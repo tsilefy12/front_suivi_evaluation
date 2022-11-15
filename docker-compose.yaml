@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  mv-font-suivi-evaluation:
+    container_name: mv-front-suivi-evaluation
+    build: 
+      context: .
+      target: developpement
+    command: npm run dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - mv-docker-network
+    expose:
+      - 3000
+networks:
+  mv-docker-network:
+    name: mv-docker-network
+    
