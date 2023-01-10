@@ -14,8 +14,38 @@ const menu = [
     items: [
       {
         id: 21,
-        name: "Grants 1",
-        link: "",
+        name: "Grants en Cours",
+        link: "/grants/grantsEnCours",
+        icon: "",
+      },
+      {
+        id: 22,
+        name: "Grants Admin",
+        link: "/grants/grantsAdmin",
+        icon: "",
+      },
+      {
+        id: 23,
+        name: " Reliquat GRANTS",
+        link: "/grants/reliquatGrants",
+        icon: "",
+      },
+      {
+        id: 24,
+        name: "Période",
+        link: "/grants/periode",
+        icon: "",
+      },
+      {
+        id: 25,
+        name: "Budget initial",
+        link: "/grants/budgetInitial",
+        icon: "",
+      },
+      {
+        id: 26,
+        name: "Budget engagé",
+        link: "/grants/budgetEngage",
         icon: "",
       },
     ],
