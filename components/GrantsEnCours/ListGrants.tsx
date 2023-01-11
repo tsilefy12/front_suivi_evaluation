@@ -9,7 +9,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
 import Data, { Order } from "./table/type-variable";
 import { rows } from "./table/constante";
 import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
@@ -23,9 +22,8 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-// import AddIcon from "@mui/icons-material/Add";
 
-const ListJournaux = () => {
+const ListGrantsEnCours = () => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("bailleur");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -154,16 +152,16 @@ const ListJournaux = () => {
                           >
                             {row.grants}
                           </TableCell>
-                          <TableCell align="right">{row.bailleur}</TableCell>
-                          <TableCell align="right">{row.anglais}</TableCell>
-                          <TableCell align="right">{row.francais}</TableCell>
+                          <TableCell align="center">{row.bailleur}</TableCell>
+                          <TableCell align="center">{row.anglais}</TableCell>
+                          <TableCell align="center">{row.francais}</TableCell>
                           <TableCell align="right">{row.responsable}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="center"
                             >
-                              <Link href="contracts/1">
+                              <Link href="/grants/grantsEnCours/detail">
                                 <IconButton
                                   color="accent"
                                   aria-label="Details"
@@ -225,7 +223,7 @@ const ListJournaux = () => {
   );
 };
 
-export default ListJournaux;
+export default ListGrantsEnCours;
 
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));

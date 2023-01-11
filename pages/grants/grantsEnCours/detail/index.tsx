@@ -1,16 +1,16 @@
 import { Container } from '@mui/material'
 import React from 'react'
-import AddNewGrantsEnCours from '../../../../components/GrantsEnCours/add/AddNewGrantsEnCours'
+import DetailGrantsEnCours from '../../../../components/GrantsEnCours/detail/DetailGrantsEnCours'
 import BackOfficeLayout from '../../../../layouts/backOffice'
 
-const AddGrantsEnCours = () => {
+const DetailGrantsEnCoursPage = () => {
   return (
     <BackOfficeLayout>
         <Container maxWidth="xl" sx={{backgroundColor: '#fff'}}>
-          <AddNewGrantsEnCours />
+          <DetailGrantsEnCours />
         </Container>
     </BackOfficeLayout>
   )
 }
 
-export default AddGrantsEnCours;
+export default DetailGrantsEnCoursPage;
