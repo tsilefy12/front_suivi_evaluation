@@ -23,9 +23,9 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const ListGrantsAdmin = () => {
+const ListBudgetsInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("bailleur");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("periode");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -93,13 +93,13 @@ const ListGrantsAdmin = () => {
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Link href="/grants/grantsAdmin/add">
+        <Link href="/grants/periode/add">
           <Button variant="contained" startIcon={<Add />}>
             Créer
           </Button>
         </Link>
         <Typography variant="h4" color="GrayText">
-          Grants Admin
+          Periode GRANTs
         </Typography>
       </SectionNavigation>
       <SectionTable>
@@ -152,7 +152,9 @@ const ListGrantsAdmin = () => {
                           >
                             {row.grants}
                           </TableCell>
-                          <TableCell align="right">{row.bailleur}</TableCell>
+                          <TableCell align="right">{row.periode}</TableCell>
+                          <TableCell align="right">{row.debut}</TableCell>
+                          <TableCell align="right">{row.fin}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
@@ -218,7 +220,7 @@ const ListGrantsAdmin = () => {
   );
 };
 
-export default ListGrantsAdmin;
+export default ListBudgetsInitial;
 
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));

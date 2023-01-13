@@ -4,16 +4,20 @@ import {
   styled,
   Typography,
   TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
   Stack,
   Divider,
 } from "@mui/material";
 import Link from "next/link";
 import React from "react";
-import { SectionNavigation } from "../ListGrants";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { Check, Close } from "@mui/icons-material";
+import { SectionNavigation } from "../ListBudgetsInitial";
 
-const AddNewGrantsAdmin = () => {
+const AddNewBudgetInitial = () => {
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <NavigationContainer>
@@ -23,7 +27,7 @@ const AddNewGrantsAdmin = () => {
           sx={{ mb: 2 }}
         >
           <Stack flexDirection={"row"}>
-            <Link href="/grants/grantsAdmin">
+            <Link href="/grants/budgetInitial">
               <Button color="info" variant="text" startIcon={<ArrowBack />}>
                 Retour
               </Button>
@@ -47,22 +51,34 @@ const AddNewGrantsAdmin = () => {
               Annuler
             </Button>
           </Stack>
-          <Typography variant="h5">Créer GRANT ADMIN</Typography>
+          <Typography variant="h5">Créer Budget initial</Typography>
         </SectionNavigation>
-        <Divider />
+        {/* <Divider /> */}
       </NavigationContainer>
 
       <FormContainer spacing={2}>
-        <TextField
+      <TextField
           fullWidth
           id="outlined-basic"
-          label="GRANT"
+          label="Description"
           variant="outlined"
         />
         <TextField
           fullWidth
           id="outlined-basic"
-          label="Bailleur"
+          label="Periode 1"
+          variant="outlined"
+        />
+        <TextField
+          fullWidth
+          id="outlined-basic"
+          label="Periode 2"
+          variant="outlined"
+        />
+        <TextField
+          fullWidth
+          id="outlined-basic"
+          label="Total"
           variant="outlined"
         />
       </FormContainer>
@@ -70,7 +86,7 @@ const AddNewGrantsAdmin = () => {
   );
 };
 
-export default AddNewGrantsAdmin;
+export default AddNewBudgetInitial;
 
 export const CustomStack = styled(Stack)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {

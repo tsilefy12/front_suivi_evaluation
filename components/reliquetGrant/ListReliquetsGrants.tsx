@@ -158,7 +158,7 @@ const ListReliquetsGrants = () => {
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
-                              justifyContent="center"
+                              justifyContent="right"
                             >
                                 <IconButton
                                   color="accent"
