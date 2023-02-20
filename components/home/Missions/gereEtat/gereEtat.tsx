@@ -9,7 +9,7 @@ import {
 import Link from "next/link";
 import React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { SectionNavigation } from "../ListMissions";
+// import { SectionNavigation } from "../../../planTravail/objectifStrategique";
 
 const GereEtat = () => {
   return (
@@ -19,7 +19,7 @@ const GereEtat = () => {
         justifyContent="space-between"
         sx={{ mb: 2 }}
       >
-        <Link href="/missions">
+        <Link href="/">
           <Button color="info" variant="text" startIcon={<ArrowBackIcon />}>
             Retour
           </Button>
@@ -91,3 +91,6 @@ const DetailsContainer = styled("div")(({ theme }) => ({
   border: "1px solid #E0E0E0",
   borderRadius: 20,
 }));
+
+export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
+

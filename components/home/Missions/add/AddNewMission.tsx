@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import React from "react";
-import { SectionNavigation } from "../ListMissions";
+import { SectionNavigation } from "../../../planTravail/objectifStrategique";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { Check, Close } from "@mui/icons-material";
 
@@ -27,7 +27,7 @@ const AddNewMission = () => {
           sx={{ mb: 2 }}
         >
           <Stack flexDirection={"row"}>
-            <Link href="/missions">
+            <Link href="/">
               <Button color="info" variant="text" startIcon={<ArrowBack />}>
                 Retour
               </Button>

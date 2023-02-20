@@ -1,6 +1,6 @@
 import { Container } from '@mui/material'
 import React from 'react'
-import GereEtat from '../../../../components/Missions/gereEtat/gereEtat'
+import GereEtat from '../../../../components/home/Missions/gereEtat/gereEtat'
 import BackOfficeLayout from '../../../../layouts/backOffice'
 
 
