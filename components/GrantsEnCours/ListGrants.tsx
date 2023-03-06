@@ -159,7 +159,7 @@ const ListGrantsEnCours = () => {
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
-                              justifyContent="center"
+                              justifyContent="right"
                             >
                               <Link href="/grants/grantsEnCours/detail">
                                 <IconButton

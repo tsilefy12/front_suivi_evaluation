@@ -1,4 +1,11 @@
-import { Button, Container, IconButton, Stack, styled, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  IconButton,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
 import Link from "next/link";
 import React from "react";
 import Box from "@mui/material/Box";
@@ -22,10 +29,11 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Visibility from "@mui/icons-material/Visibility";
 
-const ListGrantsAdmin = () => {
+const ListBudgetInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("bailleur");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("description");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -42,7 +50,7 @@ const ListGrantsAdmin = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.grants);
+      const newSelecteds = rows.map((n) => n.description);
       setSelected(newSelecteds);
       return;
     }
@@ -92,16 +100,31 @@ const ListGrantsAdmin = () => {
 
   return (
     <Container maxWidth="xl">
-      <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Link href="/grants/grantsAdmin/add">
-          <Button variant="contained" startIcon={<Add />}>
-            Créer
+
+        <SectionNavigation
+          direction="row"
+          justifyContent="space-between"
+          mb={2}
+          >
+        <Stack flexDirection={"row"}>
+          <Link href="/grants/budgetInitial/add">
+            <Button variant="contained" startIcon={<Add />}>
+              Créer
+            </Button>
+          </Link>
+          <Button
+            variant="text"
+            startIcon={<Visibility />}
+            color="accent"
+            sx={{ marginInline: 3 }}
+          >
+            Affiche Tableau de bord
           </Button>
-        </Link>
-        <Typography variant="h4" color="GrayText">
-          Grants Admin
-        </Typography>
-      </SectionNavigation>
+            </Stack>
+          <Typography variant="h4" color="GrayText">
+            Budget initial
+          </Typography>
+        </SectionNavigation>
       <SectionTable>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
@@ -126,7 +149,7 @@ const ListGrantsAdmin = () => {
                   {stableSort(rows, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const isItemSelected = isSelected(row.grants);
+                      const isItemSelected = isSelected(row.description);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -136,35 +159,36 @@ const ListGrantsAdmin = () => {
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.grants}
+                          key={row.description}
                           selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.grants)}
-                          >
-                          </TableCell>
+                            onClick={(event) => handleClick(event, row.description)}
+                          ></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             padding="none"
                           >
-                            {row.grants}
+                            {row.description}
                           </TableCell>
-                          <TableCell align="right">{row.bailleur}</TableCell>
+                          <TableCell align="right">{row.periode1}</TableCell>
+                          <TableCell align="right">{row.periode2}</TableCell>
+                          <TableCell align="right">{row.total}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
                             >
-                                <IconButton
-                                  color="accent"
-                                  aria-label="Details"
-                                  component="span"
-                                >
-                                  <VisibilityIcon />
-                                </IconButton>
+                              <IconButton
+                                color="accent"
+                                aria-label="Details"
+                                component="span"
+                              >
+                                <VisibilityIcon />
+                              </IconButton>
                               <IconButton
                                 color="primary"
                                 aria-label="Modifier"
@@ -218,8 +242,14 @@ const ListGrantsAdmin = () => {
   );
 };
 
-export default ListGrantsAdmin;
+export default ListBudgetInitial;
 
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
 const SectionTable = styled("div")(({ theme }) => ({}));
+const NavigationContainer = styled(Stack)(({ theme }) => ({
+  flexDirection: "column",
+  marginBottom: theme.spacing(2),
+  flex: 1,
+  width: "100%",
+}));

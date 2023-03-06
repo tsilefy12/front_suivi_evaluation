@@ -4,16 +4,20 @@ import {
   styled,
   Typography,
   TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
   Stack,
   Divider,
 } from "@mui/material";
 import Link from "next/link";
 import React from "react";
-import { SectionNavigation } from "../ListGrants";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { Check, Close } from "@mui/icons-material";
+import { SectionNavigation } from "../ListPeriodeGrants";
 
-const AddNewGrantsAdmin = () => {
+const AddNewPeriodeGrants = () => {
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <NavigationContainer>
@@ -23,7 +27,7 @@ const AddNewGrantsAdmin = () => {
           sx={{ mb: 2 }}
         >
           <Stack flexDirection={"row"}>
-            <Link href="/grants/grantsAdmin">
+            <Link href="/grants/periode">
               <Button color="info" variant="text" startIcon={<ArrowBack />}>
                 Retour
               </Button>
@@ -47,30 +51,53 @@ const AddNewGrantsAdmin = () => {
               Annuler
             </Button>
           </Stack>
-          <Typography variant="h5">Créer GRANT ADMIN</Typography>
+          <Typography variant="h5">Créer Réliquats Grants</Typography>
         </SectionNavigation>
-        <Divider />
+        {/* <Divider /> */}
       </NavigationContainer>
 
       <FormContainer spacing={2}>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label"> Grants </InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Grants"
+          >
+            <MenuItem value={10}> Grants 1 </MenuItem>
+            <MenuItem value={20}> Grants 2 </MenuItem>
+            <MenuItem value={30}> Grants 3 </MenuItem>
+          </Select>
+        </FormControl>
         <TextField
           fullWidth
           id="outlined-basic"
-          label="GRANT"
+          label="Periode"
           variant="outlined"
         />
-        <TextField
-          fullWidth
-          id="outlined-basic"
-          label="Bailleur"
-          variant="outlined"
-        />
+        <CustomStack
+          direction={{ xs: "column", sm: "column", md: "row" }}
+          spacing={{ xs: 2, sm: 2, md: 1 }}
+        >
+          <TextField
+            fullWidth
+            id="outlined-basic"
+            label="Debut"
+            variant="outlined"
+          />
+          <TextField
+            fullWidth
+            id="outlined-basic"
+            label="Fin"
+            variant="outlined"
+          />
+        </CustomStack>
       </FormContainer>
     </Container>
   );
 };
 
-export default AddNewGrantsAdmin;
+export default AddNewPeriodeGrants;
 
 export const CustomStack = styled(Stack)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
