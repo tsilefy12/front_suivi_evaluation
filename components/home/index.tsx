@@ -1,12 +1,12 @@
-import { Icon } from '@mui/material'
-import React from 'react'
 
-const ListEmploye = () => {
-  return (
-    <div>ListEmploye
-        <Icon>add_circle</Icon>
+import React from "react";
+
+const HomePage = () => {
+  return(
+    <div>
+      test
     </div>
   )
-}
+};
 
-export default ListEmploye
+export default HomePage;
