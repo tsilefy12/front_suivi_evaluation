@@ -72,8 +72,8 @@ const menu = [
     items: [
       {
         id:41,
-        name: "configurations 1",
-        link: "",
+        name: "Devise",
+        link: "/configurations/devise",
         icon: "",
       },
       {
