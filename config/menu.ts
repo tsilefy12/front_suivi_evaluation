@@ -2,7 +2,7 @@ const menu = [
   {
     id: 1,
     name: "Missions",
-    link: "/missions",
+    link: "/",
     icon: "descriptionIcon",
     items: [],
   },
@@ -55,14 +55,7 @@ const menu = [
     name: "Plan Travail Global",
     link: "/plan_travail",
     icon: "cropLandscapeIcon",
-    items: [
-      {
-        id: 31,
-        name: "Rapport 1",
-        link: "",
-        icon: "",
-      },
-    ],
+    items: [],
   },
   {
     id: 4,
@@ -76,12 +69,12 @@ const menu = [
         link: "/configurations/devise",
         icon: "",
       },
-      {
-        id:41,
-        name: "configurations 2",
-        link: "",
-        icon: "",
-      },
+      // {
+      //   id:41,
+      //   name: "configurations 2",
+      //   link: "",
+      //   icon: "",
+      // },
     ],
   },
 ];
