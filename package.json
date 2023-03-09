@@ -7,11 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "start:dev_container": "docker-compose up --build -V",
-    "start:prod_container": "docker-compose -f docker-compose.production.yaml up --build -V",
-    "start:prod_container_detatch": "docker-compose -f docker-compose.production.yaml up --build -V -d",
-    "stop:dev_container": "docker-compose down",
-    "stop:prod_container": "docker-compose -f docker-compose.production.yaml down",
+    "start:dev_container": "docker compose up --build -V",
+    "start:prod_container": "docker compose -f docker-compose.production.yaml up --build -V",
+    "start:prod_container_detatch": "docker compose -f docker-compose.production.yaml up --build -V -d",
+    "stop:dev_container": "docker compose down",
+    "stop:prod_container": "docker compose -f docker-compose.production.yaml down",
     "exec:terminal": "docker exec -it mv-front-suivi-evaluation /bin/sh"
   },
   "dependencies": {
