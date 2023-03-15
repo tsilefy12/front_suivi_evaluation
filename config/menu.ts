@@ -4,7 +4,14 @@ const menu = [
     name: "Missions",
     link: "/",
     icon: "descriptionIcon",
-    items: [],
+    items: [
+      {
+        id: 11,
+        name: "Prévision de mission",
+        link: "/missions/previsionDeMission",
+        icon: "",
+      },
+    ],
   },
   {
     id: 2,
@@ -60,11 +67,11 @@ const menu = [
   {
     id: 4,
     name: "Configurations",
-    link:"/configurations",
+    link: "/configurations",
     icon: "settingsIcon",
     items: [
       {
-        id:41,
+        id: 41,
         name: "Devise",
         link: "/configurations/devise",
         icon: "",

@@ -29,20 +29,20 @@ const ListObjectifStrategique = () => {
     setOpen(false);
   };
 
-
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
-        {/* <Stack direction="row" spacing={2}> */}
-        {/* <Link href="/missions/add"> */}
-          <Button onClick={handleClickOpen} color="primary" variant="contained" startIcon={<Add />}>
-            Créer
-          </Button>
-        {/* </Link> */}
+        <Button
+          onClick={handleClickOpen}
+          color="primary"
+          variant="contained"
+          startIcon={<Add />}
+        >
+          Créer
+        </Button>
         <Typography variant="h4" color="GrayText">
           Objectif strategique
         </Typography>
-        {/* </Stack> */}
       </SectionNavigation>
       <Divider />
       <SectionDetails>
@@ -68,341 +68,110 @@ const ListObjectifStrategique = () => {
         <ValueDetail>
           <KeyValue keyName="Année" value={"2023"} />
         </ValueDetail>
-        <Grid container spacing={1} mt={2}>
-          <Grid item xs={12} md={6} lg={4}>
-            <Card>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <LinkContainer>
-                    <Typography color="GrayText" mb={2}>
-                      1. Promouvoir l’exploitation durable et équitable des
-                      espèces
-                    </Typography>
-                    <Link href="/plan_travail/tacheCle">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Tâches clés
-                        </Button>
-                      </Box>
-                    </Link>
-                    <Link href="/plan_travail/objectifGenerale">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Objectifs générales
-                        </Button>
-                      </Box>
-                    </Link>
-                  </LinkContainer>
-                </Grid>
-              </Grid>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <Card>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <LinkContainer>
-                    <Typography color="GrayText" mb={2}>
-                      2. Réduire le taux de déforestation dans les sites de
-                      conservation
-                    </Typography>
-                    <Link href="/plan_travail/tacheCle">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Tâches clés
-                        </Button>
-                      </Box>
-                    </Link>
-                    <Link href="/plan_travail/objectifGenerale">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Objectifs générales
-                        </Button>
-                      </Box>
-                    </Link>
-                  </LinkContainer>
-                </Grid>
-              </Grid>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <Card>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <LinkContainer>
-                    <Typography color="GrayText" mb={2}>
-                      3. Restaurer les habitats dégradés dans toutes les sites
-                      de conservation
-                    </Typography>
-                    <Link href="/plan_travail/tacheCle">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Tâches clés
-                        </Button>
-                      </Box>
-                    </Link>
-                    <Link href="/plan_travail/objectifGenerale">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Objectifs générales
-                        </Button>
-                      </Box>
-                    </Link>
-                  </LinkContainer>
-                </Grid>
-              </Grid>
-            </Card>
-          </Grid>
+        <Grid container spacing={2} mt={2}>
+          {[1, 2, 3].map((item) => (
+            <Grid key={item} item xs={12} md={6} lg={4}>
+              <LinkContainer>
+                <Typography color="GrayText" mb={2} variant="h6">
+                  1. Promouvoir l’exploitation durable et équitable des espèces
+                </Typography>
+                <Link href="/plan_travail/tacheCle">
+                  <Box>
+                    <Button
+                      variant="text"
+                      color="info"
+                      startIcon={<SettingsIcon />}
+                    >
+                      Tâches clés
+                    </Button>
+                  </Box>
+                </Link>
+                <Link href="/plan_travail/objectifGenerale">
+                  <Box>
+                    <Button
+                      variant="text"
+                      color="info"
+                      startIcon={<SettingsIcon />}
+                    >
+                      Objectifs générales
+                    </Button>
+                  </Box>
+                </Link>
+              </LinkContainer>
+            </Grid>
+          ))}
         </Grid>
         <ValueDetail>
           <KeyValue keyName="Année" value={"2022"} />
         </ValueDetail>
-        <Grid container spacing={1} mt={1} >
-          <Grid item xs={12} md={2} lg={4}>
-            <Card>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <LinkContainer>
-                    <Typography color="GrayText" mb={2}>
-                      1. Promouvoir l’exploitation durable et équitable des
-                      espèces
-                    </Typography>
-                    <Link href="/plan_travail/tacheCle">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Tâches clés
-                        </Button>
-                      </Box>
-                    </Link>
-                    <Link href="/plan_travail/objectifGenerale">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Objectifs générales
-                        </Button>
-                      </Box>
-                    </Link>
-                  </LinkContainer>
-                </Grid>
-              </Grid>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <Card>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <LinkContainer>
-                    <Typography color="GrayText" mb={2}>
-                      2. Réduire le taux de déforestation dans les sites de
-                      conservation
-                    </Typography>
-                    <Link href="/plan_travail/tacheCle">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Tâches clés
-                        </Button>
-                      </Box>
-                    </Link>
-                    <Link href="/plan_travail/objectifGenerale">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Objectifs générales
-                        </Button>
-                      </Box>
-                    </Link>
-                  </LinkContainer>
-                </Grid>
-              </Grid>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <Card>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <LinkContainer>
-                    <Typography color="GrayText" mb={2}>
-                      3. Restaurer les habitats dégradés dans toutes les sites
-                      de conservation
-                    </Typography>
-                    <Link href="/plan_travail/tacheCle">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Tâches clés
-                        </Button>
-                      </Box>
-                    </Link>
-                    <Link href="/plan_travail/objectifGenerale">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Objectifs générales
-                        </Button>
-                      </Box>
-                    </Link>
-                  </LinkContainer>
-                </Grid>
-              </Grid>
-            </Card>
-          </Grid>
+        <Grid container spacing={2} mt={2}>
+          {[1, 2, 3].map((item) => (
+            <Grid key={item} item xs={12} md={6} lg={4}>
+              <LinkContainer>
+                <Typography color="GrayText" mb={2} variant="h6">
+                  1. Promouvoir l’exploitation durable et équitable des espèces
+                </Typography>
+                <Link href="/plan_travail/tacheCle">
+                  <Box>
+                    <Button
+                      variant="text"
+                      color="info"
+                      startIcon={<SettingsIcon />}
+                    >
+                      Tâches clés
+                    </Button>
+                  </Box>
+                </Link>
+                <Link href="/plan_travail/objectifGenerale">
+                  <Box>
+                    <Button
+                      variant="text"
+                      color="info"
+                      startIcon={<SettingsIcon />}
+                    >
+                      Objectifs générales
+                    </Button>
+                  </Box>
+                </Link>
+              </LinkContainer>
+            </Grid>
+          ))}
         </Grid>
         <ValueDetail>
-          <KeyValue keyName="Année" value={"2021"} />
+          <KeyValue keyName="Année" value={"2021  "} />
         </ValueDetail>
-        <Grid container spacing={1} mt={2}>
-          <Grid item xs={12} md={6} lg={4}>
-            <Card>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <LinkContainer>
-                    <Typography color="GrayText" mb={2}>
-                      1. Promouvoir l’exploitation durable et équitable des
-                      espèces
-                    </Typography>
-                    <Link href="/plan_travail/tacheCle">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Tâches clés
-                        </Button>
-                      </Box>
-                    </Link>
-                    <Link href="/plan_travail/objectifGenerale">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Objectifs générales
-                        </Button>
-                      </Box>
-                    </Link>
-                  </LinkContainer>
-                </Grid>
-              </Grid>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <Card>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <LinkContainer>
-                    <Typography color="GrayText" mb={2}>
-                      2. Réduire le taux de déforestation dans les sites de
-                      conservation
-                    </Typography>
-                    <Link href="/plan_travail/tacheCle">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Tâches clés
-                        </Button>
-                      </Box>
-                    </Link>
-                    <Link href="/plan_travail/objectifGenerale">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Objectifs générales
-                        </Button>
-                      </Box>
-                    </Link>
-                  </LinkContainer>
-                </Grid>
-              </Grid>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <Card>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <LinkContainer>
-                    <Typography color="GrayText" mb={2}>
-                      3. Restaurer les habitats dégradés dans toutes les sites
-                      de conservation
-                    </Typography>
-                    <Link href="/plan_travail/tacheCle">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Tâches clés
-                        </Button>
-                      </Box>
-                    </Link>
-                    <Link href="/plan_travail/objectifGenerale">
-                      <Box>
-                        <Button
-                          variant="text"
-                          color="info"
-                          startIcon={<SettingsIcon />}
-                        >
-                          Objectifs générales
-                        </Button>
-                      </Box>
-                    </Link>
-                  </LinkContainer>
-                </Grid>
-              </Grid>
-            </Card>
-          </Grid>
+        <Grid container spacing={2} mt={2}>
+          {[1, 2, 3].map((item) => (
+            <Grid key={item} item xs={12} md={6} lg={4}>
+              <LinkContainer>
+                <Typography color="GrayText" mb={2} variant="h6">
+                  1. Promouvoir l’exploitation durable et équitable des espèces
+                </Typography>
+                <Link href="/plan_travail/tacheCle">
+                  <Box>
+                    <Button
+                      variant="text"
+                      color="info"
+                      startIcon={<SettingsIcon />}
+                    >
+                      Tâches clés
+                    </Button>
+                  </Box>
+                </Link>
+                <Link href="/plan_travail/objectifGenerale">
+                  <Box>
+                    <Button
+                      variant="text"
+                      color="info"
+                      startIcon={<SettingsIcon />}
+                    >
+                      Objectifs générales
+                    </Button>
+                  </Box>
+                </Link>
+              </LinkContainer>
+            </Grid>
+          ))}
         </Grid>
       </SectionDetails>
       <Dialog open={open} onClose={handleClose}>
@@ -424,15 +193,14 @@ const SectionDetails = styled(Box)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "flex-start",
 }));
-const LinkContainer = styled(Box)(({ theme }) => ({
-  padding: 10,
-  borderRadius: 20,
-  background: "#fff",
-}));
-// export const InfoItems = styled(Stack)(({ theme }) => ({}));
 
 const ValueDetail = styled(Stack)(({ theme }) => ({
-  // width: "43px",
   height: "28px",
   padding: 10,
+}));
+const LinkContainer = styled("div")(({ theme }) => ({
+  borderRadius: theme.spacing(2),
+  background: "#fff",
+  border: `1px solid ${theme.palette.grey[100]}`,
+  padding: "20px",
 }));
