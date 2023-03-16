@@ -28,19 +28,9 @@ import Detail from "./detail";
 
 const PrevisionDeMission = () => {
   const [value, setValue] = React.useState(0);
-  const [age, setAge] = React.useState("");
   const router = useRouter();
-
-  const handleChangeSelect = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
-  };
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
-  };
-
-  const handleChangeIndex = (index: number) => {
-    setValue(index);
   };
 
   return (
@@ -73,14 +63,14 @@ const PrevisionDeMission = () => {
           </Stack>
           <Typography variant="h4">Prévision de mission</Typography>
         </SectionNavigation>
-        {/* <Divider /> */}
       </NavigationContainer>
       <Detail />
       <BodySection>
         <BodySectionTabs>
           <Stack direction="row">
             <Grid container spacing={2}>
-              <Grid item xs={12} md={8}>
+              {/* <Grid item xs={12} md={8}> */}
+              <CardLeft>
                 <Tabs
                   value={value}
                   onChange={handleChange}
@@ -100,34 +90,27 @@ const PrevisionDeMission = () => {
                 <TabPanel value={value} index={1}>
                   <Finances />
                 </TabPanel>
-              </Grid>
+              </CardLeft>
+              {/* </Grid> */}
               <Grid item xs={12} md={3}>
-                <EtatPrevision>
+                <CardPrevision>
                   <Typography sx={{ mb: 2 }} variant="h5">
                     Etat de prévision
                   </Typography>
-                  <Grid mb={3}>
-                    <KeyValue
-                      keyName="Elaboré par"
-                      value={"Nom du responsable"}
-                    />
-                  </Grid>
-                  <Grid mb={3}>
-                    <KeyValue
-                      keyName="Vérifié financièrement par"
-                      value={"Nom du responsable"}
-                    />
-                  </Grid>
-                  <Grid mb={3}>
-                    <KeyValue
-                      keyName="Vérifié techniquement par"
-                      value={"Nom  du responsable"}
-                    />
-                  </Grid>
-                  <Grid mb={3}>
-                    <KeyValue keyName="Payé par" value={"Nom du responsable"} />
-                  </Grid>
-                </EtatPrevision>
+                  <KeyValue
+                    keyName="Elaboré par"
+                    value={"Nom du responsable"}
+                  />
+                  <KeyValue
+                    keyName="Vérifié financièrement par"
+                    value={"Nom du responsable"}
+                  />
+                  <KeyValue
+                    keyName="Vérifié techniquement par"
+                    value={"Nom  du responsable"}
+                  />
+                  <KeyValue keyName="Payé par" value={"Nom du responsable"} />
+                </CardPrevision>
               </Grid>
             </Grid>
           </Stack>
@@ -171,28 +154,35 @@ function a11yProps(index: number) {
 
 export const SectionNavigation = styled(Stack)(({}) => ({}));
 export const BodySection = styled(Paper)(({ theme }) => ({
-  borderRadius: 20,
-  backgroundColor: "white",
-  // padding: "16px 32px",
+  background: "#FFFFFF",
+  borderRadius: "32px",
   marginBlock: 15,
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "flex-start",
+  padding: "16px",
+  gap: "16px",
 }));
 
 export const BodySectionTabs = styled(Box)(({ theme }) => ({
   padding: "20px",
   display: "flex",
   width: "100%",
-  // marginBottom: theme.spacing(3),
   borderRadius: 10,
   background: "#FFFFFF",
 }));
 
-const EtatPrevision = styled(Box)(({ theme }) => ({
+const CardPrevision = styled(Box)(({ theme }) => ({
   padding: "16px 32px",
   gap: "32px",
   borderRadius: 8,
-  background: "#0000000F",
-  width: "432px",
-  marginLeft: "20px",
+  background: "#FAFAFA",
+  width: "416px",
+  // marginBottom: "20px",
+  // padding: 0,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
 }));
 
 const NavigationContainer = styled(Stack)(({ theme }) => ({
@@ -200,4 +190,13 @@ const NavigationContainer = styled(Stack)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   flex: 1,
   width: "100%",
+}));
+
+const CardLeft = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  // alignItems: "flex-start",
+  padding: "0px",
+  // width: "912px",
+  // height: "656px",
 }));

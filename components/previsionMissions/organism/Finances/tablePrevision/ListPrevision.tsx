@@ -1,4 +1,11 @@
-import { Button, Container, Dialog, Stack, styled } from "@mui/material";
+import {
+  Button,
+  Container,
+  Dialog,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
 import Link from "next/link";
 import React from "react";
 import Box from "@mui/material/Box";
@@ -98,12 +105,16 @@ const ListPrevision = () => {
               </Table>
             </TableContainer>
             <Footer>
-              <KeyValue keyName="TOTAL BUDGET  " value={"300000"} />
-              <KeyValue
-                keyName="Imprévu de mission{total budget-location et perdiem MV(10% )}"
-                value={"100000"}
-              />
-              <KeyValue keyName="TOTAL GENERAL BUDGET" value={"400000"} />
+              <Typography variant="body2" align="right">
+                TOTAL BUDGET : 30000
+              </Typography>
+              <Typography variant="body2" align="right">
+                Imprévu de mission(total budget-location et perdiem MV(10% )) :
+                10000
+              </Typography>
+              <Typography variant="body2" align="right">
+                TOTAL GENERAL BUDGET : 40000
+              </Typography>
             </Footer>
           </Paper>
         </Box>
@@ -117,7 +128,12 @@ export default ListPrevision;
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
 const SectionTable = styled("div")(({ theme }) => ({}));
+
 export const Footer = styled(Stack)(({ theme }) => ({
-  flexDirection: "column",
-  marginLeft: "100px",
+  fontFamily: "Roboto",
+  fontStyle: "normal",
+  fontWeight: "400px",
+  fontSize: "14px",
+  marginRight: "270px",
+  letterSpacing: "0.25px",
 }));
