@@ -39,7 +39,12 @@ const PrevisionDeMission = () => {
         <SectionNavigation direction="row" justifyContent="space-between">
           <Stack flexDirection="row">
             <Link href="/">
-              <Button color="info" variant="text" startIcon={<ArrowBack />}>
+              <Button
+                color="info"
+                variant="text"
+                startIcon={<ArrowBack />}
+                sx={{ marginInline: 3 }}
+              >
                 Retour
               </Button>
             </Link>
