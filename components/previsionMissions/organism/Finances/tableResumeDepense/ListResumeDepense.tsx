@@ -27,7 +27,7 @@ import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../../../../config/table.config";
-import AddResumeDepense from "./add/addPrevision";
+import AddResumeDepense from "./add/addResumeDepense";
 import KeyValue from "../../../../shared/keyValue";
 
 const ListResumeDepense = () => {

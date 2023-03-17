@@ -11,6 +11,18 @@ const menu = [
         link: "/missions/previsionDeMission",
         icon: "",
       },
+      {
+        id: 12,
+        name: "Validation rapport de mission",
+        link: "/missions/validation/validationRapportMission",
+        icon: "",
+      },
+      {
+        id: 13,
+        name: "Validation Prevision de mission",
+        link: "/missions/validation/validationPrevisionMission",
+        icon: "",
+      },
     ],
   },
   {

@@ -2,21 +2,16 @@ import {
   Button,
   Grid,
   Stack,
-  Divider,
   Typography,
   styled,
   Box,
-  Card,
   Paper,
 } from "@mui/material";
 import Container from "@mui/material/Container";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React, { Fragment } from "react";
-// import KeyValue from "../../../shared/keyValue";
+import React from "react";
 import KeyValue from "../shared/keyValue";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useRouter } from "next/router";
 import Techniques from "./organism/Techniques/techniques";
 import Finances from "./organism/Finances/Finance";
@@ -96,25 +91,26 @@ const PrevisionDeMission = () => {
                   <Finances />
                 </TabPanel>
               </CardLeft>
-              {/* </Grid> */}
               <Grid item xs={12} md={3}>
                 <CardPrevision>
                   <Typography sx={{ mb: 2 }} variant="h5">
                     Etat de prévision
                   </Typography>
-                  <KeyValue
-                    keyName="Elaboré par"
-                    value={"Nom du responsable"}
-                  />
-                  <KeyValue
-                    keyName="Vérifié financièrement par"
-                    value={"Nom du responsable"}
-                  />
-                  <KeyValue
-                    keyName="Vérifié techniquement par"
-                    value={"Nom  du responsable"}
-                  />
-                  <KeyValue keyName="Payé par" value={"Nom du responsable"} />
+                  <Stack spacing={2}>
+                    <KeyValue
+                      keyName="Elaboré par"
+                      value={"Nom du responsable"}
+                    />
+                    <KeyValue
+                      keyName="Vérifié financièrement par"
+                      value={"Nom du responsable"}
+                    />
+                    <KeyValue
+                      keyName="Vérifié techniquement par"
+                      value={"Nom  du responsable"}
+                    />
+                    <KeyValue keyName="Payé par" value={"Nom du responsable"} />
+                  </Stack>
                 </CardPrevision>
               </Grid>
             </Grid>
@@ -178,16 +174,13 @@ export const BodySectionTabs = styled(Box)(({ theme }) => ({
 }));
 
 const CardPrevision = styled(Box)(({ theme }) => ({
-  padding: "16px 32px",
-  gap: "32px",
-  borderRadius: 8,
-  background: "#FAFAFA",
+  paddingInline: theme.spacing(3),
+  background: theme.palette.grey[100],
+  paddingBottom: theme.spacing(1),
   width: "416px",
-  // marginBottom: "20px",
-  // padding: 0,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-start",
+  padding: "10px 22px",
+  borderRadius: 8,
+  gap: "32px",
 }));
 
 const NavigationContainer = styled(Stack)(({ theme }) => ({
@@ -200,8 +193,5 @@ const NavigationContainer = styled(Stack)(({ theme }) => ({
 const CardLeft = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
-  // alignItems: "flex-start",
   padding: "0px",
-  // width: "912px",
-  // height: "656px",
 }));
