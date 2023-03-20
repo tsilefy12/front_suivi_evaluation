@@ -8,7 +8,7 @@ import { createData } from "./lists/table/finances.function";
 import { columns } from "./lists/table/finances.constant";
 import { Accordion, AccordionSummary, Box, Typography,AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { ListRapports } from "./lists/ListRapports";
+import ListRapports from "./lists/ListRapports";
 
 
 
