@@ -76,7 +76,3 @@ const MyTableContainer = styled(Stack)(({ theme }) => ({
 }));
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
-const Modal = styled(Stack)(({ theme }) => ({
-  borderRadius: 20,
-  width: "600px",
-}));

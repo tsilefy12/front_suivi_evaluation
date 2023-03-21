@@ -5,9 +5,7 @@ import {
   IconButton,
   Stack,
   styled,
-  Typography,
 } from "@mui/material";
-import Link from "next/link";
 import React from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
@@ -23,7 +21,7 @@ import EnhancedTableHead from "./table/EnhancedTableHead";
 import { getComparator, stableSort } from "./table/function";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddResumeDepense from "./add/addPrevision";
+import AddResumeDepense from "./add/addResumeDepense";
 import KeyValue from "../../../../shared/keyValue";
 import {
   defaultLabelDisplayedRows,

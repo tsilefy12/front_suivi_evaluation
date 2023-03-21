@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddAutreInfoAuto from "../add/addProgramme";
+import AddProgrammes from "../add/addProgramme";
 
 const ListProgrammes = () => {
   const [open, setOpen] = React.useState(false);
@@ -100,7 +100,7 @@ const ListProgrammes = () => {
                 Ajouter
               </Button>
               <Dialog open={open} onClose={handleClose}>
-                <AddAutreInfoAuto />
+                <AddProgrammes />
               </Dialog>
             </SectionNavigation>
           </Paper>

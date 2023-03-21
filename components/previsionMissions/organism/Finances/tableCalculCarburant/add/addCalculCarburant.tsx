@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
-import Link from "next/link";
+import React from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
-  Box,
   Container,
   DialogActions,
   DialogContent,
@@ -60,10 +58,7 @@ const AddCalculCarburant = () => {
                 </Select>
               </FormControl>
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  {" "}
-                  Véhicule{" "}
-                </InputLabel>
+                <InputLabel id="demo-simple-select-label">Véhicule</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"

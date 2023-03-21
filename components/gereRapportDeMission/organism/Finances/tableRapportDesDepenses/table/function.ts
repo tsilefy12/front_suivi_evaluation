@@ -1,22 +1,16 @@
 import Data, { Order } from "./type-variable";
 
 export function createData(
-  appareil: string,
-  type: string,
-  nbapp: string,
-  changes: string,
-  nbpile: string,
-  total: string,
-  nbpacks: string
+  dpj: string,
+  date: string,
+  libelles: string,
+  montant: string
 ): Data {
   return {
-    appareil,
-    type,
-    nbapp,
-    nbpile,
-    changes,
-    total,
-    nbpacks,
+    dpj,
+    date,
+    libelles,
+    montant,
   };
 }
 

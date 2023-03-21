@@ -7,7 +7,6 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import Link from "next/link";
 import React from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
@@ -27,11 +26,11 @@ import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../../../../config/table.config";
-import AddCalculCarburant from "./add/addCalculCarburant";
+import AddRapportdepense from "./add/addRapportdepense";
 
-const ListCalculCarburant = () => {
+const ListRapportDepenses = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("trajet");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("dpj");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -55,7 +54,7 @@ const ListCalculCarburant = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.trajet);
+      const newSelecteds = rows.map((n) => n.dpj);
       setSelected(newSelecteds);
       return;
     }
@@ -110,7 +109,7 @@ const ListCalculCarburant = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddCalculCarburant />
+          <AddRapportdepense />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -136,7 +135,7 @@ const ListCalculCarburant = () => {
                   {stableSort(rows, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const isItemSelected = isSelected(row.trajet);
+                      const isItemSelected = isSelected(row.dpj);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -146,12 +145,12 @@ const ListCalculCarburant = () => {
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.trajet}
+                          key={row.dpj}
                           selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.trajet)}
+                            onClick={(event) => handleClick(event, row.dpj)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -159,15 +158,11 @@ const ListCalculCarburant = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.trajet}
+                            {row.dpj}
                           </TableCell>
-                          <TableCell align="right">{row.véhicule}</TableCell>
-                          <TableCell align="right">{row.type}</TableCell>
-                          <TableCell align="right">{row.distance}</TableCell>
-                          <TableCell align="right">{row.nb}</TableCell>
-                          <TableCell align="right">
-                            {row.distanceTotal}
-                          </TableCell>
+                          <TableCell align="right">{row.date}</TableCell>
+                          <TableCell align="right">{row.libelles}</TableCell>
+                          <TableCell align="right">{row.montant}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
@@ -204,6 +199,18 @@ const ListCalculCarburant = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+            <Footer>
+              <Typography variant="body2" align="right">
+                TOTAL BUDGET : 30000
+              </Typography>
+              <Typography variant="body2" align="right">
+                Imprévu de mission(total budget-location et perdiem MV(10% )) :
+                10000
+              </Typography>
+              <Typography variant="body2" align="right">
+                TOTAL GENERAL BUDGET : 40000
+              </Typography>
+            </Footer>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
@@ -226,8 +233,16 @@ const ListCalculCarburant = () => {
   );
 };
 
-export default ListCalculCarburant;
+export default ListRapportDepenses;
 
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
 const SectionTable = styled("div")(({ theme }) => ({}));
+export const Footer = styled(Stack)(({ theme }) => ({
+  fontFamily: "Roboto",
+  fontStyle: "normal",
+  fontWeight: "400px",
+  fontSize: "14px",
+  marginRight: "176px",
+  letterSpacing: "0.25px",
+}));

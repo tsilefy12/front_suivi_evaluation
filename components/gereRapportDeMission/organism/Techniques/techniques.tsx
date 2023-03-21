@@ -1,7 +1,7 @@
 import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import { Box } from "@mui/material";
+import { Box, Stack, styled } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -21,8 +21,6 @@ const Techniques = () => {
     <Box>
       <Table>
         <TableBody>
-          {/* {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => { */}
-          {/* return ( */}
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -133,8 +131,6 @@ const Techniques = () => {
               <ListProgrammes />
             </AccordionDetails>
           </Accordion>
-          {/* ); */}
-          {/* // })} */}
         </TableBody>
       </Table>
     </Box>

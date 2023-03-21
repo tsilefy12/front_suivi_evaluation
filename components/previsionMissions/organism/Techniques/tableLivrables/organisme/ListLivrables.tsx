@@ -8,7 +8,6 @@ import { rows } from "./constante";
 import { Button, Container, Dialog, IconButton, styled } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddObjectif from "../add/addLivrable";
 import AddLivrable from "../add/addLivrable";
 
 const ListLivrables = () => {
@@ -61,7 +60,6 @@ const ListLivrables = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          {/* <AddObjectif /> */}
           <AddLivrable />
         </Dialog>
       </SectionNavigation>

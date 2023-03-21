@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
@@ -13,14 +12,20 @@ import {
   styled,
   Select,
   TextField,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
 } from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import InfoIcon from "@mui/icons-material/Info";
 
 const AddProgrammes = () => {
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <SectionNavigation>
-        <DialogTitle>Créer/modifier contact pendant la mission</DialogTitle>
+        <DialogTitle>Créer/modifier Programmes</DialogTitle>
         <DialogContent>
           <FormContainer spacing={2} mt={2}>
             <TextField
@@ -59,6 +64,56 @@ const AddProgrammes = () => {
                 <MenuItem value={30}> Responsable 3</MenuItem>
               </Select>
             </FormControl>
+            <Stack flexDirection="row">
+              <InfoIcon />
+              <Typography variant="subtitle2">
+                Voici la liste des{" "}
+                <Lien>Contact(durant la mission) pendant la prévision</Lien>,
+                vous pouvez les réutiliser pour les rapports
+              </Typography>
+            </Stack>
+            <Table sx={{ minWidth: 500 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">Date de début</TableCell>
+                  <TableCell>Date de fin</TableCell>
+                  <TableCell align="left">Activités prévues</TableCell>
+                  <TableCell align="left">Activités réalisées</TableCell>
+                  <TableCell align="left">Livrables</TableCell>
+                  <TableCell align="left">Responsable</TableCell>
+                </TableRow>
+              </TableHead>
+              {[1, 2].map((item) => (
+                <TableRow
+                  key={item}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    08/10/2021
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    08/11/2022
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    Recensement
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    Recensement
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    Livrable 1
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    Gladis
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button color="primary" startIcon={<ContentCopyIcon />}>
+                      Utiliser
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </Table>
           </FormContainer>
         </DialogContent>
         <DialogActions>
@@ -75,7 +130,6 @@ const AddProgrammes = () => {
 export default AddProgrammes;
 
 const FormContainer = styled(Stack)(({ theme }) => ({
-  // padding: 10,
   background: "#fff",
 }));
 
@@ -86,4 +140,12 @@ export const CustomStack = styled(Stack)(({ theme }) => ({
     flexWrap: "wrap",
   },
   // marginLeft: "100",
+}));
+
+const Lien = styled("span")(({ theme }) => ({
+  color: theme.palette.info.main,
+  cursor: "pointer",
+  "&:hover": {
+    color: theme.palette.info.main,
+  },
 }));

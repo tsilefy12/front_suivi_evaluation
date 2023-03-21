@@ -8,7 +8,7 @@ import { rows } from "./constante";
 import { Button, Container, Dialog, IconButton, styled } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddObjectif from "../add/addActivitesPrevues";
+import AddActivitesPrevues from "../add/addActivitesPrevues";
 
 const ListActivitesPrevues = () => {
   const [open, setOpen] = React.useState(false);
@@ -60,7 +60,7 @@ const ListActivitesPrevues = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddObjectif />
+          <AddActivitesPrevues />
         </Dialog>
       </SectionNavigation>
     </Container>
