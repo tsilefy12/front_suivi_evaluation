@@ -1,9 +1,7 @@
 import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
-import TableRow from "@mui/material/TableRow";
-import { Box, Stack, styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -20,8 +18,6 @@ const Finances = () => {
     <Box>
       <Table>
         <TableBody>
-          {/* {[1, 2, 3].map((item) => {
-              return ( */}
           <AccordionBody>
             <Accordion>
               <AccordionSummary
@@ -83,8 +79,6 @@ const Finances = () => {
                 <ListCalculCarburant />
               </AccordionDetails>
             </Accordion>
-            {/* );
-            })} */}
           </AccordionBody>
         </TableBody>
       </Table>
@@ -94,6 +88,6 @@ const Finances = () => {
 
 export default Finances;
 
-const AccordionBody = styled(Stack)(({ theme }) => ({
+const AccordionBody = styled(Box)(({ theme }) => ({
   width: "830px",
 }));

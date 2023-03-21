@@ -31,4 +31,5 @@ const FormContainer = styled(Stack)(({ theme }) => ({
   padding: 30,
   borderRadius: 20,
   background: "#fff",
+  border: `1px solid ${theme.palette.grey[100]}`,
 }));

@@ -13,7 +13,6 @@ import React from "react";
 import KeyValue from "../../shared/keyValue";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { useRouter } from "next/router";
 import Techniques from "./organism/Techniques/techniques";
 import Finances from "./organism/Finances/Finance";
 import Link from "next/link";
@@ -23,7 +22,6 @@ import Detail from "./detail";
 
 const ValidationRapportMission = () => {
   const [value, setValue] = React.useState(0);
-  const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -47,122 +45,109 @@ const ValidationRapportMission = () => {
       </NavigationContainer>
       <Detail />
       <BodySection>
-        <BodySectionTabs>
-          <Stack direction="row">
-            <Grid container spacing={2}>
-              <CardLeft>
-                <Tabs
-                  value={value}
-                  onChange={handleChange}
-                  indicatorColor="primary"
-                  textColor="primary"
-                  variant="fullWidth"
-                  aria-label="full width tabs example"
-                  centered
-                  sx={{ mb: 2 }}
-                >
-                  <Tab label="TECHNIQUE" {...a11yProps(0)} />
-                  <Tab label="FINANCE" {...a11yProps(1)} />
-                </Tabs>
-                <TabPanel value={value} index={0}>
-                  <Techniques />
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                  <Finances />
-                </TabPanel>
-              </CardLeft>
-              <Grid item xs={12} md={3}>
-                <CardBody>
-                  <Typography variant="h6">Etat du Rapport</Typography>
-                  <Stack spacing={1}>
-                    <KeyValue
-                      keyName="Elaboré par"
-                      value={"Nom du responsable"}
-                    />
-                    <Divider />
-                    <Grid>
-                      <KeyValue
-                        keyName="Vérifié financièrement par"
-                        value={"Nom du responsable"}
-                      />
-                      <Button variant="contained" startIcon={<DoneIcon />}>
-                        Vérifier financièrement
-                      </Button>
-                    </Grid>
-                    <Divider />
+        <Stack direction="row" spacing={1}>
+          <CardLeft>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="fullWidth"
+              aria-label="full width tabs example"
+              centered
+              sx={{ mb: 2 }}
+            >
+              <Tab label="TECHNIQUE" {...a11yProps(0)} />
+              <Tab label="FINANCE" {...a11yProps(1)} />
+            </Tabs>
+            <TabPanel value={value} index={0}>
+              <Techniques />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <Finances />
+            </TabPanel>
+          </CardLeft>
+          <CardRight>
+            <CardBody>
+              <Typography variant="h6">Etat du Rapport</Typography>
+              <Stack spacing={1}>
+                <KeyValue keyName="Elaboré par" value={"Nom du responsable"} />
+                <Divider />
+                <Grid>
+                  <KeyValue
+                    keyName="Vérifié financièrement par"
+                    value={"Nom du responsable"}
+                  />
+                  <Button variant="contained" startIcon={<DoneIcon />}>
+                    Vérifier financièrement
+                  </Button>
+                </Grid>
+                <Divider />
 
-                    <Grid>
-                      <KeyValue
-                        keyName="Vérifié techniquement par"
-                        value={"Nom  du responsable"}
-                      />
-                      <Button variant="contained" startIcon={<DoneIcon />}>
-                        Vérifier Techniquement
-                      </Button>
-                    </Grid>
-                    <Divider />
-                    <Grid>
-                      <KeyValue
-                        keyName="Versé par"
-                        value={"Nom du responsable"}
-                      />
-                      <Button variant="contained" startIcon={<DoneIcon />}>
-                        Versé
-                      </Button>
-                    </Grid>
-                  </Stack>
-                </CardBody>
+                <Grid>
+                  <KeyValue
+                    keyName="Vérifié techniquement par"
+                    value={"Nom  du responsable"}
+                  />
+                  <Button variant="contained" startIcon={<DoneIcon />}>
+                    Vérifier Techniquement
+                  </Button>
+                </Grid>
+                <Divider />
+                <Grid>
+                  <KeyValue keyName="Versé par" value={"Nom du responsable"} />
+                  <Button variant="contained" startIcon={<DoneIcon />}>
+                    Versé
+                  </Button>
+                </Grid>
+              </Stack>
+            </CardBody>
 
-                <CardFooter>
-                  <Typography
-                    variant="body2"
-                    sx={{ textTransform: "uppercase" }}
-                  >
-                    Info sur les dépositions de Rapport
-                  </Typography>
-                  <CardMain>
-                    <KeyValue keyName="Date" value={"dd/MM/yyyy"} />
-                    <KeyValue
-                      keyName="Activités"
-                      value={"Préparation des matériels pour ...."}
-                    />
-                    <KeyValue keyName="Livrables" value={"Matériels ..."} />
-                    <KeyValue
-                      keyName="1er responsable"
-                      value={"Nom du responsable"}
-                    />
-                  </CardMain>
-                  <Divider />
-                  <CardMain>
-                    <KeyValue keyName="Date" value={"dd/MM/yyyy"} />
-                    <KeyValue
-                      keyName="Activités"
-                      value={"Préparation des matériels pour ...."}
-                    />
-                    <KeyValue keyName="Livrables" value={"Matériels ..."} />
-                    <KeyValue
-                      keyName="1er responsable"
-                      value={"Nom du responsable"}
-                    />
-                  </CardMain>
-                  <Divider />
-                  <CardMain>
-                    <KeyValue keyName="Date" value={"dd/MM/yyyy"} />
-                    <KeyValue
-                      keyName="Activités"
-                      value={"Préparation des matériels pour ...."}
-                    />
-                    <KeyValue keyName="Livrables" value={"Matériels ..."} />
-                    <KeyValue
-                      keyName="1er responsable"
-                      value={"Nom du responsable"}
-                    />
-                  </CardMain>
-                </CardFooter>
-              </Grid>
-            </Grid>
-          </Stack>
-        </BodySectionTabs>
+            <CardFooter>
+              <Typography variant="body2" sx={{ textTransform: "uppercase" }}>
+                Info sur les dépositions de Rapport
+              </Typography>
+              <CardMain>
+                <KeyValue keyName="Date" value={"dd/MM/yyyy"} />
+                <KeyValue
+                  keyName="Activités"
+                  value={"Préparation des matériels pour ...."}
+                />
+                <KeyValue keyName="Livrables" value={"Matériels ..."} />
+                <KeyValue
+                  keyName="1er responsable"
+                  value={"Nom du responsable"}
+                />
+              </CardMain>
+              <Divider />
+              <CardMain>
+                <KeyValue keyName="Date" value={"dd/MM/yyyy"} />
+                <KeyValue
+                  keyName="Activités"
+                  value={"Préparation des matériels pour ...."}
+                />
+                <KeyValue keyName="Livrables" value={"Matériels ..."} />
+                <KeyValue
+                  keyName="1er responsable"
+                  value={"Nom du responsable"}
+                />
+              </CardMain>
+              <Divider />
+              <CardMain>
+                <KeyValue keyName="Date" value={"dd/MM/yyyy"} />
+                <KeyValue
+                  keyName="Activités"
+                  value={"Préparation des matériels pour ...."}
+                />
+                <KeyValue keyName="Livrables" value={"Matériels ..."} />
+                <KeyValue
+                  keyName="1er responsable"
+                  value={"Nom du responsable"}
+                />
+              </CardMain>
+            </CardFooter>
+          </CardRight>
+        </Stack>
       </BodySection>
     </Container>
   );
@@ -202,22 +187,14 @@ function a11yProps(index: number) {
 
 export const SectionNavigation = styled(Stack)(({}) => ({}));
 export const BodySection = styled(Paper)(({ theme }) => ({
-  background: "#FFFFFF",
   borderRadius: "32px",
   marginBlock: 15,
   display: "flex",
   flexDirection: "row",
   alignItems: "flex-start",
-  padding: "16px",
+  padding: "8px",
   gap: "16px",
-}));
-
-export const BodySectionTabs = styled(Box)(({ theme }) => ({
-  padding: "20px",
-  display: "flex",
-  width: "100%",
-  borderRadius: 10,
-  background: "#FFFFFF",
+  border: `2px solid ${theme.palette.grey[100]}`,
 }));
 
 const NavigationContainer = styled(Stack)(({ theme }) => ({
@@ -229,8 +206,19 @@ const NavigationContainer = styled(Stack)(({ theme }) => ({
 
 const CardLeft = styled(Box)(({ theme }) => ({
   display: "flex",
+  borderRadius: "10px",
   flexDirection: "column",
-  padding: "0px",
+  width: "830px",
+  marginTop: 14,
+}));
+
+const CardRight = styled(Box)(({ theme }) => ({
+  width: "400px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
+  gap: "32px",
+  borderRadius: "10px",
 }));
 
 export const CardFooter = styled("div")(({ theme }) => ({
@@ -238,8 +226,8 @@ export const CardFooter = styled("div")(({ theme }) => ({
   paddingBlock: theme.spacing(1),
   borderBottomLeftRadius: theme.spacing(2),
   borderBottomRightRadius: theme.spacing(2),
-  width: "416px",
-  padding: "10px 22px",
+  width: "398px",
+  padding: "10px 14px",
   marginTop: "10px",
 }));
 
@@ -247,10 +235,11 @@ const CardBody = styled(Stack)(({ theme }) => ({
   paddingInline: theme.spacing(3),
   background: theme.palette.grey[100],
   paddingBottom: theme.spacing(1),
-  width: "416px",
-  padding: "10px 22px",
-  borderRadius: 8,
+  width: "398px",
+  padding: "10px 14px",
+  borderRadius: 14,
   gap: "32px",
+  marginTop: 15,
 }));
 
 const CardMain = styled(Stack)(({ theme }) => ({

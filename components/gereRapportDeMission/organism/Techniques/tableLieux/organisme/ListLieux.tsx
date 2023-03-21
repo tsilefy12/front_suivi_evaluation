@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddLivrable from "../add/addLieux";
 import AddLieux from "../add/addLieux";
 
 const ListLieux = () => {

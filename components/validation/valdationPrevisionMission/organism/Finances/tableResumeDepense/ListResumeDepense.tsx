@@ -23,17 +23,12 @@ import EnhancedTableHead from "./table/EnhancedTableHead";
 import { getComparator, stableSort } from "./table/function";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-// import {
-//   defaultLabelDisplayedRows,
-//   labelRowsPerPage,
-// } from "../../../../../config/table.config";
-import AddResumeDepense from "./add/addPrevision";
+import AddResumeDepense from "./add/addResumeDepense";
 import KeyValue from "../../../../../shared/keyValue";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../../../../../config/table.config";
-// import KeyValue from "../../../../shared/keyValue";
 
 const ListResumeDepense = () => {
   const [order, setOrder] = React.useState<Order>("asc");

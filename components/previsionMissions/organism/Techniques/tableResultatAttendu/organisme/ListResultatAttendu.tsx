@@ -60,7 +60,6 @@ const ListResultatAttendu = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          {/* <AddObjectif /> */}
           <AddResultatAttendu />
         </Dialog>
       </SectionNavigation>

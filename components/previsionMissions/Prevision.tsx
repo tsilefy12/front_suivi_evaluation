@@ -1,18 +1,9 @@
-import {
-  Button,
-  Grid,
-  Stack,
-  Typography,
-  styled,
-  Box,
-  Paper,
-} from "@mui/material";
+import { Button, Stack, Typography, styled, Box, Paper } from "@mui/material";
 import Container from "@mui/material/Container";
 import React from "react";
 import KeyValue from "../shared/keyValue";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { useRouter } from "next/router";
 import Techniques from "./organism/Techniques/techniques";
 import Finances from "./organism/Finances/Finance";
 import Link from "next/link";
@@ -23,7 +14,6 @@ import Detail from "./detail";
 
 const PrevisionDeMission = () => {
   const [value, setValue] = React.useState(0);
-  const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -66,56 +56,48 @@ const PrevisionDeMission = () => {
       </NavigationContainer>
       <Detail />
       <BodySection>
-        <BodySectionTabs>
-          <Stack direction="row">
-            <Grid container spacing={2}>
-              {/* <Grid item xs={12} md={8}> */}
-              <CardLeft>
-                <Tabs
-                  value={value}
-                  onChange={handleChange}
-                  indicatorColor="primary"
-                  textColor="primary"
-                  variant="fullWidth"
-                  aria-label="full width tabs example"
-                  centered
-                  sx={{ mb: 2 }}
-                >
-                  <Tab label="TECHNIQUE" {...a11yProps(0)} />
-                  <Tab label="FINANCE" {...a11yProps(1)} />
-                </Tabs>
-                <TabPanel value={value} index={0}>
-                  <Techniques />
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                  <Finances />
-                </TabPanel>
-              </CardLeft>
-              <Grid item xs={12} md={3}>
-                <CardPrevision>
-                  <Typography sx={{ mb: 2 }} variant="h5">
-                    Etat de prévision
-                  </Typography>
-                  <Stack spacing={2}>
-                    <KeyValue
-                      keyName="Elaboré par"
-                      value={"Nom du responsable"}
-                    />
-                    <KeyValue
-                      keyName="Vérifié financièrement par"
-                      value={"Nom du responsable"}
-                    />
-                    <KeyValue
-                      keyName="Vérifié techniquement par"
-                      value={"Nom  du responsable"}
-                    />
-                    <KeyValue keyName="Payé par" value={"Nom du responsable"} />
-                  </Stack>
-                </CardPrevision>
-              </Grid>
-            </Grid>
-          </Stack>
-        </BodySectionTabs>
+        <Stack direction="row" spacing={1}>
+          <CardLeft>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="fullWidth"
+              aria-label="full width tabs example"
+              centered
+              sx={{ mb: 2 }}
+            >
+              <Tab label="TECHNIQUE" {...a11yProps(0)} />
+              <Tab label="FINANCE" {...a11yProps(1)} />
+            </Tabs>
+            <TabPanel value={value} index={0}>
+              <Techniques />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <Finances />
+            </TabPanel>
+          </CardLeft>
+          <CardRight>
+            <CardPrevision>
+              <Typography sx={{ mb: 2 }} variant="h5">
+                Etat de prévision
+              </Typography>
+              <Stack spacing={2}>
+                <KeyValue keyName="Elaboré par" value={"Nom du responsable"} />
+                <KeyValue
+                  keyName="Vérifié financièrement par"
+                  value={"Nom du responsable"}
+                />
+                <KeyValue
+                  keyName="Vérifié techniquement par"
+                  value={"Nom  du responsable"}
+                />
+                <KeyValue keyName="Payé par" value={"Nom du responsable"} />
+              </Stack>
+            </CardPrevision>
+          </CardRight>
+        </Stack>
       </BodySection>
     </Container>
   );
@@ -154,33 +136,27 @@ function a11yProps(index: number) {
 }
 
 export const SectionNavigation = styled(Stack)(({}) => ({}));
+
 export const BodySection = styled(Paper)(({ theme }) => ({
-  background: "#FFFFFF",
   borderRadius: "32px",
   marginBlock: 15,
   display: "flex",
   flexDirection: "row",
   alignItems: "flex-start",
-  padding: "16px",
+  padding: "8px",
   gap: "16px",
-}));
-
-export const BodySectionTabs = styled(Box)(({ theme }) => ({
-  padding: "20px",
-  display: "flex",
-  width: "100%",
-  borderRadius: 10,
-  background: "#FFFFFF",
+  border: `1px solid ${theme.palette.grey[100]}`,
 }));
 
 const CardPrevision = styled(Box)(({ theme }) => ({
   paddingInline: theme.spacing(3),
   background: theme.palette.grey[100],
   paddingBottom: theme.spacing(1),
-  width: "416px",
-  padding: "10px 22px",
-  borderRadius: 8,
+  width: "396px",
+  padding: "10px 14px",
+  borderRadius: 14,
   gap: "32px",
+  marginTop: 14,
 }));
 
 const NavigationContainer = styled(Stack)(({ theme }) => ({
@@ -192,6 +168,17 @@ const NavigationContainer = styled(Stack)(({ theme }) => ({
 
 const CardLeft = styled(Box)(({ theme }) => ({
   display: "flex",
+  borderRadius: "10px",
   flexDirection: "column",
-  padding: "0px",
+  width: "830px",
+  marginTop: 14,
+}));
+
+const CardRight = styled(Box)(({ theme }) => ({
+  width: "396px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
+  gap: "32px",
+  borderRadius: "10px",
 }));

@@ -21,8 +21,6 @@ const Techniques = () => {
     <Box>
       <Table>
         <TableBody>
-          {/* {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => { */}
-          {/* return ( */}
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -133,8 +131,6 @@ const Techniques = () => {
               <ListProgrammes />
             </AccordionDetails>
           </Accordion>
-          {/* ); */}
-          {/* // })} */}
         </TableBody>
       </Table>
     </Box>

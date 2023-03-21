@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
@@ -19,7 +18,7 @@ const AddProgrammes = () => {
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <SectionNavigation>
-        <DialogTitle>Créer/modifier contact pendant la mission</DialogTitle>
+        <DialogTitle>Créer/modifier Programme</DialogTitle>
         <DialogContent>
           <FormContainer spacing={2} mt={2}>
             <TextField

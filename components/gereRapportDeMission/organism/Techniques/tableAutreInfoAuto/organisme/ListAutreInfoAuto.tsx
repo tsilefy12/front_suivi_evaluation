@@ -84,9 +84,7 @@ const ListAutreInfoAuto = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          {/* <Modal> */}
           <AddAutreInfoAuto />
-          {/* </Modal> */}
         </Dialog>
       </SectionNavigation>
     </Container>

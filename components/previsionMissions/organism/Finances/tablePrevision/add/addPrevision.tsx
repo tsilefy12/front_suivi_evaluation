@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
-import Link from "next/link";
+import React from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
-  Box,
   Container,
   DialogActions,
   DialogContent,
@@ -66,8 +64,7 @@ const AddPrevisionMission = () => {
             </FormControl>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
-                {" "}
-                Ligne Budgétaire{" "}
+                Ligne Budgétaire
               </InputLabel>
               <Select
                 labelId="demo-simple-select-label"

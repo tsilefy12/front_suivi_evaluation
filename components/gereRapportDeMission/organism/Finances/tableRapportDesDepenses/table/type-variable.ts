@@ -1,10 +1,8 @@
 export default interface Data {
-  dateDébut: string;
-  dateFin: string;
-  véhicule: string;
-  trajet: string;
-  responsable: string;
-  nb: string;
+  dpj: string;
+  date: string;
+  libelles: string;
+  montant: string;
 }
 
 export type Order = "asc" | "desc";

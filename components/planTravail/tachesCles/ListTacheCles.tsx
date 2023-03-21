@@ -103,6 +103,7 @@ const ListTacheCles = () => {
 
   return (
     <Container maxWidth="xl">
+      {/* <NavigationContainer> */}
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
         <Stack flexDirection="row">
           <Link href="/plan_travail">
@@ -120,17 +121,15 @@ const ListTacheCles = () => {
           Tâches clés
         </Typography>
       </SectionNavigation>
+      {/* </NavigationContainer> */}
       <Divider />
+      <FormContainer>
+        <KeyValue
+          keyName="Objectif Strategie"
+          value={"Promouvoir l'exploitation durable équitable des espèce"}
+        />
+      </FormContainer>
       <BodySection>
-      <Card>
-        <ValueDetail>
-          <KeyValue
-            keyName="Objectif Strategie"
-            value={"Promouvoir l'exploitation durable équitable des espèce"}
-          />
-        </ValueDetail>
-      </Card>
-      <SectionTable>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />
@@ -243,7 +242,6 @@ const ListTacheCles = () => {
         label="Dense padding"
       /> */}
         </Box>
-      </SectionTable>
       </BodySection>
     </Container>
   );
@@ -253,19 +251,24 @@ export default ListTacheCles;
 
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
-const SectionTable = styled("div")(({ theme }) => ({}));
-
-const ValueDetail = styled(Stack)(({ theme }) => ({
-  width: "100%",
-  // marginBottom: theme.spacing(3),
-  padding: 20,
-  borderRadius: 10,
-  // marginBlock: 16,
-}));
 
 export const BodySection = styled(Box)(({}) => ({
   borderRadius: 20,
   backgroundColor: "white",
-  // padding: "16px 32px",
   marginBlock: 16,
+}));
+const FormContainer = styled(Stack)(({ theme }) => ({
+  width: "100%",
+  marginBottom: theme.spacing(3),
+  padding: 30,
+  borderRadius: 20,
+  background: "#fff",
+  border: `1px solid ${theme.palette.grey[100]}`,
+}));
+
+const NavigationContainer = styled(Stack)(({ theme }) => ({
+  flexDirection: "column",
+  marginBottom: theme.spacing(2),
+  flex: 1,
+  width: "100%",
 }));
