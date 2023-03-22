@@ -77,6 +77,13 @@ const menu = [
       // },
     ],
   },
+  {
+    id: 5,
+    name: "404",
+    link: "/404",
+    icon: "descriptionIcon",
+    items: [],
+  },
 ];
 
 export default menu;
