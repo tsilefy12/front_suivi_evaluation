@@ -1,7 +1,8 @@
 
 export default interface Data {
-  grants: string;
-  bailleur: string;
+  pj: string;
+  date: string;
+  libelles: string;
   }
   
 

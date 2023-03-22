@@ -25,7 +25,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 const ListGrantsAdmin = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("bailleur");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("pj");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -42,7 +42,7 @@ const ListGrantsAdmin = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.grants);
+      const newSelecteds = rows.map((n) => n.pj);
       setSelected(newSelecteds);
       return;
     }
@@ -120,22 +120,24 @@ const ListGrantsAdmin = () => {
                   {stableSort(rows, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const isItemSelected = isSelected(row.grants);
+                      const isItemSelected = isSelected(row.pj);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
+                        
+
                         <TableRow
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.grants}
+                          key={row.pj}
                           selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.grants)}
+                            onClick={(event) => handleClick(event, row.pj)}
                           >
                           </TableCell>
                           <TableCell
@@ -144,9 +146,10 @@ const ListGrantsAdmin = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.grants}
+                            {row.pj}
                           </TableCell>
-                          <TableCell align="right">{row.bailleur}</TableCell>
+                          <TableCell align="right">{row.date}</TableCell>
+                          <TableCell align="right">{row.libelles}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"

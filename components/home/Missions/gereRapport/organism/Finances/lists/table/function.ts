@@ -1,12 +1,14 @@
 import Data, { Order } from "./type-variable";
 
 export function createData(
-  grants: string,
-  bailleur: string,
+    pj: string,
+    date: string,
+    libelles: string,
 ): Data {
   return {
-    grants,
-    bailleur,
+    pj,
+    date,
+    libelles
   };
 }
 
