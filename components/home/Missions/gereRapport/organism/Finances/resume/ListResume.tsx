@@ -11,7 +11,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Data, { Order } from "./table/type-variable";
 import { rows } from "./table/constante";
-import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
 import EnhancedTableHead from "./table/EnhancedTableHead";
 import { getComparator, stableSort } from "./table/function";
 import Add from "@mui/icons-material/Add";
@@ -19,13 +18,12 @@ import {
     defaultLabelDisplayedRows,
     labelRowsPerPage,
   } from "../../../../../../../config/table.config";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const ListGrantsAdmin = () => {
+const ListResume = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("pj");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("grant");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -42,7 +40,7 @@ const ListGrantsAdmin = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.pj);
+      const newSelecteds = rows.map((n) => n.grant);
       setSelected(newSelecteds);
       return;
     }
@@ -91,15 +89,17 @@ const ListGrantsAdmin = () => {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-      <SectionTable>
-        <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2 }}>
-            <EnhancedTableToolbar numSelected={selected.length} />
-            <Link href="/">
+    <Container maxWidth="xl">
+      <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
+            <Link href="#">
             <Button variant="contained" startIcon={<Add />}>
                 Ajouter
             </Button>
             </Link>
+      </SectionNavigation>
+      <SectionTable>
+        <Box sx={{ width: "100%" }}>
+          <Paper sx={{ width: "100%", mb: 2 }}>
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -120,24 +120,22 @@ const ListGrantsAdmin = () => {
                   {stableSort(rows, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const isItemSelected = isSelected(row.pj);
+                      const isItemSelected = isSelected(row.grant);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
-                        
-
                         <TableRow
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.pj}
+                          key={row.grant}
                           selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.pj)}
+                            onClick={(event) => handleClick(event, row.grant)}
                           >
                           </TableCell>
                           <TableCell
@@ -146,10 +144,13 @@ const ListGrantsAdmin = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.pj}
+                            {row.grant}
                           </TableCell>
-                          <TableCell align="right">{row.date}</TableCell>
-                          <TableCell align="right">{row.libelles}</TableCell>
+                          <TableCell align="center">{row.budget}</TableCell>
+                          <TableCell align="center">{row.prevues}</TableCell>
+                          <TableCell align="center">{row.realisees}</TableCell>
+                          <TableCell align="center">{row.difference}</TableCell>
+                          <TableCell align="right">{row.remarque}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
@@ -204,10 +205,11 @@ const ListGrantsAdmin = () => {
       /> */}
         </Box>
       </SectionTable>
+    </Container>
   );
 };
 
-export default ListGrantsAdmin;
+export default ListResume;
 
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
