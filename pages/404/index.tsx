@@ -1,4 +1,4 @@
-import { styled, Typography, Link, Grid, IconButton } from '@mui/material'
+import { Typography, Link, Grid, IconButton } from '@mui/material'
 import React from 'react'
 import ImgNotFound from './Image/ImgNotFound'
 import Layout from './layout/Layout';
