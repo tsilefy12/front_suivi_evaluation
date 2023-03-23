@@ -23,7 +23,7 @@ const PageNotFound = () => {
                     <Grid item xs={12} md={8} lg={8}>
                         <Typography variant="h4" color="initial" sx={{my: 2}}>Oops !</Typography>
                             <ImgNotFound/>
-                        <Typography variant="h4" color="initial" sx={{my: 2}}>Cette page n'existe pas encore !</Typography>
+                        <Typography variant="h4" color="initial" sx={{my: 2}}>Cette page n&apos;existe pas encore !</Typography>
                     </Grid>
                     <Grid item xs={12} md={2} lg={2}>
                         <Link href="/">
