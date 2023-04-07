@@ -34,14 +34,15 @@ const ListMissions = () => {
 			<Divider />
 			<SectionDetails>
 				<Stack
-					direction="row"
-					sx={{
-						flex: "1 1 100%",
-						justifyContent: "space-between",
-						alignItems: "center",
-					}}
+                    direction={{ xs: 'column', sm: 'row' }}
+                    spacing={{ xs: 1, sm: 2, md: 4 }}
+                    sx={{
+                        flex: "1 1 100%",
+                        justifyContent: "space-between",
+                        alignItems:"center",
+                    }}
 				>
-					<Typography variant="h5" id="tableTitle" component="div">
+					<Typography variant="h4" id="tableTitle" component="div">
 						Liste des Missions
 					</Typography>
 					<TextField
@@ -62,10 +63,10 @@ const ListMissions = () => {
 									alignItems="center"
 								>
 									<Typography variant="h6" color="GrayText">
-										REF REF_MISSION_001
+										REF_MISSION_001
 									</Typography>
-									<Stack direction="row" spacing={1}>
-										<IconButton size="small" color="accent">
+									<Stack direction="row" spacing={{ xs: 0, sm: 0, md: 2 }}>
+										<IconButton size="small" color="success">
 											<Edit fontSize="small" />
 										</IconButton>
 										<IconButton size="small" color="warning">
@@ -86,8 +87,8 @@ const ListMissions = () => {
 								</CardBody>
 
 								<CardFooter>
-									<Stack direction="row">
-										<Link href="/missions/id/gereEtat">
+									<Stack direction={{ xs: 'column', sm: 'row' }}>
+										<Link href="/missions/previsionDeMission">
 											<Button variant="text" color="info">
 												Gérer Etat de prévision
 											</Button>
@@ -98,11 +99,14 @@ const ListMissions = () => {
 											</Button>
 										</Link>
 									</Stack>
-									<Link href="/missions/id/gereRapport">
+                                    <Stack direction={{ xs: 'column', sm: 'row' }}>
+                                    <Link href="/missions/id/gereRapport">
 										<Button variant="text" color="info">
 											Gérer Rapport
 										</Button>
 									</Link>
+									</Stack>
+									
 								</CardFooter>
 							</LinkContainer>
 						</Grid>

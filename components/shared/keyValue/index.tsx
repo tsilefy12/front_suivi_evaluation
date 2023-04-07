@@ -4,9 +4,10 @@ import Typography from "@mui/material/Typography";
 type KeyValueProps = { keyName: string; value: string };
 
 const KeyValue = ({ keyName, value }: KeyValueProps) => (
-	<Stack direction={"row"} spacing={2}>
+	<Stack direction={{ sm: 'row' }}
+    spacing={{ xs: 1, sm: 1, md: 2 }} >
 		<Typography variant="body1" color="secondary">
-			{keyName} :{" "}
+			{keyName} : {" "}
 		</Typography>
 		<Typography variant="body1" color="gray">
 			{value}

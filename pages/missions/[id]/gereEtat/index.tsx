@@ -7,7 +7,7 @@ import BackOfficeLayout from '../../../../layouts/backOffice'
 const PageGereEtat = () => {
   return (
     <BackOfficeLayout>
-        <Container maxWidth="xl" sx={{backgroundColor: '#fff'}}>
+        <Container maxWidth="xl">
           <GereEtat />
         </Container>
     </BackOfficeLayout>

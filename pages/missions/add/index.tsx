@@ -7,7 +7,7 @@ import BackOfficeLayout from '../../../layouts/backOffice'
 const AddMission = () => {
   return (
     <BackOfficeLayout>
-        <Container maxWidth="xl" sx={{backgroundColor: '#fff'}}>
+        <Container maxWidth="xl">
           <AddNewMission />
         </Container>
     </BackOfficeLayout>
