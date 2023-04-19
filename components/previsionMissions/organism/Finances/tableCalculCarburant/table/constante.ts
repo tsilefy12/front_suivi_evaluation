@@ -50,7 +50,7 @@ export const rows = [
     "1000km"
   ),
   createData(
-    "Antananarivo - Diego",
+    "Antananarivo - Antsirabe",
     "1010 TAB",
     "Essence",
     "1000km",

@@ -50,7 +50,7 @@ export const rows = [
     "10"
   ),
   createData(
-    "dd/MM/yyyy",
+    "dd/MM/yyyy2",
     "dd/MM/yyyy",
     "2020 TAB",
     "Antananarivo - Diego",

@@ -21,8 +21,12 @@ const PrevisionDeMission = () => {
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
-        <SectionNavigation direction="row" justifyContent="space-between">
-          <Stack flexDirection="row">
+        <SectionNavigation 
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 1, sm: 2, md: 4 }}
+        justifyContent="space-between"
+        sx={{ mb: 2 }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }}>
             <Link href="/">
               <Button
                 color="info"
@@ -56,7 +60,8 @@ const PrevisionDeMission = () => {
       </NavigationContainer>
       <Detail />
       <BodySection>
-        <Stack direction="row" spacing={1}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 1, md: 1 }}
+        sx={{padding:"10px"}}>
           <CardLeft>
             <Tabs
               value={value}
@@ -139,21 +144,21 @@ export const SectionNavigation = styled(Stack)(({}) => ({}));
 
 export const BodySection = styled(Paper)(({ theme }) => ({
   borderRadius: "32px",
+  width: "100%",
   marginBlock: 15,
   display: "flex",
-  flexDirection: "row",
   alignItems: "flex-start",
-  padding: "8px",
+  padding: "8px 20px",
   gap: "16px",
   border: `1px solid ${theme.palette.grey[100]}`,
 }));
 
-const CardPrevision = styled(Box)(({ theme }) => ({
+const CardPrevision = styled("div")(({ theme }) => ({
   paddingInline: theme.spacing(3),
   background: theme.palette.grey[100],
   paddingBottom: theme.spacing(1),
-  width: "396px",
-  padding: "10px 14px",
+  width: "100%",
+  padding: "8px 18px",
   borderRadius: 14,
   gap: "32px",
   marginTop: 14,
@@ -170,15 +175,17 @@ const CardLeft = styled(Box)(({ theme }) => ({
   display: "flex",
   borderRadius: "10px",
   flexDirection: "column",
-  width: "830px",
+  width: "70%",
   marginTop: 14,
+  // backgroundColor: "blue",
 }));
 
 const CardRight = styled(Box)(({ theme }) => ({
-  width: "396px",
+  width: "30%",
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-start",
   gap: "32px",
   borderRadius: "10px",
+  // backgroundColor: "red",
 }));

@@ -16,8 +16,6 @@ import ListCalculCarburant from "./tableCalculCarburant/ListCalculCarburant";
 const Finances = () => {
   return (
     <Box>
-      <Table>
-        <TableBody>
           <AccordionBody>
             <Accordion>
               <AccordionSummary
@@ -80,8 +78,6 @@ const Finances = () => {
               </AccordionDetails>
             </Accordion>
           </AccordionBody>
-        </TableBody>
-      </Table>
     </Box>
   );
 };
