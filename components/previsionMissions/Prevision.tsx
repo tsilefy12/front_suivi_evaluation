@@ -60,9 +60,9 @@ const PrevisionDeMission = () => {
       </NavigationContainer>
       <Detail />
       <BodySection>
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 1, md: 1 }}
-        sx={{padding:"10px"}}>
-          <CardLeft>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 2, sm: 2, md: 1 }}
+        sx={{padding:"10px" }}>
+          <Stack  sx={{width:"inherit" }}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -82,8 +82,8 @@ const PrevisionDeMission = () => {
             <TabPanel value={value} index={1}>
               <Finances />
             </TabPanel>
-          </CardLeft>
-          <CardRight>
+          </Stack>
+          <Stack>
             <CardPrevision>
               <Typography sx={{ mb: 2 }} variant="h5">
                 Etat de prévision
@@ -101,7 +101,7 @@ const PrevisionDeMission = () => {
                 <KeyValue keyName="Payé par" value={"Nom du responsable"} />
               </Stack>
             </CardPrevision>
-          </CardRight>
+          </Stack>
         </Stack>
       </BodySection>
     </Container>
