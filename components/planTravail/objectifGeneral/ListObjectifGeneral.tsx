@@ -114,31 +114,43 @@ const ListObjectifGeneral = () => {
 
   return (
     <Container maxWidth="xl">
-      <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Stack flexDirection="row">
-          <Link href="/plan_travail">
-            <Button color="info" variant="text" startIcon={<ArrowBack />}>
-              Retour
+      <SectionNavigation direction={{ xs: 'column', sm: 'row' }}
+         spacing={{ xs: 1, sm: 2, md: 4 }}
+         justifyContent="space-between"
+         sx={{ mb: 2 }}>
+          <Stack flexDirection={"row"}>
+            
+            <Link href="/plan_travail">
+              <Button color="info" variant="text" startIcon={<ArrowBack />}>
+                Retour
+              </Button>
+            </Link>
+            <Button
+            onClick={handleClickOpen}
+              variant="contained"
+              color="primary"
+              size="small"
+              startIcon={<Add />}
+              sx={{ marginInline: 3 }}
+            >
+              Créer
             </Button>
-          </Link>
-          <Button onClick={handleClickOpen} variant="contained" startIcon={<Add />}>
-            Créer
-          </Button>
-        </Stack>
+            
+          </Stack>
+
+        
         <Typography variant="h4" color="GrayText">
-          Objectifs Générale
+          Objectifs générales
         </Typography>
       </SectionNavigation>
       <Divider />
+      <FormContainer>
+        <KeyValue
+          keyName="Objectif Stratégique"
+          value={"Promouvoir l'exploitation durable équitable des espèces"}
+        />
+      </FormContainer>
       <BodySection>
-        <Card>
-          <ValueDetail>
-            <KeyValue
-              keyName="Objectif Strategie"
-              value={"Promouvoir l'exploitation durable équitable des espèce"}
-            />
-          </ValueDetail>
-        </Card>
         {/* <SectionTable> */}
         <SectionTable>
           <Box sx={{ width: "100%" }}>
@@ -281,4 +293,15 @@ export const BodySection = styled(Box)(({}) => ({
   borderRadius: 20,
   backgroundColor: "white",
   marginBlock: 16,
+}));
+
+
+const FormContainer = styled(Stack)(({ theme }) => ({
+  width: "100%",
+  marginBottom: theme.spacing(3),
+  padding: 30,
+  borderRadius: 20,
+  background: "#fff",
+  border: `1px solid ${theme.palette.grey[100]}`,
+  marginTop: 14,
 }));

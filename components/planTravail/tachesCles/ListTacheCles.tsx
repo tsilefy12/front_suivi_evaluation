@@ -136,8 +136,8 @@ const ListTacheCles = () => {
       <Divider />
       <FormContainer>
         <KeyValue
-          keyName="Objectif Strategie"
-          value={"Promouvoir l'exploitation durable équitable des espèce"}
+          keyName="Objectif Stratégique"
+          value={"Promouvoir l'exploitation durable équitable des espèces"}
         />
       </FormContainer>
       <BodySection>
@@ -189,8 +189,8 @@ const ListTacheCles = () => {
                           >
                             {row.tache}
                           </TableCell>
-                          <TableCell align="center">{row.projet}</TableCell>
-                          <TableCell align="center">
+                          <TableCell>{row.projet}</TableCell>
+                          <TableCell>
                             {row.responsable}
                           </TableCell>
                           <TableCell align="right">

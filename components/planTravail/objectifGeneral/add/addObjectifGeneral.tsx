@@ -13,8 +13,6 @@ import {
 
 const ObjectifsGeneralForm = ({ handleClose }: any) => {
   const [open, setOpen] = React.useState(false);
-
-
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <SectionNavigation>
@@ -31,7 +29,7 @@ const ObjectifsGeneralForm = ({ handleClose }: any) => {
           </FormContainer>
         </DialogContent>
         <DialogActions>
-          <Button color="warning" >Annuler</Button>
+          <Button color="warning" onClick={handleClose}>Annuler</Button>
           <Button variant="contained" type="submit">
             Enregistrer
           </Button>
