@@ -23,7 +23,7 @@ const menu = [
     id: 2,
     name: "GRANTS",
     link: "/grants",
-    icon: "settingsIcon",
+    icon: "runCircle",
     items: [
       {
         id: 21,

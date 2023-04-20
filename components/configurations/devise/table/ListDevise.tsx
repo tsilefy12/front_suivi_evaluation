@@ -129,13 +129,13 @@ const ListDevise = () => {
                           padding="checkbox"
                           onClick={(event) => handleClick(event, row.devise)}
                         >
-                          <Checkbox
+                          {/* <Checkbox
                             color="primary"
                             checked={isItemSelected}
                             inputProps={{
                               "aria-labelledby": labelId,
                             }}
-                          />
+                          /> */}
                         </TableCell>
                         <TableCell
                           component="th"

@@ -34,11 +34,11 @@ const TableToolbarDevise = (props: EnhancedTableToolbarProps) => {
         </Typography>
       ) : (
         <Stack
-          direction="row"
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 1, sm: 2, md: 4 }}
           sx={{
             flex: "1 1 100%",
             justifyContent: "space-between",
-            alignItems: "center",
           }}
         >
           <Typography variant="h6" id="tableTitle" component="div">
