@@ -31,8 +31,8 @@ const ListProgrammes = () => {
   return (
     <Container maxWidth="xl">
       <SectionTable>
-        <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2 }}>
+      <Box sx={{ overflow: "auto" }}>
+        <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
             <MyTableContainer>
               <Table sx={{ minWidth: 750 }} aria-label="simple table">
                 <TableHead>
@@ -91,6 +91,8 @@ const ListProgrammes = () => {
                 </TableBody>
               </Table>
             </MyTableContainer>
+          </Box>
+        </Box>
             <SectionNavigation
               direction="row"
               justifyContent="space-between"
@@ -103,8 +105,6 @@ const ListProgrammes = () => {
                 <AddProgrammes />
               </Dialog>
             </SectionNavigation>
-          </Paper>
-        </Box>
       </SectionTable>
     </Container>
   );
