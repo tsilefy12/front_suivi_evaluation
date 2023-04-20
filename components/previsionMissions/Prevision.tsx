@@ -61,8 +61,8 @@ const PrevisionDeMission = () => {
       <Detail />
       <BodySection>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 2, sm: 2, md: 1 }}
-        sx={{padding:"10px" }}>
-          <Stack  sx={{width:"inherit" }}>
+        sx={{padding:"10px", width:"100%" }}>
+          <Stack width={{xs:"100%", sm:"100%", md:"60%" }}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -83,7 +83,7 @@ const PrevisionDeMission = () => {
               <Finances />
             </TabPanel>
           </Stack>
-          <Stack>
+          <Stack width={{xs:"100%", sm:"100%", md:"50%" }}>
             <CardPrevision>
               <Typography sx={{ mb: 2 }} variant="h5">
                 Etat de prévision
@@ -144,7 +144,6 @@ export const SectionNavigation = styled(Stack)(({}) => ({}));
 
 export const BodySection = styled(Paper)(({ theme }) => ({
   borderRadius: "32px",
-  width: "100%",
   marginBlock: 15,
   display: "flex",
   alignItems: "flex-start",
@@ -169,23 +168,4 @@ const NavigationContainer = styled(Stack)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   flex: 1,
   width: "100%",
-}));
-
-const CardLeft = styled(Box)(({ theme }) => ({
-  display: "flex",
-  borderRadius: "10px",
-  flexDirection: "column",
-  width: "70%",
-  marginTop: 14,
-  // backgroundColor: "blue",
-}));
-
-const CardRight = styled(Box)(({ theme }) => ({
-  width: "30%",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-start",
-  gap: "32px",
-  borderRadius: "10px",
-  // backgroundColor: "red",
 }));

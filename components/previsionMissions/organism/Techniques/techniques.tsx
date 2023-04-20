@@ -18,7 +18,7 @@ import ListProgrammes from "./tableProgramme/organisme/ListProgrammes";
 
 const Techniques = () => {
   return (
-    <Box>
+    <Box >
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
