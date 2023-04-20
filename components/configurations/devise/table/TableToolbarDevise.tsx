@@ -41,7 +41,7 @@ const TableToolbarDevise = (props: EnhancedTableToolbarProps) => {
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="h6" id="tableTitle" component="div">
+          <Typography variant="h5" id="tableTitle" component="div">
             Liste des types de compte
           </Typography>
           <TextField
