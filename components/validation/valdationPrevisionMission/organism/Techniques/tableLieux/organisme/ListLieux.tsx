@@ -6,6 +6,7 @@ import TableRow from "@mui/material/TableRow";
 import Stack from "@mui/material/Stack";
 import { rows } from "./constante";
 import {
+  Box,
   Button,
   Container,
   Dialog,
@@ -28,6 +29,8 @@ const ListLieux = () => {
 
   return (
     <Container>
+      <Box sx={{ overflow: "auto" }}>
+        <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
       <MyTableContainer>
         <Table sx={{ minWidth: 700 }} aria-label="simple table">
           <TableHead>
@@ -75,6 +78,8 @@ const ListLieux = () => {
           </TableBody>
         </Table>
       </MyTableContainer>
+      </Box>
+      </Box>
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
         <Button variant="text" color="info" onClick={handleClickOpen}>
           Ajouter

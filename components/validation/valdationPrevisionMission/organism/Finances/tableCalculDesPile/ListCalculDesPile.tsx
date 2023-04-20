@@ -5,6 +5,7 @@ import {
   IconButton,
   Stack,
   styled,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import Box from "@mui/material/Box";
@@ -205,7 +206,9 @@ const ListCalculDesPiles = () => {
               </Table>
             </TableContainer>
             <Footer>
-              <KeyValue keyName="Total budget" value={"300000"} />
+            <Typography variant="body2" align="right">
+                Total Budget : 300000
+              </Typography>
             </Footer>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
@@ -235,5 +238,5 @@ export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
 const SectionTable = styled("div")(({ theme }) => ({}));
 export const Footer = styled(Stack)(({ theme }) => ({
-  marginLeft: "365px",
+ 
 }));
