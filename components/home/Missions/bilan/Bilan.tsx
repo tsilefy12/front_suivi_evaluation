@@ -74,8 +74,8 @@ const BilanMission = () => {
       </FormContainer>
       <BodySection>
         <Stack 
-        direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <CardLeft width={{ xs: '100%', sm: '100%', md: '70%' }}>
+        direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{padding:"10px", width:"100%" }}>
+          <Stack width={{ xs: '100%', sm: '100%', md: '70%' }}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -95,8 +95,8 @@ const BilanMission = () => {
             <TabPanel value={value} index={1}>
               <Finances />
             </TabPanel>
-          </CardLeft>
-          <CardRight width={{ xs: '100%', sm: '100%', md: '30%' }}>
+          </Stack>
+          <Stack width={{ xs: '100%', sm: '100%', md: '30%' }}>
             <CardBody>
               <Typography variant="h5">Bilan global</Typography>
               <Typography color="secondary" variant="body2">
@@ -122,7 +122,7 @@ const BilanMission = () => {
                 </Grid>
               </Grid>
             </CardBody>
-          </CardRight>
+          </Stack>
         </Stack>
       </BodySection>
     </Container>
@@ -198,19 +198,4 @@ const FormContainer = styled(Stack)(({ theme }) => ({
   borderRadius: 20,
   background: "#fff",
   border: `1px solid ${theme.palette.grey[100]}`,
-}));
-const CardLeft = styled(Box)(({ theme }) => ({
-  display: "flex",
-  borderRadius: "10px",
-  flexDirection: "column",
-//   width: "70%",
-  marginTop: 14,
-}));
-const CardRight = styled(Box)(({ theme }) => ({
-//   width: "30%",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-center",
-  gap: "40px",
-  borderRadius: "10px",
 }));
