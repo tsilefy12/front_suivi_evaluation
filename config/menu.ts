@@ -23,7 +23,7 @@ const menu = [
     id: 2,
     name: "GRANTS",
     link: "/grants",
-    icon: "runCircle",
+    icon: "run_circle",
     items: [
       {
         id: 21,
@@ -67,7 +67,7 @@ const menu = [
     id: 3,
     name: "Plan Travail Global",
     link: "/plan_travail",
-    icon: "tv",
+    icon: "display_settings",
     items: [],
   },
   {
