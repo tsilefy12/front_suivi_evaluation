@@ -3,6 +3,6 @@ function createData(id: string, resultat: string) {
 }
 
 export const rows = [
-  createData("", "Résultat numéro 1"),
-  createData("", "Résultat numéro 2"),
+  createData("1", "Résultat numéro 1"),
+  createData("2", "Résultat numéro 2"),
 ];
