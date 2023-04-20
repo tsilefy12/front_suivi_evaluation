@@ -73,7 +73,7 @@ const ValidationRapportMission = () => {
           </Stack>
           <Stack width={{xs:"100%", sm:"100%", md:"40%" }}>
             <CardBody>
-              <Typography variant="h6">Etat du Rapport</Typography>
+              <Typography variant="h6"  sx={{ textTransform: "uppercase" }}>Etat du Rapport</Typography>
               <Stack spacing={1}>
                 <KeyValue keyName="Elaboré par" value={"Nom du responsable"} />
                 <Divider />
@@ -108,7 +108,7 @@ const ValidationRapportMission = () => {
             </CardBody>
 
             <CardFooter>
-              <Typography variant="body2" sx={{ textTransform: "uppercase" }}>
+              <Typography variant="h6" sx={{ textTransform: "uppercase" }}>
                 Info sur les dépositions de Rapport
               </Typography>
               <CardMain>
@@ -214,7 +214,8 @@ export const CardFooter = styled("div")(({ theme }) => ({
   borderBottomLeftRadius: theme.spacing(2),
   borderBottomRightRadius: theme.spacing(2),
   width: "100%",
-  padding: "10px 14px",
+  padding: "10px 30px",
+  gap: "32px",
   marginTop: "10px",
 }));
 
@@ -223,7 +224,7 @@ const CardBody = styled(Stack)(({ theme }) => ({
   background: theme.palette.grey[100],
   paddingBottom: theme.spacing(1),
   width: "100%",
-  padding: "10px 14px",
+  padding: "10px 30px",
   borderRadius: 14,
   gap: "32px",
   marginTop: 15,
