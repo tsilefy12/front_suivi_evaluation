@@ -243,6 +243,5 @@ export const Footer = styled(Stack)(({ theme }) => ({
   fontStyle: "normal",
   fontWeight: "400px",
   fontSize: "14px",
-  marginRight: "176px",
   letterSpacing: "0.25px",
 }));

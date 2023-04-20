@@ -106,7 +106,7 @@ const GereRapportDeMission = () => {
           </Stack>
           <Stack width={{xs:"100%", sm:"100%", md:"40%" }}>
             <CardBody>
-              <Typography variant="h6">Etat des rapports</Typography>
+              <Typography variant="h6" sx={{ textTransform: "uppercase"}}>Etat des rapports</Typography>
               <Stack spacing={1}>
                 <KeyValue
                   keyName="Vérifié financièrement par"
@@ -139,22 +139,13 @@ const GereRapportDeMission = () => {
               </Stack>
             </CardBody>
             <CardFooter>
-              <Stack flexDirection="row">
+              <Stack flexDirection={{xs:"column", sm:"row"}}>
                 <Typography
-                  variant="body2"
+                  variant="h6"
                   sx={{ textTransform: "uppercase", marginTop: "3px" }}
                 >
                   Info sur les dépositions de Rapport
                 </Typography>
-                <Button
-                  variant="text"
-                  color="info"
-                  size="small"
-                  onClick={handleClickOpen}
-                  sx={{ marginInline: 1 }}
-                >
-                  Ajouter
-                </Button>
                 <Dialog open={open} onClose={handleClose}>
                   <AddDepositionDesRapports />
                 </Dialog>
@@ -172,14 +163,7 @@ const GereRapportDeMission = () => {
                       keyName="1er responsable"
                       value={"Nom du responsable"}
                     />
-                    <Stack flexDirection="row" marginLeft={18}>
-                      <Button variant="text" sx={{ marginInline: 2 }}>
-                        Editer
-                      </Button>
-                      <Button variant="text" color="warning">
-                        Supprimer
-                      </Button>
-                    </Stack>
+                    
                   </CardMain>
                   <Divider />
                 </Grid>
@@ -262,7 +246,7 @@ export const CardFooter = styled("div")(({ theme }) => ({
   borderBottomRightRadius: theme.spacing(2),
   width: "100%",
   padding: "10px 22px",
-  marginTop: "10px",
+  marginTop: "20px",
 }));
 
 const CardBody = styled(Stack)(({ theme }) => ({
