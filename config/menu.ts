@@ -67,7 +67,7 @@ const menu = [
     id: 3,
     name: "Plan Travail Global",
     link: "/plan_travail",
-    icon: "cropLandscapeIcon",
+    icon: "tv",
     items: [],
   },
   {
