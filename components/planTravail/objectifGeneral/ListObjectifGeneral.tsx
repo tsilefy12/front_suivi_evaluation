@@ -270,6 +270,7 @@ const ListObjectifGeneral = () => {
           </Box>
         </SectionTable>
       </BodySection>
+      
       <Dialog open={open} onClose={handleClose}>
         <ObjectifsGeneralForm />
       </Dialog>

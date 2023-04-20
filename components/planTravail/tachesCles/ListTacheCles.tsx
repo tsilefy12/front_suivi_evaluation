@@ -115,15 +115,18 @@ const ListTacheCles = () => {
                 Retour
               </Button>
             </Link>
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              startIcon={<Add />}
-              sx={{ marginInline: 3 }}
-            >
-              Créer
-            </Button>
+            <Link href="/plan_travail/tacheCle/add">
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                startIcon={<Add />}
+                sx={{ marginInline: 3 }}
+              >
+                Créer
+              </Button>
+            </Link>
+            
             
           </Stack>
 
