@@ -102,9 +102,10 @@ const ListBudgetInitial = () => {
     <Container maxWidth="xl">
 
         <SectionNavigation
-          direction="row"
-          justifyContent="space-between"
-          mb={2}
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 1, sm: 2, md: 4 }}
+        justifyContent="space-between"
+        sx={{ mb: 2 }}
           >
         <Stack flexDirection={"row"}>
           <Link href="/grants/budgetInitial/add">
@@ -125,7 +126,7 @@ const ListBudgetInitial = () => {
             Budget initial
           </Typography>
         </SectionNavigation>
-      <SectionTable>
+      <SectionTable sx={{backgroundColor: '#fff'}}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />

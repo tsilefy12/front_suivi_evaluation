@@ -6,7 +6,7 @@ import BackOfficeLayout from '../../../layouts/backOffice'
 const GrantsAdmin = () => {
   return (
     <BackOfficeLayout>
-        <Container maxWidth="xl" sx={{backgroundColor: '#fff'}}>
+        <Container maxWidth="xl" >
           <ListGrantsAdmin />
         </Container>
     </BackOfficeLayout>

@@ -6,7 +6,7 @@ import BackOfficeLayout from '../../../../layouts/backOffice'
 const DetailGrantsEnCoursPage = () => {
   return (
     <BackOfficeLayout>
-        <Container maxWidth="xl" sx={{backgroundColor: '#fff'}}>
+        <Container maxWidth="xl">
           <DetailGrantsEnCours />
         </Container>
     </BackOfficeLayout>

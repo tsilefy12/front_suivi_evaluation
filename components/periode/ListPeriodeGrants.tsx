@@ -99,10 +99,10 @@ const ListBudgetsInitial = () => {
           </Button>
         </Link>
         <Typography variant="h4" color="GrayText">
-          Periode GRANTs
+          Periode GRANTS
         </Typography>
       </SectionNavigation>
-      <SectionTable>
+      <SectionTable sx={{backgroundColor: '#fff'}}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />

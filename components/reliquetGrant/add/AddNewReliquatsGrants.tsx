@@ -19,12 +19,13 @@ import { SectionNavigation } from "../ListReliquetsGrants";
 
 const AddNewReliquatsGrants = () => {
   return (
-    <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
+    <Container maxWidth="xl" sx={{ pb: 5 }}>
       <NavigationContainer>
         <SectionNavigation
-          direction="row"
-          justifyContent="space-between"
-          sx={{ mb: 2 }}
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 1, sm: 2, md: 4 }}
+        justifyContent="space-between"
+        sx={{ mb: 2 }}
         >
           <Stack flexDirection={"row"}>
             <Link href="/grants/reliquatGrants">
@@ -56,9 +57,9 @@ const AddNewReliquatsGrants = () => {
         {/* <Divider /> */}
       </NavigationContainer>
 
-      <FormContainer spacing={2}>
+      <FormContainer spacing={2}  sx={{ backgroundColor: "#fff" }}>
       <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label"> Grants </InputLabel>
+          <InputLabel id="demo-simple-select-label"> GRANT </InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
