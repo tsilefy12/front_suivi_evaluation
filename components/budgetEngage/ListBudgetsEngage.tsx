@@ -112,20 +112,12 @@ const ListBudgetEngage = () => {
               Créer
             </Button>
           </Link>
-          {/* <Button
-            variant="text"
-            startIcon={<Visibility />}
-            color="accent"
-            sx={{ marginInline: 3 }}
-          >
-            Affiche Tableau de bord
-          </Button> */}
             </Stack>
           <Typography variant="h4" color="GrayText">
             Budget Engage
           </Typography>
         </SectionNavigation>
-      <SectionTable>
+      <SectionTable sx={{backgroundColor: '#fff'}} >
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />

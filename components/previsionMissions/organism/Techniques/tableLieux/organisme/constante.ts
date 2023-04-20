@@ -8,6 +8,6 @@ function createData(
 }
 
 export const rows = [
-  createData("", "Andraisoro", "Antananarivo", "Antananarivo"),
-  createData("", "Ampasapito", "Antananarivo", "Antananarivo"),
+  createData("1", "Andraisoro", "Antananarivo", "Antananarivo"),
+  createData("2", "Ampasapito", "Antananarivo", "Antananarivo"),
 ];

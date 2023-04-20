@@ -6,7 +6,7 @@ import BackOfficeLayout from '../../../../layouts/backOffice'
 const AddPeriodeGrants = () => {
   return (
     <BackOfficeLayout>
-        <Container maxWidth="xl" sx={{backgroundColor: '#fff'}}>
+        <Container maxWidth="xl" >
           <AddNewPeriodeGrants />
         </Container>
     </BackOfficeLayout>

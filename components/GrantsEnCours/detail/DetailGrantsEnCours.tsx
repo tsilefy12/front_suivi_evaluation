@@ -10,132 +10,97 @@ import Link from "next/link";
 import React from "react";
 import { SectionNavigation } from "../ListGrants";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import KeyValue from "../../shared/keyValue";
 
 
 const DetailGrantsEnCours = () => {
   return (
-<Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
-      <SectionNavigation direction="row" justifyContent="space-between" sx={{mb:2}}>
+<Container maxWidth="xl" sx={{ pb: 5 }}>
+      <SectionNavigation 
+        direction='row'
+        spacing={{ xs: 1, sm: 2, md: 4 }}
+        justifyContent="space-between"
+        sx={{ mb: 2 }}>
         <Link href="/contracts">
           <Button color="info" variant="text" startIcon={<ArrowBackIcon />}>
             Retour
           </Button>
         </Link>
         <Typography variant="h4" color="GrayText">
-          Details du contrats
+          Details GRANT
         </Typography>
       </SectionNavigation>
-      <DetailsContainer>
+      <DetailsContainer sx={{ backgroundColor: "#fff", pb: 5 }}>
         <Grid container spacing={4} my={1}>
           <Grid item xs={12} md={12}>
-            <InfoItems direction="row" spacing={2}>
-              <Typography variant="body1" color="secondary">
-                GRANT :
-              </Typography>
-              <Typography variant="body1" color="gray">
-                XXX-XXX-XXX
-              </Typography>
-            </InfoItems>
+            <KeyValue
+                  keyName="GRANT"
+                  value={"XXX-XXX-XXX"}
+                />
           </Grid>
         </Grid>
         <Grid container spacing={4} my={1}>
           <Grid item xs={12} md={12}>
-            <InfoItems direction="row" spacing={2}>
-              <Typography variant="body1" color="secondary">
-                Bailleur :
-              </Typography>
-              <Typography variant="body1" color="gray">
-                nom de Bailleur
-              </Typography>
-            </InfoItems>
+            <KeyValue
+                  keyName="Bailleur"
+                  value={"Nom du bailleur"}
+                />
           </Grid>
         </Grid>
         <Grid container spacing={4} my={1}>
           <Grid item xs={12} md={6}>
-            <InfoItems direction="row" spacing={2}>
-              <Typography variant="body1" color="secondary">
-                Nom du Projet en Anglais :
-              </Typography>
-              <Typography variant="body1" color="gray">
-                Value
-              </Typography>
-            </InfoItems>
+            <KeyValue
+                  keyName="Nom du projet en Anglais"
+                  value={"value"}
+                />
           </Grid>
           <Grid item xs={12} md={6}>
-            <InfoItems direction="row" spacing={2}>
-              <Typography variant="body1" color="secondary">
-                Nom du Projet en Français :
-              </Typography>
-              <Typography variant="body1" color="gray">
-                Value
-              </Typography>
-            </InfoItems>
+            <KeyValue
+                  keyName="Nom du projet en Français"
+                  value={"value"}
+                />
           </Grid>
         </Grid>
         <Grid container spacing={4} my={1}>
           <Grid item xs={12} md={12}>
-            <InfoItems direction="row" spacing={2}>
-              <Typography variant="body1" color="secondary">
-                Responsable :
-              </Typography>
-              <Typography variant="body1" color="gray">
-                Responsable1, Responsable2,...
-              </Typography>
-            </InfoItems>
+            <KeyValue
+                  keyName="Responsables"
+                  value={"Responsable 1, Responsable 2"}
+                />
           </Grid>
         </Grid>
         <Grid container spacing={4} my={1}>
           <Grid item xs={12} md={6}>
-            <InfoItems direction="row" spacing={2}>
-              <Typography variant="body1" color="secondary">
-                Date de Debut :
-              </Typography>
-              <Typography variant="body1" color="gray">
-                dd/MM/YYYY
-              </Typography>
-            </InfoItems>
+            <KeyValue
+                  keyName="Date de début"
+                  value={"dd/MM/YYYY"}
+                />
           </Grid>
           <Grid item xs={12} md={6}>
-            <InfoItems direction="row" spacing={2}>
-              <Typography variant="body1" color="secondary">
-                Date de fin :
-              </Typography>
-              <Typography variant="body1" color="gray">
-                dd/MM/yyyy
-              </Typography>
-            </InfoItems>
+            <KeyValue
+                  keyName="Date de fin"
+                  value={"dd/MM/YYYY"}
+                />
           </Grid>
           <Grid item xs={12} md={6}>
-            <InfoItems direction="row" spacing={2}>
-              <Typography variant="body1" color="secondary">
-                Durée :
-              </Typography>
-              <Typography variant="body1" color="gray">
-                x ans, xxmois et xxxjours 
-              </Typography>
-            </InfoItems>
+            <KeyValue
+                  keyName="Durée"
+                  value={"X ans, XX mois, XXX jours"}
+                />
           </Grid>
         </Grid>
         <Grid container spacing={4} my={1}>
           <Grid item xs={12} md={6}>
-            <InfoItems direction="row" spacing={2}>
-              <Typography variant="body1" color="secondary">
-                Montant en devise :
-              </Typography>
-              <Typography variant="body1" color="gray">
-                10000$
-              </Typography>
-            </InfoItems>
+            <KeyValue
+                  keyName="Montant en devise"
+                  value={"10.000 $"}
+                />
           </Grid>
           <Grid item xs={12} md={6}>
-            <InfoItems direction="row" spacing={2}>
-              <Typography variant="body1" color="secondary">
-                Montant en MGA :
-              </Typography>
-              <Typography variant="body1" color="gray">
-                40 000 000 ar
-              </Typography>
-            </InfoItems>
+            <KeyValue
+                  keyName="Montant en MGA"
+                  value={"40.000.000 Ar"}
+                />
           </Grid>
         </Grid>
       </DetailsContainer>
@@ -145,7 +110,6 @@ const DetailGrantsEnCours = () => {
 
 export default DetailGrantsEnCours;
 
-export const InfoItems = styled(Stack)(({ theme }) => ({}));
 
 const DetailsContainer = styled("div")(({ theme }) => ({
   padding: 30,

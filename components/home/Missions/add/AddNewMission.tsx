@@ -19,12 +19,12 @@ import { Check, Close } from "@mui/icons-material";
 
 const AddNewMission = () => {
   return (
-    <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
+    <Container maxWidth="xl">
       <NavigationContainer>
         <SectionNavigation
-          direction="row"
+           direction={{ xs: 'column', sm: 'row' }}
+           spacing={{ xs: 1, sm: 1, md: 2 }}
           justifyContent="space-between"
-          sx={{ mb: 2 }}
         >
           <Stack flexDirection={"row"}>
             <Link href="/">
@@ -56,7 +56,7 @@ const AddNewMission = () => {
         {/* <Divider /> */}
       </NavigationContainer>
 
-      <FormContainer spacing={2}>
+      <FormContainer  sx={{backgroundColor: '#fff'}} spacing={2}>
         <TextField
           fullWidth
           id="outlined-basic"

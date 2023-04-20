@@ -99,10 +99,10 @@ const ListGrantsAdmin = () => {
           </Button>
         </Link>
         <Typography variant="h4" color="GrayText">
-          Grants Admin
+          GRANT Admin
         </Typography>
       </SectionNavigation>
-      <SectionTable>
+      <SectionTable sx={{backgroundColor: '#fff'}}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />

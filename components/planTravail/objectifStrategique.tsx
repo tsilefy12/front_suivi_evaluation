@@ -47,7 +47,8 @@ const ListObjectifStrategique = () => {
       <Divider />
       <SectionDetails>
         <Stack
-          direction="row"
+         direction={{ xs: 'column', sm: 'row' }}
+         spacing={{ xs: 1, sm: 2, md: 4 }}
           sx={{
             flex: "1 1 100%",
             justifyContent: "space-between",
@@ -185,7 +186,7 @@ export default ListObjectifStrategique;
 
 export const SectionNavigation = styled(Stack)(({}) => ({}));
 const SectionDetails = styled(Box)(({ theme }) => ({
-  padding: 3,
+  padding: "16px 32px",
   marginBlock: 15,
   background: theme.palette.common.white,
   borderRadius: 20,
@@ -195,7 +196,7 @@ const SectionDetails = styled(Box)(({ theme }) => ({
 }));
 
 const ValueDetail = styled(Stack)(({ theme }) => ({
-  height: "28px",
+  height: "30px",
   padding: 10,
 }));
 const LinkContainer = styled("div")(({ theme }) => ({

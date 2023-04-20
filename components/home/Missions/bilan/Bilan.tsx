@@ -54,13 +54,9 @@ const BilanMission = () => {
         <Divider />
       </NavigationContainer>
       <FormContainer spacing={2}>
-        <Grid container>
+        <Grid container >
           <Grid item xs={12} md={4}>
             <KeyValue keyName="Ref mission" value={"MISSION_001"} />
-            <KeyValue
-              keyName="Description"
-              value={"Description de la mission"}
-            />
           </Grid>
           <Grid item xs={12} md={4}>
             <KeyValue keyName="Responsable" value={"Ollie Mc"} />
@@ -68,11 +64,18 @@ const BilanMission = () => {
           <Grid item xs={12} md={4}>
             <KeyValue keyName="Gestionnaire de budget" value={"Anna"} />
           </Grid>
+          <Grid item xs={12} md={4}>
+            <KeyValue
+              keyName="Description"
+              value={"Description de la mission"}
+            />
+            </Grid>
         </Grid>
       </FormContainer>
       <BodySection>
-        <Stack direction="row" spacing={2}>
-          <CardLeft>
+        <Stack 
+        direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{padding:"10px", width:"100%" }}>
+          <Stack width={{ xs: '100%', sm: '100%', md: '70%' }}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -92,8 +95,8 @@ const BilanMission = () => {
             <TabPanel value={value} index={1}>
               <Finances />
             </TabPanel>
-          </CardLeft>
-          <CardRight>
+          </Stack>
+          <Stack width={{ xs: '100%', sm: '100%', md: '30%' }}>
             <CardBody>
               <Typography variant="h5">Bilan global</Typography>
               <Typography color="secondary" variant="body2">
@@ -119,7 +122,7 @@ const BilanMission = () => {
                 </Grid>
               </Grid>
             </CardBody>
-          </CardRight>
+          </Stack>
         </Stack>
       </BodySection>
     </Container>
@@ -169,10 +172,10 @@ const NavigationContainer = styled(Stack)(({ theme }) => ({
 export const BodySection = styled(Paper)(({ theme }) => ({
   borderRadius: "32px",
   marginBlock: 15,
+  padding: 30,
   display: "flex",
   flexDirection: "row",
   alignItems: "flex-start",
-  padding: "6px",
   gap: "16px",
   border: `1px solid ${theme.palette.grey[100]}`,
 }));
@@ -181,7 +184,7 @@ const CardBody = styled(Stack)(({ theme }) => ({
   // paddingInline: theme.spacing(1),
   background: theme.palette.grey[100],
   // paddingBottom: theme.spacing(1),
-  width: "380px",
+  width: "100%",
   // height: "278px",
   padding: "10px 14px",
   borderRadius: 14,
@@ -195,19 +198,4 @@ const FormContainer = styled(Stack)(({ theme }) => ({
   borderRadius: 20,
   background: "#fff",
   border: `1px solid ${theme.palette.grey[100]}`,
-}));
-const CardLeft = styled(Box)(({ theme }) => ({
-  display: "flex",
-  borderRadius: "10px",
-  flexDirection: "column",
-  width: "830px",
-  marginTop: 14,
-}));
-const CardRight = styled(Box)(({ theme }) => ({
-  width: "400px",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-start",
-  gap: "32px",
-  borderRadius: "10px",
 }));

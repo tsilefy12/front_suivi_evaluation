@@ -9,6 +9,6 @@ function createData(
 }
 
 export const rows = [
-  createData("", "HAVANA", "Oui", "Non", "Oui"),
-  createData("", "ARO", "Oui", "Oui", "Non"),
+  createData("1", "HAVANA", "Oui", "Non", "Oui"),
+  createData("2", "ARO", "Oui", "Oui", "Non"),
 ];

@@ -19,8 +19,6 @@ import ListProgrammes from "./tableProgramme/organisme/ListProgrammes";
 const Techniques = () => {
   return (
     <Box>
-      <Table>
-        <TableBody>
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -131,8 +129,6 @@ const Techniques = () => {
               <ListProgrammes />
             </AccordionDetails>
           </Accordion>
-        </TableBody>
-      </Table>
     </Box>
   );
 };

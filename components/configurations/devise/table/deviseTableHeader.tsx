@@ -27,7 +27,7 @@ const DeviseTableHeader = (props: EnhancedTablePropsDevise) => {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
+          {/* <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
@@ -35,7 +35,7 @@ const DeviseTableHeader = (props: EnhancedTablePropsDevise) => {
             inputProps={{
               "aria-label": "select all desserts",
             }}
-          />
+          /> */}
         </TableCell>
         {headCellsDevise.map((headCell) => (
           <TableCell
@@ -58,7 +58,6 @@ const DeviseTableHeader = (props: EnhancedTablePropsDevise) => {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell></TableCell>
       </TableRow>
     </TableHead>
   );

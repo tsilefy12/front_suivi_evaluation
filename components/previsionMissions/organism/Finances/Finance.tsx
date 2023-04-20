@@ -15,10 +15,7 @@ import ListCalculCarburant from "./tableCalculCarburant/ListCalculCarburant";
 
 const Finances = () => {
   return (
-    <Box>
-      <Table>
-        <TableBody>
-          <AccordionBody>
+    <Box >
             <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -79,15 +76,8 @@ const Finances = () => {
                 <ListCalculCarburant />
               </AccordionDetails>
             </Accordion>
-          </AccordionBody>
-        </TableBody>
-      </Table>
     </Box>
   );
 };
 
 export default Finances;
-
-const AccordionBody = styled(Box)(({ theme }) => ({
-  width: "830px",
-}));

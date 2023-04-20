@@ -102,7 +102,7 @@ const ListReliquetsGrants = () => {
           Réliquats GRANTs
         </Typography>
       </SectionNavigation>
-      <SectionTable>
+      <SectionTable sx={{backgroundColor: '#fff'}} >
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />

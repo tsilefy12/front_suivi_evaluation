@@ -7,18 +7,12 @@ const menu = [
     items: [
       {
         id: 11,
-        name: "Prévision de mission",
-        link: "/missions/previsionDeMission",
-        icon: "",
-      },
-      {
-        id: 12,
         name: "Validation rapport de mission",
         link: "/missions/validation/validationRapportMission",
         icon: "",
       },
       {
-        id: 13,
+        id: 12,
         name: "Validation Prevision de mission",
         link: "/missions/validation/validationPrevisionMission",
         icon: "",
@@ -29,7 +23,7 @@ const menu = [
     id: 2,
     name: "GRANTS",
     link: "/grants",
-    icon: "settingsIcon",
+    icon: "run_circle",
     items: [
       {
         id: 21,
@@ -73,7 +67,7 @@ const menu = [
     id: 3,
     name: "Plan Travail Global",
     link: "/plan_travail",
-    icon: "cropLandscapeIcon",
+    icon: "display_settings",
     items: [],
   },
   {

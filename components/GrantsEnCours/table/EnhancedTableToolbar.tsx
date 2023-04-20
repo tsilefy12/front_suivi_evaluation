@@ -34,24 +34,26 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           {numSelected} {" " + selectedItemsLabel}
         </Typography>
       ) : (
+        
         <Stack
-          direction="row"
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 1, sm: 2, md: 4 }}
           sx={{
             flex: "1 1 100%",
             justifyContent: "space-between",
-            alignItems: "center",
           }}
+        
         >
           <Typography variant="h6" id="tableTitle" component="div">
-            Liste des Grants en cours
+            Liste des GRANTS
           </Typography>
-          {/* <TextField
+          <TextField
             variant="outlined"
             id="search"
             name="search"
             placeholder="Recherche"
             size="small"
-          /> */}
+          />
         </Stack>
       )}
       {numSelected > 0 && (

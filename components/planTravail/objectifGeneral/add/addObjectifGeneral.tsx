@@ -13,11 +13,9 @@ import {
 
 const ObjectifsGeneralForm = ({ handleClose }: any) => {
   const [open, setOpen] = React.useState(false);
-
-
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
-      <SectionNavigation>
+      <SectionNavigation width={{xs:"100%", sm:"560px"}}>
         <DialogTitle> Créer/Modifier Objectif Générale </DialogTitle>
         <DialogContent>
           <FormContainer spacing={2} mt={2}>
@@ -31,7 +29,7 @@ const ObjectifsGeneralForm = ({ handleClose }: any) => {
           </FormContainer>
         </DialogContent>
         <DialogActions>
-          <Button color="warning" >Annuler</Button>
+          <Button color="warning" onClick={handleClose}>Annuler</Button>
           <Button variant="contained" type="submit">
             Enregistrer
           </Button>
@@ -48,6 +46,4 @@ const FormContainer = styled(Stack)(({ theme }) => ({
 }));
 
 const SectionNavigation = styled(Stack)(({ theme }) => ({
-  // flexDirection: "row",
-  width: "560px",
 }));

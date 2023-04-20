@@ -13,8 +13,6 @@ import ListResumeDepense from "./tableResumeDepense/ListResumeDepense";
 const Finances = () => {
   return (
     <Box>
-      <Table>
-        <TableBody>
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -39,8 +37,6 @@ const Finances = () => {
               <ListResumeDepense />
             </AccordionDetails>
           </Accordion>
-        </TableBody>
-      </Table>
     </Box>
   );
 };

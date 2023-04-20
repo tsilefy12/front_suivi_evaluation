@@ -30,8 +30,8 @@ export const headCells: readonly HeadCell[] = [
 
 export const rows = [
   createData("10", "08/10/2021", "Sac", "10000"),
-  createData("10", "08/10/2021", "Sac", "30000"),
-  createData("10", "08/10/2021", "Provision", "10000"),
-  createData("10", "08/10/2021", "Sac", "30000"),
-  createData("10", "08/10/2021", "Provision", "30000"),
+  createData("11", "08/10/2021", "Sac", "30000"),
+  createData("12", "08/10/2021", "Provision", "10000"),
+  createData("13", "08/10/2021", "Sac", "30000"),
+  createData("14", "08/10/2021", "Provision", "30000"),
 ];

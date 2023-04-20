@@ -29,7 +29,10 @@ const ValidationPrevisionMission = () => {
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
-        <SectionNavigation direction="row" justifyContent="space-between">
+        <SectionNavigation direction='row'
+         spacing={{ xs: 1, sm: 2, md: 4 }}
+         justifyContent="space-between"
+         sx={{ mb: 2 }}>
           <Link href="/">
             <Button
               color="info"
@@ -45,8 +48,9 @@ const ValidationPrevisionMission = () => {
       </NavigationContainer>
       <Detail />
       <BodySection>
-        <Stack direction="row" spacing={1}>
-          <CardLeft>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 1, md: 2 }}
+        sx={{padding:"10px", width:"100%" }}>
+          <Stack width={{xs:"100%", sm:"100%", md:"60%" }}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -66,10 +70,10 @@ const ValidationPrevisionMission = () => {
             <TabPanel value={value} index={1}>
               <Finances />
             </TabPanel>
-          </CardLeft>
-          <CardRight>
+            </Stack>
+          <Stack width={{xs:"100%", sm:"100%", md:"40%" }}>
             <CardBody>
-              <Typography variant="h6">Etat de la prévision </Typography>
+              <Typography variant="h6" sx={{ textTransform: "uppercase" }}>Etat de la prévision </Typography>
               <Stack spacing={1}>
                 <KeyValue keyName="Elaboré par" value={"Nom du responsable"} />
                 <Divider />
@@ -102,7 +106,7 @@ const ValidationPrevisionMission = () => {
                 </Grid>
               </Stack>
             </CardBody>
-          </CardRight>
+          </Stack>
         </Stack>
       </BodySection>
     </Container>
@@ -148,7 +152,7 @@ export const BodySection = styled(Paper)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
   alignItems: "flex-start",
-  padding: "8px",
+  padding: "8px 20px",
   gap: "16px",
   border: `1px solid ${theme.palette.grey[100]}`,
 }));
@@ -160,29 +164,14 @@ const NavigationContainer = styled(Stack)(({ theme }) => ({
   width: "100%",
 }));
 
-const CardLeft = styled(Box)(({ theme }) => ({
-  display: "flex",
-  borderRadius: "20px",
-  flexDirection: "column",
-  width: "830px",
-  marginTop: 14,
-}));
-const CardRight = styled(Box)(({ theme }) => ({
-  width: "400px",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-start",
-  gap: "32px",
-  borderRadius: "20px",
-}));
 
 const CardBody = styled(Stack)(({ theme }) => ({
   paddingInline: theme.spacing(3),
   background: theme.palette.grey[100],
   paddingBottom: theme.spacing(1),
-  width: "398px",
-  padding: "14px 14px",
-  borderRadius: 20,
+  width: "100%",
+  padding: "10px 30px",
+  borderRadius: 14,
   gap: "32px",
-  marginTop: 14,
+  marginTop: 15,
 }));

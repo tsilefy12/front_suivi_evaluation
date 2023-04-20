@@ -3,6 +3,6 @@ function createData(id: string, livrable: string) {
 }
 
 export const rows = [
-  createData("", "Livrable 1"),
-  createData("", "Livrable 2"),
+  createData("1", "Livrable 1"),
+  createData("2", "Livrable 2"),
 ];

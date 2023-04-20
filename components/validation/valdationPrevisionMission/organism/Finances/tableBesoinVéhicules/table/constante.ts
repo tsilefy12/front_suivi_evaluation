@@ -42,7 +42,7 @@ export const headCells: readonly HeadCell[] = [
 
 export const rows = [
   createData(
-    "dd/MM/yyyy",
+    "20/04/2023",
     "dd/MM/yyyy",
     "1010 TAB",
     "Antananarivo - Diego",
@@ -50,7 +50,7 @@ export const rows = [
     "10"
   ),
   createData(
-    "dd/MM/yyyy",
+    "21/04/2023",
     "dd/MM/yyyy",
     "2020 TAB",
     "Antananarivo - Diego",

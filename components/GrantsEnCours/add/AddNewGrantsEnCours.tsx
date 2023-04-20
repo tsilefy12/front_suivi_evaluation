@@ -19,12 +19,13 @@ import { Check, Close } from "@mui/icons-material";
 
 const AddNewGrantsEnCours = () => {
   return (
-    <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
+    <Container maxWidth="xl" sx={{  pb: 5 }}>
       <NavigationContainer>
         <SectionNavigation
-          direction="row"
-          justifyContent="space-between"
-          sx={{ mb: 2 }}
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 1, sm: 2, md: 4 }}
+        justifyContent="space-between"
+        sx={{ mb: 2 }}
         >
           <Stack flexDirection={"row"}>
             <Link href="/grants/grantsEnCours">
@@ -56,7 +57,7 @@ const AddNewGrantsEnCours = () => {
         {/* <Divider /> */}
       </NavigationContainer>
 
-      <FormContainer spacing={2}>
+      <FormContainer sx={{ backgroundColor: "#fff", pb: 5 }} spacing={2}>
         <TextField
           fullWidth
           id="outlined-basic"

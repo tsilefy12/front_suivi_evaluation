@@ -28,10 +28,12 @@ const AddNewTacheCle = () => {
 
   
   return (
-    <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
+    <Container maxWidth="xl" sx={{ pb: 5 }}>
       <NavigationContainer>
+        
         <SectionNavigation
-          direction="row"
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={{ xs: 1, sm: 1, md: 4 }}
           justifyContent="space-between"
           sx={{ mb: 2 }}
         >
@@ -119,4 +121,5 @@ const FormContainer = styled(Stack)(({ theme }) => ({
   padding: 30,
   border: "1px solid #E0E0E0",
   borderRadius: 20,
+  background: "#fff",
 }));

@@ -6,7 +6,7 @@ import BackOfficeLayout from '../../../../layouts/backOffice'
 const AddReliquatsGrants = () => {
   return (
     <BackOfficeLayout>
-        <Container maxWidth="xl" sx={{backgroundColor: '#fff'}}>
+        <Container maxWidth="xl" >
           <AddNewReliquatsGrants />
         </Container>
     </BackOfficeLayout>

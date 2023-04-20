@@ -29,14 +29,14 @@ export const headCells: readonly HeadCell[] = [
   ];
 
   export const rows = [
-    createData('Description', '1000', '1000', '2000'),
-    createData('Description', '1000', '1000', '2000'),
-    createData('Description', '1000', '1000', '2000'),
-    createData('Description', '1000', '1000', '2000'),
-    createData('Description', '1000', '1000', '2000'),
-    createData('Description', '1000', '1000', '2000'),
-    createData('Description', '1000', '1000', '2000'),
-    createData('Description', '1000', '1000', '2000'),
-    createData('Description', '1000', '1000', '2000'),
-    createData('Description', '1000', '1000', '2000'),
+    createData('Description1', '1000', '1000', '2000'),
+    createData('Description2', '1000', '1000', '2000'),
+    createData('Description3', '1000', '1000', '2000'),
+    createData('Description4', '1000', '1000', '2000'),
+    createData('Description5', '1000', '1000', '2000'),
+    createData('Description6', '1000', '1000', '2000'),
+    createData('Description7', '1000', '1000', '2000'),
+    createData('Description8', '1000', '1000', '2000'),
+    createData('Description9', '1000', '1000', '2000'),
+    createData('Description0', '1000', '1000', '2000'),
   ]

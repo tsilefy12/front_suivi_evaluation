@@ -5,7 +5,7 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Stack from "@mui/material/Stack";
 import { rows } from "./constante";
-import { Button, Container, Dialog, IconButton, styled } from "@mui/material";
+import { Box, Button, Container, Dialog, IconButton, styled } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddLivrable from "../add/addLivrable";
@@ -21,6 +21,8 @@ const ListLivrables = () => {
 
   return (
     <Container>
+      <Box sx={{ overflow: "auto" }}>
+        <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
       <MyTableContainer>
         <Table sx={{ minWidth: 700 }} aria-label="simple table">
           <TableBody>
@@ -55,6 +57,8 @@ const ListLivrables = () => {
           </TableBody>
         </Table>
       </MyTableContainer>
+      </Box>
+      </Box>
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
         <Button variant="text" color="info" onClick={handleClickOpen}>
           Ajouter

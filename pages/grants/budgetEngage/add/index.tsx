@@ -6,7 +6,7 @@ import BackOfficeLayout from '../../../../layouts/backOffice'
 const AddBudgetEngage = () => {
   return (
     <BackOfficeLayout>
-        <Container maxWidth="xl" sx={{backgroundColor: '#fff'}}>
+        <Container maxWidth="xl" >
           <AddNewBudgetEngage />
         </Container>
     </BackOfficeLayout>

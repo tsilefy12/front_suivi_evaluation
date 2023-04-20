@@ -5,6 +5,10 @@ import {
   Typography,
   TextField,
   Stack,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
   Divider,
 } from "@mui/material";
 import Link from "next/link";
@@ -15,12 +19,13 @@ import { Check, Close } from "@mui/icons-material";
 
 const AddNewGrantsAdmin = () => {
   return (
-    <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
+    <Container maxWidth="xl" sx={{ pb: 5 }}>
       <NavigationContainer>
         <SectionNavigation
-          direction="row"
-          justifyContent="space-between"
-          sx={{ mb: 2 }}
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 1, sm: 2, md: 4 }}
+        justifyContent="space-between"
+        sx={{ mb: 2 }}
         >
           <Stack flexDirection={"row"}>
             <Link href="/grants/grantsAdmin">
@@ -52,13 +57,19 @@ const AddNewGrantsAdmin = () => {
         <Divider />
       </NavigationContainer>
 
-      <FormContainer spacing={2}>
-        <TextField
-          fullWidth
-          id="outlined-basic"
-          label="GRANT"
-          variant="outlined"
-        />
+      <FormContainer  sx={{ backgroundColor: "#fff" }} spacing={2}>
+      <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label"> Grants </InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Grants"
+          >
+            <MenuItem value={10}> Grants 1 </MenuItem>
+            <MenuItem value={20}> Grants 2 </MenuItem>
+            <MenuItem value={30}> Grants 3 </MenuItem>
+          </Select>
+        </FormControl>
         <TextField
           fullWidth
           id="outlined-basic"

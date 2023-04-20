@@ -18,28 +18,8 @@ export const rows = [
     "1.2 Mener des etudes de faisabilite pour les filieres potentielles",
   ),
   createData(
-    "1.2 Mener des etudes de faisabilite pour les filieres potentielles",
+    "1.2 Mener des études de faisabilité pour les filières potentielles",
   ),
-  createData(
-    "1.1 Promouvoir le respect des normes et faire le suivi des filieres deja identifiees",
-  ),
-  createData(
-    "1.2 Mener des etudes de faisabilite pour les filieres potentielles",
-  ),
-  createData(
-    "1.2 Mener des etudes de faisabilite pour les filieres potentielles",
-  ),
-  createData(
-    "1.1 Promouvoir le respect des normes et faire le suivi des filieres deja identifiees",
-  ),
-  createData(
-    "1.2 Mener des etudes de faisabilite pour les filieres potentielles",
-  ),
-  createData(
-    "1.2 Mener des etudes de faisabilite pour les filieres potentielles",
-  ),
-  createData(
-    "1.2 Mener des etudes de faisabilite pour les filieres potentielles",
-  ),
+  
 
 ];

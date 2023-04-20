@@ -104,19 +104,33 @@ const ListTacheCles = () => {
   return (
     <Container maxWidth="xl">
       {/* <NavigationContainer> */}
-      <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Stack flexDirection="row">
-          <Link href="/plan_travail">
-            <Button color="info" variant="text" startIcon={<ArrowBack />}>
-              Retour
-            </Button>
-          </Link>
-          <Link href="/plan_travail/tacheCle/add">
-            <Button variant="contained" startIcon={<Add />}>
-              Créer
-            </Button>
-          </Link>
-        </Stack>
+      <SectionNavigation direction={{ xs: 'column', sm: 'row' }}
+         spacing={{ xs: 1, sm: 2, md: 4 }}
+         justifyContent="space-between"
+         sx={{ mb: 2 }}>
+          <Stack flexDirection={"row"}>
+            
+            <Link href="/plan_travail">
+              <Button color="info" variant="text" startIcon={<ArrowBack />}>
+                Retour
+              </Button>
+            </Link>
+            <Link href="/plan_travail/tacheCle/add">
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                startIcon={<Add />}
+                sx={{ marginInline: 3 }}
+              >
+                Créer
+              </Button>
+            </Link>
+            
+            
+          </Stack>
+
+        
         <Typography variant="h4" color="GrayText">
           Tâches clés
         </Typography>
@@ -125,8 +139,8 @@ const ListTacheCles = () => {
       <Divider />
       <FormContainer>
         <KeyValue
-          keyName="Objectif Strategie"
-          value={"Promouvoir l'exploitation durable équitable des espèce"}
+          keyName="Objectif Stratégique"
+          value={"Promouvoir l'exploitation durable équitable des espèces"}
         />
       </FormContainer>
       <BodySection>
@@ -178,8 +192,8 @@ const ListTacheCles = () => {
                           >
                             {row.tache}
                           </TableCell>
-                          <TableCell align="center">{row.projet}</TableCell>
-                          <TableCell align="center">
+                          <TableCell>{row.projet}</TableCell>
+                          <TableCell>
                             {row.responsable}
                           </TableCell>
                           <TableCell align="right">
@@ -264,6 +278,7 @@ const FormContainer = styled(Stack)(({ theme }) => ({
   borderRadius: 20,
   background: "#fff",
   border: `1px solid ${theme.palette.grey[100]}`,
+  marginTop: 14,
 }));
 
 const NavigationContainer = styled(Stack)(({ theme }) => ({
