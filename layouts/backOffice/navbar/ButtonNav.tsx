@@ -17,38 +17,38 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useAppSelector } from "../../../hooks/reduxHooks";
 import useBasePath from "../../../hooks/useBasePath";
 
-export const OneButtonLink = ({ page}: any) => {
+export const OneButtonLink = ({ page }: any) => {
   const router = useRouter();
   const theme = useTheme();
   return (
     <Fragment key={page.id}>
-    <Link href={page.link}>
-      <Button
-        size="small"
-        color="greymenu"
-        /**
-         * check if page.link is equal to the current route,
-         * if equal the type of button is contained (active)
-         * if not the button type is text (inactive)
-         */
-        variant={router.pathname === page.link ? "contained" : "text"}
-        // onClick={handleCloseNavMenu}
-        startIcon={<Icon>{page.icon}</Icon>}
-        sx={{
-          mx: 1,
-          boxShadow: "none",
-          color: router.pathname === page.link ? "" : theme.palette.grey[600],
-          md:{my: 10}
-        }}
-      >
-        {page.name}
-      </Button>
-    </Link>
+      <Link href={page.link}>
+        <Button
+          size="small"
+          color="greymenu"
+          /**
+           * check if page.link is equal to the current route,
+           * if equal the type of button is contained (active)
+           * if not the button type is text (inactive)
+           */
+          variant={router.pathname === page.link ? "contained" : "text"}
+          // onClick={handleCloseNavMenu}
+          startIcon={<Icon>{page.icon}</Icon>}
+          sx={{
+            mx: 1,
+            boxShadow: "none",
+            color: router.pathname === page.link ? "" : theme.palette.grey[600],
+            md: { my: 10 },
+          }}
+        >
+          {page.name}
+        </Button>
+      </Link>
     </Fragment>
   );
 };
 
-export const OneButtonLinkWithItems = ({ page}: any) => {
+export const OneButtonLinkWithItems = ({ page }: any) => {
   const router = useRouter();
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -101,7 +101,9 @@ export const OneButtonLinkWithItems = ({ page}: any) => {
   );
 };
 
-export const ButtonProfile = ({ page }: any) => {
+export const ButtonProfile = ({ page, handleClickLogout }: any) => {
+  const user = useAppSelector((state) => state.auth.user);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   /**
    * Take all menu profile lists in the redux store
@@ -119,9 +121,16 @@ export const ButtonProfile = ({ page }: any) => {
 
   return (
     <>
-      <Tooltip title="Open settings">
+      <Tooltip title="Ouvrir les paramètres">
         <IconButton onClick={handleClick}>
-          <Avatar alt="Remy Sharp" src={`${basePaht}/images/Avatar.png`} />
+          <Avatar
+            alt="Remy Sharp"
+            src={
+              user!.profileImageUrl
+                ? `${apiUrl}${user!.profileImageUrl}`
+                : `${basePaht}/images/Avatar.png`
+            }
+          />
         </IconButton>
       </Tooltip>
       <Menu
@@ -162,21 +171,47 @@ export const ButtonProfile = ({ page }: any) => {
         {menuProfile.map((menu, index) =>
           menu.icon === "Avatar" ? (
             <span key={index}>
-            <MenuItem>
-              <Avatar src={`${basePaht}/images/Avatar.png`} />
-              {menu.name}
-            </MenuItem>
-            {menu.divider && <Divider />}
+              <MenuItem
+                onClick={
+                  menu.link === "/logout"
+                    ? () => {
+                        handleClickLogout();
+                      }
+                    : () => {
+                        false;
+                      }
+                }
+              >
+                <Avatar
+                  src={
+                    user!.profileImageUrl
+                      ? `${apiUrl}${user!.profileImageUrl}`
+                      : `${basePaht}/images/Avatar.png`
+                  }
+                />
+                {menu.name}
+              </MenuItem>
+              {menu.divider && <Divider />}
             </span>
           ) : (
             <span key={index}>
-            <MenuItem>
-              <ListItemIcon>
-                <Icon>{menu.icon}</Icon>
-              </ListItemIcon>
-              {menu.name}
-            </MenuItem>
-            {menu.divider && <Divider />}
+              <MenuItem
+                onClick={
+                  menu.link === "/logout"
+                    ? () => {
+                        handleClickLogout();
+                      }
+                    : () => {
+                        false;
+                      }
+                }
+              >
+                <ListItemIcon>
+                  <Icon>{menu.icon}</Icon>
+                </ListItemIcon>
+                {menu.name}
+              </MenuItem>
+              {menu.divider && <Divider />}
             </span>
           )
         )}

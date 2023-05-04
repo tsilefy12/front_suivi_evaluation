@@ -9,12 +9,14 @@ import Tooltip from "@mui/material/Tooltip";
 import { Badge, Stack, styled, useTheme } from "@mui/material";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
-import { useAppSelector } from "../../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
 import {
   OneButtonLink,
   OneButtonLinkWithItems,
   ButtonProfile,
 } from "./ButtonNav";
+import { useRouter } from "next/router";
+import { logout } from "../../../redux/features/auth/authSlice";
 
 const NavbarBackOffice = ({ matches }: any) => {
   const theme = useTheme();
@@ -22,6 +24,12 @@ const NavbarBackOffice = ({ matches }: any) => {
    * Take all menu lists in the redux store
    */
   const navMenu = useAppSelector((state) => state.menu.value);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const handleClickLogout = () => {
+    dispatch(logout({}));
+    window.location.href = "/login";
+  };
 
   return (
     <AppbarBackOffice position="static" elevation={0}>
@@ -64,7 +72,7 @@ const NavbarBackOffice = ({ matches }: any) => {
                 </Badge>
               </IconButton>
             </Tooltip>
-            <ButtonProfile />
+            <ButtonProfile handleClickLogout={handleClickLogout} />
           </MenuNavbarBo>
         </ToolbarBackOffice>
       </Container>

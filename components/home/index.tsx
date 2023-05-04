@@ -152,7 +152,7 @@ const ListMissions = () => {
 
                 <CardFooter>
                   <Stack direction={{ xs: "column", sm: "row" }}>
-                    <Link href="/missions/previsionDeMission">
+                    <Link href={`/missions/${mission.id}/previsionDeMission`}>
                       <Button variant="text" color="info">
                         Gérer Etat de prévision
                       </Button>

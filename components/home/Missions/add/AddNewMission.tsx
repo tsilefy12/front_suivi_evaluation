@@ -34,12 +34,12 @@ const AddNewMission = () => {
   const { isEditing, mission, employeeList } = useAppSelector(
     (state) => state.mission
   );
+  // console.log("list employe", employeeList);
   const dispatch = useAppDispatch();
-  const id: any = router.query;
+  // const id: any = router.query;
   const fetchEmployeesListe = useFetchEmployes();
 
   useEffect(() => {
-    console.log("list employe", employeeList);
     fetchEmployeesListe();
   }, []);
 

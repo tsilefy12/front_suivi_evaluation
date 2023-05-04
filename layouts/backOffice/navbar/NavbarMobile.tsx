@@ -11,7 +11,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import React, { Fragment, useState } from "react";
@@ -22,9 +22,7 @@ import {
   MenuNavbarBo,
 } from "./NavbarBackOffice";
 import Drawer from "@mui/material/Drawer";
-import {
-  ButtonProfile,
-} from "./ButtonNav";
+import { ButtonProfile } from "./ButtonNav";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import { useAppSelector } from "../../../hooks/reduxHooks";
@@ -64,7 +62,7 @@ const NavbarMobile = ({ matches }: any) => {
               paddingX={2}
               color="GrayText"
             >
-              Employés
+              Suivis et évaluations
             </NavMobileTypo>
           </Stack>
           <MenuNavbarBo>
