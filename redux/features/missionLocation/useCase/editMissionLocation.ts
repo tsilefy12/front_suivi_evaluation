@@ -1,12 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axios } from "../../../../axios";
-// import { axios } from "../../../../lib/axios";
 
-export const editMissionGoal = createAsyncThunk(
-  "missionGoal/editMissionGoal",
+export const editMissionLocation = createAsyncThunk(
+  "missionLocation/editMissionLocation",
   async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.get(`/mission-goal/${data.id}`);
+      const response = await axios.get(`/mission-location/${data.id}`);
       return response.data;
     } catch (error: any) {
       if (error.response) {

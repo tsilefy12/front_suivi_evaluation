@@ -124,12 +124,12 @@ export const ButtonProfile = ({ page, handleClickLogout }: any) => {
       <Tooltip title="Ouvrir les paramètres">
         <IconButton onClick={handleClick}>
           <Avatar
-            alt="Remy Sharp"
-            src={
-              user!.profileImageUrl
-                ? `${apiUrl}${user!.profileImageUrl}`
-                : `${basePaht}/images/Avatar.png`
-            }
+          // alt="Remy Sharp"
+          // src={
+          //   user!.profileImageUrl
+          //     ? `${apiUrl}${user!.profileImageUrl}`
+          //     : `${basePaht}`
+          // }
           />
         </IconButton>
       </Tooltip>
@@ -183,11 +183,11 @@ export const ButtonProfile = ({ page, handleClickLogout }: any) => {
                 }
               >
                 <Avatar
-                  src={
-                    user!.profileImageUrl
-                      ? `${apiUrl}${user!.profileImageUrl}`
-                      : `${basePaht}/images/Avatar.png`
-                  }
+                // src={
+                //   user!.profileImageUrl
+                //     ? `${apiUrl}${user!.profileImageUrl}`
+                //     : `${basePaht}`
+                // }
                 />
                 {menu.name}
               </MenuItem>

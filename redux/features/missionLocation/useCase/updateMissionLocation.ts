@@ -1,21 +1,22 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-// import { axios } from "../../../../lib/axios";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
-import { MissionGoalItem } from "../missionLocationSlice.interface";
+import { MissionLocationItem } from "../missionLocationSlice.interface";
 import { axios } from "../../../../axios";
-// import { FournisseurItem } from "../missionGoalSlice.interface";
 
-export const updateMissionGoal = createAsyncThunk(
-  "missionGoal/updateMissionGoal",
-  async (data: { id: string; missionGoal: MissionGoalItem }, thunkAPI) => {
+export const updateMissionLocation = createAsyncThunk(
+  "missionLocation/updateMissionLocation",
+  async (
+    data: { id: string; missionLocation: MissionLocationItem },
+    thunkAPI
+  ) => {
     try {
       const response = await axios.patch(
-        `/mission-goal/${data.id}`,
-        data.missionGoal
+        `/mission-location/${data.id}`,
+        data.missionLocation
       );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Objectif mis à jour avec succès",
+          message: "Lieu mis à jour avec succès",
           options: {
             variant: "success",
           },

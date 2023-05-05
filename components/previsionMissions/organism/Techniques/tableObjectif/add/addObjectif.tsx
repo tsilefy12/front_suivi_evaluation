@@ -26,30 +26,6 @@ import { Form, Formik } from "formik";
 import { cancelEdit } from "../../../../../../redux/features/missionGoal/missionGoalSlice";
 
 const AddObjectif = ({ handleClose }: any) => {
-  //   return (
-  //     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
-  //       <SectionNavigation>
-  //         <DialogTitle>Créer/modifier objectif</DialogTitle>
-  //         <DialogContent>
-  //           <FormContainer spacing={2} mt={2}>
-  //             <TextField
-  //               fullWidth
-  //               id="outlined-basic"
-  //               label="Objectif"
-  //               variant="outlined"
-  //             />
-  //           </FormContainer>
-  //         </DialogContent>
-  //         <DialogActions>
-  //           <Button color="warning">Annuler</Button>
-  //           <Button variant="contained" type="submit">
-  //             Enregistrer
-  //           </Button>
-  //         </DialogActions>
-  //       </SectionNavigation>
-  //     </Container>
-  //   );
-  // };
   const router = useRouter();
   const idfile: any = router.query.id;
   const dispatch = useAppDispatch();

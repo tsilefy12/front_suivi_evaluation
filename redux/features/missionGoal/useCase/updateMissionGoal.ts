@@ -1,9 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-// import { axios } from "../../../../lib/axios";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { MissionGoalItem } from "../missionGoalSlice.interface";
 import { axios } from "../../../../axios";
-// import { FournisseurItem } from "../missionGoalSlice.interface";
 
 export const updateMissionGoal = createAsyncThunk(
   "missionGoal/updateMissionGoal",
