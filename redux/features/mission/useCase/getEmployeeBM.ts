@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axios } from "../../../../axios";
+
 /**
  * @param data : { id: string } : the id of the consumable to get
  * @param thunkAPI

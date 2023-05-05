@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getEmployeeMM } from "./getEmployeeMM";
 import { getEmployeeBM } from "./getEmployeeBM";
-// import { getEmployee } from "./getEmployee";
 import { axios } from "../../../../axios";
 
 /**

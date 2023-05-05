@@ -1,6 +1,6 @@
-export { getMissionGoal } from "./useCase/getMissionLocation";
-export { getMissionGoalList } from "./useCase/getMissionLocationListe";
-export { createMissionGoal } from "./useCase/createMissionLocation";
-export { updateMissionGoal } from "./useCase/updateMissionLocation";
-export { deleteMissionGoal } from "./useCase/deleteMissionLocation";
-export { editMissionGoal } from "./useCase/editMissionLocation";
+export { getMissionLocation } from "./useCase/getMissionLocation";
+export { getMissionLocationList } from "./useCase/getMissionLocationListe";
+export { createMissionLocation } from "./useCase/createMissionLocation";
+export { updateMissionLocation } from "./useCase/updateMissionLocation";
+export { deleteMissionLocation } from "./useCase/deleteMissionLocation";
+export { editMissionLocation } from "./useCase/editMissionLocation";

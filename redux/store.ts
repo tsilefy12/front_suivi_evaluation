@@ -9,6 +9,9 @@ import { missionGoalSlice } from "./features/missionGoal/missionGoalSlice";
 import { exceptedResultSlice } from "./features/exceptedResult/exceptedResultSlice";
 import { plannedActivitySlice } from "./features/plannedActivity/plannedActivitySlice";
 import { deliverableSlice } from "./features/deliverable/deliverableSlice";
+import { missionLocationSlice } from "./features/missionLocation/missionLocationSlice";
+import { vehicleSlice } from "./features/vehicle/vehicleSlice";
+import { contactSlice } from "./features/contact/contactSlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +25,9 @@ export const store = configureStore({
     exceptedResult: exceptedResultSlice.reducer,
     plannedActivity: plannedActivitySlice.reducer,
     deliverable: deliverableSlice.reducer,
+    missionLocation: missionLocationSlice.reducer,
+    vehicle: vehicleSlice.reducer,
+    contact: contactSlice.reducer,
   },
 });
 

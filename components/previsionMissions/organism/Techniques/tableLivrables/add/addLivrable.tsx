@@ -27,7 +27,7 @@ import { cancelEdit } from "../../../../../../redux/features/deliverable/deliver
 
 const AddLivrable = ({ handleClose }: any) => {
   const router = useRouter();
-  const idfile: any = router.query.id;
+  const { idfile }: any = router.query.id;
   const dispatch = useAppDispatch();
 
   const { deliverable, isEditing } = useAppSelector(

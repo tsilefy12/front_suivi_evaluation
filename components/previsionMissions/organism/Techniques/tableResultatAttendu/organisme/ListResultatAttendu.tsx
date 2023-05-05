@@ -4,7 +4,6 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Stack from "@mui/material/Stack";
-import { rows } from "./constante";
 import {
   Box,
   Button,

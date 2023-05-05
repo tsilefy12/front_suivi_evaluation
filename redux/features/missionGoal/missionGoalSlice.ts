@@ -1,12 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createMissionGoal } from "./useCase/createMissionGoal";
-// import { deleteFournisseur } from "./useCase/deleteMissionGoal";
 import { editMissionGoal } from "./useCase/editMissionGoal";
 import { getMissionGoal } from "./useCase/getMissionGoal";
 import { getMissionGoalList } from "./useCase/getMissionGoalListe";
 import { updateMissionGoal } from "./useCase/updateMissionGoal";
 import { MissionGoalInitialState } from "./missionGoalSlice.interface";
-import { deleteMission } from "../mission/useCase/deleteMission";
 import { deleteMissionGoal } from "./useCase/deleteMissionGoal";
 
 const initialState: MissionGoalInitialState = {

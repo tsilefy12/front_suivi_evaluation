@@ -1,16 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-// import { axios } from "../../../../lib/axios";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { DeliverableItem } from "../deliverableSlice.interface";
 import { axios } from "../../../../axios";
 
 export const updateDeliverable = createAsyncThunk(
   "deliverable/updateDeliverable",
-  async (data: { id: string; missionGoal: DeliverableItem }, thunkAPI) => {
+  async (data: { id: string; deliverable: DeliverableItem }, thunkAPI) => {
     try {
       const response = await axios.patch(
         `/deliverable/${data.id}`,
-        data.missionGoal
+        data.deliverable
       );
       thunkAPI.dispatch(
         enqueueSnackbar({

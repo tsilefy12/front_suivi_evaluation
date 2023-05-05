@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
+  Box,
   Container,
   DialogActions,
   DialogContent,
@@ -9,48 +10,138 @@ import {
   styled,
   TextField,
 } from "@mui/material";
+import * as Yup from "yup";
+import { useRouter } from "next/router";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
+import useFetchContactListe from "../hooks/useFetchContactList";
+import {
+  createContact,
+  updateContact,
+} from "../../../../../../redux/features/contact";
+import { Form, Formik } from "formik";
+import OSTextField from "../../../../../shared/input/OSTextField";
+import { cancelEdit } from "../../../../../../redux/features/contact/contactSlice";
 
-const AddContactPendantMission = () => {
+const AddContactPendantMission = ({ handleClose }: any) => {
+  const router = useRouter();
+  const idfile: any = router.query.id;
+  const dispatch = useAppDispatch();
+
+  const { contact, isEditing } = useAppSelector((state) => state.contact);
+  const fetchContactList = useFetchContactListe();
+
+  useEffect(() => {
+    fetchContactList();
+  }, []);
+
+  const handleSubmit = async (values: any) => {
+    try {
+      if (isEditing) {
+        await dispatch(
+          updateContact({
+            id: contact.id!,
+            contact: values,
+          })
+        );
+      } else {
+        await dispatch(createContact(values));
+      }
+      fetchContactList();
+      handleClose();
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
   return (
-    <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
-      <SectionNavigation>
-        <DialogTitle>Créer/modifier contact pendant la mission</DialogTitle>
-        <DialogContent>
-          <FormContainer spacing={2} mt={2}>
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Nom et prénoms"
-              variant="outlined"
-            />
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Lieu et institution"
-              variant="outlined"
-            />
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Numéro "
-              variant="outlined"
-            />
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Remarques"
-              variant="outlined"
-            />
-          </FormContainer>
-        </DialogContent>
-        <DialogActions>
-          <Button color="warning">Annuler</Button>
-          <Button variant="contained" type="submit">
-            Enregistrer
-          </Button>
-        </DialogActions>
-      </SectionNavigation>
-    </Container>
+    <Box>
+      <Formik
+        enableReinitialize
+        initialValues={
+          isEditing
+            ? contact
+            : {
+                lastNameContact: isEditing ? contact?.lastNameContact : "",
+                firstNameContact: isEditing ? contact?.firstNameContact : "",
+                locationContact: isEditing ? contact?.locationContact : "",
+                numberContact: isEditing ? contact?.numberContact : "",
+                noteContact: isEditing ? contact?.noteContact : "",
+                missionId: idfile,
+              }
+        }
+        validationSchema={Yup.object({})}
+        onSubmit={(value: any, action: any) => {
+          handleSubmit(value);
+          action.resetForm();
+        }}
+      >
+        {(formikProps) => {
+          return (
+            <Form>
+              <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
+                <SectionNavigation>
+                  <DialogTitle>
+                    {isEditing ? "Modifier" : "Formulaire"} contact pendant la
+                    mission
+                  </DialogTitle>
+                  <DialogContent>
+                    <FormContainer spacing={2} mt={2}>
+                      <CustomStack
+                        direction={{ xs: "column", sm: "column", md: "row" }}
+                        spacing={{ xs: 2, sm: 2, md: 1 }}
+                      >
+                        <OSTextField
+                          id="outlined-basic"
+                          label="Nom"
+                          name="lastNameContact"
+                        />
+                        <OSTextField
+                          id="outlined-basic"
+                          label="Prenom"
+                          name="firstNameContact"
+                        />
+                      </CustomStack>
+                      <OSTextField
+                        id="outlined-basic"
+                        label="Lieu et institution"
+                        name="locationContact"
+                      />
+                      <OSTextField
+                        id="outlined-basic"
+                        label="Numéro"
+                        name="numberContact"
+                      />
+                      <OSTextField
+                        id="outlined-basic"
+                        label="Remarques"
+                        name="noteContact"
+                      />
+                    </FormContainer>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      color="warning"
+                      onClick={() => {
+                        formikProps.resetForm();
+                        dispatch(cancelEdit());
+                        handleClose();
+                      }}
+                    >
+                      Annuler
+                    </Button>
+                    <Button variant="contained" type="submit">
+                      Enregistrer
+                    </Button>
+                  </DialogActions>
+                </SectionNavigation>
+              </Container>
+            </Form>
+          );
+        }}
+      </Formik>
+    </Box>
   );
 };
 
@@ -69,3 +160,8 @@ export const CustomStack = styled(Stack)(({ theme }) => ({
   },
   // marginLeft: "100",
 }));
+// export const CustomStack = styled(Stack)(({ theme }) => ({
+//   [theme.breakpoints.down("sm")]: {
+//     flexWrap: "wrap",
+//   },
+// }));

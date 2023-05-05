@@ -26,10 +26,8 @@ import OSTextField from "../../../../../shared/input/OSTextField";
 import { cancelEdit } from "../../../../../../redux/features/exceptedResult/exceptedResultSlice";
 
 const AddResultatAttendu = ({ handleClose }: any) => {
-  // const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const idfile: any = router.query.id;
-  // const { idQg }: any = router.query;
   const dispatch = useAppDispatch();
 
   const { exceptedResult, isEditing } = useAppSelector(

@@ -1,16 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-// import { axios } from "../../../../lib/axios";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
 
-export const deleteMissionGoal = createAsyncThunk(
-  "missionGoal/deleteMissionGoal",
+export const deleteMissionLocation = createAsyncThunk(
+  "missionLocation/deleteMissionLocation",
   async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.delete(`/mission-goal/${data.id}`);
+      const response = await axios.delete(`/mission-location/${data.id}`);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Objectif supprimé avec succès",
+          message: "Lieu supprimé avec succès",
           options: {
             variant: "success",
           },
