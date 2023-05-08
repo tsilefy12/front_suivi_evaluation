@@ -24,10 +24,12 @@ import {
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { cancelEdit } from "../../../../../../redux/features/missionary/missionarySlice";
+import OSDateTimePicker from "../../../../../shared/date/OSDateTimePicker";
+import OSDatePicker from "../../../../../shared/date/OSDatePicker";
 
 const AddMissionnaire = ({ handleClose }: any) => {
   const router = useRouter();
-  const idfile: any = router.query.id;
+  const id: any = router.query.id;
   const dispatch = useAppDispatch();
 
   const { missionary, isEditing } = useAppSelector(
@@ -66,7 +68,11 @@ const AddMissionnaire = ({ handleClose }: any) => {
             ? missionary
             : {
                 lastNameMissionary: isEditing ? missionary?.lastNameMissionary : "",
-                missionId: idfile,
+                firstNameMissionary: isEditing ? missionary?.firstNameMissionary : "",
+                startDateMissionary: isEditing ? missionary?.startDateMissionary : "",
+                returnDateMissionary: isEditing ? missionary?.returnDateMissionary : "",
+                missionResponsabilityMissionary: isEditing ? missionary?.missionResponsabilityMissionary : "",
+                missionId: id,
               }
         }
         validationSchema={Yup.object({
@@ -83,14 +89,40 @@ const AddMissionnaire = ({ handleClose }: any) => {
               <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
                 <SectionNavigation>
                   <DialogTitle>
-                    {isEditing ? "Modifier" : "Formulaire"} objectif
+                    {isEditing ? "Modifier" : "Formulaire"} Missionnaire
                   </DialogTitle>
                   <DialogContent>
                     <FormContainer spacing={2} mt={2}>
                       <OSTextField
                         id="outlined-basic"
-                        label="Résultat"
+                        label="Nom"
                         name="lastNameMissionary"
+                      />
+                      <OSTextField
+                        id="outlined-basic"
+                        label="Prénom"
+                        name="firstNameMissionary"
+                      />
+                      <OSDatePicker
+                        fullWidth
+                        label="Date de debut"
+                        value={formikProps.values.startDateMissionary}
+                        onChange={(value: any) =>
+                          formikProps.setFieldValue("startDateMissionary", value)
+                        }
+                      />
+                      <OSDatePicker
+                        fullWidth
+                        label="Date de retour"
+                        value={formikProps.values.returnDateMissionary}
+                        onChange={(value: any) =>
+                          formikProps.setFieldValue("returnDateMissionary", value)
+                        }
+                      />
+                      <OSTextField
+                        id="outlined-basic"
+                        label="Responsable"
+                        name="missionResponsabilityMissionary"
                       />
                     </FormContainer>
                   </DialogContent>

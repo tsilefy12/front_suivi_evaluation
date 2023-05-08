@@ -12,6 +12,7 @@ import {
   Dialog,
   IconButton,
   styled,
+  TableHead,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -30,6 +31,7 @@ import {
 import useFetchMissionaryList from "../hooks/useFetchMissionaryList";
 import { deleteMissionary, editMissionary } from "../../../../../../redux/features/missionary";
 import { MissionaryItem } from "../../../../../../redux/features/missionary/missionarySlice.interface";
+import Moment from "react-moment";
 
 const ListMissionnaires = () => {
   const [open, setOpen] = React.useState(false);
@@ -79,6 +81,14 @@ const ListMissionnaires = () => {
         <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
           <MyTableContainer>
             <Table sx={{ minWidth: 700 }} aria-label="simple table">
+              <TableHead>
+                  <TableRow>
+                    <TableCell>Nom</TableCell>
+                    <TableCell>Date de début</TableCell>
+                    <TableCell>Date de retour</TableCell>
+                    <TableCell>Responsable de mission</TableCell>
+                  </TableRow>
+                </TableHead>
               <TableBody>
                 {missionaryList.map((row: MissionaryItem) => (
                   <TableRow
@@ -86,10 +96,16 @@ const ListMissionnaires = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.lastNameMissionary}
+                      {row.lastNameMissionary} {row.firstNameMissionary}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {row.firstNameMissionary}
+                      {<Moment format="DD/MM/YYYY">{row.startDateMissionary}</Moment>}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                    {<Moment format="DD/MM/YYYY">{row.returnDateMissionary}</Moment>}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {row.missionResponsabilityMissionary}
                     </TableCell>
                     <TableCell align="right">
                       <BtnActionContainer

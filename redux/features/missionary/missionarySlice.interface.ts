@@ -4,7 +4,7 @@ export interface MissionaryItem {
   firstNameMissionary?: string;
   startDateMissionary?: string;
   returnDateMissionary?: string;
-  firstNameMismissionResponsabilityMissionarysionary?: string;
+  missionResponsabilityMissionary?: string;
   missionId?: string;
 }
 
