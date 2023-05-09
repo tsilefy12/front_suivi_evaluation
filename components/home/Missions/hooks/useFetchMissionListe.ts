@@ -1,6 +1,9 @@
 import { useRouter } from "next/router";
 import { useAppDispatch } from "../../../../hooks/reduxHooks";
-import { getMissionListe } from "../../../../redux/features/mission";
+import {
+  // getMissionCopieList,
+  getMissionListe,
+} from "../../../../redux/features/mission";
 
 const useFetchMissionListe = () => {
   const router = useRouter();
@@ -24,10 +27,6 @@ const useFetchMissionListe = () => {
         [<string>router.query.orderBy]: router.query.order,
       };
     }
-    // args.include = {
-    //   missionManager: true,
-    //   budgetManager: true,
-    // };
     dispatch(getMissionListe({ args }));
   };
 };

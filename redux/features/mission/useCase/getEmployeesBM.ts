@@ -1,13 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axios } from "../../../../axios";
 
-/**
- * @param data : { args?: any } : PRISMA arguments to filter programs
- * @param thunkAPI
- * @returns {Promise<void>}
- * @memberof useCases
- * @description : This function is used to get employees data
- */
 export const getEmployeesBM = createAsyncThunk(
   "employee/getEmployeesBM",
   async (data: { args?: any }, thunkAPI) => {

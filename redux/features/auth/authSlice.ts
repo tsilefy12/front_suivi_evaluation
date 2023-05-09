@@ -119,7 +119,7 @@ export const authSlice = createSlice({
       state.isLogedIn = true;
     },
     [fetchLinkedEmployee.fulfilled.type]: (state, action) => {
-      console.log("linked emp : ", action.payload);
+      // console.log("linked emp : ", action.payload);
       state.linkedEmployee = action.payload;
     },
     [fetchLinkedEmployee.rejected.type]: (state, action) => {

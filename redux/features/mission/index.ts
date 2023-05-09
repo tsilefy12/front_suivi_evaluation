@@ -10,3 +10,5 @@ export { getEmployeeMM } from "./useCase/getEmployeeMM";
 export { getMissionListe } from "./useCase/getMissionListe";
 export { getEmployees } from "./useCase/getEmployees";
 export { getEmployee } from "./useCase/getEmployee";
+// export { getMissionCopie } from "./useCase/getMissionGoal";
+// export { getMissionCopieList } from "./useCase/getMissionGoalListe";
