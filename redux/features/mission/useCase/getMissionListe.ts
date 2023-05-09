@@ -4,12 +4,6 @@ import { getEmployeeMM } from "./getEmployeeMM";
 import { getEmployeeBM } from "./getEmployeeBM";
 import { axios } from "../../../../axios";
 
-/**
- * @param data: { args?: any } : PRISMA arguments to filter getted training data
- * @param thunkAPI
- * @returns {Promise<void>}
- * @description : This function is used to get all training data
- */
 export const getMissionListe = createAsyncThunk(
   "mission/getMissionListe",
   async (data: { args?: any }, thunkAPI) => {
@@ -23,10 +17,10 @@ export const getMissionListe = createAsyncThunk(
         await Promise.all(
           response.data.map(async (cons: MissionItem) => {
             const employeeMMId = cons.missionManagerId;
+            const employeeBMId = cons.budgetManagerId;
             const detailEmployeeMM = await thunkAPI
               .dispatch(getEmployeeMM({ employeeMMId }))
               .unwrap();
-            const employeeBMId = cons.budgetManagerId;
             const detailEmployeeBM = await thunkAPI
               .dispatch(getEmployeeBM({ employeeBMId }))
               .unwrap();
@@ -34,8 +28,8 @@ export const getMissionListe = createAsyncThunk(
               id: cons.id,
               descriptionMission: cons.descriptionMission,
               missionManagerId: cons.missionManagerId,
-              missionManager: detailEmployeeMM,
               budgetManagerId: cons.missionManagerId,
+              missionManager: detailEmployeeMM,
               budgetManager: detailEmployeeBM,
             };
             newData.push(oneCons);

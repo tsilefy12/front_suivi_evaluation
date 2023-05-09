@@ -9,6 +9,8 @@ import { editMission } from "./useCase/editMission";
 import { getEmployees } from "./useCase/getEmployees";
 import { getEmployeesMM } from "./useCase/getEmployeesMM";
 import { getEmployeesBM } from "./useCase/getEmployeesBM";
+// import { getMissionCopie } from "./useCase/getMissionGoal";
+// import { getMissionCopieList } from "./useCase/getMissionGoalListe";
 
 const missionInitialState: MissionInitialState = {
   missionListe: [],
@@ -145,6 +147,30 @@ export const missionSlice = createSlice({
       state.loading = false;
       state.error = action.error;
     },
+
+    // [getMissionCopie.pending.type]: (state) => {
+    //   state.loading = true;
+    // },
+    // [getMissionCopie.fulfilled.type]: (state, action) => {
+    //   state.mission = action.payload;
+    //   state.loading = false;
+    // },
+    // [getMissionCopie.rejected.type]: (state, action) => {
+    //   state.error = action.error;
+    //   state.loading = false;
+    // },
+
+    // [getMissionCopieList.pending.type]: (state) => {
+    //   state.loading = true;
+    // },
+    // [getMissionCopieList.fulfilled.type]: (state, action) => {
+    //   state.missionListe = action.payload;
+    //   state.loading = false;
+    // },
+    // [getMissionCopieList.rejected.type]: (state, action) => {
+    //   state.error = action.error;
+    //   state.loading = false;
+    // },
   },
 });
 

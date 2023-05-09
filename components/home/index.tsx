@@ -27,6 +27,7 @@ import Recherche from "./recherch";
 
 const ListMissions = () => {
   const router = useRouter();
+  // const id: any = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const { missionListe } = useAppSelector((state) => state.mission);
@@ -88,13 +89,6 @@ const ListMissions = () => {
             Liste des Missions
           </Typography>
           <Recherche />
-          {/* <TextField
-            variant="outlined"
-            id="search"
-            name="search"
-            placeholder="Recherche"
-            size="small"
-          /> */}
         </Stack>
         <Grid container spacing={2} mt={2}>
           {missionListe.map((mission: MissionItem) => (
@@ -109,21 +103,27 @@ const ListMissions = () => {
                     Mission {mission?.descriptionMission}
                   </Typography>
                   <Stack direction="row" spacing={{ xs: 0, sm: 0, md: 2 }}>
-                    <IconButton size="small" color="success">
-                      <Edit
-                        fontSize="small"
-                        onClick={() => {
-                          handleClickEdit(mission.id);
-                        }}
-                      />
+                    <IconButton
+                      color="success"
+                      aria-label="Modifier"
+                      component="span"
+                      size="small"
+                      onClick={() => {
+                        handleClickEdit(mission.id);
+                      }}
+                    >
+                      <Edit />
                     </IconButton>
-                    <IconButton size="small" color="warning">
-                      <CancelIcon
-                        fontSize="small"
-                        onClick={() => {
-                          handleClickDelete(mission.id);
-                        }}
-                      />
+                    <IconButton
+                      color="warning"
+                      aria-label="supprime"
+                      component="span"
+                      size="small"
+                      onClick={() => {
+                        handleClickDelete(mission.id);
+                      }}
+                    >
+                      <CancelIcon />
                     </IconButton>
                   </Stack>
                 </CardHeader>
@@ -132,7 +132,7 @@ const ListMissions = () => {
                   <Typography color="GrayText" my={2} variant="caption">
                     {/* Description de la mission de la mission description de la
                     mssion */}
-                    {mission?.descriptionMission}
+                    {/* {mission?.descriptionMission} */}
                   </Typography>
                   <Stack spacing={1}>
                     <KeyValue

@@ -3,14 +3,6 @@ import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { MissionItem } from "../mission.interface";
 import { axios } from "../../../../axios";
 
-/**
- * Create a new mission
- * @param missionItem
- * @param thunkAPI
- * @returns {Promise<void>}
- * @memberof useCases
- * @description : This function is used to create a new mission
- */
 export const createMission = createAsyncThunk(
   "mission/createMssion",
   async (mission: MissionItem, thunkAPI) => {
