@@ -12,7 +12,7 @@ import {
 import React, { Fragment } from "react";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -23,7 +23,12 @@ export const ListItemDrawer = ({ page }: any) => {
   return (
     <ListItem disablePadding key={page.id}>
       <Link href={page.link}>
-        <ListItemButton sx={{ backgroundColor: router.pathname === page.link ? theme.palette.common.white : "" }}>
+        <ListItemButton
+          sx={{
+            backgroundColor:
+              router.pathname === page.link ? theme.palette.common.white : "",
+          }}
+        >
           <ListItemIcon>
             <Icon>{page.icon}</Icon>
           </ListItemIcon>
@@ -35,12 +40,12 @@ export const ListItemDrawer = ({ page }: any) => {
 };
 
 export const ListItemWhiteChildrenDrawer = ({ page }: any) => {
-    const [open, setOpen] = React.useState(false);
-    const theme = useTheme();
-    const router = useRouter();
-    const handleClick = () => {
-        setOpen(!open);
-      };
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const router = useRouter();
+  const handleClick = () => {
+    setOpen(!open);
+  };
   return (
     <>
       <ListItem disablePadding>
@@ -64,7 +69,15 @@ export const ListItemWhiteChildrenDrawer = ({ page }: any) => {
           <Fragment key={item.id}>
             <List component="span" disablePadding>
               <Link href={item.link}>
-                <ListItemButton sx={{ ml: 4, backgroundColor: router.pathname === item.link ? theme.palette.common.white : "" }}>
+                <ListItemButton
+                  sx={{
+                    ml: 4,
+                    backgroundColor:
+                      router.pathname === item.link
+                        ? theme.palette.common.white
+                        : "",
+                  }}
+                >
                   <FiberManualRecordIcon fontSize="small" color="disabled" />
                   <Typography variant="body2" sx={{ ml: 2 }} color="GrayText">
                     {item.name}

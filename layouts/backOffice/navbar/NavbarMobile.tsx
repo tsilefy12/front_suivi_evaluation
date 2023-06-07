@@ -12,6 +12,7 @@ import {
   ListItemIcon,
   ListItemText,
   useTheme,
+  Link,
 } from "@mui/material";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import React, { Fragment, useState } from "react";
@@ -53,9 +54,11 @@ const NavbarMobile = ({ matches }: any) => {
       <Container maxWidth="xl">
         <ToolbarBackOffice variant="dense">
           <Stack flexDirection="row" alignItems="center">
+            {/* <Link href="/"> */}
             <IconBntNavBO onClick={toogleDrawer} aria-label="home">
               <MenuIcon fontSize="inherit" />
             </IconBntNavBO>
+            {/* </Link> */}
             <NavMobileTypo
               variant="h5"
               sx={{ xs: { display: "none" } }}

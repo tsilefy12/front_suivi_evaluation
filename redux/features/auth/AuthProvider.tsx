@@ -20,13 +20,14 @@ const AuthProvider = ({ children }: any) => {
 
   const addAxiosResponseInterceptor = () => {
     axios.interceptors.response.use(
-      function (response) {
+      function (response: any) {
         return response;
       },
-      async function (error) {
+      async function (error: any) {
         if (error.response.status === 401 || error.response.status === 403) {
           await dispatch(logout({}));
-          router.push("/login");
+          // router.push("/login");
+          window.location.href = "/login";
         }
         return Promise.reject(error);
       }

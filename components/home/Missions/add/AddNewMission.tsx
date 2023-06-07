@@ -34,9 +34,7 @@ const AddNewMission = () => {
   const { isEditing, mission, employeeList } = useAppSelector(
     (state) => state.mission
   );
-  // console.log("list employe", employeeList);
   const dispatch = useAppDispatch();
-  // const id: any = router.query;
   const fetchEmployeesListe = useFetchEmployes();
 
   useEffect(() => {
@@ -157,14 +155,14 @@ const AddNewMission = () => {
                     name="missionManagerId"
                     options={employeeList}
                     valueKey="id"
-                    dataKey="name"
+                    dataKey={["name", "surname"]}
                   />
                   <OSSelectField
                     id="outlined-basic"
                     label="Gestionnaire du budget"
                     name="budgetManagerId"
                     options={employeeList}
-                    dataKey="name"
+                    dataKey={["name", "surname"]}
                     valueKey="id"
                   />
                 </CustomStack>

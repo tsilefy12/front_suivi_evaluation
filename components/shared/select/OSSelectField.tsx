@@ -6,12 +6,14 @@ const OSSelectField = ({
   name,
   valueKey,
   dataKey,
+  separator,
   options,
   ...otherProps
 }: {
   name: string;
   valueKey: string;
-  dataKey: string;
+  dataKey: string | string[];
+  separator?: string;
   options: any[];
   [key: string]: any;
 }) => {
@@ -21,7 +23,6 @@ const OSSelectField = ({
 
   const handleChange = (event: any) => {
     const { value } = event.target;
-    console.log("selected value : ", value);
     setFieldValue(name, value);
   };
 
@@ -38,16 +39,34 @@ const OSSelectField = ({
     configSelect.error = true;
     configSelect.helperText = meta.error;
   }
-
-  return (
-    <TextField {...configSelect}>
-      {options.map((option: any, index: any) => (
+  const selectOptions = () => {
+    if (Array.isArray(dataKey)) {
+      return options.map((option: any, index) => {
+        const labelArray = dataKey.map((key: string) => option[key]);
+        const label = labelArray.join(separator);
+        return (
+          <MenuItem key={index} value={option[valueKey]}>
+            {label}
+          </MenuItem>
+        );
+      });
+    }
+    return options.map((option: any, index) => {
+      const label = option[dataKey];
+      return (
         <MenuItem key={index} value={option[valueKey]}>
-          {option[dataKey]}
+          {label}
         </MenuItem>
-      ))}
-    </TextField>
-  );
+      );
+    });
+  };
+
+  return <TextField {...configSelect}>{selectOptions()}</TextField>;
+};
+
+// component default props
+OSSelectField.defaultProps = {
+  separator: " ",
 };
 
 export default OSSelectField;
