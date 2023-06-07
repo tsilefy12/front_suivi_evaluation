@@ -75,108 +75,108 @@ const ListMissions = () => {
         </Typography>
       </SectionNavigation>
       <Divider />
-      {/* <SectionDetails> */}
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={{ xs: 1, sm: 2, md: 4 }}
-        sx={{
-          flex: "1 1 100%",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h4" id="tableTitle" component="div">
-          Liste des Missions
-        </Typography>
-        <Recherche />
-      </Stack>
+      <SectionDetails>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={{ xs: 1, sm: 2, md: 4 }}
+          sx={{
+            flex: "1 1 100%",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h4" id="tableTitle" component="div">
+            Liste des Missions
+          </Typography>
+          <Recherche />
+        </Stack>
 
-      <Grid container spacing={2} mt={2}>
-        {missionListe.map((mission: MissionItem) => (
-          <Grid key={mission?.id} item xs={12} md={6} lg={4}>
-            <LinkContainer>
-              <CardHeader
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Typography variant="h6" color="GrayText">
-                  Mission {mission?.descriptionMission}
-                </Typography>
-                <Stack direction="row" spacing={{ xs: 0, sm: 0, md: 2 }}>
-                  <IconButton
-                    color="success"
-                    aria-label="Modifier"
-                    component="span"
-                    size="small"
-                    onClick={() => {
-                      handleClickEdit(mission.id);
-                    }}
-                  >
-                    <Edit />
-                  </IconButton>
-                  <IconButton
-                    color="warning"
-                    aria-label="supprime"
-                    component="span"
-                    size="small"
-                    onClick={() => {
-                      handleClickDelete(mission.id);
-                    }}
-                  >
-                    <CancelIcon />
-                  </IconButton>
-                </Stack>
-              </CardHeader>
+        <Grid container spacing={2} mt={2}>
+          {missionListe.map((mission: MissionItem) => (
+            <Grid key={mission?.id} item xs={12} md={6} lg={4}>
+              <LinkContainer>
+                <CardHeader
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Typography variant="h6" color="GrayText">
+                    Mission {mission?.descriptionMission}
+                  </Typography>
+                  <Stack direction="row" spacing={{ xs: 0, sm: 0, md: 2 }}>
+                    <IconButton
+                      color="success"
+                      aria-label="Modifier"
+                      component="span"
+                      size="small"
+                      onClick={() => {
+                        handleClickEdit(mission.id);
+                      }}
+                    >
+                      <Edit />
+                    </IconButton>
+                    <IconButton
+                      color="warning"
+                      aria-label="supprime"
+                      component="span"
+                      size="small"
+                      onClick={() => {
+                        handleClickDelete(mission.id);
+                      }}
+                    >
+                      <CancelIcon />
+                    </IconButton>
+                  </Stack>
+                </CardHeader>
 
-              <CardBody>
-                <Typography color="GrayText" my={2} variant="caption">
-                  {/* Description de la mission de la mission description de la
+                <CardBody>
+                  <Typography color="GrayText" my={2} variant="caption">
+                    {/* Description de la mission de la mission description de la
                     mssion */}
-                  {mission?.descriptionMission}
-                </Typography>
-                <Stack spacing={1}>
-                  <KeyValue
-                    keyName="Responsable"
-                    value={[
-                      `${mission?.missionManager?.name} ${mission?.missionManager?.surname}`,
-                    ]}
-                  />
-                  <KeyValue
-                    keyName="Gestionnaire "
-                    value={[
-                      `${mission?.budgetManager?.name} ${mission?.budgetManager?.surname}`,
-                    ]}
-                  />
-                </Stack>
-              </CardBody>
+                    {mission?.descriptionMission}
+                  </Typography>
+                  <Stack spacing={1}>
+                    <KeyValue
+                      keyName="Responsable"
+                      value={[
+                        `${mission?.missionManager?.name} ${mission?.missionManager?.surname}`,
+                      ]}
+                    />
+                    <KeyValue
+                      keyName="Gestionnaire "
+                      value={[
+                        `${mission?.budgetManager?.name} ${mission?.budgetManager?.surname}`,
+                      ]}
+                    />
+                  </Stack>
+                </CardBody>
 
-              <CardFooter>
-                <Stack direction={{ xs: "column", sm: "row" }}>
-                  <Link href={`/missions/${mission.id}/previsionDeMission`}>
-                    <Button variant="text" color="info">
-                      Gérer Etat de prévision
-                    </Button>
-                  </Link>
-                  <Link href="/missions/id/bilan">
-                    <Button variant="text" color="info">
-                      Voir le Bilan
-                    </Button>
-                  </Link>
-                </Stack>
-                <Stack direction={{ xs: "column", sm: "row" }}>
-                  <Link href="/missions/id/gereRapport">
-                    <Button variant="text" color="info">
-                      Gérer Rapport
-                    </Button>
-                  </Link>
-                </Stack>
-              </CardFooter>
-            </LinkContainer>
-          </Grid>
-        ))}
-      </Grid>
-      {/* </SectionDetails> */}
+                <CardFooter>
+                  <Stack direction={{ xs: "column", sm: "row" }}>
+                    <Link href={`/missions/${mission.id}/previsionDeMission`}>
+                      <Button variant="text" color="info">
+                        Gérer Etat de prévision
+                      </Button>
+                    </Link>
+                    <Link href="/missions/id/bilan">
+                      <Button variant="text" color="info">
+                        Voir le Bilan
+                      </Button>
+                    </Link>
+                  </Stack>
+                  <Stack direction={{ xs: "column", sm: "row" }}>
+                    <Link href="/missions/id/gereRapport">
+                      <Button variant="text" color="info">
+                        Gérer Rapport
+                      </Button>
+                    </Link>
+                  </Stack>
+                </CardFooter>
+              </LinkContainer>
+            </Grid>
+          ))}
+        </Grid>
+      </SectionDetails>
     </Container>
   );
 };

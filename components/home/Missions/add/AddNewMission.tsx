@@ -34,6 +34,7 @@ const AddNewMission = () => {
   const { isEditing, mission, employeeList } = useAppSelector(
     (state) => state.mission
   );
+  const { employees } = useAppSelector((state) => state.employe);
   const dispatch = useAppDispatch();
   const fetchEmployeesListe = useFetchEmployes();
 
@@ -153,7 +154,7 @@ const AddNewMission = () => {
                     id="outlined-basic"
                     label="Responsable"
                     name="missionManagerId"
-                    options={employeeList}
+                    options={employees}
                     valueKey="id"
                     dataKey={["name", "surname"]}
                   />
@@ -161,7 +162,7 @@ const AddNewMission = () => {
                     id="outlined-basic"
                     label="Gestionnaire du budget"
                     name="budgetManagerId"
-                    options={employeeList}
+                    options={employees}
                     dataKey={["name", "surname"]}
                     valueKey="id"
                   />

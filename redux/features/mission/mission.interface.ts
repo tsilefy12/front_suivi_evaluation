@@ -14,5 +14,5 @@ export interface MissionInitialState {
   isEditing: boolean;
   loading: boolean;
   [key: string]: any;
-  employeeList: [];
+  // employeeList: [];
 }
