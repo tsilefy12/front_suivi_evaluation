@@ -35,7 +35,7 @@ const ListMissions = () => {
 
   useEffect(() => {
     fetchMissionListe();
-  }, [router.query]);
+  }, []);
 
   const handleClickDelete = async (id: any) => {
     confirm({
@@ -90,9 +90,10 @@ const ListMissions = () => {
           </Typography>
           <Recherche />
         </Stack>
+
         <Grid container spacing={2} mt={2}>
           {missionListe.map((mission: MissionItem) => (
-            <Grid key={mission.id} item xs={12} md={6} lg={4}>
+            <Grid key={mission?.id} item xs={12} md={6} lg={4}>
               <LinkContainer>
                 <CardHeader
                   direction="row"
@@ -132,7 +133,7 @@ const ListMissions = () => {
                   <Typography color="GrayText" my={2} variant="caption">
                     {/* Description de la mission de la mission description de la
                     mssion */}
-                    {/* {mission?.descriptionMission} */}
+                    {mission?.descriptionMission}
                   </Typography>
                   <Stack spacing={1}>
                     <KeyValue
@@ -219,3 +220,4 @@ const CardBody = styled(Stack)(({ theme }) => ({
   paddingInline: theme.spacing(3),
   paddingBottom: theme.spacing(1),
 }));
+const SectionDetailsTitle = styled(Box)(({ theme }) => ({}));

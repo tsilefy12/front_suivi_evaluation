@@ -6,16 +6,14 @@ import { getMissionListe } from "./useCase/getMissionListe";
 import { updateMission } from "./useCase/updateMission";
 import { MissionInitialState } from "./mission.interface";
 import { editMission } from "./useCase/editMission";
-import { getEmployees } from "./useCase/getEmployees";
+// import { getEmployees } from "./useCase/getEmployees";
 import { getEmployeesMM } from "./useCase/getEmployeesMM";
 import { getEmployeesBM } from "./useCase/getEmployeesBM";
-// import { getMissionCopie } from "./useCase/getMissionGoal";
-// import { getMissionCopieList } from "./useCase/getMissionGoalListe";
 
 const missionInitialState: MissionInitialState = {
   missionListe: [],
   mission: {},
-  employeeList: [],
+  // employeeList: [],
   isEditing: false,
   loading: false,
   error: null,
@@ -110,18 +108,18 @@ export const missionSlice = createSlice({
       state.error = action.error;
     },
 
-    // get employees
-    [getEmployees.pending.type]: (state) => {
-      state.loading = true;
-    },
-    [getEmployees.fulfilled.type]: (state, action) => {
-      state.loading = false;
-      state.employeeList = action.payload;
-    },
-    [getEmployees.rejected.type]: (state, action) => {
-      state.loading = false;
-      state.error = action.error;
-    },
+    // // get employees
+    // [getEmployees.pending.type]: (state) => {
+    //   state.loading = true;
+    // },
+    // [getEmployees.fulfilled.type]: (state, action) => {
+    //   state.loading = false;
+    //   state.employeeList = action.payload;
+    // },
+    // [getEmployees.rejected.type]: (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.error;
+    // },
     // get employees MM
     [getEmployeesMM.pending.type]: (state) => {
       state.loading = true;
@@ -147,30 +145,6 @@ export const missionSlice = createSlice({
       state.loading = false;
       state.error = action.error;
     },
-
-    // [getMissionCopie.pending.type]: (state) => {
-    //   state.loading = true;
-    // },
-    // [getMissionCopie.fulfilled.type]: (state, action) => {
-    //   state.mission = action.payload;
-    //   state.loading = false;
-    // },
-    // [getMissionCopie.rejected.type]: (state, action) => {
-    //   state.error = action.error;
-    //   state.loading = false;
-    // },
-
-    // [getMissionCopieList.pending.type]: (state) => {
-    //   state.loading = true;
-    // },
-    // [getMissionCopieList.fulfilled.type]: (state, action) => {
-    //   state.missionListe = action.payload;
-    //   state.loading = false;
-    // },
-    // [getMissionCopieList.rejected.type]: (state, action) => {
-    //   state.error = action.error;
-    //   state.loading = false;
-    // },
   },
 });
 

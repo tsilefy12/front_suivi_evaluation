@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: "/suivi-evaluation",
-  assetPrefix: "/suivi-evaluation",
+  assetPrefix: "/suivi-evaluation/",
   reactStrictMode: true,
   typescript: {
     // !! WARN !!
@@ -20,4 +20,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig
+module.exports = nextConfig;

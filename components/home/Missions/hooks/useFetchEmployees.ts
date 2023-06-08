@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useAppDispatch } from "../../../../hooks/reduxHooks";
-import { getEmployees } from "../../../../redux/features/mission";
+import { getEmployes } from "../../../../redux/features/employe/employeSlice";
+// import { getEmployees } from "../../../../redux/features/mission";
 
 /**
  * @description Hook to fetch employees
@@ -19,7 +20,7 @@ const useFetchEmployes = () => {
         [<string>router.query.orderBy]: router.query.order,
       };
     }
-    await dispatch(getEmployees({ args }));
+    await dispatch(getEmployes({ args }));
   };
 };
 

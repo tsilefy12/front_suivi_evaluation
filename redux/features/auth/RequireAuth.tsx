@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useAppSelector } from "../../../hooks/reduxHooks";
 
 const RequireAuth = ({ children }: any) => {
-  const isLogedIn = useAppSelector((state) => state.auth.isLogedIn);
+  const isLogedIn = useAppSelector((state: any) => state.auth.isLogedIn);
   const router = useRouter();
 
   useEffect(() => {

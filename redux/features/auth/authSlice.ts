@@ -33,9 +33,7 @@ export const fetchConnectedUser = createAsyncThunk(
       // fetch linked employee if exist
       if (response.data.employeeId) {
         await thunkAPI.dispatch(
-          fetchLinkedEmployee({
-            employeeId: response.data.employeeId,
-          })
+          fetchLinkedEmployee({ employeeId: response.data.employeeId })
         );
       }
       return response.data;

@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Tooltip from "@mui/material/Tooltip";
-import { Badge, Stack, styled, useTheme } from "@mui/material";
+import { Badge, Link, Stack, styled, useTheme } from "@mui/material";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
@@ -17,6 +17,7 @@ import {
 } from "./ButtonNav";
 import { useRouter } from "next/router";
 import { logout } from "../../../redux/features/auth/authSlice";
+// import Link from "next/link";
 
 const NavbarBackOffice = ({ matches }: any) => {
   const theme = useTheme();
@@ -36,9 +37,11 @@ const NavbarBackOffice = ({ matches }: any) => {
       <Container maxWidth="xl">
         <ToolbarBackOffice variant="dense">
           <ListMenuContainer>
-            <IconBntNavBO aria-label="home">
-              <HomeWorkIcon fontSize="inherit" />
-            </IconBntNavBO>
+            <Link href="/">
+              <IconBntNavBO aria-label="home">
+                <HomeWorkIcon fontSize="inherit" />
+              </IconBntNavBO>
+            </Link>
             <Typography variant="h5" paddingX={2} color="GrayText">
               Suivis et évaluations
             </Typography>
