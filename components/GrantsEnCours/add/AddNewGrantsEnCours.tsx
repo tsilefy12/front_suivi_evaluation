@@ -3,7 +3,6 @@ import {
   Container,
   styled,
   Typography,
-  TextField,
   FormControl,
   MenuItem,
   Stack,
@@ -93,7 +92,7 @@ const AddNewGrantsEnCours = () => {
                   direction={{ xs: 'column', sm: 'row' }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                   justifyContent="space-between"
-                  sx={{ mb: 2 }}
+                  sx={{ mb: 4 }}
                 >
                   <Stack flexDirection={"row"}>
                     <Link href="/grants/grantsEnCours">
