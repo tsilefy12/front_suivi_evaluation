@@ -14,6 +14,7 @@ import { vehicleSlice } from "./features/vehicle/vehicleSlice";
 import { contactSlice } from "./features/contact/contactSlice";
 import { missionarySlice } from "./features/missionary/missionarySlice";
 import { employeSlice } from "./features/employe";
+import { grantEncoursSlice } from "./features/grantEncours/grantEncoursSlice";
 
 export const store = configureStore({
   reducer: {
@@ -32,6 +33,8 @@ export const store = configureStore({
     contact: contactSlice.reducer,
     missionary: missionarySlice.reducer,
     employe: employeSlice.reducer,
+    grantEncours: grantEncoursSlice.reducer,
+
   },
 });
 
