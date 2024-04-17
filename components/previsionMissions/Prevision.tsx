@@ -83,7 +83,7 @@ const PrevisionDeMission = () => {
               <Finances />
             </TabPanel>
           </Stack>
-          <Stack width={{xs:"100%", sm:"100%", md:"50%" }}>
+          {/* <Stack width={{xs:"100%", sm:"100%", md:"50%" }}>
             <CardPrevision>
               <Typography sx={{ mb: 2 }} variant="h5">
                 Etat de prévision
@@ -101,7 +101,7 @@ const PrevisionDeMission = () => {
                 <KeyValue keyName="Payé par" value={"Nom du responsable"} />
               </Stack>
             </CardPrevision>
-          </Stack>
+          </Stack> */}
         </Stack>
       </BodySection>
     </Container>

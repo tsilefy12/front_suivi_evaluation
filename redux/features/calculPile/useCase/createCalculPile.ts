@@ -1,16 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
-import { GrantEncoursItem } from "../grantEncours.interface";
+import { CalculPileItem } from "../calculPile.interface";
 
-export const createGrantEncours = createAsyncThunk(
-  "grantEncours/createMssion",
-  async (grantEncours: GrantEncoursItem, thunkAPI) => {
+export const createCalculePile = createAsyncThunk(
+  "calculPile/createCalculePile",
+  async (calculPile: CalculPileItem, thunkAPI) => {
     try {
-      const response = await axios.post("/compta/grant", grantEncours);
+      const response = await axios.post("/suivi-evaluation/calcul-pile", calculPile);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Grant en cours created successfully",
+          message: "Calcul de pile created successfully",
           options: { variant: "success" },
         })
       );

@@ -1,18 +1,18 @@
 export interface GrantEncoursItem {
     id?: string;
     code?: string;
-    posteAnalytique?: string;
+    postAnalytiqueId?: string;
+    projectId?: string;
+    bankId?: string;
+    titleFr?: string;
+    titleEn?: string;
     bailleur?: string;
-    projetEnFrancais?: string;
-    projetEnAnglais?: string;
-    dateDebut?: Date;
-    dateFin?: Date;
-    duree?: number;
-    compteBanque?: string;
+    amount?: number;
+    amountMGA?: number;
     responsable?: string;
-    seuil?: number;
-    montantEnDevise?: number;
-    montantEnMGA?: number;
+    startDate?: string;
+    endDate?: string;
+    duration?: number;
   }
   
   export interface GrantEncoursInitialState {

@@ -7,13 +7,13 @@ const menu = [
     items: [
       {
         id: 11,
-        name: "Validation rapport de mission",
+        name: "Rapport de mission",
         link: "/missions/validation/validationRapportMission",
         icon: "",
       },
       {
         id: 12,
-        name: "Validation Prevision de mission",
+        name: "Prevision de mission",
         link: "/missions/validation/validationPrevisionMission",
         icon: "",
       },

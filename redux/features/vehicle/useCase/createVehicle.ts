@@ -8,6 +8,7 @@ export const createVehicle = createAsyncThunk(
   async (data: VehicleItem, thunkAPI) => {
     try {
       const response = await axios.post("/vehicle", data);
+      console.log("tonga aty")
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Vehicule créé avec succès",

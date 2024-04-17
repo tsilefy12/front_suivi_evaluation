@@ -15,6 +15,14 @@ import { contactSlice } from "./features/contact/contactSlice";
 import { missionarySlice } from "./features/missionary/missionarySlice";
 import { employeSlice } from "./features/employe";
 import { grantEncoursSlice } from "./features/grantEncours/grantEncoursSlice";
+import { previsionDepenseSlice } from "./features/PrevisionDepense/previsionDepenseSlice";
+import { programmePrevisionSlice } from "./features/programmePrevision/programmePrevisionSlice";
+import { autrInfoPrevisionSlice } from "./features/autreInfoPrevision/autreInfoPrevisionSlice";
+import { resumeDepenseSlice } from "./features/resumeDepense/resumeDepenseSlice";
+import { calculPileSlice } from "./features/calculPile/calculPileSlice";
+import { besoinVehiculeSlice } from "./features/besoinVehicule/besoinVehiculeSlice";
+import { calculCarburantSlice } from "./features/calculCarburant/calculCarburantSlice";
+import { bankSlice } from "./features/bank/bankSlice";
 
 export const store = configureStore({
   reducer: {
@@ -34,6 +42,14 @@ export const store = configureStore({
     missionary: missionarySlice.reducer,
     employe: employeSlice.reducer,
     grantEncours: grantEncoursSlice.reducer,
+    previsonDepense: previsionDepenseSlice.reducer,
+    programmePrevision: programmePrevisionSlice.reducer,
+    autreInfoPrevision: autrInfoPrevisionSlice.reducer,
+    resumeDepense: resumeDepenseSlice.reducer,
+    calculPile: calculPileSlice.reducer,
+    besoinVehicule: besoinVehiculeSlice.reducer,
+    calculCarburant: calculCarburantSlice.reducer,
+    bank: bankSlice.reducer,
 
   },
 });

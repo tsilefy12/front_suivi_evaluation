@@ -1,16 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
-import { GrantEncoursItem } from "../grantEncours.interface";
+import { PrevisionDepenseItem } from "../previsionDepense.interface";
 
-export const createGrantEncours = createAsyncThunk(
-  "grantEncours/createMssion",
-  async (grantEncours: GrantEncoursItem, thunkAPI) => {
+export const createPrevisionDepense = createAsyncThunk(
+  "previsionDepense/createPrevisionDepense",
+  async (previsionDepense: PrevisionDepenseItem, thunkAPI) => {
     try {
-      const response = await axios.post("/compta/grant", grantEncours);
+      const response = await axios.post("/suivi-evaluation/prevision-depense", previsionDepense);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Grant en cours created successfully",
+          message: "Prévision de depense created successfully",
           options: { variant: "success" },
         })
       );

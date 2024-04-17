@@ -1,16 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
-import { GrantEncoursItem } from "../grantEncours.interface";
 
-export const createGrantEncours = createAsyncThunk(
-  "grantEncours/createMssion",
-  async (grantEncours: GrantEncoursItem, thunkAPI) => {
+export const deleteProgrammePrevision = createAsyncThunk(
+  "programmePrevision/deleteProgrammePrevision",
+  async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.post("/compta/grant", grantEncours);
+      const response = await axios.delete(`/suivi-evaluation/programme-prevision/${data.id}`);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Grant en cours created successfully",
+          message: "Programme de prévision supprimé avec succès",
           options: { variant: "success" },
         })
       );

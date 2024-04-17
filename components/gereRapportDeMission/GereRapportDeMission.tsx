@@ -104,7 +104,7 @@ const GereRapportDeMission = () => {
               <Finances />
             </TabPanel>
           </Stack>
-          <Stack width={{xs:"100%", sm:"100%", md:"40%" }}>
+          {/* <Stack width={{xs:"100%", sm:"100%", md:"40%" }}>
             <CardBody>
               <Typography variant="h6" sx={{ textTransform: "uppercase"}}>Etat des rapports</Typography>
               <Stack spacing={1}>
@@ -181,7 +181,7 @@ const GereRapportDeMission = () => {
                 />
               </CardMain>
             </CardFooter>
-          </Stack>
+          </Stack> */}
         </Stack>
       </BodySection>
     </Container>

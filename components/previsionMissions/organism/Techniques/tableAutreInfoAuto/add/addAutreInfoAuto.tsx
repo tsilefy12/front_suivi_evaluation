@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
   Box,
@@ -12,6 +11,7 @@ import {
   RadioGroup,
   styled,
   TextField,
+  Button
 } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -30,6 +30,7 @@ import {
   updateVehicle,
 } from "../../../../../../redux/features/vehicle";
 import { Field, Form, Formik } from "formik";
+import { Check } from "@mui/icons-material";
 
 const AddAutreInfoAuto = ({ handleClose }: any) => {
   const router = useRouter();
@@ -55,8 +56,7 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
       } else {
         await dispatch(createVehicle(values));
       }
-      fetchVehicleList();
-      handleClose();
+      router.push("/");
     } catch (error) {
       console.log("error", error);
     }
@@ -64,24 +64,24 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
   return (
     <Box>
       <Formik
-        enableReinitialize
+        enableReinitialize={isEditing ? true : false}
         initialValues={
           isEditing
             ? vehicle
             : {
-                insuranceVehicle: isEditing ? vehicle?.insuranceVehicle : "",
-                technicalVisitVehicle: isEditing
-                  ? vehicle?.technicalVisitVehicle
-                  : "",
-                vehicleType: isEditing ? vehicle?.vehicleType : "OTHER",
-                safetyBeltVehicle: isEditing
-                  ? vehicle?.safetyBeltVehicle
-                  : true,
-                missionId: idfile,
-              }
+              insuranceVehicle: isEditing ? vehicle?.insuranceVehicle : "",
+              technicalVisitVehicle: isEditing
+                ? vehicle?.technicalVisitVehicle
+                : "OUI",
+              vehicleType: isEditing ? vehicle?.vehicleType : "OTHER",
+              safetyBeltVehicle: isEditing
+                ? vehicle?.safetyBeltVehicle
+                : true,
+              missionId: idfile,
+            }
         }
         validationSchema={Yup.object({
-          OperationType: Yup.string()
+          vehicleType: Yup.string()
             .oneOf(
               ["OTHER", "RENTAL", "PRIVATE"],
               "Veuillez choisier type d'operation"
@@ -103,6 +103,7 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
                     importante ( vehicule )
                   </DialogTitle>
                   <DialogContent>
+
                     <FormContainer spacing={2} mt={2}>
                       <OSTextField
                         fullWidth
@@ -111,9 +112,10 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
                         name="insuranceVehicle"
                       />
                       <FormControlLabel
-                        control={<Switch defaultChecked />}
+                        control={<Switch defaultChecked={formikProps.values.technicalVisitVehicle=="OUI"} />}
                         label="Visite technique"
                         name="technicalVisitVehicle"
+                        onChange={(e,c) =>formikProps.setFieldValue("technicalVisitVehicle", c ? "OUI": "NON")}
                       />
                       <FormControl>
                         <Field as={RadioGroup} row name="OperationType">
@@ -141,6 +143,7 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
                         control={<Switch defaultChecked />}
                         label="Ceinture de sécurité"
                         name="safetyBeltVehicle"
+                        onChange={(e,c) =>formikProps.setFieldValue("safetyBeltVehicle", c)}
                       />
                     </FormContainer>
                   </DialogContent>
@@ -155,9 +158,17 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
                     >
                       Annuler
                     </Button>
-                    <Button variant="contained" type="submit">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      startIcon={<Check />}
+                      sx={{ marginInline: 3 }}
+                      type="submit"
+                    >
                       Enregistrer
                     </Button>
+
                   </DialogActions>
                 </SectionNavigation>
               </Container>

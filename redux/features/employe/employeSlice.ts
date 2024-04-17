@@ -22,12 +22,12 @@ const initialState: EmployeInitialState = {
 
 export const getEmploye = createAsyncThunk(
   "employe/getEmploye",
-  async (data: { id: string; args?: any }, thunkAPI) => {
+  async (data: {args?: any }, thunkAPI) => {
     try {
       const params = {
         args: JSON.stringify(data.args),
       };
-      const response = await axios.get(`/rh/employee/${data.id}`, {
+      const response = await axios.get(`/rh/employee`, {
         params,
       });
       return response.data;
@@ -166,22 +166,22 @@ export const deleteEmploye = createAsyncThunk(
   }
 );
 
-export const editEmploye = createAsyncThunk(
-  "employe/editEmploye",
-  async (data: { id: string }, thunkAPI) => {
-    try {
-      const employe = await thunkAPI
-        .dispatch(getEmploye({ id: data.id }))
-        .unwrap();
-      return employe;
-    } catch (error: any) {
-      if (error.response) {
-        return thunkAPI.rejectWithValue(error);
-      }
-      throw error;
-    }
-  }
-);
+// export const editEmploye = createAsyncThunk(
+//   "employe/editEmploye",
+//   async (data: { id: string }, thunkAPI) => {
+//     try {
+//       const employe = await thunkAPI
+//         .dispatch(getEmploye({ id: data.id }))
+//         .unwrap();
+//       return employe;
+//     } catch (error: any) {
+//       if (error.response) {
+//         return thunkAPI.rejectWithValue(error);
+//       }
+//       throw error;
+//     }
+//   }
+// );
 
 export const employeSlice = createSlice({
   name: "employe",
@@ -199,7 +199,7 @@ export const employeSlice = createSlice({
     },
     [getEmploye.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.employe = action.payload;
+      state.employees = action.payload;
     },
     [getEmploye.rejected.type]: (state, action) => {
       state.loading = false;
@@ -258,19 +258,19 @@ export const employeSlice = createSlice({
       state.error = action.error;
     },
 
-    // edit employe
-    [editEmploye.pending.type]: (state) => {
-      state.loading = true;
-    },
-    [editEmploye.fulfilled.type]: (state, action) => {
-      state.loading = false;
-      state.employe = action.payload;
-      state.isEditing = true;
-    },
-    [editEmploye.rejected.type]: (state, action) => {
-      state.loading = false;
-      state.error = action.error;
-    },
+    // // edit employe
+    // [editEmploye.pending.type]: (state) => {
+    //   state.loading = true;
+    // },
+    // [editEmploye.fulfilled.type]: (state, action) => {
+    //   state.loading = false;
+    //   state.employe = action.payload;
+    //   state.isEditing = true;
+    // },
+    // [editEmploye.rejected.type]: (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.error;
+    // },
 
     // get users
     [getUsers.fulfilled.type]: (state, action) => {
