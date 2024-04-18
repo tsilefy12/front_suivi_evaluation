@@ -139,8 +139,6 @@ const AddNewGrantsEnCours = () => {
           amount: Yup.string().required("Champ obligatoire"),
           amountMGA: Yup.string().required("Champ obligatoire"),
           // responsable: Yup.string().required("Champ obligatoire"),
-          startDate: Yup.string().required("Champ obligatoire"),
-          endDate: Yup.string().required("Champ obligatoire"),
           duration: Yup.number().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
@@ -240,10 +238,10 @@ const AddNewGrantsEnCours = () => {
                     value={idProject}
                     onChange={(e) =>setIdProject(e.target.value)}
                   >
-                    <MenuItem value={nulValue}>Select Project</MenuItem>
+                    <MenuItem value={nulValue}>Nouveau Projet</MenuItem>
                     {
                         projectList.map((item) =>(
-                          <MenuItem value={item.id}>{item.id}</MenuItem>
+                          <MenuItem value={item.id}>{item.id + "-"+ item.titleEn}</MenuItem>
                         ))
                     }
                   </TextField>
@@ -273,8 +271,7 @@ const AddNewGrantsEnCours = () => {
                     id="outlined-basic"
                     label="Date de début"
                     variant="outlined"
-                    name="startDate"
-                    value={formikProps.values.startDate}
+                    value={!isEditing ? formikProps.values.startDate: grantEnCours?.startDate}
                     onChange={(value: any) =>formikProps.setFieldValue("startDate", value)}
                   />
                   <OSDatePicker
@@ -282,8 +279,7 @@ const AddNewGrantsEnCours = () => {
                     id="outlined-basic"
                     label="Date de fin"
                     variant="outlined"
-                    name="endDate"
-                    value={formikProps.values.endDate}
+                    value={!isEditing ? formikProps.values.endDate: grantEnCours?.endDate}
                     onChange={(value: any) =>formikProps.setFieldValue("endDate", value)}
                   />
                   <OSTextField

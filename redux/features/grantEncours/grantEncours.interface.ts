@@ -10,8 +10,8 @@ export interface GrantEncoursItem {
     amount?: number;
     amountMGA?: number;
     responsable?: string;
-    startDate?: string;
-    endDate?: string;
+    startDate?: Date;
+    endDate?: Date;
     duration?: number;
   }
   
