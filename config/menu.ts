@@ -82,12 +82,12 @@ const menu = [
         link: "/configurations/devise",
         icon: "",
       },
-      // {
-      //   id:41,
-      //   name: "configurations 2",
-      //   link: "",
-      //   icon: "",
-      // },
+      {
+        id:42,
+        name: "Poste Analytique",
+        link: "/configurations/postAnalytic",
+        icon: "",
+      },
     ],
   },
   

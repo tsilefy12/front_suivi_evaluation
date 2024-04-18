@@ -1,15 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
+import { PostAnalytiqueItem } from "../postAnalytique.interface";
 
-export const deleteGrantEncours = createAsyncThunk(
-  "grantEncours/deleteGrantEncours",
-  async (data: { id: string }, thunkAPI) => {
+export const createPostAnalytic = createAsyncThunk(
+  "postAnalytic/createPostAnalytic",
+  async (postAnalytic: PostAnalytiqueItem, thunkAPI) => {
     try {
-      const response = await axios.delete(`/compta/grant/${data.id}`);
+      const response = await axios.post("/compta/post-analytic", postAnalytic);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Grant en cours supprimé avec succès",
+          message: "Poste analytique created successfully",
           options: { variant: "success" },
         })
       );

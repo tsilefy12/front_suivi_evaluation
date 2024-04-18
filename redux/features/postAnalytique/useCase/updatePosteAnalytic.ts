@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
-import { GrantEncoursItem } from "../grantEncours.interface";
+import { PostAnalytiqueItem } from "../postAnalytique.interface";
 
 /**
  * update a mission
@@ -11,14 +11,14 @@ import { GrantEncoursItem } from "../grantEncours.interface";
  * @memberof useCases
  * @description : This function is used to update a mission
  */
-export const updateGrantEncours = createAsyncThunk(
-  "grantEncours/updateGrantEncours",
-  async (data: { id: string; grantEncours: GrantEncoursItem }, thunkAPI) => {
+export const updatePostAnalytic = createAsyncThunk(
+  "postAnalytic/updatePostAnalytic",
+  async (data: { id: string; postAnalytic: PostAnalytiqueItem }, thunkAPI) => {
     try {
-      const response = await axios.patch(`/compta/grant${data.id}`, data.grantEncours);
+      const response = await axios.patch(`/compta/post-analytic/${data.id}`, data.postAnalytic);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Grant en cours mise à jour avec succès",
+          message: "Poste analytique mise à jour avec succès",
           options: { variant: "success" },
         })
       );

@@ -199,7 +199,7 @@ export const employeSlice = createSlice({
     },
     [getEmploye.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.employees = action.payload;
+      state.employe = action.payload;
     },
     [getEmploye.rejected.type]: (state, action) => {
       state.loading = false;

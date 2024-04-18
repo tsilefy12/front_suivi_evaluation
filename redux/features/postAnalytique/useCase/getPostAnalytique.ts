@@ -1,11 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axios } from "../../../../axios";
 
-export const editGrantEncours = createAsyncThunk(
-  "grantEncours/editGrantEncours",
-  async (data: { id: string }, thunkAPI) => {
+export const getPostAnalytique = createAsyncThunk(
+  "postAnalytique/getPostAnalytique",
+  async (data: { args?: any }, thunkAPI) => {
     try {
-      const response = await axios.get(`/compta/grant/${data.id}`);
+      const params = JSON.stringify(data.args);
+      const response = await axios.get("/compta/post-analytic", { params });
       return response.data;
     } catch (error: any) {
       if (error.response) {

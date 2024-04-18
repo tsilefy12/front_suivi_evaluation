@@ -23,6 +23,8 @@ import { calculPileSlice } from "./features/calculPile/calculPileSlice";
 import { besoinVehiculeSlice } from "./features/besoinVehicule/besoinVehiculeSlice";
 import { calculCarburantSlice } from "./features/calculCarburant/calculCarburantSlice";
 import { bankSlice } from "./features/bank/bankSlice";
+import { postAnalytiqueSlice } from "./features/postAnalytique/postAnalytiqueSlice";
+import { projectSlice } from "./features/project/projectSlice";
 
 export const store = configureStore({
   reducer: {
@@ -50,6 +52,8 @@ export const store = configureStore({
     besoinVehicule: besoinVehiculeSlice.reducer,
     calculCarburant: calculCarburantSlice.reducer,
     bank: bankSlice.reducer,
+    postAnalytique: postAnalytiqueSlice.reducer,
+    project: projectSlice.reducer,
 
   },
 });

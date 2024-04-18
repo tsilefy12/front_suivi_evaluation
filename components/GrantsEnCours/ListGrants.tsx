@@ -10,10 +10,10 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Data, { Order } from "./table/type-variable";
-import { rows } from "./table/constante";
+// import { rows } from "./table/constante";
 import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
 import EnhancedTableHead from "./table/EnhancedTableHead";
-import { getComparator, stableSort } from "./table/function";
+// import { getComparator, stableSort } from "./table/function";
 import Add from "@mui/icons-material/Add";
 import {
   defaultLabelDisplayedRows,
@@ -22,74 +22,73 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { GrantEncoursItem } from "../../redux/features/grantEncours/grantEncours.interface";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import useFetchGrants from "./hooks/getGrants";
+import { useRouter } from "next/router";
+import TransportEquipmentTableHeader from "./organisme/table/TransportEquipmentTableHeader";
+import useFetchProject from "./hooks/getProject";
+import useFetchEmploys from "./hooks/getResponsable";
+import { Edit } from "@mui/icons-material";
+import { useConfirm } from "material-ui-confirm";
+import { deletePostAnalytic } from "../../redux/features/postAnalytique";
+import { deleteGrantEncours } from "../../redux/features/grantEncours";
 
 const ListGrantsEnCours = () => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("bailleur");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const confirm = useConfirm();
+  const dispatch = useAppDispatch();
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const router = useRouter();
+  const fetchGrants = useFetchGrants();
+  const { grantEncoursList } = useAppSelector((state) =>state.grantEncours)
+  const fetchProject = useFetchProject();
+  const {projectList } = useAppSelector((state) =>state.project)
+  React.useEffect(() =>{
+    fetchGrants();
+    fetchProject();
+  }, [router.query])
 
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
+  const handleClickEdit = async (id: any) => {
+    router.push(`/grants/grantsEnCours/${id}/edit`);
   };
-
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.grants);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected: readonly string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-  };
-
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
+    const handleChangePage = (event: unknown, newPage: number) => {
+      setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (
+      event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+    };
+  
+    // Avoid a layout jump when reaching the last page with empty rows.
+    const emptyRows =
+      page > 0 ? Math.max(0, (1 + page) * rowsPerPage - grantEncoursList.length) : 0;
+      const handleClickDelete = async (id: any) => {
+        confirm({
+          title: "Supprimer le grant",
+          description: "Voulez-vous vraiment supprimer ?",
+          cancellationText: "Annuler",
+          confirmationText: "Supprimer",
+          cancellationButtonProps: {
+            color: "warning",
+          },
+          confirmationButtonProps: {
+            color: "error",
+          },
+        })
+          .then(async () => {
+            await dispatch(deleteGrantEncours({ id }));
+            fetchGrants();
+          })
+          .catch(() => {});
+      };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -112,56 +111,40 @@ const ListGrantsEnCours = () => {
                 aria-labelledby="tableTitle"
                 size={dense ? "small" : "medium"}
               >
-                <EnhancedTableHead
-                  numSelected={selected.length}
-                  order={order}
-                  orderBy={orderBy}
-                  onSelectAllClick={handleSelectAllClick}
-                  onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
-                />
+                <TransportEquipmentTableHeader/>
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {grantEncoursList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.grants);
+                    .map((row: GrantEncoursItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
-
                       return (
                         <TableRow
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.grants}
-                          selected={isItemSelected}
+                          key={row.id}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.grants)}
                           >
+                                 {row.code}
                           </TableCell>
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                          >
-                            {row.grants}
+                          <TableCell align="left">{row.bailleur}</TableCell>
+                          <TableCell align="left"> 
+                          {projectList.find((e:any)=> e.id === row?.projectId)?.titleFr}
                           </TableCell>
-                          <TableCell align="center">{row.bailleur}</TableCell>
-                          <TableCell align="center">{row.anglais}</TableCell>
-                          <TableCell align="center">{row.francais}</TableCell>
-                          <TableCell align="right">{row.responsable}</TableCell>
+                          <TableCell align="left">
+                          {projectList.find((e:any)=> e.id === row?.projectId)?.titleEn}
+                          </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
                             >
-                              <Link href="/grants/grantsEnCours/detail">
+                              <Link href={`/grants/grantsEnCours/${row.id}/detail`}>
                                 <IconButton
                                   color="accent"
                                   aria-label="Details"
@@ -171,16 +154,21 @@ const ListGrantsEnCours = () => {
                                 </IconButton>
                               </Link>
                               <IconButton
-                                color="primary"
-                                aria-label="Modifier"
-                                component="span"
-                              >
-                                <EditIcon />
-                              </IconButton>
+                                  color="primary"
+                                  aria-label="Modifier"
+                                  component="span"
+                                  size="small"
+                                  onClick={() => {
+                                    handleClickEdit(row.id);
+                                  }}
+                                >
+                                  <Edit />
+                                  </IconButton>
                               <IconButton
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
+                                onClick={() =>handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>
@@ -204,7 +192,7 @@ const ListGrantsEnCours = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={rows.length}
+              count={grantEncoursList.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

@@ -21,7 +21,7 @@ export const grantEncoursSlice = createSlice({
   reducers: {
     cancelEdit: (state) => {
       state.isEditing = false;
-      state.mission = {};
+      state.grantEncours = {};
     },
   },
   extraReducers: {

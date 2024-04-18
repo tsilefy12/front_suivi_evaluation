@@ -26,7 +26,9 @@ import useFetchBank from "../hooks";
 import OSSelectField from "../../shared/select/OSSelectField";
 import useFetchEmploys from "../hooks/getResponsable";
 import { EmployeItem } from "../../../redux/features/employe/employeSlice.interface";
-import { GrantEncoursItem } from "../../../redux/features/grantEncours/grantEncours.interface";
+//import { GrantEncoursItem } from "../../../redux/features/grantEncours/grantEncours.interface";
+import useFetchPostAnalytique from "../hooks/getPostAnalytique";
+import useFetchProject from "../hooks/getProject";
 
 const AddNewGrantsEnCours = () => {
   const router = useRouter();
@@ -36,6 +38,16 @@ const AddNewGrantsEnCours = () => {
   const fetchEmploys = useFetchEmploys();
   const { bankList } = useAppSelector((state) =>state.bank);
   const { employees } = useAppSelector((state) =>state.employe)
+  const fetchPostAnalytique = useFetchPostAnalytique();
+  const { postAnalytiqueList } = useAppSelector((state) =>state.postAnalytique);
+  const fetcProject = useFetchProject();
+  const { projectList } = useAppSelector((state) =>state.project);
+
+  const [idProject, setIdProject]: any = React.useState(null);
+  let [titreFr, setTitreFr]: any = React.useState("")
+  let [titreEn, setTitreEn]: any = React.useState("")
+  const nulValue: any = null;
+
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
     isEditing
       ? employees.filter((employee) =>
@@ -47,6 +59,8 @@ const AddNewGrantsEnCours = () => {
   React.useEffect(() =>{
     fetchBank();
     fetchEmploys();
+    fetchPostAnalytique();
+    fetcProject();
   }, [])
 
   const listBank: {id: string, name: string }[]=[]
@@ -59,8 +73,21 @@ const AddNewGrantsEnCours = () => {
       listBank.push({id: "", name: ""})
     }
 
+    //get list project
+      if (projectList.length > 0) {
+          projectList.map((element: any) => {
+            if (idProject == element.id) {
+             titreFr = element.titleFr
+             titreEn = element.titleEn
+        };
+      })
+    }
+
   const handleSubmit = async (values: any) => {
     values.responsable = [...selectedEmployes.map((item) =>item.id)];
+    values.titleFr = titreFr;
+    values.titleEn = titreEn;
+    values.projectId = (idProject == null) ? null : idProject
         try {
       if (isEditing) {
         await dispatch(
@@ -86,8 +113,8 @@ const AddNewGrantsEnCours = () => {
           isEditing
             ? grantEnCours
             : {
-              code: isEditing ? grantEnCours?.code : "",
-              postAnalytiqueId: isEditing ? grantEnCours?.postAnalytiqueId : "",
+              code: isEditing ? grantEnCours?.code: "",
+              postAnalyticId: isEditing ? grantEnCours?.postAnalyticId : "",
               projectId: isEditing ? grantEnCours?.projectId : "",
               bankId: isEditing ? grantEnCours?.bankId : "",
               titleFr: isEditing ? grantEnCours?.titleFr : "",
@@ -99,20 +126,19 @@ const AddNewGrantsEnCours = () => {
               startDate: isEditing ? grantEnCours?.startDate : new Date(),
               endDate: isEditing ? grantEnCours?.enDate : new Date(),
               duration: isEditing ? grantEnCours?.duration : 0,
-              //seuil: isEditing ? grantEnCours?.seuil : 0
 
             }
         }
         validationSchema={Yup.object({
           code: Yup.string().required("Champ obligatoire"),
-          postAnalytiqueId: Yup.string().required("Champ obligatoire"),
-          bankId: Yup.string().required("Champ obligatoire"),
-          titleFr: Yup.string().required("Champ obligatoire"),
-          titleEn: Yup.string().required("Champ obligatoire"),
+          postAnalyticId: Yup.number().required("Champ obligatoire"),
+          bankId: Yup.number().required("Champ obligatoire"),
+          // titleFr: Yup.string().required("Champ obligatoire"),
+          // titleEn: Yup.string().required("Champ obligatoire"),
           bailleur: Yup.string().required("Champ obligatoire"),
-          amount: Yup.number().required("Champ obligatoire"),
-          amountMGA: Yup.number().required("Champ obligatoire"),
-          responsable: Yup.string().required("Champ obligatoire"),
+          amount: Yup.string().required("Champ obligatoire"),
+          amountMGA: Yup.string().required("Champ obligatoire"),
+          // responsable: Yup.string().required("Champ obligatoire"),
           startDate: Yup.string().required("Champ obligatoire"),
           endDate: Yup.string().required("Champ obligatoire"),
           duration: Yup.number().required("Champ obligatoire"),
@@ -167,7 +193,7 @@ const AddNewGrantsEnCours = () => {
                       Annuler
                     </Button>
                   </Stack>
-                  <Typography variant="h5">Créer GRANT</Typography>
+                  <Typography variant="h5">{isEditing ? "Modif GRANT": "Créer GRANT"}</Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}
               </NavigationContainer>
@@ -181,12 +207,15 @@ const AddNewGrantsEnCours = () => {
                     variant="outlined"
                     name="code"
                   />
-                  <OSTextField
+                  <OSSelectField
                     fullWidth
                     id="outlined-basic"
                     label="Poste analytique"
                     variant="outlined"
-                    name="postAnalytiqueId"
+                    name="postAnalyticId"
+                    options={postAnalytiqueList}
+                    dataKey="name"
+                    valueKey="id"
                   />
                   <OSTextField
                     fullWidth
@@ -200,26 +229,41 @@ const AddNewGrantsEnCours = () => {
                   direction={{ xs: "column", sm: "column", md: "row" }}
                   spacing={{ xs: 2, sm: 2, md: 1 }}
                 >
-                  <OSTextField
+                  <TextField
                     fullWidth
+                    select
                     id="outlined-basic"
                     label="Projet"
                     variant="outlined"
                     name="projectId"
-                  />
-                  <OSTextField
+                    type="number"
+                    value={idProject}
+                    onChange={(e) =>setIdProject(e.target.value)}
+                  >
+                    <MenuItem value={nulValue}>Select Project</MenuItem>
+                    {
+                        projectList.map((item) =>(
+                          <MenuItem value={item.id}>{item.id}</MenuItem>
+                        ))
+                    }
+                  </TextField>
+                  <TextField
                     fullWidth
                     id="outlined-basic"
                     label="Projet en français"
                     variant="outlined"
                     name="titleFr"
+                    value={titreFr}
+                    onChange={(e) =>setTitreFr(e.target.value)}
                   />
-                  <OSTextField
+                  <TextField
                     fullWidth
                     id="outlined-basic"
                     label="Projet en Anglais"
                     variant="outlined"
                     name="titleEn"
+                    value={titreEn}
+                    onChange={(e) =>setTitreEn(e.target.value)}
                   />
                 </CustomStack>
                 <CustomStack direction="row" spacing={4}
@@ -230,6 +274,8 @@ const AddNewGrantsEnCours = () => {
                     label="Date de début"
                     variant="outlined"
                     name="startDate"
+                    value={formikProps.values.startDate}
+                    onChange={(value: any) =>formikProps.setFieldValue("startDate", value)}
                   />
                   <OSDatePicker
                     fullWidth
@@ -237,6 +283,8 @@ const AddNewGrantsEnCours = () => {
                     label="Date de fin"
                     variant="outlined"
                     name="endDate"
+                    value={formikProps.values.endDate}
+                    onChange={(value: any) =>formikProps.setFieldValue("endDate", value)}
                   />
                   <OSTextField
                     fullWidth
@@ -244,6 +292,7 @@ const AddNewGrantsEnCours = () => {
                     label="Durée"
                     variant="outlined"
                     name="duration"
+                    type="number"
                   />
                 </CustomStack>
                 <FormControl fullWidth>
@@ -290,6 +339,7 @@ const AddNewGrantsEnCours = () => {
                     label="Montant en dévise"
                     variant="outlined"
                     name="amount"
+                    type="number"
                   />
                   <OSTextField
                     fullWidth
@@ -297,6 +347,7 @@ const AddNewGrantsEnCours = () => {
                     label="Montant en MGA"
                     variant="outlined"
                     name="amountMGA"
+                    type="number"
                   />
                 </CustomStack>
               </FormContainer>

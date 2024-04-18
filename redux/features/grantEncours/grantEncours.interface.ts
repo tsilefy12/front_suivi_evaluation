@@ -1,9 +1,9 @@
 export interface GrantEncoursItem {
     id?: string;
     code?: string;
-    postAnalytiqueId?: string;
-    projectId?: string;
-    bankId?: string;
+    postAnalyticId?: number;
+    projectId?: number;
+    bankId?: number;
     titleFr?: string;
     titleEn?: string;
     bailleur?: string;
