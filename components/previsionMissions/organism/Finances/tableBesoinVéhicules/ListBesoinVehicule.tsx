@@ -27,6 +27,13 @@ import {
   labelRowsPerPage,
 } from "../../../../../config/table.config";
 import AddBesoinVehicule from "./add/addBesoinVehicule";
+import useFetchBesoinEnVehiculeList from "./hooks/useFetchBesoinEnVehicule";
+import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import { BesoinvehiculeItem } from "../../../../../redux/features/besoinVehicule/besoinVehicule.interface";
+import Moment from "react-moment";
+import { useConfirm } from "material-ui-confirm";
+import { deleteBesoinVehicule, editBesoinVehicule } from "../../../../../redux/features/besoinVehicule";
 
 const ListBesoinVehicule = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -34,8 +41,17 @@ const ListBesoinVehicule = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
+  const fetchBesoinEnVehicule = useFetchBesoinEnVehiculeList();
+  const { besoinVehiculeList } = useAppSelector((state) =>state.besoinVehicule)
+  const router = useRouter()
+  const confirm = useConfirm();
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() =>{
+      fetchBesoinEnVehicule();
+  }, [router.query])
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -102,6 +118,30 @@ const ListBesoinVehicule = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+    const handleClickDelete = async (id: any) => {
+      confirm({
+        title: "Supprimer besoin véhicule",
+        description: "Voulez-vous vraiment supprimer ?",
+        cancellationText: "Annuler",
+        confirmationText: "Supprimer",
+        cancellationButtonProps: {
+          color: "warning",
+        },
+        confirmationButtonProps: {
+          color: "error",
+        },
+      })
+        .then(async () => {
+          await dispatch(deleteBesoinVehicule({ id }));
+          fetchBesoinEnVehicule();
+        })
+        .catch(() => { });
+    };
+    const handleClickEdit = async (id: any) => {
+      await dispatch(editBesoinVehicule({ id }));
+      handleClickOpen();
+    };
+  
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -109,7 +149,7 @@ const ListBesoinVehicule = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddBesoinVehicule />
+          <AddBesoinVehicule handleClose={handleClose}/>
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -132,10 +172,10 @@ const ListBesoinVehicule = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {besoinVehiculeList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.dateDébut);
+                    .map((row: BesoinvehiculeItem, index) => {
+                      // const isItemSelected = isSelected(row.dateDébut);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -143,16 +183,16 @@ const ListBesoinVehicule = () => {
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          aria-checked={isItemSelected}
+                          // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.dateDébut}
-                          selected={isItemSelected}
+                          key={row.id}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) =>
-                              handleClick(event, row.dateDébut)
-                            }
+                            // onClick={(event) =>
+                            //   handleClick(event, row.dateDébut)
+                            // }
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -160,13 +200,15 @@ const ListBesoinVehicule = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.dateDébut}
+                            <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
                           </TableCell>
-                          <TableCell align="right">{row.dateFin}</TableCell>
-                          <TableCell align="right">{row.véhicule}</TableCell>
+                          <TableCell align="right">
+                            <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
+                            </TableCell>
+                          <TableCell align="right">{row.vehicule}</TableCell>
                           <TableCell align="right">{row.trajet}</TableCell>
                           <TableCell align="right">{row.responsable}</TableCell>
-                          <TableCell align="right">{row.nb}</TableCell>
+                          <TableCell align="right">{row.nombreJour}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
@@ -176,6 +218,7 @@ const ListBesoinVehicule = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
+                                onClick={() =>handleClickEdit(row.id)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -183,6 +226,7 @@ const ListBesoinVehicule = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
+                                onClick={() =>handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>

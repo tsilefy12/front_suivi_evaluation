@@ -26,6 +26,12 @@ import {
   labelRowsPerPage,
 } from "../../../../../config/table.config";
 import AddCalculCarburant from "./add/addCalculCarburant";
+import useFetchCalculCarburantList from "./hooks/useFetchCarbuant";
+import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import { useConfirm } from "material-ui-confirm";
+import { deleteCalculCarburant, editCalculCarburant } from "../../../../../redux/features/calculCarburant";
+import { CalculCarburantItem } from "../../../../../redux/features/calculCarburant/calculCarburant.interface";
 
 const ListCalculCarburant = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -33,8 +39,18 @@ const ListCalculCarburant = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
+  const fetchCalculCarburant = useFetchCalculCarburantList();
+  const { calculCarburantList } = useAppSelector((state) =>state.calculCarburant);
+  const router = useRouter();
+  const confirm = useConfirm();
+  const dispatch = useAppDispatch()
+
+  React.useEffect(() =>{
+    fetchCalculCarburant();
+  }, [router.query])
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -101,6 +117,30 @@ const ListCalculCarburant = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+    const handleClickDelete = async (id: any) => {
+      confirm({
+        title: "Supprimer calcul carburant",
+        description: "Voulez-vous vraiment supprimer ?",
+        cancellationText: "Annuler",
+        confirmationText: "Supprimer",
+        cancellationButtonProps: {
+          color: "warning",
+        },
+        confirmationButtonProps: {
+          color: "error",
+        },
+      })
+        .then(async () => {
+          await dispatch(deleteCalculCarburant({ id }));
+          fetchCalculCarburant();
+        })
+        .catch(() => { });
+    };
+    const handleClickEdit = async (id: any) => {
+      await dispatch(editCalculCarburant({ id }));
+      handleClickOpen();
+    };
+  
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -108,7 +148,7 @@ const ListCalculCarburant = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddCalculCarburant />
+          <AddCalculCarburant handleClose={handleClose}/>
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -131,10 +171,10 @@ const ListCalculCarburant = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {calculCarburantList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.trajet);
+                    .map((row: CalculCarburantItem, index) => {
+                      // const isItemSelected = isSelected(row.trajet);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -142,14 +182,14 @@ const ListCalculCarburant = () => {
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          aria-checked={isItemSelected}
+                          // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.trajet}
-                          selected={isItemSelected}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.trajet)}
+                            // onClick={(event) => handleClick(event, row.trajet)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -159,10 +199,10 @@ const ListCalculCarburant = () => {
                           >
                             {row.trajet}
                           </TableCell>
-                          <TableCell align="right">{row.véhicule}</TableCell>
-                          <TableCell align="right">{row.type}</TableCell>
+                          <TableCell align="right">{row.vehicule}</TableCell>
+                          <TableCell align="right">{row.typeCarburant}</TableCell>
                           <TableCell align="right">{row.distance}</TableCell>
-                          <TableCell align="right">{row.nb}</TableCell>
+                          <TableCell align="right">{row.nombreTrajet}</TableCell>
                           <TableCell align="right">
                             {row.distanceTotal}
                           </TableCell>
@@ -175,6 +215,7 @@ const ListCalculCarburant = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
+                                onClick={() =>handleClickEdit(row.id)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -182,6 +223,7 @@ const ListCalculCarburant = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
+                                onClick={() =>handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>

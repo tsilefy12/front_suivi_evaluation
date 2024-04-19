@@ -27,6 +27,12 @@ import {
 } from "../../../../../config/table.config";
 import KeyValue from "../../../../shared/keyValue";
 import AddCalculDesPile from "./add/addCalculDesPile";
+import useFetchCalculPileList from "./hooks/useFetchCalculPile";
+import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import { CalculPileItem } from "../../../../../redux/features/calculPile/calculPile.interface";
+import { useConfirm } from "material-ui-confirm";
+import { deleteCalculPile, editCalculPile } from "../../../../../redux/features/calculPile";
 
 const ListCalculDesPiles = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -34,8 +40,18 @@ const ListCalculDesPiles = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
+  const fetchCalculPile = useFetchCalculPileList();
+  const { calculPileList } = useAppSelector((state) =>state.calculPile)
+  const router = useRouter();
+  const confirm = useConfirm();
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() =>{
+    fetchCalculPile();
+  }, [router.query])
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -102,6 +118,31 @@ const ListCalculDesPiles = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+    
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer pile",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteCalculPile({ id }));
+        fetchCalculPile();
+      })
+      .catch(() => { });
+  };
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editCalculPile({ id }));
+    handleClickOpen();
+  };
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -109,7 +150,7 @@ const ListCalculDesPiles = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddCalculDesPile />
+          <AddCalculDesPile handleClose={handleClose}/>
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -132,10 +173,10 @@ const ListCalculDesPiles = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {
+                    calculPileList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.appareil);
+                    .map((row: CalculPileItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -143,16 +184,13 @@ const ListCalculDesPiles = () => {
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          aria-checked={isItemSelected}
+                          // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.appareil}
-                          selected={isItemSelected}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) =>
-                              handleClick(event, row.appareil)
-                            }
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -163,11 +201,11 @@ const ListCalculDesPiles = () => {
                             {row.appareil}
                           </TableCell>
                           <TableCell align="right">{row.type}</TableCell>
-                          <TableCell align="right">{row.nbapp}</TableCell>
-                          <TableCell align="right">{row.nbpile}</TableCell>
-                          <TableCell align="right">{row.changes}</TableCell>
-                          <TableCell align="right">{row.total}</TableCell>
-                          <TableCell align="right">{row.nbpacks}</TableCell>
+                          <TableCell align="right">{row.nombreAppareil}</TableCell>
+                          <TableCell align="right">{row.nombrePile}</TableCell>
+                          <TableCell align="right">{row.change}</TableCell>
+                          <TableCell align="right">20</TableCell>
+                          <TableCell align="right">{row.nombrePack}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
@@ -177,6 +215,7 @@ const ListCalculDesPiles = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
+                                onClick={() => handleClickEdit(row.id)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -184,6 +223,7 @@ const ListCalculDesPiles = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
+                                onClick={() => handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>

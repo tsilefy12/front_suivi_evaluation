@@ -18,13 +18,13 @@ export const headCells: readonly HeadCell[] = [
     id: "n",
     numeric: true,
     disablePadding: false,
-    label: "N",
+    label: "Nombre",
   },
   {
     id: "pu",
     numeric: true,
     disablePadding: false,
-    label: "PU",
+    label: "Prix unitaire",
   },
   {
     id: "montant",

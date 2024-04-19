@@ -14,7 +14,7 @@ export const updateResumeDepense = createAsyncThunk(
   "resumeDepense/updateResumeDepense",
   async (data: { id: string; resumeDepense: ResumeDepenseItem }, thunkAPI) => {
     try {
-      const response = await axios.patch(`${data.id}`, data.resumeDepense);
+      const response = await axios.patch(`/suivi-evaluation/resume-depense/${data.id}`, data.resumeDepense);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Resumé de depense mise à jour avec succès",
