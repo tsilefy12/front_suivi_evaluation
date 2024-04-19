@@ -29,13 +29,14 @@ import useFetchBudgetLine from "../hooks/useFetchbudgetLine";
 
 const AddPrevisionMission = ({ handleClose }: any) => {
   const dispatch = useAppDispatch()
-  const router = useRouter();
   const { isEditing, previsionDepense } = useAppSelector((state) => state.previsonDepense)
   const fetchPrevisionDepense = useFetchPrevisionDepenseList();
   const fetchGrant = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
-  const { budgetLineList } = useAppSelector((state) => state.budgetLine)
+  const { budgetLineList } = useAppSelector((state) => state.budgetLine);
+  const router = useRouter()
+  const { id }: any = router.query;
 
   React.useEffect(() => {
     fetchPrevisionDepense();
@@ -80,6 +81,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
               grant: isEditing ? previsionDepense?.grant : "",
               ligneBudgetaire: isEditing ? previsionDepense?.ligneBudgetaire : "",
               regleme: isEditing ? previsionDepense?.regleme : "",
+              missionId: isEditing ? previsionDepense?.missionId: id,
             }
         }
         validationSchema={Yup.object({
@@ -152,17 +154,17 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                           formikProps.setFieldValue("montant", newMontant);
                         }}
                       />
-                        <OSTextField
-                          fullWidth
-                          id="outlined-basic"
-                          label="Montant"
-                          variant="outlined"
-                          value={(formikProps.values.nombre ?? 0) * (formikProps.values.pu ?? 0)}
-                          name="montant"
-                          type="number"
-                          min="0"
-                          disabled
-                        />
+                      <OSTextField
+                        fullWidth
+                        id="outlined-basic"
+                        label="Montant"
+                        variant="outlined"
+                        value={(formikProps.values.nombre ?? 0) * (formikProps.values.pu ?? 0)}
+                        name="montant"
+                        type="number"
+                        min="0"
+                        disabled
+                      />
                     </CustomStack>
                     <FormControl fullWidth>
                       <OSSelectField

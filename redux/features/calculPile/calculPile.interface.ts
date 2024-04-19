@@ -5,7 +5,8 @@ export interface CalculPileItem {
     nombreAppareil?: number;
     nombrePile?:     number;
     change?:        string;
-    nombrePack?:    number
+    nombrePack?:    number;
+    missionId?: string;
 }
 export interface CalculPileInitialState {
     calculPileList: CalculPileItem[];

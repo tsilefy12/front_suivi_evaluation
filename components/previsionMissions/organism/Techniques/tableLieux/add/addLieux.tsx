@@ -27,7 +27,7 @@ import {
 
 const AddLieux = ({ handleClose }: any) => {
   const router = useRouter();
-  const idfile: any = router.query.id;
+  const { id }: any = router.query;
   const dispatch = useAppDispatch();
 
   const { missionLocation, isEditing } = useAppSelector(
@@ -68,7 +68,7 @@ const AddLieux = ({ handleClose }: any) => {
                 village: isEditing ? missionLocation?.village : "",
                 commune: isEditing ? missionLocation?.commune : "",
                 district: isEditing ? missionLocation?.district : "",
-                missionId: idfile,
+                missionId: isEditing ? missionLocation?.missionId: id,
               }
         }
         validationSchema={Yup.object({

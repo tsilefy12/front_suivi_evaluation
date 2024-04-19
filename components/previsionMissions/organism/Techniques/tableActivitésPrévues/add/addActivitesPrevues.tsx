@@ -27,7 +27,7 @@ import { cancelEdit } from "../../../../../../redux/features/plannedActivity/pla
 
 const AddActivitesPrevues = ({ handleClose }: any) => {
   const router = useRouter();
-  const idfile: any = router.query.id;
+  const { id }: any = router.query;
   const dispatch = useAppDispatch();
 
   const { plannedActivity, isEditing } = useAppSelector(
@@ -66,7 +66,7 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
             ? plannedActivity
             : {
                 description: isEditing ? plannedActivity?.description : "",
-                missionId: idfile,
+                missionId: isEditing ? plannedActivity?.missionId: id,
               }
         }
         validationSchema={Yup.object({

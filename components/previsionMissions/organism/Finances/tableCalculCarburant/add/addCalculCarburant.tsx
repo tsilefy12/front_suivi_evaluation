@@ -21,11 +21,14 @@ import { createCalculCarburant, updateCalculCarburant } from "../../../../../../
 import OSTextField from "../../../../../shared/input/OSTextField";
 import OSSelectField from "../../../../../shared/select/OSSelectField";
 import { cancelEdit } from "../../../../../../redux/features/calculCarburant/calculCarburantSlice";
+import { useRouter } from "next/router";
 
 const AddCalculCarburant = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
   const { isEditing, calculCarburant } = useAppSelector((state) => state.calculCarburant)
   const fetchCalculCarburant = useFetchCalculCarburantList();
+  const router = useRouter()
+  const { id }: any = router.query;
 
   const handleSubmit = async (values: any) => {
     try {
@@ -70,7 +73,8 @@ const AddCalculCarburant = ({ handleClose }: any) => {
               nombreTrajet: isEditing ? calculCarburant?.nombreTrajet : "",
               distanceTotal: isEditing ? calculCarburant?.distanceTotal : "",
               consommationKilo: isEditing ? calculCarburant?.consommationKilo : "",
-              totalCarburant: isEditing ? calculCarburant?.totalCarburant : ""
+              totalCarburant: isEditing ? calculCarburant?.totalCarburant : "",
+              missionId: isEditing ? calculCarburant?.missionId: id,
             }
         }
         validationSchema={Yup.object({

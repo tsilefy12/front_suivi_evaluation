@@ -3,8 +3,9 @@ export interface ResumeDepenseItem {
     grant?: number;
     ligneBudgetaire?: number;
     depensePrevue?: string;
-    budgetDepense?: string
-    remarque?: string
+    budgetDepense?: string;
+    remarque?: string;
+    missionId?: string;
 }
 export interface ResumeDepenseInitialState {
     resumeDepenseList: ResumeDepenseItem[];

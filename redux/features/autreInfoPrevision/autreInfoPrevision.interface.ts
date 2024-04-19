@@ -4,6 +4,7 @@ export interface AutreInfoPrevisionItem {
     visiteTechnique?: string;
     voiture?: string;
     centureSecurite?: string
+    missionId?: string;
 }
 export interface AutreInfoPrevisionInitialState {
     autreInfoPrevisionList: AutreInfoPrevisionItem[];

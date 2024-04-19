@@ -23,11 +23,14 @@ import OSDatePicker from "../../../../../shared/date/OSDatePicker";
 import OSSelectField from "../../../../../shared/select/OSSelectField";
 import { cancelEdit } from "../../../../../../redux/features/besoinVehicule/besoinVehiculeSlice";
 import OSTextField from "../../../../../shared/input/OSTextField";
+import { useRouter } from "next/router";
 
 const AddBesoinVehicule = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
   const fetchBesoinEnVehicule = useFetchBesoinEnVehiculeList();
   const { isEditing, besoinVehicule } = useAppSelector((state) => state.besoinVehicule);
+  const router = useRouter();
+  const { id }: any = router.query;
 
   const handleSubmit = async (values: any) => {
     try {
@@ -72,7 +75,8 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
               vehicule: isEditing ? besoinVehicule?.vehicule : "",
               trajet: isEditing ? besoinVehicule?.trajet : "",
               responsable: isEditing ? besoinVehicule?.responsable : "",
-              nombreJour: isEditing ? besoinVehicule?.nombreJour : ""
+              nombreJour: isEditing ? besoinVehicule?.nombreJour : "",
+              missionId: isEditing ? besoinVehicule?.missionId: id,
             }
         }
         validationSchema={Yup.object({

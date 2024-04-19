@@ -27,7 +27,7 @@ import { cancelEdit } from "../../../../../../redux/features/contact/contactSlic
 
 const AddContactPendantMission = ({ handleClose }: any) => {
   const router = useRouter();
-  const idfile: any = router.query.id;
+  const { id }: any = router.query;
   const dispatch = useAppDispatch();
 
   const { contact, isEditing } = useAppSelector((state) => state.contact);
@@ -68,7 +68,7 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                 locationContact: isEditing ? contact?.locationContact : "",
                 numberContact: isEditing ? contact?.numberContact : "",
                 noteContact: isEditing ? contact?.noteContact : "",
-                missionId: idfile,
+                missionId: isEditing ? contact?.missionId: id,
               }
         }
         validationSchema={Yup.object({})}

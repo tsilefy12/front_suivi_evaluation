@@ -34,7 +34,7 @@ import { Check } from "@mui/icons-material";
 
 const AddAutreInfoAuto = ({ handleClose }: any) => {
   const router = useRouter();
-  const idfile: any = router.query.id;
+  const { id }: any = router.query;
   const dispatch = useAppDispatch();
 
   const { vehicle, isEditing } = useAppSelector((state) => state.vehicle);
@@ -70,14 +70,10 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
             ? vehicle
             : {
               insuranceVehicle: isEditing ? vehicle?.insuranceVehicle : "",
-              technicalVisitVehicle: isEditing
-                ? vehicle?.technicalVisitVehicle
-                : "OUI",
+              technicalVisitVehicle: isEditing ? vehicle?.technicalVisitVehicle : "OUI",
               vehicleType: isEditing ? vehicle?.vehicleType : "OTHER",
-              safetyBeltVehicle: isEditing
-                ? vehicle?.safetyBeltVehicle
-                : true,
-              missionId: idfile,
+              safetyBeltVehicle: isEditing ? vehicle?.safetyBeltVehicle: true,
+              missionId: isEditing ? vehicle?.missionId: id,
             }
         }
         validationSchema={Yup.object({

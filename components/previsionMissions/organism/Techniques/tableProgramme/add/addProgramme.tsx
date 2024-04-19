@@ -28,6 +28,7 @@ import { useRouter } from "next/router";
 const AddProgrammes = ({ handleClose }: any) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const { id }: any = router.query;
   const { isEditing, programmePrevision, programmePrevisionList } = useAppSelector((state) => state.programmePrevision)
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
   const fetchDeliverableListe  = useFetchDeliverableList();
@@ -74,6 +75,7 @@ const AddProgrammes = ({ handleClose }: any) => {
               activitePrevue: isEditing ? programmePrevision?.activitePrevue : "",
               livrable: isEditing ? programmePrevision?.livrable : "",
               responsable: isEditing ? programmePrevision?.responsable : "",
+              missionId: isEditing ? programmePrevision?.missionId: id,
             }
         }
         validationSchema={Yup.object({

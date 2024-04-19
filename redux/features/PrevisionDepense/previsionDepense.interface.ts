@@ -7,7 +7,8 @@ export interface PrevisionDepenseItem {
     montant?: number;
     grant?: number;
     ligneBudgetaire?: number;
-    regleme?: string
+    regleme?: string;
+    missionId?: string;
 }
 export interface PrevisionDepenseInitialState {
     previsionDepenselist: PrevisionDepenseItem[];

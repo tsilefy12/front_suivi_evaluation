@@ -104,7 +104,7 @@ const ListAutreInfoAuto = () => {
                       {row.vehicleType}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {row.safetyBeltVehicle}
+                      {row.safetyBeltVehicle==true ? "OUI": "NON"}
                     </TableCell>
                     <TableCell align="right">
                       <BtnActionContainer

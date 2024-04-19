@@ -28,6 +28,7 @@ import { cancelEdit } from "../../../../../../redux/features/resumeDepense/resum
 const AddResumeDepense = ({ handleClose }: any) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const { id }: any = router.query;
   const { isEditing, resumeDepense } = useAppSelector((state) =>state.resumeDepense) 
   const fetchResumeDepense = useFetchResumeDepenseList();
   const fetchGrant = useFetchGrants();
@@ -76,6 +77,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
               ligneBudgetaire: isEditing ? resumeDepense?.ligneBudgetaire : "",
               remarque: isEditing ? resumeDepense?.remarque : "",
               budgetDepense: isEditing ? resumeDepense?.budgetDepense: "",
+              missionId: isEditing ? resumeDepense?.missionId: id,
             }
         }
         validationSchema={Yup.object({

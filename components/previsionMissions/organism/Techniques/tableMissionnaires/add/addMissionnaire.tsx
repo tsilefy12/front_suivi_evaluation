@@ -29,7 +29,7 @@ import OSDatePicker from "../../../../../shared/date/OSDatePicker";
 
 const AddMissionnaire = ({ handleClose }: any) => {
   const router = useRouter();
-  const id: any = router.query.id;
+  const { id }= router.query;
   const dispatch = useAppDispatch();
 
   const { missionary, isEditing } = useAppSelector(
@@ -72,7 +72,7 @@ const AddMissionnaire = ({ handleClose }: any) => {
                 startDateMissionary: isEditing ? missionary?.startDateMissionary : "",
                 returnDateMissionary: isEditing ? missionary?.returnDateMissionary : "",
                 missionResponsabilityMissionary: isEditing ? missionary?.missionResponsabilityMissionary : "",
-                missionId: id,
+                missionId: isEditing ? missionary?.missionId: id,
               }
         }
         validationSchema={Yup.object({

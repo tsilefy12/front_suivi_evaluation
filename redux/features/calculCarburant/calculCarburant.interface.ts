@@ -8,6 +8,7 @@ export interface CalculCarburantItem {
     distanceTotal?: number;
     consommationKilo?: number;
     totalCarburant?: number;
+    missionId?: string;
 }
 export interface CalculCarburantInitialState {
     calculCarburantList: CalculCarburantItem[];

@@ -27,7 +27,7 @@ import { cancelEdit } from "../../../../../../redux/features/exceptedResult/exce
 
 const AddResultatAttendu = ({ handleClose }: any) => {
   const router = useRouter();
-  const idfile: any = router.query.id;
+  const { id }: any = router.query;
   const dispatch = useAppDispatch();
 
   const { exceptedResult, isEditing } = useAppSelector(
@@ -66,7 +66,7 @@ const AddResultatAttendu = ({ handleClose }: any) => {
             ? exceptedResult
             : {
                 description: isEditing ? exceptedResult?.description : "",
-                missionId: idfile,
+                missionId: isEditing ? exceptedResult?.missionId: id,
               }
         }
         validationSchema={Yup.object({

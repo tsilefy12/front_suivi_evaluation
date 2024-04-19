@@ -6,6 +6,7 @@ export interface BesoinvehiculeItem {
     trajet?: string;
     responsable?: string;
     nombreJour?: number;
+    missionId?: string;
 }
 export interface BesoinVehiculeInitialState {
     besoinVehiculeList: BesoinvehiculeItem[];

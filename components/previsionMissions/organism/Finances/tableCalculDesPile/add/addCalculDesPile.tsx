@@ -16,11 +16,14 @@ import { createCalculePile, updateCalculPile } from "../../../../../../redux/fea
 import useFetchCalculPileList from "../hooks/useFetchCalculPile";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { cancelEdit } from "../../../../../../redux/features/calculPile/calculPileSlice";
+import { useRouter } from "next/router";
 
 const AddCalculDesPile = ({ handleClose}: any) => {
 const dispatch = useAppDispatch();
 const { isEditing, calculPile } = useAppSelector((state) =>state.calculPile)
 const fetchCalculPile = useFetchCalculPileList();
+const router = useRouter()
+const { id }: any = router.query;
   
   const handleSubmit = async (values: any) => {
     try {
@@ -54,7 +57,8 @@ const fetchCalculPile = useFetchCalculPileList();
               nombrePack: isEditing ? calculPile?.nombrePack : "",
               nombrePile: isEditing ? calculPile?.nombrePile : "",
               type: isEditing ? calculPile?.type : "",
-              change: isEditing ? calculPile?.change: ""
+              change: isEditing ? calculPile?.change: "",
+              missionId: isEditing ? calculPile?.missionId: id,
             }
         }
         validationSchema={Yup.object({

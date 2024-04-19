@@ -5,6 +5,7 @@ export interface ProgrammePrevisionItem {
     activitePrevue?: string;
     livrable?: string;
     responsable?: string;
+    missionId?: string;
 }
 export interface ProgrammePrevisionInitialState {
     programmePrevisionList: ProgrammePrevisionItem[];

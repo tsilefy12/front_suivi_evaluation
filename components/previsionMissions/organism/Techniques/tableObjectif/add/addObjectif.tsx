@@ -27,7 +27,7 @@ import { cancelEdit } from "../../../../../../redux/features/missionGoal/mission
 
 const AddObjectif = ({ handleClose }: any) => {
   const router = useRouter();
-  const idfile: any = router.query.id;
+  const { id }: any = router.query;
   const dispatch = useAppDispatch();
 
   const { missionGoal, isEditing } = useAppSelector(
@@ -66,7 +66,7 @@ const AddObjectif = ({ handleClose }: any) => {
             ? missionGoal
             : {
                 description: isEditing ? missionGoal?.description : "",
-                missionId: idfile,
+                missionId: isEditing ? missionGoal?.missionId: id,
               }
         }
         validationSchema={Yup.object({
