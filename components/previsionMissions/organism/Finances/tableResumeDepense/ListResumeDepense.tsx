@@ -27,6 +27,14 @@ import {
 } from "../../../../../config/table.config";
 import AddResumeDepense from "./add/addResumeDepense";
 import KeyValue from "../../../../shared/keyValue";
+import useFetchResumeDepenseList from "./hooks/useFetchResumeDepense";
+import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import { ResumeDepenseItem } from "../../../../../redux/features/resumeDepense/reumeDepense.interface";
+import useFetchGrants from "../../../../GrantsEnCours/hooks/getGrants";
+import useFetchBudgetLine from "../tablePrevision/hooks/useFetchbudgetLine";
+import { useConfirm } from "material-ui-confirm";
+import { deleteResumeDepense, editResumeDepense } from "../../../../../redux/features/resumeDepense";
 
 const ListResumeDepense = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -34,8 +42,23 @@ const ListResumeDepense = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
+  const fetchResumeDepense = useFetchResumeDepenseList();
+  const { resumeDepenseList } = useAppSelector((state) => state.resumeDepense)
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const fetchGrant = useFetchGrants()
+  const { budgetLineList } = useAppSelector((state) => state.budgetLine);
+  const fetchLigneBudgetaire = useFetchBudgetLine();
+  const confirm = useConfirm();
+  const dispatch = useAppDispatch()
+
+  React.useEffect(() => {
+    fetchResumeDepense();
+    fetchGrant();
+    fetchLigneBudgetaire();
+  }, [router.query])
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -102,6 +125,35 @@ const ListResumeDepense = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer resumé de depense",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteResumeDepense({ id }));
+        fetchResumeDepense();
+      })
+      .catch(() => { });
+  };
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editResumeDepense({ id }));
+    handleClickOpen();
+  };
+
+  // let totalBudget: any = 0;
+  // resumeDepenseList.forEach((item: any) => {
+  //   totalBudget += item.montant;
+  // })
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -109,7 +161,7 @@ const ListResumeDepense = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddResumeDepense />
+          <AddResumeDepense handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -132,10 +184,9 @@ const ListResumeDepense = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {resumeDepenseList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.grant);
+                    .map((row: ResumeDepenseItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -143,14 +194,11 @@ const ListResumeDepense = () => {
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.grant}
-                          selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.grant)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -158,12 +206,14 @@ const ListResumeDepense = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.grant}
+                            {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
                           </TableCell>
-                          <TableCell align="right">{row.ligne}</TableCell>
-                          <TableCell align="right">{row.depenses}</TableCell>
-                          <TableCell align="right">{row.budget}</TableCell>
-                          <TableCell align="right">{row.remarques}</TableCell>
+                          <TableCell align="right">
+                            {budgetLineList.find((e: any) => e.id === row?.ligneBudgetaire)?.code}
+                          </TableCell>
+                          <TableCell align="right">{row.depensePrevue}</TableCell>
+                          <TableCell align="right">{row.budgetDepense}</TableCell>
+                          <TableCell align="right">{row.remarque}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
@@ -173,6 +223,7 @@ const ListResumeDepense = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
+                                onClick={() => handleClickEdit(row.id)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -180,6 +231,7 @@ const ListResumeDepense = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
+                                onClick={() => handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>

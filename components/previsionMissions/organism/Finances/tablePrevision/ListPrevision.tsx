@@ -2,6 +2,7 @@ import {
   Button,
   Container,
   Dialog,
+  IconButton,
   Stack,
   styled,
   Typography,
@@ -17,14 +18,44 @@ import Paper from "@mui/material/Paper";
 import Data, { Order } from "./table/type-variable";
 import { rows } from "./table/constante";
 import EnhancedTableHead from "./table/EnhancedTableHead";
-import { getComparator, stableSort } from "./table/function";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import AddPrevisionMission from "./add/addPrevision";
+import useFetchPrevisionDepenseList from "./hooks/useFetchPrevisionDepense";
+import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import { PrevisionDepenseItem } from "../../../../../redux/features/PrevisionDepense/previsionDepense.interface";
+import Moment from "react-moment";
+import useFetchGrants from "../../../../GrantsEnCours/hooks/getGrants";
+import useFetchBudgetLine from "./hooks/useFetchbudgetLine";
+import { useConfirm } from "material-ui-confirm";
+import { deletePrevisionDepense, editPrevisionDepense } from "../../../../../redux/features/PrevisionDepense";
 
 const ListPrevision = () => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("date");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
+  const fetchPrevisionDepense = useFetchPrevisionDepenseList();
+  const { previsionDepenselist } = useAppSelector((state) =>state.previsonDepense)
+  const { grantEncoursList } = useAppSelector( (state) => state.grantEncours);
+  const fetchGrant = useFetchGrants()
+  const { budgetLineList } = useAppSelector( (state) => state.budgetLine);
+  const fetchLigneBudgetaire = useFetchBudgetLine();
+  const confirm = useConfirm();
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() =>{
+      fetchPrevisionDepense();
+      fetchGrant();
+      fetchLigneBudgetaire();
+  }, [router.query])
+
+  let totalBudget: any = 0;
+  previsionDepenselist.forEach((item: any) =>{
+     totalBudget+=item.montant;
+  })
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -50,6 +81,29 @@ const ListPrevision = () => {
     setSelected([]);
   };
 
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer prévision de depense",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deletePrevisionDepense({ id }));
+        fetchPrevisionDepense();
+      })
+      .catch(() => {});
+  };
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editPrevisionDepense({ id }));
+    handleClickOpen();
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -57,7 +111,7 @@ const ListPrevision = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddPrevisionMission />
+          <AddPrevisionMission handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -74,27 +128,55 @@ const ListPrevision = () => {
                   rowCount={rows.length}
                 />
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy)).map(
-                    (row, index) => {
+                  {previsionDepenselist
+                  .slice().map(
+                    (row: PrevisionDepenseItem, index: any) => {
                       return (
                         <TableRow
                           hover
                           role="checkbox"
                           tabIndex={-1}
-                          key={row.date}
+                          key={index}
                         >
                           <TableCell padding="checkbox"></TableCell>
                           <TableCell component="th" scope="row" padding="none">
-                            {row.date}
+                            <Moment format="DD/MM/yyyy">{row.date}</Moment>
                           </TableCell>
-                          <TableCell align="right">{row.libellés}</TableCell>
-                          <TableCell align="right">{row.n}</TableCell>
+                          <TableCell align="right">{row.libelle}</TableCell>
+                          <TableCell align="right">{row.nombre}</TableCell>
                           <TableCell align="right">{row.pu}</TableCell>
-                          <TableCell align="right">{row.montant}</TableCell>
-                          <TableCell align="right">{row.grant}</TableCell>
-                          <TableCell align="center">{row.ligne}</TableCell>
+                          <TableCell align="right">{row.montant} Ar</TableCell>
+                          <TableCell align="right">
+                          {grantEncoursList.find((e:any)=> e.id === row?.grant)?.code}
+                            </TableCell>
+                          <TableCell align="center">
+                          {budgetLineList.find((e:any)=> e.id === row?.ligneBudgetaire)?.code}
+                          </TableCell>
+                          <TableCell align="right">
+                      <BtnActionContainer
+                        direction="row"
+                        justifyContent="right"
+                      >
+                        <IconButton
+                          color="primary"
+                          aria-label="Modifier"
+                          component="span"
+                          onClick={() => handleClickEdit(row.id)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          color="warning"
+                          aria-label="Supprimer"
+                          component="span"
+                          onClick={() => {
+                            handleClickDelete(row.id);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </BtnActionContainer>
+                    </TableCell>
                         </TableRow>
                       );
                     }
@@ -104,14 +186,14 @@ const ListPrevision = () => {
             </TableContainer>
             <Footer>
               <Typography variant="body2" align="right">
-                TOTAL BUDGET : 30000
+                TOTAL BUDGET : {totalBudget} Ar
               </Typography>
               <Typography variant="body2" align="right">
                 Imprévu de mission(total budget-location et perdiem MV(10% )) :
                 10000
               </Typography>
               <Typography variant="body2" align="right">
-                TOTAL GENERAL BUDGET : 40000
+                TOTAL GENERAL BUDGET : {totalBudget} Ar
               </Typography>
             </Footer>
           </Paper>

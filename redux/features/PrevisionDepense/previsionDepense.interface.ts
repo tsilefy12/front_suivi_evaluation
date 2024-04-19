@@ -4,6 +4,7 @@ export interface PrevisionDepenseItem {
     libelle?: string;
     nombre?: number;
     pu?: number;
+    montant?: number;
     grant?: number;
     ligneBudgetaire?: number;
     regleme?: string

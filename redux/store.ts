@@ -25,6 +25,7 @@ import { calculCarburantSlice } from "./features/calculCarburant/calculCarburant
 import { bankSlice } from "./features/bank/bankSlice";
 import { postAnalytiqueSlice } from "./features/postAnalytique/postAnalytiqueSlice";
 import { projectSlice } from "./features/project/projectSlice";
+import { budgetLineSlice } from "./features/budgetLine/budgetLineSlice";
 
 export const store = configureStore({
   reducer: {
@@ -54,6 +55,7 @@ export const store = configureStore({
     bank: bankSlice.reducer,
     postAnalytique: postAnalytiqueSlice.reducer,
     project: projectSlice.reducer,
+    budgetLine: budgetLineSlice.reducer,
 
   },
 });

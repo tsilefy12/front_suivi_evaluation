@@ -27,7 +27,7 @@ import { cancelEdit } from "../../../../../../redux/features/deliverable/deliver
 
 const AddLivrable = ({ handleClose }: any) => {
   const router = useRouter();
-  const { idfile }: any = router.query.id;
+  const { id }: any = router.query;
   const dispatch = useAppDispatch();
 
   const { deliverable, isEditing } = useAppSelector(
@@ -40,6 +40,8 @@ const AddLivrable = ({ handleClose }: any) => {
   }, []);
 
   const handleSubmit = async (values: any) => {
+
+    values.missionId = id;
     try {
       if (isEditing) {
         await dispatch(
@@ -65,9 +67,9 @@ const AddLivrable = ({ handleClose }: any) => {
           isEditing
             ? deliverable
             : {
-                description: isEditing ? deliverable?.description : "",
-                missionId: idfile,
-              }
+              description: isEditing ? deliverable?.description : "",
+              missionId: isEditing ? deliverable?.missionId: id,
+            }
         }
         validationSchema={Yup.object({
           description: Yup.string().required("Champ obligatoire"),

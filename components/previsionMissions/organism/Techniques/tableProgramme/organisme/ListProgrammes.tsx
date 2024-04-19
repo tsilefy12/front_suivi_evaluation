@@ -18,16 +18,55 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddProgrammes from "../add/addProgramme";
+import useFetchProgrammePrevisionList from "../hooks/useFetchProgrammePrevision";
+import { useAppSelector } from "../../../../../../hooks/reduxHooks";
+import Moment from "react-moment";
+import { deleteProgrammePrevision, editProgrammePrevision } from "../../../../../../redux/features/programmePrevision";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { useConfirm } from "material-ui-confirm";
 
 const ListProgrammes = () => {
   const [open, setOpen] = React.useState(false);
+  const fetchProgrammePrevision = useFetchProgrammePrevisionList();
+  const { programmePrevisionList } = useAppSelector((state) =>state.programmePrevision)
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const confirm = useConfirm();
+  React.useEffect(() =>{
+    fetchProgrammePrevision();
+  }, [router.query])
+
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+  // const handleClickEdit = async (id: string) => {
+  //   await dispatch(editProgrammePrevision({ id }));
+  //   handleClickOpen();
+  // };
 
+  // const handleClickDelete = async (id: any) => {
+  //   confirm({
+  //     title: "Supprimer livrable de livrable",
+  //     description: "Voulez-vous vraiment supprimer cet livrable ?",
+  //     cancellationText: "Annuler",
+  //     confirmationText: "Supprimer",
+  //     cancellationButtonProps: {
+  //       color: "warning",
+  //     },
+  //     confirmationButtonProps: {
+  //       color: "error",
+  //     },
+  //   })
+  //     .then(async () => {
+  //       await dispatch(deleteProgrammePrevision({ id }));
+  //       fetchProgrammePrevision();
+  //     })
+  //     .catch(() => {});
+  // };
   return (
     <Container maxWidth="xl">
       <SectionTable>
@@ -45,19 +84,19 @@ const ListProgrammes = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
+                  {programmePrevisionList.map((row: any) => (
                     <TableRow
                       key={row.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
-                        {row.dateDebut}
+                        <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.dateFin}
+                      <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.activites}
+                        {row.activitePrevue}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {row.livrable}
@@ -74,6 +113,7 @@ const ListProgrammes = () => {
                             color="primary"
                             aria-label="Modifier"
                             component="span"
+                            //onClick={() =>handleClickEdit(row.id)}
                           >
                             <EditIcon />
                           </IconButton>
