@@ -160,7 +160,7 @@ const AddNewBudgetInitial = () => {
                 <OSSelectField
                   fullWidth
                   id="outlined-basic"
-                  label="Ligne budgetaire"
+                  label="Periode"
                   variant="outlined"
                   options={listePeriode}
                   dataKey="name"
