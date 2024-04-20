@@ -6,7 +6,7 @@ export const getBudgetInitialList = createAsyncThunk(
   async (data: { args?: any }, thunkAPI) => {
     try {
       const params = JSON.stringify(data.args);
-      const response = await axios.get("", { params });
+      const response = await axios.get("/suivi-evaluation/budget-initial", { params });
       return response.data;
     } catch (error: any) {
       if (error.response) {

@@ -6,7 +6,7 @@ export const deleteGrantAdmin = createAsyncThunk(
   "grantAdmin/deleteGrantAdmin",
   async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.delete(`${data.id}`);
+      const response = await axios.delete(`/suivi-evaluation/grant-admin/${data.id}`);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Grant admin supprimé avec succès",

@@ -7,7 +7,7 @@ export const createTacheCle = createAsyncThunk(
   "tacheCle/createTacheCle",
   async (createTacheCle: TachCleItem, thunkAPI) => {
     try {
-      const response = await axios.post("", createTacheCle);
+      const response = await axios.post("/suivi-evaluation/tache-cle", createTacheCle);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Key task created successfully",

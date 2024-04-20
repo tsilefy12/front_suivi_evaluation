@@ -27,6 +27,7 @@ import OSTextField from "../../shared/input/OSTextField";
 import OSSelectField from "../../shared/select/OSSelectField";
 import useFetchGrants from "../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
+import useFetchPeriode from "../../periode/hooks/useFetchPeriode";
 
 const AddNewBudgetInitial = () => {
   const fetchBudgetInitial = useFetchBudgetInitial();
@@ -37,10 +38,13 @@ const AddNewBudgetInitial = () => {
   const { grantEncoursList } = useAppSelector((state) =>state.grantEncours)
   const fetchligneBudgetaire = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state) =>state.budgetLine);
+  const fetchPeriode = useFetchPeriode();
+  const { periodelist } = useAppSelector((state) =>state.periode)
 
   React.useEffect(() =>{
     fetchGrant();
     fetchligneBudgetaire();
+    fetchPeriode()
   }, [router.query])
 
   const handleSubmit = async (values: any) => {
@@ -114,6 +118,8 @@ const AddNewBudgetInitial = () => {
                       size="small"
                       startIcon={<Check />}
                       sx={{ marginInline: 3 }}
+                      type="button" // Modifier le type à "button"
+                      onClick={formikProps.submitForm}
                     >
                       Enregistrer
                     </Button>
@@ -162,8 +168,8 @@ const AddNewBudgetInitial = () => {
                   id="outlined-basic"
                   label="Periode"
                   variant="outlined"
-                  options={listePeriode}
-                  dataKey="name"
+                  options={periodelist}
+                  dataKey={["periode"]}
                   valueKey="id"
                   name="periode"
                 />
@@ -173,6 +179,7 @@ const AddNewBudgetInitial = () => {
                   label="montant"
                   variant="outlined"
                   name="montant"
+                  type="number"
 
                 />
               </FormContainer>

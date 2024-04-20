@@ -22,6 +22,13 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import useFetchGrantAdmin from "./hooks/useFetchGrantAdmin";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import { useConfirm } from "material-ui-confirm";
+import { GrantAdminItem } from "../../redux/features/grantAdmin/grantAdmin.interface";
+import { deleteGrantAdmin } from "../../redux/features/grantAdmin";
+import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 
 const ListGrantsAdmin = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -29,7 +36,19 @@ const ListGrantsAdmin = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const fetchGrantAdmin = useFetchGrantAdmin();
+  const { grantAdminlist } = useAppSelector((state) => state.grantAdmin);
+  const router = useRouter();
+  const confirm = useConfirm();
+  const dispatch = useAppDispatch();
+  const fetchGrants = useFetchGrants();
+  const { grantEncoursList } = useAppSelector((state) =>state.grantEncours)
+
+  React.useEffect(() => {
+    fetchGrantAdmin();
+    fetchGrants();
+  }, [router.query])
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -90,6 +109,30 @@ const ListGrantsAdmin = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer grant admin",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteGrantAdmin({ id }));
+        fetchGrantAdmin();
+      })
+      .catch(() => { });
+  };
+
+  const handleClickEdit = async (id: any) => {
+    router.push(`/grants/grantsAdmin/${id}/edit`);
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -102,7 +145,7 @@ const ListGrantsAdmin = () => {
           GRANT Admin
         </Typography>
       </SectionNavigation>
-      <SectionTable sx={{backgroundColor: '#fff'}}>
+      <SectionTable sx={{ backgroundColor: '#fff' }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />
@@ -123,10 +166,10 @@ const ListGrantsAdmin = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {grantAdminlist
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.grants);
+                    .map((row: GrantAdminItem, index) => {
+                      // const isItemSelected = isSelected(row.id);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -134,14 +177,13 @@ const ListGrantsAdmin = () => {
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          aria-checked={isItemSelected}
+                          // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.grants}
-                          selected={isItemSelected}
+                          key={row.id}
+                        // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.grants)}
                           >
                           </TableCell>
                           <TableCell
@@ -150,7 +192,7 @@ const ListGrantsAdmin = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.grants}
+                            {grantEncoursList.find((e:any)=> e.id === row?.grant)?.code}
                           </TableCell>
                           <TableCell align="right">{row.bailleur}</TableCell>
                           <TableCell align="right">
@@ -158,17 +200,21 @@ const ListGrantsAdmin = () => {
                               direction="row"
                               justifyContent="right"
                             >
-                                <IconButton
+                              {/* <IconButton
                                   color="accent"
                                   aria-label="Details"
                                   component="span"
                                 >
                                   <VisibilityIcon />
-                                </IconButton>
+                                </IconButton> */}
                               <IconButton
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
+                                size="small"
+                                onClick={() => {
+                                  handleClickEdit(row.id);
+                                }}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -176,6 +222,9 @@ const ListGrantsAdmin = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
+                                onClick={() => {
+                                  handleClickDelete(row.id);
+                                }}
                               >
                                 <DeleteIcon />
                               </IconButton>

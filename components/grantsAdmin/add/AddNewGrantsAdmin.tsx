@@ -52,7 +52,7 @@ const AddNewGrantsAdmin = () => {
         await dispatch(createGrantAdmin(values));
         fetchGrantAdmin();
       }
-      router.push("/grants/grantAdmin");
+      router.push("/grants/grantsAdmin");
     } catch (error) {
       console.log("error", error);
     }

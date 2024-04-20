@@ -22,6 +22,13 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useRouter } from "next/router";
+import useFetchPeriode from "./hooks/useFetchPeriode";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import Moment from "react-moment";
+import { useConfirm } from "material-ui-confirm";
+import { deletePeriode } from "../../redux/features/periode";
+import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 
 const ListBudgetsInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -29,7 +36,19 @@ const ListBudgetsInitial = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const router = useRouter();
+  const fetchPeriode = useFetchPeriode()
+  const { periodelist } = useAppSelector((state) => state.periode)
+  const dispatch = useAppDispatch();
+  const confirm = useConfirm();
+  const fetchGrants = useFetchGrants();
+  const { grantEncoursList } = useAppSelector((state) =>state.grantEncours)
+
+  React.useEffect(() => {
+    fetchPeriode();
+    fetchGrants();
+  }, [router.query])
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -90,6 +109,29 @@ const ListBudgetsInitial = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer periode",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deletePeriode({ id }));
+        fetchPeriode();
+      })
+      .catch(() => { });
+  };
+
+  const handleClickEdit = async (id: any) => {
+    router.push(`/grants/periode/${id}/edit`);
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -102,7 +144,7 @@ const ListBudgetsInitial = () => {
           Periode GRANTS
         </Typography>
       </SectionNavigation>
-      <SectionTable sx={{backgroundColor: '#fff'}}>
+      <SectionTable sx={{ backgroundColor: '#fff' }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />
@@ -123,10 +165,10 @@ const ListBudgetsInitial = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {periodelist
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const isItemSelected = isSelected(row.grants);
+                      // const isItemSelected = isSelected(row.grants);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -134,14 +176,14 @@ const ListBudgetsInitial = () => {
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          aria-checked={isItemSelected}
+                          // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.grants}
-                          selected={isItemSelected}
+                          key={row.id}
+                        // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.grants)}
+                          // onClick={(event) => handleClick(event, row.id)}
                           >
                           </TableCell>
                           <TableCell
@@ -150,27 +192,35 @@ const ListBudgetsInitial = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.grants}
+                             {grantEncoursList.find((e:any)=> e.id === row?.grant)?.code}
                           </TableCell>
                           <TableCell align="right">{row.periode}</TableCell>
-                          <TableCell align="right">{row.debut}</TableCell>
-                          <TableCell align="right">{row.fin}</TableCell>
+                          <TableCell align="right">
+                            <Moment format="DD/MM/yyyy">{row.debut}</Moment>
+                          </TableCell>
+                          <TableCell align="right">
+                            <Moment format="DD/MM/yyyy">{row.fin}</Moment>
+                          </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
                             >
-                                <IconButton
+                              {/* <IconButton
                                   color="accent"
                                   aria-label="Details"
                                   component="span"
                                 >
                                   <VisibilityIcon />
-                                </IconButton>
+                                </IconButton> */}
                               <IconButton
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
+                                size="small"
+                                onClick={() => {
+                                  handleClickEdit(row.id);
+                                }}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -178,6 +228,9 @@ const ListBudgetsInitial = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
+                                onClick={() => {
+                                  handleClickDelete(row.id);
+                                }}
                               >
                                 <DeleteIcon />
                               </IconButton>

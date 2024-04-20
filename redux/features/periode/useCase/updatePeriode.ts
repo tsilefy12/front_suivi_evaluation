@@ -15,7 +15,7 @@ export const updatePeriode = createAsyncThunk(
   "periode/updatePeriode",
   async (data: { id: string; periode: PeriodeItem }, thunkAPI) => {
     try {
-      const response = await axios.patch(`${data.id}`, data.periode);
+      const response = await axios.patch(`/suivi-evaluation/periode/${data.id}`, data.periode);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Periode mise à jour avec succès",

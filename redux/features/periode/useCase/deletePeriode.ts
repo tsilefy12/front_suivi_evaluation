@@ -6,7 +6,7 @@ export const deletePeriode = createAsyncThunk(
   "periode/deletePeriode",
   async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.delete(`${data.id}`);
+      const response = await axios.delete(`/suivi-evaluation/periode/${data.id}`);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Periode supprimé avec succès",

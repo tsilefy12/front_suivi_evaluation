@@ -7,7 +7,7 @@ export const createPeriode = createAsyncThunk(
   "periode/createPeriode",
   async (periode: PeriodeItem, thunkAPI) => {
     try {
-      const response = await axios.post("", periode);
+      const response = await axios.post("/suivi-evaluation/periode", periode);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Periode created successfully",

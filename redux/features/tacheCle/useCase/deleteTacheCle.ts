@@ -6,7 +6,7 @@ export const deleteTacheCle = createAsyncThunk(
   "tacheCle/deleteTacheCle",
   async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.delete(`${data.id}`);
+      const response = await axios.delete(`/suivi-evaluation/tache-cle/${data.id}`);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Tache clé supprimée avec succès",

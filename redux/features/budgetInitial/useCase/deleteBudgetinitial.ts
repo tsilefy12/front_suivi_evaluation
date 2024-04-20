@@ -6,7 +6,7 @@ export const deleteBudgetinitial = createAsyncThunk(
   "budgetinitial/deleteBudgetinitial",
   async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.delete(`${data.id}`);
+      const response = await axios.delete(`/suivi-evaluation/budget-initial/${data.id}`);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Budget initial supprimé avec succès",

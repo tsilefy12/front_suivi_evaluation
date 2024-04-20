@@ -53,7 +53,7 @@ const AddNewPeriodeGrants = () => {
     const DateNumber1 = date1.getTime();
     const date2 = new Date(values.fin)
     const DateNumber2 = date2.getTime();
-   // let calculDuree = ((DateNumber2 - DateNumber1)/(24*60*60*1000)).toFixed(0);
+    
   if (DateNumber1 >= DateNumber2) {
      setOpen(true)
   }else{
@@ -92,9 +92,9 @@ const AddNewPeriodeGrants = () => {
             }
         }
         validationSchema={Yup.object({
-          // periode: Yup.string().required("Champ obligatoire"),
-          // montant: Yup.number().required("Champ obligatoire"),
-          // grant: Yup.number().required("Champ obligatoire"),
+          periode: Yup.string().required("Champ obligatoire"),
+          montant: Yup.number().required("Champ obligatoire"),
+          grant: Yup.number().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);

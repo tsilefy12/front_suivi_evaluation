@@ -15,7 +15,7 @@ export const updateBudgetInitial = createAsyncThunk(
   "budgetInitial/updateBudgetInitial",
   async (data: { id: string; budgetInitial: BudgetInitialItem }, thunkAPI) => {
     try {
-      const response = await axios.patch(`${data.id}`, data.budgetInitial);
+      const response = await axios.patch(`/suivi-evaluation/budget-initial/${data.id}`, data.budgetInitial);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Budget initial mise à jour avec succès",

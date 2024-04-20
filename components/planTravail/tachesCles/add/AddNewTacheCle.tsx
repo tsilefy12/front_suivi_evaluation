@@ -92,7 +92,7 @@ const AddNewTacheCle = () => {
         }
         validationSchema={Yup.object({
           tacheCle: Yup.string().required("Champ obligatoire"),
-          project: Yup.number().required("Champ obligatoire"),
+          projet: Yup.number().required("Champ obligatoire"),
           responsable: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {

@@ -15,7 +15,7 @@ export const updateTacheCle = createAsyncThunk(
   "tacheCle/updateTacheCle",
   async (data: { id: string; tacheCle: TachCleItem }, thunkAPI) => {
     try {
-      const response = await axios.patch(`${data.id}`, data.tacheCle);
+      const response = await axios.patch(`/suivi-evaluation/tache-cle/${data.id}`, data.tacheCle);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Tache clé mise à jour avec succès",

@@ -15,7 +15,7 @@ export const updateGrantAdmin = createAsyncThunk(
   "grantAdmin/updateGrantAdmin",
   async (data: { id: string; grantAdmin: GrantAdminItem }, thunkAPI) => {
     try {
-      const response = await axios.patch(`${data.id}`, data.grantAdmin);
+      const response = await axios.patch(`/suivi-evaluation/grant-admin/${data.id}`, data.grantAdmin);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Grant admin mise à jour avec succès",
