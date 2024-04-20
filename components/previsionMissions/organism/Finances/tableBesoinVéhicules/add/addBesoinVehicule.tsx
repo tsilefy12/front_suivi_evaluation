@@ -3,8 +3,10 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
   Container,
+  Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   FormControl,
   InputLabel,
@@ -24,6 +26,7 @@ import OSSelectField from "../../../../../shared/select/OSSelectField";
 import { cancelEdit } from "../../../../../../redux/features/besoinVehicule/besoinVehiculeSlice";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { useRouter } from "next/router";
+import { Check } from "@mui/icons-material";
 
 const AddBesoinVehicule = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
@@ -31,36 +34,46 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
   const { isEditing, besoinVehicule } = useAppSelector((state) => state.besoinVehicule);
   const router = useRouter();
   const { id }: any = router.query;
+  const [open, setOpen] = React.useState(false);
 
   const handleSubmit = async (values: any) => {
-    try {
-      if (isEditing) {
-        await dispatch(
-          updateBesoinVehicule({
-            id: besoinVehicule.id!,
-            besoinVehicule: values,
-          })
-        );
-      } else {
+    const date1 = new Date(values.dateDebut);
+    const DateNumber1 = date1.getTime();
+    const date2 = new Date(values.dateFin)
+    const DateNumber2 = date2.getTime();
+    // let calculDuree = ((DateNumber2 - DateNumber1)/(24*60*60*1000)).toFixed(0);
+    if (DateNumber1 >= DateNumber2) {
+      setOpen(true)
+    } else {
+      try {
+        if (isEditing) {
+          await dispatch(
+            updateBesoinVehicule({
+              id: besoinVehicule.id!,
+              besoinVehicule: values,
+            })
+          );
+        } else {
 
-        await dispatch(createBesoinVehicule(values));
+          await dispatch(createBesoinVehicule(values));
+        }
+        fetchBesoinEnVehicule();
+        handleClose();
+      } catch (error) {
+        console.log("error", error);
       }
-      fetchBesoinEnVehicule();
-      handleClose();
-    } catch (error) {
-      console.log("error", error);
     }
   };
 
-  const listVehicule =[
-    {id: "Vehicule 1", name: "Vehicule 1"},
-    {id: "Vehicule 2", name: "Vehicule 2"},
-    {id: "Vehicule 3", name: "Vehicule 3"}
+  const listVehicule = [
+    { id: "Vehicule 1", name: "Vehicule 1" },
+    { id: "Vehicule 2", name: "Vehicule 2" },
+    { id: "Vehicule 3", name: "Vehicule 3" }
   ]
-  const listResponsable =[
-    {id: "Responsable 1", name: "Responsable 1"},
-    {id: "Responsable 2", name: "Responsable 2"},
-    {id: "Responsable 3", name: "Responsable 3"}
+  const listResponsable = [
+    { id: "Responsable 1", name: "Responsable 1" },
+    { id: "Responsable 2", name: "Responsable 2" },
+    { id: "Responsable 3", name: "Responsable 3" }
   ]
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
@@ -76,7 +89,7 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
               trajet: isEditing ? besoinVehicule?.trajet : "",
               responsable: isEditing ? besoinVehicule?.responsable : "",
               nombreJour: isEditing ? besoinVehicule?.nombreJour : "",
-              missionId: isEditing ? besoinVehicule?.missionId: id,
+              missionId: isEditing ? besoinVehicule?.missionId : id,
             }
         }
         validationSchema={Yup.object({
@@ -141,7 +154,7 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                       name="trajet"
                     />
                     <FormControl fullWidth>
-                    <OSSelectField
+                      <OSSelectField
                         fullWidth
                         id="outlined-basic"
                         label="Responsable"
@@ -181,6 +194,23 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                   </Button>
                 </DialogActions>
               </SectionNavigation>
+              <Dialog
+                open={open}
+                disablePortal={false}
+                sx={styleDialog}
+              >
+                <DialogTitle color="red">Attention!!</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    La date début doit être inferieure de la date fin
+                  </DialogContentText>
+                  <DialogActions>
+                    <Button onClick={() => setOpen(false)}>
+                      <Check color="primary" />
+                    </Button>
+                  </DialogActions>
+                </DialogContent>
+              </Dialog>
             </Form>
           )
         }}
@@ -203,3 +233,10 @@ export const CustomStack = styled(Stack)(({ theme }) => ({
     flexWrap: "wrap",
   },
 }));
+const styleDialog = {
+  position: "fixed",
+  //left: 150,
+  top: 20,
+  width: "auto",
+  alignItem: "center"
+}

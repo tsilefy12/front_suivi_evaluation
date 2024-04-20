@@ -1,6 +1,7 @@
 export interface PostAnalytiqueItem {
     id?: number;
     name?: string;
+    bailleur?: string;
 }
 export interface PostAnalytiqueInitialState {
     postAnalytiqueList: PostAnalytiqueItem[];

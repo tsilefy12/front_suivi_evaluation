@@ -26,6 +26,10 @@ import { bankSlice } from "./features/bank/bankSlice";
 import { postAnalytiqueSlice } from "./features/postAnalytique/postAnalytiqueSlice";
 import { projectSlice } from "./features/project/projectSlice";
 import { budgetLineSlice } from "./features/budgetLine/budgetLineSlice";
+import { budgetInitialSlice } from "./features/budgetInitial/budgetInitialSlice";
+import { periodeSlice } from "./features/periode/periodeSlice";
+import { grantAdminSlice } from "./features/grantAdmin/periodeSlice";
+import { tacheCleSlice } from "./features/tacheCle/tacheCle";
 
 export const store = configureStore({
   reducer: {
@@ -56,6 +60,10 @@ export const store = configureStore({
     postAnalytique: postAnalytiqueSlice.reducer,
     project: projectSlice.reducer,
     budgetLine: budgetLineSlice.reducer,
+    budgetInitial: budgetInitialSlice.reducer,
+    periode: periodeSlice.reducer,
+    grantAdmin: grantAdminSlice.reducer,
+    tacheCle: tacheCleSlice.reducer,
 
   },
 });

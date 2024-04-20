@@ -1,11 +1,11 @@
 import { Stack, styled, Typography, TextField, Button, Link } from "@mui/material";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { createPostAnalytic, updatePostAnalytic} from "../../../redux/features/postAnalytique";
+import { createPostAnalytic, updatePostAnalytic } from "../../../redux/features/postAnalytique";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { ArrowBack, Check } from "@mui/icons-material";
+import { ArrowBack, Check, Close } from "@mui/icons-material";
 import { cancelEdit } from "../../../redux/features/postAnalytique/postAnalytiqueSlice";
 import OSTextField from "../../shared/input/OSTextField";
 
@@ -14,6 +14,7 @@ const PostAnalyticForm = () => {
   const router = useRouter()
   const { isEditing, postAnalytique } = useAppSelector((state) => state.postAnalytique)
   const handleSubmit = async (values: any) => {
+    values.bailleur = "";
     try {
       if (isEditing) {
         await dispatch(
@@ -41,10 +42,12 @@ const PostAnalyticForm = () => {
             ? postAnalytique
             : {
               name: isEditing ? postAnalytique?.name : "",
+              bailleur: isEditing ? postAnalytique?.bailleur: ""
             }
         }
         validationSchema={Yup.object({
           name: Yup.string().required("Champ obligatoire"),
+          bailleur: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -61,22 +64,26 @@ const PostAnalyticForm = () => {
                 id="outlined-basic"
                 label="Poste analytique"
                 variant="outlined"
-                name="name" 
-                />
+                name="name"
+              />
+              <OSTextField
+                id="outlined-basic"
+                label="Bailleur"
+                variant="outlined"
+                name="bailleur"
+              />
               <BtnContainer direction="row" spacing={2} justifyContent="flex-end">
-                <Link href="/configurations/postAnalytic">
                   <Button
                     color="info"
                     variant="text"
-                    startIcon={<ArrowBack />}
+                    startIcon={<Close />}
                     onClick={() => {
                       formikProps.resetForm();
                       dispatch(cancelEdit());
                     }}
                   >
-                    Retour
+                    Annuler
                   </Button>
-                </Link>
                 <Button
                   variant="contained"
                   color="primary"

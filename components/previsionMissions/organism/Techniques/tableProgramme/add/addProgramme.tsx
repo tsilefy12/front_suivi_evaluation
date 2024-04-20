@@ -12,6 +12,8 @@ import {
   styled,
   Select,
   TextField,
+  Dialog,
+  DialogContentText,
 } from "@mui/material";
 import { Form, Formik } from "formik";
 import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
@@ -24,15 +26,17 @@ import { cancelEdit } from "../../../../../../redux/features/programmePrevision/
 import OSSelectField from "../../../../../shared/select/OSSelectField";
 import useFetchDeliverableList from "../../tableLivrables/hooks/useFetchDeliverableList";
 import { useRouter } from "next/router";
+import { Check } from "@mui/icons-material";
 
 const AddProgrammes = ({ handleClose }: any) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const { id }: any = router.query;
-  const { isEditing, programmePrevision, programmePrevisionList } = useAppSelector((state) => state.programmePrevision)
+  const [open, setOpen] = React.useState(false)
+  const { isEditing, programmePrevision } = useAppSelector((state) => state.programmePrevision)
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
-  const fetchDeliverableListe  = useFetchDeliverableList();
-  const { deliverableList } = useAppSelector((state) =>state.deliverable);
+  const fetchDeliverableListe = useFetchDeliverableList();
+  const { deliverableList } = useAppSelector((state) => state.deliverable);
 
   React.useEffect(() => {
     fetchProgrammePrevision();
@@ -40,32 +44,43 @@ const AddProgrammes = ({ handleClose }: any) => {
   }, [router.query])
 
   const handleSubmit = async (values: any) => {
-    try {
-      if (isEditing) {
-        await dispatch(
-          updateProgrammePrevision({
-            id: programmePrevision.id!,
-            programmePrevision: values,
-          })
-        );
-      } else {
-        await dispatch(createProgrammePrevision(values));
+    const date1 = new Date(values.dateDebut);
+    const DateNumber1 = date1.getTime();
+    const date2 = new Date(values.dateFin)
+    const DateNumber2 = date2.getTime();
+
+    console.log("test")
+    if (DateNumber1 >= DateNumber2) {
+      setOpen(true)
+    } else {
+      try {
+        if (isEditing) {
+          await dispatch(
+            updateProgrammePrevision({
+              id: programmePrevision.id!,
+              programmePrevision: values,
+            })
+          );
+        } else {
+          await dispatch(createProgrammePrevision(values));
+        }
+        fetchProgrammePrevision();
+        handleClose();
+      } catch (error) {
+        console.log("error", error);
       }
-      fetchProgrammePrevision();
-      handleClose();
-    } catch (error) {
-      console.log("error", error);
     }
+
   };
   const ListResponsable = [
-    {id: "Responsable 1", name: "Responsable 1"},
-    {id: "Responsable 2", name: "Responsable 2"},
-    {id: "Responsable 3", name: "Responsable 3"},
+    { id: "Responsable 1", name: "Responsable 1" },
+    { id: "Responsable 2", name: "Responsable 2" },
+    { id: "Responsable 3", name: "Responsable 3" },
   ]
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
-        enableReinitialize = {isEditing ? true: false}
+        enableReinitialize={isEditing ? true : false}
         initialValues={
           isEditing
             ? programmePrevision
@@ -75,7 +90,7 @@ const AddProgrammes = ({ handleClose }: any) => {
               activitePrevue: isEditing ? programmePrevision?.activitePrevue : "",
               livrable: isEditing ? programmePrevision?.livrable : "",
               responsable: isEditing ? programmePrevision?.responsable : "",
-              missionId: isEditing ? programmePrevision?.missionId: id,
+              missionId: isEditing ? programmePrevision?.missionId : id,
             }
         }
         validationSchema={Yup.object({
@@ -102,7 +117,7 @@ const AddProgrammes = ({ handleClose }: any) => {
                       variant="outlined"
                       name="dateDebut"
                       value={formikProps.values.dateDebut}
-                      onChange={(value: any) =>formikProps.setFieldValue("dateDebut", value)}
+                      onChange={(value: any) => formikProps.setFieldValue("dateDebut", value)}
                     />
                     <OSDatePicker
                       fullWidth
@@ -111,7 +126,7 @@ const AddProgrammes = ({ handleClose }: any) => {
                       variant="outlined"
                       name="dateFin"
                       value={formikProps.values.dateFin}
-                      onChange={(value: any) =>formikProps.setFieldValue("dateFin", value)}
+                      onChange={(value: any) => formikProps.setFieldValue("dateFin", value)}
                     />
                     <OSTextField
                       fullWidth
@@ -132,7 +147,7 @@ const AddProgrammes = ({ handleClose }: any) => {
                     />
                     <FormControl fullWidth>
                       <OSSelectField
-                        fullWidth 
+                        fullWidth
                         id="outlined-basic"
                         label="Responsable"
                         variant="outlined"
@@ -159,6 +174,23 @@ const AddProgrammes = ({ handleClose }: any) => {
                     Enregistrer
                   </Button>
                 </DialogActions>
+                <Dialog
+                  open={open}
+                  disablePortal={false}
+                  sx={styleDialog}
+                >
+                  <DialogTitle color="red">Attention!!</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>
+                      La date début doit être inferieure de la date fin
+                    </DialogContentText>
+                    <DialogActions>
+                      <Button onClick={() => setOpen(false)}>
+                        <Check color="primary" />
+                      </Button>
+                    </DialogActions>
+                  </DialogContent>
+                </Dialog>
               </SectionNavigation>
             </Form>
           )
@@ -183,3 +215,10 @@ export const CustomStack = styled(Stack)(({ theme }) => ({
   },
   // marginLeft: "100",
 }));
+const styleDialog = {
+  position: "fixed",
+  //left: 150,
+  top: 20,
+  width: "auto",
+  alignItem: "center"
+}

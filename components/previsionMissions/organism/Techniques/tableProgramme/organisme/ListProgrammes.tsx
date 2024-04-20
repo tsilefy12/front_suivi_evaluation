@@ -142,7 +142,7 @@ const ListProgrammes = () => {
                 Ajouter
               </Button>
               <Dialog open={open} onClose={handleClose}>
-                <AddProgrammes />
+                <AddProgrammes handleClose={handleClose}/>
               </Dialog>
             </SectionNavigation>
       </SectionTable>
