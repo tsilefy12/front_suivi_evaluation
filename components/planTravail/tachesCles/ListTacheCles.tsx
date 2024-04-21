@@ -33,6 +33,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import KeyValue from "../../shared/keyValue";
+import useFetchTacheCle from "./hooks/useFetchTacheCle";
+import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
+import { useConfirm } from "material-ui-confirm";
+import useFetchProject from "../../GrantsEnCours/hooks/getProject";
+import { useRouter } from "next/router";
+import { TachCleItem } from "../../../redux/features/tacheCle/tacheCle.interface";
+import useFetchEmploys from "../../GrantsEnCours/hooks/getResponsable";
+import { deleteTacheCle } from "../../../redux/features/tacheCle";
 
 const ListTacheCles = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -40,7 +48,22 @@ const ListTacheCles = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(3);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const fetchTacheCle: any = useFetchTacheCle()
+  const { tacheClelist } = useAppSelector((state) =>state.tacheCle)
+  const dispatch = useAppDispatch()
+  const confirm = useConfirm()
+  const fetchProject = useFetchProject()
+  const { projectList } = useAppSelector((state) =>state.project)
+  const router = useRouter()
+  const fetchEmployes = useFetchEmploys()
+  const { employees } = useAppSelector((state) =>state.employe)
+
+  React.useEffect(() =>{
+    fetchProject();
+    fetchTacheCle();
+    fetchEmployes();
+  }, [router.query])
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -101,6 +124,29 @@ const ListTacheCles = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+    const handleClickDelete = async (id: any) => {
+      confirm({
+        title: "Supprimer tache clé",
+        description: "Voulez-vous vraiment supprimer ?",
+        cancellationText: "Annuler",
+        confirmationText: "Supprimer",
+        cancellationButtonProps: {
+          color: "warning",
+        },
+        confirmationButtonProps: {
+          color: "error",
+        },
+      })
+        .then(async () => {
+          await dispatch(deleteTacheCle({ id }));
+          fetchTacheCle();
+        })
+        .catch(() => { });
+    };
+  
+    const handleClickEdit = async (id: any) => {
+      router.push(`/plant_travail/tacheCle/${id}/edit`);
+    };
   return (
     <Container maxWidth="xl">
       {/* <NavigationContainer> */}
@@ -164,10 +210,10 @@ const ListTacheCles = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {tacheClelist
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.tache);
+                    .map((row: TachCleItem, index) => {
+                      // const isItemSelected = isSelected(row.id);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -175,14 +221,14 @@ const ListTacheCles = () => {
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          aria-checked={isItemSelected}
+                          // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.tache}
-                          selected={isItemSelected}
+                          key={row.id}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.tache)}
+                            // onClick={(event) => handleClick(event, row.tache)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -190,11 +236,13 @@ const ListTacheCles = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.tache}
+                            {row.tacheCle}
                           </TableCell>
-                          <TableCell>{row.projet}</TableCell>
                           <TableCell>
-                            {row.responsable}
+                          {projectList.find((e: any) =>e.id === row.projet)?.titleEn}
+                          </TableCell>
+                          <TableCell>
+                            {employees.find((e: any) =>e.id === row.responsable)?.name}
                           </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
@@ -212,6 +260,7 @@ const ListTacheCles = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
+                                onClick={() =>handleClickEdit(row.id)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -219,6 +268,7 @@ const ListTacheCles = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
+                                onClick={() =>handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>

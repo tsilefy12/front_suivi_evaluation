@@ -24,12 +24,13 @@ import { EmployeItem } from "../../../../redux/features/employe/employeSlice.int
 import useFetchProject from "../../../GrantsEnCours/hooks/getProject";
 import OSTextField from "../../../shared/input/OSTextField";
 import OSSelectField from "../../../shared/select/OSSelectField";
+import { cancelEdit } from "../../../../redux/features/tacheCle/tacheCle";
 
 const AddNewTacheCle = () => {
   const router = useRouter();
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe)
-  const { tacheCle, isEditing } = useAppSelector((state) => state.tacheCle)
+  const { tacheCle, isEditing, tacheClelist } = useAppSelector((state) => state.tacheCle)
   const dispatch = useAppDispatch();
   const fetchTacheCle = useFetchTacheCle();
   const { grantEnCours } = useAppSelector((state) =>state.grantEncours) 
@@ -40,17 +41,17 @@ const AddNewTacheCle = () => {
     fetchEmployes();
     fetchProject();
   }, [router.query])
-//  console.log("list project :", projectList)
+
   const [selectedEmployes, setSelectedEmployes] = React.useState<EmployeItem[]>(
     isEditing
       ? employees.filter((employee) =>
-          grantEnCours?.employeeIDs?.includes(employee.id!)
+          tacheCle?.responsable?.includes(employee.id!)
         )
       : []
   );
-
+//  console.log(" id responsable :", selectedEmployes)
   const handleSubmit = async (values: any) => {
-
+    values.responsable = [...selectedEmployes.map((item) =>item.id)];
     try {
       if (isEditing) {
         await dispatch(
@@ -63,7 +64,7 @@ const AddNewTacheCle = () => {
         await dispatch(createTacheCle(values));
         fetchTacheCle();
       }
-      router.push("/grants/tacheCle");
+      router.push("/plan_travail/tacheCle");
     } catch (error) {
       console.log("error", error);
     }
@@ -91,9 +92,9 @@ const AddNewTacheCle = () => {
             }
         }
         validationSchema={Yup.object({
-          tacheCle: Yup.string().required("Champ obligatoire"),
-          projet: Yup.number().required("Champ obligatoire"),
-          responsable: Yup.string().required("Champ obligatoire"),
+          // tacheCle: Yup.string().required("Champ obligatoire"),
+          // projet: Yup.number().required("Champ obligatoire"),
+          // responsable: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -122,6 +123,8 @@ const AddNewTacheCle = () => {
                       size="small"
                       startIcon={<Check />}
                       sx={{ marginInline: 3 }}
+                      type="button" // Modifier le type à "button"
+                      onClick={formikProps.submitForm}
                     >
                       Enregistrer
                     </Button>
@@ -131,6 +134,10 @@ const AddNewTacheCle = () => {
                       size="small"
                       startIcon={<Close />}
                       sx={{ marginInline: 3 }}
+                      onClick={() => {
+                        formikProps.resetForm();
+                        dispatch(cancelEdit());
+                      }}
                     >
                       Annuler
                     </Button>
@@ -157,6 +164,7 @@ const AddNewTacheCle = () => {
                   dataKey="name"
                   valueKey="id"
                   name="projet"
+                  type="number"
                 />
                 <FormControl fullWidth>
                   <Autocomplete

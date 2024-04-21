@@ -1,9 +1,10 @@
 
 export default interface Data {
-  description: string;
-  periode1: string;
-  periode2: string;
-  total: string;
+  grant: string;
+  ligneBudgetaire: string;
+  periode: string;
+  montant: string;
+  // total: string;
   }
   
 

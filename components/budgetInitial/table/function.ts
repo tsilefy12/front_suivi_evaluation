@@ -1,16 +1,18 @@
 import Data, { Order } from "./type-variable";
 
 export function createData(
-  description: string,
-  periode1: string,
-  periode2: string,
-  total: string,
+  grant: string,
+  ligneBudgetaire: string,
+  periode: string,
+  montant: string,
+  // total: string,
 ): Data {
   return {
-    description,
-    periode1,
-    periode2,
-    total,
+    grant,
+    ligneBudgetaire,
+    periode,
+    montant,
+    // total,
   };
 }
 

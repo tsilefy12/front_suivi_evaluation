@@ -6,8 +6,12 @@ const useFetchBudgetInitial = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  return async () => {
-    let args: any = {};
+  return  async () => {
+    let args: any = {
+      include:{
+        periode: true,
+      }
+    };
     if (router.query.search) {
       args.where = {
         OR: [],

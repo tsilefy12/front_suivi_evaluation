@@ -3,40 +3,37 @@ import { HeadCell } from "./type-variable";
 
 export const headCells: readonly HeadCell[] = [
     {
-      id: 'description',
+      id: 'grant',
       numeric: false,
       disablePadding: true,
-      label: 'DESCRIPTION',
+      label: 'GRANT',
     },
     {
-      id: 'periode1',
+      id: 'ligneBudgetaire',
       numeric: true,
       disablePadding: false,
-      label: 'PERIODE 1',
+      label: 'LIGNE BUDGETAIRE',
     },
     {
-      id: 'periode2',
+      id: 'periode',
       numeric: true,
       disablePadding: false,
-      label: 'PERIODE 2',
+      label: 'PERIODE',
     },
     {
-      id: 'total',
+      id: 'montant',
       numeric: true,
       disablePadding: false,
-      label: 'TOTAL',
+      label: 'MONTANT',
     },
+    // {
+    //   id: 'total',
+    //   numeric: true,
+    //   disablePadding: false,
+    //   label: 'TOTAL',
+    // },
   ];
 
   export const rows = [
-    createData('Description1', '1000', '1000', '2000'),
-    createData('Description2', '1000', '1000', '2000'),
-    createData('Description3', '1000', '1000', '2000'),
-    createData('Description4', '1000', '1000', '2000'),
-    createData('Description5', '1000', '1000', '2000'),
-    createData('Description6', '1000', '1000', '2000'),
-    createData('Description7', '1000', '1000', '2000'),
-    createData('Description8', '1000', '1000', '2000'),
-    createData('Description9', '1000', '1000', '2000'),
-    createData('Description0', '1000', '1000', '2000'),
+    createData('Description1', '1000', '1000', '1000'),
   ]

@@ -2,8 +2,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
 
-export const deleteBudgetinitial = createAsyncThunk(
-  "budgetinitial/deleteBudgetinitial",
+export const deleteBudgetInitial = createAsyncThunk(
+  "budgetinitial/deleteBudgetInitial",
   async (data: { id: string }, thunkAPI) => {
     try {
       const response = await axios.delete(`/suivi-evaluation/budget-initial/${data.id}`);

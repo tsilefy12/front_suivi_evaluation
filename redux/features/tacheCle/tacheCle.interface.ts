@@ -1,7 +1,7 @@
 export interface TachCleItem {
     id?: string;
-    tacheCle?:       string;
-    projet?:          number;
+    tacheCle?: string;
+    projet?: number;
     responsable?: string;
 }
 export interface TacheCleInitialState {

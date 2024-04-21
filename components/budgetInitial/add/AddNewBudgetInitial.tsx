@@ -81,14 +81,14 @@ const AddNewBudgetInitial = () => {
             : {
               grant: isEditing ? budgetInitial?.grant : "",
               ligneBudgetaire: isEditing ? budgetInitial?.ligneBudgetaire : "",
-              periode: isEditing ? budgetInitial?.periode : "",
+              periodeId: isEditing ? budgetInitial?.periode : "",
               montant: isEditing ? budgetInitial?.montant : "",
             }
         }
         validationSchema={Yup.object({
           grant: Yup.string().required("Champ obligatoire"),
           ligneBudgetaire: Yup.number().required("Champ obligatoire"),
-          periode: Yup.string().required("Champ obligatoire"),
+          periodeId: Yup.string().required("Champ obligatoire"),
           montant: Yup.number().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
@@ -137,7 +137,7 @@ const AddNewBudgetInitial = () => {
                       Annuler
                     </Button>
                   </Stack>
-                  <Typography variant="h5">Créer Budget initial</Typography>
+                  <Typography variant="h5">{isEditing ? "Modifier Budget initial": "Créer Budget initial"}</Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}
               </NavigationContainer>
@@ -171,7 +171,7 @@ const AddNewBudgetInitial = () => {
                   options={periodelist}
                   dataKey={["periode"]}
                   valueKey="id"
-                  name="periode"
+                  name="periodeId"
                 />
                 <OSTextField
                   fullWidth

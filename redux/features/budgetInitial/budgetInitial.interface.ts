@@ -2,8 +2,9 @@ export interface BudgetInitialItem {
     id?: string;
     grant?: number;
     ligneBudgetaire?: number;
-    periode?: string;
+    periodeId?: string;
     montant?: number;
+    periode?: any;
 }
 export interface BugdgetInitialInitialState {
     budgetInitialList: BudgetInitialItem[];

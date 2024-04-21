@@ -30,14 +30,41 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Visibility from "@mui/icons-material/Visibility";
+import useFetchBudgetInitial from "./hooks/useFetchBudgetInitial";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
+import useFetchBudgetLine from "../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
+import { BudgetInitialItem } from "../../redux/features/budgetInitial/budgetInitial.interface";
+import { useConfirm } from "material-ui-confirm";
+import { deleteBudgetInitial } from "../../redux/features/budgetInitial";
+import useFetchPeriode from "../periode/hooks/useFetchPeriode";
 
 const ListBudgetInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("description");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("grant");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const fetchBudgetInitial = useFetchBudgetInitial();
+  const { budgetInitialList} = useAppSelector((state) =>state.budgetInitial)
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const fetchGrant = useFetchGrants();
+  const { grantEncoursList } = useAppSelector((state) =>state.grantEncours)
+  const fetchligneBudgetaire = useFetchBudgetLine();
+  const { budgetLineList } = useAppSelector((state) =>state.budgetLine)
+  const confirm = useConfirm()
+  const fetchPeriode = useFetchPeriode()
+  const { periodelist } = useAppSelector((state) =>state.periode) 
+
+  React.useEffect(() =>{
+    fetchBudgetInitial();
+    fetchGrant();
+    fetchligneBudgetaire();
+    fetchPeriode();
+  }, [router.query])
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -50,7 +77,7 @@ const ListBudgetInitial = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.description);
+      const newSelecteds = rows.map((n) => n.grant);
       setSelected(newSelecteds);
       return;
     }
@@ -98,6 +125,29 @@ const ListBudgetInitial = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+    const handleClickDelete = async (id: any) => {
+      confirm({
+        title: "Supprimer budget initial",
+        description: "Voulez-vous vraiment supprimer ?",
+        cancellationText: "Annuler",
+        confirmationText: "Supprimer",
+        cancellationButtonProps: {
+          color: "warning",
+        },
+        confirmationButtonProps: {
+          color: "error",
+        },
+      })
+        .then(async () => {
+          await dispatch(deleteBudgetInitial({ id }));
+          fetchBudgetInitial();
+        })
+        .catch(() => { });
+    };
+  
+    const handleClickEdit = async (id: any) => {
+      router.push(`/grants/budgetInitial/${id}/edit`);
+    };
   return (
     <Container maxWidth="xl">
 
@@ -147,10 +197,10 @@ const ListBudgetInitial = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  { budgetInitialList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.description);
+                    .map((row: BudgetInitialItem, index: any) => {
+                      // const isItemSelected = isSelected(row.id);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -158,14 +208,14 @@ const ListBudgetInitial = () => {
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          aria-checked={isItemSelected}
+                          // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.description}
-                          selected={isItemSelected}
+                          key={row.id}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.description)}
+                            // onClick={(event) => handleClick(event, row.id)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -173,27 +223,33 @@ const ListBudgetInitial = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.description}
+                          {grantEncoursList.find((e:any)=> e.id === row?.grant)?.code}
                           </TableCell>
-                          <TableCell align="right">{row.periode1}</TableCell>
-                          <TableCell align="right">{row.periode2}</TableCell>
-                          <TableCell align="right">{row.total}</TableCell>
+                          <TableCell align="right">
+                          {budgetLineList.find((e:any)=> e.id === row?.ligneBudgetaire)?.code}
+                          </TableCell>
+                          <TableCell align="right">
+                          {periodelist.find((e:any)=> e.id === row?.periodeId)?.periode}
+                          </TableCell>
+                          <TableCell align="right">{row.montant}</TableCell>
+                          {/* <TableCell align="right">{row.total}</TableCell> */}
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
                             >
-                              <IconButton
+                              {/* <IconButton
                                 color="accent"
                                 aria-label="Details"
                                 component="span"
                               >
                                 <VisibilityIcon />
-                              </IconButton>
+                              </IconButton> */}
                               <IconButton
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
+                                onClick={() =>handleClickEdit(row.id)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -201,6 +257,7 @@ const ListBudgetInitial = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
+                                onClick={() =>handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>

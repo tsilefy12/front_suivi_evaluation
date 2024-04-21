@@ -4,7 +4,7 @@ import { getBudgetInitialList } from "./useCase/getBudgetInitialList";
 import { createBudgetInitial } from "./useCase/createBudgetInitial";
 import { editBudgetInitial } from "./useCase/editBudgetInitial";
 import { updateBudgetInitial } from "./useCase/updateBudgetInitial";
-import { deleteBudgetinitial } from "./useCase/deleteBudgetinitial";
+import { deleteBudgetInitial } from "./useCase/deleteBudgetInitial";
 import { BugdgetInitialInitialState } from "./budgetInitial.interface";
 
 const budgetInitialInitialState: BugdgetInitialInitialState = {
@@ -93,13 +93,13 @@ export const budgetInitialSlice = createSlice({
     },
 
     // delete budget initial
-    [deleteBudgetinitial.pending.type]: (state) => {
+    [deleteBudgetInitial.pending.type]: (state) => {
       state.loading = true;
     },
-    [deleteBudgetinitial.fulfilled.type]: (state, action) => {
+    [deleteBudgetInitial.fulfilled.type]: (state, action) => {
       state.loading = false;
     },
-    [deleteBudgetinitial.rejected.type]: (state, action) => {
+    [deleteBudgetInitial.rejected.type]: (state, action) => {
       state.loading = false;
       state.error = action.error;
     },
