@@ -31,7 +31,7 @@ const AddLivrable = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
 
   const { deliverable, isEditing } = useAppSelector(
-    (state) => state.deliverable
+    (state: any) => state.deliverable
   );
   const fetchDeliverableListe = useFetchDeliverableList();
 

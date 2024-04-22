@@ -25,10 +25,10 @@ export const transportEquipmentHeadCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'TITRE DU PROJET(Français)',
   },
-  {
-    id: 'responsable',
-    numeric: true,
-    disablePadding: false,
-    label: 'Responsable',
-  },
+  // {
+  //   id: 'responsable',
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: 'Responsable',
+  // },
 ];

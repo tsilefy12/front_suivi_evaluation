@@ -30,6 +30,8 @@ import { budgetInitialSlice } from "./features/budgetInitial/budgetInitialSlice"
 import { periodeSlice } from "./features/periode/periodeSlice";
 import { grantAdminSlice } from "./features/grantAdmin/periodeSlice";
 import { tacheCleSlice } from "./features/tacheCle/tacheCle";
+import { objectifGeneralSlice } from "./features/objectifGeneral/objectifGeneralSlice";
+import { planTravailSlice } from "./features/planTravail/planTravailSlice";
 
 export const store = configureStore({
   reducer: {
@@ -64,6 +66,8 @@ export const store = configureStore({
     periode: periodeSlice.reducer,
     grantAdmin: grantAdminSlice.reducer,
     tacheCle: tacheCleSlice.reducer,
+    objectifGeneral: objectifGeneralSlice.reducer,
+    planTravail: planTravailSlice.reducer,
 
   },
 });

@@ -59,7 +59,7 @@ const ListGrantsEnCours = () => {
     const handleChangePage = (event: unknown, newPage: number) => {
       setPage(newPage);
     };
-  
+   console.log("list :", grantEncoursList)
     const handleChangeRowsPerPage = (
       event: React.ChangeEvent<HTMLInputElement>
     ) => {

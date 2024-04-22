@@ -44,7 +44,7 @@ const AddNewTacheCle = () => {
 
   const [selectedEmployes, setSelectedEmployes] = React.useState<EmployeItem[]>(
     isEditing
-      ? employees.filter((employee) =>
+      ? employees.filter((employee: any) =>
           tacheCle?.responsable?.includes(employee.id!)
         )
       : []

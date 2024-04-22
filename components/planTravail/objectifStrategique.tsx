@@ -176,7 +176,7 @@ const ListObjectifStrategique = () => {
         </Grid>
       </SectionDetails>
       <Dialog open={open} onClose={handleClose}>
-        <ObjectifStrategiqueForm />
+        <ObjectifStrategiqueForm handleClose={handleClose}/>
       </Dialog>
     </Container>
   );

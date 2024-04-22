@@ -35,6 +35,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import KeyValue from "../../shared/keyValue";
 import ObjectifsGeneralForm from "./add/addObjectifGeneral";
+import useFetchObjectifGeneral from "./hooks/useFetchObjectifGeneral";
+import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import { ObjectifGeneralItem } from "../../../redux/features/objectifGeneral/objectifGeneral.interface";
+import { useConfirm } from "material-ui-confirm";
+import { deleteObjectifGeneral, editObjectifGeneral } from "../../../redux/features/objectifGeneral";
 
 const ListObjectifGeneral = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -42,8 +48,17 @@ const ListObjectifGeneral = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(3);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
+  const fetchObjectifGeneral = useFetchObjectifGeneral();
+  const { objectifGenerallist } = useAppSelector((state) => state.objectifGeneral)
+  const router = useRouter();
+  const confirm = useConfirm();
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    fetchObjectifGeneral();
+  }, [router.query])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -112,33 +127,58 @@ const ListObjectifGeneral = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+    const handleClickDelete = async (id: any) => {
+      confirm({
+        title: "Supprimer tache clé",
+        description: "Voulez-vous vraiment supprimer ?",
+        cancellationText: "Annuler",
+        confirmationText: "Supprimer",
+        cancellationButtonProps: {
+          color: "warning",
+        },
+        confirmationButtonProps: {
+          color: "error",
+        },
+      })
+        .then(async () => {
+          await dispatch(deleteObjectifGeneral({ id }));
+          fetchObjectifGeneral();
+          handleClose();
+        })
+        .catch(() => { });
+    };
+  
+    const handleClickEdit = async (id: any) => {
+      await dispatch(editObjectifGeneral({ id }));
+      handleClickOpen();
+    };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction={{ xs: 'column', sm: 'row' }}
-         spacing={{ xs: 1, sm: 2, md: 4 }}
-         justifyContent="space-between"
-         sx={{ mb: 2 }}>
-          <Stack flexDirection={"row"}>
-            
-            <Link href="/plan_travail">
-              <Button color="info" variant="text" startIcon={<ArrowBack />}>
-                Retour
-              </Button>
-            </Link>
-            <Button
-            onClick={handleClickOpen}
-              variant="contained"
-              color="primary"
-              size="small"
-              startIcon={<Add />}
-              sx={{ marginInline: 3 }}
-            >
-              Créer
-            </Button>
-            
-          </Stack>
+        spacing={{ xs: 1, sm: 2, md: 4 }}
+        justifyContent="space-between"
+        sx={{ mb: 2 }}>
+        <Stack flexDirection={"row"}>
 
-        
+          <Link href="/plan_travail">
+            <Button color="info" variant="text" startIcon={<ArrowBack />}>
+              Retour
+            </Button>
+          </Link>
+          <Button
+            onClick={handleClickOpen}
+            variant="contained"
+            color="primary"
+            size="small"
+            startIcon={<Add />}
+            sx={{ marginInline: 3 }}
+          >
+            Créer
+          </Button>
+
+        </Stack>
+
+
         <Typography variant="h4" color="GrayText">
           Objectifs générales
         </Typography>
@@ -173,13 +213,13 @@ const ListObjectifGeneral = () => {
                   <TableBody>
                     {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                    {stableSort(rows, getComparator(order, orderBy))
+                    {objectifGenerallist
                       .slice(
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
                       )
-                      .map((row, index) => {
-                        const isItemSelected = isSelected(row.titre);
+                      .map((row: ObjectifGeneralItem, index: any) => {
+                        // const isItemSelected = isSelected(row.titre);
                         const labelId = `enhanced-table-checkbox-${index}`;
 
                         return (
@@ -187,14 +227,14 @@ const ListObjectifGeneral = () => {
                             hover
                             //   onClick={(event) => handleClick(event, row.reference)}
                             role="checkbox"
-                            aria-checked={isItemSelected}
+                            // aria-checked={isItemSelected}
                             tabIndex={-1}
-                            key={row.titre}
-                            selected={isItemSelected}
+                            key={row.id}
+                            // selected={isItemSelected}
                           >
                             <TableCell
                               padding="checkbox"
-                              onClick={(event) => handleClick(event, row.titre)}
+                              // onClick={(event) => handleClick(event, row.titre)}
                             ></TableCell>
                             <TableCell
                               component="th"
@@ -202,28 +242,25 @@ const ListObjectifGeneral = () => {
                               scope="row"
                               padding="none"
                             >
-                              {row.titre}
+                              {row.objectif}
                             </TableCell>
-                            {/* <TableCell align="center">{row.titre}</TableCell>
-                          <TableCell align="center">
-                            {row.responsable}
-                          </TableCell> */}
                             <TableCell align="right">
                               <BtnActionContainer
                                 direction="row"
                                 justifyContent="right"
                               >
-                                <IconButton
+                                {/* <IconButton
                                   color="accent"
                                   aria-label="Details"
                                   component="span"
                                 >
                                   <VisibilityIcon />
-                                </IconButton>
+                                </IconButton> */}
                                 <IconButton
                                   color="primary"
                                   aria-label="Modifier"
                                   component="span"
+                                  onClick={() =>handleClickEdit(row.id)}
                                 >
                                   <EditIcon />
                                 </IconButton>
@@ -231,6 +268,7 @@ const ListObjectifGeneral = () => {
                                   color="warning"
                                   aria-label="Supprimer"
                                   component="span"
+                                  onClick={() =>handleClickDelete(row.id)}
                                 >
                                   <DeleteIcon />
                                 </IconButton>
@@ -270,9 +308,9 @@ const ListObjectifGeneral = () => {
           </Box>
         </SectionTable>
       </BodySection>
-      
+
       <Dialog open={open} onClose={handleClose}>
-        <ObjectifsGeneralForm />
+        <ObjectifsGeneralForm handleClose={handleClose}/>
       </Dialog>
     </Container>
   );
@@ -290,7 +328,7 @@ const ValueDetail = styled(Stack)(({ theme }) => ({
   borderRadius: 10,
 }));
 
-export const BodySection = styled(Box)(({}) => ({
+export const BodySection = styled(Box)(({ }) => ({
   borderRadius: 20,
   backgroundColor: "white",
   marginBlock: 16,

@@ -61,6 +61,12 @@ const menu = [
         link: "/grants/budgetEngage",
         icon: "",
       },
+      {
+        id: 27,
+        name: "Ligne budgetaire",
+        link: "/grants/ligneBudgetaire",
+        icon: "",
+      },
     ],
   },
   {

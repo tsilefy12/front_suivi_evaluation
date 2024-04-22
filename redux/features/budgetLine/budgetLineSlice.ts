@@ -21,7 +21,7 @@ export const budgetLineSlice = createSlice({
   reducers: {
     cancelEdit: (state) => {
       state.isEditing = false;
-      state.grantEncours = {};
+      state.budgetLine = {};
     },
   },
   extraReducers: {
