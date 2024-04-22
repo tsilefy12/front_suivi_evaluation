@@ -7,7 +7,7 @@ export const createPlanTravail = createAsyncThunk(
   "planTravail/createPlanTravail",
   async (planTravail: PlanTravailItem, thunkAPI) => {
     try {
-      const response = await axios.post("", planTravail);
+      const response = await axios.post("/suivi-evaluation/plan-travaile", planTravail);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Plan de travail crée avec succès",

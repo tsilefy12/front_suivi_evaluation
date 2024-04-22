@@ -5,7 +5,7 @@ export const editPlanTravail = createAsyncThunk(
   "planTravail/editPlanTravail",
   async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.get(`/${data.id}`);
+      const response = await axios.get(`/suivi-evaluation/plan-travaile/${data.id}`);
       return response.data;
     } catch (error: any) {
       if (error.response) {

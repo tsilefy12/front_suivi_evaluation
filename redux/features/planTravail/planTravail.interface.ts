@@ -4,7 +4,7 @@ export interface PlanTravailItem {
     description?: string;
 }
 export interface PlanTravailInitialState {
-    plantTravaillist: PlanTravailItem[];
+    planTravaillist: PlanTravailItem[];
     planTravail: PlanTravailItem;
     isEditing: boolean;
     loading: boolean;

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import React, { useEffect } from "react";
-import { SectionNavigation } from "../../../planTravail/objectifStrategique";
+import { SectionNavigation } from "../../../plan_travail/objectifStrategique";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { Check, Close } from "@mui/icons-material";
 import { useRouter } from "next/router";

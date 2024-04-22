@@ -1,4 +1,13 @@
-import { Button, Container, IconButton, Stack, styled, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  Container,
+  Divider,
+  IconButton,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
 import Link from "next/link";
 import React from "react";
 import Box from "@mui/material/Box";
@@ -18,37 +27,43 @@ import Add from "@mui/icons-material/Add";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
-} from "../../config/table.config";
+} from "../../../../config/table.config";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useRouter } from "next/router";
-import useFetchPeriode from "./hooks/useFetchPeriode";
-import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import Moment from "react-moment";
+import ArrowBack from "@mui/icons-material/ArrowBack";
+import KeyValue from "../../../shared/keyValue";
+import useFetchTacheCle from "./hooks/useFetchTacheCle";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
 import { useConfirm } from "material-ui-confirm";
-import { deletePeriode } from "../../redux/features/periode";
-import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
-import { PeriodeItem } from "../../redux/features/periode/periode.interface";
+import useFetchProject from "../../../GrantsEnCours/hooks/getProject";
+import { useRouter } from "next/router";
+import { TachCleItem } from "../../../../redux/features/tacheCle/tacheCle.interface";
+import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
+import { deleteTacheCle } from "../../../../redux/features/tacheCle";
 
-const ListBudgetsInitial = () => {
+const ListTacheCles = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("periode");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("projet");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const router = useRouter();
-  const fetchPeriode = useFetchPeriode()
-  const { periodelist } = useAppSelector((state) => state.periode)
-  const dispatch = useAppDispatch();
-  const confirm = useConfirm();
-  const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) =>state.grantEncours)
+  const fetchTacheCle: any = useFetchTacheCle()
+  const { tacheClelist } = useAppSelector((state) =>state.tacheCle)
+  const dispatch = useAppDispatch()
+  const confirm = useConfirm()
+  const fetchProject = useFetchProject()
+  const { projectList } = useAppSelector((state) =>state.project)
+  const router = useRouter()
+  const fetchEmployes = useFetchEmploys()
+  const { employees } = useAppSelector((state) =>state.employe)
+  const { id }: any = router.query;
 
-  React.useEffect(() => {
-    fetchPeriode();
-    fetchGrants();
+  React.useEffect(() =>{
+    fetchProject();
+    fetchTacheCle();
+    fetchEmployes();
   }, [router.query])
 
   const handleRequestSort = (
@@ -60,9 +75,14 @@ const ListBudgetsInitial = () => {
     setOrderBy(property);
   };
 
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.grants);
+      const newSelecteds = rows.map((n) => n.tache);
       setSelected(newSelecteds);
       return;
     }
@@ -110,42 +130,72 @@ const ListBudgetsInitial = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const handleClickDelete = async (id: any) => {
-    confirm({
-      title: "Supprimer periode",
-      description: "Voulez-vous vraiment supprimer ?",
-      cancellationText: "Annuler",
-      confirmationText: "Supprimer",
-      cancellationButtonProps: {
-        color: "warning",
-      },
-      confirmationButtonProps: {
-        color: "error",
-      },
-    })
-      .then(async () => {
-        await dispatch(deletePeriode({ id }));
-        fetchPeriode();
+    const handleClickDelete = async (id: any) => {
+      confirm({
+        title: "Supprimer tache clé",
+        description: "Voulez-vous vraiment supprimer ?",
+        cancellationText: "Annuler",
+        confirmationText: "Supprimer",
+        cancellationButtonProps: {
+          color: "warning",
+        },
+        confirmationButtonProps: {
+          color: "error",
+        },
       })
-      .catch(() => { });
-  };
-
-  const handleClickEdit = async (id: any) => {
-    router.push(`/grants/periode/${id}/edit`);
-  };
+        .then(async () => {
+          await dispatch(deleteTacheCle({ id }));
+          fetchTacheCle();
+        })
+        .catch(() => { });
+    };
+  
+    const handleClickEdit = async (id: any) => {
+      router.push(`/plant_travail/tachesCles/${id}/edit`);
+    };
   return (
     <Container maxWidth="xl">
-      <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Link href="/grants/periode/add">
-          <Button variant="contained" startIcon={<Add />}>
-            Créer
-          </Button>
-        </Link>
+      {/* <NavigationContainer> */}
+      <SectionNavigation direction={{ xs: 'column', sm: 'row' }}
+         spacing={{ xs: 1, sm: 2, md: 4 }}
+         justifyContent="space-between"
+         sx={{ mb: 2 }}>
+          <Stack flexDirection={"row"}>
+            
+            <Link href="/plan_travail">
+              <Button color="info" variant="text" startIcon={<ArrowBack />}>
+                Retour
+              </Button>
+            </Link>
+            <Link href={`/plant_travail/${id}/tachesCles/add`}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                startIcon={<Add />}
+                sx={{ marginInline: 3 }}
+              >
+                Créer
+              </Button>
+            </Link>
+            
+            
+          </Stack>
+
+        
         <Typography variant="h4" color="GrayText">
-          Periode GRANTS
+          Tâches clés
         </Typography>
       </SectionNavigation>
-      <SectionTable sx={{ backgroundColor: '#fff' }}>
+      {/* </NavigationContainer> */}
+      <Divider />
+      <FormContainer>
+        <KeyValue
+          keyName="Objectif Stratégique"
+          value={"Promouvoir l'exploitation durable équitable des espèces"}
+        />
+      </FormContainer>
+      <BodySection>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />
@@ -166,10 +216,10 @@ const ListBudgetsInitial = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {periodelist
+                  {tacheClelist
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: PeriodeItem, index: any) => {
-                      // const isItemSelected = isSelected(row.grants);
+                    .map((row: TachCleItem, index) => {
+                      // const isItemSelected = isSelected(row.id);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -180,48 +230,43 @@ const ListBudgetsInitial = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                        // selected={isItemSelected}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                          // onClick={(event) => handleClick(event, row.id)}
-                          >
-                          </TableCell>
+                            // onClick={(event) => handleClick(event, row.tache)}
+                          ></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             padding="none"
                           >
-                             {grantEncoursList.find((e:any)=> e.id === row?.grant)?.code}
+                            {row.tacheCle}
                           </TableCell>
-                          <TableCell align="right">{row.periode}</TableCell>
-                          <TableCell align="right">
-                            <Moment format="DD/MM/yyyy">{row.debut}</Moment>
+                          <TableCell>
+                          {projectList.find((e: any) =>e.id === row.projet)?.titleEn}
                           </TableCell>
-                          <TableCell align="right">
-                            <Moment format="DD/MM/yyyy">{row.fin}</Moment>
+                          <TableCell>
+                            {employees.find((e: any) =>e.id === row.responsable)?.name}
                           </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
                             >
-                              {/* <IconButton
-                                  color="accent"
-                                  aria-label="Details"
-                                  component="span"
-                                >
-                                  <VisibilityIcon />
-                                </IconButton> */}
+                              <IconButton
+                                color="accent"
+                                aria-label="Details"
+                                component="span"
+                              >
+                                <VisibilityIcon />
+                              </IconButton>
                               <IconButton
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
-                                size="small"
-                                onClick={() => {
-                                  handleClickEdit(row.id);
-                                }}
+                                onClick={() =>handleClickEdit(row.id)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -229,9 +274,7 @@ const ListBudgetsInitial = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
-                                onClick={() => {
-                                  handleClickDelete(row.id);
-                                }}
+                                onClick={() =>handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>
@@ -269,13 +312,34 @@ const ListBudgetsInitial = () => {
         label="Dense padding"
       /> */}
         </Box>
-      </SectionTable>
+      </BodySection>
     </Container>
   );
 };
 
-export default ListBudgetsInitial;
+export default ListTacheCles;
 
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
-const SectionTable = styled("div")(({ theme }) => ({}));
+
+export const BodySection = styled(Box)(({}) => ({
+  borderRadius: 20,
+  backgroundColor: "white",
+  marginBlock: 16,
+}));
+const FormContainer = styled(Stack)(({ theme }) => ({
+  width: "100%",
+  marginBottom: theme.spacing(3),
+  padding: 30,
+  borderRadius: 20,
+  background: "#fff",
+  border: `1px solid ${theme.palette.grey[100]}`,
+  marginTop: 14,
+}));
+
+const NavigationContainer = styled(Stack)(({ theme }) => ({
+  flexDirection: "column",
+  marginBottom: theme.spacing(2),
+  flex: 1,
+  width: "100%",
+}));

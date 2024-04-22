@@ -8,7 +8,7 @@ import { updatePlanTravail } from "./useCase/updatePlanTravail";
 import { deletePlanTravail } from "./useCase/deletePlanTravail";
 
 const planTravailInitialState: PlanTravailInitialState = {
-  plantTravaillist: [],
+  planTravaillist: [],
   planTravail: {},
   isEditing: false,
   loading: false,
