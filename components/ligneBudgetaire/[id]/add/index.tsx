@@ -64,13 +64,13 @@ const AddNewBudgetLine = () => {
                         : {
                             code: isEditing ? budgetLine?.code : "",
                             grantId: isEditing ? budgetLine?.grantId : "",
-                            montant: isEditing ? budgetLine?.montant: ""
+                            amount: isEditing ? budgetLine?.amount: ""
                         }
                 }
                 validationSchema={Yup.object({
                     code: Yup.string().required("Champ obligatoire"),
                     grantId: Yup.number().required("Champ obligatoire"),
-                    montant: Yup.string().required("Champ obligatoire"),
+                    amount: Yup.string().required("Champ obligatoire"),
                 })}
                 onSubmit={(value: any, action: any) => {
                     handleSubmit(value);
@@ -155,7 +155,7 @@ const AddNewBudgetLine = () => {
                                         id="outlined-basic"
                                         label="Montant"
                                         variant="outlined"
-                                        name="montant"
+                                        name="amount"
                                         type="number"
                                     />
                                 </Stack>
