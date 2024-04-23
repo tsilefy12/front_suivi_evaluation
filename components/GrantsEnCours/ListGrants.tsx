@@ -45,10 +45,10 @@ const ListGrantsEnCours = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const router = useRouter();
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) =>state.grantEncours)
+  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours)
   const fetchProject = useFetchProject();
-  const {projectList } = useAppSelector((state) =>state.project)
-  React.useEffect(() =>{
+  const { projectList } = useAppSelector((state: any) => state.project)
+  React.useEffect(() => {
     fetchGrants();
     fetchProject();
   }, [router.query])
@@ -56,39 +56,39 @@ const ListGrantsEnCours = () => {
   const handleClickEdit = async (id: any) => {
     router.push(`/grants/grantsEnCours/${id}/edit`);
   };
-    const handleChangePage = (event: unknown, newPage: number) => {
-      setPage(newPage);
-    };
-   console.log("list :", grantEncoursList)
-    const handleChangeRowsPerPage = (
-      event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
-      setPage(0);
-    };
-  
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows =
-      page > 0 ? Math.max(0, (1 + page) * rowsPerPage - grantEncoursList.length) : 0;
-      const handleClickDelete = async (id: any) => {
-        confirm({
-          title: "Supprimer le grant",
-          description: "Voulez-vous vraiment supprimer ?",
-          cancellationText: "Annuler",
-          confirmationText: "Supprimer",
-          cancellationButtonProps: {
-            color: "warning",
-          },
-          confirmationButtonProps: {
-            color: "error",
-          },
-        })
-          .then(async () => {
-            await dispatch(deleteGrantEncours({ id }));
-            fetchGrants();
-          })
-          .catch(() => {});
-      };
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+  console.log("list :", grantEncoursList)
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - grantEncoursList.length) : 0;
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer le grant",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteGrantEncours({ id }));
+        fetchGrants();
+      })
+      .catch(() => { });
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -101,7 +101,7 @@ const ListGrantsEnCours = () => {
           GRANTS en Cours
         </Typography>
       </SectionNavigation>
-      <SectionTable sx={{backgroundColor: '#fff'}}>
+      <SectionTable sx={{ backgroundColor: '#fff' }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />
@@ -111,7 +111,7 @@ const ListGrantsEnCours = () => {
                 aria-labelledby="tableTitle"
                 size={dense ? "small" : "medium"}
               >
-                <TransportEquipmentTableHeader/>
+                <TransportEquipmentTableHeader />
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
@@ -130,20 +130,25 @@ const ListGrantsEnCours = () => {
                           <TableCell
                             padding="checkbox"
                           >
-                                 {row.code}
+                            {row.code}
                           </TableCell>
                           <TableCell align="left">{row.bailleur}</TableCell>
-                          <TableCell align="left"> 
-                          {projectList.find((e:any)=> e.id === row?.projectId)?.titleFr}
+                          <TableCell align="left">
+                            {projectList.find((e: any) => e.id === row?.projectId)?.titleFr}
                           </TableCell>
                           <TableCell align="left">
-                          {projectList.find((e:any)=> e.id === row?.projectId)?.titleEn}
+                            {projectList.find((e: any) => e.id === row?.projectId)?.titleEn}
                           </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
                             >
+                              <Link href={`/grants/ligneBudgetaire/${row.id}/add`}>
+                                <Button variant="contained" startIcon={<Add />}>
+                                  Ajouter ligne budgetaire
+                                </Button>
+                              </Link>
                               <Link href={`/grants/grantsEnCours/${row.id}/detail`}>
                                 <IconButton
                                   color="accent"
@@ -154,21 +159,21 @@ const ListGrantsEnCours = () => {
                                 </IconButton>
                               </Link>
                               <IconButton
-                                  color="primary"
-                                  aria-label="Modifier"
-                                  component="span"
-                                  size="small"
-                                  onClick={() => {
-                                    handleClickEdit(row.id);
-                                  }}
-                                >
-                                  <Edit />
-                                  </IconButton>
+                                color="primary"
+                                aria-label="Modifier"
+                                component="span"
+                                size="small"
+                                onClick={() => {
+                                  handleClickEdit(row.id);
+                                }}
+                              >
+                                <Edit />
+                              </IconButton>
                               <IconButton
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
-                                onClick={() =>handleClickDelete(row.id)}
+                                onClick={() => handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>

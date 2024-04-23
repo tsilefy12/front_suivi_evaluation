@@ -1,8 +1,9 @@
 
 export default interface Data {
   tache: string;
-  projet: string;
-  responsable: string;
+  projetEn: string;
+  projetFr: string;
+  plan: string;
   }
   
 

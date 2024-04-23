@@ -9,16 +9,22 @@ export const headCells: readonly HeadCell[] = [
     label: "Tâche Clé",
   },
   {
-    id: "projet",
+    id: "projetEn",
     numeric: true,
     disablePadding: false,
-    label: "Projet",
+    label: "Titre projet en Anglais",
   },
   {
-    id: "responsable",
+    id: "projetFr",
     numeric: true,
     disablePadding: false,
-    label: "Responsable",
+    label: "Titre projet en Français",
+  },
+  {
+    id: "plan",
+    numeric: true,
+    disablePadding: false,
+    label: "Plan du travail",
   },
 ];
 
@@ -26,17 +32,8 @@ export const rows = [
   createData(
     "1.1 Promouvoir le respect des normes et faire le suivi des filieres deja identifiees",
     "FITANTANANA MAHARITRA HOLOVAIN-JAFY",
-    "Allie Mac"
+    "FITANTANANA MAHARITRA HOLOVAIN-JAFY",
+    "FITANTANANA MAHARITRA HOLOVAIN-JAFY",
   ),
-  createData(
-    "1.2 Mener des etudes de faisabilite pour les filieres potentielles",
-    "PERMETTRE AUX JEUNES DE MENER LA CONSERVATION DANS LEST DE MADAGASCAR",
-    "Allie Mac"
-  ),
-  createData(
-    "1.3 Augmenter la capacite de gestion administrative et financiere des communautes locales",
-    "DEVELOPPEMENT, VALORISATION ET AMELIORATION DES CONDITIONS DE VIE DES COMMUNAUTES LOCALES",
-    "Antsa Fitia"
-  )
 
 ];

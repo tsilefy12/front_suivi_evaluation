@@ -3,6 +3,8 @@ export interface TachCleItem {
     tacheCle?: string;
     projet?: number;
     responsable?: string;
+    planTravaileId?: string;
+    planTravaile?: any;
 }
 export interface TacheCleInitialState {
     tacheClelist: TachCleItem[];

@@ -2,6 +2,7 @@ import {
   Button,
   Card,
   Container,
+  Dialog,
   Divider,
   IconButton,
   Stack,
@@ -40,32 +41,48 @@ import useFetchProject from "../../../GrantsEnCours/hooks/getProject";
 import { useRouter } from "next/router";
 import { TachCleItem } from "../../../../redux/features/tacheCle/tacheCle.interface";
 import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
-import { deleteTacheCle } from "../../../../redux/features/tacheCle";
+import { deleteTacheCle, editTacheCle } from "../../../../redux/features/tacheCle";
+import AddNewTacheCle from "./add/AddNewTacheCle";
+import useFetchPlanTravaile from "../../hooks/useFetchPlanTravail";
+import { getPlanTravail } from "../../../../redux/features/planTravail";
 
 const ListTacheCles = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("projet");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("projetEn");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const fetchTacheCle: any = useFetchTacheCle()
-  const { tacheClelist } = useAppSelector((state) =>state.tacheCle)
+  const { tacheClelist, tacheCle } = useAppSelector((state) => state.tacheCle)
   const dispatch = useAppDispatch()
   const confirm = useConfirm()
   const fetchProject = useFetchProject()
-  const { projectList } = useAppSelector((state) =>state.project)
+  const { projectList } = useAppSelector((state) => state.project)
   const router = useRouter()
   const fetchEmployes = useFetchEmploys()
-  const { employees } = useAppSelector((state) =>state.employe)
+  const { employees } = useAppSelector((state) => state.employe)
   const { id }: any = router.query;
+  const [open, setOpen] = React.useState(false);
+  const fetchPlanTravail = useFetchPlanTravaile()
+  const { planTravaillist, planTravail } = useAppSelector((state) =>state.planTravail)
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchProject();
     fetchTacheCle();
     fetchEmployes();
+    fetchPlanTravail();
+    getPlanTravaile();
+    getTache();
   }, [router.query])
-
+ const getPlanTravaile = () =>{
+  const args: any = {};
+   dispatch(getPlanTravail({id, args}))
+ }
+ const getTache = () =>{
+  const args: any = {};
+   dispatch(getPlanTravail({id, args}))
+ }
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -74,12 +91,32 @@ const ListTacheCles = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+  const listTache: {id: string, projetFrs: string, projetEng: string, plan: string}[] = [];
+  let idTacheCle:any = "";
+  tacheClelist.forEach((element: any) =>{
+    if (id === element.planTravaileId) {
+      idTacheCle = element.id;
+      const projetFrs = element.projet ? projectList.find((e: any) => e.id === element.projet)?.titleEn : '';
+      const projetEng = element.projet ? projectList.find((e: any) => e.id === element.projet)?.titleEn : '';
+      const plan = element.planTravaileId ? planTravaillist.find((e: any) => e.id === element.planTravaileId)?.description : '';
+      listTache.push({
+        id: element.tacheCle, 
+        projetFrs: projetFrs !== undefined ? projetFrs : '',
+        projetEng: projetEng !== undefined ? projetEng : '',
+        plan: plan !== undefined ? plan : '',
+      });
+    }
+  });
+  
 
-  const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
-  
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       const newSelecteds = rows.map((n) => n.tache);
@@ -130,59 +167,55 @@ const ListTacheCles = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const handleClickDelete = async (id: any) => {
-      confirm({
-        title: "Supprimer tache clé",
-        description: "Voulez-vous vraiment supprimer ?",
-        cancellationText: "Annuler",
-        confirmationText: "Supprimer",
-        cancellationButtonProps: {
-          color: "warning",
-        },
-        confirmationButtonProps: {
-          color: "error",
-        },
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer tache clé",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteTacheCle({ id }));
+        fetchTacheCle();
       })
-        .then(async () => {
-          await dispatch(deleteTacheCle({ id }));
-          fetchTacheCle();
-        })
-        .catch(() => { });
-    };
-  
-    const handleClickEdit = async (id: any) => {
-      router.push(`/plant_travail/tachesCles/${id}/edit`);
-    };
+      .catch(() => { });
+  };
+
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editTacheCle({ id }))
+    handleClickOpen()
+  };
   return (
     <Container maxWidth="xl">
       {/* <NavigationContainer> */}
       <SectionNavigation direction={{ xs: 'column', sm: 'row' }}
-         spacing={{ xs: 1, sm: 2, md: 4 }}
-         justifyContent="space-between"
-         sx={{ mb: 2 }}>
-          <Stack flexDirection={"row"}>
-            
-            <Link href="/plan_travail">
-              <Button color="info" variant="text" startIcon={<ArrowBack />}>
-                Retour
-              </Button>
-            </Link>
-            <Link href={`/plant_travail/${id}/tachesCles/add`}>
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                startIcon={<Add />}
-                sx={{ marginInline: 3 }}
-              >
-                Créer
-              </Button>
-            </Link>
-            
-            
-          </Stack>
+        spacing={{ xs: 1, sm: 2, md: 4 }}
+        justifyContent="space-between"
+        sx={{ mb: 2 }}>
+        <Stack flexDirection={"row"}>
 
-        
+          <Link href="/plan_travail">
+            <Button color="info" variant="text" startIcon={<ArrowBack />}>
+              Retour
+            </Button>
+          </Link>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            startIcon={<Add />}
+            sx={{ marginInline: 3 }}
+            onClick={handleClickOpen}
+          >
+            Créer
+          </Button>
+        </Stack>
         <Typography variant="h4" color="GrayText">
           Tâches clés
         </Typography>
@@ -192,7 +225,7 @@ const ListTacheCles = () => {
       <FormContainer>
         <KeyValue
           keyName="Objectif Stratégique"
-          value={"Promouvoir l'exploitation durable équitable des espèces"}
+          value={listTache.length!=0 ? planTravail.description! : ""}
         />
       </FormContainer>
       <BodySection>
@@ -216,9 +249,9 @@ const ListTacheCles = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {tacheClelist
+                  {listTache
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: TachCleItem, index) => {
+                    .map((row, index) => {
                       // const isItemSelected = isSelected(row.id);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -230,11 +263,11 @@ const ListTacheCles = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                          // selected={isItemSelected}
+                        // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            // onClick={(event) => handleClick(event, row.tache)}
+                          // onClick={(event) => handleClick(event, row.tache)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -242,31 +275,36 @@ const ListTacheCles = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.tacheCle}
+                            {row.id}
                           </TableCell>
                           <TableCell>
-                          {projectList.find((e: any) =>e.id === row.projet)?.titleEn}
+                            {row.projetEng}
                           </TableCell>
                           <TableCell>
-                            {employees.find((e: any) =>e.id === row.responsable)?.name}
+                          {row.projetFrs}
+                          </TableCell>
+                          <TableCell>
+                          {row.plan}
                           </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
                             >
-                              <IconButton
-                                color="accent"
-                                aria-label="Details"
-                                component="span"
-                              >
-                                <VisibilityIcon />
-                              </IconButton>
+                              <Link href={`/plan_travail/${id}/tachesCles/${row.id}/details`}>
+                                <IconButton
+                                  color="accent"
+                                  aria-label="Details"
+                                  component="span"
+                                >
+                                  <VisibilityIcon />
+                                </IconButton>
+                              </Link>
                               <IconButton
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
-                                onClick={() =>handleClickEdit(row.id)}
+                                onClick={() => handleClickEdit(idTacheCle)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -274,7 +312,7 @@ const ListTacheCles = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
-                                onClick={() =>handleClickDelete(row.id)}
+                                onClick={() => handleClickDelete(idTacheCle)}
                               >
                                 <DeleteIcon />
                               </IconButton>
@@ -313,6 +351,9 @@ const ListTacheCles = () => {
       /> */}
         </Box>
       </BodySection>
+      <Dialog open={open} onClose={handleClose}>
+        <AddNewTacheCle handleClose={handleClose} />
+      </Dialog>
     </Container>
   );
 };
@@ -322,7 +363,7 @@ export default ListTacheCles;
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
 
-export const BodySection = styled(Box)(({}) => ({
+export const BodySection = styled(Box)(({ }) => ({
   borderRadius: 20,
   backgroundColor: "white",
   marginBlock: 16,

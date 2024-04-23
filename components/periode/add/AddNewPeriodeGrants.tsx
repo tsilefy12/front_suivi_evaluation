@@ -40,8 +40,8 @@ const AddNewPeriodeGrants = () => {
   const fetchGrant = useFetchGrants();
   const fetchPeriode = useFetchPeriode();
   const [open, setOpen]: any = React.useState(false);
-  const { grantEncoursList } = useAppSelector((state) => state.grantEncours)
-  const { isEditing, periode } = useAppSelector((state) => state.periode)
+  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours)
+  const { isEditing, periode } = useAppSelector((state: any) => state.periode)
 
   React.useEffect(() => {
     fetchGrant();

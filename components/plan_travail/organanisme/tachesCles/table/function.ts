@@ -2,13 +2,15 @@ import Data, { Order } from "./type-variable";
 
 export function createData(
   tache: string,
-  projet: string,
-  responsable: string,
+  projetEn: string,
+  projetFr: string,
+  plan: string,
 ): Data {
   return {
     tache,
-    projet,
-    responsable,
+    projetEn,
+    projetFr,
+    plan,
   };
 }
 

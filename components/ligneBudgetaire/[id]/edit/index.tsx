@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
-import AddNewBudgetLine from "../../add";
+import AddNewBudgetLine from "../add";
 import { editBudgetLine } from "../../../../redux/features/budgetLine";
 
 const EditBudgetLine= () => {

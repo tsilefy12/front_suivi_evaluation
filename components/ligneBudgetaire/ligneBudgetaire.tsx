@@ -40,10 +40,11 @@ const ListBudgetLine = () => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const router = useRouter();
-  const { budgetLineList } = useAppSelector((state) =>state.budgetLine)
+  const { id }: any = router.query;
+  const { budgetLineList } = useAppSelector((state: any) =>state.budgetLine)
   const fetchBudgetLine = useFetchBudgetLine();
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) =>state.grantEncours);
+  const { grantEncoursList } = useAppSelector((state: any) =>state.grantEncours);
   React.useEffect(() =>{
     fetchGrants();
     fetchBudgetLine();
@@ -88,7 +89,7 @@ const ListBudgetLine = () => {
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Link href="/grants/ligneBudgetaire/add">
+        <Link href={`/grants/ligneBudgetaire/${id}}/add`}>
           <Button variant="contained" startIcon={<Add />}>
             Créer
           </Button>
@@ -131,7 +132,7 @@ const ListBudgetLine = () => {
                           <TableCell align="left">
                             {grantEncoursList.find((e: any) =>e.id === row.grantId)?.code}
                           </TableCell>
-                          <TableCell align="right">
+                          {/* <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
@@ -156,7 +157,7 @@ const ListBudgetLine = () => {
                                 <DeleteIcon />
                               </IconButton>
                             </BtnActionContainer>
-                          </TableCell>
+                          </TableCell> */}
                         </TableRow>
                       );
                     })}

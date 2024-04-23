@@ -42,6 +42,7 @@ import { ObjectifGeneralItem } from "../../../../redux/features/objectifGeneral/
 import { useConfirm } from "material-ui-confirm";
 import { deleteObjectifGeneral, editObjectifGeneral } from "../../../../redux/features/objectifGeneral";
 import useFetchPlanTravaile from "../../hooks/useFetchPlanTravail";
+import { getPlanTravail } from "../../../../redux/features/planTravail";
 
 const ListObjectifGeneral = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -57,13 +58,19 @@ const ListObjectifGeneral = () => {
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const fetchPlanTravail = useFetchPlanTravaile();
-  const { planTravaillist } = useAppSelector((state: any) =>state.planTravail)
+  const { planTravaillist, planTravail } = useAppSelector((state: any) =>state.planTravail)
+  const { id }: any = router.query;
 
   React.useEffect(() => {
     fetchObjectifGeneral();
     fetchPlanTravail();
+    getPlanTravaile();
   }, [router.query])
-
+// console.log("list objectifs :", objectifGenerallist)
+  const getPlanTravaile =  () =>{
+    const args: any = {};
+    dispatch(getPlanTravail({id, args}))
+  }
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -179,10 +186,7 @@ const ListObjectifGeneral = () => {
           >
             Créer
           </Button>
-
         </Stack>
-
-
         <Typography variant="h4" color="GrayText">
           Objectifs générales
         </Typography>
@@ -191,7 +195,7 @@ const ListObjectifGeneral = () => {
       <FormContainer>
         <KeyValue
           keyName="Objectif Stratégique"
-          value={"Promouvoir l'exploitation durable équitable des espèces"}
+          value={objectifGenerallist.length !=0 ? planTravail.description!: ""}
         />
       </FormContainer>
       <BodySection>

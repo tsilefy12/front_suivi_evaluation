@@ -9,26 +9,26 @@ import Link from "next/link";
 import React, { useState } from "react";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { Check, Close } from "@mui/icons-material";
-import OSTextField from "../../shared/input/OSTextField";
+import OSTextField from "../../../shared/input/OSTextField";
 import { Formik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
-import { useAppSelector, useAppDispatch } from "../../../hooks/reduxHooks";
-import OSDatePicker from "../../shared/date/OSDatePicker";
-import { cancelEdit } from "../../../redux/features/budgetLine/budgetLineSlice";
-import useFetchGrants from "../../GrantsEnCours/hooks/getGrants";
+import { useAppSelector, useAppDispatch } from "../../../../hooks/reduxHooks";
+import OSDatePicker from "../../../shared/date/OSDatePicker";
+import { cancelEdit } from "../../../../redux/features/budgetLine/budgetLineSlice";
+import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
 import { useConfirm } from "material-ui-confirm";
-import useFetchBudgetLine from "../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
-import { createBudgetLine, updateBudgetLine } from "../../../redux/features/budgetLine";
-import { SectionNavigation } from "../../home";
-import OSSelectField from "../../shared/select/OSSelectField";
+import useFetchBudgetLine from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
+import { createBudgetLine, updateBudgetLine } from "../../../../redux/features/budgetLine";
+import { SectionNavigation } from "../../../home";
+import OSSelectField from "../../../shared/select/OSSelectField";
 
 const AddNewBudgetLine = () => {
     const router = useRouter();
     const fetchGrants = useFetchGrants();
-    const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+    const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
     const fetchLigneBudgetaire = useFetchBudgetLine();
-    const { isEditing, budgetLine } = useAppSelector((state) => state.budgetLine)
+    const { isEditing, budgetLine } = useAppSelector((state: any) => state.budgetLine)
     const dispatch = useAppDispatch();
 
     React.useEffect(() => {
@@ -64,11 +64,13 @@ const AddNewBudgetLine = () => {
                         : {
                             code: isEditing ? budgetLine?.code : "",
                             grantId: isEditing ? budgetLine?.grantId : "",
+                            montant: isEditing ? budgetLine?.montant: ""
                         }
                 }
                 validationSchema={Yup.object({
                     code: Yup.string().required("Champ obligatoire"),
                     grantId: Yup.number().required("Champ obligatoire"),
+                    montant: Yup.string().required("Champ obligatoire"),
                 })}
                 onSubmit={(value: any, action: any) => {
                     handleSubmit(value);
@@ -147,6 +149,14 @@ const AddNewBudgetLine = () => {
                                         options={grantEncoursList}
                                         dataKey={["code"]}
                                         valueKey="id"
+                                    />
+                                    <OSTextField
+                                        fullWidth
+                                        id="outlined-basic"
+                                        label="Montant"
+                                        variant="outlined"
+                                        name="montant"
+                                        type="number"
                                     />
                                 </Stack>
                             </FormContainer>

@@ -2,6 +2,7 @@ export interface BudgetLineItem {
     id?: string;
     code?: string;
     grantId?: number;
+    montant?: number;
   }
   
   export interface BudgetLineInitialState {

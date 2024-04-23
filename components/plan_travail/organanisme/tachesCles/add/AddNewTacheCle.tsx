@@ -7,6 +7,9 @@ import {
   FormControl,
   Stack,
   Autocomplete,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import Link from "next/link";
 import React from "react";
@@ -26,16 +29,17 @@ import OSTextField from "../../../../shared/input/OSTextField";
 import OSSelectField from "../../../../shared/select/OSSelectField";
 import { cancelEdit } from "../../../../../redux/features/tacheCle/tacheCle";
 
-const AddNewTacheCle = () => {
+const AddNewTacheCle = ({ handleClose }: any) => {
   const router = useRouter();
   const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state) => state.employe)
-  const { tacheCle, isEditing, tacheClelist } = useAppSelector((state) => state.tacheCle)
+  const { employees } = useAppSelector((state: any) => state.employe)
+  const { tacheCle, isEditing, tacheClelist } = useAppSelector((state: any) => state.tacheCle)
   const dispatch = useAppDispatch();
   const fetchTacheCle = useFetchTacheCle();
-  const { grantEnCours } = useAppSelector((state) =>state.grantEncours) 
-  const { projectList } = useAppSelector((state) =>state.project)
+  const { grantEnCours } = useAppSelector((state: any) => state.grantEncours)
+  const { projectList } = useAppSelector((state: any) => state.project)
   const fetchProject = useFetchProject();
+  const { id } = router.query;
 
   React.useEffect(() => {
     fetchEmployes();
@@ -45,13 +49,14 @@ const AddNewTacheCle = () => {
   const [selectedEmployes, setSelectedEmployes] = React.useState<EmployeItem[]>(
     isEditing
       ? employees.filter((employee: any) =>
-          tacheCle?.responsable?.includes(employee.id!)
-        )
+        tacheCle?.responsable?.includes(employee.id!)
+      )
       : []
   );
-//  console.log(" id responsable :", selectedEmployes)
+  //  console.log(" id responsable :", selectedEmployes)
   const handleSubmit = async (values: any) => {
-    values.responsable = [...selectedEmployes.map((item) =>item.id)];
+    values.responsable = [...selectedEmployes.map((item) => item.id)];
+    // console.log("tableau respo :", values.responsable)
     try {
       if (isEditing) {
         await dispatch(
@@ -60,23 +65,25 @@ const AddNewTacheCle = () => {
             tacheCle: values,
           })
         );
+        handleClose()
       } else {
         await dispatch(createTacheCle(values));
         fetchTacheCle();
+        handleClose();
       }
-      router.push("/plan_travail/tacheCle");
+      router.push(`/plan_travail/${id}/tachesCles`);
     } catch (error) {
       console.log("error", error);
     }
   };
-    //get list project
-    const listProjet: {id: number, name: any}[]=[];
-    if (projectList.length > 0) {
-      projectList.map((element: any) => {
-        listProjet.push({id: element.id, name: element.titleEn})
+  //get list project
+  const listProjet: { id: number, name: any }[] = [];
+  if (projectList.length > 0) {
+    projectList.map((element: any) => {
+      listProjet.push({ id: element.id, name: element.titleEn })
     })
-  }else{
-    listProjet.push({id: 0, name: ""})
+  } else {
+    listProjet.push({ id: 0, name: "" })
   }
   return (
     <Container maxWidth="xl" sx={{ pb: 5 }}>
@@ -89,6 +96,7 @@ const AddNewTacheCle = () => {
               tacheCle: isEditing ? tacheCle?.tacheCle : "",
               responsable: isEditing ? tacheCle?.responsable : "",
               projet: isEditing ? tacheCle?.projet : "",
+              planTravaileId: id,
             }
         }
         validationSchema={Yup.object({
@@ -111,12 +119,10 @@ const AddNewTacheCle = () => {
                   justifyContent="space-between"
                   sx={{ mb: 2 }}
                 >
+                <CustomStack direction="column" spacing={2}>
+                <DialogTitle>{isEditing ? "Modifier Tâche clé": "Créer Tâche clé"}</DialogTitle>
+                  <DialogActions>
                   <Stack flexDirection={"row"}>
-                    <Link href="/plan_travail/tacheCle">
-                      <Button color="info" variant="text" startIcon={<ArrowBack />}>
-                        Retour
-                      </Button>
-                    </Link>
                     <Button
                       variant="contained"
                       color="primary"
@@ -137,58 +143,61 @@ const AddNewTacheCle = () => {
                       onClick={() => {
                         formikProps.resetForm();
                         dispatch(cancelEdit());
+                        handleClose()
                       }}
                     >
                       Annuler
                     </Button>
                   </Stack>
-                  <Typography variant="h5">Créer Tâches clés</Typography>
+                  </DialogActions>
+                </CustomStack>
                 </SectionNavigation>
                 {/* <Divider /> */}
               </NavigationContainer>
-
-              <FormContainer spacing={2}>
-                <OSTextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Tâche clé"
-                  variant="outlined"
-                  name="tacheCle"
-                />
-                <OSSelectField                  
-                  fullWidth
-                  id="outlined-basic"
-                  label="Projet"
-                  variant="outlined"
-                  options={listProjet}
-                  dataKey="name"
-                  valueKey="id"
-                  name="projet"
-                  type="number"
-                />
-                <FormControl fullWidth>
-                  <Autocomplete
-                    multiple
-                    id="tags-standard"
-                    options={employees}
-                    getOptionLabel={(employee) =>
-                      `${employee.name} ${employee.surname}` as string
-                    }
-                    value={selectedEmployes}
-                    onChange={(event, newValue) => {
-                      setSelectedEmployes(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        id="outlined-basic"
-                        label="Sélectionnez participant"
-                        variant="outlined"
-                      />
-                    )}
+              <DialogContent>
+              <FormContainer spacing={2} direction="column">
+                  <OSTextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Tâche clé"
+                    variant="outlined"
+                    name="tacheCle"
                   />
-                </FormControl>
+                  <OSSelectField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Projet"
+                    variant="outlined"
+                    options={listProjet}
+                    dataKey="name"
+                    valueKey="id"
+                    name="projet"
+                    type="number"
+                  />
+                  <FormControl fullWidth>
+                    <Autocomplete
+                      multiple
+                      id="tags-standard"
+                      options={employees}
+                      getOptionLabel={(employee: any) =>
+                        `${employee.name!} ${employee.surname!}` as string
+                      }
+                      value={selectedEmployes}
+                      onChange={(event, newValue) => {
+                        setSelectedEmployes(newValue!);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          id="outlined-basic"
+                          label="Sélectionnez participant"
+                          variant="outlined"
+                        />
+                      )}
+                    />
+                  </FormControl>
               </FormContainer>
+              </DialogContent>
             </Form>
           )
         }}

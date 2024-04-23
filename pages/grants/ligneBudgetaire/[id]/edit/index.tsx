@@ -1,7 +1,7 @@
 import { Container } from '@mui/material'
 import React from 'react'
-import BackOfficeLayout from '../../../../../layouts/backOffice'
-import EditBudgetLine from '../../../../../components/ligneBudgetaire/[id]/edit'
+import BackOfficeLayout from '../../../../../../layouts/backOffice'
+import EditBudgetLine from '../../../../../../components/ligneBudgetaire/[id]/edit'
 
 const AddGrantsEnCours = () => {
   return (
