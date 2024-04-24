@@ -20,8 +20,6 @@ import { getBudgetLineList } from "../../../redux/features/budgetLine";
 import OSTextField from "../../shared/input/OSTextField";
 
 const BudgetEngagedForm  = ({formikProps}: {formikProps: FormikProps<any>}) => {
-
-  console.log(formikProps)
   const dispatch = useAppDispatch();
 
   const { grantEncoursList } = useAppSelector( (state) => state.grantEncours);
@@ -57,6 +55,7 @@ const BudgetEngagedForm  = ({formikProps}: {formikProps: FormikProps<any>}) => {
                 size="small"
                 startIcon={<Check />}
                 sx={{ marginInline: 3 }}
+                type="submit"
               >
                 Enregistrer
               </Button>
@@ -99,7 +98,7 @@ const BudgetEngagedForm  = ({formikProps}: {formikProps: FormikProps<any>}) => {
               <OSSelectField
                   id="outlined-basic"
                   label="LB"
-                  name="budgerLineId"
+                  name="budgetLineId"
                   options={budgetLineList}
                   dataKey="code"
                   valueKey="id"
@@ -118,6 +117,7 @@ const BudgetEngagedForm  = ({formikProps}: {formikProps: FormikProps<any>}) => {
               variant="outlined"
               label="Montant"
               name="amount"
+              type = "number"
           />
         </FormContainer>
       </Container>

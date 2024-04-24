@@ -27,7 +27,7 @@ export default function AddNewBudgetEngage() {
                 // );
             } else {
                 await dispatch(
-                createBudgetEngaged(values)
+                    createBudgetEngaged(values)
                 );
             }
             route.push("/grants/budgetEngage");
@@ -47,12 +47,11 @@ export default function AddNewBudgetEngage() {
                             grantsId: isEditing ? budgetEngaged.grantsId: 0,
                             budgetLineId: isEditing ? budgetEngaged.budgetLineId: 0,
                             libelle: isEditing ? budgetEngaged.libelle: "",
-                            amount :isEditing ? budgetEngaged.amount :""
+                            amount :isEditing ? budgetEngaged.amount :0
                         }
                     }
                     validationSchema={Yup.object({
-                        reference:Yup.string().required("Champ obligatoire"),
-                        numBonCommande:Yup.string().required("Champ obligatoire"),
+                        libelle:Yup.string().required("Champ obligatoire"),
                     })}
                     onSubmit={(value: any, action: any) => {
                         handleSubmit(value);

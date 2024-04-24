@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -30,6 +30,12 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Visibility from "@mui/icons-material/Visibility";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { BudgetEngagedItem } from "../../redux/features/budgetEngaged/budgetEngaged.interface";
+import Moment from "react-moment";
+import { getBudgetEngagedList } from "../../redux/features/budgetEngaged/budgetEngagedSlice";
+import { getBudgetLineList } from "../../redux/features/budgetLine";
+import { getGrantEncoursList } from "../../redux/features/grantEncours";
 
 const ListBudgetEngage = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -38,7 +44,21 @@ const ListBudgetEngage = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const { budgetEngagedList } = useAppSelector((state) => state.budgetsEngaged);
+  const dispatch = useAppDispatch();
 
+  const { grantEncoursList } = useAppSelector( (state) => state.grantEncours);
+  const { budgetLineList } = useAppSelector( (state) => state.budgetLine);
+    
+  const fetchUtilsData = () => {
+    dispatch(getGrantEncoursList({}));
+    dispatch(getBudgetLineList({}));
+    dispatch(getBudgetEngagedList({}));
+  };
+
+  useEffect(() => {
+      fetchUtilsData();
+  }, []);
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -114,7 +134,7 @@ const ListBudgetEngage = () => {
           </Link>
             </Stack>
           <Typography variant="h4" color="GrayText">
-            Budget Engage
+            Budget Engagés
           </Typography>
         </SectionNavigation>
       <SectionTable sx={{backgroundColor: '#fff'}} >
@@ -136,12 +156,10 @@ const ListBudgetEngage = () => {
                   rowCount={rows.length}
                 />
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {budgetEngagedList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.date);
+                    .map((row : BudgetEngagedItem, index :any) => {
+                      const isItemSelected = isSelected(index);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -151,12 +169,12 @@ const ListBudgetEngage = () => {
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.date}
+                          key={row.id}
                           selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.date)}
+                            // onClick={(event) => handleClick(event, row?.date)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -164,12 +182,14 @@ const ListBudgetEngage = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.date}
+                            <Moment format="DD/MM/YYYY">
+                              {row?.date}
+                            </Moment>
                           </TableCell>
-                          <TableCell align="right">{row.grants}</TableCell>
-                          <TableCell align="right">{row.lb}</TableCell>
+                          <TableCell align="right">{grantEncoursList.find((e) => e.id == row.grantsId)?.code}</TableCell>
+                          <TableCell align="right">{budgetLineList.find((e) => e.id == row.budgetLineId)?.code}</TableCell>
                           <TableCell align="right">{row.libelle}</TableCell>
-                          <TableCell align="right">{row.montant}</TableCell>
+                          <TableCell align="right">{row.amount}</TableCell>
                         </TableRow>
                       );
                     })}
