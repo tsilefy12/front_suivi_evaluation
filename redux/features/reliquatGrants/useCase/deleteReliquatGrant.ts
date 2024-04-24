@@ -6,7 +6,7 @@ export const deleteReliquatGrant = createAsyncThunk(
   "reliquatGrant/deleteReliquatGrant",
   async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.delete(`${data.id}`);
+      const response = await axios.delete(`/suivi-evaluation/reliquat-grant/${data.id}`);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Reliquate grants supprimé avec succès",

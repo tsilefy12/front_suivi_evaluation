@@ -5,7 +5,7 @@ export const getReliquatGrant = createAsyncThunk(
   "reliquatGrant/getReliquatGrant",
   async (data: { id: string; args?: any }, thunkAPI) => {
     try {
-      const response = await axios.get(`${data.id}`);
+      const response = await axios.get(`/suivi-evaluation/reliquat-grant/${data.id}`);
       return response.data;
     } catch (error: any) {
       if (error.response) {

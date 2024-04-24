@@ -15,7 +15,7 @@ export const updateReliquatGrant = createAsyncThunk(
   "reliquatGrant/updateReliquatGrant",
   async (data: { id: string; reliquatGrant: ReliquatGrantsItem }, thunkAPI) => {
     try {
-      const response = await axios.patch(`${data.id}`, data.reliquatGrant);
+      const response = await axios.patch(`/suivi-evaluation/reliquat-grant/${data.id}`, data.reliquatGrant);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Reliquate grant mise à jour avec succès",
