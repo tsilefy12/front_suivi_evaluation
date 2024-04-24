@@ -4,6 +4,7 @@ import {
     styled,
     Typography,
     Stack,
+    MenuItem,
 } from "@mui/material";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -30,13 +31,26 @@ const AddNewBudgetLine = () => {
     const fetchLigneBudgetaire = useFetchBudgetLine();
     const { isEditing, budgetLine } = useAppSelector((state: any) => state.budgetLine)
     const dispatch = useAppDispatch();
+    const { id }: any = router.query;
 
     React.useEffect(() => {
         fetchGrants();
         fetchLigneBudgetaire();
-    }, [router.query])
 
+    }, [router.query])
+ 
+    const grantValue: {id: number, name: string }[] = [];
+    let grantCode: any = "";
+
+    grantEncoursList.forEach((element: any) => {
+        if (element.id === parseInt(id)) {
+          grantValue.push({id:parseInt(id), name: element.code})
+          grantCode = element.code
+        }
+    });
     const handleSubmit = async (values: any) => {
+        values.grantId = parseInt(id);
+
         try {
             if (isEditing) {
                 await dispatch(
@@ -69,7 +83,7 @@ const AddNewBudgetLine = () => {
                 }
                 validationSchema={Yup.object({
                     code: Yup.string().required("Champ obligatoire"),
-                    grantId: Yup.number().required("Champ obligatoire"),
+                    grantId: Yup.string().required("Champ obligatoire"),
                     amount: Yup.string().required("Champ obligatoire"),
                 })}
                 onSubmit={(value: any, action: any) => {
@@ -140,16 +154,15 @@ const AddNewBudgetLine = () => {
                                         variant="outlined"
                                         name="code"
                                     />
-                                    <OSSelectField
+                                    <OSTextField
                                         fullWidth
                                         id="outlined-basic"
                                         label="Grant"
                                         variant="outlined"
                                         name="grantId"
-                                        options={grantEncoursList}
-                                        dataKey={["code"]}
-                                        valueKey="id"
-                                    />
+                                        value={grantCode}
+                                    >
+                                    </OSTextField>
                                     <OSTextField
                                         fullWidth
                                         id="outlined-basic"

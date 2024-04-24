@@ -1,9 +1,9 @@
 export interface ReliquatGrantsItem {
     id?: string;
-    grant?: string;
+    grant?: number;
     soldeCaisse?: number;
     soldeBank?: number;
-    montantTotal?: string;
+    montantTotal?: number;
 }
 export interface ReliquatGrantsInitialState {
     reliquatGrantList: ReliquatGrantsItem[];
