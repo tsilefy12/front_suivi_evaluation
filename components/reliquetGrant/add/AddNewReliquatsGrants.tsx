@@ -54,7 +54,7 @@ const AddNewReliquatsGrants = () => {
         await dispatch(createReliquatGrant(values));
         fetchEliquatGrant();
       }
-      router.push("/grants/reliquatGrant");
+      router.push("/grants/reliquatGrants");
     } catch (error) {
       console.log("error", error);
     }
@@ -70,7 +70,7 @@ const AddNewReliquatsGrants = () => {
               grant: isEditing ? reliquatGrant?.grant : "",
               soldeCaisse: isEditing ? reliquatGrant?.soldeCaisse : "",
               soldeBank: isEditing ? reliquatGrant?.soldeBank : "",
-              montantTotal: isEditing ? reliquatGrant?.montantTotal : "",
+              // montantTotal: isEditing ? reliquatGrant?.montantTotal : "",
             }
         }
         validationSchema={Yup.object({

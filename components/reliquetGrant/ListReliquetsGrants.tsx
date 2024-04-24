@@ -22,6 +22,13 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import useFetchReliquatGrant from "./hooks/useFetchEliquatGrant";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
+import { useRouter } from "next/router";
+import { useConfirm } from "material-ui-confirm";
+import { ReliquatGrantsItem } from "../../redux/features/reliquatGrants/reliquatGrants.interface";
+import { deleteReliquatGrant, editReliquatGrant } from "../../redux/features/reliquatGrants";
 
 const ListReliquetsGrants = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -29,8 +36,20 @@ const ListReliquetsGrants = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const fetchReliquatGrant = useFetchReliquatGrant();
+  const { reliquatGrantList } = useAppSelector((state: any) =>state.reliquatGrant)
+  const fetchGrant = useFetchGrants()
+  const { grantEncoursList } = useAppSelector((state: any) =>state.grantEncours)
+  const router = useRouter()
+  const dispatch = useAppDispatch()
+  const confirm = useConfirm()
 
+  React.useEffect(() =>{
+    fetchReliquatGrant();
+    fetchGrant();
+  }, [router.query])
+//  console.log("liste :", reliquatGrantList)
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -90,6 +109,29 @@ const ListReliquetsGrants = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+    const handleClickDelete = async (id: any) => {
+      confirm({
+        title: "Supprimer reliquate grant",
+        description: "Voulez-vous vraiment supprimer ?",
+        cancellationText: "Annuler",
+        confirmationText: "Supprimer",
+        cancellationButtonProps: {
+          color: "warning",
+        },
+        confirmationButtonProps: {
+          color: "error",
+        },
+      })
+        .then(async () => {
+          await dispatch(deleteReliquatGrant({ id }));
+          fetchReliquatGrant();
+        })
+        .catch(() => { });
+    };
+  
+    const handleClickEdit = async (id: any) => {
+      router.push(`/grants/reliquatGrants/${id}/edit`);
+    };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -123,10 +165,10 @@ const ListReliquetsGrants = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {reliquatGrantList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.grants);
+                    .map((row: ReliquatGrantsItem, index: any) => {
+                      // const isItemSelected = isSelected(row.id);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -134,14 +176,14 @@ const ListReliquetsGrants = () => {
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          aria-checked={isItemSelected}
+                          // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.grants}
-                          selected={isItemSelected}
+                          key={row.id!}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.grants)}
+                            // onClick={(event) => handleClick(event, row.id)}
                           >
                           </TableCell>
                           <TableCell
@@ -150,27 +192,28 @@ const ListReliquetsGrants = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.grants}
+                           {grantEncoursList.find((e: any) =>e.id === row.grant)?.code}
                           </TableCell>
-                          <TableCell align="right">{row.caisse}</TableCell>
-                          <TableCell align="right">{row.banque}</TableCell>
-                          <TableCell align="right">{row.montant}</TableCell>
+                          <TableCell align="right">{row.soldeCaisse}</TableCell>
+                          <TableCell align="right">{row.soldeBank}</TableCell>
+                          <TableCell align="right">{row.montantTotal} Ar</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
                             >
-                                <IconButton
+                                {/* <IconButton
                                   color="accent"
                                   aria-label="Details"
                                   component="span"
                                 >
                                   <VisibilityIcon />
-                                </IconButton>
+                                </IconButton> */}
                               <IconButton
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
+                                onClick={() =>handleClickEdit(row.id)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -178,6 +221,7 @@ const ListReliquetsGrants = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
+                                onClick={() =>handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>

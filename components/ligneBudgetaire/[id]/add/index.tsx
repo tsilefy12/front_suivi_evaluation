@@ -30,7 +30,7 @@ const AddNewBudgetLine = () => {
     const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
     const fetchLigneBudgetaire = useFetchBudgetLine();
     const { isEditing, budgetLine } = useAppSelector((state: any) => state.budgetLine)
-    const dispatch = useAppDispatch();
+    const dispatch: any = useAppDispatch();
     const { id }: any = router.query;
 
     React.useEffect(() => {
