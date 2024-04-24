@@ -33,6 +33,7 @@ import { Edit } from "@mui/icons-material";
 import { useConfirm } from "material-ui-confirm";
 import { deletePostAnalytic } from "../../redux/features/postAnalytique";
 import { deleteGrantEncours } from "../../redux/features/grantEncours";
+import useFetchReliquatGrant from "../reliquetGrant/hooks/useFetchEliquatGrant";
 
 const ListGrantsEnCours = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -48,10 +49,22 @@ const ListGrantsEnCours = () => {
   const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours)
   const fetchProject = useFetchProject();
   const { projectList } = useAppSelector((state: any) => state.project)
+  const fetchtReliquatGrant = useFetchReliquatGrant();
+  const { reliquatGrantList } = useAppSelector((state: any) =>state.reliquatGrant)
   React.useEffect(() => {
     fetchGrants();
     fetchProject();
+    fetchtReliquatGrant();
   }, [router.query])
+
+  const listGrants:{id: number, grants: number, baille: string, projet: string}[] = [];
+  grantEncoursList.forEach((g: any) => {
+    reliquatGrantList.forEach((rg: any) =>{
+      if (g.id != rg.grant) {
+        listGrants.push({id: g.id, grants: g.code, baille: g.bailleur,projet: g.projectId})
+      }
+    })
+  });
 
   const handleClickEdit = async (id: any) => {
     router.push(`/grants/grantsEnCours/${id}/edit`);
@@ -115,9 +128,9 @@ const ListGrantsEnCours = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {grantEncoursList
+                  {listGrants
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: GrantEncoursItem, index: any) => {
+                    .map((row: any, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
                       return (
                         <TableRow
@@ -130,14 +143,14 @@ const ListGrantsEnCours = () => {
                           <TableCell
                             padding="checkbox"
                           >
-                            {row.code}
+                            {row.grants}
                           </TableCell>
-                          <TableCell align="left">{row.bailleur}</TableCell>
+                          <TableCell align="left">{row.baille}</TableCell>
                           <TableCell align="left">
-                            {projectList.find((e: any) => e.id === row?.projectId)?.titleFr}
+                            {projectList.find((e: any) => e.id === row?.projet)?.titleFr}
                           </TableCell>
                           <TableCell align="left">
-                            {projectList.find((e: any) => e.id === row?.projectId)?.titleEn}
+                            {projectList.find((e: any) => e.id === row?.projet)?.titleEn}
                           </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer

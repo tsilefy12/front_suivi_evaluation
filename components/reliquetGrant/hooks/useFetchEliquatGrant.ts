@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useAppDispatch } from "../../../hooks/reduxHooks";
 import { getReliquatGrantList } from "../../../redux/features/reliquatGrants";
 
-const useFetchEliquatGrant = () => {
+const useFetchReliquatGrant = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -27,4 +27,4 @@ const useFetchEliquatGrant = () => {
   };
 };
 
-export default useFetchEliquatGrant;
+export default useFetchReliquatGrant;

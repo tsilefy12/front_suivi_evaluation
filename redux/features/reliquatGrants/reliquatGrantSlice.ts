@@ -44,7 +44,7 @@ export const reliquatGrantSlice = createSlice({
     },
     [getReliquatGrantList.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.reliquatGrant = action.payload;
+      state.reliquatGrantList = action.payload;
     },
     [getReliquatGrantList.rejected.type]: (state, action) => {
       state.loading = false;
