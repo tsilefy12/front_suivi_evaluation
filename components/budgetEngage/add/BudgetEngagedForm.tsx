@@ -18,13 +18,15 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
 import { getGrantEncoursList } from "../../../redux/features/grantEncours";
 import { getBudgetLineList } from "../../../redux/features/budgetLine";
 import OSTextField from "../../shared/input/OSTextField";
+import { useRouter } from "next/router";
 
 const BudgetEngagedForm  = ({formikProps}: {formikProps: FormikProps<any>}) => {
   const dispatch = useAppDispatch();
-
+  const router = useRouter()
   const { grantEncoursList } = useAppSelector( (state) => state.grantEncours);
   const { budgetLineList } = useAppSelector( (state) => state.budgetLine);
-    
+  const { isEditing } = useAppSelector((state) => state.budgetsEngaged);
+
   const fetchUtilsData = () => {
     dispatch(getGrantEncoursList({}));
     dispatch(getBudgetLineList({}));
@@ -44,11 +46,11 @@ const BudgetEngagedForm  = ({formikProps}: {formikProps: FormikProps<any>}) => {
           sx={{ mb: 2 }}
           >
             <Stack flexDirection={"row"}>
-              <Link href="/grants/budgetEngage">
-                <Button color="info" variant="text" startIcon={<ArrowBack />}>
-                  Retour
-                </Button>
-              </Link>
+              <Button color="info" variant="text" startIcon={<ArrowBack />}
+                onClick={ () => router.back()}
+              >
+                Retour
+              </Button>
               <Button
                 variant="contained"
                 color="primary"
@@ -69,7 +71,7 @@ const BudgetEngagedForm  = ({formikProps}: {formikProps: FormikProps<any>}) => {
                 Annuler
               </Button>
             </Stack>
-            <Typography variant="h5">Créer Budget Engage</Typography>
+            <Typography variant="h5">{isEditing ? "Modifier" :"Créer"} Budget Engagés</Typography>
           </SectionNavigation>
         </NavigationContainer>
 

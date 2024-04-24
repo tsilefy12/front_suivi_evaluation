@@ -69,6 +69,21 @@ export const getBudgetEngagedList = createAsyncThunk(
     }
 );
 
+export const editBudgedEngaged = createAsyncThunk(
+    "budgetEngaged/editBudgedEngaged",
+    async (data: { id: string }, thunkAPI) => {
+      try {
+        const response = await axios.get(`/suivi-evaluation/budget-engage/${data.id}`);
+        return response.data;
+      } catch (error: any) {
+        if (error.response) {
+          return thunkAPI.rejectWithValue(error);
+        }
+        throw error;
+      }
+    }
+);
+  
 export const getBudgetEngaged = createAsyncThunk(
     "budgetEngaged/getBudgetEngaged",
     async (data: { id: string; args?: any }, thunkAPI) => {
@@ -84,6 +99,27 @@ export const getBudgetEngaged = createAsyncThunk(
     }
 );
 
+export const updateBudgetEngaged = createAsyncThunk(
+    "budgetEngage/updateBudgetEngaged",
+    async (data: { id: string; budgetEngageData: BudgetEngagedItem }, thunkAPI) => {
+      try {
+        const response = await axios.patch(`/suivi-evaluation/budget-engage/${data.id}`, data.budgetEngageData);
+        thunkAPI.dispatch(
+            enqueueSnackbar({
+                message: "mise à jour avec succès",
+                options: { variant: "success" },
+            })
+        );
+        return response.data;
+      } catch (error: any) {
+        if (error.response) {
+          return thunkAPI.rejectWithValue(error);
+        }
+        return error;
+      }
+    }
+);
+
 export const budgetEngagedSlice = createSlice({
     name: "budgetEngaged",
     initialState: budgetEngagedInitialState,
@@ -94,74 +130,74 @@ export const budgetEngagedSlice = createSlice({
       },
     },
     extraReducers: {
-      // get budget engaged
-      [getBudgetEngaged.pending.type]: (state) => {
-        state.loading = true;
-      },
-      [getBudgetEngaged.fulfilled.type]: (state, action) => {
-        state.loading = false;
-        state.budgetEngaged = action.payload;
-      },
-      [getBudgetEngaged.rejected.type]: (state, action) => {
-        state.loading = false;
-        state.error = action.error;
-      },
-  
-      // get  budget engaged list
-      [getBudgetEngagedList.pending.type]: (state) => {
-        state.loading = true;
-      },
-      [getBudgetEngagedList.fulfilled.type]: (state, action) => {
-        state.loading = false;
-        state.budgetEngagedList = action.payload;
-      },
-      [getBudgetEngagedList.rejected.type]: (state, action) => {
-        state.loading = false;
-        state.error = action.error;
-      },
-  
-      // create budget engaged
-      [createBudgetEngaged.pending.type]: (state) => {
-        state.loading = true;
-      },
-      [createBudgetEngaged.fulfilled.type]: (state, action) => {
-        state.loading = false;
-        state.budgetEngagedList.push(action.payload);
-      },
-      [createBudgetEngaged.rejected.type]: (state, action) => {
-        state.loading = false;
-        state.error = action.error;
-      },
-  
-    //   // edit vehicule
-    //   [editBesoinVehicule.pending.type]: (state) => {
-    //     state.loading = true;
-    //   },
-    //   [editBesoinVehicule.fulfilled.type]: (state, action) => {
-    //     state.loading = false;
-    //     state.besoinVehicule = action.payload;
-    //     state.isEditing = true;
-    //   },
-    //   [editBesoinVehicule.rejected.type]: (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.error;
-    //   },
-  
-    //   // update vehicule 
-    //   [updateBesoinVehicule.pending.type]: (state) => {
-    //     state.loading = true;
-    //   },
-    //   [updateBesoinVehicule.fulfilled.type]: (state, action) => {
-    //     state.loading = false;
-    //     state.besoinVehicule = {};
-    //     state.isEditing = false;
-    //   },
-    //   [updateBesoinVehicule.rejected.type]: (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.error;
-    //   },
-  
-        // delete vehicule
+        // get budget engaged
+        [getBudgetEngaged.pending.type]: (state) => {
+            state.loading = true;
+        },
+        [getBudgetEngaged.fulfilled.type]: (state, action) => {
+            state.loading = false;
+            state.budgetEngaged = action.payload;
+        },
+        [getBudgetEngaged.rejected.type]: (state, action) => {
+            state.loading = false;
+            state.error = action.error;
+        },
+
+        // get  budget engaged list
+        [getBudgetEngagedList.pending.type]: (state) => {
+            state.loading = true;
+        },
+        [getBudgetEngagedList.fulfilled.type]: (state, action) => {
+            state.loading = false;
+            state.budgetEngagedList = action.payload;
+        },
+        [getBudgetEngagedList.rejected.type]: (state, action) => {
+            state.loading = false;
+            state.error = action.error;
+        },
+
+        // create budget engaged
+        [createBudgetEngaged.pending.type]: (state) => {
+            state.loading = true;
+        },
+        [createBudgetEngaged.fulfilled.type]: (state, action) => {
+            state.loading = false;
+            state.budgetEngagedList.push(action.payload);
+        },
+        [createBudgetEngaged.rejected.type]: (state, action) => {
+            state.loading = false;
+            state.error = action.error;
+        },
+
+        // edit budget engaged
+        [editBudgedEngaged.pending.type]: (state) => {
+            state.loading = true;
+        },
+        [editBudgedEngaged.fulfilled.type]: (state, action) => {
+            state.loading = false;
+            state.budgetEngaged = action.payload;
+            state.isEditing = true;
+        },
+        [editBudgedEngaged.rejected.type]: (state, action) => {
+            state.loading = false;
+            state.error = action.error;
+        },
+
+        // update vehicule 
+        [updateBudgetEngaged.pending.type]: (state) => {
+            state.loading = true;
+        },
+        [updateBudgetEngaged.fulfilled.type]: (state, action) => {
+            state.loading = false;
+            state.budgetEngaged = {};
+            state.isEditing = false;
+        },
+        [updateBudgetEngaged.rejected.type]: (state, action) => {
+            state.loading = false;
+            state.error = action.error;
+        },
+
+        // delete budget angaged
         [deleteBudgetEngaged.pending.type]: (state) => {
             state.loading = true;
         },

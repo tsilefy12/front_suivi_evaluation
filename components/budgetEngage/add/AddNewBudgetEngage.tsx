@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import { styled } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
 import BudgetEngagedForm from "./BudgetEngagedForm";
-import { createBudgetEngaged } from "../../../redux/features/budgetEngaged/budgetEngagedSlice";
+import { createBudgetEngaged, updateBudgetEngaged } from "../../../redux/features/budgetEngaged/budgetEngagedSlice";
 
 export default function AddNewBudgetEngage() {
     const dispatch = useAppDispatch();
@@ -19,12 +19,12 @@ export default function AddNewBudgetEngage() {
     const handleSubmit = async (values: any) => {
         try {
             if (isEditing) {
-                // await dispatch(
-                //   updateConsumptionInvoice({
-                //     id: id!,
-                //     consumptionInvoice: values,
-                //   })
-                // );
+                await dispatch(
+                    updateBudgetEngaged({
+                        id: id!,
+                        budgetEngageData: values,
+                    })
+                );
             } else {
                 await dispatch(
                     createBudgetEngaged(values)
