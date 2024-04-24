@@ -52,7 +52,6 @@ const DetailGrantsEnCours = () => {
   }[] = [];
 
   if (Array.isArray(grantEncoursList)) {
-    // Maintenant, vous pouvez utiliser forEach en toute sécurité
     grantEncoursList.forEach((g: any) => {
       if (g.id === id) {
         listDetailGrantEncours.push({
