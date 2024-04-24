@@ -33,6 +33,7 @@ import { tacheCleSlice } from "./features/tacheCle/tacheCle";
 import { objectifGeneralSlice } from "./features/objectifGeneral/objectifGeneralSlice";
 import { planTravailSlice } from "./features/planTravail/planTravailSlice";
 import { reliquatGrantSlice } from "./features/reliquatGrants/reliquatGrantSlice";
+import { budgetEngagedSlice } from "./features/budgetEngaged/budgetEngagedSlice";
 
 export const store = configureStore({
   reducer: {
@@ -70,6 +71,7 @@ export const store = configureStore({
     objectifGeneral: objectifGeneralSlice.reducer,
     planTravail: planTravailSlice.reducer,
     reliquatGrant: reliquatGrantSlice.reducer,
+    budgetsEngaged: budgetEngagedSlice.reducer
   },
 });
 
