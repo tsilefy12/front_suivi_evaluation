@@ -8,6 +8,11 @@ import {
   Stack,
   Autocomplete,
   TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -32,77 +37,89 @@ import useFetchProject from "../hooks/getProject";
 
 const AddNewGrantsEnCours = () => {
   const router = useRouter();
-  const { isEditing, grantEnCours, grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const { isEditing, grantEncour } = useAppSelector((state) => state.grantEncours);
   const dispatch = useAppDispatch();
   const fetchBank = useFetchBank();
   const fetchEmploys = useFetchEmploys();
-  const { bankList } = useAppSelector((state) =>state.bank);
-  const { employees } = useAppSelector((state) =>state.employe)
+  const { bankList } = useAppSelector((state) => state.bank);
+  const { employees } = useAppSelector((state) => state.employe)
   const fetchPostAnalytique = useFetchPostAnalytique();
-  const { postAnalytiqueList } = useAppSelector((state) =>state.postAnalytique);
+  const { postAnalytiqueList } = useAppSelector((state) => state.postAnalytique);
   const fetcProject = useFetchProject();
-  const { projectList } = useAppSelector((state) =>state.project);
+  const { projectList } = useAppSelector((state) => state.project);
 
   const [idProject, setIdProject]: any = React.useState(null);
   let [titreFr, setTitreFr]: any = React.useState("")
   let [titreEn, setTitreEn]: any = React.useState("")
   const nulValue: any = null;
+  const [open, setOpen] = React.useState(false)
 
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
     isEditing
-      ? employees.filter((employee) =>
-          grantEnCours?.employeeIDs?.includes(employee.id!)
-        )
+      ? employees.filter((employee: any) =>
+        grantEncour?.responsable?.includes(employee.id!)
+      )
       : []
   );
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchBank();
     fetchEmploys();
     fetchPostAnalytique();
     fetcProject();
   }, [])
 
-  const listBank: {id: string, name: string }[]=[]
+  const listBank: { id: string, name: string }[] = []
   //get list bank
-    if (bankList.length > 0) {
-      bankList.forEach((element: any) => {
-          listBank.push({id: element["id"], name: element['name']})
-      });
-    }else{
-      listBank.push({id: "", name: ""})
-    }
+  if (bankList.length > 0) {
+    bankList.forEach((element: any) => {
+      listBank.push({ id: element["id"], name: element['name'] })
+    });
+  } else {
+    listBank.push({ id: "", name: "" })
+  }
 
-    //get list project
-      if (projectList.length > 0) {
-          projectList.map((element: any) => {
-            if (idProject == element.id) {
-             titreFr = element.titleFr
-             titreEn = element.titleEn
-        };
-      })
-    }
+  //get list project
+  if (projectList.length > 0) {
+    projectList.map((element: any) => {
+      if (idProject == element.id) {
+        titreFr = element.titleFr
+        titreEn = element.titleEn
+      };
+    })
+  }
 
   const handleSubmit = async (values: any) => {
-    values.responsable = [...selectedEmployes.map((item) =>item.id)];
+    values.responsable = [...selectedEmployes.map((item) => item.id)];
     values.titleFr = titreFr;
     values.titleEn = titreEn;
     values.projectId = (idProject == null) ? null : idProject
-        try {
-      if (isEditing) {
-        await dispatch(
-          updateGrantEncours({
-            id: grantEnCours.id!,
-            grantEncours: values,
-          })
-        );
-      } else {
+    const date1 = new Date(values.startDate);
+    const DateNumber1 = date1.getTime();
+    const date2 = new Date(values.endDate)
+    const DateNumber2 = date2.getTime();
+    let calcul = DateNumber2 - DateNumber1 ;
+    const duree = (calcul / (24*60*60*1000)).toFixed(0)
+    values.duration = duree;
+    if (DateNumber1 >= DateNumber2) {
+      setOpen(true)
+    } else {
+      try {
+        if (isEditing) {
+          await dispatch(
+            updateGrantEncours({
+              id: grantEncour.id!,
+              grantEncour: values,
+            })
+          );
+        } else {
 
-        await dispatch(createGrantEncours(values));
+          await dispatch(createGrantEncours(values));
+        }
+        router.push("/grants/grantsEnCours");
+      } catch (error) {
+        console.log("error", error);
       }
-      router.push("/grants/grantsEnCours");
-    } catch (error) {
-      console.log("error", error);
     }
   };
   return (
@@ -111,21 +128,21 @@ const AddNewGrantsEnCours = () => {
         enableReinitialize={isEditing ? true : false}
         initialValues={
           isEditing
-            ? grantEnCours
+            ? grantEncour
             : {
-              code: isEditing ? grantEnCours?.code: "",
-              postAnalyticId: isEditing ? grantEnCours?.postAnalyticId : "",
-              projectId: isEditing ? grantEnCours?.projectId : "",
-              bankId: isEditing ? grantEnCours?.bankId : "",
-              titleFr: isEditing ? grantEnCours?.titleFr : "",
-              titleEn: isEditing ? grantEnCours?.titlEn : "",
-              bailleur: isEditing ? grantEnCours?.bailleur : "",
-              amount: isEditing ? grantEnCours?.amount : 0,
-              amountMGA: isEditing ? grantEnCours?.amountMGA : 0,
-              responsable: isEditing ? grantEnCours?.responsable : "",
-              startDate: isEditing ? grantEnCours?.startDate : new Date(),
-              endDate: isEditing ? grantEnCours?.enDate : new Date(),
-              duration: isEditing ? grantEnCours?.duration : 0,
+              code: isEditing ? grantEncour?.code : "",
+              postAnalyticId: isEditing ? grantEncour?.postAnalyticId : "",
+              projectId: isEditing ? grantEncour?.projectId : "",
+              bankId: isEditing ? grantEncour?.bankId : "",
+              titleFr: isEditing ? grantEncour?.titleFr : "",
+              titleEn: isEditing ? grantEncour?.titleEn : "",
+              bailleur: isEditing ? grantEncour?.bailleur : "",
+              amount: isEditing ? grantEncour?.amount : 0,
+              amountMGA: isEditing ? grantEncour?.amountMGA : 0,
+              responsable: isEditing ? grantEncour?.responsable : "",
+              startDate: isEditing ? grantEncour?.startDate : new Date(),
+              endDate: isEditing ? grantEncour?.endDate : new Date(),
+              // duration: isEditing ? grantEncour?.duration : 0,
 
             }
         }
@@ -139,7 +156,7 @@ const AddNewGrantsEnCours = () => {
           amount: Yup.string().required("Champ obligatoire"),
           amountMGA: Yup.string().required("Champ obligatoire"),
           // responsable: Yup.string().required("Champ obligatoire"),
-          duration: Yup.number().required("Champ obligatoire"),
+          // duration: Yup.number().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -191,7 +208,7 @@ const AddNewGrantsEnCours = () => {
                       Annuler
                     </Button>
                   </Stack>
-                  <Typography variant="h5">{isEditing ? "Modif GRANT": "Créer GRANT"}</Typography>
+                  <Typography variant="h5">{isEditing ? "Modif GRANT" : "Créer GRANT"}</Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}
               </NavigationContainer>
@@ -236,13 +253,13 @@ const AddNewGrantsEnCours = () => {
                     name="projectId"
                     type="number"
                     value={idProject}
-                    onChange={(e) =>setIdProject(e.target.value)}
+                    onChange={(e) => setIdProject(e.target.value)}
                   >
                     <MenuItem value={nulValue}>Nouveau Projet</MenuItem>
                     {
-                        projectList.map((item) =>(
-                          <MenuItem value={item.id}>{item.id + "-"+ item.titleEn}</MenuItem>
-                        ))
+                      projectList.map((item: any) => (
+                        <MenuItem value={item.id}>{item.id + "-" + item.titleEn}</MenuItem>
+                      ))
                     }
                   </TextField>
                   <TextField
@@ -252,7 +269,7 @@ const AddNewGrantsEnCours = () => {
                     variant="outlined"
                     name="titleFr"
                     value={titreFr}
-                    onChange={(e) =>setTitreFr(e.target.value)}
+                    onChange={(e) => setTitreFr(e.target.value)}
                   />
                   <TextField
                     fullWidth
@@ -261,7 +278,7 @@ const AddNewGrantsEnCours = () => {
                     variant="outlined"
                     name="titleEn"
                     value={titreEn}
-                    onChange={(e) =>setTitreEn(e.target.value)}
+                    onChange={(e) => setTitreEn(e.target.value)}
                   />
                 </CustomStack>
                 <CustomStack direction="row" spacing={4}
@@ -271,25 +288,25 @@ const AddNewGrantsEnCours = () => {
                     id="outlined-basic"
                     label="Date de début"
                     variant="outlined"
-                    value={!isEditing ? formikProps.values.startDate: grantEnCours?.startDate}
-                    onChange={(value: any) =>formikProps.setFieldValue("startDate", value)}
+                    value={!isEditing ? formikProps.values.startDate : grantEncour?.startDate}
+                    onChange={(value: any) => formikProps.setFieldValue("startDate", value)}
                   />
                   <OSDatePicker
                     fullWidth
                     id="outlined-basic"
                     label="Date de fin"
                     variant="outlined"
-                    value={!isEditing ? formikProps.values.endDate: grantEnCours?.endDate}
-                    onChange={(value: any) =>formikProps.setFieldValue("endDate", value)}
+                    value={!isEditing ? formikProps.values.endDate : grantEncour?.endDate}
+                    onChange={(value: any) => formikProps.setFieldValue("endDate", value)}
                   />
-                  <OSTextField
+                  {/* <OSTextField
                     fullWidth
                     id="outlined-basic"
                     label="Durée"
                     variant="outlined"
                     name="duration"
                     type="number"
-                  />
+                  /> */}
                 </CustomStack>
                 <FormControl fullWidth>
                   <OSSelectField
@@ -304,11 +321,11 @@ const AddNewGrantsEnCours = () => {
                   />
                 </FormControl>
                 <FormControl>
-                <Autocomplete
+                  <Autocomplete
                     multiple
                     id="tags-standard"
                     options={employees}
-                    getOptionLabel={(employee) =>
+                    getOptionLabel={(employee: any) =>
                       `${employee.name} ${employee.surname}` as string
                     }
                     value={selectedEmployes}
@@ -351,6 +368,23 @@ const AddNewGrantsEnCours = () => {
           )
         }}
       </Formik>
+      <Dialog
+        open={open}
+        disablePortal={false}
+        sx={styleDialog}
+      >
+        <DialogTitle color="red">Attention!!</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            La date début doit être inferieure de la date fin
+          </DialogContentText>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)}>
+              <Check color="primary" />
+            </Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 };
@@ -375,3 +409,10 @@ const FormContainer = styled(Stack)(({ theme }) => ({
   border: "1px solid #E0E0E0",
   borderRadius: 20,
 }));
+const styleDialog = {
+  position: "fixed",
+  //left: 150,
+  top: 20,
+  width: "auto",
+  alignItem: "center"
+}

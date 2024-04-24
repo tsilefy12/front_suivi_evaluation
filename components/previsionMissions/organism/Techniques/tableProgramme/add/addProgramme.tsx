@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
@@ -14,6 +14,7 @@ import {
   TextField,
   Dialog,
   DialogContentText,
+  Autocomplete,
 } from "@mui/material";
 import { Form, Formik } from "formik";
 import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
@@ -27,6 +28,8 @@ import OSSelectField from "../../../../../shared/select/OSSelectField";
 import useFetchDeliverableList from "../../tableLivrables/hooks/useFetchDeliverableList";
 import { useRouter } from "next/router";
 import { Check } from "@mui/icons-material";
+import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
+import { EmployeItem } from "../../../../../../redux/features/employe/employeSlice.interface";
 
 const AddProgrammes = ({ handleClose }: any) => {
   const dispatch = useAppDispatch()
@@ -37,19 +40,30 @@ const AddProgrammes = ({ handleClose }: any) => {
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
   const fetchDeliverableListe = useFetchDeliverableList();
   const { deliverableList } = useAppSelector((state) => state.deliverable);
+  const fetchEmployes = useFetchEmploys();
+  const { employees } = useAppSelector((state: any) =>state.employe)
 
   React.useEffect(() => {
     fetchProgrammePrevision();
     fetchDeliverableListe();
+    fetchEmployes();
   }, [router.query])
 
+  const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
+    isEditing
+      ? employees.filter((employee: any) =>
+        programmePrevision?.responsable?.includes(employee.id!)
+      )
+      : []
+  );
   const handleSubmit = async (values: any) => {
+    values.responsable = [...selectedEmployes.map((item) => item.id)];
     const date1 = new Date(values.dateDebut);
     const DateNumber1 = date1.getTime();
     const date2 = new Date(values.dateFin)
     const DateNumber2 = date2.getTime();
 
-    console.log("test")
+    // console.log("test")
     if (DateNumber1 >= DateNumber2) {
       setOpen(true)
     } else {
@@ -72,11 +86,7 @@ const AddProgrammes = ({ handleClose }: any) => {
     }
 
   };
-  const ListResponsable = [
-    { id: "Responsable 1", name: "Responsable 1" },
-    { id: "Responsable 2", name: "Responsable 2" },
-    { id: "Responsable 3", name: "Responsable 3" },
-  ]
+ 
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -146,16 +156,26 @@ const AddProgrammes = ({ handleClose }: any) => {
                       valueKey="id"
                     />
                     <FormControl fullWidth>
-                      <OSSelectField
-                        fullWidth
+                    <Autocomplete
+                    multiple
+                    id="tags-standard"
+                    options={employees}
+                    getOptionLabel={(employee: any) =>
+                      `${employee.name} ${employee.surname}` as string
+                    }
+                    value={selectedEmployes}
+                    onChange={(event, newValue) => {
+                      setSelectedEmployes(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
                         id="outlined-basic"
-                        label="Responsable"
+                        label="Sélectionnez participant"
                         variant="outlined"
-                        name="responsable"
-                        options={ListResponsable}
-                        dataKey="name"
-                        valueKey="id"
                       />
+                    )}
+                  />
                     </FormControl>
                   </FormContainer>
                 </DialogContent>
