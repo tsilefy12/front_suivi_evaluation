@@ -91,7 +91,7 @@ const ListTacheCles = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
-  const listTache: {id: string, projetFrs: string, projetEng: string, plan: string}[] = [];
+  const listTache: {id: string,tache: string, projetFrs: string, projetEng: string, plan: string}[] = [];
   let idTacheCle:any = "";
   tacheClelist.forEach((element: any) =>{
     if (id === element.planTravaileId) {
@@ -100,7 +100,8 @@ const ListTacheCles = () => {
       const projetEng = element.projet ? projectList.find((e: any) => e.id === element.projet)?.titleEn : '';
       const plan = element.planTravaileId ? planTravaillist.find((e: any) => e.id === element.planTravaileId)?.description : '';
       listTache.push({
-        id: element.tacheCle, 
+        id: element.id, 
+        tache: element.tacheCle,
         projetFrs: projetFrs !== undefined ? projetFrs : '',
         projetEng: projetEng !== undefined ? projetEng : '',
         plan: plan !== undefined ? plan : '',
@@ -275,7 +276,7 @@ const ListTacheCles = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.id}
+                            {row.tache}
                           </TableCell>
                           <TableCell>
                             {row.projetEng}

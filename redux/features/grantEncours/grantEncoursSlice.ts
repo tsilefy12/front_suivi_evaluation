@@ -9,7 +9,7 @@ import { deleteGrantEncours } from "./useCase/deleteGrantEncours";
 
 const grantEncoursInitialState: GrantEncoursInitialState = {
   grantEncoursList: [],
-  grantEncours: {},
+  grantEncour: {},
   isEditing: false,
   loading: false,
   error: null,
@@ -21,7 +21,7 @@ export const grantEncoursSlice = createSlice({
   reducers: {
     cancelEdit: (state) => {
       state.isEditing = false;
-      state.grantEncours = {};
+      state.grantEncour = {};
     },
   },
   extraReducers: {
@@ -31,7 +31,7 @@ export const grantEncoursSlice = createSlice({
     },
     [getGrantEncours.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.grantEncours = action.payload;
+      state.grantEncour = action.payload;
     },
     [getGrantEncours.rejected.type]: (state, action) => {
       state.loading = false;
@@ -70,7 +70,7 @@ export const grantEncoursSlice = createSlice({
     },
     [editGrantEncours.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.grantEncours = action.payload;
+      state.grantEncour = action.payload;
       state.isEditing = true;
     },
     [editGrantEncours.rejected.type]: (state, action) => {
@@ -84,7 +84,7 @@ export const grantEncoursSlice = createSlice({
     },
     [updateGrantEncours.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.grantEncours = {};
+      state.grantEncour = {};
       state.isEditing = false;
     },
     [updateGrantEncours.rejected.type]: (state, action) => {

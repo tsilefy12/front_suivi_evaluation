@@ -17,7 +17,7 @@ export interface GrantEncoursItem {
   
   export interface GrantEncoursInitialState {
     grantEncoursList: GrantEncoursItem[];
-    grantEncours: GrantEncoursItem;
+    grantEncour: GrantEncoursItem;
     isEditing: boolean;
     loading: boolean;
     [key: string]: any;

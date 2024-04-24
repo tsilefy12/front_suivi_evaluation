@@ -2,6 +2,7 @@ import React from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
+  Autocomplete,
   Container,
   Dialog,
   DialogActions,
@@ -27,6 +28,9 @@ import { cancelEdit } from "../../../../../../redux/features/besoinVehicule/beso
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { useRouter } from "next/router";
 import { Check } from "@mui/icons-material";
+import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
+import { EmployeItem } from "../../../../../../redux/features/employe/employeSlice.interface";
+import useFetchVehicleList from "../../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
 
 const AddBesoinVehicule = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
@@ -35,13 +39,24 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
   const router = useRouter();
   const { id }: any = router.query;
   const [open, setOpen] = React.useState(false);
+  const fetchEmployes = useFetchEmploys();
+  const { employees } = useAppSelector((state: any) => state.employe)
+  const fetchVehicule = useFetchVehicleList();
+  const { vehicleList } = useAppSelector((state: any) =>state.vehicle)
+
+  React.useEffect(() => {
+    fetchVehicule();
+    fetchEmployes();
+  }, [router.query])
 
   const handleSubmit = async (values: any) => {
+    values.responsable = [...selectedEmployes.map((item) => item.id)];
     const date1 = new Date(values.dateDebut);
     const DateNumber1 = date1.getTime();
     const date2 = new Date(values.dateFin)
     const DateNumber2 = date2.getTime();
-    // let calculDuree = ((DateNumber2 - DateNumber1)/(24*60*60*1000)).toFixed(0);
+    let calculDuree = ((DateNumber2 - DateNumber1)/(24*60*60*1000)).toFixed(0);
+    values.nombreJour = calculDuree;
     if (DateNumber1 >= DateNumber2) {
       setOpen(true)
     } else {
@@ -64,17 +79,15 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
       }
     }
   };
+  const [selectedEmployes, setSelectedEmployes] = React.useState<EmployeItem[]>(
+    isEditing
+      ? employees.filter((employee: any) =>
+        besoinVehicule?.responsable?.includes(employee.id!)
+      )
+      : []
+  );
 
-  const listVehicule = [
-    { id: "Vehicule 1", name: "Vehicule 1" },
-    { id: "Vehicule 2", name: "Vehicule 2" },
-    { id: "Vehicule 3", name: "Vehicule 3" }
-  ]
-  const listResponsable = [
-    { id: "Responsable 1", name: "Responsable 1" },
-    { id: "Responsable 2", name: "Responsable 2" },
-    { id: "Responsable 3", name: "Responsable 3" }
-  ]
+
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -88,7 +101,7 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
               vehicule: isEditing ? besoinVehicule?.vehicule : "",
               trajet: isEditing ? besoinVehicule?.trajet : "",
               responsable: isEditing ? besoinVehicule?.responsable : "",
-              nombreJour: isEditing ? besoinVehicule?.nombreJour : "",
+              // nombreJour: isEditing ? besoinVehicule?.nombreJour : "",
               missionId: isEditing ? besoinVehicule?.missionId : id,
             }
         }
@@ -96,7 +109,7 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
           vehicule: Yup.string().required("Champ obligatoire"),
           trajet: Yup.string().required("Champ obligatoire"),
           responsable: Yup.string().required("Champ obligatoire"),
-          nombreJour: Yup.number().required("Champ obligatoire"),
+          // nombreJour: Yup.number().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -140,8 +153,8 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                         id="outlined-basic"
                         label="Vehicule"
                         variant="outlined"
-                        options={listVehicule}
-                        dataKey="name"
+                        options={vehicleList}
+                        dataKey={["vehicleType"]}
                         valueKey="id"
                         name="vehicule"
                       />
@@ -154,25 +167,35 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                       name="trajet"
                     />
                     <FormControl fullWidth>
-                      <OSSelectField
-                        fullWidth
-                        id="outlined-basic"
-                        label="Responsable"
-                        variant="outlined"
-                        options={listResponsable}
-                        dataKey="name"
-                        valueKey="id"
-                        name="responsable"
+                      <Autocomplete
+                        multiple
+                        id="tags-standard"
+                        options={employees}
+                        getOptionLabel={(employee: any) =>
+                          `${employee.name} ${employee.surname}` as string
+                        }
+                        value={selectedEmployes}
+                        onChange={(event, newValue) => {
+                          setSelectedEmployes(newValue);
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            id="outlined-basic"
+                            label="Sélectionnez participant"
+                            variant="outlined"
+                          />
+                        )}
                       />
                     </FormControl>
-                    <OSTextField
+                    {/* <OSTextField
                       fullWidth
                       id="outlined-basic"
                       label="Nombre de jour"
                       variant="outlined"
                       name="nombreJour"
                       type="number"
-                    />
+                    /> */}
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>

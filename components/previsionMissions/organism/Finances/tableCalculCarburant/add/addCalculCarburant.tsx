@@ -22,6 +22,7 @@ import OSTextField from "../../../../../shared/input/OSTextField";
 import OSSelectField from "../../../../../shared/select/OSSelectField";
 import { cancelEdit } from "../../../../../../redux/features/calculCarburant/calculCarburantSlice";
 import { useRouter } from "next/router";
+import useFetchVehicleList from "../../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
 
 const AddCalculCarburant = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
@@ -29,6 +30,12 @@ const AddCalculCarburant = ({ handleClose }: any) => {
   const fetchCalculCarburant = useFetchCalculCarburantList();
   const router = useRouter()
   const { id }: any = router.query;
+  const fetchVehicule = useFetchVehicleList();
+  const { vehicleList } = useAppSelector((state: any) =>state.vehicle)
+
+  React.useEffect(() =>{
+    fetchVehicule();
+  },  [id])
 
   const handleSubmit = async (values: any) => {
     try {
@@ -53,10 +60,7 @@ const AddCalculCarburant = ({ handleClose }: any) => {
     {id: "Essence", name: "Essence"},
     {id: "Gasoil", name: "Gasoil"}
   ]
-  const listeVehicule =[
-    {id: "Véhicule 1", name: "Véhicule 1"},
-    {id: "Véhicule 2", name: "Véhicule 2"}
-  ]
+ 
   
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
@@ -142,8 +146,8 @@ const AddCalculCarburant = ({ handleClose }: any) => {
                            label="Véhicule"
                            variant="outlined"
                            name="vehicule"
-                           options={listeVehicule}
-                           dataKey="name"
+                           options={vehicleList}
+                           dataKey={["vehicleType"]}
                            valueKey="id"
                        />
                       </FormControl>

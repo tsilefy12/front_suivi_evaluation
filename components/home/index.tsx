@@ -4,8 +4,11 @@ import {
   Card,
   Container,
   Divider,
+  FormLabel,
   Grid,
   IconButton,
+  Menu,
+  MenuItem,
   Stack,
   styled,
   TextField,
@@ -14,7 +17,7 @@ import {
 import Link from "next/link";
 import React, { useEffect } from "react";
 import Add from "@mui/icons-material/Add";
-import Edit from "@mui/icons-material/Edit";
+import EditIcon from "@mui/icons-material/Edit";
 import CancelIcon from "@mui/icons-material/Cancel";
 import KeyValue from "../shared/keyValue";
 import { useRouter } from "next/router";
@@ -24,6 +27,8 @@ import { MissionItem } from "../../redux/features/mission/mission.interface";
 import { useConfirm } from "material-ui-confirm";
 import { deleteMission, editMission } from "../../redux/features/mission";
 import Recherche from "./recherch";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const ListMissions = () => {
   const router = useRouter();
@@ -54,14 +59,20 @@ const ListMissions = () => {
         await dispatch(deleteMission({ id }));
         fetchMissionListe();
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const handleClickEdit = async (id: any) => {
     await dispatch(editMission({ id }));
-    router.push(`/missions/add`);
+    router.push(`/missions/${id}/edit`);
   };
-
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
@@ -103,51 +114,46 @@ const ListMissions = () => {
                   <Typography variant="h6" color="GrayText">
                     Mission {mission?.descriptionMission}
                   </Typography>
-                  <Stack direction="row" spacing={{ xs: 0, sm: 0, md: 2 }}>
-                    <IconButton
-                      color="success"
-                      aria-label="Modifier"
-                      component="span"
-                      size="small"
-                      onClick={() => {
+                  <div>
+                    <IconButton onClick={handleClick}>
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={() => {
                         handleClickEdit(mission.id);
-                      }}
-                    >
-                      <Edit />
-                    </IconButton>
-                    <IconButton
-                      color="warning"
-                      aria-label="supprime"
-                      component="span"
-                      size="small"
-                      onClick={() => {
+                        handleClose();
+                      }}>
+                        <EditIcon color="primary" />
+                        Modifier
+                      </MenuItem>
+                      <MenuItem onClick={() => {
                         handleClickDelete(mission.id);
-                      }}
-                    >
-                      <CancelIcon />
-                    </IconButton>
-                  </Stack>
+                        handleClose();
+                      }}>
+                        <DeleteIcon color="warning" />
+                        Supprimer
+                      </MenuItem>
+                    </Menu>
+                  </div>
                 </CardHeader>
 
                 <CardBody>
                   <Typography color="GrayText" my={2} variant="caption">
-                    {/* Description de la mission de la mission description de la
-                    mssion */}
                     {mission?.descriptionMission}
                   </Typography>
                   <Stack spacing={1}>
-                    <KeyValue
-                      keyName="Responsable"
-                      value={[
-                        `${mission?.missionManager?.name} ${mission?.missionManager?.surname}`,
-                      ]}
-                    />
-                    <KeyValue
-                      keyName="Gestionnaire "
-                      value={[
-                        `${mission?.budgetManager?.name} ${mission?.budgetManager?.surname}`,
-                      ]}
-                    />
+                    <FormLabel>
+                      Responsable : <span></span>
+                      {mission?.missionManager?.name} {mission?.missionManager?.surname!}
+                    </FormLabel>
+                    <FormLabel>
+                      Gestionnaire : <span></span>
+                      {mission?.budgetManager?.name} {mission?.budgetManager?.surname}
+                    </FormLabel>
                   </Stack>
                 </CardBody>
 
@@ -155,19 +161,19 @@ const ListMissions = () => {
                   <Stack direction={{ xs: "column", sm: "row" }}>
                     <Link href={`/missions/${mission.id}/previsionDeMission`}>
                       <Button variant="text" color="info">
-                        Gérer Etat de prévision
+                        Etat de prévision
                       </Button>
                     </Link>
                     <Link href="/missions/id/bilan">
                       <Button variant="text" color="info">
-                        Voir le Bilan
+                        Bilan
                       </Button>
                     </Link>
                   </Stack>
                   <Stack direction={{ xs: "column", sm: "row" }}>
                     <Link href="/missions/id/gereRapport">
                       <Button variant="text" color="info">
-                        Gérer Rapport
+                        Rapport
                       </Button>
                     </Link>
                   </Stack>
@@ -183,7 +189,7 @@ const ListMissions = () => {
 
 export default ListMissions;
 
-export const SectionNavigation = styled(Stack)(({}) => ({}));
+export const SectionNavigation = styled(Stack)(({ }) => ({}));
 
 const SectionDetails = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),

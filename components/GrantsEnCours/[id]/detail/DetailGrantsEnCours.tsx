@@ -5,6 +5,8 @@ import {
   Typography,
   Grid,
   FormLabel,
+  FormControl,
+  Stack,
 } from "@mui/material";
 import Link from "next/link";
 import React, { useEffect } from "react";
@@ -16,56 +18,40 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import { getGrantEncours } from "../../../../redux/features/grantEncours";
 import useFetchProject from "../../hooks/getProject";
-import useFetchEmployes from "../../../home/Missions/hooks/useFetchEmployees";
 import Moment from "react-moment";
+import useFetchEmploys from "../../hooks/getResponsable";
 
 
 const DetailGrantsEnCours = () => {
   const router = useRouter()
-  const dispatch = useAppDispatch();
+  const dispatch: any = useAppDispatch();
   const { id }: any = router.query;
 
   const fetchGrant = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) => state.grantEncours)
+  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours)
   const fetchProject = useFetchProject();
   const { projectList } = useAppSelector((state: any) => state.project)
-  const fetchEmployes = useFetchEmployes()
+  const fetchEmployes = useFetchEmploys()
   const { employees } = useAppSelector((state: any) => state.employe)
-  console.log(" id :", id)
+
   React.useEffect(() => {
-    getDetailsGrant();
     fetchGrant();
     fetchProject();
     fetchEmployes();
-    getDetailsGrant();
-  }, [id])
+  }, [router.query])
 
-  const getDetailsGrant = () => {
-    const args: any = {};
-    dispatch(getGrantEncours({ id, args }));
-  };
+  
+  // console.log("list details :", grantEncours)
 
-  const listDetailGrantEncours: {
-    id: string, cd: string, baille:
-      string, projet: string, respo: any,
-    debut: any, fin: any, duree: string, devise: any, mga: any
-  }[] = [];
+  const listDetailGrantEncours: {idD: number, cd: string, baille: string, projet: number, respo: string, debut: Date, fin: Date, duree: number, devise: number, mga: number, bank: number}[] = [];
 
-  if (Array.isArray(grantEncoursList)) {
     grantEncoursList.forEach((g: any) => {
-      if (g.id === id) {
-        listDetailGrantEncours.push({
-          id: g.id,cd: g.code, baille: g.bailleur, projet: g.projectId,
-          respo: g.responsable, debut: g.startDate, fin: g.endDate, duree: g.duration, devise: g.amount, mga: g.montantMGA
-        })
+      if (parseInt(g.id!) === parseInt(id!)) {
+        listDetailGrantEncours.push({idD: parseInt(g.id!), cd: g.code!, baille: g.bailleur!, projet: parseInt(g.projectId!),respo: g.responsable!, debut: g.startDate!, fin: g.endDate!, duree: parseInt(g.duration!), devise: parseInt(g.amount!), mga: parseInt(g.amountMGA!), bank: parseInt(g.bankId!) })
       }
     })
-  } else {
-    console.error("grantEncoursList n'est pas un tableau.");
-  }
-  
-  
-  console.log("list details :", listDetailGrantEncours)
+
+  // console.log("list details :", listDetailGrantEncours)
   return (
     <Container maxWidth="xl" sx={{ pb: 5 }}>
       <SectionNavigation
@@ -82,86 +68,97 @@ const DetailGrantsEnCours = () => {
           Details GRANT
         </Typography>
       </SectionNavigation>
-      {
-        listDetailGrantEncours.map((row: any, index: any) => (
-          <DetailsContainer sx={{ backgroundColor: "#fff", pb: 5 }} key={row.id}>
-            <Grid container spacing={4} my={1}>
-              <Grid item xs={12} md={12}>
-                Code :
-                <FormLabel>{row.cd}</FormLabel>
+      <DetailsContainer sx={{ backgroundColor: "#fff", pb: 5 }}>
+        {
+          listDetailGrantEncours.map((row: any, index: any) => (
+            <Container  key={row.idD!} maxWidth="xl" sx={{ pb: 5 }}>
+              <Grid container spacing={4} my={1}>
+                <Grid item xs={12} md={12}>
+                  <KeyValue
+                    keyName="Code"
+                    value={row.cd!}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container spacing={4} my={1}>
-              <Grid item xs={12} md={12}>
-                <KeyValue
-                  keyName="Bailleur"
-                  value={row.baille!}
-                />
+              <Grid container spacing={4} my={1}>
+                <Grid item xs={12} md={12}>
+                  <KeyValue
+                    keyName="Bailleur"
+                    value={row.baille!}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container spacing={4} my={1}>
-              <Grid item xs={12} md={6}>
-                <KeyValue
-                  keyName="Nom du projet en Anglais"
-                  value={projectList.find((e: any) => e.id === row.projet)?.titleEn}
-                />
+              <Grid container spacing={4} my={1}>
+                <Grid item xs={12} md={6}>
+                  <KeyValue
+                    keyName="Nom du projet en Anglais"
+                    value={projectList.find((e: any) => e.id === row.projet)?.titleEn}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <KeyValue
+                    keyName="Nom du projet en Français"
+                    value={projectList.find((e: any) => e.id === row.projet)?.titleFr}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12} md={6}>
-                <KeyValue
-                  keyName="Nom du projet en Français"
-                  value={projectList.find((e: any) => e.id === row.projet)?.titleFr}
-                />
+              <Grid container spacing={4} my={1}>
+                <Grid item xs={12} md={12}>
+                  Responsables :
+                  {
+                    employees && employees.map((e: any) =>(
+                      (
+                        row.respo!.includes(e.id) ? (
+                          <Stack key={e.id} direction="column" spacing={2}>
+                            Nom et prénoms : {e.name} {e.surname}
+                          </Stack>
+                        ) : null
+                      )
+                     ))
+                  }
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container spacing={4} my={1}>
-              <Grid item xs={12} md={12}>
-                Responsables :
-                {
-                  row.respo && employees.map((e: any) => {
-                    return (
-                      row.responsable!.includes(e.id) ? (
-                        <FormLabel key={e.id}>
-                          Nom et prénoms : {e.name} {e.surname}
-                        </FormLabel>
-                      ) : null
-                    );
-                  })
-                }
+              <Grid container spacing={4} my={1}>
+                <Grid item xs={12} md={6}>
+                  Date début : <span></span>
+                  <Moment format="DD/MM/yyyy">{row.debut!}</Moment>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  Date fin : <span></span>
+                  <Moment format="DD/MM/yyyy">{row.fin!}</Moment>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  Durée : <span></span>
+                  <FormLabel>
+                    {row.duree!}
+                  </FormLabel>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container spacing={4} my={1}>
-              <Grid item xs={12} md={6}>
-                Date début : <span></span>
-                <Moment format="DD/MM/yyyy">{row.debut!}</Moment>
+              <Grid container spacing={4} my={1}>
+                <Grid item xs={12} md={6}>
+                  Montant en devise : <span></span>
+                  <FormLabel>
+                    {row.devise!}
+                  </FormLabel>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  Montant en MGA : <span></span>
+                  <FormLabel>
+                    {row.mga!}
+                  </FormLabel>
+                </Grid>
               </Grid>
-              <Grid item xs={12} md={6}>
-                Date fin : <span></span>
-                <Moment format="DD/MM/yyyy">{row.fin!}</Moment>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                Durée : <span></span>
-                <FormLabel>
-                  {row.duree!}
-                </FormLabel>
-              </Grid>
-            </Grid>
-            <Grid container spacing={4} my={1}>
-              <Grid item xs={12} md={6}>
-                Montant en devise : <span></span>
-                <FormLabel>
-                  {row.devise!}
-                </FormLabel>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                Montant en MGA : <span></span>
-                <FormLabel>
-                  {row.mga!}
-                </FormLabel>
-              </Grid>
-            </Grid>
-          </DetailsContainer>
-        ))
-      }
+              {/* <Grid item xs={12} md={6}>
+                  <KeyValue
+                    keyName="Nom du projet en Français"
+                    value={projectList.find((e: any) => e.id === row.projet)?.titleFr}
+                  />
+                </Grid> */}
+            </Container>
+          ))
+        }
+      </DetailsContainer>
+
     </Container>
   );
 };
