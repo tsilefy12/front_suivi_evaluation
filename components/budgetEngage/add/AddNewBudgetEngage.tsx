@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import { styled } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
 import BudgetEngagedForm from "./BudgetEngagedForm";
+import { createBudgetEngaged } from "../../../redux/features/budgetEngaged/budgetEngagedSlice";
 
 export default function AddNewBudgetEngage() {
     const dispatch = useAppDispatch();
@@ -15,6 +16,26 @@ export default function AddNewBudgetEngage() {
     const { id }: any = route.query;
     const { isEditing,budgetEngaged } = useAppSelector((state) => state.budgetsEngaged);
 
+    const handleSubmit = async (values: any) => {
+        try {
+            if (isEditing) {
+                // await dispatch(
+                //   updateConsumptionInvoice({
+                //     id: id!,
+                //     consumptionInvoice: values,
+                //   })
+                // );
+            } else {
+                await dispatch(
+                createBudgetEngaged(values)
+                );
+            }
+            route.push("/grants/budgetEngage");
+        } catch (error) {
+          console.log("error", error);
+        }
+    };
+    
     return (
         <>
             <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>
@@ -34,7 +55,7 @@ export default function AddNewBudgetEngage() {
                         numBonCommande:Yup.string().required("Champ obligatoire"),
                     })}
                     onSubmit={(value: any, action: any) => {
-                        // handleSubmit(value);
+                        handleSubmit(value);
                         action.resetForm();
                     }}
                 >

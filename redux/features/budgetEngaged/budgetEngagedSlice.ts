@@ -15,7 +15,7 @@ export const createBudgetEngaged = createAsyncThunk(
     "budgetEngaget/createBudgetEngaged",
     async (dataBudgetEngaged: BudgetEngagedItem, thunkAPI) => {
       try {
-        const response = await axios.post("/suivi-evaluation/besoin-en-vehicule", dataBudgetEngaged);
+        const response = await axios.post("/suivi-evaluation/budget-engage", dataBudgetEngaged);
         thunkAPI.dispatch(
             enqueueSnackbar({
                 message: "Budget engagé créer avec succes",
@@ -36,7 +36,7 @@ export const deleteBudgetEngaged = createAsyncThunk(
     "budgetEngaged/deleteBudgetEngaged",
     async (data: { id: string }, thunkAPI) => {
       try {
-        const response = await axios.delete(`/suivi-evaluation/besoin-en-vehicule/${data.id}`);
+        const response = await axios.delete(`/suivi-evaluation/budget-engage/${data.id}`);
         thunkAPI.dispatch(
           enqueueSnackbar({
             message: "Budget engagé supprimé avec succès",
@@ -58,7 +58,7 @@ export const getBudgetEngagedList = createAsyncThunk(
     async (data: { args?: any }, thunkAPI) => {
       try {
         const params = JSON.stringify(data.args);
-        const response = await axios.get("/suivi-evaluation/besoin-en-vehicule", { params });
+        const response = await axios.get("/suivi-evaluation/budget-engage", { params });
         return response.data;
       } catch (error: any) {
         if (error.response) {
@@ -73,7 +73,7 @@ export const getBudgetEngaged = createAsyncThunk(
     "budgetEngaged/getBudgetEngaged",
     async (data: { id: string; args?: any }, thunkAPI) => {
       try {
-        const response = await axios.get(`/suivi-evaluation/besoin-en-vehicule/${data.id}`);
+        const response = await axios.get(`/suivi-evaluation/budget-engage/${data.id}`);
         return response.data;
       } catch (error: any) {
         if (error.response) {
