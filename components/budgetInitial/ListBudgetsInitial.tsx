@@ -2,8 +2,10 @@ import {
   Button,
   Container,
   IconButton,
+  MenuItem,
   Stack,
   styled,
+  TextField,
   Typography,
 } from "@mui/material";
 import Link from "next/link";
@@ -48,18 +50,18 @@ const ListBudgetInitial = () => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const fetchBudgetInitial = useFetchBudgetInitial();
-  const { budgetInitialList} = useAppSelector((state) =>state.budgetInitial)
+  const { budgetInitialList } = useAppSelector((state) => state.budgetInitial)
   const router = useRouter();
   const dispatch = useAppDispatch();
   const fetchGrant = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) =>state.grantEncours)
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours)
   const fetchligneBudgetaire = useFetchBudgetLine();
-  const { budgetLineList } = useAppSelector((state) =>state.budgetLine)
+  const { budgetLineList } = useAppSelector((state) => state.budgetLine)
   const confirm = useConfirm()
   const fetchPeriode = useFetchPeriode()
-  const { periodelist } = useAppSelector((state) =>state.periode) 
+  const { periodelist } = useAppSelector((state) => state.periode)
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchBudgetInitial();
     fetchGrant();
     fetchligneBudgetaire();
@@ -74,6 +76,40 @@ const ListBudgetInitial = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+
+  const listPeriode: { id: string }[] = [];
+  const periodeSet = new Set<string>();
+  budgetInitialList.forEach((e: any) => {
+    if ((e?.periodeId).length!=0) {
+      e.periodeId.forEach((ep: any) => {
+          periodeSet.add(ep);
+      });
+    }
+  });
+ 
+  // console.log("periode set :", periodeSet)
+  periodeSet.forEach(id => {
+     budgetInitialList.forEach((bi: any) =>{
+      bi.periodeId.forEach((element: any) => {
+        if (id===element) {
+          listPeriode.push({id: id})
+        }
+      });
+       
+     })
+  });
+
+  const listBL: { id: string }[] = [];
+  const budgetLineSet = new Set<string>();
+  budgetInitialList.forEach((e: any) => {
+      (e.ligneBudgetaire).forEach((ep: any) => {
+        budgetLineSet.add(ep)
+      })
+  })
+
+  budgetLineSet.forEach(id => {
+    listBL.push({ id });
+  });
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -125,38 +161,38 @@ const ListBudgetInitial = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const handleClickDelete = async (id: any) => {
-      confirm({
-        title: "Supprimer budget initial",
-        description: "Voulez-vous vraiment supprimer ?",
-        cancellationText: "Annuler",
-        confirmationText: "Supprimer",
-        cancellationButtonProps: {
-          color: "warning",
-        },
-        confirmationButtonProps: {
-          color: "error",
-        },
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer budget initial",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteBudgetInitial({ id }));
+        fetchBudgetInitial();
       })
-        .then(async () => {
-          await dispatch(deleteBudgetInitial({ id }));
-          fetchBudgetInitial();
-        })
-        .catch(() => { });
-    };
-  
-    const handleClickEdit = async (id: any) => {
-      router.push(`/grants/budgetInitial/${id}/edit`);
-    };
+      .catch(() => { });
+  };
+
+  const handleClickEdit = async (id: any) => {
+    router.push(`/grants/budgetInitial/${id}/edit`);
+  };
   return (
     <Container maxWidth="xl">
 
-        <SectionNavigation
+      <SectionNavigation
         direction={{ xs: 'column', sm: 'row' }}
         spacing={{ xs: 1, sm: 2, md: 4 }}
         justifyContent="space-between"
         sx={{ mb: 2 }}
-          >
+      >
         <Stack flexDirection={"row"}>
           <Link href="/grants/budgetInitial/add">
             <Button variant="contained" startIcon={<Add />}>
@@ -171,12 +207,12 @@ const ListBudgetInitial = () => {
           >
             Affiche Tableau de bord
           </Button>
-            </Stack>
-          <Typography variant="h4" color="GrayText">
-            Budget initial
-          </Typography>
-        </SectionNavigation>
-      <SectionTable sx={{backgroundColor: '#fff'}}>
+        </Stack>
+        <Typography variant="h4" color="GrayText">
+          Budget initial
+        </Typography>
+      </SectionNavigation>
+      <SectionTable sx={{ backgroundColor: '#fff' }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />
@@ -197,7 +233,7 @@ const ListBudgetInitial = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  { budgetInitialList
+                  {budgetInitialList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: BudgetInitialItem, index: any) => {
                       // const isItemSelected = isSelected(row.id);
@@ -211,11 +247,11 @@ const ListBudgetInitial = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                          // selected={isItemSelected}
+                        // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            // onClick={(event) => handleClick(event, row.id)}
+                          // onClick={(event) => handleClick(event, row.id)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -223,13 +259,29 @@ const ListBudgetInitial = () => {
                             scope="row"
                             padding="none"
                           >
-                          {grantEncoursList.find((e:any)=> e.id === row?.grant)?.code}
+                            {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
                           </TableCell>
-                          <TableCell align="right">
-                          {budgetLineList.find((e:any)=> e.id === row?.ligneBudgetaire)?.code}
+                          <TableCell sx={{ height: "10vh", overflow: "auto", width: "300px" }} align="right">
+                            {
+                              listBL.map((lp: any) => {
+                                return (
+                                  <Stack direction="column" spacing={2} height={25} overflow="auto">
+                                    {budgetLineList.find((e: any) => e.id === lp.id)?.code}
+                                  </Stack>
+                                )
+                              })
+                            }
                           </TableCell>
-                          <TableCell align="right">
-                          {periodelist.find((e:any)=> e.id === row?.periodeId)?.periode}
+                          <TableCell sx={{ width: "300px" }} align="right">
+                            {
+                              listPeriode.map((lp: any) => {
+                                return (
+                                  <Stack direction="column" spacing={2} height={25} overflow="auto">
+                                    {periodelist.find((e: any) => e.id === lp.id)?.periode}
+                                  </Stack>
+                                )
+                              })
+                            }
                           </TableCell>
                           <TableCell align="right">{row.montant}</TableCell>
                           {/* <TableCell align="right">{row.total}</TableCell> */}
@@ -249,7 +301,7 @@ const ListBudgetInitial = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
-                                onClick={() =>handleClickEdit(row.id)}
+                                onClick={() => handleClickEdit(row.id)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -257,7 +309,7 @@ const ListBudgetInitial = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
-                                onClick={() =>handleClickDelete(row.id)}
+                                onClick={() => handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>

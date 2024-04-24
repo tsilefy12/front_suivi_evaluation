@@ -145,8 +145,8 @@ const ListGrantsEnCours = () => {
                               justifyContent="right"
                             >
                               <Link href={`/grants/ligneBudgetaire/${row.id}/add`}>
-                                <Button variant="contained" startIcon={<Add />}>
-                                  Ajouter ligne budgetaire
+                                <Button variant="outlined" color="accent" startIcon={<Add />}>
+                                  Ligne budgetaire
                                 </Button>
                               </Link>
                               <Link href={`/grants/grantsEnCours/${row.id}/detail`}>
