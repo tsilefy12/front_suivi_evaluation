@@ -18,6 +18,8 @@ import { Check, Close } from "@mui/icons-material";
 import { cancelEdit } from "../../../redux/features/planTravail/planTravailSlice";
 import OSDatePicker from "../../shared/date/OSDatePicker";
 import OSTextField from "../../shared/input/OSTextField";
+import { getProjectList } from "../../../redux/features/project/useCase/getProjectList";
+import OSSelectField from "../../shared/select/OSSelectField";
 
 const ObjectifStrategiqueForm = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
@@ -25,9 +27,9 @@ const ObjectifStrategiqueForm = ({ handleClose }: any) => {
   const router = useRouter();
   const { isEditing, planTravail } = useAppSelector((state) => state.planTravail);
 
-
+  const { projectList } = useAppSelector((state: any) => state.project)
   React.useEffect(() => {
-    // fetchplanTravail();
+    dispatch(getProjectList({}))
   }, [router.query])
 
   const handleSubmit = async (values: any) => {
@@ -57,13 +59,17 @@ const ObjectifStrategiqueForm = ({ handleClose }: any) => {
         initialValues={
           isEditing
             ? planTravail
-            : {
-              date: isEditing ? planTravail?.date : "",
-              description: isEditing ? planTravail?.description : ""
-            }
+              : {
+                title: isEditing ? planTravail?.title : "",
+                startDate: isEditing && planTravail?.startDate? new Date(planTravail?.startDate) : new Date(),
+                endDate: isEditing && planTravail?.endDate ?  new Date(planTravail?.endDate) : new Date(),
+                description: isEditing ? planTravail?.description : "",
+                projectId: isEditing ? planTravail?.projectId : 0
+              }
         }
         validationSchema={Yup.object({
-          date: Yup.string().required("Champ obligatoire"),
+          startDate: Yup.date().required("Champ obligatoire"),
+          endDate: Yup.date().required("Champ obligatoire"),
           description: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
@@ -75,26 +81,52 @@ const ObjectifStrategiqueForm = ({ handleClose }: any) => {
           return (
             <Form>
               <SectionNavigation width={{ xs: "100%", sm: "560px" }}>
-                <DialogTitle> Créer/Modifier Objectif Strategique </DialogTitle>
+                <DialogTitle> {isEditing ? "Modifier" : "Créer"} Objectif Strategique </DialogTitle>
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
+                    <OSTextField
+                        fullWidth
+                        id="outlined-basic"
+                        label="Titre"
+                        variant="outlined"
+                        name="title"
+                    />
+                      <OSTextField
+                        fullWidth
+                        id="outlined-basic"
+                        label="Description"
+                        variant="outlined"
+                        name="description"
+                      />
+                     <FormControl fullWidth>
+                      <OSDatePicker
+                        fullWidth
+                        id="outlined-basic"
+                        label="Date début"
+                        variant="outlined"
+                        value={formikProps.values.startDate!}
+                        onChange={(value: any) =>formikProps.setFieldValue("startDate", value)}
+                        name="startDate"
+                      />
+                    </FormControl>
                     <FormControl fullWidth>
                       <OSDatePicker
                         fullWidth
                         id="outlined-basic"
-                        label="Date"
+                        label="Date fin"
                         variant="outlined"
-                        value={formikProps.values.date!}
-                        onChange={(value: any) =>formikProps.setFieldValue("date", value)}
-                        name="date"
+                        value={formikProps.values.endDate!}
+                        onChange={(value: any) =>formikProps.setFieldValue("endDate", value)}
+                        name="endDate"
                       />
                     </FormControl>
-                    <OSTextField
-                      fullWidth
-                      id="outlined-basic"
-                      label="Description"
-                      variant="outlined"
-                      name="description"
+                    <OSSelectField
+                        id="outlined-basic"
+                        label="Project"
+                        name="grantsId"
+                        options={projectList}
+                        dataKey="titleFr"
+                        valueKey="id"
                     />
                   </FormContainer>
                 </DialogContent>
