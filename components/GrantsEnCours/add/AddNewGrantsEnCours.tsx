@@ -91,16 +91,16 @@ const AddNewGrantsEnCours = () => {
 
   const handleSubmit = async (values: any) => {
     values.responsable = [...selectedEmployes.map((item) => item.id)];
-    values.titleFr = titreFr;
-    values.titleEn = titreEn;
-    values.projectId = (idProject == null) ? null : idProject
+    // values.titleFr = titreFr;
+    // values.titleEn = titreEn;
+    // values.projectId = (idProject == null) ? null : idProject
     const date1 = new Date(values.startDate);
     const DateNumber1 = date1.getTime();
     const date2 = new Date(values.endDate)
     const DateNumber2 = date2.getTime();
-    let calcul = DateNumber2 - DateNumber1 ;
-    const duree = (calcul / (24*60*60*1000)).toFixed(0)
-    values.duration = duree;
+    let calcul = DateNumber2 - DateNumber1;
+    const duree = (calcul / (24 * 60 * 60 * 1000)).toFixed(0)
+    values.deadline = duree;
     if (DateNumber1 >= DateNumber2) {
       setOpen(true)
     } else {
@@ -132,7 +132,7 @@ const AddNewGrantsEnCours = () => {
             : {
               code: isEditing ? grantEncour?.code : "",
               postAnalyticId: isEditing ? grantEncour?.postAnalyticId : "",
-              projectId: isEditing ? grantEncour?.projectId : "",
+              // projectId: isEditing ? grantEncour?.projectId : "",
               bankId: isEditing ? grantEncour?.bankId : "",
               titleFr: isEditing ? grantEncour?.titleFr : "",
               titleEn: isEditing ? grantEncour?.titleEn : "",
@@ -142,13 +142,18 @@ const AddNewGrantsEnCours = () => {
               responsable: isEditing ? grantEncour?.responsable : "",
               startDate: isEditing ? grantEncour?.startDate : new Date(),
               endDate: isEditing ? grantEncour?.endDate : new Date(),
+              techDate: isEditing ? grantEncour?.techDate : new Date(),
+              financeDate: isEditing ? grantEncour?.financeDate : new Date(),
+              status: isEditing ? grantEncour?.status : "",
+              financeValidator: isEditing ? grantEncour?.financeValidator : "",
+              financeVerificator: isEditing ? grantEncour?.financeVerificator : "",
               // duration: isEditing ? grantEncour?.duration : 0,
 
             }
         }
         validationSchema={Yup.object({
           code: Yup.string().required("Champ obligatoire"),
-          postAnalyticId: Yup.number().required("Champ obligatoire"),
+          // postAnalyticId: Yup.number().required("Champ obligatoire"),
           bankId: Yup.number().required("Champ obligatoire"),
           // titleFr: Yup.string().required("Champ obligatoire"),
           // titleEn: Yup.string().required("Champ obligatoire"),
@@ -239,47 +244,50 @@ const AddNewGrantsEnCours = () => {
                     variant="outlined"
                     name="bailleur"
                   />
+                  <OSTextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Status"
+                    variant="outlined"
+                    name="status"
+                    type="string"
+                  />
                 </Stack>
                 <CustomStack
                   direction={{ xs: "column", sm: "column", md: "row" }}
                   spacing={{ xs: 2, sm: 2, md: 1 }}
                 >
-                  <TextField
-                    fullWidth
-                    select
-                    id="outlined-basic"
-                    label="Projet"
-                    variant="outlined"
-                    name="projectId"
-                    type="number"
-                    value={idProject}
-                    onChange={(e) => setIdProject(e.target.value)}
-                  >
-                    <MenuItem value={nulValue}>Nouveau Projet</MenuItem>
-                    {
-                      projectList.map((item: any) => (
-                        <MenuItem value={item.id}>{item.id + "-" + item.titleEn}</MenuItem>
-                      ))
-                    }
-                  </TextField>
-                  <TextField
+                  <OSSelectField
                     fullWidth
                     id="outlined-basic"
-                    label="Projet en français"
+                    label="Finance validateur"
                     variant="outlined"
-                    name="titleFr"
-                    value={titreFr}
-                    onChange={(e) => setTitreFr(e.target.value)}
+                    name="financeValidator"
+                    options={employees}
+                    dataKey={["name"]}
+                    valueKey="id"
                   />
-                  <TextField
+                  <OSSelectField
                     fullWidth
                     id="outlined-basic"
-                    label="Projet en Anglais"
+                    label="Finance vérificateur"
                     variant="outlined"
-                    name="titleEn"
-                    value={titreEn}
-                    onChange={(e) => setTitreEn(e.target.value)}
+                    name="financeVerificator"
+                    options={employees}
+                    dataKey={["name"]}
+                    valueKey="id"
                   />
+                  <OSSelectField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Validateur technique"
+                    variant="outlined"
+                    name="techValidator"
+                    options={employees}
+                    dataKey={["name"]}
+                    valueKey="id"
+                  />
+
                 </CustomStack>
                 <CustomStack direction="row" spacing={4}
                 >
@@ -299,14 +307,13 @@ const AddNewGrantsEnCours = () => {
                     value={!isEditing ? formikProps.values.endDate : grantEncour?.endDate}
                     onChange={(value: any) => formikProps.setFieldValue("endDate", value)}
                   />
-                  {/* <OSTextField
+                  <OSDatePicker
                     fullWidth
                     id="outlined-basic"
-                    label="Durée"
+                    label="Date tech"
                     variant="outlined"
-                    name="duration"
-                    type="number"
-                  /> */}
+                    name="techDate"
+                  />
                 </CustomStack>
                 <FormControl fullWidth>
                   <OSSelectField
@@ -320,6 +327,17 @@ const AddNewGrantsEnCours = () => {
                     valueKey="id"
                   />
                 </FormControl>
+                <OSSelectField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Currency"
+                    variant="outlined"
+                    name="currencyId"
+                    options={employees}
+                    dataKey={["name"]}
+                    valueKey="id"
+
+                  />
                 <FormControl>
                   <Autocomplete
                     multiple

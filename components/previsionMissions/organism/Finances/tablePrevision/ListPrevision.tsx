@@ -2,9 +2,14 @@ import {
   Button,
   Container,
   Dialog,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
   IconButton,
+  MenuItem,
   Stack,
   styled,
+  TextField,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -30,6 +35,9 @@ import useFetchGrants from "../../../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "./hooks/useFetchbudgetLine";
 import { useConfirm } from "material-ui-confirm";
 import { deletePrevisionDepense, editPrevisionDepense } from "../../../../../redux/features/PrevisionDepense";
+import { useFormikContext } from 'formik';
+import OSSelectField from "../../../../shared/select/OSSelectField";
+import OSTextField from "../../../../shared/input/OSTextField";
 
 const ListPrevision = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -38,24 +46,43 @@ const ListPrevision = () => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const fetchPrevisionDepense = useFetchPrevisionDepenseList();
-  const { previsionDepenselist } = useAppSelector((state) =>state.previsonDepense)
-  const { grantEncoursList } = useAppSelector( (state) => state.grantEncours);
+  const { previsionDepenselist } = useAppSelector((state: any) => state.previsonDepense)
+  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
   const fetchGrant = useFetchGrants()
-  const { budgetLineList } = useAppSelector( (state) => state.budgetLine);
+  const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const fetchLigneBudgetaire = useFetchBudgetLine();
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
+  const [getGrantId, setGetGrantId]: any = React.useState("");
 
-  React.useEffect(() =>{
-      fetchPrevisionDepense();
-      fetchGrant();
-      fetchLigneBudgetaire();
+  React.useEffect(() => {
+    fetchPrevisionDepense();
+    fetchGrant();
+    fetchLigneBudgetaire();
   }, [router.query])
 
   let totalBudget: any = 0;
-  previsionDepenselist.forEach((item: any) =>{
-     totalBudget+=item.montant;
+  let getBudgetline: any = "";
+  const listGrant = [
+    {id: 1, name: "grant 1"},
+    {id: 2, name: "grant 2"}
+  ]
+  const listLigne: {name: string }[] = []
+
+  let getLigne: any = ""
+
+  grantEncoursList.forEach((b: any) => {
+    budgetLineList.forEach((l: any) =>{
+      if (getGrantId == l.id) {
+         listLigne.push({name: l.code})
+      }
+    })
+      
+    previsionDepenselist.forEach((item: any) => {
+      totalBudget += item.montant;
+    })
   })
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -98,7 +125,7 @@ const ListPrevision = () => {
         await dispatch(deletePrevisionDepense({ id }));
         fetchPrevisionDepense();
       })
-      .catch(() => {});
+      .catch(() => { });
   };
   const handleClickEdit = async (id: any) => {
     await dispatch(editPrevisionDepense({ id }));
@@ -129,58 +156,58 @@ const ListPrevision = () => {
                 />
                 <TableBody>
                   {previsionDepenselist
-                  .slice().map(
-                    (row: PrevisionDepenseItem, index: any) => {
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={index}
-                        >
-                          <TableCell padding="checkbox"></TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Moment format="DD/MM/yyyy">{row.date}</Moment>
-                          </TableCell>
-                          <TableCell align="right">{row.libelle}</TableCell>
-                          <TableCell align="right">{row.nombre}</TableCell>
-                          <TableCell align="right">{row.pu}</TableCell>
-                          <TableCell align="right">{row.montant} Ar</TableCell>
-                          <TableCell align="right">
-                          {grantEncoursList.find((e:any)=> e.id === row?.grant)?.code}
+                    .slice().map(
+                      (row: PrevisionDepenseItem, index: any) => {
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            tabIndex={-1}
+                            key={index}
+                          >
+                            <TableCell padding="checkbox"></TableCell>
+                            <TableCell component="th" scope="row" padding="none">
+                              <Moment format="DD/MM/yyyy">{row.date}</Moment>
                             </TableCell>
-                          <TableCell align="center">
-                          {budgetLineList.find((e:any)=> e.id === row?.ligneBudgetaire)?.code}
-                          </TableCell>
-                          <TableCell align="right">
-                      <BtnActionContainer
-                        direction="row"
-                        justifyContent="right"
-                      >
-                        <IconButton
-                          color="primary"
-                          aria-label="Modifier"
-                          component="span"
-                          onClick={() => handleClickEdit(row.id)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          color="warning"
-                          aria-label="Supprimer"
-                          component="span"
-                          onClick={() => {
-                            handleClickDelete(row.id);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </BtnActionContainer>
-                    </TableCell>
-                        </TableRow>
-                      );
-                    }
-                  )}
+                            <TableCell align="right">{row.libelle}</TableCell>
+                            <TableCell align="right">{row.nombre}</TableCell>
+                            <TableCell align="right">{row.pu}</TableCell>
+                            <TableCell align="right">{row.montant} Ar</TableCell>
+                            <TableCell align="right">
+                              {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
+                            </TableCell>
+                            <TableCell align="center">
+                              {budgetLineList.find((e: any) => e.id === row?.ligneBudgetaire)?.code}
+                            </TableCell>
+                            <TableCell align="right">
+                              <BtnActionContainer
+                                direction="row"
+                                justifyContent="right"
+                              >
+                                <IconButton
+                                  color="primary"
+                                  aria-label="Modifier"
+                                  component="span"
+                                  onClick={() => handleClickEdit(row.id)}
+                                >
+                                  <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                  color="warning"
+                                  aria-label="Supprimer"
+                                  component="span"
+                                  onClick={() => {
+                                    handleClickDelete(row.id);
+                                  }}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              </BtnActionContainer>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      }
+                    )}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -188,10 +215,55 @@ const ListPrevision = () => {
               <Typography variant="body2" align="right">
                 TOTAL BUDGET : {totalBudget} Ar
               </Typography>
-              <Typography variant="body2" align="right">
-                Imprévu de mission(total budget-location et perdiem MV(10% )) :
-                10000
+              <Typography variant="body2" align="right" sx={{ width: "100%" }}>
+                <Stack direction="column" spacing={2}>
+                    <Stack direction="row" sx={{ textAlign: "right" }} spacing={2}>
+                      <FormControl sx={{ flex: "1", textAlign: "right", paddingLeft: 65}}>
+                        <TextField
+                          select
+                          id="outlined-basic"
+                          label="Grant"
+                          variant="outlined"
+                          name="grant"
+                          value={getGrantId}
+                          onChange={(e: any) => setGetGrantId(e.target.value)}
+                          sx={{ width: "100%", textAlign: "start"}}
+                          size="small"
+                        >
+                          <MenuItem value="vide">Select grant</MenuItem>
+                          {grantEncoursList.map((g: any) => (
+                            <MenuItem key={g.id} value={g.id}>
+                              {g.name}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </FormControl>
+                      <FormControl sx={{ flex: "1" }}>
+                        <TextField
+                          select
+                          id="outlined-basic"
+                          label="Ligne budgetaire"
+                          variant="outlined"
+                          name="budgetLine"
+                          sx={{ width: "100%", textAlign: "start"}}
+                          size="small"
+                          // value={getLigne}
+                        > 
+                         <MenuItem value="vide">Select grant</MenuItem>
+                          {listLigne.map((g: any) => (
+                            <MenuItem key={g.id} value={g.id}>
+                              {g.name}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </FormControl>
+                    </Stack>
+                  <FormLabel>
+                    Imprévu de mission(total budget-location et perdiem MV(10% )) : 10000
+                  </FormLabel>
+                </Stack>
               </Typography>
+
               <Typography variant="body2" align="right">
                 TOTAL GENERAL BUDGET : {totalBudget} Ar
               </Typography>
