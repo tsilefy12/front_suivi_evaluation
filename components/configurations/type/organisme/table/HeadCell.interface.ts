@@ -1,5 +1,5 @@
 import { Order } from "../../../../../config/table.config";
-import { PostAnalytiqueItem } from "../../../../../redux/features/postAnalytique/postAnalytique.interface";
+import { TypeItem } from "../../../../../redux/features/type/type.interface";
 
 export interface HeadCell {
   disablePadding: boolean;
@@ -12,7 +12,7 @@ export interface TimesheetEnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof PostAnalytiqueItem
+    property: keyof TypeItem
   ) => void;
   order: Order;
   orderBy: string;

@@ -3,6 +3,9 @@ export interface BudgetLineItem {
     code?: string;
     grantId?: number;
     amount?: number;
+    lineBudget?:"";
+    type?:"";
+    organisation?:"";
   }
   
   export interface BudgetLineInitialState {
