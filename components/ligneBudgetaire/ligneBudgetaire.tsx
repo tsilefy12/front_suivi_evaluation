@@ -133,7 +133,7 @@ const ListBudgetLine = () => {
                           <TableCell align="left">
                             {grantEncoursList.find((e: any) =>e.id === row.grantId)?.code}
                           </TableCell>
-                          {/* <TableCell align="right">
+                          <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
@@ -158,7 +158,7 @@ const ListBudgetLine = () => {
                                 <DeleteIcon />
                               </IconButton>
                             </BtnActionContainer>
-                          </TableCell> */}
+                          </TableCell>
                         </TableRow>
                       );
                     })}
