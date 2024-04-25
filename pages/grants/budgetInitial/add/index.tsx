@@ -1,7 +1,7 @@
 import { Container } from '@mui/material'
 import React from 'react'
-import AddNewBudgetInitial from '../../../../components/budgetInitial/add/AddNewBudgetInitial'
-import BackOfficeLayout from '../../../../layouts/backOffice'
+import BackOfficeLayout from '../../../../layouts/backOffice';
+import AddNewBudgetInitial from '../../../../components/budgetInitial/add/AddNewBudgetInitial';
 
 const AddBudgetInitial = () => {
   return (

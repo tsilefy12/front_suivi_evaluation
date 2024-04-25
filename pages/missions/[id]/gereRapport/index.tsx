@@ -1,7 +1,7 @@
 import { Container } from "@mui/material";
 import React from "react";
-import GereRapportDeMission from "../../../../components/gereRapportDeMission/GereRapportDeMission";
 import BackOfficeLayout from "../../../../layouts/backOffice";
+import GereRapportDeMission from "../../../../components/gereRapportDeMission/GereRapportDeMission";
 
 const GereRapport = () => {
   return (

@@ -1,8 +1,7 @@
 import { Container } from '@mui/material'
 import React from 'react'
-import BilanMission from '../../../../components/home/Missions/bilan/Bilan';
-// import BilanMission from '../../../../components/Missions/bilan/Bilan';
 import BackOfficeLayout from '../../../../layouts/backOffice';
+import BilanMission from '../../../../components/home/Missions/bilan/Bilan';
 
 
 const Bilan = () => {

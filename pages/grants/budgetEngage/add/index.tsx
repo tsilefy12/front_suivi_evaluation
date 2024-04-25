@@ -1,7 +1,7 @@
 import { Container } from '@mui/material'
 import React from 'react'
-import AddNewBudgetEngage from '../../../../components/budgetEngage/add/AddNewBudgetEngage'
-import BackOfficeLayout from '../../../../layouts/backOffice'
+import BackOfficeLayout from '../../../../layouts/backOffice';
+import AddNewBudgetEngage from '../../../../components/budgetEngage/add/AddNewBudgetEngage';
 
 const AddBudgetEngage = () => {
   return (

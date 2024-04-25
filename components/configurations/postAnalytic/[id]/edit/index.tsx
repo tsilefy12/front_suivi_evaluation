@@ -1,15 +1,16 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import PostAnalyticForm from "../../PostAnalyticForm";
+import React, { useEffect } from "react";
+// import PostAnalyticForm from "../../PostAnalyticForm";
 import { editPostAnalytic } from "../../../../../redux/features/postAnalytique";
 import { useAppDispatch } from "../../../../../hooks/reduxHooks";
 import { Container, Grid } from "@mui/material";
+import PostAnalyticForm from "../../PostAnalyticForm";
 import ListPosatAnalytic from "../../table/ListPostAnalytic";
 
 const EditPosteAnalytic = () => {
     const router = useRouter();
-    const dispatch = useAppDispatch();
-    useEffect(() => {
+    const dispatch: any = useAppDispatch();
+    React.useEffect(() => {
         if (router.query.id) {
             getPoste(router.query.id as string);
         }

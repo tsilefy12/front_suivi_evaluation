@@ -2,14 +2,13 @@ import React from "react";
 import { styled } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
-import KeyValue from "../../../../../../components/shared/keyValue";
-import DetailGrantsEnCours from "../../../../../../components/plan_travail/organanisme/tachesCles/[idT]/details";
 import BackOfficeLayout from "../../../../../../layouts/backOffice";
+import DetailTacheCles from "../../../../../../components/plan_travail/organanisme/tachesCles/[idT]/details";
 
 const Detail = () => {
     return (
         <BackOfficeLayout>
-            <DetailGrantsEnCours />
+            <DetailTacheCles />
         </BackOfficeLayout>
     );
 };

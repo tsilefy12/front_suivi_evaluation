@@ -1,7 +1,7 @@
 import { Container } from '@mui/material'
 import React from 'react'
-import ListBudgetInitial from '../../../components/budgetInitial/ListBudgetsInitial'
-import BackOfficeLayout from '../../../layouts/backOffice'
+import BackOfficeLayout from '../../../layouts/backOffice';
+import ListBudgetInitial from '../../../components/budgetInitial/ListBudgetsInitial';
 
 const BudgetInitial = () => {
   return (
