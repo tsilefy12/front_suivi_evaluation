@@ -42,7 +42,7 @@ export const typeSlice = createSlice({
     },
     [createType.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.postAnalytiqueList.push(action.payload);
+      state.typeList.push(action.payload);
     },
     [createType.rejected.type]: (state, action) => {
       state.loading = false;
