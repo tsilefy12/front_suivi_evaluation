@@ -94,6 +94,12 @@ const menu = [
         link: "/configurations/postAnalytic",
         icon: "",
       },
+      {
+        id:43,
+        name: "Type",
+        link: "/configurations/type",
+        icon: "",
+      }
     ],
   },
   

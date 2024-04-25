@@ -22,7 +22,6 @@ import { useConfirm } from "material-ui-confirm";
 import useFetchBudgetLine from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
 import { createBudgetLine, updateBudgetLine } from "../../../../redux/features/budgetLine";
 import { SectionNavigation } from "../../../home";
-import OSSelectField from "../../../shared/select/OSSelectField";
 
 const AddNewBudgetLine = () => {
     const router = useRouter();
@@ -75,11 +74,14 @@ const AddNewBudgetLine = () => {
                 initialValues={
                     isEditing
                         ? budgetLine
-                        : {
-                            code: isEditing ? budgetLine?.code : "",
-                            grantId: isEditing ? budgetLine?.grantId : "",
-                            amount: isEditing ? budgetLine?.amount: ""
-                        }
+                            : {
+                                code: isEditing ? budgetLine?.code : "",
+                                grantId: isEditing ? budgetLine?.grantId : 0,
+                                amount: isEditing ? budgetLine?.amount: 0,
+                                type: isEditing ? budgetLine?.type : "",
+                                organisation: isEditing ? budgetLine?.organisation : "",
+                                lineBudget: isEditing ? budgetLine?.lineBudget : ""
+                            }
                 }
                 validationSchema={Yup.object({
                     code: Yup.string().required("Champ obligatoire"),
@@ -150,19 +152,43 @@ const AddNewBudgetLine = () => {
                                     <OSTextField
                                         fullWidth
                                         id="outlined-basic"
-                                        label="Code"
-                                        variant="outlined"
-                                        name="code"
-                                    />
-                                    <OSTextField
-                                        fullWidth
-                                        id="outlined-basic"
                                         label="Grant"
                                         variant="outlined"
                                         name="grantId"
                                         value={grantCode}
-                                    >
-                                    </OSTextField>
+                                    />
+                                    <Stack direction="row" spacing={2}>
+                                        <OSTextField
+                                            fullWidth
+                                            id="outlined-basic"
+                                            label="Code"
+                                            variant="outlined"
+                                            name="code"
+                                        />
+                                        <OSTextField
+                                            fullWidth
+                                            id="outlined-basic"
+                                            label="Organisation"
+                                            variant="outlined"
+                                            name="organisation"
+                                        />
+                                    </Stack>
+                                    <Stack direction="row" spacing={2}>
+                                        <OSTextField
+                                            fullWidth
+                                            id="outlined-basic"
+                                            label="Type"
+                                            variant="outlined"
+                                            name="type"
+                                        />
+                                        <OSTextField
+                                            fullWidth
+                                            id="outlined-basic"
+                                            label="Ligne de budget"
+                                            variant="outlined"
+                                            name="lineBudget"
+                                        />
+                                    </Stack>
                                     <OSTextField
                                         fullWidth
                                         id="outlined-basic"

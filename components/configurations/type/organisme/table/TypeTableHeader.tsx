@@ -3,14 +3,14 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import HeadCellComponent from "./HeadCellComponent";
-import { transportEquipmentHeadCells } from "./TransportEquipmentHeaderCell";
+import { typeHeadCells } from "./TypeHeaderCell";
 import { HeadCell } from "./HeadCell.interface";
 
-const PosteAnalytiqueTableHeader = () => {
+const TypeTableHeader = () => {
 	return (
 		<TableHead>
 			<TableRow>
-				{transportEquipmentHeadCells.map((headCell: HeadCell) => (
+				{typeHeadCells.map((headCell: HeadCell) => (
 					<HeadCellComponent
 						headCell={headCell}
 						key={headCell.id}
@@ -22,4 +22,4 @@ const PosteAnalytiqueTableHeader = () => {
 	);
 };
 
-export default PosteAnalytiqueTableHeader;
+export default TypeTableHeader;

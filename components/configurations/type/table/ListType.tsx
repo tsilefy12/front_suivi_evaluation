@@ -8,10 +8,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import TableToolbarEtatMateriel from "./TableToolbarDevise";
-import { getComparator, stableSort } from "./function-devise";
-import Link from "next/link";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
@@ -20,15 +16,15 @@ import {
 } from "../../../../config/table.config";
 import useFetchPostAnalytique from "../../../GrantsEnCours/hooks/getPostAnalytique";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
-import PosteAnalytiqueTableHeader from "../organisme/table/PostAnalytiqueTableHeader";
-import { PostAnalytiqueItem } from "../../../../redux/features/postAnalytique/postAnalytique.interface";
+import TypeTableHeader from "../organisme/table/TypeTableHeader";
+import { TypeItem } from "../../../../redux/features/type/type.interface";
 import { useConfirm } from "material-ui-confirm";
-import { deletePostAnalytic } from "../../../../redux/features/postAnalytique";
+import { deleteType, getType } from "../../../../redux/features/type";
+import { cancelEdit } from "../../../../redux/features/type/typeSlice";
 import { useRouter } from "next/router";
 
-const ListPosatAnalytic = () => {
-  const fetchPostAnalytique = useFetchPostAnalytique();
-  const { postAnalytiqueList } = useAppSelector((state) =>state.postAnalytique);
+const ListType = () => {
+  const { typeList } = useAppSelector((state) =>state.types);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -38,8 +34,9 @@ const ListPosatAnalytic = () => {
   const { id }: any = router.query;
 
   React.useEffect(() =>{
-      fetchPostAnalytique();
-  }, [postAnalytiqueList])
+      dispatch(cancelEdit())
+      dispatch(getType({}))
+  }, [typeList])
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -53,14 +50,15 @@ const ListPosatAnalytic = () => {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - postAnalytiqueList.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - typeList.length) : 0;
 
 
 
   const handleClickDelete = async (id: any) => {
+    dispatch(cancelEdit())
     confirm({
-      title: "Supprimer le poste",
-      description: "Voulez-vous vraiment supprimer ?",
+      title: "Supprimer le type",
+      description: "Voulez-vous vraiment supprimer ce type ?",
       cancellationText: "Annuler",
       confirmationText: "Supprimer",
       cancellationButtonProps: {
@@ -71,14 +69,14 @@ const ListPosatAnalytic = () => {
       },
     })
       .then(async () => {
-        await dispatch(deletePostAnalytic({ id }));
-        fetchPostAnalytique();
+        await dispatch(deleteType({ id }));
+        await dispatch(getType({}));
       })
       .catch(() => {});
   };
   
   const handleClickEdit = async (id: any) => {
-    router.push(`/configurations/postAnalytic/${id}/edit`);
+    router.push(`/configurations/type/${id}/edit`);
   };
   return (
     <TableSection>
@@ -91,11 +89,11 @@ const ListPosatAnalytic = () => {
               aria-labelledby="tableTitle"
               size={"small"}
             >
-              <PosteAnalytiqueTableHeader />
+              <TypeTableHeader />
               <TableBody>
-                { postAnalytiqueList
+                { typeList
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row: PostAnalytiqueItem, index: any) => {
+                  .map((row: TypeItem, index: any) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
                       <TableRow
@@ -155,7 +153,7 @@ const ListPosatAnalytic = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={postAnalytiqueList.length}
+            count={typeList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -180,4 +178,4 @@ const TableSection = styled("div")(({ theme }) => ({
 
 const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 
-export default ListPosatAnalytic;
+export default ListType;

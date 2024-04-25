@@ -1,6 +1,6 @@
 import { HeadCell } from "./HeadCell.interface";
 
-export const transportEquipmentHeadCells: readonly HeadCell[] = [
+export const postAnalytiqueHeadCells: readonly HeadCell[] = [
   {
     id: 'postAnalytique',
     numeric: false,
