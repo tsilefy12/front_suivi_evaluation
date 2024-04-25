@@ -1,7 +1,7 @@
 import { Container } from "@mui/material";
 import React from "react";
-import ValidationPrevisionMission from "../../../../components/validation/valdationPrevisionMission/ValidatioPrevisionMission";
 import BackOfficeLayout from "../../../../layouts/backOffice";
+import ValidationPrevisionMission from "../../../../components/validation/valdationPrevisionMission/ValidatioPrevisionMission";
 
 const ValidationMissions = () => {
   return (

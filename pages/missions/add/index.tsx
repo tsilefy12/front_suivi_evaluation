@@ -1,8 +1,7 @@
 import { Container } from '@mui/material'
 import React from 'react'
-import AddNewMission from '../../../components/home/Missions/add/AddNewMission'
-// import AddNewMission from '../../../components/Missions/add/AddNewMission'
-import BackOfficeLayout from '../../../layouts/backOffice'
+import BackOfficeLayout from '../../../layouts/backOffice';
+import AddNewMission from '../../../components/home/Missions/add/AddNewMission';
 
 const AddMission = () => {
   return (
