@@ -35,6 +35,7 @@ import { planTravailSlice } from "./features/planTravail/planTravailSlice";
 import { reliquatGrantSlice } from "./features/reliquatGrants/reliquatGrantSlice";
 import { budgetEngagedSlice } from "./features/budgetEngaged/budgetEngagedSlice";
 import { typeSlice } from "./features/type/typeSlice";
+import { organisationSlice } from "./features/organisation/organisationSlice";
 
 
 export const store = configureStore({
@@ -74,7 +75,8 @@ export const store = configureStore({
     planTravail: planTravailSlice.reducer,
     reliquatGrant: reliquatGrantSlice.reducer,
     budgetsEngaged: budgetEngagedSlice.reducer,
-    types: typeSlice.reducer
+    types: typeSlice.reducer,
+    organisations : organisationSlice.reducer
   },
 });
 

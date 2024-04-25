@@ -99,6 +99,12 @@ const menu = [
         name: "Type",
         link: "/configurations/type",
         icon: "",
+      },
+      {
+        id:44,
+        name: "Organisation",
+        link: "/configurations/organisation",
+        icon: "",
       }
     ],
   },
