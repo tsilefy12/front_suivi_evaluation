@@ -3,7 +3,7 @@ import { styled } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import BackOfficeLayout from "../../../../../../layouts/backOffice";
-import DetailTacheCles from "../../../../../../components/plan_travail/organanisme/tachesCles/[idT]/details";
+import DetailTacheCles from "../../../../../../components/plan_travail/organanisme/tachesEtObjectifs/[idT]/details";
 
 const Detail = () => {
     return (

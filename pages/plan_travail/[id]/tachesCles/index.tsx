@@ -1,6 +1,6 @@
 import { Container } from '@mui/material'
 import React from 'react'
-import ListTacheCles from '../../../../components/plan_travail/organanisme/tachesCles/ListTacheCles'
+import ListTacheCles from '../../../../components/plan_travail/organanisme/tachesEtObjectifs/ListTacheCles'
 import BackOfficeLayout from '../../../../layouts/backOffice'
 
 const TacheCles = () => {

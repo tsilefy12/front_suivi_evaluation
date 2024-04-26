@@ -54,7 +54,7 @@ const ListObjectifStrategique = () => {
           Créer
         </Button>
         <Typography variant="h4" color="GrayText">
-          Objectif strategique
+          plan de travail
         </Typography>
       </SectionNavigation>
       <Divider />
@@ -69,7 +69,7 @@ const ListObjectifStrategique = () => {
           }}
         >
           <Typography variant="h6" id="tableTitle" component="div">
-            Liste des objectifs stratégiques
+            Liste de plan de travail
           </Typography>
           <TextField
             variant="outlined"
@@ -96,11 +96,11 @@ const ListObjectifStrategique = () => {
                       color="info"
                       startIcon={<SettingsIcon />}
                     >
-                      Tâches clés
+                      Tâches et objectifs
                     </Button>
                   </Box>
                 </Link>
-                <Link href={`/plan_travail/${row.id}/objectifGenerale`}>
+                {/* <Link href={`/plan_travail/${row.id}/objectifGenerale`}>
                   <Box>
                     <Button
                       variant="text"
@@ -110,7 +110,7 @@ const ListObjectifStrategique = () => {
                       Objectifs générales
                     </Button>
                   </Box>
-                </Link>
+                </Link> */}
               </LinkContainer>
             </Grid>
           ))}

@@ -82,7 +82,7 @@ const ObjectifStrategiqueForm = ({ handleClose }: any) => {
           return (
             <Form>
               <SectionNavigation width={{ xs: "100%", sm: "560px" }}>
-                <DialogTitle> {isEditing ? "Modifier" : "Créer"} Objectif Strategique </DialogTitle>
+                <DialogTitle> {isEditing ? "Modifier" : "Créer"} Plan de travail </DialogTitle>
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
                     <OSTextField

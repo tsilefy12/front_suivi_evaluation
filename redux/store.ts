@@ -29,8 +29,8 @@ import { budgetLineSlice } from "./features/budgetLine/budgetLineSlice";
 import { budgetInitialSlice } from "./features/budgetInitial/budgetInitialSlice";
 import { periodeSlice } from "./features/periode/periodeSlice";
 import { grantAdminSlice } from "./features/grantAdmin/periodeSlice";
-import { tacheCleSlice } from "./features/tacheCle/tacheCle";
-import { objectifGeneralSlice } from "./features/objectifGeneral/objectifGeneralSlice";
+import { tacheEtObjectifsSlice } from "./features/tachesEtObjectifs/tacheEtObjectifsSlice";
+import { objectifAnnuelsSlice } from "./features/objectifAnnuels/objectifGeneralSlice";
 import { planTravailSlice } from "./features/planTravail/planTravailSlice";
 import { reliquatGrantSlice } from "./features/reliquatGrants/reliquatGrantSlice";
 import { budgetEngagedSlice } from "./features/budgetEngaged/budgetEngagedSlice";
@@ -71,8 +71,8 @@ export const store = configureStore({
     budgetInitial: budgetInitialSlice.reducer,
     periode: periodeSlice.reducer,
     grantAdmin: grantAdminSlice.reducer,
-    tacheCle: tacheCleSlice.reducer,
-    objectifGeneral: objectifGeneralSlice.reducer,
+    tacheEtObjectifs: tacheEtObjectifsSlice.reducer,
+    objectifsAnnuels: objectifAnnuelsSlice.reducer,
     planTravail: planTravailSlice.reducer,
     reliquatGrant: reliquatGrantSlice.reducer,
     budgetsEngaged: budgetEngagedSlice.reducer,
