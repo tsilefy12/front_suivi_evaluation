@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
-import { OrganisationItem } from "../organisation.interface";
+import { LineBudgetItem } from "../lineBudget.interface";
 
 /**
  * update a mission
@@ -11,14 +11,14 @@ import { OrganisationItem } from "../organisation.interface";
  * @memberof useCases
  * @description : This function is used to update a mission
  */
-export const updateOrganisation= createAsyncThunk(
-  "organisation/updateOrganisation",
-  async (data: { id: number; organisation: OrganisationItem }, thunkAPI) => {
+export const updateLineBudget= createAsyncThunk(
+  "lineBudget/updateLineBudget",
+  async (data: { id: number; lineBudget: LineBudgetItem }, thunkAPI) => {
     try {
-      const response = await axios.patch(`/compta/config-organisation/${data.id}`, data.organisation);
+      const response = await axios.patch(`/compta/config-budget/${data.id}`, data.lineBudget);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "mise à jour avec succès",
+          message: "Type  mise à jour avec succès",
           options: { variant: "success"},
         })
       );

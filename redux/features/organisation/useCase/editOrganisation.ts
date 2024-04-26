@@ -5,7 +5,7 @@ export const editOrganisation = createAsyncThunk(
   "organisation/editOrganisation",
   async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.get(`/compta/organisation/${data.id}`);
+      const response = await axios.get(`/compta/config-organisation/${data.id}`);
       return response.data;
     } catch (error: any) {
       if (error.response) {

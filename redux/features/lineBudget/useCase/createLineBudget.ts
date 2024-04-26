@@ -1,16 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
-import { OrganisationItem } from "../organisation.interface";
+import { LineBudgetItem } from "../lineBudget.interface";
 
-export const createOrganisation = createAsyncThunk(
-  "organisation/createOrganisation",
-  async (organisation: OrganisationItem, thunkAPI) => {
+export const createLineBudget = createAsyncThunk(
+
+  "lineBudget/createLineBudget",
+  async (lineBudget: LineBudgetItem, thunkAPI) => {
     try {
-      const response = await axios.post("/compta/config-organisation", organisation);
+      const response = await axios.post("/compta/config-budget", lineBudget);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Organisation créer avec succès",
+          message: "Line budget créer avec succès",
           options: { variant: "success" }
         })
       );

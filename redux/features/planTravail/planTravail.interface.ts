@@ -4,7 +4,7 @@ export interface PlanTravailItem {
     startDate?: Date;
     endDate?: Date;
     description?: string;
-    projectId?:number;
+    projectId?: number;
 }
 export interface PlanTravailInitialState {
     planTravaillist: PlanTravailItem[];
