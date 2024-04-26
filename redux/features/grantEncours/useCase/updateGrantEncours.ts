@@ -15,7 +15,7 @@ export const updateGrantEncours = createAsyncThunk(
   "grantEncours/updateGrantEncours",
   async (data: { id: string; grantEncour: GrantEncoursItem }, thunkAPI) => {
     try {
-      const response = await axios.patch(`/compta/grant${data.id}`, data.grantEncour);
+      const response = await axios.patch(`/compta/grant/${data.id}`, data.grantEncour);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Grant en cours mise à jour avec succès",
