@@ -4,15 +4,22 @@ export interface GrantEncoursItem {
     postAnalyticId?: number;
     projectId?: number;
     bankId?: number;
-    titleFr?: string;
-    titleEn?: string;
+    // titleFr?: string;
+    // titleEn?: string;
     bailleur?: string;
     amount?: number;
     amountMGA?: number;
+    currencyId?: number;
     responsable?: string;
-    startDate?: Date;
-    endDate?: Date;
-    duration?: number;
+    startDate?: string;
+    endDate?: string;
+    deadline?: string;
+    techDate?: string;
+    financeDate?: string;
+    status?: string;
+    techValidator?: string;
+    financeValidator?: string;
+    financeVerificator?: string;
   }
   
   export interface GrantEncoursInitialState {

@@ -34,6 +34,7 @@ import { useConfirm } from "material-ui-confirm";
 import { deletePostAnalytic } from "../../redux/features/postAnalytique";
 import { deleteGrantEncours } from "../../redux/features/grantEncours";
 import useFetchReliquatGrant from "../reliquetGrant/hooks/useFetchEliquatGrant";
+import useFetchEmployes from "../home/Missions/hooks/useFetchEmployees";
 
 const ListGrantsEnCours = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -51,17 +52,20 @@ const ListGrantsEnCours = () => {
   const { projectList } = useAppSelector((state: any) => state.project)
   const fetchtReliquatGrant = useFetchReliquatGrant();
   const { reliquatGrantList } = useAppSelector((state: any) =>state.reliquatGrant)
+  const fetchEpmloyes = useFetchEmployes();
+  const { employees } = useAppSelector((state: any) =>state.employe)
   React.useEffect(() => {
     fetchGrants();
     fetchProject();
     fetchtReliquatGrant();
+    fetchEpmloyes();
   }, [router.query])
-
-  const listGrants:{id: number, grants: number, baille: string, projet: string}[] = [];
+ 
+  const listGrants:{id: number, grants: number, baille: string, Vtechnique: string, FValidator: string, FVerificateur: string, etat: string}[] = [];
   grantEncoursList.forEach((g: any) => {
     reliquatGrantList.forEach((rg: any) =>{
       if (g.id != rg.grant) {
-        listGrants.push({id: g.id, grants: g.code, baille: g.bailleur,projet: g.projectId})
+        listGrants.push({id: g.id, grants: g.code, baille: g.bailleur,Vtechnique: g.techValidator, FValidator: g.financeValidator, FVerificateur: g.financeVerificator, etat: g.status})
       }
     })
   });
@@ -145,12 +149,17 @@ const ListGrantsEnCours = () => {
                           >
                             {row.grants}
                           </TableCell>
-                          <TableCell align="left">{row.baille}</TableCell>
                           <TableCell align="left">
-                            {projectList.find((e: any) => e.id === row?.projet)?.titleFr}
+                          {employees.find((e: any) =>e.id === row.Vtechnique)?.name}
                           </TableCell>
                           <TableCell align="left">
-                            {projectList.find((e: any) => e.id === row?.projet)?.titleEn}
+                            {employees.find((e: any) =>e.id === row.FValidator)?.name}
+                          </TableCell>
+                          <TableCell align="left">
+                          {employees.find((e: any) =>e.id === row.FVerificateur)?.name}
+                          </TableCell>
+                          <TableCell align="left">
+                            {row.etat}
                           </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer

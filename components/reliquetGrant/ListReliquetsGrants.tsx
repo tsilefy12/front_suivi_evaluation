@@ -141,7 +141,7 @@ const ListReliquetsGrants = () => {
           </Button>
         </Link>
         <Typography variant="h4" color="GrayText">
-          Réliquats GRANTs
+          Réliquats GRANTS
         </Typography>
       </SectionNavigation>
       <SectionTable sx={{backgroundColor: '#fff'}} >

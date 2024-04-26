@@ -18,13 +18,13 @@ export const headCells: readonly HeadCell[] = [
       id: 'anglais',
       numeric: true,
       disablePadding: false,
-      label: 'TITRE DU PROJET(Anglais)',
+      label: 'FINANCE VALIDATEUR',
     },
     {
       id: 'francais',
       numeric: true,
       disablePadding: false,
-      label: 'TITRE DU PROJET(Français)',
+      label: 'FINANCE VERIFICATEUR'
     },
   ];
 

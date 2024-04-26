@@ -33,7 +33,7 @@ const AddNewBudgetLine = () => {
     const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
     const fetchLigneBudgetaire = useFetchBudgetLine();
     const { isEditing, budgetLine } = useAppSelector((state: any) => state.budgetLine)
-    const {  lineBudgetList } = useAppSelector((state) => state.lineBudget)
+    const {  lineBudgetList } = useAppSelector((state) => state.budgetLine)
     const {  typeList } = useAppSelector((state) => state.types)
     const {  organisationList } = useAppSelector((state) => state.organisations)
 
