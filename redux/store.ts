@@ -77,7 +77,8 @@ export const store = configureStore({
     reliquatGrant: reliquatGrantSlice.reducer,
     budgetsEngaged: budgetEngagedSlice.reducer,
     types: typeSlice.reducer,
-    organisations : organisationSlice.reducer
+    organisations : organisationSlice.reducer,
+    currency: currencySlice.reducer,
   },
 });
 
