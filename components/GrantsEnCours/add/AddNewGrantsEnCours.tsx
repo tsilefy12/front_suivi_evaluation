@@ -77,26 +77,25 @@ const AddNewGrantsEnCours = () => {
   } else {
     listBank.push({ id: "", name: "" })
   }
- console.log("grant :", grantEncoursList)
- const listStatus = [
-  {id: "PENDING", name: "PENDING"},
-  {id: "IN_PROGRESS", name: "IN_PROGRESS"},
-  {id: "COMPLETED", name: "COMPLETED"}
- ]
+  console.log("grant :", grantEncoursList)
+  const listStatus = [
+    { id: "PENDING", name: "PENDING" },
+    { id: "IN_PROGRESS", name: "IN_PROGRESS" },
+    { id: "COMPLETED", name: "COMPLETED" }
+  ]
+
   const handleSubmit = async (values: any) => {
-    values.responsable = [...selectedEmployes.map((item) => item.id)];
-    values.projectId = 1;
-    values.bankId = null;
-    values.postAnalyticId = null;
-    // console.log("finance :", values.financeValidator)
-    const date1 = new Date(values.startDate);
+    const updateValues = {...values}
+    updateValues.responsable = [...selectedEmployes.map((item) => item.id)];
+    updateValues.projectId = null;
+    updateValues.bankId = null;
+    updateValues.postAnalyticId = null;
+ 
+    const date1 = new Date(updateValues.startDate);
     const DateNumber1 = date1.getTime();
-    const date2 = new Date(values.endDate)
+    const date2 = new Date(updateValues.endDate)
     const DateNumber2 = date2.getTime();
-    let calcul = DateNumber2 - DateNumber1;
-    const dateDeadline = new Date(calcul).toISOString();
-    console.log("deadline", dateDeadline);
-    values.deadline = dateDeadline
+
     if (DateNumber1 >= DateNumber2) {
       setOpen(true)
     } else {
@@ -109,7 +108,7 @@ const AddNewGrantsEnCours = () => {
             })
           );
         } else {
-      
+
           await dispatch(createGrantEncours(values));
         }
         router.push("/grants/grantsEnCours");
@@ -145,7 +144,7 @@ const AddNewGrantsEnCours = () => {
               financeVerificator: isEditing ? grantEncour?.financeVerificator : "",
               techValidator: isEditing ? grantEncour?.techValidator : "",
               currencyId: isEditing ? grantEncour?.currencyId : "",
-              deadline: isEditing ? grantEncour?.deadline : ""
+              deadline: isEditing ? grantEncour?.deadline : new Date().toISOString(),
               // duration: isEditing ? grantEncour?.duration : 0,
             }
         }
@@ -308,6 +307,17 @@ const AddNewGrantsEnCours = () => {
                     label="Date tech"
                     variant="outlined"
                     name="techDate"
+                    value={!isEditing ? formikProps.values.techDate : grantEncour?.techDate}
+                    onChange={(value: any) => formikProps.setFieldValue("techDate", value)}
+                  />
+                  <OSDatePicker
+                    fullWidth
+                    id="outlined-basic"
+                    label="Deadline"
+                    variant="outlined"
+                    name="deadline"
+                    value={!isEditing ? formikProps.values.deadline : grantEncour?.deadline}
+                    onChange={(value: any) => formikProps.setFieldValue("deadline", value)}
                   />
                 </CustomStack>
                 <FormControl fullWidth>
@@ -323,15 +333,15 @@ const AddNewGrantsEnCours = () => {
                   />
                 </FormControl>
                 <OSSelectField
-                    fullWidth
-                    id="outlined-basic"
-                    label="Currency"
-                    variant="outlined"
-                    name="currencyId"
-                    options={currencylist}
-                    dataKey={["name"]}
-                    valueKey="id"
-                  />
+                  fullWidth
+                  id="outlined-basic"
+                  label="Currency"
+                  variant="outlined"
+                  name="currencyId"
+                  options={currencylist}
+                  dataKey={["name"]}
+                  valueKey="id"
+                />
                 <FormControl>
                   <Autocomplete
                     multiple
