@@ -1,6 +1,5 @@
 import {
   Button,
-  Card,
   Container,
   Dialog,
   Divider,
@@ -34,19 +33,18 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import KeyValue from "../../../shared/keyValue";
-import useFetchTacheCle from "./hooks/useFetchTacheCle";
+import useFetchTacheCle from "./hooks/useFetchTacheEtObjectifs";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
 import { useConfirm } from "material-ui-confirm";
 import useFetchProject from "../../../GrantsEnCours/hooks/getProject";
 import { useRouter } from "next/router";
-import { TachCleItem } from "../../../../redux/features/tachesEtObjectifs/tacheETObjectifs.interface";
 import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
-import { deleteTacheCle, editTacheCle } from "../../../../redux/features/tachesEtObjectifs";
-import AddNewTacheCle from "./add/AddNewTacheCle";
+import { deleteTacheEtObjectifs, editTacheEtObjectifs } from "../../../../redux/features/tachesEtObjectifs";
+import AddNewTacheCle from "./add/AddNewTacheEtObjectifs";
 import useFetchPlanTravaile from "../../hooks/useFetchPlanTravail";
 import { getPlanTravail } from "../../../../redux/features/planTravail";
 
-const ListTacheCles = () => {
+const ListTacheEtObjectifs = () => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("projetEn");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -54,7 +52,7 @@ const ListTacheCles = () => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const fetchTacheCle: any = useFetchTacheCle()
-  const { tacheClelist, tacheCle } = useAppSelector((state) => state.tacheCle)
+  const { tacheEtObjectifList } = useAppSelector((state) => state.tacheEtObjectifs)
   const dispatch = useAppDispatch()
   const confirm = useConfirm()
   const fetchProject = useFetchProject()
@@ -81,8 +79,8 @@ const ListTacheCles = () => {
  }
  const getTache = () =>{
   const args: any = {};
-   dispatch(getPlanTravail({id, args}))
- }
+    dispatch(getPlanTravail({id, args}))
+  }
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -93,7 +91,7 @@ const ListTacheCles = () => {
   };
   const listTache: {id: string,tache: string, projetFrs: string, projetEng: string, plan: string}[] = [];
   let idTacheCle:any = "";
-  tacheClelist.forEach((element: any) =>{
+  tacheEtObjectifList.forEach((element: any) =>{
     if (id === element.planTravaileId) {
       idTacheCle = element.id;
       const projetFrs = element.projet ? projectList.find((e: any) => e.id === element.projet)?.titleEn : '';
@@ -182,14 +180,14 @@ const ListTacheCles = () => {
       },
     })
       .then(async () => {
-        await dispatch(deleteTacheCle({ id }));
+        await dispatch(deleteTacheEtObjectifs({ id }));
         fetchTacheCle();
       })
       .catch(() => { });
   };
 
   const handleClickEdit = async (id: any) => {
-    await dispatch(editTacheCle({ id }))
+    await dispatch(editTacheEtObjectifs({ id }))
     handleClickOpen()
   };
   return (
@@ -359,7 +357,7 @@ const ListTacheCles = () => {
   );
 };
 
-export default ListTacheCles;
+export default ListTacheEtObjectifs;
 
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));

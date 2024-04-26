@@ -17,8 +17,8 @@ import KeyValue from "../../../../../shared/keyValue";
 import useFetchPlanTravaile from "../../../../hooks/useFetchPlanTravail";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import { getPlanTravail } from "../../../../../../redux/features/planTravail";
-import { SectionNavigation } from "../../ListTacheCles";
-import useFetchTacheCle from "../../hooks/useFetchTacheCle";
+import { SectionNavigation } from "../../ListTacheEtObjectifs";
+import useFetchTacheCle from "../../hooks/useFetchTacheEtObjectifs";
 import { getTacheCle } from "../../../../../../redux/features/tachesEtObjectifs";
 import useFetchProject from "../../../../../GrantsEnCours/hooks/getProject";
 
