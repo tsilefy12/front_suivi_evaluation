@@ -87,7 +87,7 @@ const ListObjectifStrategique = () => {
             <Grid key={row.id} item xs={12} md={6} lg={4}>
               <LinkContainer>
                 <Typography color="GrayText" mb={2} variant="h6">
-                  {row.description}
+                {row.title} : {row.description}
                 </Typography>
                 <Link href={`/plan_travail/${row.id}/tachesCles`}>
                   <Box>
