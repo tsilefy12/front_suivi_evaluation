@@ -34,10 +34,11 @@ import { EmployeItem } from "../../../redux/features/employe/employeSlice.interf
 //import { GrantEncoursItem } from "../../../redux/features/grantEncours/grantEncours.interface";
 import useFetchPostAnalytique from "../hooks/getPostAnalytique";
 import useFetchProject from "../hooks/getProject";
+import useFetchCurrency from "../hooks/getCurrency";
 
 const AddNewGrantsEnCours = () => {
   const router = useRouter();
-  const { isEditing, grantEncour } = useAppSelector((state) => state.grantEncours);
+  const { isEditing, grantEncour, grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const dispatch = useAppDispatch();
   const fetchBank = useFetchBank();
   const fetchEmploys = useFetchEmploys();
@@ -46,12 +47,9 @@ const AddNewGrantsEnCours = () => {
   const fetchPostAnalytique = useFetchPostAnalytique();
   const { postAnalytiqueList } = useAppSelector((state) => state.postAnalytique);
   const fetcProject = useFetchProject();
-  const { projectList } = useAppSelector((state) => state.project);
+  const fetchCurreny = useFetchCurrency();
+  const { currencylist } = useAppSelector((state: any) => state.currency);
 
-  const [idProject, setIdProject]: any = React.useState(null);
-  let [titreFr, setTitreFr]: any = React.useState("")
-  let [titreEn, setTitreEn]: any = React.useState("")
-  const nulValue: any = null;
   const [open, setOpen] = React.useState(false)
 
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
@@ -67,7 +65,8 @@ const AddNewGrantsEnCours = () => {
     fetchEmploys();
     fetchPostAnalytique();
     fetcProject();
-  }, [])
+    fetchCurreny();
+  }, [router.query])
 
   const listBank: { id: string, name: string }[] = []
   //get list bank
@@ -78,29 +77,27 @@ const AddNewGrantsEnCours = () => {
   } else {
     listBank.push({ id: "", name: "" })
   }
-
-  //get list project
-  if (projectList.length > 0) {
-    projectList.map((element: any) => {
-      if (idProject == element.id) {
-        titreFr = element.titleFr
-        titreEn = element.titleEn
-      };
-    })
-  }
-
+ console.log("grant :", grantEncoursList)
+ const listStatus = [
+  {id: "PENDING", name: "PENDING"},
+  {id: "IN_PROGRESS", name: "IN_PROGRESS"},
+  {id: "COMPLETED", name: "COMPLETED"}
+ ]
   const handleSubmit = async (values: any) => {
     values.responsable = [...selectedEmployes.map((item) => item.id)];
-    // values.titleFr = titreFr;
-    // values.titleEn = titreEn;
-    // values.projectId = (idProject == null) ? null : idProject
+    values.projectId = 1;
+    values.bankId = null;
+    values.postAnalyticId = null;
+    console.log("finance :", values.financeValidator)
+
     const date1 = new Date(values.startDate);
     const DateNumber1 = date1.getTime();
     const date2 = new Date(values.endDate)
     const DateNumber2 = date2.getTime();
     let calcul = DateNumber2 - DateNumber1;
-    const duree = (calcul / (24 * 60 * 60 * 1000)).toFixed(0)
-    values.deadline = duree;
+    const dateDeadline = new Date(calcul).toISOString();
+    console.log("deadline", dateDeadline);
+    values.deadline = dateDeadline
     if (DateNumber1 >= DateNumber2) {
       setOpen(true)
     } else {
@@ -113,7 +110,7 @@ const AddNewGrantsEnCours = () => {
             })
           );
         } else {
-
+      
           await dispatch(createGrantEncours(values));
         }
         router.push("/grants/grantsEnCours");
@@ -131,37 +128,33 @@ const AddNewGrantsEnCours = () => {
             ? grantEncour
             : {
               code: isEditing ? grantEncour?.code : "",
-              postAnalyticId: isEditing ? grantEncour?.postAnalyticId : "",
-              // projectId: isEditing ? grantEncour?.projectId : "",
+              postAnalyticId: isEditing ? grantEncour?.postAnalyticId : 0,
+              projectId: isEditing ? grantEncour?.projectId : 0,
               bankId: isEditing ? grantEncour?.bankId : "",
-              titleFr: isEditing ? grantEncour?.titleFr : "",
-              titleEn: isEditing ? grantEncour?.titleEn : "",
+              // titleFr: isEditing ? grantEncour?.titleFr : "",
+              // titleEn: isEditing ? grantEncour?.titleEn : "",
               bailleur: isEditing ? grantEncour?.bailleur : "",
               amount: isEditing ? grantEncour?.amount : 0,
               amountMGA: isEditing ? grantEncour?.amountMGA : 0,
               responsable: isEditing ? grantEncour?.responsable : "",
-              startDate: isEditing ? grantEncour?.startDate : new Date(),
-              endDate: isEditing ? grantEncour?.endDate : new Date(),
-              techDate: isEditing ? grantEncour?.techDate : new Date(),
-              financeDate: isEditing ? grantEncour?.financeDate : new Date(),
+              startDate: isEditing ? grantEncour?.startDate : new Date().toISOString(),
+              endDate: isEditing ? grantEncour?.endDate : new Date().toISOString(),
+              techDate: isEditing ? grantEncour?.techDate : new Date().toISOString(),
+              financeDate: isEditing ? grantEncour?.financeDate : new Date().toISOString(),
               status: isEditing ? grantEncour?.status : "",
               financeValidator: isEditing ? grantEncour?.financeValidator : "",
               financeVerificator: isEditing ? grantEncour?.financeVerificator : "",
+              techValidator: isEditing ? grantEncour?.techValidator : "",
+              currencyId: isEditing ? grantEncour?.currencyId : "",
+              deadline: isEditing ? grantEncour?.deadline : ""
               // duration: isEditing ? grantEncour?.duration : 0,
-
             }
         }
         validationSchema={Yup.object({
           code: Yup.string().required("Champ obligatoire"),
-          // postAnalyticId: Yup.number().required("Champ obligatoire"),
-          bankId: Yup.number().required("Champ obligatoire"),
-          // titleFr: Yup.string().required("Champ obligatoire"),
-          // titleEn: Yup.string().required("Champ obligatoire"),
           bailleur: Yup.string().required("Champ obligatoire"),
           amount: Yup.string().required("Champ obligatoire"),
           amountMGA: Yup.string().required("Champ obligatoire"),
-          // responsable: Yup.string().required("Champ obligatoire"),
-          // duration: Yup.number().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -236,6 +229,7 @@ const AddNewGrantsEnCours = () => {
                     options={postAnalytiqueList}
                     dataKey="name"
                     valueKey="id"
+                    type="number"
                   />
                   <OSTextField
                     fullWidth
@@ -244,13 +238,16 @@ const AddNewGrantsEnCours = () => {
                     variant="outlined"
                     name="bailleur"
                   />
-                  <OSTextField
+                  <OSSelectField
                     fullWidth
                     id="outlined-basic"
                     label="Status"
                     variant="outlined"
                     name="status"
                     type="string"
+                    options={listStatus}
+                    dataKey="name"
+                    valueKey="id"
                   />
                 </Stack>
                 <CustomStack
@@ -287,7 +284,6 @@ const AddNewGrantsEnCours = () => {
                     dataKey={["name"]}
                     valueKey="id"
                   />
-
                 </CustomStack>
                 <CustomStack direction="row" spacing={4}
                 >
@@ -333,10 +329,9 @@ const AddNewGrantsEnCours = () => {
                     label="Currency"
                     variant="outlined"
                     name="currencyId"
-                    options={employees}
+                    options={currencylist}
                     dataKey={["name"]}
                     valueKey="id"
-
                   />
                 <FormControl>
                   <Autocomplete
@@ -364,6 +359,7 @@ const AddNewGrantsEnCours = () => {
                   direction={{ xs: "column", sm: "column", md: "row" }}
                   spacing={{ xs: 2, sm: 2, md: 1 }}
                 >
+
                   <OSTextField
                     fullWidth
                     id="outlined-basic"

@@ -11,24 +11,24 @@ export const transportEquipmentHeadCells: readonly HeadCell[] = [
     id: 'bailleur',
     numeric: true,
     disablePadding: false,
-    label: 'BAILLEUR',
+    label: 'VALIDATEUR TECHNIQUE',
   },
   {
     id: 'anglais',
     numeric: true,
     disablePadding: false,
-    label: 'TITRE DU PROJET(Anglais)',
+    label: 'FINANCE VALIDATEUR',
   },
   {
     id: 'francais',
     numeric: true,
     disablePadding: false,
-    label: 'TITRE DU PROJET(Français)',
+    label: 'FINANCE VERIFICATEUR'
   },
-  // {
-  //   id: 'responsable',
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: 'Responsable',
-  // },
+  {
+    id: 'status',
+    numeric: true,
+    disablePadding: false,
+    label: 'STATUS',
+  },
 ];
