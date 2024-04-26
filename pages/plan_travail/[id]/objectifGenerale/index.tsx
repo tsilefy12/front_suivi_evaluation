@@ -1,14 +1,14 @@
 import { Container } from '@mui/material'
 import React from 'react'
 import BackOfficeLayout from '../../../../layouts/backOffice';
-import ListObjectifGeneral from '../../../../components/plan_travail/organanisme/objectifGenerale/ListObjectifGeneral';
+import ListObjectifStrategique from '../../../../components/plan_travail/objectifStrategique';
 
 
 const ObjectifGenerale = () => {
   return (
     <BackOfficeLayout>
         <Container maxWidth="xl" >
-          <ListObjectifGeneral />
+          <ListObjectifStrategique />
         </Container>
     </BackOfficeLayout>
   )
