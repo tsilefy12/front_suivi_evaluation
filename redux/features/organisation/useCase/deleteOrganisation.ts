@@ -6,7 +6,7 @@ export const deleteOrganisation = createAsyncThunk(
   "organisation/deleteOrganisation",
   async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.delete(`/compta/organisation/${data.id}`);
+      const response = await axios.delete(`/compta/config-organisation/${data.id}`);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Organisation supprimé avec succès",

@@ -15,7 +15,7 @@ export const updateBudgetLine = createAsyncThunk(
   "budgetLine/updateBudgetLine",
   async (data: { id: string; budgetLine: BudgetLineItem }, thunkAPI) => {
     try {
-      const response = await axios.patch(`/campta/budget-line/${data.id}`, data.budgetLine);
+      const response = await axios.patch(`/compta/budget-line/${data.id}`, data.budgetLine);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Ligne budgetaire mise à jour avec succès",

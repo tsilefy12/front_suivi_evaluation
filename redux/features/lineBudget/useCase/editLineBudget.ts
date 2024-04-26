@@ -1,12 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axios } from "../../../../axios";
 
-export const getOrganisation = createAsyncThunk(
-  "organisation/getOrganisation",
-  async (data: { args?: any }, thunkAPI) => {
+export const editLineBudget = createAsyncThunk(
+  "LIneBudget/editLineBudget",
+  async (data: { id: string }, thunkAPI) => {
     try {
-      const params = JSON.stringify(data.args);
-      const response = await axios.get("/compta/config-organisation", { params });
+      const response = await axios.get(`/compta/config-budget/${data.id}`);
       return response.data;
     } catch (error: any) {
       if (error.response) {

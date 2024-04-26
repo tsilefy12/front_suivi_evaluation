@@ -33,6 +33,8 @@ const ObjectifStrategiqueForm = ({ handleClose }: any) => {
   }, [router.query])
 
   const handleSubmit = async (values: any) => {
+    values.startDate = new Date(values.startDate).toISOString()
+    values.endDate = new Date(values.endDate).toISOString()
     try {
       if (isEditing) {
         await dispatch(
@@ -45,7 +47,6 @@ const ObjectifStrategiqueForm = ({ handleClose }: any) => {
       } else {
         await dispatch(createPlanTravail(values));
         handleClose();
-        // fetchplanTravail();
       }
       router.push("/plan_travail");
     } catch (error) {
@@ -125,7 +126,7 @@ const ObjectifStrategiqueForm = ({ handleClose }: any) => {
                         label="Project"
                         name="grantsId"
                         options={projectList}
-                        dataKey="titleFr"
+                        dataKey="title"
                         valueKey="id"
                     />
                   </FormContainer>

@@ -88,8 +88,7 @@ const AddNewGrantsEnCours = () => {
     values.projectId = 1;
     values.bankId = null;
     values.postAnalyticId = null;
-    console.log("finance :", values.financeValidator)
-
+    // console.log("finance :", values.financeValidator)
     const date1 = new Date(values.startDate);
     const DateNumber1 = date1.getTime();
     const date2 = new Date(values.endDate)

@@ -105,6 +105,12 @@ const menu = [
         name: "Organisation",
         link: "/configurations/organisation",
         icon: "",
+      },
+      {
+        id:45,
+        name: "Ligne de Budget",
+        link: "/configurations/lineBudget",
+        icon: "",
       }
     ],
   },

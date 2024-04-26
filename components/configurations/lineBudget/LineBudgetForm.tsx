@@ -1,31 +1,33 @@
 import { Button, Stack, Typography, styled } from "@mui/material";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { createType, updateType } from "../../../redux/features/type";
+import { createLineBudget, updateLineBudget } from "../../../redux/features/lineBudget";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { ArrowBack, Check, Close } from "@mui/icons-material";
-import { cancelEdit } from "../../../redux/features/type/typeSlice";
+import { cancelEdit } from "../../../redux/features/lineBudget/lineBudgetSlice";
 import OSTextField from "../../shared/input/OSTextField";
 
-const TypeForm = () => {
+const LineBudgetForm = () => {
   const dispatch = useAppDispatch();
   const router = useRouter()
-  const { isEditing, type } = useAppSelector((state) => state.types)
+  const { isEditing, lineBudget } = useAppSelector((state) => state.lineBudget)
+  console.log(isEditing,lineBudget )
   const handleSubmit = async (values: any) => {
     try {
       if (isEditing) {
         await dispatch(
-          updateType({
-            id: type.id!.toString(),
-            type: values,
+          updateLineBudget({
+            id: lineBudget.id!,
+            lineBudget: values,
           })
         );
       } else {
-        await dispatch(createType(values));
+
+        await dispatch(createLineBudget(values));
       }
-      router.push("/configurations/type");
+      router.push("/configurations/lineBudget");
     } catch (error) {
       console.log("error", error);
     }
@@ -37,9 +39,9 @@ const TypeForm = () => {
         enableReinitialize={isEditing ? true : false}
         initialValues={
           isEditing
-            ? type
+            ? lineBudget
               : {
-                name: isEditing ? type?.name : ""
+                name: isEditing ? lineBudget?.name : ""
               }
         }
         validationSchema={Yup.object({
@@ -58,7 +60,7 @@ const TypeForm = () => {
               </Typography>
               <OSTextField
                 id="outlined-basic"
-                label="Type"
+                label="Ligne de budget"
                 variant="outlined"
                 name="name"
               />
@@ -104,4 +106,4 @@ const FormContainer = styled("div")(({ theme }) => ({
   background: "#fff",
 }));
 
-export default TypeForm;
+export default LineBudgetForm;

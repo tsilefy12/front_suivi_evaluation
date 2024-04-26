@@ -1,36 +1,36 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import OrganisationForm from "../../OrganisationForm";
+import LineBudgetForm from "../../LineBudgetForm";
 import { useAppDispatch } from "../../../../../hooks/reduxHooks";
 import { Container, Grid } from "@mui/material";
-import ListOrganisation from "../../table/ListOrganisation";
-import { editOrganisation } from "../../../../../redux/features/organisation";
+import ListLineBudget from "../../table/ListLineBudget";
+import { editLineBudget } from "../../../../../redux/features/lineBudget";
 
-const EditOrganisation = () => {
+const EditType = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const getOrganisation = async (id: string) => {
-        await dispatch(editOrganisation({ id }));
-    };
-
     useEffect(() => {
-      if (router.query.id) {
-        getOrganisation(router.query.id as string);
-      }
+        if (router.query.id) {
+            getLineBudget(router.query.id as string);
+        }
     }, [router.query]);
+
+    const getLineBudget = async (id: string) => {
+      await dispatch(editLineBudget({ id }));
+    };
 
     return (
         <Container maxWidth="xl">
         <Grid container spacing={1}>
           <Grid item xs={12} md={4}>
-            <OrganisationForm/>
+            <LineBudgetForm/>
           </Grid>
           <Grid item xs={12} md={8}>
-            <ListOrganisation />
+            <ListLineBudget />
           </Grid>
         </Grid>
       </Container>
     );
 };
 
-export default EditOrganisation;
+export default EditType;

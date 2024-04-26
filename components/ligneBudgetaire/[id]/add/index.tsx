@@ -22,6 +22,10 @@ import { useConfirm } from "material-ui-confirm";
 import useFetchBudgetLine from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
 import { createBudgetLine, updateBudgetLine } from "../../../../redux/features/budgetLine";
 import { SectionNavigation } from "../../../home";
+import { getLineBudget } from "../../../../redux/features/lineBudget";
+import { getType } from "../../../../redux/features/type";
+import { getOrganisation } from "../../../../redux/features/organisation";
+import OSSelectField from "../../../shared/select/OSSelectField";
 
 const AddNewBudgetLine = () => {
     const router = useRouter();
@@ -29,14 +33,12 @@ const AddNewBudgetLine = () => {
     const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
     const fetchLigneBudgetaire = useFetchBudgetLine();
     const { isEditing, budgetLine } = useAppSelector((state: any) => state.budgetLine)
+    const {  lineBudgetList } = useAppSelector((state) => state.lineBudget)
+    const {  typeList } = useAppSelector((state) => state.types)
+    const {  organisationList } = useAppSelector((state) => state.organisations)
+
     const dispatch: any = useAppDispatch();
     const { id }: any = router.query;
-
-    React.useEffect(() => {
-        fetchGrants();
-        fetchLigneBudgetaire();
-
-    }, [router.query])
  
     const grantValue: {id: number, name: string }[] = [];
     let grantCode: any = "";
@@ -49,7 +51,6 @@ const AddNewBudgetLine = () => {
     });
     const handleSubmit = async (values: any) => {
         values.grantId = parseInt(id);
-
         try {
             if (isEditing) {
                 await dispatch(
@@ -59,7 +60,6 @@ const AddNewBudgetLine = () => {
                     })
                 );
             } else {
-
                 await dispatch(createBudgetLine(values));
             }
             router.push("/grants/ligneBudgetaire");
@@ -67,6 +67,14 @@ const AddNewBudgetLine = () => {
             console.log("error", error);
         }
     };
+
+    React.useEffect(() => {
+        dispatch(getLineBudget({}))
+        dispatch(getOrganisation({}))
+        dispatch(getType({}))
+        fetchGrants();
+        fetchLigneBudgetaire();
+    }, [router.query])
     return (
         <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>
             <Formik
@@ -78,9 +86,9 @@ const AddNewBudgetLine = () => {
                                 code: isEditing ? budgetLine?.code : "",
                                 grantId: isEditing ? budgetLine?.grantId : 0,
                                 amount: isEditing ? budgetLine?.amount: 0,
-                                type: isEditing ? budgetLine?.type : "",
-                                organisation: isEditing ? budgetLine?.organisation : "",
-                                lineBudget: isEditing ? budgetLine?.lineBudget : ""
+                                budgetTypeId: isEditing ? budgetLine?.budgetTypeId : 0,
+                                configOrganisationId: isEditing ? budgetLine?.configOrganisationId : 0,
+                                configBudgetLineId: isEditing ? budgetLine?.configBudgetLineId : 0
                             }
                 }
                 validationSchema={Yup.object({
@@ -165,28 +173,37 @@ const AddNewBudgetLine = () => {
                                             variant="outlined"
                                             name="code"
                                         />
-                                        <OSTextField
+                                        <OSSelectField
                                             fullWidth
                                             id="outlined-basic"
+                                            options={organisationList}
+                                            valueKey="id"
+                                            dataKey="name"
                                             label="Organisation"
                                             variant="outlined"
-                                            name="organisation"
+                                            name="configOrganisationId"
                                         />
                                     </Stack>
                                     <Stack direction="row" spacing={2}>
-                                        <OSTextField
+                                        <OSSelectField
                                             fullWidth
                                             id="outlined-basic"
                                             label="Type"
+                                            options={typeList}
+                                            dataKey="name"
+                                            valueKey="id"
                                             variant="outlined"
-                                            name="type"
+                                            name="budgetTypeId"
                                         />
-                                        <OSTextField
+                                        <OSSelectField
                                             fullWidth
                                             id="outlined-basic"
+                                            options={lineBudgetList}
+                                            dataKey="name"
+                                            valueKey="id"
                                             label="Ligne de budget"
                                             variant="outlined"
-                                            name="lineBudget"
+                                            name="configBudgetLineId"
                                         />
                                     </Stack>
                                     <OSTextField

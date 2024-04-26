@@ -1,6 +1,4 @@
 import React from "react";
-import { Order } from "./type-variable-devise";
-import DataEtatMateriel from "./type-variable-devise";
 import { Box, Checkbox, IconButton, Paper, styled, Stack } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,17 +12,16 @@ import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../../../config/table.config";
-import useFetchPostAnalytique from "../../../GrantsEnCours/hooks/getPostAnalytique";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
-import TypeTableHeader from "../organisme/table/TypeTableHeader";
-import { TypeItem } from "../../../../redux/features/type/type.interface";
+import TypeTableHeader from "../organisme/table/LineBudgetTableHeader";
+import { LineBudgetItem } from "../../../../redux/features/lineBudget/lineBudget.interface";
 import { useConfirm } from "material-ui-confirm";
-import { deleteType, getType } from "../../../../redux/features/type";
-import { cancelEdit } from "../../../../redux/features/type/typeSlice";
+import { deleteLineBudget, getLineBudget } from "../../../../redux/features/lineBudget";
+import { cancelEdit } from "../../../../redux/features/lineBudget/lineBudgetSlice";
 import { useRouter } from "next/router";
 
-const ListType = () => {
-  const { typeList } = useAppSelector((state) =>state.types);
+const ListLineBudget = () => {
+  const { lineBudgetList } = useAppSelector((state) =>state.lineBudget);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -34,8 +31,8 @@ const ListType = () => {
   const { id }: any = router.query;
 
   React.useEffect(() =>{
-      dispatch(getType({}))
-  }, [typeList])
+      dispatch(getLineBudget({}))
+  }, [lineBudgetList])
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -49,15 +46,15 @@ const ListType = () => {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - typeList.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - lineBudgetList.length) : 0;
 
 
 
   const handleClickDelete = async (id: any) => {
     dispatch(cancelEdit())
     confirm({
-      title: "Supprimer le type",
-      description: "Voulez-vous vraiment supprimer ce type ?",
+      title: "Supprimer le ligne de budget",
+      description: "Voulez-vous vraiment supprimer ce ligne de budget ?",
       cancellationText: "Annuler",
       confirmationText: "Supprimer",
       cancellationButtonProps: {
@@ -68,14 +65,14 @@ const ListType = () => {
       },
     })
       .then(async () => {
-        await dispatch(deleteType({ id }));
-        await dispatch(getType({}));
+        await dispatch(deleteLineBudget({ id }));
+        await dispatch(getLineBudget({}));
       })
       .catch(() => {});
   };
   
   const handleClickEdit = async (id: any) => {
-    router.push(`/configurations/type/${id}/edit`);
+    router.push(`/configurations/lineBudget/${id}/edit`);
   };
   return (
     <TableSection>
@@ -90,12 +87,13 @@ const ListType = () => {
             >
               <TypeTableHeader />
               <TableBody>
-                { typeList
+                { lineBudgetList
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row: TypeItem, index: any) => {
+                  .map((row: LineBudgetItem, index: any) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
                       <TableRow
+                      key={row.id}
                       >
                         <TableCell
                           component="th"
@@ -152,7 +150,7 @@ const ListType = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={typeList.length}
+            count={lineBudgetList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -177,4 +175,4 @@ const TableSection = styled("div")(({ theme }) => ({
 
 const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 
-export default ListType;
+export default ListLineBudget;

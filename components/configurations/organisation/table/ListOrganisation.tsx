@@ -33,8 +33,7 @@ const ListOrganisation = () => {
   const { id }: any = router.query;
 
   React.useEffect(() =>{
-      dispatch(cancelEdit())
-      dispatch(getOrganisation({}))
+    dispatch(getOrganisation({}))
   }, [organisationList])
 
   const handleChangePage = (event: unknown, newPage: number) => {
