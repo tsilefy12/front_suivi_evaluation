@@ -1,6 +1,6 @@
-export { createTacheCle } from './useCase/createTacheEtObjectifs';
-export { deleteTacheCle } from './useCase/deleteTacheEtObjectifs';
-export { editTacheCle } from './useCase/editTacheEtObjectis';
-export { getTacheCle } from './useCase/getTacheEtObjectifs';
-export { getTacheClelist } from './useCase/getTacheEtObjectifsList';
-export { updateTacheCle } from './useCase/updateTacheEtObjectifs';
+export { createTacheEtObjectifs } from './useCase/createTacheEtObjectifs';
+export { deleteTacheEtObjectifs } from './useCase/deleteTacheEtObjectifs';
+export { editTacheEtObjectifs } from './useCase/editTacheEtObjectis';
+export { getTacheEtObjectifs } from './useCase/getTacheEtObjectifs';
+export { getTacheEtObjectifsList } from './useCase/getTacheEtObjectifsList';
+export { updateTacheEtObjectifs } from './useCase/updateTacheEtObjectifs';

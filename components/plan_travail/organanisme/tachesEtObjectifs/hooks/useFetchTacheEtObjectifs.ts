@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { useAppDispatch } from "../../../../../hooks/reduxHooks";
-import { getTacheClelist } from "../../../../../redux/features/tachesEtObjectifs";
+import { getTacheEtObjectifsList } from "../../../../../redux/features/tachesEtObjectifs";
 
-const useFetchTacheCle = () => {
+const useFetchTacheEtObjectifs = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -23,8 +23,8 @@ const useFetchTacheCle = () => {
           break;
       }
     }
-    await dispatch(getTacheClelist({ args }));
+    await dispatch(getTacheEtObjectifsList({ args }));
   };
 };
 
-export default useFetchTacheCle;
+export default useFetchTacheEtObjectifs;

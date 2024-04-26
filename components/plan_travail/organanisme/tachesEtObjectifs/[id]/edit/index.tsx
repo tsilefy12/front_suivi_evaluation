@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import AddNewTacheCle from "../../add/AddNewTacheCle";
+import AddNewTacheCle from "../../add/AddNewTacheEtObjectifs";
 import { useAppDispatch } from "../../../../../../hooks/reduxHooks";
 import { editTacheCle } from "../../../../../../redux/features/tachesEtObjectifs";
 
