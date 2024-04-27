@@ -41,6 +41,7 @@ import { lineBudgetSlice } from "./features/lineBudget/lineBudgetSlice";
 import { statusSlice } from "./features/status/statusSlice";
 import { objectifRapportSlice } from "./features/objectifRapport/objectifRapportSlice";
 import { resultatRapportSlice } from "./features/resultatAttendu/resultatRapportSlice";
+import { activiteRapportSlice } from "./features/activitesRapport/activiteRapportSlice";
 
 
 export const store = configureStore({
@@ -87,6 +88,7 @@ export const store = configureStore({
     status: statusSlice.reducer,
     objectifRapport: objectifRapportSlice.reducer,
     resultatRapport: resultatRapportSlice.reducer,
+    activiteRapport: activiteRapportSlice.reducer,
   },
 });
 

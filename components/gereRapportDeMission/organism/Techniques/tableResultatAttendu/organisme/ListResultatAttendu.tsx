@@ -105,8 +105,8 @@ const ListResultatAttendu = () => {
         <Button variant="text" color="info" onClick={handleClickOpen}>
           Ajouter
         </Button>
-        <Dialog open={open} onClose={handleClose}>
-          <AddResultatAttendu handleClose={handleClose}/>
+        <Dialog open={open} onClose={handleClose} disablePortal={true}>
+          <AddResultatAttendu handleClose={handleClose} disablePortal={true}/>
         </Dialog>
       </SectionNavigation>
     </Container>

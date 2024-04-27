@@ -9,9 +9,24 @@ import { Box, Button, Container, Dialog, IconButton, styled } from "@mui/materia
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddActivitesPrevues from "../add/addActivitesPrevues";
+import { useRouter } from "next/router";
+import useFetchActiviteRapport from "../hooks/useFetchActivityRapport";
+import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import { useConfirm } from "material-ui-confirm";
+import { ActiviteRapportItem } from "../../../../../../redux/features/activitesRapport/activiteRapport.interface";
+import { deleteActiviteRapport, editAcitiviteRapport } from "../../../../../../redux/features/activitesRapport";
 
 const ListActivitesPrevues = () => {
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
+  const fetchActivityRapport = useFetchActiviteRapport();
+  const { activiteRapportlist } = useAppSelector((state: any) =>state.activiteRapport);
+  const dispatch: any = useAppDispatch();
+  const confirm = useConfirm();
+
+  React.useEffect(() =>{
+    fetchActivityRapport();
+  }, [router.query])
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -19,6 +34,30 @@ const ListActivitesPrevues = () => {
     setOpen(false);
   };
 
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer l'activté de rapport",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteActiviteRapport({ id }));
+        fetchActivityRapport();
+      })
+      .catch(() => {});
+  };
+
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editAcitiviteRapport({ id }));
+    handleClickOpen();
+  };
   return (
     <Container>
       <Box sx={{ overflow: "auto" }}>
@@ -26,7 +65,7 @@ const ListActivitesPrevues = () => {
       <MyTableContainer>
         <Table sx={{ minWidth: 700 }} aria-label="simple table">
           <TableBody>
-            {rows.map((row) => (
+            {activiteRapportlist.map((row: ActiviteRapportItem, index: any) => (
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -40,6 +79,7 @@ const ListActivitesPrevues = () => {
                       color="primary"
                       aria-label="Modifier"
                       component="span"
+                      onClick={() =>handleClickEdit(row.id!)}
                     >
                       <EditIcon />
                     </IconButton>
@@ -47,6 +87,7 @@ const ListActivitesPrevues = () => {
                       color="warning"
                       aria-label="Supprimer"
                       component="span"
+                      onClick={() =>handleClickDelete(row.id!)}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -63,8 +104,8 @@ const ListActivitesPrevues = () => {
         <Button variant="text" color="info" onClick={handleClickOpen}>
           Ajouter
         </Button>
-        <Dialog open={open} onClose={handleClose}>
-          <AddActivitesPrevues />
+        <Dialog open={open} onClose={handleClose} disablePortal={true}>
+          <AddActivitesPrevues handleClose={handleClose} disablePortal={true}/>
         </Dialog>
       </SectionNavigation>
     </Container>

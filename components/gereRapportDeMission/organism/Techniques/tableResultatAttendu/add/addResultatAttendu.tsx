@@ -110,6 +110,7 @@ const AddResultatAttendu = ({ handleClose }: any) => {
                         vous pouvez les réutiliser pour les rapports
                       </Typography>
                     </Stack>
+                    <FormContainer sx={{height: 200, overflow: "auto"}}>
                     <Table sx={{ minWidth: 500 }} aria-label="simple table">
                       {resultatRapportlist.map((item: ResultatRapportItem, index: any) => (
                         <TableRow
@@ -131,6 +132,7 @@ const AddResultatAttendu = ({ handleClose }: any) => {
                         </TableRow>
                       ))}
                   </Table>
+                  </FormContainer>
                 </FormContainer>
               </DialogContent>
               <DialogActions>
