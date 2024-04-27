@@ -1,7 +1,8 @@
 export interface ProjectItem {
     id?: string;
-    titleFr?: string;
-    titleEn?: string;
+    title?: string;
+    descriptionEn?: string;
+    descriptionFr?: string;
 }
 export interface ProjectInitialState {
     projectList: ProjectItem[];

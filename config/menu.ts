@@ -117,6 +117,12 @@ const menu = [
         name: "Status",
         link: "/configurations/status",
         icon: "",
+      },
+      {
+        id:46,
+        name: "Projet",
+        link: "/configurations/project",
+        icon: "",
       }
     ],
   },
