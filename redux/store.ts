@@ -38,6 +38,7 @@ import { typeSlice } from "./features/type/typeSlice";
 import { organisationSlice } from "./features/organisation/organisationSlice";
 import { currencySlice } from "./features/currency/currencySlice";
 import { lineBudgetSlice } from "./features/lineBudget/lineBudgetSlice";
+import { statusSlice } from "./features/status/statusSlice";
 
 
 export const store = configureStore({
@@ -81,6 +82,7 @@ export const store = configureStore({
     organisations : organisationSlice.reducer,
     lineBudget : lineBudgetSlice.reducer,
     currency: currencySlice.reducer,
+    status: statusSlice.reducer,
   },
 });
 
