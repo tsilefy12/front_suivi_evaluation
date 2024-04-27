@@ -83,7 +83,7 @@ const GereRapportDeMission = () => {
       <BodySection>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 1, md: 2 }}
         sx={{padding:"10px", width:"100%" }}>
-          <Stack width={{xs:"100%", sm:"100%", md:"60%" }}>
+          <Stack width={{xs:"100%", sm:"100%" }}>
             <Tabs
               value={value}
               onChange={handleChange}

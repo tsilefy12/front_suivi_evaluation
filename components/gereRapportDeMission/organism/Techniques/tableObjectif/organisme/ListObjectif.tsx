@@ -9,9 +9,24 @@ import { Box, Button, Container, Dialog, IconButton, styled } from "@mui/materia
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddObjectif from "../add/addObjectif";
+import useFetchObjectifRapport from "../hooks/useFetchObjectifRapport";
+import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import { deleteObjectifRapport, editObjectifRapport } from "../../../../../../redux/features/objectifRapport";
+import { ObjectifRapportItem } from "../../../../../../redux/features/objectifRapport/objectifRapport.interface";
+import { useConfirm } from "material-ui-confirm";
 
 const ListObjectif = () => {
   const [open, setOpen] = React.useState(false);
+  const fetchObjectifRapport = useFetchObjectifRapport();
+  const { objectifRapportlist } = useAppSelector((state: any) =>state.objectifRapport);
+  const router = useRouter();
+  const dispatch: any = useAppDispatch();
+  const confirm = useConfirm();
+
+  React.useEffect(() =>{
+    fetchObjectifRapport();
+  }, [router.query])
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -19,14 +34,38 @@ const ListObjectif = () => {
     setOpen(false);
   };
 
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer l'objectif de rapport",
+      description: "Voulez-vous vraiment supprimer cet objectif ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteObjectifRapport({ id }));
+        fetchObjectifRapport();
+      })
+      .catch(() => {});
+  };
+
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editObjectifRapport({ id }));
+    handleClickOpen();
+  };
   return (
     <Container>
       <Box sx={{ overflow: "auto" }}>
         <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
       <MyTableContainer>
-        <Table sx={{ minWidth: 700 }} aria-label="simple table">
+        <Table sx={{ width: "100%" }} aria-label="simple table">
           <TableBody>
-            {rows.map((row) => (
+            {objectifRapportlist.map((row: ObjectifRapportItem, index: any) => (
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -40,6 +79,7 @@ const ListObjectif = () => {
                       color="primary"
                       aria-label="Modifier"
                       component="span"
+                      onClick={() =>handleClickEdit(row.id!)}
                     >
                       <EditIcon />
                     </IconButton>
@@ -47,6 +87,7 @@ const ListObjectif = () => {
                       color="warning"
                       aria-label="Supprimer"
                       component="span"
+                      onClick={() =>handleClickDelete(row.id)}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -64,7 +105,7 @@ const ListObjectif = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddObjectif />
+          <AddObjectif handleClose={handleClose}/>
         </Dialog>
       </SectionNavigation>
     </Container>

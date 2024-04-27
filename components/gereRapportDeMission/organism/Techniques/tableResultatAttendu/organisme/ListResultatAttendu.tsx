@@ -9,14 +9,54 @@ import { Box, Button, Container, Dialog, IconButton, styled } from "@mui/materia
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddResultatAttendu from "../add/addResultatAttendu";
+import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import useFetchResultatRapport from "../hooks/useFetchResultatRapport";
+import { useRouter } from "next/router";
+import { useConfirm } from "material-ui-confirm";
+import { ResultatRapportItem } from "../../../../../../redux/features/resultatAttendu/resultatRapport.interface";
+import { deleteResultatRapport, editResultatRapport } from "../../../../../../redux/features/resultatAttendu";
 
 const ListResultatAttendu = () => {
   const [open, setOpen] = React.useState(false);
+  const fetchResultatRapport = useFetchResultatRapport();
+  const { resultatRapportlist } = useAppSelector((state) =>state.resultatRapport);
+  const router = useRouter();
+  const confirm = useConfirm();
+  const dispatch: any = useAppDispatch();
+  
+  React.useEffect(() =>{
+    fetchResultatRapport();
+  }, [router.query])
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer le résultat de rapport",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteResultatRapport({ id }));
+        fetchResultatRapport();
+      })
+      .catch(() => {});
+  };
+
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editResultatRapport({ id }));
+    handleClickOpen();
   };
 
   return (
@@ -26,7 +66,7 @@ const ListResultatAttendu = () => {
       <MyTableContainer>
         <Table sx={{ minWidth: 700 }} aria-label="simple table">
           <TableBody>
-            {rows.map((row) => (
+            {resultatRapportlist.map((row: ResultatRapportItem, index: any) => (
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -40,6 +80,7 @@ const ListResultatAttendu = () => {
                       color="primary"
                       aria-label="Modifier"
                       component="span"
+                      onClick={() =>handleClickEdit(row.id)}
                     >
                       <EditIcon />
                     </IconButton>
@@ -47,6 +88,7 @@ const ListResultatAttendu = () => {
                       color="warning"
                       aria-label="Supprimer"
                       component="span"
+                      onClick={() =>handleClickDelete(row.id)}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -64,7 +106,7 @@ const ListResultatAttendu = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddResultatAttendu />
+          <AddResultatAttendu handleClose={handleClose}/>
         </Dialog>
       </SectionNavigation>
     </Container>

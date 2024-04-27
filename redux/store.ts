@@ -39,6 +39,8 @@ import { organisationSlice } from "./features/organisation/organisationSlice";
 import { currencySlice } from "./features/currency/currencySlice";
 import { lineBudgetSlice } from "./features/lineBudget/lineBudgetSlice";
 import { statusSlice } from "./features/status/statusSlice";
+import { objectifRapportSlice } from "./features/objectifRapport/objectifRapportSlice";
+import { resultatRapportSlice } from "./features/resultatAttendu/resultatRapportSlice";
 
 
 export const store = configureStore({
@@ -83,6 +85,8 @@ export const store = configureStore({
     lineBudget : lineBudgetSlice.reducer,
     currency: currencySlice.reducer,
     status: statusSlice.reducer,
+    objectifRapport: objectifRapportSlice.reducer,
+    resultatRapport: resultatRapportSlice.reducer,
   },
 });
 
