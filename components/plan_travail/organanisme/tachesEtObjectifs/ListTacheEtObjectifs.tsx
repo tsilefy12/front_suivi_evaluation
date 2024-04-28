@@ -261,7 +261,7 @@ const ListTacheEtObjectifs = () => {
                                 {row.statusId}
                             </TableCell>
                             <TableCell>
-                                {row.responsableId}
+                                {employees.find((e)=> e.id == row?.responsableId)?.name}
                             </TableCell>
                             <TableCell>
                                 <Moment format="DD/MM/YYYY">
