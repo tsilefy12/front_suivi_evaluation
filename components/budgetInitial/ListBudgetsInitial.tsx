@@ -263,7 +263,7 @@ const ListBudgetInitial = () => {
                           </TableCell>
                           <TableCell sx={{ height: "10vh", overflow: "auto", width: "300px" }} align="right">
                             {
-                              [row.ligneBudgetaire].map((lp: any) => {
+                              (row.ligneBudgetaire! as any).map((lp: any) => {
                                 return (
                                   <Stack direction="column" spacing={2} height={25} overflow="auto">
                                     {budgetLineList.find((e: any) => e.id === lp)?.code}
@@ -274,7 +274,7 @@ const ListBudgetInitial = () => {
                           </TableCell>
                           <TableCell sx={{ width: "300px" }} align="right">
                             {
-                              [row.periodeId].map((lp: any) => {
+                              (row.periodeId! as any).map((lp: any) => {
                                 return (
                                   <Stack direction="column" spacing={2} height={25} overflow="auto">
                                     {periodelist.find((e: any) => e.id === lp)?.periode}
