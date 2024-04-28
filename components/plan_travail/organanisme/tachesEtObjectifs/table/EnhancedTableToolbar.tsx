@@ -45,7 +45,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         
         >
           <Typography variant="h6" id="tableTitle" component="div">
-            Liste des tâches clés
+            Liste des tâches et objectifs
           </Typography>
           <TextField
             variant="outlined"

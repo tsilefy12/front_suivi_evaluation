@@ -1,5 +1,6 @@
 export interface TacheEtObjectifItem {
     id?: string;
+    sn?: string;
     keyTasks?: string;
     statusId?: number;
     timeFrame?: string;

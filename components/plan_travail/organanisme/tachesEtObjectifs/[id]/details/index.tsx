@@ -73,7 +73,7 @@ const DetailTacheCles = () => {
                 spacing={{ xs: 1, sm: 2, md: 4 }}
                 justifyContent="space-between"
                 sx={{ mb: 2 }}>
-                <Link href={`/plan_travail/${id}/tachesCles`}>
+                <Link href={`/plan_travail/${id}/tachesEtObjectifs`}>
                     <Button color="info" variant="text" startIcon={<ArrowBackIcon />}>
                         Retour
                     </Button>
