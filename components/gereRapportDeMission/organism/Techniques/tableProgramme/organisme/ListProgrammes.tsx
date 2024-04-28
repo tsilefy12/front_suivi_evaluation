@@ -17,10 +17,40 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddProgrammes from "../add/addProgramme";
+import { useRouter } from "next/router";
+import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import useFetchProgrammeRapport from "../hooks/useFetchProgrammeRapport";
+import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
+import useFetchLivrableRapport from "../../tableLivrables/hooks/useFetchLivrableRapport";
+import useFetchActiviteRapport from "../../tableActivitésPrévues/hooks/useFetchActivityRapport";
+import { ProgrammeRapportItem } from "../../../../../../redux/features/programmeRapport/programmeRapport.interface";
+import Moment from "react-moment";
+import { useConfirm } from "material-ui-confirm";
+import { deleteProgrammeRapport, editProgrammeRapport } from "../../../../../../redux/features/programmeRapport";
+import AddProgrammesRapport from "../add/addProgramme";
 
 const ListProgrammes = () => {
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
+  const dispatch: any = useAppDispatch();
+  const { isEditing, programmeRapport, programmeRapportList } = useAppSelector((state: any) => state.programmeRapport);
+  const fetchProgrammeRapport = useFetchProgrammeRapport();
+  const { id }: any = router.query;
+  const fetchEmployes = useFetchEmploys();
+  const { employees } = useAppSelector((state: any) => state.employe);
+  const fetchLivrable = useFetchLivrableRapport();
+  const { livrableRapportlist } = useAppSelector((state: any) => state.livrableRapport);
+  const fetchActivitePrevueR = useFetchActiviteRapport();
+  const { activiteRapportlist } = useAppSelector((state: any) => state.activiteRapport);
+  const confirm = useConfirm();
+
+  React.useEffect(() => {
+    fetchProgrammeRapport();
+    fetchEmployes();
+    fetchActivitePrevueR();
+    fetchLivrable();
+  }, [router.query])
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -28,42 +58,75 @@ const ListProgrammes = () => {
     setOpen(false);
   };
 
+  
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer le programme de rapport",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteProgrammeRapport({ id }));
+        fetchProgrammeRapport();
+      })
+      .catch(() => {});
+  };
+
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editProgrammeRapport({ id }));
+    handleClickOpen();
+  };
   return (
     <Container maxWidth="xl">
       <SectionTable>
-      <Box sx={{ overflow: "auto" }}>
-        <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
+        <Box sx={{ overflow: "auto" }}>
+          <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
             <MyTableContainer>
               <Table sx={{ minWidth: 750 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
                     <TableCell>Date de début</TableCell>
-                    <TableCell align="left">Date de fin</TableCell>
+                    <TableCell align="left">Date fin</TableCell>
                     <TableCell align="left">Activités prévues</TableCell>
                     <TableCell align="left">Livrables</TableCell>
                     <TableCell align="left">Responsable</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
+                  {programmeRapportList.map((row: ProgrammeRapportItem, index: any) => (
                     <TableRow
                       key={row.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
-                        {row.dateDebut}
+                        <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.dateFin}
+                        <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.activites}
+                        {row.activitePrevueR}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.livrable}
+                        {row.livrableR}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.responsable}
+                        {
+                          [row.responsableR].map((lp: any) => {
+                            return (
+                              <Stack direction="column" spacing={2} height={25} overflow="auto">
+                                {employees.find((e: any) => e.id === lp.id)?.name}
+                              </Stack>
+                            )
+                          })
+                        }
                       </TableCell>
                       <TableCell align="right">
                         <BtnActionContainer
@@ -74,6 +137,7 @@ const ListProgrammes = () => {
                             color="primary"
                             aria-label="Modifier"
                             component="span"
+                            onClick={() =>handleClickEdit(row.id!)}
                           >
                             <EditIcon />
                           </IconButton>
@@ -81,6 +145,7 @@ const ListProgrammes = () => {
                             color="warning"
                             aria-label="Supprimer"
                             component="span"
+                            onClick={() =>handleClickDelete(row.id!)}
                           >
                             <DeleteIcon />
                           </IconButton>
@@ -91,20 +156,20 @@ const ListProgrammes = () => {
                 </TableBody>
               </Table>
             </MyTableContainer>
-            </Box>
-            </Box>
-            <SectionNavigation
-              direction="row"
-              justifyContent="space-between"
-              mb={2}
-            >
-              <Button variant="text" color="info" onClick={handleClickOpen}>
-                Ajouter
-              </Button>
-              <Dialog open={open} onClose={handleClose}>
-                <AddProgrammes />
-              </Dialog>
-            </SectionNavigation>
+          </Box>
+        </Box>
+        <SectionNavigation
+          direction="row"
+          justifyContent="space-between"
+          mb={2}
+        >
+          <Button variant="text" color="info" onClick={handleClickOpen}>
+            Ajouter
+          </Button>
+          <Dialog open={open} onClose={handleClose}>
+            <AddProgrammesRapport handleClose={handleClose}/>
+          </Dialog>
+        </SectionNavigation>
       </SectionTable>
     </Container>
   );

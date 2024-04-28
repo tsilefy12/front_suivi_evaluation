@@ -30,6 +30,7 @@ import { useRouter } from "next/router";
 import { Check } from "@mui/icons-material";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import { EmployeItem } from "../../../../../../redux/features/employe/employeSlice.interface";
+import useFetchPlannedActivityList from "../../tableActivitésPrévues/hooks/useFetchPlannedActivityList";
 
 const AddProgrammes = ({ handleClose }: any) => {
   const dispatch = useAppDispatch()
@@ -41,12 +42,15 @@ const AddProgrammes = ({ handleClose }: any) => {
   const fetchDeliverableListe = useFetchDeliverableList();
   const { deliverableList } = useAppSelector((state) => state.deliverable);
   const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) =>state.employe)
+  const { employees } = useAppSelector((state: any) =>state.employe);
+  const fetchActivitePrevue = useFetchPlannedActivityList();
+  const { plannedActivityList } = useAppSelector((state: any) =>state.plannedActivity) 
 
   React.useEffect(() => {
     fetchProgrammePrevision();
     fetchDeliverableListe();
     fetchEmployes();
+    fetchActivitePrevue();
   }, [router.query])
 
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
@@ -58,11 +62,11 @@ const AddProgrammes = ({ handleClose }: any) => {
   );
   const handleSubmit = async (values: any) => {
     values.responsable = [...selectedEmployes.map((item) => item.id)];
+    values.missionId = id!;
     const date1 = new Date(values.dateDebut);
     const DateNumber1 = date1.getTime();
     const date2 = new Date(values.dateFin)
     const DateNumber2 = date2.getTime();
-
     // console.log("test")
     if (DateNumber1 >= DateNumber2) {
       setOpen(true)
@@ -104,9 +108,9 @@ const AddProgrammes = ({ handleClose }: any) => {
             }
         }
         validationSchema={Yup.object({
-          activitePrevue: Yup.string().required("Champ obligatoire"),
-          livrable: Yup.string().required("Champ obligatoire"),
-          responsable: Yup.string().required("Champ obligatoire"),
+          // activitePrevue: Yup.string().required("Champ obligatoire"),
+          // livrable: Yup.string().required("Champ obligatoire"),
+          // responsable: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -138,12 +142,15 @@ const AddProgrammes = ({ handleClose }: any) => {
                       value={formikProps.values.dateFin}
                       onChange={(value: any) => formikProps.setFieldValue("dateFin", value)}
                     />
-                    <OSTextField
+                    <OSSelectField
                       fullWidth
                       id="outlined-basic"
                       label="Activités prévues "
                       variant="outlined"
                       name="activitePrevue"
+                      options={plannedActivityList}
+                      dataKey={["description"]}
+                      valueKey="id"
                     />
                     <OSSelectField
                       fullWidth
@@ -190,7 +197,11 @@ const AddProgrammes = ({ handleClose }: any) => {
                   >
                     Annuler
                   </Button>
-                  <Button variant="contained" type="submit">
+                  <Button 
+                  variant="contained" 
+                  type="button"
+                  onClick={formikProps.submitForm}
+                  >
                     Enregistrer
                   </Button>
                 </DialogActions>

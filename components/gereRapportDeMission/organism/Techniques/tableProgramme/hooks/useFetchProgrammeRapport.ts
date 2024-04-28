@@ -1,13 +1,14 @@
 import { useRouter } from "next/router";
 import { useAppDispatch } from "../../../../../../hooks/reduxHooks";
-import { getProgrammePrevisionList } from "../../../../../../redux/features/programmePrevision";
+import { getObjectifRapportlist } from "../../../../../../redux/features/objectifRapport";
+import { getProgrammeRapportList } from "../../../../../../redux/features/programmeRapport";
 
-const useFetchProgrammePrevisionList = () => {
+const useFetchProgrammeRapport = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   return async () => {
-    const args: any = {};
+    let args: any = {};
     if (router.query.search) {
       args.where = {
         OR: [],
@@ -23,8 +24,8 @@ const useFetchProgrammePrevisionList = () => {
           break;
       }
     }
-    await dispatch(getProgrammePrevisionList({ args }));
+    await dispatch(getProgrammeRapportList({ args }));
   };
 };
 
-export default useFetchProgrammePrevisionList;
+export default useFetchProgrammeRapport;

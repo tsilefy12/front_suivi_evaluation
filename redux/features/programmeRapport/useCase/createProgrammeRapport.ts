@@ -1,15 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
+import { ProgrammeRapportItem } from "../programmeRapport.interface";
 
-export const deleteProgrammePrevision = createAsyncThunk(
-  "programmePrevision/deleteProgrammePrevision",
-  async (data: { id: string }, thunkAPI) => {
+export const createProgrammeRapport = createAsyncThunk(
+  "programmeRapport/createProgrammeRapport",
+  async (programmeRapport: ProgrammeRapportItem, thunkAPI) => {
     try {
-      const response = await axios.delete(`/suivi-evaluation/programme-prevision/${data.id}`);
+      const response = await axios.post("/suivi-evaluation/programme-rapport", programmeRapport);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Programme de prevision supprimé avec succès",
+          message: "Programme de rapport created successfully",
           options: { variant: "success" },
         })
       );

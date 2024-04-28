@@ -21,20 +21,32 @@ import AddProgrammes from "../add/addProgramme";
 import useFetchProgrammePrevisionList from "../hooks/useFetchProgrammePrevision";
 import { useAppSelector } from "../../../../../../hooks/reduxHooks";
 import Moment from "react-moment";
-import { deleteProgrammePrevision, editProgrammePrevision } from "../../../../../../redux/features/programmePrevision";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useConfirm } from "material-ui-confirm";
+import useFetchPlannedActivityList from "../../tableActivitésPrévues/hooks/useFetchPlannedActivityList";
+import useFetchDeliverableList from "../../tableLivrables/hooks/useFetchDeliverableList";
+import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
+import { deleteProgrammePrevision, editProgrammePrevision } from "../../../../../../redux/features/programmePrevision";
 
 const ListProgrammes = () => {
   const [open, setOpen] = React.useState(false);
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
-  const { programmePrevisionList } = useAppSelector((state) =>state.programmePrevision)
-  const dispatch = useDispatch()
+  const { programmePrevisionList } = useAppSelector((state: any) =>state.programmePrevision)
+  const dispatch: any = useDispatch()
   const router = useRouter()
   const confirm = useConfirm();
+  const fetchActivitePrevue = useFetchPlannedActivityList();
+  const { plannedActivityList } = useAppSelector((state: any) =>state.plannedActivity);
+  const fetchLivrable = useFetchDeliverableList();
+  const { deliverableList } = useAppSelector((state: any) =>state.deliverable);
+  const fetchEmployes = useFetchEmploys();
+  const { employees } = useAppSelector((state: any) =>state.employe);
   React.useEffect(() =>{
     fetchProgrammePrevision();
+    fetchActivitePrevue();
+    fetchLivrable();
+    fetchEmployes();
   }, [router.query])
 
   const handleClickOpen = () => {
@@ -43,30 +55,31 @@ const ListProgrammes = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  // const handleClickEdit = async (id: string) => {
-  //   await dispatch(editProgrammePrevision({ id }));
-  //   handleClickOpen();
-  // };
 
-  // const handleClickDelete = async (id: any) => {
-  //   confirm({
-  //     title: "Supprimer livrable de livrable",
-  //     description: "Voulez-vous vraiment supprimer cet livrable ?",
-  //     cancellationText: "Annuler",
-  //     confirmationText: "Supprimer",
-  //     cancellationButtonProps: {
-  //       color: "warning",
-  //     },
-  //     confirmationButtonProps: {
-  //       color: "error",
-  //     },
-  //   })
-  //     .then(async () => {
-  //       await dispatch(deleteProgrammePrevision({ id }));
-  //       fetchProgrammePrevision();
-  //     })
-  //     .catch(() => {});
-  // };
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer l'activté de rapport",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteProgrammePrevision({ id }));
+        fetchProgrammePrevision();
+      })
+      .catch(() => {});
+  };
+
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editProgrammePrevision({ id }));
+    handleClickOpen();
+  };
   return (
     <Container maxWidth="xl">
       <SectionTable>
@@ -96,13 +109,13 @@ const ListProgrammes = () => {
                       <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.activitePrevue}
+                        {plannedActivityList.find((e: any) =>e.id === row.activitePrevue)?.description}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.livrable}
+                        {deliverableList.find((e: any) =>e.id === row.livrable)?.description}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.responsable}
+                      {row.responsable}
                       </TableCell>
                       <TableCell align="right">
                         <BtnActionContainer
@@ -113,7 +126,7 @@ const ListProgrammes = () => {
                             color="primary"
                             aria-label="Modifier"
                             component="span"
-                            //onClick={() =>handleClickEdit(row.id)}
+                            onClick={() =>handleClickEdit(row.id)}
                           >
                             <EditIcon />
                           </IconButton>
@@ -121,6 +134,7 @@ const ListProgrammes = () => {
                             color="warning"
                             aria-label="Supprimer"
                             component="span"
+                            onClick={() =>handleClickDelete(row.id)}
                           >
                             <DeleteIcon />
                           </IconButton>
