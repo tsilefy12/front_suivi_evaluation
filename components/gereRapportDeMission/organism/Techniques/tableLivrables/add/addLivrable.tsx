@@ -9,34 +9,103 @@ import {
   styled,
   TextField,
 } from "@mui/material";
+import OSTextField from "../../../../../shared/input/OSTextField";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
+import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import useFetchlivrableRapport from "../../tableActivitésPrévues/hooks/useFetchActivityRapport";
+import { createLivrableRapport, updateLivrableRapport } from "../../../../../../redux/features/LivrableRapport";
+import { cancelEdit } from "../../../../../../redux/features/LivrableRapport/livrableRapportSlice";
 
-const AddLivrable = () => {
+const AddlivrableRapport = ({ handleClose }: any) => {
+  const { isEditing, livrableRapport } = useAppSelector((state: any) => state.livrableRapport);
+  const dispatch: any = useAppDispatch();
+  const router = useRouter();
+  const fetchlivrableRapport = useFetchlivrableRapport();
+  const { id }: any = router.query;
+  React.useEffect(() => {
+    fetchlivrableRapport()
+  }, [router.query])
+
+
+  const handleSubmit = async (values: any) => {
+    values.missionId = id!;
+    try {
+      if (isEditing) {
+        await dispatch(
+          updateLivrableRapport({
+            id: livrableRapport.id!,
+            livrableRapport: values,
+          })
+        );
+      } else {
+        await dispatch(createLivrableRapport(values));
+      }
+      fetchlivrableRapport(),
+        handleClose();
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
-      <SectionNavigation>
-        <DialogTitle>Créer/modifier livrables</DialogTitle>
-        <DialogContent>
-          <FormContainer spacing={2} mt={2}>
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Livrable"
-              variant="outlined"
-            />
-          </FormContainer>
-        </DialogContent>
-        <DialogActions>
-          <Button color="warning">Annuler</Button>
-          <Button variant="contained" type="submit">
-            Enregistrer
-          </Button>
-        </DialogActions>
-      </SectionNavigation>
+      <Formik
+        enableReinitialize={isEditing ? true : false}
+        initialValues={
+          isEditing
+            ? livrableRapport
+            : {
+              livrable: isEditing ? livrableRapport?.livrable : "",
+              // missiomId: id!
+            }
+        }
+        validationSchema={Yup.object({
+          livrable: Yup.string().required("Champ obligatoire"),
+        })}
+        onSubmit={(value: any, action: any) => {
+          handleSubmit(value);
+          action.resetForm();
+        }}
+      >{(formikProps) => {
+        return (
+          <Form>
+            <SectionNavigation>
+              <DialogTitle>Créer/modifier livrableRapports</DialogTitle>
+              <DialogContent>
+                <FormContainer spacing={2} mt={2}>
+                  <OSTextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Livrable de rapport"
+                    variant="outlined"
+                    name="livrable"
+                  />
+                </FormContainer>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  color="warning"
+                  onClick={() => {
+                    formikProps.resetForm();
+                    dispatch(cancelEdit())
+                  }}
+                >Annuler</Button>
+                <Button variant="contained" type="submit">
+                  Enregistrer
+                </Button>
+              </DialogActions>
+            </SectionNavigation>
+          </Form>
+        )
+      }}
+      </Formik>
     </Container>
   );
 };
 
-export default AddLivrable;
+export default AddlivrableRapport;
 
 const FormContainer = styled(Stack)(({ theme }) => ({
   background: "#fff",

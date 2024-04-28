@@ -42,6 +42,9 @@ import { statusSlice } from "./features/status/statusSlice";
 import { objectifRapportSlice } from "./features/objectifRapport/objectifRapportSlice";
 import { resultatRapportSlice } from "./features/resultatAttendu/resultatRapportSlice";
 import { activiteRapportSlice } from "./features/activitesRapport/activiteRapportSlice";
+import { lieuxRapportSlice } from "./features/lieuxRapport/lieuxSlice";
+import { livrableRapportSlice } from "./features/LivrableRapport/livrableRapportSlice";
+import { missionRapportSlice } from "./features/missionRapport/missionRapportSlice";
 
 
 export const store = configureStore({
@@ -89,6 +92,9 @@ export const store = configureStore({
     objectifRapport: objectifRapportSlice.reducer,
     resultatRapport: resultatRapportSlice.reducer,
     activiteRapport: activiteRapportSlice.reducer,
+    lieuxRapport: lieuxRapportSlice.reducer,
+    livrableRapport: livrableRapportSlice.reducer,
+    missionRapport: missionRapportSlice.reducer,
   },
 });
 

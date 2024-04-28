@@ -17,9 +17,27 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddContactPendantMission from "../add/addContactPendantMission";
+import useFetchContactMissionRapport from "../hooks/useFetchContactMissionRapport";
+import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import { useConfirm } from "material-ui-confirm";
+import { deleteMissionRapport, editMissionRapport } from "../../../../../../redux/features/missionRapport";
+import { MissionRapportItem } from "../../../../../../redux/features/missionRapport/missionRapport.interface";
 
 const ListContactPendantMission = () => {
   const [open, setOpen] = React.useState(false);
+  const fetchContactMissionRapport = useFetchContactMissionRapport();
+  const { missionRapportlist } = useAppSelector((state: any) => state.missionRapport);
+  const dispatch: any = useAppDispatch();
+  const router = useRouter();
+  const { id }: any = router.query;
+  const confirm = useConfirm();
+
+  
+  React.useEffect(() => {
+    fetchContactMissionRapport();
+  }, [id])
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -27,6 +45,33 @@ const ListContactPendantMission = () => {
     setOpen(false);
   };
 
+  const listVide: { id: string }[] = [];
+  console.log("list :", 404 ? listVide : missionRapportlist)
+
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer contact pendant la mission",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteMissionRapport({ id }));
+        fetchContactMissionRapport();
+      })
+      .catch(() => { });
+  };
+
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editMissionRapport({ id }));
+    handleClickOpen();
+  };
   return (
     <Container>
       <Box sx={{ overflow: "auto" }}>
@@ -42,22 +87,22 @@ const ListContactPendantMission = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {missionRapportlist.map((row: MissionRapportItem, index: any) => (
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {row.nomPrenom}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {row.lieu}
+                  {row.lieuInstitution}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {row.numero}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {row.remarques}
+                  {row.remarque}
                 </TableCell>
                 <TableCell align="right">
                   <BtnActionContainer direction="row" justifyContent="right">
@@ -65,6 +110,7 @@ const ListContactPendantMission = () => {
                       color="primary"
                       aria-label="Modifier"
                       component="span"
+                      onClick={() =>handleClickEdit(row.id!)}
                     >
                       <EditIcon />
                     </IconButton>
@@ -72,6 +118,7 @@ const ListContactPendantMission = () => {
                       color="warning"
                       aria-label="Supprimer"
                       component="span"
+                      onClick={() =>handleClickDelete(row.id!)}
                     >
                       <DeleteIcon />
                     </IconButton>

@@ -3,22 +3,51 @@ import { styled } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import KeyValue from "../shared/keyValue";
+import { useRouter } from "next/router";
+import useFetchMissionListe from "../home/Missions/hooks/useFetchMissionListe";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 const Detail = () => {
+  const router = useRouter();
+  const fetchMission = useFetchMissionListe();
+  const { missionListe } = useAppSelector((state: any) => state.mission);
+  const { id }: any = router.query;
+
+  React.useEffect(() => {
+    fetchMission();
+  }, [router.query])
+
+  // console.log("list mission :", missionListe)
+  const listMission:{id: string, desc: string, respo: any, gestionaire: any }[] = [];
+
+  missionListe.forEach((m: any) => {
+    if (id === m.id) {
+      listMission.push({
+        id: m.id,
+        desc: m.descriptionMission,
+        respo: [m.missionManager].map((mm: any) => mm.name + " "+ mm.surname),
+        gestionaire: [m.budgetManager].map((bm: any) => bm.name + " "+ bm.surname)
+      })
+    }
+  })
   return (
     <FormContainer spacing={2}>
-      <Grid container>
-        <Grid item xs={12} md={4}>
-          <KeyValue keyName="Ref mission" value={"MISSION_001"} />
-          <KeyValue keyName="Description" value={"Description de la mission"} />
+    {
+      listMission.map((item: any) => (
+        <Grid container key={item.id}>
+          <Grid item xs={12} md={4}>
+            <KeyValue keyName="Ref mission" value={"MISSION_001"} />
+            <KeyValue keyName="Description" value={item.desc} />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <KeyValue keyName="Responsable" value={item.respo} />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <KeyValue keyName="Gestionnaire de budget" value={item.gestionaire} />
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <KeyValue keyName="Responsable" value={"Ollie Mc"} />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <KeyValue keyName="Gestionnaire de budget" value={"Anna"} />
-        </Grid>
-      </Grid>
+      ))
+    }
     </FormContainer>
   );
 };

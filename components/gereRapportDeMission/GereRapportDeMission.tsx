@@ -23,10 +23,13 @@ import Detail from "./detail";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import AddDepositionDesRapports from "./add/addDepositionDesRapports";
+import useFetchMissionListe from "../home/Missions/hooks/useFetchMissionListe";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 const GereRapportDeMission = () => {
   const [value, setValue] = React.useState(0);
   const router = useRouter();
+ 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -41,11 +44,11 @@ const GereRapportDeMission = () => {
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
-        <SectionNavigation 
-         direction={{ xs: 'column', sm: 'row' }}
-         spacing={{ xs: 1, sm: 2, md: 4 }}
-         justifyContent="space-between"
-         sx={{ mb: 2 }}>
+        <SectionNavigation
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={{ xs: 1, sm: 2, md: 4 }}
+          justifyContent="space-between"
+          sx={{ mb: 2 }}>
           <Stack direction={{ xs: 'column', sm: 'row' }}>
             <Link href="/">
               <Button
@@ -82,8 +85,8 @@ const GereRapportDeMission = () => {
       <Detail />
       <BodySection>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 1, md: 2 }}
-        sx={{padding:"10px", width:"100%" }}>
-          <Stack width={{xs:"100%", sm:"100%" }}>
+          sx={{ padding: "10px", width: "100%" }}>
+          <Stack width={{ xs: "100%", sm: "100%" }}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -220,7 +223,7 @@ function a11yProps(index: number) {
   };
 }
 
-export const SectionNavigation = styled(Stack)(({}) => ({}));
+export const SectionNavigation = styled(Stack)(({ }) => ({}));
 export const BodySection = styled(Paper)(({ theme }) => ({
   borderRadius: "32px",
   marginBlock: 15,
