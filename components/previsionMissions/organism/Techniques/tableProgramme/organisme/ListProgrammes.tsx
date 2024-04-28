@@ -115,7 +115,17 @@ const ListProgrammes = () => {
                         {deliverableList.find((e: any) =>e.id === row.livrable)?.description}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                      {row.responsable}
+                      {
+                              (row.responsable).map((lp: any) => {
+                                return (
+                                  <Stack direction="column" spacing={2} height={25} overflow="auto">
+                                    {employees.find((e: any) => e.id === lp)?.name} 
+                                    {" "}
+                                    {employees.find((e: any) => e.id === lp)?.surname}
+                                  </Stack>
+                                )
+                              })
+                            }
                       </TableCell>
                       <TableCell align="right">
                         <BtnActionContainer
