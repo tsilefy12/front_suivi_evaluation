@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddAutreInfoAuto from "../add/addAutreInfoAuto";
+import AddAutreInfoAutoRapport from "../add/addAutreInfoAuto";
 
 const ListAutreInfoAuto = () => {
   const [open, setOpen] = React.useState(false);
@@ -89,7 +89,7 @@ const ListAutreInfoAuto = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddAutreInfoAuto />
+          <AddAutreInfoAutoRapport handleClose={handleClose}/>
         </Dialog>
       </SectionNavigation>
     </Container>

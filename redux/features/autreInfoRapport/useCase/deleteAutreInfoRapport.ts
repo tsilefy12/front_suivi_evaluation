@@ -1,16 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
-import { TacheEtObjectifItem } from "../tacheETObjectifs.interface";
 
-export const createTacheEtObjectifs = createAsyncThunk(
-  "tacheEtObjectifs/createTacheEtObjectifs",
-  async (tacheEtObjectifs: TacheEtObjectifItem, thunkAPI) => {
+export const deleteAutreInfoRapport = createAsyncThunk(
+  "autreInfoRapport/deleteAutreInfoRapport",
+  async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/tache-cle", tacheEtObjectifs);
+      const response = await axios.delete(`/suivi-evaluation/autre-info-rapport/${data.id}`);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "created successfully",
+          message: "Autre information de rapport supprimé avec succès",
           options: { variant: "success" },
         })
       );

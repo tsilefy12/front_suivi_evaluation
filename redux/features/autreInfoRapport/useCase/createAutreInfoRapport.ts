@@ -1,16 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
-import { TacheEtObjectifItem } from "../tacheETObjectifs.interface";
+import { AutreInfoRapportItem } from "../autreInfoRapport.interface";
 
-export const createTacheEtObjectifs = createAsyncThunk(
-  "tacheEtObjectifs/createTacheEtObjectifs",
-  async (tacheEtObjectifs: TacheEtObjectifItem, thunkAPI) => {
+export const createAutreInfoRapport = createAsyncThunk(
+  "autreInfoRapport/createAutreInfoRapport",
+  async (autreInfoRapport: AutreInfoRapportItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/tache-cle", tacheEtObjectifs);
+      const response = await axios.post("/suivi-evaluation/autre-info-rapport", autreInfoRapport);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "created successfully",
+          message: "Other information created successfully",
           options: { variant: "success" },
         })
       );

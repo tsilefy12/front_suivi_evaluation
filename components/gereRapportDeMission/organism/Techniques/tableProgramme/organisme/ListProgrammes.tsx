@@ -28,6 +28,7 @@ import Moment from "react-moment";
 import { useConfirm } from "material-ui-confirm";
 import { deleteProgrammeRapport, editProgrammeRapport } from "../../../../../../redux/features/programmeRapport";
 import AddProgrammesRapport from "../add/addProgramme";
+import { editAcitiviteRapport } from "../../../../../../redux/features/activitesRapport";
 
 const ListProgrammes = () => {
   const [open, setOpen] = React.useState(false);
@@ -112,10 +113,10 @@ const ListProgrammes = () => {
                         <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.activitePrevueR}
+                        {activiteRapportlist.find((e: any) =>e.id === row.activitePrevueR)?.description}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.livrableR}
+                        {livrableRapportlist.find((e: any) =>e.id === row.livrableR)?.livrable}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {
