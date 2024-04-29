@@ -73,7 +73,7 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
               technicalVisitVehicle: isEditing ? vehicle?.technicalVisitVehicle : "OUI",
               vehicleType: isEditing ? vehicle?.vehicleType : "OTHER",
               safetyBeltVehicle: isEditing ? vehicle?.safetyBeltVehicle: true,
-              missionId: isEditing ? vehicle?.missionId: id,
+              // missionId: isEditing ? vehicle?.missionId: id,
             }
         }
         validationSchema={Yup.object({

@@ -43,6 +43,7 @@ const AddNewBudgetInitial = () => {
   const fetchPeriode = useFetchPeriode();
   const { periodelist } = useAppSelector((state: any) => state.periode)
   const [grantValue, setGrantValue]: any = React.useState("vide");
+  const { id }: any = router.query;
 
   React.useEffect(() => {
     fetchGrant();
@@ -199,7 +200,8 @@ interface OSTextFieldProps {
                   label="Grant"
                   variant="outlined"
                   name="grant"
-                  value={grantValue}
+                  value={(id) ? 
+                  budgetLineList.find((e: any) =>e.id === budgetInitial?.grant)?.code: grantValue}
                   onChange={(e: any) => setGrantValue(e.target.value)}
                   hyperText={grantValue == "vide" ? false: true}
                 >

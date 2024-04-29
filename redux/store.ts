@@ -46,6 +46,7 @@ import { lieuxRapportSlice } from "./features/lieuxRapport/lieuxSlice";
 import { livrableRapportSlice } from "./features/LivrableRapport/livrableRapportSlice";
 import { missionRapportSlice } from "./features/missionRapport/missionRapportSlice";
 import { programmeRapportSlice } from "./features/programmeRapport/programmeRapportSlice";
+import { autreInfoRaportSlice } from "./features/autreInfoRapport/autreInfoRapportSlice";
 
 
 export const store = configureStore({
@@ -97,6 +98,7 @@ export const store = configureStore({
     livrableRapport: livrableRapportSlice.reducer,
     missionRapport: missionRapportSlice.reducer,
     programmeRapport: programmeRapportSlice.reducer,
+    autreInfoRapport: autreInfoRaportSlice.reducer,
   },
 });
 
