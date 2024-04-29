@@ -1,10 +1,12 @@
 
 export default interface Data {
-  tache: string;
-  projetEn: string;
-  projetFr: string;
-  plan: string;
-  }
+  sn: string;
+  keyTasks: string;
+  status: string;
+  responsable: string;
+  startDate: string;
+  endDate: string;
+}
   
 
 export type Order = 'asc' | 'desc';

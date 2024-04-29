@@ -89,7 +89,7 @@ const ListObjectifStrategique = () => {
                 <Typography color="GrayText" mb={2} variant="h6">
                 {row.title} : {row.description}
                 </Typography>
-                <Link href={`/plan_travail/${row.id}/tachesCles`}>
+                <Link href={`/plan_travail/${row.id}/tachesEtObjectifs`}>
                   <Box>
                     <Button
                       variant="text"

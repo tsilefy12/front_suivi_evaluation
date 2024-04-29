@@ -40,13 +40,13 @@ import useFetchProject from "../../../GrantsEnCours/hooks/getProject";
 import { useRouter } from "next/router";
 import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
 import { deleteTacheEtObjectifs, editTacheEtObjectifs } from "../../../../redux/features/tachesEtObjectifs";
-import AddNewTacheCle from "./add/AddNewTacheEtObjectifs";
 import useFetchPlanTravaile from "../../hooks/useFetchPlanTravail";
 import { getPlanTravail } from "../../../../redux/features/planTravail";
+import Moment from "react-moment";
 
 const ListTacheEtObjectifs = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("projetEn");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("startDate");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -56,7 +56,6 @@ const ListTacheEtObjectifs = () => {
   const dispatch = useAppDispatch()
   const confirm = useConfirm()
   const fetchProject = useFetchProject()
-  const { projectList } = useAppSelector((state) => state.project)
   const router = useRouter()
   const fetchEmployes = useFetchEmploys()
   const { employees } = useAppSelector((state) => state.employe)
@@ -89,27 +88,9 @@ const ListTacheEtObjectifs = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
-  const listTache: {id: string,tache: string, projetFrs: string, projetEng: string, plan: string}[] = [];
-  let idTacheCle:any = "";
-  tacheEtObjectifList.forEach((element: any) =>{
-    if (id === element.planTravaileId) {
-      idTacheCle = element.id;
-      const projetFrs = element.projet ? projectList.find((e: any) => e.id === element.projet)?.titleEn : '';
-      const projetEng = element.projet ? projectList.find((e: any) => e.id === element.projet)?.titleEn : '';
-      const plan = element.planTravaileId ? planTravaillist.find((e: any) => e.id === element.planTravaileId)?.description : '';
-      listTache.push({
-        id: element.id, 
-        tache: element.tacheCle,
-        projetFrs: projetFrs !== undefined ? projetFrs : '',
-        projetEng: projetEng !== undefined ? projetEng : '',
-        plan: plan !== undefined ? plan : '',
-      });
-    }
-  });
-  
 
   const handleClickOpen = () => {
-    setOpen(true);
+    router.push(`/plan_travail/${id}/tachesEtObjectifs/add`)
   };
 
   const handleClose = () => {
@@ -118,7 +99,7 @@ const ListTacheEtObjectifs = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.tache);
+      const newSelecteds = rows.map((n) => n.keyTasks);
       setSelected(newSelecteds);
       return;
     }
@@ -192,167 +173,171 @@ const ListTacheEtObjectifs = () => {
   };
   return (
     <Container maxWidth="xl">
-      {/* <NavigationContainer> */}
-      <SectionNavigation direction={{ xs: 'column', sm: 'row' }}
-        spacing={{ xs: 1, sm: 2, md: 4 }}
-        justifyContent="space-between"
-        sx={{ mb: 2 }}>
-        <Stack flexDirection={"row"}>
-
-          <Link href="/plan_travail">
-            <Button color="info" variant="text" startIcon={<ArrowBack />}>
-              Retour
-            </Button>
-          </Link>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            startIcon={<Add />}
-            sx={{ marginInline: 3 }}
-            onClick={handleClickOpen}
-          >
-            Créer
-          </Button>
-        </Stack>
-        <Typography variant="h4" color="GrayText">
-          Tâches clés
-        </Typography>
-      </SectionNavigation>
-      {/* </NavigationContainer> */}
-      <Divider />
-      <FormContainer>
-        <KeyValue
-          keyName="Objectif Stratégique"
-          value={listTache.length!=0 ? planTravail.description! : ""}
-        />
-      </FormContainer>
-      <BodySection>
-        <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2 }}>
-            <EnhancedTableToolbar numSelected={selected.length} />
-            <TableContainer>
-              <Table
-                sx={{ minWidth: 750 }}
-                aria-labelledby="tableTitle"
-                size={dense ? "small" : "medium"}
-              >
-                <EnhancedTableHead
-                  numSelected={selected.length}
-                  order={order}
-                  orderBy={orderBy}
-                  onSelectAllClick={handleSelectAllClick}
-                  onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
-                />
-                <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
-                  {listTache
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      // const isItemSelected = isSelected(row.id);
-                      const labelId = `enhanced-table-checkbox-${index}`;
-
-                      return (
-                        <TableRow
-                          hover
-                          //   onClick={(event) => handleClick(event, row.reference)}
-                          role="checkbox"
-                          // aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={row.id}
-                        // selected={isItemSelected}
-                        >
-                          <TableCell
-                            padding="checkbox"
-                          // onClick={(event) => handleClick(event, row.tache)}
-                          ></TableCell>
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                          >
-                            {row.tache}
-                          </TableCell>
-                          <TableCell>
-                            {row.projetEng}
-                          </TableCell>
-                          <TableCell>
-                          {row.projetFrs}
-                          </TableCell>
-                          <TableCell>
-                          {row.plan}
-                          </TableCell>
-                          <TableCell align="right">
-                            <BtnActionContainer
-                              direction="row"
-                              justifyContent="right"
-                            >
-                              <Link href={`/plan_travail/${id}/tachesCles/${row.id}/details`}>
-                                <IconButton
-                                  color="accent"
-                                  aria-label="Details"
-                                  component="span"
-                                >
-                                  <VisibilityIcon />
-                                </IconButton>
-                              </Link>
-                              <IconButton
-                                color="primary"
-                                aria-label="Modifier"
-                                component="span"
-                                onClick={() => handleClickEdit(idTacheCle)}
-                              >
-                                <EditIcon />
-                              </IconButton>
-                              <IconButton
-                                color="warning"
-                                aria-label="Supprimer"
-                                component="span"
-                                onClick={() => handleClickDelete(idTacheCle)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            </BtnActionContainer>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow
-                      style={{
-                        height: (dense ? 33 : 53) * emptyRows,
-                      }}
-                    >
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              labelRowsPerPage={labelRowsPerPage}
-              labelDisplayedRows={defaultLabelDisplayedRows}
+        {/* <NavigationContainer> */}
+        <SectionNavigation direction={{ xs: 'column', sm: 'row' }}
+            spacing={{ xs: 1, sm: 2, md: 4 }}
+            justifyContent="space-between"
+            sx={{ mb: 2 }}>
+            <Stack flexDirection={"row"}>
+                <Button color="info" variant="text" startIcon={<ArrowBack />}>
+                Retour
+                </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    startIcon={<Add />}
+                    sx={{ marginInline: 3 }}
+                    onClick={handleClickOpen}
+                >
+                    Créer
+                </Button>
+            </Stack>
+            <Typography variant="h4" color="GrayText">
+                Tâches et Objectifs
+            </Typography>
+        </SectionNavigation>
+        {/* </NavigationContainer> */}
+        <Divider />
+        <FormContainer>
+            <KeyValue
+            keyName="Objectif Stratégique"
+            value={tacheEtObjectifList.length!=0 ? planTravail.description! : ""}
             />
-          </Paper>
-          {/* <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      /> */}
-        </Box>
-      </BodySection>
-      <Dialog open={open} onClose={handleClose}>
-        <AddNewTacheCle handleClose={handleClose} />
-      </Dialog>
+        </FormContainer>
+        <BodySection>
+            <Box sx={{ width: "100%" }}>
+            <Paper sx={{ width: "100%", mb: 2 }}>
+                <EnhancedTableToolbar numSelected={selected.length} />
+                <TableContainer>
+                <Table
+                    sx={{ minWidth: 750 }}
+                    aria-labelledby="tableTitle"
+                    size={dense ? "small" : "medium"}
+                >
+                    <EnhancedTableHead
+                    numSelected={selected.length}
+                    order={order}
+                    orderBy={orderBy}
+                    onSelectAllClick={handleSelectAllClick}
+                    onRequestSort={handleRequestSort}
+                    rowCount={rows.length}
+                    />
+                    <TableBody>
+                    {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+                rows.slice().sort(getComparator(order, orderBy)) */}
+                    {tacheEtObjectifList
+                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((row, index) => {
+                        // const isItemSelected = isSelected(row.id);
+                        const labelId = `enhanced-table-checkbox-${index}`;
+
+                        return (
+                            <TableRow
+                            hover
+                            //   onClick={(event) => handleClick(event, row.reference)}
+                            role="checkbox"
+                            // aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={row.id}
+                            // selected={isItemSelected}
+                            >
+                            <TableCell
+                                padding="checkbox"
+                            // onClick={(event) => handleClick(event, row.tache)}
+                            ></TableCell>
+                            <TableCell
+                                component="th"
+                                id={labelId}
+                                scope="row"
+                                padding="none"
+                            >
+                                {row.sn}
+                            </TableCell>
+                            <TableCell>
+                                {row.keyTasks}
+                            </TableCell>
+                            <TableCell>
+                                {row.statusId}
+                            </TableCell>
+                            <TableCell>
+                                {employees.find((e)=> e.id == row?.responsableId)?.name}
+                            </TableCell>
+                            <TableCell>
+                                <Moment format="DD/MM/YYYY">
+                                    {row.startDate}
+                                </Moment>
+                            </TableCell>
+                            <TableCell>
+                                <Moment format="DD/MM/YYYY">
+                                    {row.endDate}
+                                </Moment>
+                            </TableCell>
+                            <TableCell align="right">
+                                <BtnActionContainer
+                                direction="row"
+                                justifyContent="right"
+                                >
+                                <Link href={`/plan_travail/${id}/tachesEtObjectifs/${row.id}/details`}>
+                                    <IconButton
+                                    color="accent"
+                                    aria-label="Details"
+                                    component="span"
+                                    >
+                                    <VisibilityIcon />
+                                    </IconButton>
+                                </Link>
+                                <IconButton
+                                    color="primary"
+                                    aria-label="Modifier"
+                                    component="span"
+                                    onClick={() => handleClickEdit(row.id!)}
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                    color="warning"
+                                    aria-label="Supprimer"
+                                    component="span"
+                                    onClick={() => handleClickDelete(row.id!)}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                                </BtnActionContainer>
+                            </TableCell>
+                            </TableRow>
+                        );
+                        })}
+                    {emptyRows > 0 && (
+                        <TableRow
+                        style={{
+                            height: (dense ? 33 : 53) * emptyRows,
+                        }}
+                        >
+                        <TableCell colSpan={6} />
+                        </TableRow>
+                    )}
+                    </TableBody>
+                </Table>
+                </TableContainer>
+                <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                labelRowsPerPage={labelRowsPerPage}
+                labelDisplayedRows={defaultLabelDisplayedRows}
+                />
+            </Paper>
+            {/* <FormControlLabel
+            control={<Switch checked={dense} onChange={handleChangeDense} />}
+            label="Dense padding"
+        /> */}
+            </Box>
+        </BodySection>
     </Container>
   );
 };

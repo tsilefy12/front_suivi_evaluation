@@ -68,8 +68,8 @@ Page                                                 Size     First Load JS
 ├ ○ /missions/validation/validationRapportMission    7.56 kB         253 kB
 ├ ○ /plan_travail                                    334 B           302 kB
 ├ ○ /plan_travail/[id]/objectifGenerale              5.58 kB         268 kB
-├ ○ /plan_travail/[id]/tachesCles                    353 B           281 kB
-└ ○ /plan_travail/[id]/tachesCles/[idT]/details      1.48 kB         284 kB
+├ ○ /plan_travail/[id]/tachesEtObjectifs                    353 B           281 kB
+└ ○ /plan_travail/[id]/tachesEtObjectifs/[idT]/details      1.48 kB         284 kB
 + First Load JS shared by all                        196 kB
   ├ chunks/framework-4c3194704528425d.js             45 kB
   ├ chunks/main-21ee0316c78b3544.js                  28.8 kB
