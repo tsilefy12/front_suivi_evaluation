@@ -102,6 +102,7 @@ const AddNewTacheEtObjectifs = ({ handleClose }: any) => {
                 startDate: isEditing && tacheEtObjectif?.startDate ? new Date(tacheEtObjectif?.startDate) : new Date(),
                 endDate: isEditing && tacheEtObjectif?.endDate? new Date(tacheEtObjectif?.endDate): new Date(),
                 planTravaileId: id,
+                sn: isEditing ? tacheEtObjectif?.sn : "",
                 }
             }
             validationSchema={Yup.object({
