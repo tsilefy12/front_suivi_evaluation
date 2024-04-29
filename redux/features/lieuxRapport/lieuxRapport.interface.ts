@@ -1,6 +1,6 @@
 export interface LieuxRapportItem {
   id?: string;
-  fonkotany?: string;
+  fokontany?: string;
   commune?: string;
   district?: string;
   missionId?: string;

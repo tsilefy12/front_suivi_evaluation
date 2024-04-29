@@ -1,6 +1,6 @@
 export interface LivrableRapportItem {
     id?: number;
-    livrable?: string;
+    livrablee?: string;
     missionId?: string;
 }
 export interface LivrableRapportInitialState {

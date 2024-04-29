@@ -57,12 +57,12 @@ const AddlivrableRapport = ({ handleClose }: any) => {
           isEditing
             ? livrableRapport
             : {
-              livrable: isEditing ? livrableRapport?.livrable : "",
+              livrablee: isEditing ? livrableRapport?.livrablee : "",
               // missiomId: id!
             }
         }
         validationSchema={Yup.object({
-          livrable: Yup.string().required("Champ obligatoire"),
+          livrablee: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -80,7 +80,7 @@ const AddlivrableRapport = ({ handleClose }: any) => {
                     id="outlined-basic"
                     label="Livrable de rapport"
                     variant="outlined"
-                    name="livrable"
+                    name="livrablee"
                   />
                 </FormContainer>
               </DialogContent>

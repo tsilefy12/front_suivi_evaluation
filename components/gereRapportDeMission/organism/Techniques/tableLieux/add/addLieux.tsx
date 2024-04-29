@@ -63,14 +63,14 @@ const AddLieux = ({ handleClose }: any) => {
           isEditing
             ? lieuxRapport
             : {
-              fonkotany: isEditing ? lieuxRapport?.fonkotany : "",
+              fokontany: isEditing ? lieuxRapport?.fokontany : "",
               commune: isEditing ? lieuxRapport?.commune : "",
               district: isEditing ? lieuxRapport?.district : "",
               // missiomId: id!
             }
         }
         validationSchema={Yup.object({
-          fonkotany: Yup.string().required("Champ obligatoire"),
+          fokontany: Yup.string().required("Champ obligatoire"),
           commune: Yup.string().required("Champ obligatoire"),
           district: Yup.string().required("Champ obligatoire"),
         })}
@@ -91,7 +91,7 @@ const AddLieux = ({ handleClose }: any) => {
                       id="outlined-basic"
                       label="Fokontany"
                       variant="outlined"
-                      name="fonkotany"
+                      name="fokontany"
                     />
                     <OSTextField
                       fullWidth
