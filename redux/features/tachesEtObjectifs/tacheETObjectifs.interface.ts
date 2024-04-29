@@ -10,10 +10,9 @@ export interface TacheEtObjectifItem {
     notes?: string;
     startDate? : Date;
     endDate? : Date;
-    sn?: string;
     planTravaileId?: string;
     planTravaile?: any;
-    
+
 }
 export interface TacheEtObjectifInitialState {
     tacheEtObjectifList: TacheEtObjectifItem[];
