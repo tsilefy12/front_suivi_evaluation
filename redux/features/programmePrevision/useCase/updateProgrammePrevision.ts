@@ -15,7 +15,7 @@ export const updateProgrammePrevision = createAsyncThunk(
   "programmePrevision/updateProgrammePrevision",
   async (data: { id: string; programmePrevision: ProgrammePrevisionItem }, thunkAPI) => {
     try {
-      const response = await axios.patch(`${data.id}`, data.programmePrevision);
+      const response = await axios.patch(`/suivi-evaluation/programme-prevision/${data.id}`, data.programmePrevision);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Programme de prévision mise à jour avec succès",
