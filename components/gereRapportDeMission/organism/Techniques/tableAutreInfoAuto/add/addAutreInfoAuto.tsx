@@ -67,7 +67,7 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
             ? autreInfoRapport
             : {
               assurance: isEditing ? autreInfoRapport?.assurance : "",
-              visiteTechnique: isEditing ? autreInfoRapport?.visiteTechnique : "OUI",
+              visiteTechnic: isEditing ? autreInfoRapport?.visiteTechnic : "OUI",
               voiture: isEditing ? autreInfoRapport?.voiture : "OTHER",
               centureSecurite: isEditing ? autreInfoRapport?.centureSecurite: true,
               // missionId: isEditing ? autreInfoRapport?.missionId: id,
@@ -108,14 +108,14 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                       <FormControlLabel
                         control={<Switch defaultChecked={formikProps.values.visiteTechnique=="OUI"} />}
                         label="Visite technique"
-                        name="visiteTechnique"
-                        onChange={(e,c) =>formikProps.setFieldValue("visiteTechnique", c ? "OUI": "NON")}
+                        name="visiteTechnic"
+                        onChange={(e,c) =>formikProps.setFieldValue("visiteTechnic", c ? "OUI": "NON")}
                       />
                       <FormControlLabel
-                        control={<Switch defaultChecked={formikProps.values.centureSecurite=="OUI"} />}
+                        control={<Switch defaultChecked/>}
                         label="Ceinture de sécurité"
                         name="centureSecurite"
-                        onChange={(e,c) =>formikProps.setFieldValue("centureSecurite", c ? "OUI": "NON")}
+                        onChange={(e,c) =>formikProps.setFieldValue("centureSecurite", c)}
                       />
                     </CustomStack>
                     <CustomStack

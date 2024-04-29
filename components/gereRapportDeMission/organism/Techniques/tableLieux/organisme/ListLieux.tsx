@@ -17,9 +17,20 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddLieux from "../add/addLieux";
+import useFetchLieuxRapport from "../hooks/useFetchLieuxRapport";
+import { useAppSelector } from "../../../../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import { LieuxRapportItem } from "../../../../../../redux/features/lieuxRapport/lieuxRapport.interface";
 
 const ListLieux = () => {
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
+  const fetchLieuxRapport = useFetchLieuxRapport();
+  const { lieuxRapportlist } = useAppSelector((state: any) =>state.lieuxRapport);
+
+  React.useEffect(() =>{
+    fetchLieuxRapport();
+  }, [router.query])
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -41,13 +52,13 @@ const ListLieux = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {lieuxRapportlist.map((row: LieuxRapportItem, index: any) => (
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.lieux}
+                  {row.fokontany}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {row.commune}

@@ -15,17 +15,22 @@ import { useRouter } from "next/router";
 import { deleteObjectifRapport, editObjectifRapport } from "../../../../../../redux/features/objectifRapport";
 import { ObjectifRapportItem } from "../../../../../../redux/features/objectifRapport/objectifRapport.interface";
 import { useConfirm } from "material-ui-confirm";
+import useFetchMissionGoalListe from "../../../../../previsionMissions/organism/Techniques/tableObjectif/hooks/useFetchObjectifList";
 
 const ListObjectif = () => {
   const [open, setOpen] = React.useState(false);
   const fetchObjectifRapport = useFetchObjectifRapport();
-  const { objectifRapportlist } = useAppSelector((state: any) =>state.objectifRapport);
+  const { objectifRapportlist } = useAppSelector((state: any) => state.objectifRapport);
   const router = useRouter();
   const dispatch: any = useAppDispatch();
   const confirm = useConfirm();
+  const { missionGoalList } = useAppSelector((state: any) => state.missionGoal);
+  const fetchMissionGoalList = useFetchMissionGoalListe();
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchObjectifRapport();
+    fetchMissionGoalList();
+
   }, [router.query])
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,7 +56,7 @@ const ListObjectif = () => {
         await dispatch(deleteObjectifRapport({ id }));
         fetchObjectifRapport();
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const handleClickEdit = async (id: any) => {
@@ -62,50 +67,53 @@ const ListObjectif = () => {
     <Container>
       <Box sx={{ overflow: "auto" }}>
         <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
-      <MyTableContainer>
-        <Table sx={{ width: "100%" }} aria-label="simple table">
-          <TableBody>
-            {objectifRapportlist.map((row: ObjectifRapportItem, index: any) => (
-              <TableRow
-                key={row.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.objectif}
-                </TableCell>
-                <TableCell align="right">
-                  <BtnActionContainer direction="row" justifyContent="right">
-                    <IconButton
-                      color="primary"
-                      aria-label="Modifier"
-                      component="span"
-                      onClick={() =>handleClickEdit(row.id!)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      color="warning"
-                      aria-label="Supprimer"
-                      component="span"
-                      onClick={() =>handleClickDelete(row.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </BtnActionContainer>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </MyTableContainer>
-      </Box>
+          <MyTableContainer>
+            <Table sx={{ width: "100%" }} aria-label="simple table">
+              <TableBody>
+                {objectifRapportlist.map((row: ObjectifRapportItem, index: any) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {
+                        missionGoalList.find((mg: any) => mg.id === row.objectif)?.description || row.objectif
+                      }
+                    </TableCell>
+
+                    <TableCell align="right">
+                      <BtnActionContainer direction="row" justifyContent="right">
+                        <IconButton
+                          color="primary"
+                          aria-label="Modifier"
+                          component="span"
+                          onClick={() => handleClickEdit(row.id!)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          color="warning"
+                          aria-label="Supprimer"
+                          component="span"
+                          onClick={() => handleClickDelete(row.id)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </BtnActionContainer>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </MyTableContainer>
+        </Box>
       </Box>
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
         <Button variant="text" color="info" onClick={handleClickOpen}>
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddObjectif handleClose={handleClose}/>
+          <AddObjectif handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
     </Container>

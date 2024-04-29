@@ -99,6 +99,7 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       label="Nom et prénoms"
                       variant="outlined"
                       name="nomPrenom"
+                      type="text"
                     />
                     <OSTextField
                       fullWidth
@@ -106,6 +107,7 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       label="Lieu et institution"
                       variant="outlined"
                       name="lieuInstitution"
+                      type="text"
                     />
                     <OSTextField
                       fullWidth
@@ -113,6 +115,7 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       label="Numéro "
                       variant="outlined"
                       name="numero"
+                      type="text"
                     />
                     <OSTextField
                       fullWidth
@@ -120,6 +123,7 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       label="Remarques"
                       variant="outlined"
                       name="remarque"
+                      type="text"
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />

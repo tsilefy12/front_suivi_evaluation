@@ -7,7 +7,7 @@ const useFetchLieuxRapport = () => {
   const dispatch = useAppDispatch();
 
   return async () => {
-    let args: any = {};
+    const args: any = {};
     if (router.query.search) {
       args.where = {
         OR: [],

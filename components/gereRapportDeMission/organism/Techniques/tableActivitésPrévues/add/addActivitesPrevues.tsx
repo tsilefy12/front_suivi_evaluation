@@ -23,6 +23,8 @@ import { createActiviteRapport, updateActiviteRapport } from "../../../../../../
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { ActiviteRapportItem } from "../../../../../../redux/features/activitesRapport/activiteRapport.interface";
 import { cancelEdit } from "../../../../../../redux/features/activitesRapport/activiteRapportSlice";
+import useFetchPlannedActivityList from "../../../../../previsionMissions/organism/Techniques/tableActivitésPrévues/hooks/useFetchPlannedActivityList";
+import { PlannedActivityItem } from "../../../../../../redux/features/plannedActivity/plannedActivitySlice.interface";
 
 const AddActivitesPrevues = ({ handleClose }: any) => {
   const router = useRouter();
@@ -30,10 +32,16 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
   const fetchActivityRapport = useFetchActiviteRapport();
   const { activiteRapport, isEditing, activiteRapportlist } = useAppSelector((state: any) =>state.activiteRapport);
   const [getUtiliser, setGetUtiliser] = React.useState("");
+  const [getId, setGetId]: any = React.useState("");
   const { id }: any = router.query;
+  const { plannedActivityList } = useAppSelector(
+    (state: any) => state.plannedActivity
+  );
+  const fetchPlannedActivityListe = useFetchPlannedActivityList();
   
   React.useEffect(() =>{
     fetchActivityRapport();
+    fetchPlannedActivityListe();
   }, [router.query])
 
   const handleSubmit = async (values: any) => {
@@ -48,7 +56,7 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
         );
       } else {
         if (getUtiliser !== "") {
-          values.activite = getUtiliser;
+          values.activite = getId;
           return (await dispatch(createActiviteRapport(values)),
             handleClose()
           );
@@ -65,9 +73,10 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
     }
   };
 
-  const ClikUtiliser = (id: any) => {
+  const ClikUtiliser = (id: any, valeur: any) => {
     if (!isEditing) {
-      setGetUtiliser(id);
+      setGetUtiliser(valeur);
+      setGetId(id)
     }
   }
   return (
@@ -101,7 +110,8 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
                       variant="outlined"
                       name="activite"
                       value={getUtiliser != "" ? getUtiliser : formikProps.values.activite}
-                    />
+                      disabled={!!plannedActivityList.find((e: any) => e.id===formikProps.values.activite && isEditing)}
+                      />
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
@@ -112,19 +122,20 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
                     </Stack>
                     <FormContainer sx={{height: 200, overflow: "auto"}}>
                     <Table sx={{ minWidth: 500 }} aria-label="simple table">
-                      {activiteRapportlist.map((item: ActiviteRapportItem, index: any) => (
+                      {plannedActivityList.map((item: PlannedActivityItem, index: any) => (
                         <TableRow
                           key={index}
                           sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                         >
                           <TableCell component="th" scope="row">
-                            {item.activite}
+                            {item.description}
                           </TableCell>
                           <TableCell align="right">
                             <Button 
                             color="primary" 
                             startIcon={<ContentCopyIcon />}
-                            onClick={() =>ClikUtiliser(item.activite)}
+                            onClick={() =>ClikUtiliser(item.id, item.description)}
+                            disabled = {isEditing}
                             >
                               Utiliser
                             </Button>

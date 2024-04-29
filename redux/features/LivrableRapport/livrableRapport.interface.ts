@@ -1,11 +1,11 @@
 export interface LivrableRapportItem {
-    id?: number;
+    id?: string;
     livrablee?: string;
     missionId?: string;
 }
 export interface LivrableRapportInitialState {
     livrableRapportlist: LivrableRapportItem[];
-    livrableRapport: LivrableRapportItem
+    livrableRapport: LivrableRapportItem;
     isEditing: boolean;
     loading: boolean;
     [key: string]: any;

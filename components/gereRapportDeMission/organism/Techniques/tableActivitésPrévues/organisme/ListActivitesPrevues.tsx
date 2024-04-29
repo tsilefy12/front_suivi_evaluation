@@ -15,17 +15,23 @@ import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHoo
 import { useConfirm } from "material-ui-confirm";
 import { ActiviteRapportItem } from "../../../../../../redux/features/activitesRapport/activiteRapport.interface";
 import { deleteActiviteRapport, editAcitiviteRapport } from "../../../../../../redux/features/activitesRapport";
+import useFetchPlannedActivityList from "../../../../../previsionMissions/organism/Techniques/tableActivitésPrévues/hooks/useFetchPlannedActivityList";
 
 const ListActivitesPrevues = () => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const fetchActivityRapport = useFetchActiviteRapport();
-  const { activiteRapportlist } = useAppSelector((state: any) =>state.activiteRapport);
+  const { activiteRapportlist } = useAppSelector((state: any) => state.activiteRapport);
   const dispatch: any = useAppDispatch();
   const confirm = useConfirm();
+  const { plannedActivityList } = useAppSelector(
+    (state: any) => state.plannedActivity
+  );
+  const fetchPlannedActivityListe = useFetchPlannedActivityList();
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchActivityRapport();
+    fetchPlannedActivityListe();
   }, [router.query])
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,7 +57,7 @@ const ListActivitesPrevues = () => {
         await dispatch(deleteActiviteRapport({ id }));
         fetchActivityRapport();
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const handleClickEdit = async (id: any) => {
@@ -62,50 +68,52 @@ const ListActivitesPrevues = () => {
     <Container>
       <Box sx={{ overflow: "auto" }}>
         <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
-      <MyTableContainer>
-        <Table sx={{ minWidth: 700 }} aria-label="simple table">
-          <TableBody>
-            {activiteRapportlist.map((row: ActiviteRapportItem, index: any) => (
-              <TableRow
-                key={row.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.activite}
-                </TableCell>
-                <TableCell align="right">
-                  <BtnActionContainer direction="row" justifyContent="right">
-                    <IconButton
-                      color="primary"
-                      aria-label="Modifier"
-                      component="span"
-                      onClick={() =>handleClickEdit(row.id!)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      color="warning"
-                      aria-label="Supprimer"
-                      component="span"
-                      onClick={() =>handleClickDelete(row.id!)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </BtnActionContainer>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </MyTableContainer>
-      </Box>
+          <MyTableContainer>
+            <Table sx={{ minWidth: 700 }} aria-label="simple table">
+              <TableBody>
+                {activiteRapportlist.map((row: ActiviteRapportItem, index: any) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {
+                        plannedActivityList.find((mg: any) => mg.id === row.activite)?.description || row.activite
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      <BtnActionContainer direction="row" justifyContent="right">
+                        <IconButton
+                          color="primary"
+                          aria-label="Modifier"
+                          component="span"
+                          onClick={() => handleClickEdit(row.id!)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          color="warning"
+                          aria-label="Supprimer"
+                          component="span"
+                          onClick={() => handleClickDelete(row.id!)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </BtnActionContainer>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </MyTableContainer>
+        </Box>
       </Box>
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
         <Button variant="text" color="info" onClick={handleClickOpen}>
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose} disablePortal={true}>
-          <AddActivitesPrevues handleClose={handleClose} disablePortal={true}/>
+          <AddActivitesPrevues handleClose={handleClose} disablePortal={true} />
         </Dialog>
       </SectionNavigation>
     </Container>

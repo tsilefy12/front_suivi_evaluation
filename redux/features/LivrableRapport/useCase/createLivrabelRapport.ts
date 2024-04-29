@@ -8,6 +8,7 @@ export const createLivrableRapport = createAsyncThunk(
   async (data: {livrableRapport: LivrableRapportItem}, thunkAPI) => {
     try {
       const response = await axios.post("/suivi-evaluation/livrable-rapport", data.livrableRapport);
+      console.log("data :", response.data)
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Deliverable created successfully",

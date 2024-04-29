@@ -29,7 +29,7 @@ const ListLivrables = () => {
     fetchLivrableRapport();
   }, [id])
   const listVide: { id: string }[] = [];
-  console.log("list :", 404 ? listVide : livrableRapportlist)
+  // console.log("list :", 404 ? listVide : livrableRapportlist)
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -73,7 +73,7 @@ const ListLivrables = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.livrable}
+                      {row.livrablee}
                     </TableCell>
                     <TableCell align="right">
                       <BtnActionContainer direction="row" justifyContent="right">
@@ -107,7 +107,7 @@ const ListLivrables = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddLivrable />
+          <AddLivrable handleClose={handleClose}/>
         </Dialog>
       </SectionNavigation>
     </Container>

@@ -23,6 +23,8 @@ import { useRouter } from "next/router";
 import { createObjectifRapport, updateObjectifRapport } from "../../../../../../redux/features/objectifRapport";
 import useFetchObjectifRapport from "../hooks/useFetchObjectifRapport";
 import { cancelEdit } from "../../../../../../redux/features/objectifRapport/objectifRapportSlice";
+import useFetchMissionGoalListe from "../../../../../previsionMissions/organism/Techniques/tableObjectif/hooks/useFetchObjectifList";
+import KeyValue from "../../../../../shared/keyValue";
 
 
 const AddObjectif = ({ handleClose }: any) => {
@@ -32,9 +34,13 @@ const AddObjectif = ({ handleClose }: any) => {
   const fetchObjectifRapport = useFetchObjectifRapport();
   const { id }: any = router.query;
   const [getUtiliser, setGetUtiliser]: any = React.useState("");
+  const [getId, setGetId]: any = React.useState("");
+  const { missionGoalList } = useAppSelector((state: any) => state.missionGoal);
+  const fetchMissionGoalList = useFetchMissionGoalListe();
 
   React.useEffect(() => {
-    fetchObjectifRapport()
+    fetchObjectifRapport();
+    fetchMissionGoalList();
   }, [router.query])
 
   const handleSubmit = async (values: any) => {
@@ -49,7 +55,7 @@ const AddObjectif = ({ handleClose }: any) => {
         );
       } else {
         if (getUtiliser !== "") {
-          values.objectif = getUtiliser;
+          values.objectif = getId;
           return (await dispatch(createObjectifRapport(values)),
             handleClose()
           );
@@ -65,11 +71,12 @@ const AddObjectif = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-  const ClikUtiliser = (id: any) => {
+  const ClikUtiliser = ((id: any, valeur: any) => {
     if (!isEditing) {
-      setGetUtiliser(id);
+      setGetUtiliser(valeur);
+      setGetId(id);
     }
-  }
+  })
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -101,6 +108,7 @@ const AddObjectif = ({ handleClose }: any) => {
                       variant="outlined"
                       name="objectif"
                       value={getUtiliser != "" ? getUtiliser : formikProps.values.objectif}
+                      disabled={!!missionGoalList.find((e: any) => e.id===formikProps.values.objectif && isEditing)}
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
@@ -111,20 +119,20 @@ const AddObjectif = ({ handleClose }: any) => {
                     </Stack>
                     <FormContainer sx={{height: 200, overflow: "auto"}}>
                     <Table sx={{ minWidth: 500}} aria-label="simple table">
-                      {objectifRapportlist.map((item: any) => (
-                  
+                      {missionGoalList.map((item: any) => (
                         <TableRow
                           key={item.id}
                           sx={{ "&:last-child td, &:last-child th": { border: 0 }}}
                         >
                           <TableCell component="th" scope="row">
-                            {item.objectif}
+                            {item.description}
                           </TableCell>
                           <TableCell align="right">
                             <Button
                               color="primary"
                               startIcon={<ContentCopyIcon />}
-                              onClick={() => ClikUtiliser(item.objectif)}
+                              onClick={() => ClikUtiliser(item.id, item.description)}
+                              disabled = {isEditing}
                             >
                               Utiliser
                             </Button>

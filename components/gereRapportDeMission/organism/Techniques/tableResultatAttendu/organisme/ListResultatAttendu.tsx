@@ -15,17 +15,23 @@ import { useRouter } from "next/router";
 import { useConfirm } from "material-ui-confirm";
 import { ResultatRapportItem } from "../../../../../../redux/features/resultatAttendu/resultatRapport.interface";
 import { deleteResultatRapport, editResultatRapport } from "../../../../../../redux/features/resultatAttendu";
+import useFetchExceptedResultList from "../../../../../previsionMissions/organism/Techniques/tableResultatAttendu/hooks/useFetchExceptedResultList";
 
 const ListResultatAttendu = () => {
   const [open, setOpen] = React.useState(false);
   const fetchResultatRapport = useFetchResultatRapport();
-  const { resultatRapportlist } = useAppSelector((state) =>state.resultatRapport);
+  const { resultatRapportlist } = useAppSelector((state) => state.resultatRapport);
   const router = useRouter();
   const confirm = useConfirm();
   const dispatch: any = useAppDispatch();
-  
-  React.useEffect(() =>{
+  const { exceptedResultList } = useAppSelector(
+    (state) => state.exceptedResult
+  );
+  const fetchExceptedResultListe = useFetchExceptedResultList();
+
+  React.useEffect(() => {
     fetchResultatRapport();
+    fetchExceptedResultListe();
   }, [router.query])
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,7 +57,7 @@ const ListResultatAttendu = () => {
         await dispatch(deleteResultatRapport({ id }));
         fetchResultatRapport();
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const handleClickEdit = async (id: any) => {
@@ -63,50 +69,52 @@ const ListResultatAttendu = () => {
     <Container>
       <Box sx={{ overflow: "auto" }}>
         <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
-      <MyTableContainer>
-        <Table sx={{ minWidth: 700 }} aria-label="simple table">
-          <TableBody>
-            {resultatRapportlist.map((row: ResultatRapportItem, index: any) => (
-              <TableRow
-                key={row.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.resultat}
-                </TableCell>
-                <TableCell align="right">
-                  <BtnActionContainer direction="row" justifyContent="right">
-                    <IconButton
-                      color="primary"
-                      aria-label="Modifier"
-                      component="span"
-                      onClick={() =>handleClickEdit(row.id)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      color="warning"
-                      aria-label="Supprimer"
-                      component="span"
-                      onClick={() =>handleClickDelete(row.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </BtnActionContainer>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </MyTableContainer>
-      </Box>
+          <MyTableContainer>
+            <Table sx={{ minWidth: 700 }} aria-label="simple table">
+              <TableBody>
+                {resultatRapportlist.map((row: ResultatRapportItem, index: any) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {
+                        exceptedResultList.find((mg: any) => mg.id === row.resultat)?.description || row.resultat
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      <BtnActionContainer direction="row" justifyContent="right">
+                        <IconButton
+                          color="primary"
+                          aria-label="Modifier"
+                          component="span"
+                          onClick={() => handleClickEdit(row.id)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          color="warning"
+                          aria-label="Supprimer"
+                          component="span"
+                          onClick={() => handleClickDelete(row.id)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </BtnActionContainer>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </MyTableContainer>
+        </Box>
       </Box>
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
         <Button variant="text" color="info" onClick={handleClickOpen}>
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose} disablePortal={true}>
-          <AddResultatAttendu handleClose={handleClose} disablePortal={true}/>
+          <AddResultatAttendu handleClose={handleClose} disablePortal={true} />
         </Dialog>
       </SectionNavigation>
     </Container>

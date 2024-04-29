@@ -40,7 +40,10 @@ const AddlivrableRapport = ({ handleClose }: any) => {
           })
         );
       } else {
-        await dispatch(createLivrableRapport(values));
+        console.log("mandalo ato", values)
+        if (values) {
+           dispatch(createLivrableRapport(values));
+        }
       }
       fetchlivrableRapport(),
         handleClose();
@@ -92,7 +95,11 @@ const AddlivrableRapport = ({ handleClose }: any) => {
                     dispatch(cancelEdit())
                   }}
                 >Annuler</Button>
-                <Button variant="contained" type="submit">
+                <Button
+                  variant="contained"
+                  type="button"
+                  onClick={formikProps.submitForm}
+                >
                   Enregistrer
                 </Button>
               </DialogActions>

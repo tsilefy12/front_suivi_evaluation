@@ -24,6 +24,8 @@ import { createResultatAttendu, updateResultRapport } from "../../../../../../re
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { ResultatRapportItem } from "../../../../../../redux/features/resultatAttendu/resultatRapport.interface";
 import { cancelEdit } from "../../../../../../redux/features/resultatAttendu/resultatRapportSlice";
+import useFetchExceptedResultList from "../../../../../previsionMissions/organism/Techniques/tableResultatAttendu/hooks/useFetchExceptedResultList";
+import { ExceptedResultItem } from "../../../../../../redux/features/exceptedResult/exceptedResultSlice.interface";
 
 const AddResultatAttendu = ({ handleClose }: any) => {
   const router = useRouter();
@@ -32,9 +34,15 @@ const AddResultatAttendu = ({ handleClose }: any) => {
   const fetchRapport = useFetchResultatRapport();
   const { id }: any = router.query;
   const [getUtiliser, setGetUtiliser]: any = React.useState("")
+  const [getId, setGetId]: any = React.useState("");
+  const { exceptedResultList } = useAppSelector(
+    (state: any) => state.exceptedResult
+  );
+  const fetchExceptedResultListe = useFetchExceptedResultList();
 
   React.useEffect(() => {
-    fetchRapport()
+    fetchRapport();
+    fetchExceptedResultListe();
   }, [router.query])
 
   const handleSubmit = async (values: any) => {
@@ -49,7 +57,7 @@ const AddResultatAttendu = ({ handleClose }: any) => {
         );
       } else {
         if (getUtiliser !== "") {
-          values.resultat = getUtiliser;
+          values.resultat = getId;
           return (await dispatch(createResultatAttendu(values)),
             handleClose()
           );
@@ -66,9 +74,10 @@ const AddResultatAttendu = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-  const ClikUtiliser = (id: any) => {
+  const ClikUtiliser = (id: any, valeur: any) => {
     if (!isEditing) {
-      setGetUtiliser(id);
+      setGetUtiliser(valeur);
+      setGetId(id)
     }
   }
   return (
@@ -102,6 +111,7 @@ const AddResultatAttendu = ({ handleClose }: any) => {
                       variant="outlined"
                       name="resultat"
                       value={getUtiliser != "" ? getUtiliser : formikProps.values.resultat}
+                      disabled={!!exceptedResultList.find((e: any) => e.id===formikProps.values.resultat && isEditing)}
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
@@ -112,19 +122,20 @@ const AddResultatAttendu = ({ handleClose }: any) => {
                     </Stack>
                     <FormContainer sx={{height: 200, overflow: "auto"}}>
                     <Table sx={{ minWidth: 500 }} aria-label="simple table">
-                      {resultatRapportlist.map((item: ResultatRapportItem, index: any) => (
+                      {exceptedResultList.map((item: ExceptedResultItem, index: any) => (
                         <TableRow
                           key={index}
                           sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                         >
                           <TableCell component="th" scope="row">
-                            {item.resultat}
+                            {item.description}
                           </TableCell>
                           <TableCell align="right">
                             <Button
                               color="primary"
                               startIcon={<ContentCopyIcon />}
-                              onClick={() => ClikUtiliser(item.resultat)}
+                              onClick={() => ClikUtiliser(item.id, item.description)}
+                              disabled = {isEditing}
                               >
                             Utiliser
                           </Button>

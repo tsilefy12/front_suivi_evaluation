@@ -1,7 +1,7 @@
 export interface AutreInfoRapportItem {
     id?: string;
     assurance?: string;
-    visiteTechnique?: string;
+    visiteTechnic?: string;
     voiture?: string;
     centureSecurite?: boolean;
     missionId?: string;
