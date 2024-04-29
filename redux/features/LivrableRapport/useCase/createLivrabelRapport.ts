@@ -3,24 +3,22 @@ import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
 import { LivrableRapportItem } from "../livrableRapport.interface";
 
+// Action creator
 export const createLivrableRapport = createAsyncThunk(
   "livrableRapport/createLivrableRapport",
-  async (data: {livrableRapport: LivrableRapportItem}, thunkAPI) => {
+  async (data: LivrableRapportItem, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post("/suivi-evaluation/livrable-rapport", data.livrableRapport);
-      console.log("data :", response.data)
-      thunkAPI.dispatch(
-        enqueueSnackbar({
-          message: "Deliverable created successfully",
-          options: { variant: "success" },
-        })
-      );
-      return response.data;
+      const response = await axios.post("/suivi-evaluation/livrable-rapport", data);
+      dispatch(enqueueSnackbar({
+        message: "Livrable rapport créé avec succès",
+        options: { variant: "success" },
+      }));
+      return response.data; // Retourner uniquement les données de la réponse Axios
     } catch (error: any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error);
+        return rejectWithValue(error.response.data); // Retourner uniquement les données de l'erreur Axios
       }
-      return error;
+      return rejectWithValue(error.message); // Retourner un message d'erreur générique
     }
   }
 );

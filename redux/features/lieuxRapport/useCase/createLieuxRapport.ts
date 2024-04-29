@@ -5,10 +5,10 @@ import { LieuxRapportItem } from "../lieuxRapport.interface";
 
 export const createLieuxRapport = createAsyncThunk(
   "lieux/createLieuxRapport",
-  async (data: {lieuxRapport:LieuxRapportItem}, thunkAPI) => {
+  async (data: LieuxRapportItem, {dispatch, rejectWithValue}) => {
     try {
-      const response = await axios.post("/suivi-evaluation/lieux-rapport", data.lieuxRapport);
-      thunkAPI.dispatch(
+      const response = await axios.post("/suivi-evaluation/lieux-rapport", data);
+       dispatch(
         enqueueSnackbar({
           message: "Lieu de rapport créé avec succès",
           options: {
@@ -19,7 +19,7 @@ export const createLieuxRapport = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error);
+        return rejectWithValue(error);
       }
       throw error;
     }

@@ -154,6 +154,7 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
                     dispatch(cancelEdit());
                     handleClose();
                   }}
+                  disabled={isEditing}
                   >Annuler
                   </Button>
                   <Button variant="contained" type="submit">

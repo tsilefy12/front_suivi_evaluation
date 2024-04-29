@@ -43,7 +43,7 @@ const ListLieux = () => {
   const dispatch = useAppDispatch();
   const { idfile }: any = router.query;
   const { missionLocationList } = useAppSelector(
-    (state) => state.missionLocation
+    (state: any) => state.missionLocation
   );
   const usefetchMissionLocationListe = useFetchMissionLocationListe();
 

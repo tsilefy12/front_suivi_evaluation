@@ -108,7 +108,7 @@ const AddObjectif = ({ handleClose }: any) => {
                       variant="outlined"
                       name="objectif"
                       value={getUtiliser != "" ? getUtiliser : formikProps.values.objectif}
-                      disabled={!!missionGoalList.find((e: any) => e.id===formikProps.values.objectif && isEditing)}
+                      disabled={!!missionGoalList.find((e: any) => e.id === formikProps.values.objectif && isEditing)}
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
@@ -117,30 +117,30 @@ const AddObjectif = ({ handleClose }: any) => {
                         vous pouvez les réutiliser pour les rapports
                       </Typography>
                     </Stack>
-                    <FormContainer sx={{height: 200, overflow: "auto"}}>
-                    <Table sx={{ minWidth: 500}} aria-label="simple table">
-                      {missionGoalList.map((item: any) => (
-                        <TableRow
-                          key={item.id}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 }}}
-                        >
-                          <TableCell component="th" scope="row">
-                            {item.description}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Button
-                              color="primary"
-                              startIcon={<ContentCopyIcon />}
-                              onClick={() => ClikUtiliser(item.id, item.description)}
-                              disabled = {isEditing}
-                            >
-                              Utiliser
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-       
-                      ))}
-                    </Table>
+                    <FormContainer sx={{ height: 200, overflow: "auto" }}>
+                      <Table sx={{ minWidth: 500 }} aria-label="simple table">
+                        {missionGoalList.map((item: any) => (
+                          <TableRow
+                            key={item.id}
+                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {item.description}
+                            </TableCell>
+                            <TableCell align="right">
+                              <Button
+                                color="primary"
+                                startIcon={<ContentCopyIcon />}
+                                onClick={() => ClikUtiliser(item.id, item.description)}
+                                disabled={isEditing}
+                              >
+                                Utiliser
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+
+                        ))}
+                      </Table>
                     </FormContainer>
                   </FormContainer>
                 </DialogContent>
@@ -149,7 +149,9 @@ const AddObjectif = ({ handleClose }: any) => {
                     formikProps.resetForm();
                     dispatch(cancelEdit());
                     handleClose();
-                  }}>
+                  }}
+                    disabled={isEditing}
+                  >
                     Annuler
                   </Button>
                   <Button

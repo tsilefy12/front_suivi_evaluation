@@ -54,7 +54,7 @@ export const lieuxRapportSlice = createSlice({
     },
     [createLieuxRapport.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.lieuxRapportlist = action.payload;    
+      state.lieuxRapportlist.push(action.payload);    
     },
     [createLieuxRapport.rejected.type]: (state, action) => {
       state.error = action.error;

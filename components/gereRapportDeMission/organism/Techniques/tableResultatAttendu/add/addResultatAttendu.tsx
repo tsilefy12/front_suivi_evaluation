@@ -153,7 +153,9 @@ const AddResultatAttendu = ({ handleClose }: any) => {
                   formikProps.resetForm();
                   dispatch(cancelEdit());
                   handleClose();
-                }}>
+                }}
+                disabled={isEditing}
+                >
                 Annuler</Button>
                 <Button
                   variant="contained"

@@ -23,6 +23,8 @@ import { createLieuxRapport, updateLieuxRapport } from "../../../../../../redux/
 import { Form, Formik } from "formik";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { cancelEdit } from "../../../../../../redux/features/lieuxRapport/lieuxSlice";
+import useFetchMissionLocationListe from "../../../../../previsionMissions/organism/Techniques/tableLieux/hooks/useFetchMissionLocationList";
+import { MissionLocationItem } from "../../../../../../redux/features/missionLocation/missionLocationSlice.interface";
 
 const AddLieux = ({ handleClose }: any) => {
   const { isEditing, lieuxRapport } = useAppSelector((state: any) => state.lieuxRapport);
@@ -30,10 +32,20 @@ const AddLieux = ({ handleClose }: any) => {
   const router = useRouter();
   const fetchLieuxRapport = useFetchLieuxRapport();
   const { id }: any = router.query;
-  React.useEffect(() => {
-    fetchLieuxRapport()
-  }, [router.query])
+  const { missionLocationList } = useAppSelector(
+    (state: any) => state.missionLocation
+  );
+  const fetchMissionLocationListe = useFetchMissionLocationListe();
+  const [getId, setGetId]: any = React.useState("");
+  const [getFokontany, setGetFokontany]: any = React.useState("");
+  const [getCommune, setGetCommune]: any = React.useState("");
+  const [getDisctrict, setGetDistrict]: any = React.useState("");
 
+
+  React.useEffect(() => {
+    fetchLieuxRapport();
+    fetchMissionLocationListe();
+  }, [router.query])
 
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
@@ -46,7 +58,14 @@ const AddLieux = ({ handleClose }: any) => {
           })
         );
       } else {
-        await dispatch(createLieuxRapport(values));
+        if (getId != "") {
+          values.fokontany = getId;
+          values.commune = getId;
+          values.district = getId;
+          return (dispatch(createLieuxRapport(values)), handleClose());
+        }else if (values.fokontany != "" && values.commune!=="" && values.district!=="" ) {
+          return  (await dispatch(createLieuxRapport(values)), handleClose())
+        }
       }
       fetchLieuxRapport(),
         handleClose();
@@ -55,6 +74,12 @@ const AddLieux = ({ handleClose }: any) => {
     }
   };
 
+  const ClickHandler = (id: any, FokontanyValue: any, CommuneValue: any, DistrictValue: any) => {
+    setGetId(id);
+    setGetFokontany(FokontanyValue);
+    setGetCommune(CommuneValue);
+    setGetDistrict(DistrictValue);
+  }
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -69,11 +94,6 @@ const AddLieux = ({ handleClose }: any) => {
               // missiomId: id!
             }
         }
-        validationSchema={Yup.object({
-          fokontany: Yup.string().required("Champ obligatoire"),
-          commune: Yup.string().required("Champ obligatoire"),
-          district: Yup.string().required("Champ obligatoire"),
-        })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
           action.resetForm();
@@ -92,6 +112,8 @@ const AddLieux = ({ handleClose }: any) => {
                       label="Fokontany"
                       variant="outlined"
                       name="fokontany"
+                      value={getId != "" ? getFokontany : formikProps.values.fokontany}
+                      disabled={!!missionLocationList.find((e: any) => e.id===formikProps.values.fokontany && isEditing)}
                     />
                     <OSTextField
                       fullWidth
@@ -99,6 +121,8 @@ const AddLieux = ({ handleClose }: any) => {
                       label="Commune"
                       variant="outlined"
                       name="commune"
+                      value={getId != "" ? getCommune : formikProps.values.commune}
+                      disabled={!!missionLocationList.find((e: any) => e.id===formikProps.values.commune && isEditing)}
                     />
                     <OSTextField
                       fullWidth
@@ -106,6 +130,8 @@ const AddLieux = ({ handleClose }: any) => {
                       label="Disctrict"
                       variant="outlined"
                       name="district"
+                      value={getId != "" ? getDisctrict : formikProps.values.district}
+                      disabled={!!missionLocationList.find((e: any) => e.id===formikProps.values.district && isEditing)}
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
@@ -115,16 +141,27 @@ const AddLieux = ({ handleClose }: any) => {
                       </Typography>
                     </Stack>
                     <Table sx={{ minWidth: 500 }} aria-label="simple table">
-                      {[1, 2].map((item) => (
+                      {missionLocationList.map((item: MissionLocationItem, index: any) => (
                         <TableRow
-                          key={item}
+                          key={index}
                           sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                         >
                           <TableCell component="th" scope="row">
-                            Résultat numéro 1
+                            {item.village}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {item.commune}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {item.district}
                           </TableCell>
                           <TableCell align="right">
-                            <Button color="primary" startIcon={<ContentCopyIcon />}>
+                            <Button
+                              color="primary"
+                              startIcon={<ContentCopyIcon />}
+                              onClick={() => ClickHandler(item.id, item.village, item.commune, item.district)}
+                              disabled={isEditing}
+                            >
                               Utiliser
                             </Button>
                           </TableCell>
@@ -140,6 +177,7 @@ const AddLieux = ({ handleClose }: any) => {
                       formikProps.resetForm();
                       dispatch(cancelEdit())
                     }}
+                    disabled={isEditing}
                   >Annuler</Button>
                   <Button
                     variant="contained"

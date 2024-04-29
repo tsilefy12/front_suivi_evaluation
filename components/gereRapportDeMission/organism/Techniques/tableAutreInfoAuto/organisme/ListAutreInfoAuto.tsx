@@ -17,9 +17,25 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddAutreInfoAutoRapport from "../add/addAutreInfoAuto";
+import useFetchAutreInfoRapport from "../hooks/useFetchAutreInfoRaport";
+import { useRouter } from "next/router";
+import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import { useConfirm } from "material-ui-confirm";
+import { AutreInfoRapportItem } from "../../../../../../redux/features/autreInfoRapport/autreInfoRapport.interface";
+import { deleteAutreInfoRapport, editAutreInfoRapport } from "../../../../../../redux/features/autreInfoRapport";
 
 const ListAutreInfoAuto = () => {
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
+  const { id }: any = router.query;
+  const dispatch: any = useAppDispatch();
+  const confirm = useConfirm();
+  const fetchAutreInfoRapport = useFetchAutreInfoRapport();
+  const { autreInfoRapportList } = useAppSelector((state: any) => state.autreInfoRapport);
+
+  React.useEffect(() =>{
+    fetchAutreInfoRapport();
+  }, [router.query])
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -27,6 +43,30 @@ const ListAutreInfoAuto = () => {
     setOpen(false);
   };
 
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer voiture",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteAutreInfoRapport({ id }));
+        fetchAutreInfoRapport();
+      })
+      .catch(() => { });
+  };
+
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editAutreInfoRapport({ id }));
+    handleClickOpen();
+  };
   return (
     <Container>
       <Box sx={{ overflow: "auto" }}>
@@ -42,22 +82,22 @@ const ListAutreInfoAuto = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {autreInfoRapportList.map((row: AutreInfoRapportItem, index: any) => (
               <TableRow
-                key={row.id}
+                key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   {row.assurance}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {row.visite}
+                  {row.visiteTechnic}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {row.voiture}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {row.ceinture}
+                  {row.centureSecurite ? "OUI": "NON" }
                 </TableCell>
                 <TableCell align="right">
                   <BtnActionContainer direction="row" justifyContent="right">
@@ -65,6 +105,7 @@ const ListAutreInfoAuto = () => {
                       color="primary"
                       aria-label="Modifier"
                       component="span"
+                      onClick={() =>handleClickEdit(row.id!)}
                     >
                       <EditIcon />
                     </IconButton>
@@ -72,6 +113,7 @@ const ListAutreInfoAuto = () => {
                       color="warning"
                       aria-label="Supprimer"
                       component="span"
+                      onClick={() =>handleClickDelete(row.id!)}
                     >
                       <DeleteIcon />
                     </IconButton>

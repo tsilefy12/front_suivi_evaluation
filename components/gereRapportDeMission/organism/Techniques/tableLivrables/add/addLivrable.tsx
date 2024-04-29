@@ -40,13 +40,10 @@ const AddlivrableRapport = ({ handleClose }: any) => {
           })
         );
       } else {
-        console.log("mandalo ato", values)
-        if (values) {
-           dispatch(createLivrableRapport(values));
-        }
+        dispatch(createLivrableRapport(values));
       }
-      fetchlivrableRapport(),
-        handleClose();
+      handleClose();
+      fetchlivrableRapport();
     } catch (error) {
       console.log("error", error);
     }

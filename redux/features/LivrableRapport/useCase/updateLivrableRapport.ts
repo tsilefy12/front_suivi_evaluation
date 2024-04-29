@@ -13,7 +13,7 @@ import { LivrableRapportItem } from "../livrableRapport.interface";
  */
 export const updateLivrableRapport = createAsyncThunk(
   "livrableRapport/updateLivrableRapport",
-  async (data: { id: string; livrableRapport: LivrableRapportItem }, thunkAPI) => {
+  async (data: { id: string, livrableRapport: LivrableRapportItem }, thunkAPI) => {
     try {
       const response = await axios.patch(`/suivi-evaluation/livrable-rapport/${data.id}`, data.livrableRapport);
       thunkAPI.dispatch(

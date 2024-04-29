@@ -27,6 +27,7 @@ import useFetchAutreInfoRapport from "../hooks/useFetchAutreInfoRaport";
 import { createAutreInfoRapport, updateAutreInfoRapport } from "../../../../../../redux/features/autreInfoRapport";
 import { Field, Form, Formik } from "formik";
 import OSTextField from "../../../../../shared/input/OSTextField";
+import useFetchVehicleList from "../../../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
 
 const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
   const router = useRouter();
@@ -35,8 +36,17 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
   const fetchAutreInfoRapport = useFetchAutreInfoRapport();
   const { autreInfoRapport, isEditing, autreInfoRapportList } = useAppSelector((state: any) => state.autreInfoRapport);
 
+  const { vehicleList } = useAppSelector((state) => state.vehicle);
+  const fetchVehicleListe = useFetchVehicleList();
+  const [getId, setGetId]: any = React.useState("");
+  const [getAssurance, setGetAssurance]: any = React.useState("")
+  const [getVisite, setGetVisite]: any = React.useState("");
+  const [getTypeVehicule, setGetTypeVehicule]: any = React.useState("");
+  const [getCenture, setGetCenture]: any = React.useState(false);
+
   React.useEffect(() => {
     fetchAutreInfoRapport();
+    fetchVehicleListe();
   }, [router.query]);
 
   const handleSubmit = async (values: any) => {
@@ -50,14 +60,34 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
           })
         );
       } else {
-        await dispatch(createAutreInfoRapport(values));
-        useFetchAutreInfoRapport();
-        handleClose();
+          if (getId!=="") {
+            values.missionId = id!;
+            values.assurance = getAssurance;
+            values.visiteTechnic = getVisite;
+            values.voiture = getTypeVehicule;
+            values.centureSecurite = getCenture;
+
+            return ( dispatch(createAutreInfoRapport(values)),   useFetchAutreInfoRapport(),
+            handleClose());
+          }else if (values.assurance!="" &&  values.visiteTechnic!=="" && values.voiture!=="" ) {
+            return (dispatch(createAutreInfoRapport(values)), useFetchAutreInfoRapport(), handleClose());
+          }
       }
+    
     } catch (error) {
       console.log("error", error);
     }
   };
+
+
+  const ClickHandler = (id: any, ass: any, visity: any, type: any, centure: boolean) =>{
+    setGetId(id);
+    setGetAssurance(ass);
+    setGetTypeVehicule(type);
+    setGetVisite(visity);
+    setGetCenture(centure);
+  }
+  console.log("type :", getTypeVehicule)
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -74,7 +104,7 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
             }
         }
         validationSchema={Yup.object({
-          assurance: Yup.string().required("Veuillez choisir type d'operation "),
+          // assurance: Yup.string().required("Veuillez choisir type d'operation "),
           voiture: Yup.string()
             .oneOf(
               ["OTHER", "RENTAL", "PRIVATE"],
@@ -100,22 +130,26 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                       label="Assurance"
                       variant="outlined"
                       name="assurance"
+                      value={getId != "" ? getAssurance : formikProps.values.assurance}
+                      disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
                     />
                     <CustomStack
                       direction={{ xs: "column", sm: "column", md: "row" }}
                       spacing={{ xs: 2, sm: 2, md: 1 }}
                     >
                       <FormControlLabel
-                        control={<Switch defaultChecked={formikProps.values.visiteTechnique=="OUI"} />}
+                        control={<Switch defaultChecked={getId != "" ? getVisite :formikProps.values.visiteTechnic=="OUI"} />}
                         label="Visite technique"
                         name="visiteTechnic"
                         onChange={(e,c) =>formikProps.setFieldValue("visiteTechnic", c ? "OUI": "NON")}
+                        disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
                       />
                       <FormControlLabel
-                        control={<Switch defaultChecked/>}
+                        control={<Switch defaultChecked={getCenture==true}/>}
                         label="Ceinture de sécurité"
                         name="centureSecurite"
                         onChange={(e,c) =>formikProps.setFieldValue("centureSecurite", c)}
+                        disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
                       />
                     </CustomStack>
                     <CustomStack
@@ -125,21 +159,24 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                       <Field as={RadioGroup} row name="OperationType">
                           <FormControlLabel
                             value="OTHER"
-                            control={<Radio />}
+                            control={<Radio defaultChecked={getTypeVehicule==="OTHER"}/>}
                             label="Autre de location"
                             name="voiture"
+                            disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
                           />
                           <FormControlLabel
                             value="RENTAL"
-                            control={<Radio />}
+                            control={<Radio defaultChecked={getTypeVehicule==="RENTAL"}/>}
                             label="Voiture de location"
                             name="voiture"
+                            disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
                           />
                           <FormControlLabel
                             value="PRIVATE"
-                            control={<Radio />}
+                            control={<Radio defaultChecked={getTypeVehicule==="PRIVATE"}/>}
                             label="Voiture privé"
                             name="voiture"
+                            disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
                           />
                         </Field>
                     </CustomStack>
@@ -161,25 +198,30 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                           <TableCell align="left">Ceinture de securite</TableCell>
                         </TableRow>
                       </TableHead>
-                      {[1, 2].map((item) => (
+                      {vehicleList.map((item) => (
                         <TableRow
-                          key={item}
+                          key={item.id!}
                           sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                         >
                           <TableCell component="th" scope="row">
-                            HAVANA
+                            {item.insuranceVehicle}
                           </TableCell>
                           <TableCell component="th" scope="row">
-                            Oui
+                            {item.technicalVisitVehicle}
                           </TableCell>
                           <TableCell component="th" scope="row">
-                            Non
+                            {item.vehicleType}
                           </TableCell>
                           <TableCell component="th" scope="row">
-                            Oui
+                            {item.safetyBeltVehicle ? "OUI": "NON"}
                           </TableCell>
                           <TableCell align="right">
-                            <Button color="primary" startIcon={<ContentCopyIcon />}>
+                            <Button 
+                            color="primary" 
+                            startIcon={<ContentCopyIcon />}
+                            onClick={() =>ClickHandler(item.id!, item.insuranceVehicle, item.technicalVisitVehicle, item.vehicleType, item.safetyBeltVehicle!)}
+                            disabled={isEditing}
+                            >
                               Utiliser
                             </Button>
                           </TableCell>
@@ -189,7 +231,7 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
-                  <Button color="warning">Annuler</Button>
+                  <Button color="warning" disabled={isEditing}>Annuler</Button>
                   <Button 
                   variant="contained" 
                   type="submit"
