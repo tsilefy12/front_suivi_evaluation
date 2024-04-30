@@ -41,6 +41,8 @@ import { cancelEdit } from "../../../../../../redux/features/programmeRapport/pr
 import { format } from "date-fns";
 import useFetchProgrammePrevisionList from "../../../../../previsionMissions/organism/Techniques/tableProgramme/hooks/useFetchProgrammePrevision";
 import { ProgrammePrevisionItem } from "../../../../../../redux/features/programmePrevision/programmePrevision.interface";
+import useFetchPlannedActivityList from "../../../../../previsionMissions/organism/Techniques/tableActivitésPrévues/hooks/useFetchPlannedActivityList";
+import useFetchDeliverableList from "../../../../../previsionMissions/organism/Techniques/tableLivrables/hooks/useFetchDeliverableList";
 
 const AddProgrammesRapport = ({ handleClose }: any) => {
   const router = useRouter();
@@ -50,19 +52,28 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
   const { id }: any = router.query;
   const [getUtiliser, setGetUtiliser]: any = React.useState("");
   const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) =>state.employe);
+  const { employees } = useAppSelector((state: any) => state.employe);
   const fetchLivrable = useFetchLivrableRapport();
-  const { livrableRapportlist } = useAppSelector((state: any) =>state.livrableRapport);
+  const { livrableRapportlist } = useAppSelector((state: any) => state.livrableRapport);
   const fetchActivitePrevueR = useFetchActiviteRapport();
-  const { activiteRapportlist } = useAppSelector((state: any) =>state.activiteRapport);
+  const { activiteRapportlist } = useAppSelector((state: any) => state.activiteRapport);
   const [open, setOpen]: any = React.useState(false);
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
-  const { programmePrevisionList } = useAppSelector((state: any) =>state.programmePrevision)
-  const [dateD, setDateD] = React.useState(new Date());
-  const [dateF, setDateF] = React.useState(new Date());
+  const { programmePrevisionList } = useAppSelector((state: any) => state.programmePrevision)
+  const [dateD, setDateD] = React.useState("01/01/2000");
+  const [dateF, setDateF] = React.useState("01/01/2000");
   const [activity, setActivitty] = React.useState("");
   const [liverable, setLiverable] = React.useState("");
+  const [activityRealise, setActivityRealise] = React.useState("");
+  const [getId, setGetId]: any = React.useState("");
+
   const [respo, setRespo] = React.useState([]);
+  const { plannedActivityList } = useAppSelector(
+    (state: any) => state.plannedActivity
+  );
+  const fetchPlannedActivityListe = useFetchPlannedActivityList();
+  const fetchtDeliverable = useFetchDeliverableList();
+  const { deliverableList } = useAppSelector((state: any) => state.deliverable);
 
 
   React.useEffect(() => {
@@ -70,7 +81,9 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
     fetchEmployes();
     fetchActivitePrevueR();
     fetchLivrable();
-    fetchProgrammePrevision()
+    fetchProgrammePrevision();
+    fetchPlannedActivityListe();
+    fetchtDeliverable();
   }, [router.query])
 
   console.log("liste programme prev :", programmePrevisionList)
@@ -81,23 +94,14 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
       )
       : []
   );
-  const ClikUtiliser = (id: any) => {
-    if (!isEditing) {
-      setGetUtiliser(id);
-    }
-    if (getUtiliser!="" && !isEditing) {
-      programmePrevisionList.forEach((pl: any) =>{
-        if (pl.id! === getUtiliser) {
-          setDateD(pl.dateDebut);
-          setDateF(pl.dateFin);
-          setActivitty(pl.activitePrevueR);
-          setLiverable(pl.livrableR);
-          setRespo(pl.responsableR)
-        }
-      })
-    }
+  const ClikUtiliser = (id: any, date1: any, date2: any, activity1: any, activity2: any) => {
+    setGetId(id)
+    setDateD(date1);
+    setDateF(date2);
+    setActivitty(activity1);
+    setActivityRealise(activity2);
   }
-  
+
   const handleSubmit = async (values: any) => {
     // console.log("id responsable :", values.responsableR)
     values.missionId = id!;
@@ -119,17 +123,17 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
         );
       }
       else {
-        if (dateD !== null && dateF!==null && activity!=="" && liverable!=="" && respo.length!=0) {
+        if (dateD !== null && dateF !== null && activity !== "" && liverable !== "" && respo.length != 0) {
           values.dateDebut = dateD;
           values.dateFin = dateF;
           values.activitePrevueR = activity;
           values.livrableR = liverable;
-          values.responsableR = respo; 
+          values.responsableR = respo;
           return (await dispatch(createProgrammeRapport(values)),
             handleClose()
           );
         } else if (values.activitePrevueR !== "" && values.livrableR !== "") {
-          values.responsableR = [...selectedEmployes.map(e =>e.id)];
+          values.responsableR = [...selectedEmployes.map(e => e.id)];
           return (await dispatch(createProgrammeRapport(values)),
             handleClose()
           );
@@ -153,7 +157,8 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
             : {
               dateDebut: isEditing ? programmeRapport?.dateDebut : new Date(),
               dateFin: isEditing ? programmeRapport?.dateFin : new Date(),
-              activitePrevueR: isEditing ? programmeRapport?.activitePrevueR: "",
+              activitePrevueR: isEditing ? programmeRapport?.activitePrevueR : "",
+              activtiteRealise: isEditing ? programmeRapport?.activtiteRealise : "",
               livrableR: isEditing ? programmeRapport?.livrableR : "",
               responsableR: isEditing ? programmeRapport?.responsableR : ""
               // missiomId: id!
@@ -164,7 +169,7 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
           action.resetForm();
         }}
       >
-        {(fromikProps) => {
+        {(formikProps) => {
           return (
             <Form>
               <SectionNavigation>
@@ -177,8 +182,8 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                       label="Date de début"
                       variant="outlined"
                       name="dateDebut"
-                      value={dateD!=null ? dateD: fromikProps.values.dateDebut!}
-                      onChange={(value: any) =>fromikProps.setFieldValue("dateDebut", value)}
+                      value={(dateD != "01/01/2000") ? dateD : formikProps.values.dateDebut}
+                      onChange={(value: any) => formikProps.setFieldValue("dateDebut", value)}
                     />
                     <OSDatePicker
                       fullWidth
@@ -186,16 +191,26 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                       label="Date de fin "
                       variant="outlined"
                       name="dateFin"
-                      value={dateF!=null ? dateF : fromikProps.values.dateFin!}
-                      onChange={(value: any) =>fromikProps.setFieldValue("dateFin", value)}
+                      value={(dateF != "01/01/2000") ? dateF : formikProps.values.dateFin}
+                      onChange={(value: any) => formikProps.setFieldValue("dateFin", value)}
                     />
                     <OSSelectField
                       fullWidth
                       id="outlined-basic"
                       label="Activités prévues "
                       variant="outlined"
+                      options={plannedActivityList}
+                      dataKey={activity !== "" ? activity : ["description"]}
+                      valueKey="id"
+                      name="activitePrevueR"
+                    />
+                    <OSSelectField
+                      fullWidth
+                      id="outlined-basic"
+                      label="Activité réalisées "
+                      variant="outlined"
                       options={activiteRapportlist}
-                      dataKey={activity!=="" ? activity : ["activite"]}
+                      dataKey={activityRealise !== "" ? activityRealise : ["activite"]}
                       valueKey="id"
                       name="activitePrevueR"
                     />
@@ -205,31 +220,31 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                       label="Livrable"
                       variant="outlined"
                       options={livrableRapportlist}
-                      dataKey={liverable !=="" ? liverable : ["livrable"]}
+                      dataKey={liverable !== "" ? liverable : ["livrablee"]}
                       valueKey="id"
                       name="livrableR"
                     />
                     <FormControl fullWidth>
-                    <Autocomplete
-                    multiple
-                    id="tags-standard"
-                    options={employees}
-                    getOptionLabel={(employee: any) =>
-                      `${employee.name} ${employee.surname}` as string
-                    }
-                    value={respo.length!==0 ? respo : selectedEmployes}
-                    onChange={(event, newValue) => {
-                      setSelectedEmployes(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        id="outlined-basic"
-                        label="Sélectionnez participant"
-                        variant="outlined"
+                      <Autocomplete
+                        multiple
+                        id="tags-standard"
+                        options={employees}
+                        getOptionLabel={(employee: any) =>
+                          `${employee.name} ${employee.surname}` as string
+                        }
+                        value={respo.length !== 0 ? respo : selectedEmployes}
+                        onChange={(event, newValue) => {
+                          setSelectedEmployes(newValue);
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            id="outlined-basic"
+                            label="Sélectionnez participant"
+                            variant="outlined"
+                          />
+                        )}
                       />
-                    )}
-                  />
                     </FormControl>
                     <Stack flexDirection="row">
                       <InfoIcon />
@@ -245,12 +260,11 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                           <TableCell align="left">Date de début</TableCell>
                           <TableCell>Date fin</TableCell>
                           <TableCell align="left">Activités prévues</TableCell>
-                          <TableCell align="left">Activités réalisées</TableCell>
                           <TableCell align="left">Livrables</TableCell>
                           <TableCell align="left">Responsable</TableCell>
                         </TableRow>
                       </TableHead>
-                      {programmePrevisionList.map((item: ProgrammePrevisionItem, index: any) => (
+                      {programmePrevisionList.map((item: any) => (
                         <TableRow
                           key={item.id!}
                           sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -262,30 +276,34 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                             <Moment format="DD/MM/yyyy">{item.dateFin}</Moment>
                           </TableCell>
                           <TableCell component="th" scope="row">
-                            {activiteRapportlist.find((e: any) =>e.id === item.activitePrevue)?.activite}
+                            {plannedActivityList.find((e: any) => e.id === item.activitePrevue)?.description}
                           </TableCell>
                           <TableCell component="th" scope="row">
-                          {activiteRapportlist.find((e: any) =>e.id === item.activitePrevue)?.activite}
+                            {deliverableList.find((e: any) => e.id === item.livrable)?.description}
                           </TableCell>
                           <TableCell component="th" scope="row">
-                          {livrableRapportlist.find((e: any) =>e.id === item.livrable)?.livrable}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                          {
-                              [item.responsable].map((lp: any) => {
+                            {
+                              (item.responsable).map((lp: any) => {
                                 return (
                                   <Stack direction="column" spacing={2} height={25} overflow="auto">
-                                    {employees.find((e: any) => e.id === lp.id)?.name}
+                                    {employees.find((e: any) => e.id === lp)?.name}
+                                    {" "}
+                                    {employees.find((e: any) => e.id === lp)?.surname}
                                   </Stack>
                                 )
                               })
                             }
                           </TableCell>
                           <TableCell align="right">
-                            <Button 
-                            color="primary" 
-                            startIcon={<ContentCopyIcon />}
-                            onClick={() =>ClikUtiliser(item.id!)}
+                            <Button
+                              color="primary"
+                              startIcon={<ContentCopyIcon />}
+                              onClick={() => ClikUtiliser(
+                                item.id!,
+                                item.dateDebut,
+                                item.dateFin,
+                                item.activitePrevue,
+                                item.activitePrevue)}
                             >
                               Utiliser
                             </Button>
@@ -296,13 +314,13 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
-                  <Button 
-                  color="warning"
-                  onClick={() =>{
-                    fromikProps.resetForm();
-                    dispatch(cancelEdit());
-                  }
-                  }
+                  <Button
+                    color="warning"
+                    onClick={() => {
+                      formikProps.resetForm();
+                      dispatch(cancelEdit());
+                    }
+                    }
                   >Annuler</Button>
                   <Button variant="contained" type="submit">
                     Enregistrer
@@ -310,22 +328,22 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                 </DialogActions>
               </SectionNavigation>
               <Dialog
-                  open={open}
-                  disablePortal={false}
-                  sx={styleDialog}
-                >
-                  <DialogTitle color="red">Attention!!</DialogTitle>
-                  <DialogContent>
-                    <DialogContentText>
-                      La date début doit être inferieure de la date fin
-                    </DialogContentText>
-                    <DialogActions>
-                      <Button onClick={() => setOpen(false)}>
-                        <Check color="primary" />
-                      </Button>
-                    </DialogActions>
-                  </DialogContent>
-                </Dialog>
+                open={open}
+                disablePortal={false}
+                sx={styleDialog}
+              >
+                <DialogTitle color="red">Attention!!</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    La date début doit être inferieure de la date fin
+                  </DialogContentText>
+                  <DialogActions>
+                    <Button onClick={() => setOpen(false)}>
+                      <Check color="primary" />
+                    </Button>
+                  </DialogActions>
+                </DialogContent>
+              </Dialog>
             </Form>
           )
         }}

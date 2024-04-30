@@ -8,7 +8,7 @@ export const updateMissionRapport = createAsyncThunk(
   async (data: { id: string; missionRapport: MissionRapportItem }, thunkAPI) => {
     try {
       const response = await axios.patch(
-        `/suivi-evaluation/livrable-rapport/${data.id}`,
+        `/suivi-evaluation/mission-rapport/${data.id}`,
         data.missionRapport
       );
       thunkAPI.dispatch(

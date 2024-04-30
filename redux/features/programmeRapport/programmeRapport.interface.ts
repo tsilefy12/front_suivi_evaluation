@@ -2,7 +2,8 @@ export interface ProgrammeRapportItem {
     id?: string;
     dateDebut?: Date;
     dateFin?: Date;
-    activitePrevueR?: string;
+    activitePrevueR?: string[];
+    activiteRealise?: string;
     livrableR?: string;
     responsableR?: string;
     missionId?: string;

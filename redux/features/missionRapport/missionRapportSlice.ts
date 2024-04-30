@@ -8,7 +8,7 @@ import { deleteMissionRapport } from "./useCase/deleteMissionRapport";
 import { editMissionRapport } from "./useCase/editMissionRapport";
 
 const missionRapportInitialState: MissionRapportInitialState = {
-  missionRapportlist: [],
+  missionRapportList: [],
   missionRapport: {},
   isEditing: false,
   loading: false,
@@ -41,7 +41,7 @@ export const missionRapportSlice = createSlice({
       state.loading = true;
     },
     [getMissionRapportList.fulfilled.type]: (state, action) => {
-      state.missionRapportlist = action.payload;
+      state.missionRapportList = action.payload;
       state.loading = false;
     },
     [getMissionRapportList.rejected.type]: (state, action) => {
@@ -54,7 +54,7 @@ export const missionRapportSlice = createSlice({
     },
     [createMissionRapport.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.missionRapportlist = action.payload;    
+      state.missionRapportList.push(action.payload);    
     },
     [createMissionRapport.rejected.type]: (state, action) => {
       state.error = action.error;

@@ -27,26 +27,22 @@ import { MissionRapportItem } from "../../../../../../redux/features/missionRapp
 const ListContactPendantMission = () => {
   const [open, setOpen] = React.useState(false);
   const fetchContactMissionRapport = useFetchContactMissionRapport();
-  const { missionRapportlist } = useAppSelector((state: any) => state.missionRapport);
+  const { missionRapportList } = useAppSelector((state: any) => state.missionRapport);
   const dispatch: any = useAppDispatch();
   const router = useRouter();
   const { id }: any = router.query;
   const confirm = useConfirm();
 
-  
   React.useEffect(() => {
     fetchContactMissionRapport();
-  }, [id])
-
+  }, [router.query])
+//  console.log("lis :", [missionRapportlist])
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
-
-  const listVide: { id: string }[] = [];
-  console.log("list :", 404 ? listVide : missionRapportlist)
 
   const handleClickDelete = async (id: any) => {
     confirm({
@@ -62,6 +58,7 @@ const ListContactPendantMission = () => {
       },
     })
       .then(async () => {
+        console.log(" id :", id)
         await dispatch(deleteMissionRapport({ id }));
         fetchContactMissionRapport();
       })
@@ -87,9 +84,10 @@ const ListContactPendantMission = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {missionRapportlist.map((row: MissionRapportItem, index: any) => (
-              <TableRow
-                key={row.id}
+             { 
+              missionRapportList.map((row: MissionRapportItem, index: any) => (
+                <TableRow
+                key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
@@ -110,7 +108,7 @@ const ListContactPendantMission = () => {
                       color="primary"
                       aria-label="Modifier"
                       component="span"
-                      onClick={() =>handleClickEdit(row.id!)}
+                      onClick={() =>handleClickEdit(row.id)}
                     >
                       <EditIcon />
                     </IconButton>
@@ -118,14 +116,14 @@ const ListContactPendantMission = () => {
                       color="warning"
                       aria-label="Supprimer"
                       component="span"
-                      onClick={() =>handleClickDelete(row.id!)}
+                      onClick={() =>handleClickDelete(row.id)}
                     >
                       <DeleteIcon />
                     </IconButton>
                   </BtnActionContainer>
                 </TableCell>
               </TableRow>
-            ))}
+              ))}
           </TableBody>
         </Table>
       </MyTableContainer>
@@ -136,7 +134,7 @@ const ListContactPendantMission = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddContactPendantMission />
+          <AddContactPendantMission handleClose={handleClose}/>
         </Dialog>
       </SectionNavigation>
     </Container>

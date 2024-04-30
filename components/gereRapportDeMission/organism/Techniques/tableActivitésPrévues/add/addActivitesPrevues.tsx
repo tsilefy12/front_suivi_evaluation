@@ -56,7 +56,7 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
         );
       } else {
         if (getUtiliser !== "") {
-          values.activite = getId;
+          values.activite = getUtiliser;
           return (await dispatch(createActiviteRapport(values)),
             handleClose()
           );
@@ -110,7 +110,7 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
                       variant="outlined"
                       name="activite"
                       value={getUtiliser != "" ? getUtiliser : formikProps.values.activite}
-                      disabled={!!plannedActivityList.find((e: any) => e.id===formikProps.values.activite && isEditing)}
+                      disabled={!!plannedActivityList.find((e: any) => e.description===formikProps.values.activite && isEditing)}
                       />
                     <Stack flexDirection="row">
                       <InfoIcon />

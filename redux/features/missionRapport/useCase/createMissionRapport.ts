@@ -5,9 +5,9 @@ import { MissionRapportItem } from "../missionRapport.interface";
 
 export const createMissionRapport = createAsyncThunk(
   "missionRapport/createMissionRapport",
-  async (data:{ missionRapport : MissionRapportItem }, thunkAPI) => {
+  async (data: MissionRapportItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/mission-rapport", data.missionRapport);
+      const response = await axios.post("/suivi-evaluation/mission-rapport", data);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Rapport de mission créé avec succès",

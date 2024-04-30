@@ -49,7 +49,7 @@ const Techniques = () => {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography>Activités prévues</Typography>
+              <Typography>Activités réalisées</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <ListActivitesPrevues />

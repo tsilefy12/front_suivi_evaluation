@@ -29,6 +29,7 @@ import { useConfirm } from "material-ui-confirm";
 import { deleteProgrammeRapport, editProgrammeRapport } from "../../../../../../redux/features/programmeRapport";
 import AddProgrammesRapport from "../add/addProgramme";
 import { editAcitiviteRapport } from "../../../../../../redux/features/activitesRapport";
+import useFetchPlannedActivityList from "../../../../../previsionMissions/organism/Techniques/tableActivitésPrévues/hooks/useFetchPlannedActivityList";
 
 const ListProgrammes = () => {
   const [open, setOpen] = React.useState(false);
@@ -41,15 +42,18 @@ const ListProgrammes = () => {
   const { employees } = useAppSelector((state: any) => state.employe);
   const fetchLivrable = useFetchLivrableRapport();
   const { livrableRapportlist } = useAppSelector((state: any) => state.livrableRapport);
-  const fetchActivitePrevueR = useFetchActiviteRapport();
+  const fetchPlannedActivityListe = useFetchPlannedActivityList();
+  const { plannedActivityList } = useAppSelector((state: any) => state.plannedActivity);
+  const fetchActivityRapport = useFetchActiviteRapport();
   const { activiteRapportlist } = useAppSelector((state: any) => state.activiteRapport);
   const confirm = useConfirm();
 
   React.useEffect(() => {
     fetchProgrammeRapport();
     fetchEmployes();
-    fetchActivitePrevueR();
+    fetchPlannedActivityListe();
     fetchLivrable();
+    fetchActivityRapport();
   }, [router.query])
 
   const handleClickOpen = () => {
@@ -59,7 +63,7 @@ const ListProgrammes = () => {
     setOpen(false);
   };
 
-  
+  // console.log("list programme :", programmeRapportList)
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer le programme de rapport",
@@ -77,7 +81,7 @@ const ListProgrammes = () => {
         await dispatch(deleteProgrammeRapport({ id }));
         fetchProgrammeRapport();
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const handleClickEdit = async (id: any) => {
@@ -101,7 +105,7 @@ const ListProgrammes = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {programmeRapportList.map((row: ProgrammeRapportItem, index: any) => (
+                  {programmeRapportList.map((row: any) => (
                     <TableRow
                       key={row.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -113,17 +117,19 @@ const ListProgrammes = () => {
                         <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {activiteRapportlist.find((e: any) =>e.id === row.activitePrevueR)?.description}
+                        {activiteRapportlist.find((e: any) =>e.id === row.activitePrevueR)?.activite}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {livrableRapportlist.find((e: any) =>e.id === row.livrableR)?.livrable}
+                        {livrableRapportlist.find((e: any) =>e.id===row.livrableR).livrablee}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {
-                          [row.responsableR].map((lp: any) => {
+                          (row.responsableR).map((lp: any) => {
                             return (
                               <Stack direction="column" spacing={2} height={25} overflow="auto">
-                                {employees.find((e: any) => e.id === lp.id)?.name}
+                                {employees.find((e: any) => e.id === lp)?.name}
+                                {" "}
+                                {employees.find((e: any) => e.id === lp)?.surname}
                               </Stack>
                             )
                           })
@@ -138,7 +144,7 @@ const ListProgrammes = () => {
                             color="primary"
                             aria-label="Modifier"
                             component="span"
-                            onClick={() =>handleClickEdit(row.id!)}
+                            onClick={() => handleClickEdit(row.id!)}
                           >
                             <EditIcon />
                           </IconButton>
@@ -146,7 +152,7 @@ const ListProgrammes = () => {
                             color="warning"
                             aria-label="Supprimer"
                             component="span"
-                            onClick={() =>handleClickDelete(row.id!)}
+                            onClick={() => handleClickDelete(row.id!)}
                           >
                             <DeleteIcon />
                           </IconButton>
@@ -168,7 +174,7 @@ const ListProgrammes = () => {
             Ajouter
           </Button>
           <Dialog open={open} onClose={handleClose}>
-            <AddProgrammesRapport handleClose={handleClose}/>
+            <AddProgrammesRapport handleClose={handleClose} />
           </Dialog>
         </SectionNavigation>
       </SectionTable>
