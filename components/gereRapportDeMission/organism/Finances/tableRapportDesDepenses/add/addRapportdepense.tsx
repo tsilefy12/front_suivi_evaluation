@@ -99,6 +99,13 @@ const AddRapportdepense = ({ handleClose }: any) => {
             BudgetLineGrantList.push({ id: b.id, name: b.code });
           }
         }
+        else {
+          if (!uniqueValues.has(b.id)) {
+            uniqueValues.add(b.id);
+            BudgetLineGrantList.push({ id: "", name: "" });
+            selectedBudgetLine = [];
+          }
+        }
       });
     }
   });

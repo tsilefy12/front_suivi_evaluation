@@ -18,12 +18,13 @@ const Detail = () => {
   }, [router.query])
 
   // console.log("list mission :", missionListe)
-  const listMission:{id: string, desc: string, respo: any, gestionaire: any }[] = [];
+  const listMission:{id: string, ref: string, desc: string, respo: any, gestionaire: any }[] = [];
 
   missionListe.forEach((m: any) => {
     if (id === m.id) {
       listMission.push({
         id: m.id,
+        ref: m.reference,
         desc: m.descriptionMission,
         respo: [m.missionManager].map(mm => (mm.name + " " + mm.surname)),
         gestionaire: [m.budgetManager].map(bm => (bm.name + " " + bm.surname))
@@ -36,7 +37,7 @@ const Detail = () => {
         listMission.map((item: any) => (
           <Grid container key={item.id}>
             <Grid item xs={12} md={4}>
-              <KeyValue keyName="Ref mission" value={"MISSION_001"} />
+              <KeyValue keyName="Ref mission" value={item.ref} />
               <KeyValue keyName="Description" value={item.desc} />
             </Grid>
             <Grid item xs={12} md={4}>

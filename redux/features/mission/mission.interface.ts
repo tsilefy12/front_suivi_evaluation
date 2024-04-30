@@ -5,6 +5,7 @@ export interface MissionItem {
   budgetManagerId?: string;
   missionManagerId?: string;
   descriptionMission?: string;
+  reference?: string;
   [x: string]: any;
 }
 

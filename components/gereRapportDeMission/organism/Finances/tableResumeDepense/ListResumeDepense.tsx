@@ -28,6 +28,14 @@ import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../../../../config/table.config";
+import useFetchResumeDepensePrevue from "./hooks/useFetchResumeDepensePrevue";
+import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import { ResumeDepensePrevueItem } from "../../../../../redux/features/resumeDepensePrevue/reumeDepensePrevue.interface";
+import useFetchGrants from "../../../../GrantsEnCours/hooks/getGrants";
+import useFetchBudgetLine from "../../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
+import { useConfirm } from "material-ui-confirm";
+import { deleteResumeDepensePrevue, editResumeDepensePrevue } from "../../../../../redux/features/resumeDepensePrevue";
 
 const ListResumeDepense = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -35,8 +43,24 @@ const ListResumeDepense = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
+  const fetchResumeDepensePrevue = useFetchResumeDepensePrevue();
+  const { resumeDepensePrevueList } = useAppSelector((state: any) => state.resumeDepensePrevue);
+  const router = useRouter();
+  const fetchGrantList = useFetchGrants();
+  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
+  const fetchligneBudgetaire = useFetchBudgetLine();
+  const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
+  const confirm = useConfirm();
+  const dispatch: any = useAppDispatch();
+
+  React.useEffect(() => {
+    fetchResumeDepensePrevue();
+    fetchGrantList();
+    fetchligneBudgetaire();
+  }, [router.query])
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -103,6 +127,30 @@ const ListResumeDepense = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer  le resumé de depense prevue",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteResumeDepensePrevue({ id }));
+        fetchResumeDepensePrevue();
+      })
+      .catch(() => { });
+  };
+
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editResumeDepensePrevue({ id }));
+    handleClickOpen();
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -110,7 +158,7 @@ const ListResumeDepense = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddResumeDepense />
+          <AddResumeDepense handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -133,25 +181,25 @@ const ListResumeDepense = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {resumeDepensePrevueList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.grant);
-                      const labelId = `enhanced-table-checkbox-${index}`;
+                    .map((row: any) => {
+                      // const isItemSelected = isSelected(row.grant);
+                      const labelId = `enhanced-table-checkbox-${row.id!}`;
 
                       return (
                         <TableRow
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          aria-checked={isItemSelected}
+                          // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.grant}
-                          selected={isItemSelected}
+                        // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.grant)}
+                          // onClick={(event) => handleClick(event, row.grant)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -159,12 +207,22 @@ const ListResumeDepense = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.grant}
+                            {grantEncoursList.find((e: any) =>e.id === row.grant)?.code}
                           </TableCell>
-                          <TableCell align="right">{row.ligne}</TableCell>
-                          <TableCell align="right">{row.depenses}</TableCell>
-                          <TableCell align="right">{row.budget}</TableCell>
-                          <TableCell align="right">{row.remarques}</TableCell>
+                          <TableCell align="right">
+                            {
+                              (row.ligneBudgetaire).map((lb: any) => {
+                                return (
+                                  <Stack direction="column" spacing={2} height={25} overflow="auto">
+                                    {budgetLineList.find((b: any) => b.id === lb)?.code}
+                                  </Stack>
+                                )
+                              })
+                            }
+                          </TableCell>
+                          <TableCell align="right">{row.depensePrevue}</TableCell>
+                          <TableCell align="right">{row.budgetDepense}</TableCell>
+                          <TableCell align="right">{row.remarque}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
@@ -174,6 +232,7 @@ const ListResumeDepense = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
+                                onClick={() =>handleClickEdit(row.id!)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -181,6 +240,7 @@ const ListResumeDepense = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
+                                onClick={() =>handleClickDelete(row.id!)}
                               >
                                 <DeleteIcon />
                               </IconButton>

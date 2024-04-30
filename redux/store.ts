@@ -48,6 +48,7 @@ import { missionRapportSlice } from "./features/missionRapport/missionRapportSli
 import { programmeRapportSlice } from "./features/programmeRapport/programmeRapportSlice";
 import { autreInfoRaportSlice } from "./features/autreInfoRapport/autreInfoRapportSlice";
 import { rapportDepenseSlice } from "./features/rapportDepense/rapportDepenseSlice";
+import { resumeDepensePrevueSlice } from "./features/resumeDepensePrevue/resumeDepensePrevueSlice";
 
 
 export const store = configureStore({
@@ -101,6 +102,7 @@ export const store = configureStore({
     programmeRapport: programmeRapportSlice.reducer,
     autreInfoRapport: autreInfoRaportSlice.reducer,
     rapportDepense: rapportDepenseSlice.reducer,
+    resumeDepensePrevue: resumeDepensePrevueSlice.reducer,
   },
 });
 

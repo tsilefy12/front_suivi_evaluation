@@ -62,19 +62,21 @@ const AddNewMission = () => {
   return (
     <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>
       <Formik
-        enableReinitialize ={ isEditing ? true: false }
+        enableReinitialize={isEditing ? true : false}
         initialValues={
           isEditing
             ? mission
             : {
-                missionManagerId: isEditing ? mission?.missionManagerId : "",
-                budgetManagerId: isEditing ? mission?.budgetManagerId : "",
-                descriptionMission: isEditing
-                  ? mission?.descriptionMission
-                  : "",
-              }
+              reference: isEditing ? mission?.reference : "",
+              missionManagerId: isEditing ? mission?.missionManagerId : "",
+              budgetManagerId: isEditing ? mission?.budgetManagerId : "",
+              descriptionMission: isEditing
+                ? mission?.descriptionMission
+                : "",
+            }
         }
         validationSchema={Yup.object({
+          reference: Yup.string().required("Champ obligatoire"),
           missionManagerId: Yup.string().required("Champ obligatoire"),
           budgetManagerId: Yup.string().required("Champ obligatoire"),
           descriptionMission: Yup.string().required("Champ obligatoire"),
@@ -150,6 +152,11 @@ const AddNewMission = () => {
                   direction={{ xs: "column", sm: "column", md: "row" }}
                   spacing={{ xs: 2, sm: 2, md: 1 }}
                 >
+                  <OSTextField
+                    id="outlined-basic"
+                    label="Référence"
+                    name="reference"
+                  />
                   <OSSelectField
                     id="outlined-basic"
                     label="Responsable"
@@ -171,6 +178,8 @@ const AddNewMission = () => {
                   id="outlined-basic"
                   label="Description de la mission"
                   name="descriptionMission"
+                  rows={5}
+                  type="textarea"
                 />
               </FormContainer>
             </Form>
