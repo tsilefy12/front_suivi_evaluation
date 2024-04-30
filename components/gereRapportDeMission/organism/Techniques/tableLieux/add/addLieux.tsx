@@ -59,9 +59,9 @@ const AddLieux = ({ handleClose }: any) => {
         );
       } else {
         if (getId != "") {
-          values.fokontany = getId;
-          values.commune = getId;
-          values.district = getId;
+          values.fokontany = getFokontany;
+          values.commune = getCommune;
+          values.district = getDisctrict;
           return (dispatch(createLieuxRapport(values)), handleClose());
         }else if (values.fokontany != "" && values.commune!=="" && values.district!=="" ) {
           return  (await dispatch(createLieuxRapport(values)), handleClose())
@@ -112,8 +112,8 @@ const AddLieux = ({ handleClose }: any) => {
                       label="Fokontany"
                       variant="outlined"
                       name="fokontany"
-                      value={getId != "" ? getFokontany : formikProps.values.fokontany}
-                      disabled={!!missionLocationList.find((e: any) => e.id===formikProps.values.fokontany && isEditing)}
+                      value={getId!= "" ? getFokontany : formikProps.values.fokontany}
+                      disabled={!!missionLocationList.find((e: any) => e.village===formikProps.values.fokontany && isEditing)}
                     />
                     <OSTextField
                       fullWidth
@@ -122,7 +122,7 @@ const AddLieux = ({ handleClose }: any) => {
                       variant="outlined"
                       name="commune"
                       value={getId != "" ? getCommune : formikProps.values.commune}
-                      disabled={!!missionLocationList.find((e: any) => e.id===formikProps.values.commune && isEditing)}
+                      disabled={!!missionLocationList.find((e: any) => e.commune===formikProps.values.commune && isEditing)}
                     />
                     <OSTextField
                       fullWidth
@@ -131,7 +131,7 @@ const AddLieux = ({ handleClose }: any) => {
                       variant="outlined"
                       name="district"
                       value={getId != "" ? getDisctrict : formikProps.values.district}
-                      disabled={!!missionLocationList.find((e: any) => e.id===formikProps.values.district && isEditing)}
+                      disabled={!!missionLocationList.find((e: any) => e.district===formikProps.values.district && isEditing)}
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
@@ -182,6 +182,7 @@ const AddLieux = ({ handleClose }: any) => {
                   <Button
                     variant="contained"
                     type="submit"
+                    disabled={!!missionLocationList.find((e: any) => e.district===formikProps.values.district && isEditing)}
                   >
                     Enregistrer
                   </Button>
