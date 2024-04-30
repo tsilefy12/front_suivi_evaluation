@@ -3,6 +3,8 @@ export default interface Data {
   date: string;
   libelles: string;
   montant: string;
+  grant: string;
+  budgetLine: string;
 }
 
 export type Order = "asc" | "desc";

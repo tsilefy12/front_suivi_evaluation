@@ -4,13 +4,17 @@ export function createData(
   dpj: string,
   date: string,
   libelles: string,
-  montant: string
+  montant: string,
+  grant: string,
+  budgetLine: string,
 ): Data {
   return {
     dpj,
     date,
     libelles,
     montant,
+    grant,
+    budgetLine
   };
 }
 

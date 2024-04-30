@@ -79,18 +79,18 @@ const Techniques = () => {
               <ListLieux />
             </AccordionDetails>
           </Accordion>
-          <Accordion>
+          {/* <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography>Missionnaire</Typography>
+          <Typography>Missionnaire</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <ListLieux />
             </AccordionDetails>
-          </Accordion>
+          </Accordion> */}
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}

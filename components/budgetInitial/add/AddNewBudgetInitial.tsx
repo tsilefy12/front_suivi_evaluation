@@ -82,17 +82,23 @@ const AddNewBudgetInitial = () => {
       )
       : BudgetLineGrantList
   );
+  const uniqueValues = new Set();
+
   grantEncoursList.forEach((g: any) => {
-    budgetLineList.forEach((b: any) => {
-      let grantBudget: any = g.id;
-      let BudgetGrant: any = b.grantId;
-      // console.log("id grant :", grantBudget, BudgetGrant)
-      if (grantBudget === BudgetGrant && grantValue!="vide") {
-        grantInBudgteLine.push(b.id)
-        BudgetLineGrantList.push({ id: b.id, name: b.code })
-      }
-    })
-  })
+    if (grantValue !== "vide") {
+      budgetLineList.forEach((b: any) => {
+        let BudgetGrant: any = b.grantId;
+        console.log("id grant :", BudgetGrant)
+        if (grantValue === BudgetGrant) {
+          grantInBudgteLine.push(b.id);
+          if (!uniqueValues.has(b.id)) {
+            uniqueValues.add(b.id);
+            BudgetLineGrantList.push({ id: b.id, name: b.code });
+          }
+        }
+      });
+    }
+  });
 
   const handleSubmit = async (values: any) => {
     values.periodeId = [...selectedPeriode.map((p: any) => p.id)];

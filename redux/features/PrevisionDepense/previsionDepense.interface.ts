@@ -5,6 +5,7 @@ export interface PrevisionDepenseItem {
     nombre?: number;
     pu?: number;
     montant?: number;
+    imprevue?: number;
     grant?: number;
     ligneBudgetaire?: number;
     regleme?: string;

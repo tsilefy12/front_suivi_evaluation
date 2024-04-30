@@ -47,6 +47,7 @@ import { livrableRapportSlice } from "./features/LivrableRapport/livrableRapport
 import { missionRapportSlice } from "./features/missionRapport/missionRapportSlice";
 import { programmeRapportSlice } from "./features/programmeRapport/programmeRapportSlice";
 import { autreInfoRaportSlice } from "./features/autreInfoRapport/autreInfoRapportSlice";
+import { rapportDepenseSlice } from "./features/rapportDepense/rapportDepenseSlice";
 
 
 export const store = configureStore({
@@ -99,6 +100,7 @@ export const store = configureStore({
     missionRapport: missionRapportSlice.reducer,
     programmeRapport: programmeRapportSlice.reducer,
     autreInfoRapport: autreInfoRaportSlice.reducer,
+    rapportDepense: rapportDepenseSlice.reducer,
   },
 });
 

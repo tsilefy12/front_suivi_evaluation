@@ -8,7 +8,7 @@ export interface MissionRapportItem {
 }
 
 export interface MissionRapportInitialState {
-  missionRapportlist: MissionRapportItem[];
+  missionRapportList: MissionRapportItem[];
   missionRapport: MissionRapportItem;
   isEditing: boolean;
   loading: boolean;

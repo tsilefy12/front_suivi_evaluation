@@ -27,6 +27,12 @@ import {
   labelRowsPerPage,
 } from "../../../../../config/table.config";
 import AddRapportdepense from "./add/addRapportdepense";
+import useFetchRapportDepense from "./hooks/useFetchRapportDepense";
+import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import { useConfirm } from "material-ui-confirm";
+import { RapportDepenseItem } from "../../../../../redux/features/rapportDepense/rapportDepense.interface";
+import Moment from "react-moment";
 
 const ListRapportDepenses = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -34,8 +40,18 @@ const ListRapportDepenses = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
+  const dispatch: any = useAppDispatch();
+  const confirm = useConfirm();
+  const fetchRapportDepense = useFetchRapportDepense();
+  const { rapportDepenseList } = useAppSelector((state: any) =>state.rapportDepense);
+
+  React.useEffect(() =>{
+    fetchRapportDepense();
+  }, [router.query])
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -109,7 +125,7 @@ const ListRapportDepenses = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddRapportdepense />
+          <AddRapportdepense handleClose={handleClose}/>
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -127,15 +143,15 @@ const ListRapportDepenses = () => {
                   orderBy={orderBy}
                   onSelectAllClick={handleSelectAllClick}
                   onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
+                  rowCount={rapportDepenseList.length}
                 />
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {rapportDepenseList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
-                      const isItemSelected = isSelected(row.dpj);
+                    .map((row: RapportDepenseItem, index: any) => {
+                      // const isItemSelected = isSelected(row.id);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -143,14 +159,14 @@ const ListRapportDepenses = () => {
                           hover
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          aria-checked={isItemSelected}
+                          // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.dpj}
-                          selected={isItemSelected}
+                          key={row.id}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            onClick={(event) => handleClick(event, row.dpj)}
+                            // onClick={(event) => handleClick(event, row.dpj)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -158,11 +174,15 @@ const ListRapportDepenses = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.dpj}
+                            {row.id}
                           </TableCell>
-                          <TableCell align="right">{row.date}</TableCell>
-                          <TableCell align="right">{row.libelles}</TableCell>
+                          <TableCell align="right">
+                            <Moment format="DD/MM/yyyy">{row.date}</Moment>
+                          </TableCell>
+                          <TableCell align="right">{row.libelle}</TableCell>
                           <TableCell align="right">{row.montant}</TableCell>
+                          <TableCell align="right">{row.grant}</TableCell>
+                          <TableCell align="right">{row.ligneBudgetaire}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"

@@ -97,12 +97,12 @@ const ListLieux = () => {
                       }
                     </TableCell>
                     <TableCell component="th" scope="row">
-                    {
+                      {
                         missionLocationList.find((ml: any) => ml.id === row.commune)?.commune || row.commune
                       }
                     </TableCell>
                     <TableCell component="th" scope="row">
-                    {
+                      {
                         missionLocationList.find((ml: any) => ml.id === row.district)?.district || row.district
                       }
                     </TableCell>
