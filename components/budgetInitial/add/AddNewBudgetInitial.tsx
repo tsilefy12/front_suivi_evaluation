@@ -44,6 +44,7 @@ const AddNewBudgetInitial = () => {
   const { periodelist } = useAppSelector((state: any) => state.periode)
   const [grantValue, setGrantValue]: any = React.useState("vide");
   const { id }: any = router.query;
+  const uniqueValues = new Set();
 
   React.useEffect(() => {
     fetchGrant();
@@ -62,14 +63,20 @@ const AddNewBudgetInitial = () => {
       : periodeGrantList
   );
   grantEncoursList.forEach((g: any) => {
-    periodelist.forEach((p: any) => {
-      let grantPeriode: any = g.id;
-      let periodeGrant: any = p.grant;
-      if (grantPeriode === periodeGrant && grantValue!="vide") {
-        grantInPeriode.push(p.id)
-        periodeGrantList.push({ id: p.id, name: p.periode })
-      }
-    })
+    if (grantValue!=="vide") {
+      periodelist.forEach((p: any) => {
+        let periodeGrant: any = p.grant;
+        if (grantValue === periodeGrant) {
+          grantInPeriode.push(p.id)
+          if (!uniqueValues.has(p.id)) {
+            uniqueValues.add(p.id);
+            return periodeGrantList.push({ id: p.id, name: p.periode })
+          }else{
+            return [];
+          }
+        }
+      })
+    }
   })
 
   //get grant dans budget
@@ -82,7 +89,6 @@ const AddNewBudgetInitial = () => {
       )
       : BudgetLineGrantList
   );
-  const uniqueValues = new Set();
 
   grantEncoursList.forEach((g: any) => {
     if (grantValue !== "vide") {
@@ -114,8 +120,11 @@ const AddNewBudgetInitial = () => {
           })
         );
       } else {
-        await dispatch(createBudgetInitial(values));
-        fetchBudgetInitial();
+        if (400) {
+          return null;
+        }
+         return (await dispatch(createBudgetInitial(values)),
+        fetchBudgetInitial())
       }
       router.push("/grants/budgetInitial");
     } catch (error) {
@@ -142,9 +151,11 @@ interface OSTextFieldProps {
             }
         }
         validationSchema={Yup.object({
-          // grant: Yup.string().required("Champ obligatoire"),
-          // ligneBudgetaire: Yup.string().required("Champ obligatoire"),
-          // periodeId: Yup.string().required("Champ obligatoire"),
+          grant: Yup.string().when("grantValue", {
+            is: (grantValue: any) => grantValue !== "vide",then: Yup.string().required("Champ obligatoire"),
+          }),
+          ligneBudgetaire: Yup.string().required("Champ obligatoire"),
+          periodeId: Yup.string().required("Champ obligatoire"),
           montant: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {

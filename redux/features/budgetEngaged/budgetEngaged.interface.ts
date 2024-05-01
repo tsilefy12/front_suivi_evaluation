@@ -2,7 +2,7 @@ export interface BudgetEngagedItem {
     id?: string;
     date?: Date;
     grantsId?: number;
-    budgetLineId?: number;
+    budgetLineId?: number[];
     libelle?: string;
     amount?: number;
 }

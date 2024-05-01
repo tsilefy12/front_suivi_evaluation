@@ -7,7 +7,7 @@ export interface PrevisionDepenseItem {
     montant?: number;
     imprevue?: number;
     grant?: number;
-    ligneBudgetaire?: number;
+    ligneBudgetaire?: number[];
     regleme?: string;
     missionId?: string;
 }

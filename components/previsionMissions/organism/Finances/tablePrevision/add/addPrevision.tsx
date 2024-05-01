@@ -2,6 +2,7 @@ import React from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
+  Autocomplete,
   Container,
   Dialog,
   DialogActions,
@@ -37,6 +38,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
   const { budgetLineList } = useAppSelector((state) => state.budgetLine);
   const router = useRouter()
   const { id }: any = router.query;
+  const [grantValue, setGrantValue]: any = React.useState("vide");
 
   React.useEffect(() => {
     fetchPrevisionDepense();
@@ -45,6 +47,8 @@ const AddPrevisionMission = ({ handleClose }: any) => {
   }, [router.query])
 
   const handleSubmit = async (values: any) => {
+    values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) => bl.id)];
+    values.grant = grantValue;
     try {
       if (isEditing) {
         await dispatch(
@@ -54,8 +58,10 @@ const AddPrevisionMission = ({ handleClose }: any) => {
           })
         );
       } else {
-
-        await dispatch(createPrevisionDepense(values));
+        if(400){
+          return null;
+        }
+        return await dispatch(createPrevisionDepense(values));
       }
       fetchPrevisionDepense();
       handleClose();
@@ -63,9 +69,41 @@ const AddPrevisionMission = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-  const listPardefaut = [
-    { id: 1, name: "vide" }
-  ]
+
+  const grantInBudgteLine: any = []
+  const BudgetLineGrantList: { id: string, name: any }[] = []
+  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
+    isEditing
+      ? budgetLineList.filter((pg: any) =>
+        Array.isArray(previsionDepense?.ligneBudgetaire) && previsionDepense?.ligneBudgetaire?.includes(pg.id)
+      )
+      : BudgetLineGrantList
+  );
+
+  //select budget line depends grant
+  const uniqueValues = new Set();
+
+  grantEncoursList.forEach((g: any) => {
+    if (grantValue !== "vide") {
+      budgetLineList.forEach((b: any) => {
+        let BudgetGrant: any = b.grantId;
+        console.log("id grant :", BudgetGrant)
+        if (grantValue === BudgetGrant) {
+          grantInBudgteLine.push(b.id);
+          if (!uniqueValues.has(b.id)) {
+            uniqueValues.add(b.id);
+            BudgetLineGrantList.push({ id: b.id, name: b.code });
+          }
+        } else {
+          if (!uniqueValues.has(b.id)) {
+            uniqueValues.add(b.id);
+            BudgetLineGrantList.push({ id: "", name: "" });
+            selectedBudgetLine = [];
+          }
+        }
+      });
+    }
+  });
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -81,16 +119,15 @@ const AddPrevisionMission = ({ handleClose }: any) => {
               grant: isEditing ? previsionDepense?.grant : "",
               ligneBudgetaire: isEditing ? previsionDepense?.ligneBudgetaire : "",
               regleme: isEditing ? previsionDepense?.regleme : "",
-              missionId: isEditing ? previsionDepense?.missionId: id,
+              missionId: isEditing ? previsionDepense?.missionId : id,
             }
         }
         validationSchema={Yup.object({
           libelle: Yup.string().required("Champ obligatoire"),
           nombre: Yup.number().required("Champ obligatoire"),
           pu: Yup.number().required("Champ obligatoire"),
-          grant: Yup.number().required("Champ obligatoire"),
-          ligneBudgetaire: Yup.number().required("Champ obligatoire"),
           regleme: Yup.string().required("Champ obligatoire"),
+          // ligneBudgetaire: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -167,27 +204,45 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                       />
                     </CustomStack>
                     <FormControl fullWidth>
-                      <OSSelectField
+                      <OSTextField
                         fullWidth
+                        select
                         id="outlined-basic"
                         label="Grant"
                         variant="outlined"
                         name="grant"
-                        options={grantEncoursList ? grantEncoursList : listPardefaut}
-                        dataKey={grantEncoursList ? ["code"] : "name"}
-                        valueKey="id"
-                      />
+                        value={(id) ?
+                          budgetLineList.find((e: any) => e.id === previsionDepense?.grant)?.code : grantValue}
+                        onChange={(e: any) => setGrantValue(e.target.value)}
+                        hyperText={grantValue == "vide" ? false : true}
+                      >
+                        <MenuItem value="vide">Select grant</MenuItem>
+                        {
+                          grantEncoursList.map((item: any) => (
+                            <MenuItem value={item.id!}>{item.code!}</MenuItem>
+                          ))
+                        }
+                      </OSTextField>
                     </FormControl>
                     <FormControl fullWidth>
-                      <OSSelectField
-                        fullWidth
-                        id="outlined-basic"
-                        label="Ligne budgetaire"
-                        variant="outlined"
-                        name="ligneBudgetaire"
-                        options={budgetLineList ? budgetLineList : listPardefaut}
-                        dataKey={budgetLineList ? ["code"] : "name"}
-                        valueKey="id"
+                    <Autocomplete
+                        multiple
+                        id="tags-standard"
+                        options={grantValue != "vide" ? BudgetLineGrantList : []}
+                        getOptionLabel={(option) => option.name}
+                        value={grantValue != "vide" ? selectedBudgetLine : []}
+                        onChange={(event, newValue) => {
+                          setSelectedBudgetLine(newValue!);
+                        }}
+                        isOptionEqualToValue={(option, value) => option.id === value.id}
+                        renderInput={(params: any) => (
+                          <TextField
+                            {...params}
+                            id="outlined-basic"
+                            label="Sélectionnez ligne budgetaire"
+                            variant="outlined"
+                          />
+                        )}
                       />
                     </FormControl>
                     <OSTextField

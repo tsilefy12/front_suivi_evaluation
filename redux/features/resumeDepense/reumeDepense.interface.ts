@@ -1,7 +1,7 @@
 export interface ResumeDepenseItem {
     id?: string;
     grant?: number;
-    ligneBudgetaire?: number;
+    ligneBudgetaire?: number[];
     depensePrevue?: string;
     budgetDepense?: string;
     remarque?: string;

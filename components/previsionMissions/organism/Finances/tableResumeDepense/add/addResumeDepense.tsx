@@ -2,6 +2,7 @@ import React from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
+  Autocomplete,
   Container,
   DialogActions,
   DialogContent,
@@ -29,20 +30,58 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const { id }: any = router.query;
-  const { isEditing, resumeDepense } = useAppSelector((state) =>state.resumeDepense) 
+  const { isEditing, resumeDepense } = useAppSelector((state) => state.resumeDepense)
   const fetchResumeDepense = useFetchResumeDepenseList();
   const fetchGrant = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
-  const { budgetLineList } = useAppSelector((state) => state.budgetLine)
+  const { budgetLineList } = useAppSelector((state) => state.budgetLine);
+  const [grantValue, setGrantValue]: any = React.useState("vide");
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchResumeDepense();
     fetchBudgetLine();
     fetchGrant();
   }, [router.query])
 
+  const grantInBudgteLine: any = []
+  const BudgetLineGrantList: { id: string, name: any }[] = []
+  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
+    isEditing
+      ? budgetLineList.filter((pg: any) =>
+        Array.isArray(resumeDepense?.ligneBudgetaire) && resumeDepense?.ligneBudgetaire?.includes(pg.id)
+      )
+      : BudgetLineGrantList
+  );
+
+  //select budget line depends grant
+  const uniqueValues = new Set();
+
+  grantEncoursList.forEach((g: any) => {
+    if (grantValue !== "vide") {
+      budgetLineList.forEach((b: any) => {
+        let BudgetGrant: any = b.grantId;
+        console.log("id grant :", BudgetGrant)
+        if (grantValue === BudgetGrant) {
+          grantInBudgteLine.push(b.id);
+          if (!uniqueValues.has(b.id)) {
+            uniqueValues.add(b.id);
+            BudgetLineGrantList.push({ id: b.id, name: b.code });
+          }
+        } else {
+          if (!uniqueValues.has(b.id)) {
+            uniqueValues.add(b.id);
+            BudgetLineGrantList.push({ id: "", name: "" });
+            selectedBudgetLine = [];
+          }
+        }
+      });
+    }
+  });
+
   const handleSubmit = async (values: any) => {
+    values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) => bl.id)];
+    values.grant = grantValue;
     try {
       if (isEditing) {
         await dispatch(
@@ -52,19 +91,18 @@ const AddResumeDepense = ({ handleClose }: any) => {
           })
         );
       } else {
-
-        await dispatch(createResumeDepense(values));
+        if (400) {
+          return null;
+        }
+        return (await dispatch(createResumeDepense(values)), fetchResumeDepense(),
+          handleClose());
       }
-      fetchResumeDepense();
-      handleClose();
+
     } catch (error) {
       console.log("error", error);
     }
   };
-  const listPardefaut = [
-    { id: 1, name: "vide" }
-  ]
-  
+
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -77,16 +115,16 @@ const AddResumeDepense = ({ handleClose }: any) => {
               depensePrevue: isEditing ? resumeDepense?.depensePrevue : "",
               ligneBudgetaire: isEditing ? resumeDepense?.ligneBudgetaire : "",
               remarque: isEditing ? resumeDepense?.remarque : "",
-              budgetDepense: isEditing ? resumeDepense?.budgetDepense: "",
-              missionId: isEditing ? resumeDepense?.missionId: id,
+              budgetDepense: isEditing ? resumeDepense?.budgetDepense : "",
+              missionId: isEditing ? resumeDepense?.missionId : id,
             }
         }
         validationSchema={Yup.object({
-          grant: Yup.number().required("Champ obligatoire"),
+          // grant: Yup.number().required("Champ obligatoire"),
           depensePrevue: Yup.string().required("Champ obligatoire"),
-          ligneBudgetaire: Yup.number().required("Champ obligatoire"),
+          // ligneBudgetaire: Yup.number().required("Champ obligatoire"),
           remarque: Yup.string().required("Champ obligatoire"),
-          budgetDepense:  Yup.string().required("Champ obligatoire"),
+          budgetDepense: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -100,28 +138,46 @@ const AddResumeDepense = ({ handleClose }: any) => {
                 <DialogTitle>Créer/modifier résumé de dépense</DialogTitle>
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
-                  <FormControl fullWidth>
-                      <OSSelectField
+                    <FormControl fullWidth>
+                      <OSTextField
                         fullWidth
+                        select
                         id="outlined-basic"
                         label="Grant"
                         variant="outlined"
                         name="grant"
-                        options={grantEncoursList ? grantEncoursList : listPardefaut}
-                        dataKey={grantEncoursList ? ["code"] : "name"}
-                        valueKey="id"
-                      />
+                        value={(id) ?
+                          budgetLineList.find((e: any) => e.id === resumeDepense?.grant)?.code : grantValue}
+                        onChange={(e: any) => setGrantValue(e.target.value)}
+                        hyperText={grantValue == "vide" ? false : true}
+                      >
+                        <MenuItem value="vide">Select grant</MenuItem>
+                        {
+                          grantEncoursList.map((item: any) => (
+                            <MenuItem value={item.id!}>{item.code!}</MenuItem>
+                          ))
+                        }
+                      </OSTextField>
                     </FormControl>
                     <FormControl fullWidth>
-                      <OSSelectField
-                        fullWidth
-                        id="outlined-basic"
-                        label="Ligne budgetaire"
-                        variant="outlined"
-                        name="ligneBudgetaire"
-                        options={budgetLineList ? budgetLineList : listPardefaut}
-                        dataKey={budgetLineList ? ["code"] : "name"}
-                        valueKey="id"
+                      <Autocomplete
+                        multiple
+                        id="tags-standard"
+                        options={grantValue != "vide" ? BudgetLineGrantList : []}
+                        getOptionLabel={(option) => option.name}
+                        value={grantValue != "vide" ? selectedBudgetLine : []}
+                        onChange={(event, newValue) => {
+                          setSelectedBudgetLine(newValue!);
+                        }}
+                        isOptionEqualToValue={(option, value) => option.id === value.id}
+                        renderInput={(params: any) => (
+                          <TextField
+                            {...params}
+                            id="outlined-basic"
+                            label="Sélectionnez ligne budgetaire"
+                            variant="outlined"
+                          />
+                        )}
                       />
                     </FormControl>
                     <OSTextField
@@ -148,7 +204,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
-                <Button
+                  <Button
                     color="warning"
                     onClick={() => {
                       formikProps.resetForm();
