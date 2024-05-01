@@ -32,17 +32,17 @@ import { deleteProgrammePrevision, editProgrammePrevision } from "../../../../..
 const ListProgrammes = () => {
   const [open, setOpen] = React.useState(false);
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
-  const { programmePrevisionList } = useAppSelector((state: any) =>state.programmePrevision)
+  const { programmePrevisionList } = useAppSelector((state: any) => state.programmePrevision)
   const dispatch: any = useDispatch()
   const router = useRouter()
   const confirm = useConfirm();
   const fetchActivitePrevue = useFetchPlannedActivityList();
-  const { plannedActivityList } = useAppSelector((state: any) =>state.plannedActivity);
+  const { plannedActivityList } = useAppSelector((state: any) => state.plannedActivity);
   const fetchLivrable = useFetchDeliverableList();
-  const { deliverableList } = useAppSelector((state: any) =>state.deliverable);
+  const { deliverableList } = useAppSelector((state: any) => state.deliverable);
   const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) =>state.employe);
-  React.useEffect(() =>{
+  const { employees } = useAppSelector((state: any) => state.employe);
+  React.useEffect(() => {
     fetchProgrammePrevision();
     fetchActivitePrevue();
     fetchLivrable();
@@ -73,7 +73,7 @@ const ListProgrammes = () => {
         await dispatch(deleteProgrammePrevision({ id }));
         fetchProgrammePrevision();
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const handleClickEdit = async (id: any) => {
@@ -83,8 +83,8 @@ const ListProgrammes = () => {
   return (
     <Container maxWidth="xl">
       <SectionTable>
-      <Box sx={{ overflow: "auto" }}>
-        <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
+        <Box sx={{ overflow: "auto" }}>
+          <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
             <MyTableContainer>
               <Table sx={{ minWidth: 750 }} aria-label="simple table">
                 <TableHead>
@@ -106,26 +106,26 @@ const ListProgrammes = () => {
                         <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                      <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
+                        <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {plannedActivityList.find((e: any) =>e.id === row.activitePrevue)?.description}
+                        {plannedActivityList.find((e: any) => e.id === row.activitePrevue)?.description}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {deliverableList.find((e: any) =>e.id === row.livrable)?.description}
+                        {deliverableList.find((e: any) => e.id === row.livrable)?.description}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                      {
-                              (row.responsable).map((lp: any) => {
-                                return (
-                                  <Stack direction="column" spacing={2} height={25} overflow="auto">
-                                    {employees.find((e: any) => e.id === lp)?.name} 
-                                    {" "}
-                                    {employees.find((e: any) => e.id === lp)?.surname}
-                                  </Stack>
-                                )
-                              })
-                            }
+                        {
+                          (row.responsable).map((lp: any) => {
+                            return (
+                              <Stack direction="column" spacing={2} height={25} overflow="auto">
+                                {employees.find((e: any) => e.id === lp)?.name}
+                                {" "}
+                                {employees.find((e: any) => e.id === lp)?.surname}
+                              </Stack>
+                            )
+                          })
+                        }
                       </TableCell>
                       <TableCell align="right">
                         <BtnActionContainer
@@ -136,7 +136,7 @@ const ListProgrammes = () => {
                             color="primary"
                             aria-label="Modifier"
                             component="span"
-                            onClick={() =>handleClickEdit(row.id)}
+                            onClick={() => handleClickEdit(row.id)}
                           >
                             <EditIcon />
                           </IconButton>
@@ -144,7 +144,7 @@ const ListProgrammes = () => {
                             color="warning"
                             aria-label="Supprimer"
                             component="span"
-                            onClick={() =>handleClickDelete(row.id)}
+                            onClick={() => handleClickDelete(row.id)}
                           >
                             <DeleteIcon />
                           </IconButton>
@@ -155,20 +155,20 @@ const ListProgrammes = () => {
                 </TableBody>
               </Table>
             </MyTableContainer>
-            </Box>
-            </Box>
-            <SectionNavigation
-              direction="row"
-              justifyContent="space-between"
-              mb={2}
-            >
-              <Button variant="text" color="info" onClick={handleClickOpen}>
-                Ajouter
-              </Button>
-              <Dialog open={open} onClose={handleClose}>
-                <AddProgrammes handleClose={handleClose}/>
-              </Dialog>
-            </SectionNavigation>
+          </Box>
+        </Box>
+        <SectionNavigation
+          direction="row"
+          justifyContent="space-between"
+          mb={2}
+        >
+          <Button variant="text" color="info" onClick={handleClickOpen}>
+            Ajouter
+          </Button>
+          <Dialog open={open} onClose={handleClose}>
+            <AddProgrammes handleClose={handleClose} />
+          </Dialog>
+        </SectionNavigation>
       </SectionTable>
     </Container>
   );

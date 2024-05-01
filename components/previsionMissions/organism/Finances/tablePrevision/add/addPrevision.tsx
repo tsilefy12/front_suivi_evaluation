@@ -58,10 +58,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
           })
         );
       } else {
-        if(400){
-          return null;
-        }
-        return await dispatch(createPrevisionDepense(values));
+        await dispatch(createPrevisionDepense(values));
       }
       fetchPrevisionDepense();
       handleClose();

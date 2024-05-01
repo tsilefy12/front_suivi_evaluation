@@ -4,7 +4,7 @@ export interface BesoinvehiculeItem {
     dateFin?: Date;
     vehicule?: string;
     trajet?: string;
-    responsable?: string;
+    responsable?: string[];
     nombreJour?: number;
     missionId?: string;
 }

@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Button,
   Container,
   Dialog,
@@ -12,7 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -46,7 +47,7 @@ const ListPrevision = () => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const fetchPrevisionDepense = useFetchPrevisionDepenseList();
-  const { previsionDepenselist } = useAppSelector((state: any) => state.previsonDepense)
+  const { previsionDepenselist, isEditing, previsionDepense } = useAppSelector((state: any) => state.previsonDepense)
   const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
   const fetchGrant = useFetchGrants()
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
@@ -61,27 +62,22 @@ const ListPrevision = () => {
     fetchLigneBudgetaire();
   }, [router.query])
 
-  let totalBudget: any = 0;
-  let getBudgetline: any = "";
-  const listGrant = [
-    {id: 1, name: "grant 1"},
-    {id: 2, name: "grant 2"}
-  ]
-  const listLigne: {name: string }[] = []
-
-  let getLigne: any = ""
+  const listLigne: { name: string }[] = []
 
   grantEncoursList.forEach((b: any) => {
-    budgetLineList.forEach((l: any) =>{
+    budgetLineList.forEach((l: any) => {
       if (getGrantId == l.id) {
-         listLigne.push({name: l.code})
+        listLigne.push({ name: l.code })
       }
     })
-      
+  })
+  let total: any = useMemo(() => {
+    let totalBudget: any = 0;
     previsionDepenselist.forEach((item: any) => {
       totalBudget += item.montant;
     })
-  })
+    return totalBudget;
+  }, [previsionDepenselist])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -131,6 +127,42 @@ const ListPrevision = () => {
     await dispatch(editPrevisionDepense({ id }));
     handleClickOpen();
   };
+
+  //select budget line depends grant
+  const [grantValue, setGrantValue]: any = React.useState("vide");
+  const grantInBudgteLine: any = []
+  const BudgetLineGrantList: { id: string, name: any }[] = []
+  const uniqueValues = new Set();
+  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
+    isEditing
+      ? budgetLineList.filter((pg: any) =>
+        Array.isArray(previsionDepense?.ligneBudgetaire) && previsionDepense?.ligneBudgetaire?.includes(pg.id)
+      )
+      : BudgetLineGrantList
+  );
+
+  grantEncoursList.forEach((g: any) => {
+    if (grantValue !== "vide") {
+      budgetLineList.forEach((b: any) => {
+        let BudgetGrant: any = b.grantId;
+        // console.log("id grant :", BudgetGrant)
+        if (grantValue === BudgetGrant) {
+          grantInBudgteLine.push(b.id);
+          if (!uniqueValues.has(b.id)) {
+            uniqueValues.add(b.id);
+            BudgetLineGrantList.push({ id: b.id, name: b.code });
+          }
+        } else {
+          if (!uniqueValues.has(b.id)) {
+            uniqueValues.add(b.id);
+            BudgetLineGrantList.push({ id: "", name: "" });
+            selectedBudgetLine = [];
+          }
+        }
+      });
+    }
+  });
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -177,7 +209,15 @@ const ListPrevision = () => {
                               {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
                             </TableCell>
                             <TableCell align="center">
-                              {budgetLineList.find((e: any) => e.id === row?.ligneBudgetaire)?.code}
+                              {
+                                (row.ligneBudgetaire!).map((lb: any) => {
+                                  return (
+                                    <Stack direction="column" spacing={2} height={25} overflow="auto">
+                                      {budgetLineList.find((e: any) => e.id === lb)?.code}
+                                    </Stack>
+                                  )
+                                })
+                              }
                             </TableCell>
                             <TableCell align="right">
                               <BtnActionContainer
@@ -213,65 +253,68 @@ const ListPrevision = () => {
             </TableContainer>
             <Footer>
               <Typography variant="body2" align="right">
-                TOTAL BUDGET : {totalBudget} Ar
+                TOTAL BUDGET : {total} Ar
               </Typography>
               <Typography variant="body2" align="right" sx={{ width: "100%" }}>
                 <Stack direction="column" spacing={2}>
-                    <Stack direction="row" sx={{ textAlign: "right" }} spacing={2}>
-                      <FormControl sx={{ flex: "1", textAlign: "right", paddingLeft: 65}}>
-                        <TextField
-                          select
-                          id="outlined-basic"
-                          label="Grant"
-                          variant="outlined"
-                          name="grant"
-                          value={getGrantId}
-                          onChange={(e: any) => setGetGrantId(e.target.value)}
-                          sx={{ width: "100%", textAlign: "start"}}
-                          size="small"
-                        >
-                          <MenuItem value="vide">Select grant</MenuItem>
-                          {grantEncoursList.map((g: any) => (
-                            <MenuItem key={g.id} value={g.id}>
-                              {g.name}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </FormControl>
-                      <FormControl sx={{ flex: "1" }}>
-                        <TextField
-                          select
-                          id="outlined-basic"
-                          label="Ligne budgetaire"
-                          variant="outlined"
-                          name="budgetLine"
-                          sx={{ width: "100%", textAlign: "start"}}
-                          size="small"
-                          // value={getLigne}
-                        > 
-                         <MenuItem value="vide">Select grant</MenuItem>
-                          {listLigne.map((g: any) => (
-                            <MenuItem key={g.id} value={g.id}>
-                              {g.name}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </FormControl>
-                    </Stack>
-                  <FormLabel>
-                    Imprévu de mission(total budget-location et perdiem MV(10% )) : 10000
-                  </FormLabel>
+                  <Stack direction="row" sx={{ textAlign: "right" }} spacing={2}>
+                    <FormControl sx={{ flex: "1", textAlign: "left", paddingLeft: 40 }}>
+                      <TextField
+                        fullWidth
+                        select
+                        id="outlined-basic"
+                        label="Grant"
+                        variant="outlined"
+                        size="small"
+                        value={(router.query) ?
+                          budgetLineList.find((e: any) => e.id === previsionDepense?.grant)?.code : grantValue}
+                        onChange={(e: any) => setGrantValue(e.target.value)}
+                      >
+                        <MenuItem value="vide">Select grant</MenuItem>
+                        {
+                          grantEncoursList.map((item: any) => (
+                            <MenuItem value={item.id!}>{item.code!}</MenuItem>
+                          ))
+                        }
+                      </TextField>
+                    </FormControl>
+                    <FormControl sx={{ flex: "1" }}>
+                      <Autocomplete
+                        multiple
+                        id="tags-standard"
+                        size="small"
+                        options={grantValue != "vide" ? BudgetLineGrantList : []}
+                        getOptionLabel={(option) => option.name}
+                        value={grantValue != "vide" ? selectedBudgetLine : []}
+                        onChange={(event, newValue) => {
+                          setSelectedBudgetLine(newValue!);
+                        }}
+                        isOptionEqualToValue={(option, value) => option.id === value.id}
+                        renderInput={(params: any) => (
+                          <TextField
+                            {...params}
+                            id="outlined-basic"
+                            label="Sélectionnez ligne budgetaire"
+                            variant="outlined"
+                          />
+                        )}
+                      />
+                  </FormControl>
                 </Stack>
-              </Typography>
+                <FormLabel>
+                  Imprévu de mission(total budget-location et perdiem MV(10% )) : {total / 10}
+                </FormLabel>
+              </Stack>
+            </Typography>
 
-              <Typography variant="body2" align="right">
-                TOTAL GENERAL BUDGET : {totalBudget} Ar
-              </Typography>
-            </Footer>
-          </Paper>
-        </Box>
-      </SectionTable>
-    </Container>
+            <Typography variant="body2" align="right">
+              TOTAL GENERAL BUDGET : {total} Ar
+            </Typography>
+          </Footer>
+        </Paper>
+      </Box>
+    </SectionTable>
+    </Container >
   );
 };
 

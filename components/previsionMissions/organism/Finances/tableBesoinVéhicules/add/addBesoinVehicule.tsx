@@ -56,7 +56,7 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
     const date2 = new Date(values.dateFin)
     const DateNumber2 = date2.getTime();
     let calculDuree = ((DateNumber2 - DateNumber1)/(24*60*60*1000)).toFixed(0);
-    values.nombreJour = calculDuree;
+    values.nombreJour = parseInt(calculDuree);
     if (DateNumber1 >= DateNumber2) {
       setOpen(true)
     } else {
@@ -108,7 +108,7 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
         validationSchema={Yup.object({
           vehicule: Yup.string().required("Champ obligatoire"),
           trajet: Yup.string().required("Champ obligatoire"),
-          responsable: Yup.string().required("Champ obligatoire"),
+          // responsable: Yup.string().required("Champ obligatoire"),
           // nombreJour: Yup.number().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
@@ -211,7 +211,8 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                   </Button>
                   <Button
                     variant="contained"
-                    type="submit"
+                    type="button"
+                    onClick={formikProps.submitForm}
                   >
                     Enregistrer
                   </Button>

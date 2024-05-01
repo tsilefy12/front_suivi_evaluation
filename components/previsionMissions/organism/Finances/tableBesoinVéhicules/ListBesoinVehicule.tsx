@@ -34,6 +34,8 @@ import { BesoinvehiculeItem } from "../../../../../redux/features/besoinVehicule
 import Moment from "react-moment";
 import { useConfirm } from "material-ui-confirm";
 import { deleteBesoinVehicule, editBesoinVehicule } from "../../../../../redux/features/besoinVehicule";
+import useFetchVehicleList from "../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
+import useFetchEmploys from "../../../../GrantsEnCours/hooks/getResponsable";
 
 const ListBesoinVehicule = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -44,13 +46,19 @@ const ListBesoinVehicule = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const fetchBesoinEnVehicule = useFetchBesoinEnVehiculeList();
-  const { besoinVehiculeList } = useAppSelector((state) =>state.besoinVehicule)
+  const { besoinVehiculeList } = useAppSelector((state) => state.besoinVehicule);
+  const fetchVehicule = useFetchVehicleList();
+  const { vehicleList } = useAppSelector((state: any) => state.vehicle);
+  const fetchEmployes = useFetchEmploys();
+  const { employees } = useAppSelector((state: any) => state.employe);
   const router = useRouter()
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
 
-  React.useEffect(() =>{
-      fetchBesoinEnVehicule();
+  React.useEffect(() => {
+    fetchBesoinEnVehicule();
+    fetchVehicule();
+    fetchEmployes();
   }, [router.query])
   const handleClickOpen = () => {
     setOpen(true);
@@ -118,30 +126,30 @@ const ListBesoinVehicule = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const handleClickDelete = async (id: any) => {
-      confirm({
-        title: "Supprimer besoin véhicule",
-        description: "Voulez-vous vraiment supprimer ?",
-        cancellationText: "Annuler",
-        confirmationText: "Supprimer",
-        cancellationButtonProps: {
-          color: "warning",
-        },
-        confirmationButtonProps: {
-          color: "error",
-        },
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer besoin véhicule",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteBesoinVehicule({ id }));
+        fetchBesoinEnVehicule();
       })
-        .then(async () => {
-          await dispatch(deleteBesoinVehicule({ id }));
-          fetchBesoinEnVehicule();
-        })
-        .catch(() => { });
-    };
-    const handleClickEdit = async (id: any) => {
-      await dispatch(editBesoinVehicule({ id }));
-      handleClickOpen();
-    };
-  
+      .catch(() => { });
+  };
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editBesoinVehicule({ id }));
+    handleClickOpen();
+  };
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -149,7 +157,7 @@ const ListBesoinVehicule = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddBesoinVehicule handleClose={handleClose}/>
+          <AddBesoinVehicule handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -186,13 +194,13 @@ const ListBesoinVehicule = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                          // selected={isItemSelected}
+                        // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            // onClick={(event) =>
-                            //   handleClick(event, row.dateDébut)
-                            // }
+                          // onClick={(event) =>
+                          //   handleClick(event, row.dateDébut)
+                          // }
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -204,10 +212,24 @@ const ListBesoinVehicule = () => {
                           </TableCell>
                           <TableCell align="right">
                             <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
-                            </TableCell>
-                          <TableCell align="right">{row.vehicule}</TableCell>
+                          </TableCell>
+                          <TableCell align="right">
+                            {vehicleList.find((e: any) => e.id === row.vehicule)?.vehicleType}
+                          </TableCell>
                           <TableCell align="right">{row.trajet}</TableCell>
-                          <TableCell align="right">{row.responsable}</TableCell>
+                          <TableCell align="right">
+                            {
+                              (row.responsable!).map((lp: any) => {
+                                return (
+                                  <Stack direction="column" spacing={2} height={25} overflow="auto">
+                                    {employees.find((e: any) => e.id === lp)?.name}
+                                    {" "}
+                                    {employees.find((e: any) => e.id === lp)?.surname}
+                                  </Stack>
+                                )
+                              })
+                            }
+                          </TableCell>
                           <TableCell align="right">{row.nombreJour}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
@@ -218,7 +240,7 @@ const ListBesoinVehicule = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
-                                onClick={() =>handleClickEdit(row.id)}
+                                onClick={() => handleClickEdit(row.id)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -226,7 +248,7 @@ const ListBesoinVehicule = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
-                                onClick={() =>handleClickDelete(row.id)}
+                                onClick={() => handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>
