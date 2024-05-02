@@ -68,24 +68,16 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [1, 2].length) : 0;
 
+  //select budget line depends grant
   const grantInBudgteLine: any = []
   const BudgetLineGrantList: { id: string, name: any }[] = []
-  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
-    isEditing
-      ? budgetLineList.filter((pg: any) =>
-        resumeDepensePrevue?.ligneBudgetaire?.includes(pg.id!)
-      )
-      : BudgetLineGrantList
-  );
-
-  //select budget line depends grant
   const uniqueValues = new Set();
 
   grantEncoursList.forEach((g: any) => {
     if (grantValue !== "vide") {
       budgetLineList.forEach((b: any) => {
         let BudgetGrant: any = b.grantId;
-        console.log("id grant :", BudgetGrant)
+        // console.log("id grant :", BudgetGrant)
         if (grantValue === BudgetGrant) {
           grantInBudgteLine.push(b.id);
           if (!uniqueValues.has(b.id)) {
@@ -103,10 +95,19 @@ const AddResumeDepense = ({ handleClose }: any) => {
     }
   });
 
+  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
+    isEditing
+      ? budgetLineList.filter((pg: any) =>
+        resumeDepensePrevue?.ligneBudgetaire?.includes(pg.id!)
+      )
+      : BudgetLineGrantList
+  );
+console.log("grant value :", grantValue)
   //ajout 
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
     values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) => bl.id)];
+    console.log("ligne budgetaire :", values.ligneBudgetaire)
     values.grant = grantValue;
     try {
       if (isEditing) {
@@ -181,10 +182,10 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         multiple
                         id="tags-standard"
                         options={grantValue != "vide" ? BudgetLineGrantList : []}
-                        getOptionLabel={(option) => option.name}
-                        value={grantValue != "vide" ? selectedBudgetLine : []}
+                        getOptionLabel={(option: any) => option.name}
+                        value={selectedBudgetLine}
                         onChange={(event, newValue) => {
-                          setSelectedBudgetLine(newValue!);
+                          setSelectedBudgetLine(newValue);
                         }}
                         isOptionEqualToValue={(option, value) => option.id === value.id}
                         renderInput={(params: any) => (

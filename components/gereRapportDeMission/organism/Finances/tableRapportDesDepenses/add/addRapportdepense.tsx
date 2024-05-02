@@ -74,31 +74,24 @@ const AddRapportdepense = ({ handleClose }: any) => {
       ? Math.max(0, (1 + page) * rowsPerPage - [1, 2, 3, 4, 5].length)
       : 0;
 
-  const grantInBudgteLine: any = []
-  const BudgetLineGrantList: { id: string, name: any }[] = []
-  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
-    isEditing
-      ? budgetLineList.filter((pg: any) =>
-        rapportDepense?.ligneBudgetaire?.includes(pg.id!)
-      )
-      : BudgetLineGrantList
-  );
 
   //select budget line depends grant
+  const grantInBudgteLine: any = []
+  const BudgetLineGrantList: { id: string, name: any }[] = []
   const uniqueValues = new Set();
+
   grantEncoursList.forEach((g: any) => {
     if (grantValue !== "vide") {
       budgetLineList.forEach((b: any) => {
         let BudgetGrant: any = b.grantId;
-        console.log("id grant :", BudgetGrant)
+        // console.log("id grant :", BudgetGrant)
         if (grantValue === BudgetGrant) {
           grantInBudgteLine.push(b.id);
           if (!uniqueValues.has(b.id)) {
             uniqueValues.add(b.id);
             BudgetLineGrantList.push({ id: b.id, name: b.code });
           }
-        }
-        else {
+        } else {
           if (!uniqueValues.has(b.id)) {
             uniqueValues.add(b.id);
             BudgetLineGrantList.push({ id: "", name: "" });
@@ -108,6 +101,14 @@ const AddRapportdepense = ({ handleClose }: any) => {
       });
     }
   });
+
+  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
+    isEditing
+      ? budgetLineList.filter((pg: any) =>
+        rapportDepense?.ligneBudgetaire?.includes(pg.id!)
+      )
+      : BudgetLineGrantList
+  );
 
   //ajout 
   const handleSubmit = async (values: any) => {
@@ -212,7 +213,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                           id="tags-standard"
                           options={grantValue != "vide" ? BudgetLineGrantList : []}
                           getOptionLabel={(option) => option.name}
-                          value={grantValue != "vide" ? selectedBudgetLine : []}
+                          value={grantValue !== "vide" ? selectedBudgetLine : []}
                           onChange={(event, newValue) => {
                             setSelectedBudgetLine(newValue!);
                           }}

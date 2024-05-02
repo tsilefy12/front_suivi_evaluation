@@ -45,14 +45,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
   }, [router.query])
 
   const grantInBudgteLine: any = []
-  const BudgetLineGrantList: { id: string, name: any }[] = []
-  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
-    isEditing
-      ? budgetLineList.filter((pg: any) =>
-        Array.isArray(resumeDepense?.ligneBudgetaire) && resumeDepense?.ligneBudgetaire?.includes(pg.id)
-      )
-      : BudgetLineGrantList
-  );
+  const BudgetLineGrantList: { id: string, name: any }[] = [];
 
   //select budget line depends grant
   const uniqueValues = new Set();
@@ -79,6 +72,13 @@ const AddResumeDepense = ({ handleClose }: any) => {
     }
   });
 
+  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
+    isEditing
+      ? budgetLineList.filter((pg: any) =>
+        Array.isArray(resumeDepense?.ligneBudgetaire) && resumeDepense?.ligneBudgetaire?.includes(pg.id)
+      )
+      : BudgetLineGrantList
+  );
   const handleSubmit = async (values: any) => {
     values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) => bl.id)];
     values.grant = grantValue;
@@ -161,7 +161,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         multiple
                         id="tags-standard"
                         options={grantValue != "vide" ? BudgetLineGrantList : []}
-                        getOptionLabel={(option) => option.name}
+                        getOptionLabel={(option) => BudgetLineGrantList.length!=0 ? option.name: ""}
                         value={grantValue != "vide" ? selectedBudgetLine : []}
                         onChange={(event, newValue) => {
                           setSelectedBudgetLine(newValue!);

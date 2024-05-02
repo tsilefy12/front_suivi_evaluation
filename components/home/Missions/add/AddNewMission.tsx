@@ -153,6 +153,7 @@ const AddNewMission = () => {
                   spacing={{ xs: 2, sm: 2, md: 1 }}
                 >
                   <OSTextField
+                    fullWidth
                     id="outlined-basic"
                     label="Référence"
                     name="reference"

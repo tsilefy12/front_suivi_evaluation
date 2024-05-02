@@ -18,10 +18,10 @@ const Detail = () => {
   }, [router.query])
 
   // console.log("list mission :", missionListe)
-  const listMission:{id: string, ref: string, desc: string, respo: any, gestionaire: any }[] = [];
-
+  const listMission: { id: string, ref: string, desc: string, respo: any, gestionaire: any }[] = [];
   missionListe.forEach((m: any) => {
     if (id === m.id) {
+      console.log("ref :", m.reference)
       listMission.push({
         id: m.id,
         ref: m.reference,
@@ -31,6 +31,7 @@ const Detail = () => {
       })
     }
   })
+// console.log("list mission :", missionListe)
   return (
     <FormContainer spacing={2}>
       {

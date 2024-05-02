@@ -69,13 +69,6 @@ const AddPrevisionMission = ({ handleClose }: any) => {
 
   const grantInBudgteLine: any = []
   const BudgetLineGrantList: { id: string, name: any }[] = []
-  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
-    isEditing
-      ? budgetLineList.filter((pg: any) =>
-        Array.isArray(previsionDepense?.ligneBudgetaire) && previsionDepense?.ligneBudgetaire?.includes(pg.id)
-      )
-      : BudgetLineGrantList
-  );
 
   //select budget line depends grant
   const uniqueValues = new Set();
@@ -101,6 +94,14 @@ const AddPrevisionMission = ({ handleClose }: any) => {
       });
     }
   });
+
+  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
+    isEditing
+      ? budgetLineList.filter((pg: any) =>
+        Array.isArray(previsionDepense?.ligneBudgetaire) && previsionDepense?.ligneBudgetaire?.includes(pg.id)
+      )
+      : BudgetLineGrantList
+  );
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik

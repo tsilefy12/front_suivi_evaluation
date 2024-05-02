@@ -221,7 +221,7 @@ const ListResumeDepense = () => {
                           <TableCell align="right">
                             <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auot" : 70, overflow: "auto" }}>
                               {
-                                (row.ligneBudgetaire!).map((lb: any) => {
+                                 Array.isArray(row.ligneBudgetaire) && (row.ligneBudgetaire).map((lb: any) => {
                                   return (
                                     <Stack direction="column" spacing={2}>
                                       {budgetLineList.find((b: any) => b.id === lb)?.code}

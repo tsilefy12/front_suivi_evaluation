@@ -164,16 +164,16 @@ const ListMissions = () => {
                         Etat de prévision
                       </Button>
                     </Link>
-                    <Link href="/missions/id/bilan">
+                    <Link href={`/missions/${mission.id!}/gereRapport`}>
                       <Button variant="text" color="info">
-                        Bilan
+                        Rapport
                       </Button>
                     </Link>
                   </Stack>
                   <Stack direction={{ xs: "column", sm: "row" }}>
-                    <Link href={`/missions/${mission.id!}/gereRapport`}>
+                    <Link href="/missions/id/bilan">
                       <Button variant="text" color="info">
-                        Rapport
+                        Bilan
                       </Button>
                     </Link>
                   </Stack>
