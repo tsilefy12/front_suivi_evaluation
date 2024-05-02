@@ -91,11 +91,8 @@ const AddResumeDepense = ({ handleClose }: any) => {
           })
         );
       } else {
-        if (400) {
-          return null;
-        }
-        return (await dispatch(createResumeDepense(values)), fetchResumeDepense(),
-          handleClose());
+          await dispatch(createResumeDepense(values)), fetchResumeDepense(),
+          handleClose();
       }
 
     } catch (error) {

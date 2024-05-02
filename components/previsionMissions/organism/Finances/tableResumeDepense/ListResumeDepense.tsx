@@ -2,11 +2,12 @@ import {
   Button,
   Container,
   Dialog,
+  FormLabel,
   IconButton,
   Stack,
   styled,
 } from "@mui/material";
-import React from "react";
+import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -35,6 +36,7 @@ import useFetchGrants from "../../../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "../tablePrevision/hooks/useFetchbudgetLine";
 import { useConfirm } from "material-ui-confirm";
 import { deleteResumeDepense, editResumeDepense } from "../../../../../redux/features/resumeDepense";
+import Typography from "../../../../../themes/overrides/Typography";
 
 const ListResumeDepense = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -59,6 +61,15 @@ const ListResumeDepense = () => {
     fetchGrant();
     fetchLigneBudgetaire();
   }, [router.query])
+
+  let total: any = useMemo(() => {
+    let totalBudget: any = 0;
+    resumeDepenseList.forEach((item: any) => {
+      totalBudget += parseInt(item.budgetDepense);
+    })
+    return totalBudget
+  }, [resumeDepenseList])
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -150,10 +161,8 @@ const ListResumeDepense = () => {
     handleClickOpen();
   };
 
-  // let totalBudget: any = 0;
-  // resumeDepenseList.forEach((item: any) => {
-  //   totalBudget += item.montant;
-  // })
+
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -185,7 +194,6 @@ const ListResumeDepense = () => {
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {resumeDepenseList
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: ResumeDepenseItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -195,7 +203,7 @@ const ListResumeDepense = () => {
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
                           tabIndex={-1}
-                          key={row.grant}
+                          key={row.id}
                         >
                           <TableCell
                             padding="checkbox"
@@ -253,12 +261,13 @@ const ListResumeDepense = () => {
               </Table>
             </TableContainer>
             <Footer>
-              <KeyValue keyName="Total budget" value={"300000"} />
+                TOTAL BUDGET : {total} Ar
             </Footer>
+
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={rows.length}
+              count={resumeDepenseList.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -282,6 +291,12 @@ export default ListResumeDepense;
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
 const SectionTable = styled("div")(({ theme }) => ({}));
+
 export const Footer = styled(Stack)(({ theme }) => ({
-  marginLeft: "320px",
+  fontFamily: "Roboto",
+  fontStyle: "normal",
+  fontWeight: "400px",
+  fontSize: "14px",
+  marginRight: "270px",
+  letterSpacing: "0.25px",
 }));
