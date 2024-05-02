@@ -219,7 +219,7 @@ const ListResumeDepense = () => {
                             {grantEncoursList.find((e: any) => e.id === row.grant)?.code}
                           </TableCell>
                           <TableCell align="right">
-                            <FormControl sx={{ height: 70, overflow: "auto" }}>
+                            <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auot" : 70, overflow: "auto" }}>
                               {
                                 (row.ligneBudgetaire!).map((lb: any) => {
                                   return (

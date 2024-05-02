@@ -1,6 +1,7 @@
 import {
   Button,
   Container,
+  FormControl,
   IconButton,
   MenuItem,
   Stack,
@@ -235,9 +236,9 @@ const ListBudgetInitial = () => {
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {budgetInitialList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: BudgetInitialItem, index: any) => {
+                    .map((row: any) => {
                       // const isItemSelected = isSelected(row.id);
-                      const labelId = `enhanced-table-checkbox-${index}`;
+                      const labelId = `enhanced-table-checkbox-${row.id}`;
 
                       return (
                         <TableRow
@@ -262,15 +263,17 @@ const ListBudgetInitial = () => {
                             {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
                           </TableCell>
                           <TableCell sx={{ height: "10vh", overflow: "auto", width: "300px" }} align="right">
-                            {
-                              (row.ligneBudgetaire! as any).map((lp: any) => {
-                                return (
-                                  <Stack direction="column" spacing={2} height={25} overflow="auto">
-                                    {budgetLineList.find((e: any) => e.id === lp)?.code}
-                                  </Stack>
-                                )
-                              })
-                            }
+                          <FormControl sx={{ height: (row.budgetLineId).length <= 1 ? "auto": 70, overflow: "auto" }}>
+                              {
+                                (row.ligneBudgetaire).map((lb: any) => {
+                                  return (
+                                    <Stack direction="column" spacing={2}>
+                                      {budgetLineList.find((b: any) => b.id === lb)?.code}
+                                    </Stack>
+                                  )
+                                })
+                              }
+                            </FormControl>
                           </TableCell>
                           <TableCell sx={{ width: "300px" }} align="right">
                             {

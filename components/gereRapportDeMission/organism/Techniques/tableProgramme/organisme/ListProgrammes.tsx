@@ -10,6 +10,7 @@ import {
   Button,
   Container,
   Dialog,
+  FormControl,
   IconButton,
   Paper,
   styled,
@@ -123,10 +124,11 @@ const ListProgrammes = () => {
                         {livrableRapportlist.find((e: any) =>e.id===row.livrableR).livrablee}
                       </TableCell>
                       <TableCell component="th" scope="row">
+                        <FormControl sx={{height: (row.responsableR).length <= 2 ? "auto": 70, overflow: "auto"}}>
                         {
                           (row.responsableR).map((lp: any) => {
                             return (
-                              <Stack direction="column" spacing={2} height={25} overflow="auto">
+                              <Stack direction="column" spacing={2}>
                                 {employees.find((e: any) => e.id === lp)?.name}
                                 {" "}
                                 {employees.find((e: any) => e.id === lp)?.surname}
@@ -134,6 +136,7 @@ const ListProgrammes = () => {
                             )
                           })
                         }
+                        </FormControl>
                       </TableCell>
                       <TableCell align="right">
                         <BtnActionContainer

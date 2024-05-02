@@ -1,10 +1,11 @@
 import {
-  Button,
-  Container,
-  IconButton,
-  Stack,
-  styled,
-  Typography,
+    Button,
+    Container,
+    FormControl,
+    IconButton,
+    Stack,
+    styled,
+    Typography,
 } from "@mui/material";
 import Link from "next/link";
 import React, { useEffect } from "react";
@@ -23,8 +24,8 @@ import EnhancedTableHead from "./table/EnhancedTableHead";
 import { getComparator, stableSort } from "./table/function";
 import Add from "@mui/icons-material/Add";
 import {
-  defaultLabelDisplayedRows,
-  labelRowsPerPage,
+    defaultLabelDisplayedRows,
+    labelRowsPerPage,
 } from "../../config/table.config";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
@@ -53,18 +54,15 @@ const ListBudgetEngage = () => {
     const { budgetEngagedList } = useAppSelector((state) => state.budgetsEngaged);
     const dispatch = useAppDispatch();
 
-    const { grantEncoursList } = useAppSelector( (state) => state.grantEncours);
-    const { budgetLineList } = useAppSelector( (state) => state.budgetLine);
+    const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+    const { budgetLineList } = useAppSelector((state) => state.budgetLine);
     const fetchBudgetEngagedList = useFetchBudgetEngaged()
-    const fetchUtilsData = () => {
+
+    React.useEffect(() => {
         dispatch(getGrantEncoursList({}));
         dispatch(getBudgetLineList({}));
         fetchBudgetEngagedList()
-    };
-
-    useEffect(() => {
-        fetchUtilsData();
-    }, []);
+    }, [router.query]);
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
         property: keyof Data
@@ -76,9 +74,9 @@ const ListBudgetEngage = () => {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-        const newSelecteds = rows.map((n) => n.date);
-        setSelected(newSelecteds);
-        return;
+            const newSelecteds = rows.map((n) => n.date);
+            setSelected(newSelecteds);
+            return;
         }
         setSelected([]);
     };
@@ -88,16 +86,16 @@ const ListBudgetEngage = () => {
         let newSelected: readonly string[] = [];
 
         if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, name);
+            newSelected = newSelected.concat(selected, name);
         } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
+            newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
+            newSelected = newSelected.concat(selected.slice(0, -1));
         } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-            selected.slice(0, selectedIndex),
-            selected.slice(selectedIndex + 1)
-        );
+            newSelected = newSelected.concat(
+                selected.slice(0, selectedIndex),
+                selected.slice(selectedIndex + 1)
+            );
         }
 
         setSelected(newSelected);
@@ -120,7 +118,7 @@ const ListBudgetEngage = () => {
 
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
     const confirm = useConfirm();
-    const handleClickDelete = (id:any) => {
+    const handleClickDelete = (id: any) => {
         try {
             confirm({
                 title: "Supprimer le budget engagés",
@@ -133,27 +131,27 @@ const ListBudgetEngage = () => {
                 confirmationButtonProps: {
                     color: "error",
                 },
-                })
+            })
                 .then(async () => {
-                    await dispatch(deleteBudgetEngaged({id}));
+                    await dispatch(deleteBudgetEngaged({ id }));
                     fetchBudgetEngagedList()
                 })
-                .catch(() => {});
+                .catch(() => { });
 
         } catch (error) {
             console.error(error)
         }
     }
 
-    const handleClickEdit = (id:any)=>{
+    const handleClickEdit = (id: any) => {
         try {
-            dispatch(editBudgedEngaged({id}));
+            dispatch(editBudgedEngaged({ id }));
             router.push(`/grants/budgetEngage/${id}/edit`);
         } catch (error) {
             console.error(error)
         }
     }
-    
+
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -161,136 +159,150 @@ const ListBudgetEngage = () => {
         <Container maxWidth="xl">
 
             <SectionNavigation
-            direction="row"
-            justifyContent="space-between"
-            mb={2}
+                direction="row"
+                justifyContent="space-between"
+                mb={2}
             >
-            <Stack flexDirection={"row"}>
-            <Link href="/grants/budgetEngage/add">
-                <Button variant="contained" startIcon={<Add />}>
-                Créer
-                </Button>
-            </Link>
+                <Stack flexDirection={"row"}>
+                    <Link href="/grants/budgetEngage/add">
+                        <Button variant="contained" startIcon={<Add />}>
+                            Créer
+                        </Button>
+                    </Link>
                 </Stack>
-            <Typography variant="h4" color="GrayText">
-                Budget Engagés
-            </Typography>
+                <Typography variant="h4" color="GrayText">
+                    Budget Engagés
+                </Typography>
             </SectionNavigation>
-        <SectionTable sx={{backgroundColor: '#fff'}} >
-            <Box sx={{ width: "100%" }}>
-            <Paper sx={{ width: "100%", mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
-                <TableContainer>
-                <Table
-                    sx={{ minWidth: 750 }}
-                    aria-labelledby="tableTitle"
-                    size={dense ? "small" : "medium"}
-                >
-                    <EnhancedTableHead
-                    numSelected={selected.length}
-                    order={order}
-                    orderBy={orderBy}
-                    onSelectAllClick={handleSelectAllClick}
-                    onRequestSort={handleRequestSort}
-                    rowCount={rows.length}
-                    />
-                    <TableBody>
-                    {budgetEngagedList
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map((row : BudgetEngagedItem, index :any) => {
-                        const isItemSelected = isSelected(index);
-                        const labelId = `enhanced-table-checkbox-${index}`;
-
-                        return (
-                            <TableRow
-                            hover
-                            //   onClick={(event) => handleClick(event, row.reference)}
-                            role="checkbox"
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={row.id}
-                            selected={isItemSelected}
+            <SectionTable sx={{ backgroundColor: '#fff' }} >
+                <Box sx={{ width: "100%" }}>
+                    <Paper sx={{ width: "100%", mb: 2 }}>
+                        <EnhancedTableToolbar numSelected={selected.length} />
+                        <TableContainer>
+                            <Table
+                                sx={{ minWidth: 750 }}
+                                aria-labelledby="tableTitle"
+                                size={dense ? "small" : "medium"}
                             >
-                                <TableCell
-                                    padding="checkbox"
-                                    // onClick={(event) => handleClick(event, row?.date)}
-                                ></TableCell>
-                                <TableCell
-                                    component="th"
-                                    id={labelId}
-                                    scope="row"
-                                    padding="none"
-                                >
-                                    <Moment format="DD/MM/YYYY">
-                                    {row?.date}
-                                    </Moment>
-                                </TableCell>
-                                <TableCell align="right">{grantEncoursList.find((e) => e.id == row.grantsId)?.code}</TableCell>
-                                <TableCell align="right">{budgetLineList.find((e) => e.id == row.budgetLineId)?.code}</TableCell>
-                                <TableCell align="right">{row.libelle}</TableCell>
-                                <TableCell align="right">{row?.amount}</TableCell>
-                                <TableCell align="right" width={"150px"}>
-                                    <BtnActionContainer
-                                        direction="row"
-                                        justifyContent="right"
-                                    >
-                                    <IconButton
-                                        color="primary"
-                                        aria-label="Modifier"
-                                        component="span"
-                                        size="small"
-                                        onClick={() => {
-                                            handleClickEdit(row?.id);
-                                        }}
-                                    >
-                                        <Edit />
-                                    </IconButton>
-                                    <IconButton
-                                        color="warning"
-                                        aria-label="Supprimer"
-                                        component="span"
-                                        size="small"
-                                        onClick={() => {
-                                            handleClickDelete(row?.id);
-                                        }}
-                                    >
-                                        <Delete />
-                                    </IconButton>
-                                    </BtnActionContainer>
-                                </TableCell>
-                            </TableRow>
-                        );
-                        })}
-                    {emptyRows > 0 && (
-                        <TableRow
-                        style={{
-                            height: (dense ? 33 : 53) * emptyRows,
-                        }}
-                        >
-                        <TableCell colSpan={6} />
-                        </TableRow>
-                    )}
-                    </TableBody>
-                </Table>
-                </TableContainer>
-                <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                labelRowsPerPage={labelRowsPerPage}
-                labelDisplayedRows={defaultLabelDisplayedRows}
-                />
-            </Paper>
-            {/* <FormControlLabel
+                                <EnhancedTableHead
+                                    numSelected={selected.length}
+                                    order={order}
+                                    orderBy={orderBy}
+                                    onSelectAllClick={handleSelectAllClick}
+                                    onRequestSort={handleRequestSort}
+                                    rowCount={rows.length}
+                                />
+                                <TableBody>
+                                    {budgetEngagedList
+                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        .map((row: any) => {
+                                            const isItemSelected = isSelected(row.id!);
+                                            const labelId = `enhanced-table-checkbox-${row.id!}`;
+
+                                            return (
+                                                <TableRow
+                                                    hover
+                                                    //   onClick={(event) => handleClick(event, row.reference)}
+                                                    role="checkbox"
+                                                    aria-checked={isItemSelected}
+                                                    tabIndex={-1}
+                                                    key={row.id}
+                                                    selected={isItemSelected}
+                                                >
+                                                    <TableCell
+                                                        padding="checkbox"
+                                                    // onClick={(event) => handleClick(event, row?.date)}
+                                                    ></TableCell>
+                                                    <TableCell
+                                                        component="th"
+                                                        id={labelId}
+                                                        scope="row"
+                                                        padding="none"
+                                                    >
+                                                        <Moment format="DD/MM/YYYY">
+                                                            {row?.date}
+                                                        </Moment>
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                        {grantEncoursList.find((e: any) => e.id === row.grantsId)?.code}
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                        <FormControl sx={{ height: (row.budgetLineId).length <= 2 ? "auto": 70 , overflow: "auto" }}>
+                                                            {
+                                                                (row.budgetLineId).map((lb: any) => {
+                                                                    return (
+                                                                        <Stack direction="column" spacing={2}>
+                                                                            {budgetLineList.find((b: any) => b.id === lb)?.code}
+                                                                        </Stack>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </FormControl>
+                                                    </TableCell>
+                                                    <TableCell align="right">{row.libelle}</TableCell>
+                                                    <TableCell align="right">{row?.amount}</TableCell>
+                                                    <TableCell align="right" width={"150px"}>
+                                                        <BtnActionContainer
+                                                            direction="row"
+                                                            justifyContent="right"
+                                                        >
+                                                            <IconButton
+                                                                color="primary"
+                                                                aria-label="Modifier"
+                                                                component="span"
+                                                                size="small"
+                                                                onClick={() => {
+                                                                    handleClickEdit(row?.id);
+                                                                }}
+                                                            >
+                                                                <Edit />
+                                                            </IconButton>
+                                                            <IconButton
+                                                                color="warning"
+                                                                aria-label="Supprimer"
+                                                                component="span"
+                                                                size="small"
+                                                                onClick={() => {
+                                                                    handleClickDelete(row?.id);
+                                                                }}
+                                                            >
+                                                                <Delete />
+                                                            </IconButton>
+                                                        </BtnActionContainer>
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                    {emptyRows > 0 && (
+                                        <TableRow
+                                            style={{
+                                                height: (dense ? 33 : 53) * emptyRows,
+                                            }}
+                                        >
+                                            <TableCell colSpan={6} />
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={rows.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            labelRowsPerPage={labelRowsPerPage}
+                            labelDisplayedRows={defaultLabelDisplayedRows}
+                        />
+                    </Paper>
+                    {/* <FormControlLabel
             control={<Switch checked={dense} onChange={handleChangeDense} />}
             label="Dense padding"
         /> */}
-            </Box>
-        </SectionTable>
+                </Box>
+            </SectionTable>
         </Container>
     );
 };
@@ -301,8 +313,8 @@ export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
 const SectionTable = styled("div")(({ theme }) => ({}));
 const NavigationContainer = styled(Stack)(({ theme }) => ({
-  flexDirection: "column",
-  marginBottom: theme.spacing(2),
-  flex: 1,
-  width: "100%",
+    flexDirection: "column",
+    marginBottom: theme.spacing(2),
+    flex: 1,
+    width: "100%",
 }));
