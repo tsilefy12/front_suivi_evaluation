@@ -62,23 +62,6 @@ const ListPrevision = () => {
     fetchLigneBudgetaire();
   }, [router.query])
 
-  const listLigne: { name: string }[] = []
-
-  grantEncoursList.forEach((b: any) => {
-    budgetLineList.forEach((l: any) => {
-      if (getGrantId == l.id) {
-        listLigne.push({ name: l.code })
-      }
-    })
-  })
-  let total: any = useMemo(() => {
-    let totalBudget: any = 0;
-    previsionDepenselist.forEach((item: any) => {
-      totalBudget += item.montant;
-    })
-    return totalBudget;
-  }, [previsionDepenselist])
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -128,40 +111,37 @@ const ListPrevision = () => {
     handleClickOpen();
   };
 
+  
+  let total: any = useMemo(() => {
+    let totalBudget: any = 0;
+    previsionDepenselist.forEach((item: any) => {
+      totalBudget += item.montant;
+    })
+    return totalBudget;
+  }, [previsionDepenselist])
+
   //select budget line depends grant
-  const [grantValue, setGrantValue]: any = React.useState("vide");
-  const grantInBudgteLine: any = []
-  const BudgetLineGrantList: { id: string, name: any }[] = []
-  const uniqueValues = new Set();
+  const listLigne: { name: any }[] = []
+
+  previsionDepenselist.forEach((b: any) => {
+    if (getGrantId === b.id) {
+      const ligneBudgetaireIds = b.ligneBudgetaire || [];
+      ligneBudgetaireIds.forEach((id: any) => {
+        const code = budgetLineList.find((e: any) => e.id === id)?.code;
+        if (code) {
+            listLigne.push({ name: code });
+        }
+      });
+    }
+  });
+
   let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
     isEditing
       ? budgetLineList.filter((pg: any) =>
         Array.isArray(previsionDepense?.ligneBudgetaire) && previsionDepense?.ligneBudgetaire?.includes(pg.id)
       )
-      : BudgetLineGrantList
+      : listLigne
   );
-
-  grantEncoursList.forEach((g: any) => {
-    if (grantValue !== "vide") {
-      budgetLineList.forEach((b: any) => {
-        let BudgetGrant: any = b.grantId;
-        // console.log("id grant :", BudgetGrant)
-        if (grantValue === BudgetGrant) {
-          grantInBudgteLine.push(b.id);
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-            BudgetLineGrantList.push({ id: b.id, name: b.code });
-          }
-        } else {
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-            BudgetLineGrantList.push({ id: "", name: "" });
-            selectedBudgetLine = [];
-          }
-        }
-      });
-    }
-  });
 
   return (
     <Container maxWidth="xl">
@@ -209,16 +189,16 @@ const ListPrevision = () => {
                               {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
                             </TableCell>
                             <TableCell align="center">
-                              <FormControl sx={{height: (row.ligneBudgetaire!).length <= 2 ? "auto" : 70, overflow: "auto"}}>
-                              {
-                                (row.ligneBudgetaire!).map((lb: any) => {
-                                  return (
-                                    <Stack direction="column" spacing={2} height={25} overflow="auto">
-                                      {budgetLineList.find((e: any) => e.id === lb)?.code}
-                                    </Stack>
-                                  )
-                                })
-                              }
+                              <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auto" : 70, overflow: "auto" }}>
+                                {
+                                  (row.ligneBudgetaire!).map((lb: any) => {
+                                    return (
+                                      <Stack direction="column" spacing={2} height={25} overflow="auto">
+                                        {budgetLineList.find((e: any) => e.id === lb)?.code}
+                                      </Stack>
+                                    )
+                                  })
+                                }
                               </FormControl>
                             </TableCell>
                             <TableCell align="right">
@@ -268,14 +248,15 @@ const ListPrevision = () => {
                         label="Grant"
                         variant="outlined"
                         size="small"
-                        value={(router.query) ?
-                          budgetLineList.find((e: any) => e.id === previsionDepense?.grant)?.code : grantValue}
-                        onChange={(e: any) => setGrantValue(e.target.value)}
+                        value={getGrantId}
+                        onChange={(e: any) => setGetGrantId(e.target.value)}
                       >
                         <MenuItem value="vide">Select grant</MenuItem>
                         {
-                          grantEncoursList.map((item: any) => (
-                            <MenuItem value={item.id!}>{item.code!}</MenuItem>
+                          previsionDepenselist.map((item: any) => (
+                            <MenuItem value={item.id!}>
+                              {grantEncoursList.find((e: any) => e.id === item.grant)?.code}
+                            </MenuItem>
                           ))
                         }
                       </TextField>
@@ -285,37 +266,37 @@ const ListPrevision = () => {
                         multiple
                         id="tags-standard"
                         size="small"
-                        options={grantValue != "vide" ? BudgetLineGrantList : []}
+                        options={listLigne}
                         getOptionLabel={(option) => option.name}
-                        value={grantValue != "vide" ? selectedBudgetLine : []}
+                        value={selectedBudgetLine}
                         onChange={(event, newValue) => {
-                          setSelectedBudgetLine(newValue!);
+                          setSelectedBudgetLine(newValue);
                         }}
-                        isOptionEqualToValue={(option, value) => option.id === value.id}
-                        renderInput={(params: any) => (
+                        renderInput={(params) => (
                           <TextField
                             {...params}
                             id="outlined-basic"
-                            label="Sélectionnez ligne budgetaire"
+                            label="Sélectionnez ligne budgétaire"
                             variant="outlined"
                           />
                         )}
                       />
-                  </FormControl>
-                </Stack>
-                <FormLabel>
-                  Imprévu de mission(total budget-location et perdiem MV(10% )) : {total / 10}
-                </FormLabel>
-              </Stack>
-            </Typography>
 
-            <Typography variant="body2" align="right">
-              TOTAL GENERAL BUDGET : {total} Ar
-            </Typography>
-          </Footer>
-        </Paper>
-      </Box>
-    </SectionTable>
+                    </FormControl>
+                  </Stack>
+                  <FormLabel>
+                    Imprévu de mission(total budget-location et perdiem MV(10% )) : {total / 10}
+                  </FormLabel>
+                </Stack>
+              </Typography>
+
+              <Typography variant="body2" align="right">
+                TOTAL GENERAL BUDGET : {total} Ar
+              </Typography>
+            </Footer>
+          </Paper>
+        </Box>
+      </SectionTable>
     </Container >
   );
 };
