@@ -203,6 +203,9 @@ const ListBudgetsInitial = () => {
                             <Moment format="DD/MM/yyyy">{row.fin}</Moment>
                           </TableCell>
                           <TableCell align="right">
+                            {row.montant} Ar
+                          </TableCell>
+                          <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"

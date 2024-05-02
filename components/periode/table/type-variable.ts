@@ -4,6 +4,7 @@ export default interface Data {
   periode: string;
   debut: string;
   fin: string;
+  montant: string;
   }
   
 

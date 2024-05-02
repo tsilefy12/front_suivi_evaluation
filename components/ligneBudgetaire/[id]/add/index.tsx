@@ -31,9 +31,9 @@ const AddNewBudgetLine = () => {
     const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
     const fetchLigneBudgetaire = useFetchBudgetLine();
     const { isEditing, budgetLine } = useAppSelector((state: any) => state.budgetLine)
-    const {  lineBudgetList } = useAppSelector((state) => state.lineBudget)
-    const {  typeList } = useAppSelector((state) => state.types)
-    const {  organisationList } = useAppSelector((state) => state.organisations)
+    const {  lineBudgetList } = useAppSelector((state: any) => state.lineBudget)
+    const {  typeList } = useAppSelector((state: any) => state.types)
+    const {  organisationList } = useAppSelector((state: any) => state.organisations)
 
     const dispatch: any = useAppDispatch();
     const { id }: any = router.query;
@@ -82,17 +82,20 @@ const AddNewBudgetLine = () => {
                         ? budgetLine
                             : {
                                 code: isEditing ? budgetLine?.code : "",
-                                grantId: isEditing ? budgetLine?.grantId : 0,
-                                amount: isEditing ? budgetLine?.amount: 0,
-                                budgetTypeId: isEditing ? budgetLine?.budgetTypeId : 0,
-                                configOrganisationId: isEditing ? budgetLine?.configOrganisationId : 0,
-                                configBudgetLineId: isEditing ? budgetLine?.configBudgetLineId : 0
+                                grantId: isEditing ? budgetLine?.grantId : "",
+                                amount: isEditing ? budgetLine?.amount: "",
+                                budgetTypeId: isEditing ? budgetLine?.budgetTypeId : null,
+                                configOrganisationId: isEditing ? budgetLine?.configOrganisationId : null,
+                                configBudgetLineId: isEditing ? budgetLine?.configBudgetLineId : null,
                             }
                 }
                 validationSchema={Yup.object({
                     code: Yup.string().required("Champ obligatoire"),
-                    grantId: Yup.string().required("Champ obligatoire"),
+                    // grantId: Yup.string().required("Champ obligatoire"),
                     amount: Yup.string().required("Champ obligatoire"),
+                    // budgetTypeId: Yup.string().required("Champ obligatoire"),
+                    // configOrganisationId: Yup.string().required("Champ obligatoire"),
+                    // configBudgetLineId: Yup.string().required("Champ obligatoire"),
                 })}
                 onSubmit={(value: any, action: any) => {
                     handleSubmit(value);
@@ -180,6 +183,7 @@ const AddNewBudgetLine = () => {
                                             label="Organisation"
                                             variant="outlined"
                                             name="configOrganisationId"
+                                            type="number"
                                         />
                                     </Stack>
                                     <Stack direction="row" spacing={2}>

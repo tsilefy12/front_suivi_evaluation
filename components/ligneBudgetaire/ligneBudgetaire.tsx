@@ -29,6 +29,9 @@ import useFetchBudgetLine from "../previsionMissions/organism/Finances/tablePrev
 import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 import { BudgetLineItem } from "../../redux/features/budgetLine/budgetLine.interface";
 import { deleteBudgetLine } from "../../redux/features/budgetLine";
+import { getOrganisation } from "../../redux/features/organisation";
+import { getLineBudget } from "../../redux/features/lineBudget";
+import { getType } from "../../redux/features/type";
 
 const ListBudgetLine = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -45,9 +48,16 @@ const ListBudgetLine = () => {
   const fetchBudgetLine = useFetchBudgetLine();
   const fetchGrants = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state: any) =>state.grantEncours);
+  const {organisationList } = useAppSelector((state: any) =>state.organisations);
+  const {  lineBudgetList } = useAppSelector((state: any) => state.lineBudget)
+  const {  typeList } = useAppSelector((state: any) => state.types)
+
   React.useEffect(() =>{
     fetchGrants();
     fetchBudgetLine();
+    dispatch(getOrganisation({}))
+    dispatch(getLineBudget({}))
+    dispatch(getType({}))
   }, [router.query])
 
   const handleClickEdit = async (id: any) => {
@@ -94,14 +104,14 @@ const ListBudgetLine = () => {
             Créer
           </Button>
         </Link> */}
-        <Typography variant="h5" color="GrayText">
+        {/* <Typography variant="h5" color="GrayText">
         Ligne budgetaire
 
-        </Typography>
+        </Typography> */}
       </SectionNavigation>
       <SectionTable sx={{backgroundColor: '#fff'}}>
         <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2 }}>
+          <Paper sx={{ width: "100%", mb: 2, ml: 4 }}>
             <EnhancedTableToolbar numSelected={selected.length} />
             <TableContainer>
               <Table
@@ -130,13 +140,25 @@ const ListBudgetLine = () => {
                           >
                                  {row.code}
                           </TableCell>
-                          <TableCell align="left">
+                          <TableCell align="center">
                             {grantEncoursList.find((e: any) =>e.id === row.grantId)?.code}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="center">
+                            {typeList.find((e: any) =>e.id === row.budgetTypeId)?.name}
+                          </TableCell>
+                          <TableCell align="center">
+                            {lineBudgetList.find((e: any) =>e.id === row.configBudgetLineId)?.name}
+                          </TableCell>
+                          <TableCell align="center">
+                            {organisationList.find((e: any) =>e.id === row.configOrganisationId)?.name}
+                          </TableCell>
+                          <TableCell align="center">
+                            {row.amount}
+                          </TableCell>
+                          {/* <TableCell align="center">
                             <BtnActionContainer
                               direction="row"
-                              justifyContent="right"
+                              justifyContent="center"
                             >
                               <IconButton
                                   color="primary"
@@ -158,7 +180,7 @@ const ListBudgetLine = () => {
                                 <DeleteIcon />
                               </IconButton>
                             </BtnActionContainer>
-                          </TableCell>
+                          </TableCell> */}
                         </TableRow>
                       );
                     })}

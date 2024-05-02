@@ -8,12 +8,12 @@ export const headCells: readonly HeadCell[] = [
     disablePadding: true,
     label: "DPJ#",
   },
-  {
-    id: "date",
-    numeric: true,
-    disablePadding: false,
-    label: "Date",
-  },
+  // {
+  //   id: "date",
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: "Date",
+  // },
   {
     id: "libelles",
     numeric: true,

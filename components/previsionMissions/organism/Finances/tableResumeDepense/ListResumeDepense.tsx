@@ -2,6 +2,7 @@ import {
   Button,
   Container,
   Dialog,
+  FormControl,
   FormLabel,
   IconButton,
   Stack,
@@ -217,7 +218,17 @@ const ListResumeDepense = () => {
                             {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
                           </TableCell>
                           <TableCell align="right">
-                            {budgetLineList.find((e: any) => e.id === row?.ligneBudgetaire)?.code}
+                          <FormControl sx={{ height: 70, overflow: "auto" }}>
+                              {
+                                (row.ligneBudgetaire!).map((lb: any) => {
+                                  return (
+                                    <Stack direction="column" spacing={2}>
+                                      {budgetLineList.find((b: any) => b.id === lb)?.code}
+                                    </Stack>
+                                  )
+                                })
+                              }
+                          </FormControl>
                           </TableCell>
                           <TableCell align="right">{row.depensePrevue}</TableCell>
                           <TableCell align="right">{row.budgetDepense}</TableCell>

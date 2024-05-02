@@ -2,6 +2,7 @@ import {
   Button,
   Container,
   Dialog,
+  FormControl,
   IconButton,
   Stack,
   styled,
@@ -33,6 +34,9 @@ import { useRouter } from "next/router";
 import { useConfirm } from "material-ui-confirm";
 import { RapportDepenseItem } from "../../../../../redux/features/rapportDepense/rapportDepense.interface";
 import Moment from "react-moment";
+import useFetchGrants from "../../../../GrantsEnCours/hooks/getGrants";
+import useFetchBudgetLine from "../../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
+import { deleteRapportDepense, editRapportDepense } from "../../../../../redux/features/rapportDepense";
 
 const ListRapportDepenses = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -46,10 +50,16 @@ const ListRapportDepenses = () => {
   const dispatch: any = useAppDispatch();
   const confirm = useConfirm();
   const fetchRapportDepense = useFetchRapportDepense();
-  const { rapportDepenseList } = useAppSelector((state: any) =>state.rapportDepense);
+  const { rapportDepenseList } = useAppSelector((state: any) => state.rapportDepense);
+  const fetchGrantList = useFetchGrants();
+  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
+  const fetchligneBudgetaire = useFetchBudgetLine();
+  const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchRapportDepense();
+    fetchGrantList();
+    fetchligneBudgetaire();
   }, [router.query])
 
   const handleClickOpen = () => {
@@ -118,6 +128,30 @@ const ListRapportDepenses = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer  le rapport de depense",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteRapportDepense({ id }));
+        fetchRapportDepense();
+      })
+      .catch(() => { });
+  };
+
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editRapportDepense({ id }));
+    handleClickOpen();
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -125,7 +159,7 @@ const ListRapportDepenses = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddRapportdepense handleClose={handleClose}/>
+          <AddRapportdepense handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -162,27 +196,41 @@ const ListRapportDepenses = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                          // selected={isItemSelected}
+                        // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            // onClick={(event) => handleClick(event, row.dpj)}
+                          // onClick={(event) => handleClick(event, row.dpj)}
                           ></TableCell>
-                          <TableCell
+                          {/* <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             padding="none"
                           >
-                            {row.id}
-                          </TableCell>
-                          <TableCell align="right">
+                           <Moment format="DD/MM/yyyy"> {row.date}</Moment>
+                          </TableCell> */}
+                          <TableCell align="left">
                             <Moment format="DD/MM/yyyy">{row.date}</Moment>
                           </TableCell>
                           <TableCell align="right">{row.libelle}</TableCell>
                           <TableCell align="right">{row.montant}</TableCell>
-                          <TableCell align="right">{row.grant}</TableCell>
-                          <TableCell align="right">{row.ligneBudgetaire}</TableCell>
+                          <TableCell align="right">
+                            {grantEncoursList.find((e: any) => e.id === row.grant)?.code}
+                          </TableCell>
+                          <TableCell align="right">
+                            <FormControl sx={{height: 70, overflow: "auto"}}>
+                            {
+                              (row.ligneBudgetaire!).map((lb: any) => {
+                                return (
+                                  <Stack direction="column" spacing={2}>
+                                    {budgetLineList.find((b: any) => b.id === lb)?.code}
+                                  </Stack>
+                                )
+                              })
+                            }
+                            </FormControl>
+                          </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
@@ -192,6 +240,7 @@ const ListRapportDepenses = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
+                                onClick={() =>handleClickEdit(row.id!)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -199,6 +248,7 @@ const ListRapportDepenses = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
+                                onClick={() =>handleClickDelete(row.id!)}
                               >
                                 <DeleteIcon />
                               </IconButton>

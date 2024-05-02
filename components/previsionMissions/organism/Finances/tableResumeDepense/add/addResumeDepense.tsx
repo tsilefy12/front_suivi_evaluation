@@ -30,12 +30,12 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const { id }: any = router.query;
-  const { isEditing, resumeDepense } = useAppSelector((state) => state.resumeDepense)
+  const { isEditing, resumeDepense } = useAppSelector((state: any) => state.resumeDepense)
   const fetchResumeDepense = useFetchResumeDepenseList();
   const fetchGrant = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
-  const { budgetLineList } = useAppSelector((state) => state.budgetLine);
+  const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const [grantValue, setGrantValue]: any = React.useState("vide");
 
   React.useEffect(() => {
@@ -91,10 +91,10 @@ const AddResumeDepense = ({ handleClose }: any) => {
           })
         );
       } else {
-          await dispatch(createResumeDepense(values)), fetchResumeDepense(),
-          handleClose();
+          await dispatch(createResumeDepense(values)), fetchResumeDepense();
       }
-
+      handleClose();
+      fetchResumeDepense();
     } catch (error) {
       console.log("error", error);
     }
@@ -144,7 +144,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         variant="outlined"
                         name="grant"
                         value={(id) ?
-                          budgetLineList.find((e: any) => e.id === resumeDepense?.grant)?.code : grantValue}
+                         resumeDepense?.grant: grantValue}
                         onChange={(e: any) => setGrantValue(e.target.value)}
                         hyperText={grantValue == "vide" ? false : true}
                       >

@@ -54,7 +54,7 @@ const AddNewBudgetInitial = () => {
 
   //get grant dans periode
   const grantInPeriode: any = []
-  const periodeGrantList: { id: string, name: any }[] = []
+  const periodeGrantList: { id: string, name: any, montant: number }[] = []
   let [selectedPeriode, setSelectedPeriode] = React.useState<any[]>(
     isEditing
       ? budgetLineList.filter((pg: any) =>
@@ -70,7 +70,7 @@ const AddNewBudgetInitial = () => {
           grantInPeriode.push(p.id)
           if (!uniqueValues.has(p.id)) {
             uniqueValues.add(p.id);
-            return periodeGrantList.push({ id: p.id, name: p.periode })
+            return periodeGrantList.push({ id: p.id, name: p.periode, montant: p.montant })
           }else{
             return [];
           }
@@ -81,7 +81,7 @@ const AddNewBudgetInitial = () => {
 
   //get grant dans budget
   const grantInBudgteLine: any = []
-  const BudgetLineGrantList: { id: string, name: any }[] = []
+  const BudgetLineGrantList: { id: string, name: any, montant: number }[] = []
   let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
     isEditing
       ? budgetLineList.filter((pg: any) =>
@@ -99,18 +99,25 @@ const AddNewBudgetInitial = () => {
           grantInBudgteLine.push(b.id);
           if (!uniqueValues.has(b.id)) {
             uniqueValues.add(b.id);
-            BudgetLineGrantList.push({ id: b.id, name: b.code });
+            BudgetLineGrantList.push({ id: b.id, name: b.code, montant: b.amount });
           }
         }
       });
     }
   });
-
+ 
   const handleSubmit = async (values: any) => {
     values.periodeId = [...selectedPeriode.map((p: any) => p.id)];
+
     values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) =>bl.id)];
     values.grant = grantValue;
-    console.log("id grant :", values.ligneBudgetaire)
+    let totalMontantBudget = selectedBudgetLine.reduce((total: number, currentItem: any) => total + currentItem.montant, 0);
+    let totalMontantPeriode = selectedPeriode.reduce((total: number, currentItem: any) => total + currentItem.montant, 0);
+
+    console.log("montant budget :", totalMontantBudget)
+    console.log("montant periode :", totalMontantPeriode)
+    let somme = totalMontantBudget + totalMontantPeriode;
+    values.montant = somme;
     try {
       if (isEditing) {
         await dispatch(
@@ -120,12 +127,9 @@ const AddNewBudgetInitial = () => {
           })
         );
       } else {
-        if (400) {
-          return null;
-        }
-         return (await dispatch(createBudgetInitial(values)),
-        fetchBudgetInitial())
+        await dispatch(createBudgetInitial(values))
       }
+      fetchBudgetInitial()
       router.push("/grants/budgetInitial");
     } catch (error) {
       console.log("error", error);
@@ -146,18 +150,18 @@ interface OSTextFieldProps {
             : {
               grant: isEditing ? budgetInitial?.grant : grantValue,
               ligneBudgetaire: isEditing ? budgetInitial?.ligneBudgetaire : "",
-              periodeId: isEditing ? budgetInitial?.periode : "",
-              montant: isEditing ? budgetInitial?.montant : "",
+              periodeId: isEditing ? budgetInitial?.periodeId : "",
+              // montant: isEditing ? budgetInitial?.montant : ,
             }
         }
-        validationSchema={Yup.object({
-          grant: Yup.string().when("grantValue", {
-            is: (grantValue: any) => grantValue !== "vide",then: Yup.string().required("Champ obligatoire"),
-          }),
-          ligneBudgetaire: Yup.string().required("Champ obligatoire"),
-          periodeId: Yup.string().required("Champ obligatoire"),
-          montant: Yup.string().required("Champ obligatoire"),
-        })}
+        // validationSchema={Yup.object({
+        //   grant: Yup.string().when("grantValue", {
+        //     is: (grantValue: any) => grantValue !== "vide",then: Yup.string().required("Champ obligatoire"),
+        //   }),
+        //   ligneBudgetaire: Yup.string().required("Champ obligatoire"),
+        //   periodeId: Yup.string().required("Champ obligatoire"),
+        //   montant: Yup.string().required("Champ obligatoire"),
+        // })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
           action.resetForm();
@@ -266,14 +270,6 @@ interface OSTextFieldProps {
                       variant="outlined"
                     />
                   )}
-                />
-                <OSTextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="montant"
-                  variant="outlined"
-                  name="montant"
-                  type="number"
                 />
               </FormContainer>
             </Form>

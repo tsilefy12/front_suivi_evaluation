@@ -86,7 +86,6 @@ const AddRapportdepense = ({ handleClose }: any) => {
 
   //select budget line depends grant
   const uniqueValues = new Set();
-
   grantEncoursList.forEach((g: any) => {
     if (grantValue !== "vide") {
       budgetLineList.forEach((b: any) => {
@@ -160,7 +159,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
           return (
             <Form>
               <SectionNavigation>
-                <DialogTitle>Créer/modifier besoin en véhicule</DialogTitle>
+                <DialogTitle>{!isEditing ? "Créer" : "Modifier"} rapport de depense</DialogTitle>
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
                     <OSDatePicker

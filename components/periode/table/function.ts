@@ -5,12 +5,14 @@ export function createData(
   periode: string,
   debut: string,
   fin: string,
+  montant: string,
 ): Data {
   return {
     grants,
     periode,
     debut,
     fin,
+    montant,
   };
 }
 

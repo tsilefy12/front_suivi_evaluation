@@ -8,7 +8,7 @@ import { HeadCell } from "./HeadCell.interface";
 
 const TransportEquipmentTableHeader = () => {
 	return (
-		<TableHead>
+		<TableHead >
 			<TableRow>
 				{transportEquipmentHeadCells.map((headCell: HeadCell) => (
 					<HeadCellComponent

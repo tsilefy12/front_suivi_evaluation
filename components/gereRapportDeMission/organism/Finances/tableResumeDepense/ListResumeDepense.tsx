@@ -2,12 +2,13 @@ import {
   Button,
   Container,
   Dialog,
+  FormControl,
   IconButton,
   Stack,
   styled,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -68,6 +69,14 @@ const ListResumeDepense = () => {
     setOpen(false);
   };
 
+  let total: any = useMemo(() => {
+    let totalBudget: any = 0;
+    resumeDepensePrevueList.forEach((item: any) => {
+      totalBudget += parseInt(item.budgetDepense);
+    })
+    return totalBudget
+  }, [resumeDepensePrevueList])
+  
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -207,18 +216,20 @@ const ListResumeDepense = () => {
                             scope="row"
                             padding="none"
                           >
-                            {grantEncoursList.find((e: any) =>e.id === row.grant)?.code}
+                            {grantEncoursList.find((e: any) => e.id === row.grant)?.code}
                           </TableCell>
                           <TableCell align="right">
-                            {
-                              (row.ligneBudgetaire).map((lb: any) => {
-                                return (
-                                  <Stack direction="column" spacing={2} height={25} overflow="auto">
-                                    {budgetLineList.find((b: any) => b.id === lb)?.code}
-                                  </Stack>
-                                )
-                              })
-                            }
+                            <FormControl sx={{ height: 70, overflow: "auto" }}>
+                              {
+                                (row.ligneBudgetaire!).map((lb: any) => {
+                                  return (
+                                    <Stack direction="column" spacing={2}>
+                                      {budgetLineList.find((b: any) => b.id === lb)?.code}
+                                    </Stack>
+                                  )
+                                })
+                              }
+                            </FormControl>
                           </TableCell>
                           <TableCell align="right">{row.depensePrevue}</TableCell>
                           <TableCell align="right">{row.budgetDepense}</TableCell>
@@ -232,7 +243,7 @@ const ListResumeDepense = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
-                                onClick={() =>handleClickEdit(row.id!)}
+                                onClick={() => handleClickEdit(row.id!)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -240,7 +251,7 @@ const ListResumeDepense = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
-                                onClick={() =>handleClickDelete(row.id!)}
+                                onClick={() => handleClickDelete(row.id!)}
                               >
                                 <DeleteIcon />
                               </IconButton>
@@ -263,7 +274,7 @@ const ListResumeDepense = () => {
             </TableContainer>
             <Footer>
               <Typography variant="body2" align="right">
-                Total Budget : 300000
+                Total Budget : {total} Ar
               </Typography>
             </Footer>
             <TablePagination

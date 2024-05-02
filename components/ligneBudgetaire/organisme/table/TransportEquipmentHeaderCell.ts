@@ -13,4 +13,28 @@ export const transportEquipmentHeadCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'GRANT',
   },
+  {
+    id: 'organisation',
+    numeric: true,
+    disablePadding: false,
+    label: 'ORGANISATION',
+  },
+  {
+    id: 'type',
+    numeric: true,
+    disablePadding: false,
+    label: 'TYPE',
+  },
+  {
+    id: 'lineBudget',
+    numeric: true,
+    disablePadding: false,
+    label: 'LIGNE BUDGET',
+  },
+  {
+    id: 'montant',
+    numeric: true,
+    disablePadding: false,
+    label: 'MONTANT',
+  },
 ];
