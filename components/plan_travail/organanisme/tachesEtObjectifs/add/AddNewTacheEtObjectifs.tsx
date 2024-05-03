@@ -32,7 +32,7 @@ import OSDatePicker from "../../../../shared/date/OSDatePicker";
 import NewTacheEtObjectifs from "./NewTacheEtObjectifs";
 import { createObejectifAnnuel } from "../../../../../redux/features/objectifAnnuels";
 
-const AddNewTacheEtObjectifs = () => {
+const AddNewTacheEtObjectifs = ({selectedEmployes}: any) => {
     const router = useRouter();
     const fetchEmployes = useFetchEmploys();
     const { employees } = useAppSelector((state: any) => state.employe)
@@ -51,6 +51,8 @@ const AddNewTacheEtObjectifs = () => {
     const handleSubmit = async (values: any) => {
         values.startDate = new Date(values.startDate).toISOString()
         values.endDate = new Date(values.endDate).toISOString()
+        values.participantId = [...selectedEmployes.map((e: any) =>e.id)]
+        console.log("valeur participant id :", values.participantId)
 
         try {
             if (isEditing) {

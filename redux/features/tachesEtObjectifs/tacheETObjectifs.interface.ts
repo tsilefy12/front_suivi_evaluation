@@ -7,7 +7,7 @@ export interface TacheEtObjectifItem {
     responsableId?: string;
     expectedResult? : string;
     resources?:string;
-    participantsId?: string;
+    participantsId?: string[];
     notes?: string;
     startDate? : Date;
     endDate? : Date;
