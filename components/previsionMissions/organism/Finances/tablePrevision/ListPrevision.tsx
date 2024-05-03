@@ -252,7 +252,8 @@ const ListPrevision = () => {
               <Typography variant="body2" align="right" sx={{ width: "100%" }}>
                 <Stack direction="column" spacing={2}>
                   <Stack direction="row" sx={{ textAlign: "right" }} spacing={2}>
-                    <FormControl sx={{ flex: "1", textAlign: "left", paddingLeft: 55 }}>
+                    <FormLabel>Budget line selected amount : {getGrantId!==null ? "00": getAmountBudget} Ar</FormLabel>
+                    <FormControl sx={{ flex: "1", textAlign: "left", paddingLeft: 10 }}>
                       <TextField
                         fullWidth
                         select
