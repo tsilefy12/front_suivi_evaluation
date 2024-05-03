@@ -118,6 +118,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
               ligneBudgetaire: isEditing ? previsionDepense?.ligneBudgetaire : "",
               regleme: isEditing ? previsionDepense?.regleme : "",
               missionId: isEditing ? previsionDepense?.missionId : id,
+              // montant: nombre * publicDecrypt,
             }
         }
         validationSchema={Yup.object({
@@ -189,7 +190,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                           formikProps.setFieldValue("montant", newMontant);
                         }}
                       />
-                      <OSTextField
+                      {/* <OSTextField
                         fullWidth
                         id="outlined-basic"
                         label="Montant"
@@ -199,7 +200,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                         type="number"
                         min="0"
                         disabled
-                      />
+                      /> */}
                     </CustomStack>
                     <FormControl fullWidth>
                       <OSTextField

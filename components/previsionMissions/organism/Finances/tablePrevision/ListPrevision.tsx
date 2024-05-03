@@ -36,9 +36,8 @@ import useFetchGrants from "../../../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "./hooks/useFetchbudgetLine";
 import { useConfirm } from "material-ui-confirm";
 import { deletePrevisionDepense, editPrevisionDepense } from "../../../../../redux/features/PrevisionDepense";
-import { useFormikContext } from 'formik';
 import OSSelectField from "../../../../shared/select/OSSelectField";
-import OSTextField from "../../../../shared/input/OSTextField";
+
 
 const ListPrevision = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -47,14 +46,14 @@ const ListPrevision = () => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const fetchPrevisionDepense = useFetchPrevisionDepenseList();
-  const { previsionDepenselist, isEditing, previsionDepense } = useAppSelector((state: any) => state.previsonDepense)
-  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
-  const fetchGrant = useFetchGrants()
-  const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
+  const { previsionDepenselist, isEditing, previsionDepense }: any = useAppSelector((state: any) => state.previsonDepense)
+  const { grantEncoursList }: any = useAppSelector((state: any) => state.grantEncours);
+  const fetchGrant: any = useFetchGrants()
+  const { budgetLineList }: any = useAppSelector((state: any) => state.budgetLine);
   const fetchLigneBudgetaire = useFetchBudgetLine();
   const confirm = useConfirm();
-  const dispatch = useAppDispatch();
-  const [getGrantId, setGetGrantId]: any = React.useState("");
+  const dispatch: any = useAppDispatch();
+  const [getGrantId, setGetGrantId]: any = React.useState(0);
 
   React.useEffect(() => {
     fetchPrevisionDepense();
@@ -111,7 +110,7 @@ const ListPrevision = () => {
     handleClickOpen();
   };
 
-  
+
   let total: any = useMemo(() => {
     let totalBudget: any = 0;
     previsionDepenselist.forEach((item: any) => {
@@ -121,28 +120,41 @@ const ListPrevision = () => {
   }, [previsionDepenselist])
 
   //select budget line depends grant
-  const listLigne: { name: any }[] = []
+  const listLigne: { id: string, name: any }[] = []
 
   previsionDepenselist.forEach((b: any) => {
-    if (getGrantId === b.id) {
+    if (getGrantId !== null && getGrantId === b.grant) {
       const ligneBudgetaireIds = b.ligneBudgetaire || [];
       ligneBudgetaireIds.forEach((id: any) => {
         const code = budgetLineList.find((e: any) => e.id === id)?.code;
         if (code) {
-            listLigne.push({ name: code });
+          listLigne.push({ id: ligneBudgetaireIds.map((lId: any) => lId), name: code });
         }
       });
+    } else {
+      listLigne.push({ id: "", name: "" })
     }
   });
 
-  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
-    isEditing
-      ? budgetLineList.filter((pg: any) =>
+  let [selectedBudgetLine, setSelectedBudgetLine]: any = React.useState<any[]>(() => {
+    if (isEditing) {
+      return budgetLineList.filter((pg: any) =>
         Array.isArray(previsionDepense?.ligneBudgetaire) && previsionDepense?.ligneBudgetaire?.includes(pg.id)
-      )
-      : listLigne
-  );
+      );
+    } else {
+      return listLigne.length > 0 ? listLigne : [];
+    }
+  });
+  console.log(" id :", selectedBudgetLine)
+  //get imprevue 
+  let getAmountBudget = ""
 
+  budgetLineList.forEach((element: any) => {
+    if (getGrantId !== "" && selectedBudgetLine !== "" && element.code === selectedBudgetLine) {
+      getAmountBudget = element.amount
+    }
+  });
+  console.log("vola :", getAmountBudget)
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -240,7 +252,7 @@ const ListPrevision = () => {
               <Typography variant="body2" align="right" sx={{ width: "100%" }}>
                 <Stack direction="column" spacing={2}>
                   <Stack direction="row" sx={{ textAlign: "right" }} spacing={2}>
-                    <FormControl sx={{ flex: "1", textAlign: "left", paddingLeft: 40 }}>
+                    <FormControl sx={{ flex: "1", textAlign: "left", paddingLeft: 55 }}>
                       <TextField
                         fullWidth
                         select
@@ -253,39 +265,43 @@ const ListPrevision = () => {
                       >
                         <MenuItem value="vide">Select grant</MenuItem>
                         {
-                          previsionDepenselist.map((item: any) => (
-                            <MenuItem value={item.id!}>
-                              {grantEncoursList.find((e: any) => e.id === item.grant)?.code}
+                          // Filtrer les éléments uniques de grantEncoursList
+                          Array.from(new Set(previsionDepenselist.map((item: any) => item.grant))).map((grantId: any) => {
+                            const grant = grantEncoursList.find((e: any) => e.id === grantId);
+                            return grant ? (
+                              <MenuItem key={grantId} value={grantId}>
+                                {grant.code}
+                              </MenuItem>
+                            ) : null;
+                          })
+                        }
+                      </TextField>
+
+                    </FormControl>
+                    <FormControl sx={{ flex: "1", textAlign: "left" }}>
+                      <TextField
+                        fullWidth
+                        select
+                        id="outlined-basic"
+                        label="Ligne budgetaire"
+                        variant="outlined"
+                        size="small"
+                        value={selectedBudgetLine}
+                        onChange={(e: any) => setSelectedBudgetLine(e.target.value)}
+                      >
+                        <MenuItem value="vide">Select budget line</MenuItem>
+                        {
+                          listLigne.map((item: any) => (
+                            <MenuItem value={item.name}>
+                              {item.name}
                             </MenuItem>
                           ))
                         }
                       </TextField>
                     </FormControl>
-                    <FormControl sx={{ flex: "1" }}>
-                      <Autocomplete
-                        multiple
-                        id="tags-standard"
-                        size="small"
-                        options={listLigne}
-                        getOptionLabel={(option) => option.name}
-                        value={selectedBudgetLine}
-                        onChange={(event, newValue) => {
-                          setSelectedBudgetLine(newValue);
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            id="outlined-basic"
-                            label="Sélectionnez ligne budgétaire"
-                            variant="outlined"
-                          />
-                        )}
-                      />
-
-                    </FormControl>
                   </Stack>
                   <FormLabel>
-                    Imprévu de mission(total budget-location et perdiem MV(10% )) : {total / 10}
+                    Imprévu de mission(total budget-location et perdiem MV(10% )) : {total / 10} Ar
                   </FormLabel>
                 </Stack>
               </Typography>
