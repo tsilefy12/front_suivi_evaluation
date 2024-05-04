@@ -43,6 +43,8 @@ import { deleteTacheEtObjectifs, editTacheEtObjectifs } from "../../../../redux/
 import useFetchPlanTravaile from "../../hooks/useFetchPlanTravail";
 import { getPlanTravail } from "../../../../redux/features/planTravail";
 import Moment from "react-moment";
+import { getStatuslist } from "../../../../redux/features/status";
+import { TacheEtObjectifItem } from "../../../../redux/features/tachesEtObjectifs/tacheETObjectifs.interface";
 
 const ListTacheEtObjectifs = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -63,6 +65,7 @@ const ListTacheEtObjectifs = () => {
   const [open, setOpen] = React.useState(false);
   const fetchPlanTravail = useFetchPlanTravaile()
   const { planTravaillist, planTravail } = useAppSelector((state) =>state.planTravail)
+  const { statuslist } = useAppSelector((state: any) =>state.status)
 
   React.useEffect(() => {
     fetchProject();
@@ -71,6 +74,7 @@ const ListTacheEtObjectifs = () => {
     fetchPlanTravail();
     getPlanTravaile();
     getTache();
+    dispatch(getStatuslist({}));
   }, [router.query])
  const getPlanTravaile = () =>{
   const args: any = {};
@@ -169,7 +173,7 @@ const ListTacheEtObjectifs = () => {
 
   const handleClickEdit = async (id: any) => {
     await dispatch(editTacheEtObjectifs({ id }))
-    handleClickOpen()
+    // handleClickOpen()
   };
   return (
     <Container maxWidth="xl">
@@ -228,7 +232,7 @@ const ListTacheEtObjectifs = () => {
                 rows.slice().sort(getComparator(order, orderBy)) */}
                     {tacheEtObjectifList
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map((row, index) => {
+                        .map((row: TacheEtObjectifItem, index: any) => {
                         // const isItemSelected = isSelected(row.id);
                         const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -258,10 +262,10 @@ const ListTacheEtObjectifs = () => {
                                 {row.keyTasks}
                             </TableCell>
                             <TableCell>
-                                {row.statusId}
+                                {statuslist.find((e: any) =>e.id === row.statusId)?.status}
                             </TableCell>
                             <TableCell>
-                                {employees.find((e)=> e.id == row?.responsableId)?.name}
+                                {employees.find((e: any)=> e.id == row?.responsableId)?.name}
                             </TableCell>
                             <TableCell>
                                 <Moment format="DD/MM/YYYY">
@@ -287,6 +291,7 @@ const ListTacheEtObjectifs = () => {
                                     <VisibilityIcon />
                                     </IconButton>
                                 </Link>
+                                <Link href={`/plan_travail/${id!}/tachesEtObjectifs/${row.id!}/edit`}>
                                 <IconButton
                                     color="primary"
                                     aria-label="Modifier"
@@ -295,6 +300,7 @@ const ListTacheEtObjectifs = () => {
                                 >
                                     <EditIcon />
                                 </IconButton>
+                                </Link>
                                 <IconButton
                                     color="warning"
                                     aria-label="Supprimer"

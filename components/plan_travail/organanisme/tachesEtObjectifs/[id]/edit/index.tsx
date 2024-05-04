@@ -2,22 +2,23 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import AddNewTacheCle from "../../add/AddNewTacheEtObjectifs";
 import { useAppDispatch } from "../../../../../../hooks/reduxHooks";
-import { editTacheCle } from "../../../../../../redux/features/tachesEtObjectifs";
+import { editTacheEtObjectifs, getTacheEtObjectifs } from "../../../../../../redux/features/tachesEtObjectifs";
+import AddNewTacheEtObjectifs from "../../add/AddNewTacheEtObjectifs";
 
 const EditTacheCle = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     useEffect(() => {
-        if (router.query.id) {
-            getTacheCle(router.query.id as string);
+        if (router.query.idT) {
+            getTacheCle(router.query.idT as string);
         }
     }, [router.query]);
 
     const getTacheCle = async (id: string) => {
-        await dispatch(editTacheCle({ id }));
+        await dispatch(editTacheEtObjectifs({ id }));
     };
     return (
-        <AddNewTacheCle></AddNewTacheCle>
+        <AddNewTacheEtObjectifs></AddNewTacheEtObjectifs>
     );
 }
 

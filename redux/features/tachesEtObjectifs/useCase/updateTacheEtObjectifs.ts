@@ -13,9 +13,9 @@ import { TacheEtObjectifItem } from "../tacheETObjectifs.interface";
  */
 export const updateTacheEtObjectifs = createAsyncThunk(
   "tacheEtObjectifs/updateTacheCle",
-  async (data: { id: string; tacheEtObjectifs: TacheEtObjectifItem }, thunkAPI) => {
+  async (data: { idT: string; tacheEtObjectif: TacheEtObjectifItem }, thunkAPI) => {
     try {
-      const response = await axios.patch(`/suivi-evaluation/tache-cle/${data.id}`, data.tacheEtObjectifs);
+      const response = await axios.patch(`/suivi-evaluation/tache-cle/${data.idT}`, data.tacheEtObjectif);
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Mise à jour avec succès",

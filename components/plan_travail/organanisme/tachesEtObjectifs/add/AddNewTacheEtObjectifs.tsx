@@ -21,7 +21,7 @@ import { useRouter } from "next/router";
 import * as Yup from "yup";
 import useFetchEmploys from "../../../../GrantsEnCours/hooks/getResponsable";
 import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
-import { updateTacheEtObjectifs, createTacheEtObjectifs } from "../../../../../redux/features/tachesEtObjectifs";
+import { updateTacheEtObjectifs, createTacheEtObjectifs, getTacheEtObjectifsList } from "../../../../../redux/features/tachesEtObjectifs";
 import { EmployeItem } from "../../../../../redux/features/employe/employeSlice.interface";
 import useFetchProject from "../../../../GrantsEnCours/hooks/getProject";
 import OSTextField from "../../../../shared/input/OSTextField";
@@ -30,38 +30,56 @@ import { cancelEdit } from "../../../../../redux/features/tachesEtObjectifs/tach
 import { getStatuslist } from "../../../../../redux/features/status";
 import OSDatePicker from "../../../../shared/date/OSDatePicker";
 import NewTacheEtObjectifs from "./NewTacheEtObjectifs";
-import { createObejectifAnnuel } from "../../../../../redux/features/objectifAnnuels";
+import { createObejectifAnnuel, updateObjectifAnnuel } from "../../../../../redux/features/objectifAnnuels";
 
-const AddNewTacheEtObjectifs = ({selectedEmployes}: any) => {
+const AddNewTacheEtObjectifs = () => {
     const router = useRouter();
     const fetchEmployes = useFetchEmploys();
     const { employees } = useAppSelector((state: any) => state.employe)
-    const { isEditing, tacheEtObjectif } = useAppSelector((state) => state.tacheEtObjectifs)
+    const { isEditing,  tacheEtObjectif } = useAppSelector((state) => state.tacheEtObjectifs)
     const dispatch = useAppDispatch();
     const [ valuesArticle, setValuesArticle ] = useState < any[]> ([])
     const [ idDelete,setIdDelete] = useState < any[]> ([])
 
-    const { id } = router.query;
+    const { idT }: any = router.query;
+    const { id }: any = router.query;
 
     React.useEffect(() => {
         fetchEmployes();
         dispatch(getStatuslist({}))
+        dispatch(getTacheEtObjectifsList({}))
     }, [router.query])
   
+    const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
+        isEditing
+            ? employees.filter((employee: any) =>
+                tacheEtObjectif?.participantsId?.includes(employee.id!)
+            )
+            : []
+    );
     const handleSubmit = async (values: any) => {
-        values.startDate = new Date(values.startDate).toISOString()
-        values.endDate = new Date(values.endDate).toISOString()
-        values.participantId = [...selectedEmployes.map((e: any) =>e.id)]
+        values.participantsId = [...selectedEmployes.map((item) => item.id)]
         console.log("valeur participant id :", values.participantId)
 
         try {
             if (isEditing) {
-                await dispatch(
-                    updateTacheEtObjectifs({
-                        id: tacheEtObjectif.id!,
-                        tacheEtObjectifs: values,
-                    })
-                )
+               const res =   await dispatch(
+                updateTacheEtObjectifs({idT, tacheEtObjectif }))
+                console.log("value article :", valuesArticle)
+                    if (valuesArticle.length > 0) {
+                        valuesArticle?.forEach((item: any, index: any) =>{
+                            console.log("idT :", item.id)
+                            const idT = item.idT
+                            if (idT) {
+                                const objectifAnnuels = {
+                                    objectiveTitle:item.objectiveTitle,
+                                    year:item.year,
+                                    taskAndObjectiveId:res.payload.id
+                                };
+                                dispatch(updateObjectifAnnuel({id, objectifAnnuels}))
+                            }
+                        })
+                    }
             } else {
                 const res = await dispatch(createTacheEtObjectifs(values));
                 if(valuesArticle.length > 0 ){
@@ -69,12 +87,13 @@ const AddNewTacheEtObjectifs = ({selectedEmployes}: any) => {
                         const newData = {
                             objectiveTitle: element.objectiveTitle,
                             year: element.year,
-                            taskAndObjectiveId: res.payload.id
+                            taskAndObjectiveId: res.payload.id!
                         };
                         dispatch(createObejectifAnnuel(newData));
                     });
                 }
             }
+            dispatch(getTacheEtObjectifsList({}));
             router.push(`/plan_travail/${id}/tachesEtObjectifs`);
         } catch (error) {
             console.log("error", error);
@@ -101,7 +120,7 @@ const AddNewTacheEtObjectifs = ({selectedEmployes}: any) => {
                                 startDate:isEditing ? new Date(tacheEtObjectif?.startDate!): new Date(),
                                 endDate: isEditing ? new Date(tacheEtObjectif?.endDate!) : new Date(),
                                 planTravaileId: id,
-                                objectiveTitle:"",
+                                // objectiveTitle:"",
                                 year:0
                             }
                 }
@@ -115,7 +134,8 @@ const AddNewTacheEtObjectifs = ({selectedEmployes}: any) => {
                     action.resetForm();
                 }}
             >
-                {(formikProps) =><NewTacheEtObjectifs setIdDelete={setIdDelete} formikProps={formikProps} valuesArticle={valuesArticle} setValuesArticle={setValuesArticle} />}
+                {(formikProps) =><NewTacheEtObjectifs setIdDelete={setIdDelete} formikProps={formikProps} valuesArticle={valuesArticle} 
+                setValuesArticle={setValuesArticle} selectedEmployes={selectedEmployes} setSelectedEmployes={setSelectedEmployes}/>}
             </Formik>
         </Container>
     );

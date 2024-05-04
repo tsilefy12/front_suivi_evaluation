@@ -19,8 +19,8 @@ import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import { getPlanTravail } from "../../../../../../redux/features/planTravail";
 import { SectionNavigation } from "../../ListTacheEtObjectifs";
 import useFetchTacheCle from "../../hooks/useFetchTacheEtObjectifs";
-import { getTacheCle } from "../../../../../../redux/features/tachesEtObjectifs";
 import useFetchProject from "../../../../../GrantsEnCours/hooks/getProject";
+import { getTacheEtObjectifs } from "../../../../../../redux/features/tachesEtObjectifs";
 
 const DetailTacheCles = () => {
     const router = useRouter()
@@ -28,7 +28,7 @@ const DetailTacheCles = () => {
     const { idT }: any = router.query;
     const { id }: any = router.query;
 
-    const { tacheCle } = useAppSelector((state: any) => state.tacheCle)
+    const { tacheEtObjectif } = useAppSelector((state: any) => state.tacheEtObjectifs)
     const fetchTacheCle = useFetchTacheCle();
     const fetchResponsable = useFetchEmploys();
     const { employees } = useAppSelector((state: any) => state.employe)
@@ -51,15 +51,15 @@ const DetailTacheCles = () => {
                 planTravaile: true,
             }
         };
-        dispatch(getTacheCle({ idT, args }));
+        dispatch(getTacheEtObjectifs({ idT, args }));
     };
     const listResponsable: { id: string, name: any }[] = [];
 
     employees.forEach((element: any) => {
-        let longueur: any = (tacheCle.responsable)?.length;
+        let longueur: any = (tacheEtObjectif.responsable)?.length;
         let i = 0;
         while (i < longueur) {
-            if (tacheCle.responsable![i] === element.id) {
+            if (tacheEtObjectif.responsable![i] === element.id) {
                 listResponsable.push({ id: element.surname, name: element.name })
             }
             i = i + 1
@@ -88,7 +88,7 @@ const DetailTacheCles = () => {
                  <FormLabel>
                         <span>Tache : </span>
                         <span style={{color: "black"}}>
-                            {tacheCle?.tacheCle}
+                            {tacheEtObjectif?.keyTasks}
                         </span>
                     </FormLabel>
                  </Grid>
@@ -100,12 +100,12 @@ const DetailTacheCles = () => {
                             <span style={{ color: "black" }}>Tous les projets </span>
                             <FormLabel> <b style={{ color: "black" }}>  Titre Français : </b>
                                 <span style={{ color: "black" }}>
-                                    {projectList.find((e: any) => e.id === tacheCle.projet)?.titleFr}
+                                    {projectList.find((e: any) => e.id === tacheEtObjectif.projet)?.titleFr}
                                 </span>
                             </FormLabel>
                             <FormLabel> <b style={{ color: "black" }}>  Titre Anglais  : </b>
                                 <span style={{ color: "black" }}>
-                                    {projectList.find((e: any) => e.id === tacheCle.projet)?.titleEn}
+                                    {projectList.find((e: any) => e.id === tacheEtObjectif.projet)?.titleEn}
                                 </span>
                             </FormLabel>
                         </Stack>
@@ -131,7 +131,7 @@ const DetailTacheCles = () => {
                   <Grid item xs={12} md={6}>
                     <FormLabel>
                         <span>Plan du travail : </span>
-                        <span style={{color: "black"}}>{planTravaillist.find((e: any) =>e.id === tacheCle.planTravaileId)?.description}</span>
+                        <span style={{color: "black"}}>{planTravaillist.find((e: any) =>e.id === tacheEtObjectif.planTravaileId)?.description}</span>
                     </FormLabel>
                   </Grid>
                 </Grid>

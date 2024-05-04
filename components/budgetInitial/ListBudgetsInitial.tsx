@@ -263,7 +263,7 @@ const ListBudgetInitial = () => {
                             {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
                           </TableCell>
                           <TableCell sx={{ height: "10vh", overflow: "auto", width: "300px" }} align="right">
-                          <FormControl sx={{ height: (row.budgetLineId).length <= 1 ? "auto": 70, overflow: "auto" }}>
+                          <FormControl sx={{ height: (row.ligneBudgetaire).length <= 2 ? "auto": 70, overflow: "auto" }}>
                               {
                                 (row.ligneBudgetaire).map((lb: any) => {
                                   return (

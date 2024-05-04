@@ -225,7 +225,6 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                     </FormControl>
                     <FormControl fullWidth>
                     <Autocomplete
-                        multiple
                         id="tags-standard"
                         options={grantValue != "vide" ? BudgetLineGrantList : []}
                         getOptionLabel={(option) => option.name}

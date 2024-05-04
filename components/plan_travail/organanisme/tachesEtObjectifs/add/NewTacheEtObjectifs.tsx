@@ -14,18 +14,16 @@ import useFetchEmploys from '../../../../GrantsEnCours/hooks/getResponsable';
 import { getStatuslist } from '../../../../../redux/features/status';
 import OSSelectField from '../../../../shared/select/OSSelectField';
 import OSDatePicker from '../../../../shared/date/OSDatePicker';
-import { EmployeItem } from '../../../../../redux/features/employe/employeSlice.interface';
-import AddNewTacheEtObjectifs from './AddNewTacheEtObjectifs';
 
-const NewTacheEtObjectifs = ({ formikProps, valuesArticle, setValuesArticle, setIdDelete }: { formikProps: FormikProps<any>, valuesArticle: any, setValuesArticle: any, setIdDelete: any }) => {
+const NewTacheEtObjectifs = ({ formikProps, valuesArticle, setValuesArticle, setIdDelete, selectedEmployes, setSelectedEmployes }: { formikProps: FormikProps<any>, valuesArticle: any, setValuesArticle: any, setIdDelete: any, selectedEmployes: any, setSelectedEmployes: any }) => {
     const dispatch = useAppDispatch();
     const route = useRouter();
     const [idValues, setIdValues] = useState<any>()
 
-    const { statuslist } = useAppSelector((state) => state.status)
+    const { statuslist } = useAppSelector((state: any) => state.status)
     const { employees } = useAppSelector((state: any) => state.employe)
 
-    const { isEditing, tacheEtObjectif } = useAppSelector((state) => state.tacheEtObjectifs);
+    const { isEditing } = useAppSelector((state: any) => state.tacheEtObjectifs);
     const fetchEmployes = useFetchEmploys();
 
     const fetchUtilsData = () => {
@@ -37,13 +35,6 @@ const NewTacheEtObjectifs = ({ formikProps, valuesArticle, setValuesArticle, set
         fetchUtilsData();
     }, []);
 
-    const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
-        isEditing
-            ? employees.filter((employee: any) =>
-                tacheEtObjectif?.participantsId?.includes(employee.id!)
-            )
-            : []
-    );
     return (
         <Form>
             <NavigationContainer>
@@ -265,6 +256,7 @@ const NewTacheEtObjectifs = ({ formikProps, valuesArticle, setValuesArticle, set
                                                     onClick={() => {
                                                         formikProps.setFieldValue('objectiveTitle', item.objectiveTitle);
                                                         formikProps.setFieldValue('year', item.year);
+                                                        formikProps.setFieldValue('taskAndObjectiveId', item.taskAndObjectiveId);
                                                         setIdValues(item.id)
                                                     }}
                                                 >
@@ -386,7 +378,7 @@ const NewTacheEtObjectifs = ({ formikProps, valuesArticle, setValuesArticle, set
                     </TableContainer>
                 </FormContainer>
             </Box>
-            <AddNewTacheEtObjectifs selectedEmployes={selectedEmployes} />
+            {/* <AddNewTacheEtObjectifs selectedEmployes={selectedEmployes} /> */}
         </Form>
     )
 }

@@ -38,14 +38,14 @@ import useFetchCurrency from "../hooks/getCurrency";
 
 const AddNewGrantsEnCours = () => {
   const router = useRouter();
-  const { isEditing, grantEncour, grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const { isEditing, grantEncour, grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
   const dispatch = useAppDispatch();
   const fetchBank = useFetchBank();
   const fetchEmploys = useFetchEmploys();
-  const { bankList } = useAppSelector((state) => state.bank);
-  const { employees } = useAppSelector((state) => state.employe)
+  const { bankList } = useAppSelector((state: any) => state.bank);
+  const { employees } = useAppSelector((state: any) => state.employe)
   const fetchPostAnalytique = useFetchPostAnalytique();
-  const { postAnalytiqueList } = useAppSelector((state) => state.postAnalytique);
+  const { postAnalytiqueList } = useAppSelector((state: any) => state.postAnalytique);
   const fetcProject = useFetchProject();
   const fetchCurreny = useFetchCurrency();
   const { currencylist } = useAppSelector((state: any) => state.currency);
