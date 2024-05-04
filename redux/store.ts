@@ -49,6 +49,10 @@ import { programmeRapportSlice } from "./features/programmeRapport/programmeRapp
 import { autreInfoRaportSlice } from "./features/autreInfoRapport/autreInfoRapportSlice";
 import { rapportDepenseSlice } from "./features/rapportDepense/rapportDepenseSlice";
 import { resumeDepensePrevueSlice } from "./features/resumeDepensePrevue/resumeDepensePrevueSlice";
+import { calculPileRapportSlice } from "./features/calculPileRapport/calculPileRapportSlice";
+import { calculCarburantRapportSlice } from "./features/calculCarburantRapport/calculCarburantRapportSlice";
+import { siteSlice } from "./features/site/siteSlice";
+import { besoinVehiculeRapportSlice } from "./features/besoinVehiculeRapport/besoinVehiculeRapportSlice";
 
 
 export const store = configureStore({
@@ -103,6 +107,10 @@ export const store = configureStore({
     autreInfoRapport: autreInfoRaportSlice.reducer,
     rapportDepense: rapportDepenseSlice.reducer,
     resumeDepensePrevue: resumeDepensePrevueSlice.reducer,
+    calculPileRapport: calculPileRapportSlice.reducer,
+    calculCarburantRapport: calculCarburantRapportSlice.reducer,
+    site: siteSlice.reducer,
+    besoinVehiculeRapport: besoinVehiculeRapportSlice.reducer,
   },
 });
 

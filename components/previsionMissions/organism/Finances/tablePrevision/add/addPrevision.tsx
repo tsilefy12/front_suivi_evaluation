@@ -228,7 +228,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                         id="tags-standard"
                         options={grantValue != "vide" ? BudgetLineGrantList : []}
                         getOptionLabel={(option) => option.name}
-                        value={grantValue != "vide" ? selectedBudgetLine : []}
+                        value={selectedBudgetLine}
                         onChange={(event, newValue) => {
                           setSelectedBudgetLine(newValue!);
                         }}

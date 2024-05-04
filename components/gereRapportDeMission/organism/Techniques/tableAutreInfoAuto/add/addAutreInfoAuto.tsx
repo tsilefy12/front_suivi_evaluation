@@ -73,6 +73,8 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
             return (dispatch(createAutreInfoRapport(values)), useFetchAutreInfoRapport(), handleClose());
           }
       }
+      fetchAutreInfoRapport()
+      handleClose();
     
     } catch (error) {
       console.log("error", error);

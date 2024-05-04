@@ -9,34 +9,73 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ListRapportDepenses from "./tableRapportDesDepenses/ListRapportDepense";
 import ListResumeDepense from "./tableResumeDepense/ListResumeDepense";
+import ListCalculDesPilesRapport from "./tableCalculDesPile/ListCalculDesPile";
+import ListCalculCarburantRapport from "./tableCalculCarburant/ListCalculCarburant";
+import ListBesoinVehiculeRapport from "./tableBesoinVéhicules/ListBesoinVehicule";
 
 const Finances = () => {
   return (
     <Box>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Rapport des dépenses</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ListRapportDepenses />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Résumé de dépense prévus</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ListResumeDepense />
-            </AccordionDetails>
-          </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Rapport des dépenses</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListRapportDepenses />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Résumé de dépense prévus</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListResumeDepense />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Calcul des Piles</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListCalculDesPilesRapport />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Besoin en Véhicules</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListBesoinVehiculeRapport />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Calcul des Carburants</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListCalculCarburantRapport />
+        </AccordionDetails>
+      </Accordion>
     </Box>
   );
 };

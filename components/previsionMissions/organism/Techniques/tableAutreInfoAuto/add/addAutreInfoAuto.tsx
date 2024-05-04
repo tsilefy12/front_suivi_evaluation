@@ -45,6 +45,7 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
   }, []);
 
   const handleSubmit = async (values: any) => {
+    values.missionId = id!;
     try {
       if (isEditing) {
         await dispatch(
@@ -56,7 +57,8 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
       } else {
         await dispatch(createVehicle(values));
       }
-      router.push("/");
+      fetchVehicleList()
+      handleClose()
     } catch (error) {
       console.log("error", error);
     }
