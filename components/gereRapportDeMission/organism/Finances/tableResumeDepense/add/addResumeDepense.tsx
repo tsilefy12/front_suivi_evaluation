@@ -34,6 +34,7 @@ import useFetchGrants from "../../../../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "../../../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
 import { createResumeDepensePrevue, updateResumeDepensePrevue } from "../../../../../../redux/features/resumeDepensePrevue";
 import OSTextField from "../../../../../shared/input/OSTextField";
+import OSSelectField from "../../../../../shared/select/OSSelectField";
 
 const AddResumeDepense = ({ handleClose }: any) => {
   const [page, setPage] = React.useState(0);
@@ -82,32 +83,19 @@ const AddResumeDepense = ({ handleClose }: any) => {
           grantInBudgteLine.push(b.id);
           if (!uniqueValues.has(b.id)) {
             uniqueValues.add(b.id);
-            BudgetLineGrantList.push({ id: b.id, name: b.code });
+            return   BudgetLineGrantList.push({ id: b.id, name: b.code });
           }
         } else {
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-            BudgetLineGrantList.push({ id: "", name: "" });
-            selectedBudgetLine = [];
-          }
+          return [];
         }
       });
     }
   });
 
-  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
-    isEditing
-      ? budgetLineList.filter((pg: any) =>
-        resumeDepensePrevue?.ligneBudgetaire?.includes(pg.id!)
-      )
-      : BudgetLineGrantList
-  );
-console.log("grant value :", grantValue)
+  // console.log("Budget line value :", BudgetLineGrantList)
   //ajout 
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
-    values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) => bl.id)];
-    console.log("ligne budgetaire :", values.ligneBudgetaire)
     values.grant = grantValue;
     try {
       if (isEditing) {
@@ -178,25 +166,18 @@ console.log("grant value :", grantValue)
                       </OSTextField>
                     </FormControl>
                     <FormControl fullWidth>
-                      <Autocomplete
-                        multiple
-                        id="tags-standard"
-                        options={grantValue != "vide" ? BudgetLineGrantList : []}
-                        getOptionLabel={(option: any) => option.name}
-                        value={selectedBudgetLine}
-                        onChange={(event, newValue) => {
-                          setSelectedBudgetLine(newValue);
-                        }}
-                        isOptionEqualToValue={(option, value) => option.id === value.id}
-                        renderInput={(params: any) => (
-                          <TextField
-                            {...params}
-                            id="outlined-basic"
-                            label="Sélectionnez ligne budgetaire"
-                            variant="outlined"
-                          />
-                        )}
-                      />
+                      <OSSelectField
+                        fullWidth
+                        select
+                        id="outlined-basic"
+                        label="Budget Line"
+                        variant="outlined"
+                        name="grant"
+                        options={BudgetLineGrantList}
+                        dataKey={["name"]}
+                        valueKey="id"
+                      >
+                      </OSSelectField>
                     </FormControl>
                     <OSTextField
                       fullWidth

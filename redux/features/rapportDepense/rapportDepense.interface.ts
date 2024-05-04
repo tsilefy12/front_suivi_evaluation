@@ -4,7 +4,7 @@ export interface RapportDepenseItem {
     libelle?: string;
     montant?: number;
     grant?: number;
-    ligneBudgetaire?: number[];
+    ligneBudgetaire?: number;
     missionId?: string;
 }
 export interface RapportDepenseInitialState {

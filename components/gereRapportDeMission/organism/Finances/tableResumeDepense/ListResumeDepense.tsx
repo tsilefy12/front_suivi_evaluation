@@ -160,6 +160,13 @@ const ListResumeDepense = () => {
     await dispatch(editResumeDepensePrevue({ id }));
     handleClickOpen();
   };
+  // let total: any = useMemo(() => {
+  //   let totalBudget: any = 0;
+  //   resumeDepensePrevueList.forEach((item: any) => {
+  //     totalBudget += item.montant;
+  //   })
+  //   return totalBudget;
+  // }, [resumeDepensePrevueList])
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>

@@ -8,7 +8,7 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -152,6 +152,14 @@ const ListRapportDepenses = () => {
     await dispatch(editRapportDepense({ id }));
     handleClickOpen();
   };
+
+  let total: any = useMemo(() => {
+    let totalBudget: any = 0;
+    rapportDepenseList.forEach((item: any) => {
+      totalBudget += item.montant;
+    })
+    return totalBudget;
+  }, [rapportDepenseList])
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -219,16 +227,16 @@ const ListRapportDepenses = () => {
                             {grantEncoursList.find((e: any) => e.id === row.grant)?.code}
                           </TableCell>
                           <TableCell align="right">
-                            <FormControl sx={{height: (row.ligneBudgetaire!).length <= 2 ? "auot" : 70, overflow: "auto"}}>
-                            {
-                              (row.ligneBudgetaire!).map((lb: any) => {
-                                return (
-                                  <Stack direction="column" spacing={2}>
-                                    {budgetLineList.find((b: any) => b.id === lb)?.code}
-                                  </Stack>
-                                )
-                              })
-                            }
+                            <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auot" : 70, overflow: "auto" }}>
+                              {
+                                (row.ligneBudgetaire!).map((lb: any) => {
+                                  return (
+                                    <Stack direction="column" spacing={2}>
+                                      {budgetLineList.find((b: any) => b.id === lb)?.code}
+                                    </Stack>
+                                  )
+                                })
+                              }
                             </FormControl>
                           </TableCell>
                           <TableCell align="right">
@@ -240,7 +248,7 @@ const ListRapportDepenses = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
-                                onClick={() =>handleClickEdit(row.id!)}
+                                onClick={() => handleClickEdit(row.id!)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -248,7 +256,7 @@ const ListRapportDepenses = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
-                                onClick={() =>handleClickDelete(row.id!)}
+                                onClick={() => handleClickDelete(row.id!)}
                               >
                                 <DeleteIcon />
                               </IconButton>
@@ -271,14 +279,14 @@ const ListRapportDepenses = () => {
             </TableContainer>
             <Footer>
               <Typography variant="body2" align="right">
-                TOTAL BUDGET : 30000
+                TOTAL BUDGET : {total} Ar
               </Typography>
               <Typography variant="body2" align="right">
                 Imprévu de mission(total budget-location et perdiem MV(10% )) :
-                10000
+              {total / 10} Ar
               </Typography>
               <Typography variant="body2" align="right">
-                TOTAL GENERAL BUDGET : 40000
+                TOTAL GENERAL BUDGET : {total} Ar
               </Typography>
             </Footer>
             <TablePagination

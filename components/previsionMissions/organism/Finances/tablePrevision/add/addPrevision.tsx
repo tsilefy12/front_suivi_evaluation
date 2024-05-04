@@ -29,7 +29,7 @@ import { cancelEdit } from "../../../../../../redux/features/programmePrevision/
 import useFetchBudgetLine from "../hooks/useFetchbudgetLine";
 
 const AddPrevisionMission = ({ handleClose }: any) => {
-  const dispatch = useAppDispatch()
+  const dispatch: any = useAppDispatch()
   const { isEditing, previsionDepense } = useAppSelector((state) => state.previsonDepense)
   const fetchPrevisionDepense = useFetchPrevisionDepenseList();
   const fetchGrant = useFetchGrants();
@@ -46,8 +46,33 @@ const AddPrevisionMission = ({ handleClose }: any) => {
     fetchBudgetLine();
   }, [router.query])
 
+  const grantInBudgteLine: any = []
+  const BudgetLineGrantList: { id: string, name: any }[] = []
+
+  //select budget line depends grant
+  const uniqueValues = new Set();
+
+  grantEncoursList.forEach((g: any) => {
+    if (grantValue !== "vide") {
+      budgetLineList.forEach((b: any) => {
+        let BudgetGrant: any = b.grantId;
+        console.log("id grant :", BudgetGrant)
+        if (grantValue === BudgetGrant) {
+          grantInBudgteLine.push(b.id);
+          if (!uniqueValues.has(b.id)) {
+            uniqueValues.add(b.id);
+           return BudgetLineGrantList.push({ id: b.id, name: b.code });
+          }
+        } else {
+          if (!uniqueValues.has(b.id)) {
+            uniqueValues.add(b.id);
+            return  [];
+          }
+        }
+      });
+    }
+  });
   const handleSubmit = async (values: any) => {
-    values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) => bl.id)];
     values.grant = grantValue;
     try {
       if (isEditing) {
@@ -66,42 +91,6 @@ const AddPrevisionMission = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-
-  const grantInBudgteLine: any = []
-  const BudgetLineGrantList: { id: string, name: any }[] = []
-
-  //select budget line depends grant
-  const uniqueValues = new Set();
-
-  grantEncoursList.forEach((g: any) => {
-    if (grantValue !== "vide") {
-      budgetLineList.forEach((b: any) => {
-        let BudgetGrant: any = b.grantId;
-        console.log("id grant :", BudgetGrant)
-        if (grantValue === BudgetGrant) {
-          grantInBudgteLine.push(b.id);
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-            BudgetLineGrantList.push({ id: b.id, name: b.code });
-          }
-        } else {
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-            BudgetLineGrantList.push({ id: "", name: "" });
-            selectedBudgetLine = [];
-          }
-        }
-      });
-    }
-  });
-
-  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
-    isEditing
-      ? budgetLineList.filter((pg: any) =>
-        Array.isArray(previsionDepense?.ligneBudgetaire) && previsionDepense?.ligneBudgetaire?.includes(pg.id)
-      )
-      : BudgetLineGrantList
-  );
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -224,24 +213,18 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                       </OSTextField>
                     </FormControl>
                     <FormControl fullWidth>
-                    <Autocomplete
-                        id="tags-standard"
-                        options={grantValue != "vide" ? BudgetLineGrantList : []}
-                        getOptionLabel={(option) => option.name}
-                        value={selectedBudgetLine}
-                        onChange={(event, newValue) => {
-                          setSelectedBudgetLine(newValue!);
-                        }}
-                        isOptionEqualToValue={(option, value) => option.id === value.id}
-                        renderInput={(params: any) => (
-                          <TextField
-                            {...params}
-                            id="outlined-basic"
-                            label="Sélectionnez ligne budgetaire"
-                            variant="outlined"
-                          />
-                        )}
-                      />
+                    <OSSelectField
+                        fullWidth
+                        select
+                        id="outlined-basic"
+                        label="Budget Line"
+                        variant="outlined"
+                        name="grant"
+                        options={BudgetLineGrantList}
+                        dataKey={["name"]}
+                        valueKey="id"
+                      >
+                      </OSSelectField>
                     </FormControl>
                     <OSTextField
                       fullWidth

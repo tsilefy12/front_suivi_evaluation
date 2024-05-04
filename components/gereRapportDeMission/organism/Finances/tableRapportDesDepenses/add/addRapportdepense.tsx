@@ -89,31 +89,21 @@ const AddRapportdepense = ({ handleClose }: any) => {
           grantInBudgteLine.push(b.id);
           if (!uniqueValues.has(b.id)) {
             uniqueValues.add(b.id);
-            BudgetLineGrantList.push({ id: b.id, name: b.code });
+           return  BudgetLineGrantList.push({ id: b.id, name: b.code });
           }
         } else {
           if (!uniqueValues.has(b.id)) {
             uniqueValues.add(b.id);
-            BudgetLineGrantList.push({ id: "", name: "" });
-            selectedBudgetLine = [];
+           return [];
           }
         }
       });
     }
   });
 
-  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
-    isEditing
-      ? budgetLineList.filter((pg: any) =>
-        rapportDepense?.ligneBudgetaire?.includes(pg.id!)
-      )
-      : BudgetLineGrantList
-  );
-
   //ajout 
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
-    values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) => bl.id)];
     values.grant = grantValue;
     try {
       if (isEditing) {
@@ -208,25 +198,18 @@ const AddRapportdepense = ({ handleClose }: any) => {
                             ))
                           }
                         </OSTextField>
-                        <Autocomplete
-                          multiple
-                          id="tags-standard"
-                          options={grantValue != "vide" ? BudgetLineGrantList : []}
-                          getOptionLabel={(option) => option.name}
-                          value={grantValue !== "vide" ? selectedBudgetLine : []}
-                          onChange={(event, newValue) => {
-                            setSelectedBudgetLine(newValue!);
-                          }}
-                          isOptionEqualToValue={(option, value) => option.id === value.id}
-                          renderInput={(params: any) => (
-                            <TextField
-                              {...params}
-                              id="outlined-basic"
-                              label="Sélectionnez ligne budgetaire"
-                              variant="outlined"
-                            />
-                          )}
-                        />
+                       <OSSelectField 
+                          fullWidth
+                          select
+                          id="outlined-basic"
+                          label="Budget Line"
+                          variant="outlined"
+                          name="grant"
+                          options={BudgetLineGrantList}
+                          dataKey={["name"]}
+                          valueKey="id"
+                       >
+                       </OSSelectField>
                       </Stack>
                     </FormControl>
                     <Stack flexDirection="row">
