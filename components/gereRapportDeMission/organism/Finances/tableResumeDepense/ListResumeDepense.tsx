@@ -160,13 +160,7 @@ const ListResumeDepense = () => {
     await dispatch(editResumeDepensePrevue({ id }));
     handleClickOpen();
   };
-  // let total: any = useMemo(() => {
-  //   let totalBudget: any = 0;
-  //   resumeDepensePrevueList.forEach((item: any) => {
-  //     totalBudget += item.montant;
-  //   })
-  //   return totalBudget;
-  // }, [resumeDepensePrevueList])
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -226,7 +220,8 @@ const ListResumeDepense = () => {
                             {grantEncoursList.find((e: any) => e.id === row.grant)?.code}
                           </TableCell>
                           <TableCell align="right">
-                            <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auot" : 70, overflow: "auto" }}>
+                          {budgetLineList.find((e: any) =>e.id === row.ligneBudgetaire)?.code}
+                            {/* <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auot" : 70, overflow: "auto" }}>
                               {
                                  Array.isArray(row.ligneBudgetaire) && (row.ligneBudgetaire).map((lb: any) => {
                                   return (
@@ -236,7 +231,7 @@ const ListResumeDepense = () => {
                                   )
                                 })
                               }
-                            </FormControl>
+                            </FormControl> */}
                           </TableCell>
                           <TableCell align="right">{row.depensePrevue}</TableCell>
                           <TableCell align="right">{row.budgetDepense}</TableCell>

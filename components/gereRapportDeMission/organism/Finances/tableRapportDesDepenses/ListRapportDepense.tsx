@@ -227,7 +227,8 @@ const ListRapportDepenses = () => {
                             {grantEncoursList.find((e: any) => e.id === row.grant)?.code}
                           </TableCell>
                           <TableCell align="right">
-                            <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auot" : 70, overflow: "auto" }}>
+                          {budgetLineList.find((e: any) =>e.id === row.ligneBudgetaire)?.code}
+                            {/* <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auot" : 70, overflow: "auto" }}>
                               {
                                 (row.ligneBudgetaire!).map((lb: any) => {
                                   return (
@@ -237,7 +238,7 @@ const ListRapportDepenses = () => {
                                   )
                                 })
                               }
-                            </FormControl>
+                            </FormControl> */}
                           </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer

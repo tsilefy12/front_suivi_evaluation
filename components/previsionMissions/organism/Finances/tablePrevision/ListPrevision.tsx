@@ -201,17 +201,7 @@ const ListPrevision = () => {
                               {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
                             </TableCell>
                             <TableCell align="center">
-                              <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auto" : 70, overflow: "auto" }}>
-                                {
-                                  (row.ligneBudgetaire!).map((lb: any) => {
-                                    return (
-                                      <Stack direction="column" spacing={2} height={25} overflow="auto">
-                                        {budgetLineList.find((e: any) => e.id === lb)?.code}
-                                      </Stack>
-                                    )
-                                  })
-                                }
-                              </FormControl>
+                             {budgetLineList.find((e: any) =>e.id === row.ligneBudgetaire)?.code}
                             </TableCell>
                             <TableCell align="right">
                               <BtnActionContainer
