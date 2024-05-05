@@ -95,16 +95,19 @@ const AddLieux = ({ handleClose }: any) => {
                         id="outlined-basic"
                         label="Fokontany"
                         name="village"
+                        inputProps={{ autoComplete: "off" }}
                       />
                       <OSTextField
                         id="outlined-basic"
                         label="Commune"
                         name="commune"
+                        inputProps={{ autoComplete: "off" }}
                       />
                       <OSTextField
                         id="outlined-basic"
                         label="Disctrict"
                         name="district"
+                        inputProps={{ autoComplete: "off" }}
                       />
                     </FormContainer>
                   </DialogContent>

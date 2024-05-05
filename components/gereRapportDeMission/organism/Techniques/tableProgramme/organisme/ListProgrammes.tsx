@@ -101,6 +101,7 @@ const ListProgrammes = () => {
                     <TableCell>Date de début</TableCell>
                     <TableCell align="left">Date fin</TableCell>
                     <TableCell align="left">Activités prévues</TableCell>
+                    <TableCell align="left">Activités réalisées</TableCell>
                     <TableCell align="left">Livrables</TableCell>
                     <TableCell align="left">Responsable</TableCell>
                   </TableRow>
@@ -118,7 +119,10 @@ const ListProgrammes = () => {
                         <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {activiteRapportlist.find((e: any) =>e.id === row.activitePrevueR)?.activite}
+                        {plannedActivityList.find((e: any) =>e.id === row.activitePrevueR)?.description}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.activiteRealise}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {livrableRapportlist.find((e: any) =>e.id===row.livrableR).livrablee}

@@ -124,13 +124,7 @@ const ListPrevision = () => {
 
   previsionDepenselist.forEach((b: any) => {
     if (getGrantId !== null && getGrantId === b.grant) {
-      const ligneBudgetaireIds = b.ligneBudgetaire || [];
-      ligneBudgetaireIds.forEach((id: any) => {
-        const code = budgetLineList.find((e: any) => e.id === id)?.code;
-        if (code) {
-          listLigne.push({ id: ligneBudgetaireIds.map((lId: any) => lId), name: code });
-        }
-      });
+      return listLigne.push({id: b.id, name: budgetLineList.find((e: any) =>e.id===b.ligneBudgetaire)?.code})
     } else {
       listLigne.push({ id: "", name: "" })
     }
@@ -145,7 +139,7 @@ const ListPrevision = () => {
       return listLigne.length > 0 ? listLigne : [];
     }
   });
-  console.log(" id :", selectedBudgetLine)
+  // console.log(" id :", selectedBudgetLine)
   //get imprevue 
   let getAmountBudget = ""
 
@@ -154,7 +148,7 @@ const ListPrevision = () => {
       getAmountBudget = element.amount
     }
   });
-  console.log("vola :", getAmountBudget)
+  // console.log("vola :", getAmountBudget)
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>

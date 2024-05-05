@@ -42,8 +42,8 @@ const AddlivrableRapport = ({ handleClose }: any) => {
       } else {
         dispatch(createLivrableRapport(values));
       }
-      handleClose();
       fetchlivrableRapport();
+      handleClose();
     } catch (error) {
       console.log("error", error);
     }
@@ -81,6 +81,7 @@ const AddlivrableRapport = ({ handleClose }: any) => {
                     label="Livrable de rapport"
                     variant="outlined"
                     name="livrablee"
+                    inputProps={{ autoComplete: "off"}}
                   />
                 </FormContainer>
               </DialogContent>

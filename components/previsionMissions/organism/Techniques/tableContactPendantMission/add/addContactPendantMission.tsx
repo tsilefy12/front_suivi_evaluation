@@ -96,27 +96,32 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                           id="outlined-basic"
                           label="Nom"
                           name="lastNameContact"
+                          inputProps={{ autoComplete: "off" }}
                         />
                         <OSTextField
                           id="outlined-basic"
                           label="Prenom"
                           name="firstNameContact"
+                          inputProps={{ autoComplete: "off" }}
                         />
                       </CustomStack>
                       <OSTextField
                         id="outlined-basic"
                         label="Lieu et institution"
                         name="locationContact"
+                        inputProps={{ autoComplete: "off" }}
                       />
                       <OSTextField
                         id="outlined-basic"
                         label="Numéro"
                         name="numberContact"
+                        inputProps={{ autoComplete: "off" }}
                       />
                       <OSTextField
                         id="outlined-basic"
                         label="Remarques"
                         name="noteContact"
+                        inputProps={{ autoComplete: "off" }}
                       />
                     </FormContainer>
                   </DialogContent>

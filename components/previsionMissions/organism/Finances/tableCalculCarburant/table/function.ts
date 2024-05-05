@@ -6,7 +6,9 @@ export function createData(
   type: string,
   distance: string,
   nb: string,
-  distanceTotal: string
+  distanceTotal: string,
+  consommationKilo: string,
+  totalCarburant: string
 ): Data {
   return {
     trajet,
@@ -15,6 +17,8 @@ export function createData(
     distance,
     nb,
     distanceTotal,
+    consommationKilo,
+    totalCarburant
   };
 }
 

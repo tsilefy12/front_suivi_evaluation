@@ -34,7 +34,6 @@ const AddResultatAttendu = ({ handleClose }: any) => {
   const fetchRapport = useFetchResultatRapport();
   const { id }: any = router.query;
   const [getUtiliser, setGetUtiliser]: any = React.useState("")
-  const [getId, setGetId]: any = React.useState("");
   const { exceptedResultList } = useAppSelector(
     (state: any) => state.exceptedResult
   );
@@ -45,6 +44,9 @@ const AddResultatAttendu = ({ handleClose }: any) => {
     fetchExceptedResultListe();
   }, [router.query])
 
+  const ClikUtiliser = (valeur: any) => {
+    setGetUtiliser(valeur);
+  }
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
     try {
@@ -57,7 +59,8 @@ const AddResultatAttendu = ({ handleClose }: any) => {
         );
       } else {
         if (getUtiliser !== "") {
-          values.resultat = getId;
+          values.missionId = id!;
+          values.resultat = getUtiliser;
           return (await dispatch(createResultatAttendu(values)),
             handleClose()
           );
@@ -74,12 +77,7 @@ const AddResultatAttendu = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-  const ClikUtiliser = (id: any, valeur: any) => {
-    if (!isEditing) {
-      setGetUtiliser(valeur);
-      setGetId(id)
-    }
-  }
+
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -111,7 +109,7 @@ const AddResultatAttendu = ({ handleClose }: any) => {
                       variant="outlined"
                       name="resultat"
                       value={getUtiliser != "" ? getUtiliser : formikProps.values.resultat}
-                      disabled={!!exceptedResultList.find((e: any) => e.id===formikProps.values.resultat && isEditing)}
+                      disabled={!!exceptedResultList.find((e: any) => e.description === formikProps.values.resultat && isEditing)}
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
@@ -120,56 +118,56 @@ const AddResultatAttendu = ({ handleClose }: any) => {
                         vous pouvez les réutiliser pour les rapports
                       </Typography>
                     </Stack>
-                    <FormContainer sx={{height: 200, overflow: "auto"}}>
-                    <Table sx={{ minWidth: 500 }} aria-label="simple table">
-                      {exceptedResultList.map((item: ExceptedResultItem, index: any) => (
-                        <TableRow
-                          key={index}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {item.description}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Button
-                              color="primary"
-                              startIcon={<ContentCopyIcon />}
-                              onClick={() => ClikUtiliser(item.id, item.description)}
-                              disabled = {isEditing}
+                    <FormContainer sx={{ height: 200, overflow: "auto" }}>
+                      <Table sx={{ minWidth: 500 }} aria-label="simple table">
+                        {exceptedResultList.map((item: ExceptedResultItem, index: any) => (
+                          <TableRow
+                            key={index}
+                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {item.description}
+                            </TableCell>
+                            <TableCell align="right">
+                              <Button
+                                color="primary"
+                                startIcon={<ContentCopyIcon />}
+                                onClick={() => ClikUtiliser(item.description)}
+                                disabled={isEditing}
                               >
-                            Utiliser
-                          </Button>
-                        </TableCell>
-                        </TableRow>
-                      ))}
-                  </Table>
+                                Utiliser
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </Table>
+                    </FormContainer>
                   </FormContainer>
-                </FormContainer>
-              </DialogContent>
-              <DialogActions>
-                <Button 
-                color="warning"
-                onClick={() => {
-                  formikProps.resetForm();
-                  dispatch(cancelEdit());
-                  handleClose();
-                }}
-                disabled={isEditing}
-                >
-                Annuler</Button>
-                <Button
-                  variant="contained"
-                  type="button"
-                  onClick={formikProps.submitForm}
-                >
-                  Enregistrer
-                </Button>
-              </DialogActions>
-            </SectionNavigation>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    color="warning"
+                    onClick={() => {
+                      formikProps.resetForm();
+                      dispatch(cancelEdit());
+                      handleClose();
+                    }}
+                  >
+                    Annuler</Button>
+                  <Button
+                    variant="contained"
+                    type="button"
+                    onClick={formikProps.submitForm}
+                    disabled={!!exceptedResultList.find((e: any) => e.description === formikProps.values.resultat && isEditing)}
+                  >
+                    Enregistrer
+                  </Button>
+                </DialogActions>
+              </SectionNavigation>
             </Form>
-      )
+          )
         }}
-    </Formik>
+      </Formik>
     </Container >
   );
 };

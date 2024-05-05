@@ -75,9 +75,9 @@ const AddCalculCarburant = ({ handleClose }: any) => {
               typeCarburant: isEditing ? calculCarburant?.typeCarburant : "",
               vehicule: isEditing ? calculCarburant?.vehicule : "",
               nombreTrajet: isEditing ? calculCarburant?.nombreTrajet : "",
-              distanceTotal: isEditing ? calculCarburant?.distanceTotal : "",
-              consommationKilo: isEditing ? calculCarburant?.consommationKilo : "",
-              totalCarburant: isEditing ? calculCarburant?.totalCarburant : "",
+              distanceTotal: isEditing ? calculCarburant?.distanceTotal : 0,
+              consommationKilo: isEditing ? calculCarburant?.consommationKilo : 0,
+              // totalCarburant: isEditing ? calculCarburant?.totalCarburant : "",
               missionId: isEditing ? calculCarburant?.missionId: id,
             }
         }
@@ -113,6 +113,7 @@ const AddCalculCarburant = ({ handleClose }: any) => {
                         label="Trajet"
                         variant="outlined"
                         name="trajet"
+                        inputProps={{ autoComplete: "off" }}
                       />
                       <OSTextField
                         fullWidth
@@ -121,6 +122,7 @@ const AddCalculCarburant = ({ handleClose }: any) => {
                         variant="outlined"
                         name="distance"
                         type="number"
+                        inputProps={{ autoComplete: "off", min: 0 }}
                       />
                     </CustomStack>
                     <CustomStack
@@ -159,6 +161,7 @@ const AddCalculCarburant = ({ handleClose }: any) => {
                       variant="outlined"
                       name="nombreTrajet"
                       type="number"
+                      inputProps={{ autoComplete: "off", min: 0}}
                     />
                     <OSTextField
                       fullWidth
@@ -167,6 +170,14 @@ const AddCalculCarburant = ({ handleClose }: any) => {
                       variant="outlined"
                       name="distanceTotal"
                       type="number"
+                      value={formikProps.values.distanceTotal}
+                      onChange={(event: any) =>{
+                        const newValue = parseInt(event.target.value)
+                        formikProps.setFieldValue("distanceTotal", newValue)
+                        const TotalCarburant = newValue * formikProps.values.consommationKilo
+                        formikProps.setFieldValue("totalCarburant", TotalCarburant)
+                      }}
+                      inputProps={{ autoComplete: "off", min: 0}}
                     />
                     <OSTextField
                       fullWidth
@@ -175,6 +186,14 @@ const AddCalculCarburant = ({ handleClose }: any) => {
                       variant="outlined"
                       name="consommationKilo"
                       type="number"
+                      value={formikProps.values.consommationKilo}
+                      onChange={(event: any) =>{
+                        const newValue = parseInt(event.target.value)
+                        formikProps.setFieldValue("consommationKilo", newValue)
+                        const TotalCarburant = newValue * formikProps.values.distanceTotal
+                        formikProps.setFieldValue("totalCarburant", TotalCarburant)
+                      }}
+                      inputProps={{ autoComplete: "off", min: 0}}
                     />
                     <OSTextField
                       fullWidth
@@ -183,6 +202,8 @@ const AddCalculCarburant = ({ handleClose }: any) => {
                       variant="outlined"
                       name="totalCarburant"
                       type="number"
+                      value={formikProps.values.distanceTotal * formikProps.values.consommationKilo}
+                      inputProps={{ autoComplete: "off", min: 0}}
                     />
                   </FormContainer>
                 </DialogContent>

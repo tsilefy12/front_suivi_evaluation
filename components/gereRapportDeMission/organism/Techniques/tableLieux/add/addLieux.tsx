@@ -176,13 +176,17 @@ const AddLieux = ({ handleClose }: any) => {
                     onClick={() => {
                       formikProps.resetForm();
                       dispatch(cancelEdit())
+                      handleClose()
                     }}
-                    disabled={isEditing}
                   >Annuler</Button>
                   <Button
                     variant="contained"
                     type="submit"
-                    disabled={!!missionLocationList.find((e: any) => e.district===formikProps.values.district && isEditing)}
+                    disabled={
+                    !!missionLocationList.find((e: any) => e.district===formikProps.values.district && isEditing) 
+                    &&  !!missionLocationList.find((e: any) => e.commune===formikProps.values.commune && isEditing) 
+                    && !!missionLocationList.find((e: any) => e.district===formikProps.values.district && isEditing)
+                  }
                   >
                     Enregistrer
                   </Button>

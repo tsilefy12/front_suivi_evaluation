@@ -93,6 +93,7 @@ const AddLivrable = ({ handleClose }: any) => {
                         id="outlined-basic"
                         label="Livrable"
                         name="description"
+                        inputProps={{ autoComplete: "off" }}
                       />
                     </FormContainer>
                   </DialogContent>

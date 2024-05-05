@@ -89,8 +89,9 @@ const AddObjectif = ({ handleClose }: any) => {
                     <FormContainer spacing={2} mt={2}>
                       <OSTextField
                         id="outlined-basic"
-                        label="Résultat"
+                        label="Objectif"
                         name="description"
+                        inputProps={{ autoComplete: "off" }}
                       />
                     </FormContainer>
                   </DialogContent>

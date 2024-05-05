@@ -112,8 +112,8 @@ const ListObjectif = () => {
         <Button variant="text" color="info" onClick={handleClickOpen}>
           Ajouter
         </Button>
-        <Dialog open={open} onClose={handleClose}>
-          <AddObjectif handleClose={handleClose} />
+        <Dialog open={open} onClose={handleClose} disablePortal={true}>
+          <AddObjectif handleClose={handleClose}/>
         </Dialog>
       </SectionNavigation>
     </Container>

@@ -157,6 +157,7 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                         dataKey={["vehicleType"]}
                         valueKey="id"
                         name="vehicule"
+                        inputProps={{ autoComplete: "off" }}
                       />
                     </FormControl>
                     <OSTextField
@@ -165,6 +166,7 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                       label="Trajet"
                       variant="outlined"
                       name="trajet"
+                      inputProps={{ autoComplete: "off" }}
                     />
                     <FormControl fullWidth>
                       <Autocomplete

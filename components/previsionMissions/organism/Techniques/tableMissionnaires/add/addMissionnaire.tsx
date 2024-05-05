@@ -97,11 +97,13 @@ const AddMissionnaire = ({ handleClose }: any) => {
                         id="outlined-basic"
                         label="Nom"
                         name="lastNameMissionary"
+                        inputProps={{ autoComplete: "off" }}
                       />
                       <OSTextField
                         id="outlined-basic"
                         label="Prénom"
                         name="firstNameMissionary"
+                        inputProps={{ autoComplete: "off" }}
                       />
                       <OSDatePicker
                         fullWidth
@@ -123,6 +125,7 @@ const AddMissionnaire = ({ handleClose }: any) => {
                         id="outlined-basic"
                         label="Responsable"
                         name="missionResponsabilityMissionary"
+                        inputProps={{ autoComplete: "off" }}
                       />
                     </FormContainer>
                   </DialogContent>

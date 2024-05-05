@@ -28,6 +28,7 @@ import { createAutreInfoRapport, updateAutreInfoRapport } from "../../../../../.
 import { Field, Form, Formik } from "formik";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import useFetchVehicleList from "../../../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
+import { cancelEdit } from "../../../../../../redux/features/autreInfoRapport/autreInfoRapportSlice";
 
 const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
   const router = useRouter();
@@ -36,7 +37,7 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
   const fetchAutreInfoRapport = useFetchAutreInfoRapport();
   const { autreInfoRapport, isEditing, autreInfoRapportList } = useAppSelector((state: any) => state.autreInfoRapport);
 
-  const { vehicleList } = useAppSelector((state) => state.vehicle);
+  const { vehicleList } = useAppSelector((state: any) => state.vehicle);
   const fetchVehicleListe = useFetchVehicleList();
   const [getId, setGetId]: any = React.useState("");
   const [getAssurance, setGetAssurance]: any = React.useState("")
@@ -132,6 +133,7 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                       label="Assurance"
                       variant="outlined"
                       name="assurance"
+                      inputProps={{ autoComplete: "off" }}
                       value={getId != "" ? getAssurance : formikProps.values.assurance}
                       disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
                     />
@@ -200,7 +202,7 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                           <TableCell align="left">Ceinture de securite</TableCell>
                         </TableRow>
                       </TableHead>
-                      {vehicleList.map((item) => (
+                      {vehicleList.map((item: any) => (
                         <TableRow
                           key={item.id!}
                           sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -233,10 +235,18 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
-                  <Button color="warning" disabled={isEditing}>Annuler</Button>
+                  <Button 
+                  color="warning"
+                  onClick={() => {
+                    formikProps.resetForm();
+                    dispatch(cancelEdit());
+                    handleClose();
+                  }}
+                  >Annuler</Button>
                   <Button 
                   variant="contained" 
                   type="submit"
+                  disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
                   >
                     Enregistrer
                   </Button>

@@ -91,6 +91,7 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
                         id="outlined-basic"
                         label="Activités"
                         name="description"
+                        inputProps={{ autoComplete: "off" }}
                       />
                     </FormContainer>
                   </DialogContent>

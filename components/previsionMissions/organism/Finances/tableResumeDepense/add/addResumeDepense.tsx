@@ -64,7 +64,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
         } else {
           if (!uniqueValues.has(b.id)) {
             uniqueValues.add(b.id);
-            BudgetLineGrantList.push({ id: "", name: "" });
             return [];
           }
         }
@@ -163,7 +162,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         id="outlined-basic"
                         label="Budget Line"
                         variant="outlined"
-                        name="grant"
+                        name="ligneBudgetaire"
                         options={BudgetLineGrantList}
                         dataKey={["name"]}
                         valueKey="id"
@@ -176,6 +175,8 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       label="Dépense prévue"
                       variant="outlined"
                       name="depensePrevue"
+                      type="number"
+                      inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <OSTextField
                       fullWidth
@@ -183,6 +184,8 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       label="Budget de dépense"
                       variant="outlined"
                       name="budgetDepense"
+                      type="number"
+                      inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <OSTextField
                       fullWidth
@@ -190,6 +193,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       label="Rémarque"
                       variant="outlined"
                       name="remarque"
+                      inputProps={{ autoComplete: "off" }}
                     />
                   </FormContainer>
                 </DialogContent>

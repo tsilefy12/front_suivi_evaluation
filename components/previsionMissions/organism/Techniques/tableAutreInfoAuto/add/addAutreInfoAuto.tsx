@@ -108,6 +108,7 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
                         id="outlined-basic"
                         label="Assurance"
                         name="insuranceVehicle"
+                        inputProps={{ autoComplete: "off" }}
                       />
                       <FormControlLabel
                         control={<Switch defaultChecked={formikProps.values.technicalVisitVehicle=="OUI"} />}

@@ -59,26 +59,28 @@ const AddContactPendantMission = ({ handleClose }: any) => {
           })
         );
       } else {
-         if (getId!="") {
+        if (getId != "") {
           values.missionId = id!;
           values.nomPrenom = getNom;
           values.lieuInstitution = getLieu;
           values.numero = getNumero;
           values.remarque = getNote;
 
-          return  (await dispatch(createMissionRapport(values)), fetchContactMissionRapport(),
+          return (await dispatch(createMissionRapport(values)), fetchContactMissionRapport(),
+            handleClose());
+        }
+        return (await dispatch(createMissionRapport(values)), fetchContactMissionRapport(),
           handleClose());
-         }
-         return  (await dispatch(createMissionRapport(values)), fetchContactMissionRapport(),
-         handleClose());
       }
+      fetchContactMissionRapport()
+      handleClose()
     } catch (error) {
       console.log("error", error);
     }
   };
 
-  const ClickHandler = ((id: any, nom: any, lieu: any, num: any, note: any) =>{
-        setGetId(id); setGetNom(nom); setGetLieu(lieu); setGetNumero(num); setGetNote(note);
+  const ClickHandler = ((id: any, nom: any, lieu: any, num: any, note: any) => {
+    setGetId(id); setGetNom(nom); setGetLieu(lieu); setGetNumero(num); setGetNote(note);
   })
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
@@ -122,8 +124,9 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       variant="outlined"
                       name="nomPrenom"
                       type="text"
+                      inputProps={{ autoComplete: "off" }}
                       value={getId != "" ? getNom : formikProps.values.nomPrenom}
-                      disabled={!!contactList.find((e: any) => (e.firstNameContact + " " +e.lastNameContact) === formikProps.values.nomPrenom && isEditing)}
+                      disabled={!!contactList.find((e: any) => (e.firstNameContact + " " + e.lastNameContact) === formikProps.values.nomPrenom && isEditing)}
                     />
                     <OSTextField
                       fullWidth
@@ -132,6 +135,7 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       variant="outlined"
                       name="lieuInstitution"
                       type="text"
+                      inputProps={{ autoComplete: "off" }}
                       value={getId != "" ? getLieu : formikProps.values.lieuInstitution}
                       disabled={!!contactList.find((e: any) => e.locationContact === formikProps.values.lieuInstitution && isEditing)}
                     />
@@ -142,6 +146,7 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       variant="outlined"
                       name="numero"
                       type="text"
+                      inputProps={{ autoComplete: "off" }}
                       value={getId != "" ? getNumero : formikProps.values.numero}
                       disabled={!!contactList.find((e: any) => e.numberContact === formikProps.values.numero && isEditing)}
                     />
@@ -152,6 +157,7 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       variant="outlined"
                       name="remarque"
                       type="text"
+                      inputProps={{ autoComplete: "off" }}
                       value={getId != "" ? getNote : formikProps.values.remarque}
                       disabled={!!contactList.find((e: any) => e.noteContact === formikProps.values.remarque && isEditing)}
                     />
@@ -186,19 +192,19 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                             {item.numberContact}
                           </TableCell>
                           <TableCell component="th" scope="row">
-                          {item.noteContact}
+                            {item.noteContact}
                           </TableCell>
                           <TableCell align="right">
-                            <Button 
-                            color="primary" 
-                            startIcon={<ContentCopyIcon />}
-                            onClick={() =>ClickHandler(
-                              item.id, (item.firstNameContact +" " +item.lastNameContact),
-                              item.locationContact, 
-                              item.numberContact,
-                              item.noteContact
-                            )}
-                            disabled={isEditing}
+                            <Button
+                              color="primary"
+                              startIcon={<ContentCopyIcon />}
+                              onClick={() => ClickHandler(
+                                item.id, (item.firstNameContact + " " + item.lastNameContact),
+                                item.locationContact,
+                                item.numberContact,
+                                item.noteContact
+                              )}
+                              disabled={isEditing}
                             >
                               Utiliser
                             </Button>
@@ -215,9 +221,10 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       formikProps.resetForm();
                       dispatch(cancelEdit())
                     }}
-                    disabled={isEditing}
                   >Annuler</Button>
-                  <Button variant="contained" type="submit">
+                  <Button
+                    variant="contained"
+                    type="submit">
                     Enregistrer
                   </Button>
                 </DialogActions>

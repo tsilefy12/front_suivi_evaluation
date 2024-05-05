@@ -138,10 +138,9 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
             handleClose()
           );
         }
-        fetchProgrammeRapport(),
-          handleClose();
       }
-
+      fetchProgrammeRapport(),
+      handleClose();
     } catch (error) {
       console.log("error", error);
     }
@@ -212,7 +211,7 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                       options={activiteRapportlist}
                       dataKey={activityRealise !== "" ? activityRealise : ["activite"]}
                       valueKey="id"
-                      name="activitePrevueR"
+                      name="activiteRealise"
                     />
                     <OSSelectField
                       fullWidth
@@ -319,8 +318,8 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                     onClick={() => {
                       formikProps.resetForm();
                       dispatch(cancelEdit());
-                    }
-                    }
+                    }}
+                    disabled={isEditing}
                   >Annuler</Button>
                   <Button variant="contained" type="submit">
                     Enregistrer

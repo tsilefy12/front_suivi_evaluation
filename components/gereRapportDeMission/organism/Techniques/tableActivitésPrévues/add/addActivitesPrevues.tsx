@@ -30,20 +30,23 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
   const router = useRouter();
   const dispatch: any = useAppDispatch();
   const fetchActivityRapport = useFetchActiviteRapport();
-  const { activiteRapport, isEditing, activiteRapportlist } = useAppSelector((state: any) =>state.activiteRapport);
+  const { activiteRapport, isEditing, activiteRapportlist } = useAppSelector((state: any) => state.activiteRapport);
   const [getUtiliser, setGetUtiliser] = React.useState("");
-  const [getId, setGetId]: any = React.useState("");
   const { id }: any = router.query;
   const { plannedActivityList } = useAppSelector(
     (state: any) => state.plannedActivity
   );
   const fetchPlannedActivityListe = useFetchPlannedActivityList();
-  
-  React.useEffect(() =>{
+
+  React.useEffect(() => {
     fetchActivityRapport();
     fetchPlannedActivityListe();
   }, [router.query])
 
+
+  const ClikUtiliser = (valeur: any) => {
+    setGetUtiliser(valeur);
+  }
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
     try {
@@ -56,6 +59,7 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
         );
       } else {
         if (getUtiliser !== "") {
+          values.missionId = id!;
           values.activite = getUtiliser;
           return (await dispatch(createActiviteRapport(values)),
             handleClose()
@@ -73,12 +77,6 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
     }
   };
 
-  const ClikUtiliser = (id: any, valeur: any) => {
-    if (!isEditing) {
-      setGetUtiliser(valeur);
-      setGetId(id)
-    }
-  }
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -109,9 +107,10 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
                       label="Activités"
                       variant="outlined"
                       name="activite"
+                      inputProps={{ autoComplete: "off" }}
                       value={getUtiliser != "" ? getUtiliser : formikProps.values.activite}
-                      disabled={!!plannedActivityList.find((e: any) => e.description===formikProps.values.activite && isEditing)}
-                      />
+                      disabled={!!plannedActivityList.find((e: any) => e.description === formikProps.values.activite && isEditing)}
+                    />
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
@@ -120,44 +119,47 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
                         les réutiliser pour les rapports
                       </Typography>
                     </Stack>
-                    <FormContainer sx={{height: 200, overflow: "auto"}}>
-                    <Table sx={{ minWidth: 500 }} aria-label="simple table">
-                      {plannedActivityList.map((item: PlannedActivityItem, index: any) => (
-                        <TableRow
-                          key={index}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {item.description}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Button 
-                            color="primary" 
-                            startIcon={<ContentCopyIcon />}
-                            onClick={() =>ClikUtiliser(item.id, item.description)}
-                            disabled = {isEditing}
-                            >
-                              Utiliser
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </Table>
+                    <FormContainer sx={{ height: 200, overflow: "auto" }}>
+                      <Table sx={{ minWidth: 500 }} aria-label="simple table">
+                        {plannedActivityList.map((item: PlannedActivityItem, index: any) => (
+                          <TableRow
+                            key={index}
+                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {item.description}
+                            </TableCell>
+                            <TableCell align="right">
+                              <Button
+                                color="primary"
+                                startIcon={<ContentCopyIcon />}
+                                onClick={() => ClikUtiliser(item.description)}
+                                disabled={isEditing}
+                              >
+                                Utiliser
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </Table>
                     </FormContainer>
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
-                  <Button 
-                  color="warning"
-                  onClick={() => {
-                    formikProps.resetForm();
-                    dispatch(cancelEdit());
-                    handleClose();
-                  }}
-                  disabled={isEditing}
+                  <Button
+                    color="warning"
+                    onClick={() => {
+                      formikProps.resetForm();
+                      dispatch(cancelEdit());
+                      handleClose();
+                    }}
                   >Annuler
                   </Button>
-                  <Button variant="contained" type="submit">
+                  <Button 
+                  variant="contained" 
+                  type="submit"
+                  disabled={!!plannedActivityList.find((e: any) => e.description === formikProps.values.activite && isEditing)}
+                  >
                     Enregistrer
                   </Button>
                 </DialogActions>

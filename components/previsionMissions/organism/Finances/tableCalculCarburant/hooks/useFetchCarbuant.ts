@@ -9,7 +9,11 @@ const useFetchCalculCarburantList = () => {
   const dispatch = useAppDispatch();
 
   return async () => {
-    let args: any = {};
+    let args: any = {
+      include:{
+        vehicle: true
+      }
+    };
     if (router.query.search) {
       args.where = {
         OR: [],

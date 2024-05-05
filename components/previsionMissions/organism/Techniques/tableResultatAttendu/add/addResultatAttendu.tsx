@@ -91,6 +91,7 @@ const AddResultatAttendu = ({ handleClose }: any) => {
                         id="outlined-basic"
                         label="Résultat"
                         name="description"
+                        inputProps={{ autoComplete: "off" }}
                       />
                     </FormContainer>
                   </DialogContent>

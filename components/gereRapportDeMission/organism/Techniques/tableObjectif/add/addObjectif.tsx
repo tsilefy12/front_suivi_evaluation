@@ -34,7 +34,6 @@ const AddObjectif = ({ handleClose }: any) => {
   const fetchObjectifRapport = useFetchObjectifRapport();
   const { id }: any = router.query;
   const [getUtiliser, setGetUtiliser]: any = React.useState("");
-  const [getId, setGetId]: any = React.useState("");
   const { missionGoalList } = useAppSelector((state: any) => state.missionGoal);
   const fetchMissionGoalList = useFetchMissionGoalListe();
 
@@ -42,6 +41,7 @@ const AddObjectif = ({ handleClose }: any) => {
     fetchObjectifRapport();
     fetchMissionGoalList();
   }, [router.query])
+
 
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
@@ -55,7 +55,7 @@ const AddObjectif = ({ handleClose }: any) => {
         );
       } else {
         if (getUtiliser !== "") {
-          values.objectif = getId;
+          values.objectif = getUtiliser;
           return (await dispatch(createObjectifRapport(values)),
             handleClose()
           );
@@ -67,16 +67,14 @@ const AddObjectif = ({ handleClose }: any) => {
       }
       fetchObjectifRapport(),
       handleClose();
+      getUtiliser("")
     } catch (error) {
       console.log("error", error);
     }
   };
-  const ClikUtiliser = ((id: any, valeur: any) => {
-    if (!isEditing) {
-      setGetUtiliser(valeur);
-      setGetId(id);
-    }
-  })
+  const ClikUtiliser = ((valeur: any) => {
+    setGetUtiliser(valeur);
+    })
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -85,7 +83,7 @@ const AddObjectif = ({ handleClose }: any) => {
           isEditing
             ? objectifRapport
             : {
-              objectif: isEditing ? objectifRapport?.objectif : "",
+              objectif: isEditing ?  objectifRapport?.objectif : "",
               missiomId: id!
             }
         }
@@ -107,8 +105,9 @@ const AddObjectif = ({ handleClose }: any) => {
                       label="Objectif"
                       variant="outlined"
                       name="objectif"
-                      value={getUtiliser != "" ? getUtiliser : formikProps.values.objectif}
-                      disabled={!!missionGoalList.find((e: any) => e.id === formikProps.values.objectif && isEditing)}
+                      inputProps={{ autoComplete: "off" }}
+                      value={(getUtiliser !== "" && !isEditing) ? getUtiliser : formikProps.values.objectif}
+                      disabled={!!missionGoalList.find((e: any) => e.description === formikProps.values.objectif && isEditing)}
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
@@ -131,7 +130,7 @@ const AddObjectif = ({ handleClose }: any) => {
                               <Button
                                 color="primary"
                                 startIcon={<ContentCopyIcon />}
-                                onClick={() => ClikUtiliser(item.id, item.description)}
+                                onClick={() => ClikUtiliser(item.description)}
                                 disabled={isEditing}
                               >
                                 Utiliser
@@ -150,7 +149,6 @@ const AddObjectif = ({ handleClose }: any) => {
                     dispatch(cancelEdit());
                     handleClose();
                   }}
-                    disabled={isEditing}
                   >
                     Annuler
                   </Button>
@@ -158,6 +156,7 @@ const AddObjectif = ({ handleClose }: any) => {
                     variant="contained"
                     type="button"
                     onClick={formikProps.submitForm}
+                    disabled={!!missionGoalList.find((e: any) => e.description === formikProps.values.objectif && isEditing)}
                   >
                     Enregistrer
                   </Button>

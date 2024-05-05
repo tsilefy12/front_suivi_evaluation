@@ -32,6 +32,7 @@ import { useRouter } from "next/router";
 import { useConfirm } from "material-ui-confirm";
 import { deleteCalculCarburant, editCalculCarburant } from "../../../../../redux/features/calculCarburant";
 import { CalculCarburantItem } from "../../../../../redux/features/calculCarburant/calculCarburant.interface";
+import useFetchVehicleList from "../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
 
 const ListCalculCarburant = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -46,9 +47,12 @@ const ListCalculCarburant = () => {
   const router = useRouter();
   const confirm = useConfirm();
   const dispatch = useAppDispatch()
+  const fetchVehicule = useFetchVehicleList();
+  const { vehicleList } = useAppSelector((state: any) =>state.vehicle)
 
   React.useEffect(() =>{
     fetchCalculCarburant();
+    fetchVehicule();
   }, [router.query])
 
   const handleClickOpen = () => {
@@ -199,12 +203,18 @@ const ListCalculCarburant = () => {
                           >
                             {row.trajet}
                           </TableCell>
-                          <TableCell align="right">{row.vehicule}</TableCell>
+                          <TableCell align="right">
+                            {vehicleList.find((e: any) =>e.id === row.vehicule)?.vehicleType}
+                          </TableCell>
                           <TableCell align="right">{row.typeCarburant}</TableCell>
-                          <TableCell align="right">{row.distance}</TableCell>
                           <TableCell align="right">{row.nombreTrajet}</TableCell>
+                          <TableCell align="right">{row.distance}</TableCell>
+                          <TableCell align="right">{row.consommationKilo}</TableCell>
                           <TableCell align="right">
                             {row.distanceTotal}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.totalCarburant} Ar
                           </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer

@@ -3,10 +3,11 @@ function createData(
   dateDebut: string,
   dateFin: string,
   activites: string,
+  activitesRealise: string,
   livrable: string,
   responsable: string
 ) {
-  return { id, dateDebut, dateFin, activites, livrable, responsable };
+  return { id, dateDebut, dateFin, activites,activitesRealise, livrable, responsable };
 }
 
 export const rows = [
@@ -16,14 +17,7 @@ export const rows = [
     "08/11/2022  ",
     "Recensement ",
     "Livrable 1",
-    "Gladis"
-  ),
-  createData(
-    "2",
-    "08/10/2021",
-    "08/11/2022  ",
-    "Descente  ",
-    "Livrable 2",
+    "Livrable 1",
     "Gladis"
   ),
 ];

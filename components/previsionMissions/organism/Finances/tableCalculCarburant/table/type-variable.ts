@@ -5,6 +5,8 @@ export default interface Data {
   distance: string;
   nb: string;
   distanceTotal: string;
+  consommationKilo: string;
+  totalCarburant: string;
 }
 
 export type Order = "asc" | "desc";

@@ -144,6 +144,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                       label="Libellé"
                       variant="outlined"
                       name="libelle"
+                      inputProps={{ autoComplete: "off" }}
                     />
                     <CustomStack
                       direction={{ xs: "column", sm: "column", md: "row" }}
@@ -156,6 +157,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                         variant="outlined"
                         name="nombre"
                         type="number"
+                        inputProps={{ autoComplete: "off", min: 0 }}
                         value={formikProps.values.nombre}
                         onChange={(event: any) => {
                           const newValue = parseInt(event.target.value);
@@ -171,6 +173,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                         variant="outlined"
                         name="pu"
                         type="number"
+                        inputProps={{ autoComplete: "off", min: 0 }}
                         value={formikProps.values.pu}
                         onChange={(event: any) => {
                           const newValue = parseInt(event.target.value);
@@ -219,7 +222,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                         id="outlined-basic"
                         label="Budget Line"
                         variant="outlined"
-                        name="grant"
+                        name="ligneBudgetaire"
                         options={BudgetLineGrantList}
                         dataKey={["name"]}
                         valueKey="id"
@@ -232,6 +235,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                       label="Reglème"
                       variant="outlined"
                       name="regleme"
+                      inputProps={{ autoComplete: "off" }}
                     />
                   </FormContainer>
                 </DialogContent>
