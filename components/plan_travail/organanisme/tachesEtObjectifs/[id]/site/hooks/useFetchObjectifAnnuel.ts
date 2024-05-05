@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
-import { useAppDispatch } from "../../../../../../hooks/reduxHooks";
-import { getMissionRapportList } from "../../../../../../redux/features/missionRapport";
+import { getObjectifAnnuelslist } from "../../../../../../../redux/features/objectifAnnuels";
+import { useAppDispatch } from "../../../../../../../hooks/reduxHooks";
 
-const useFetchMissionaryRapportList = () => {
+const useFetchObjectifsAnnuel = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -23,8 +23,8 @@ const useFetchMissionaryRapportList = () => {
           break;
       }
     }
-    await dispatch(getMissionRapportList({ args }));
+    await dispatch(getObjectifAnnuelslist({ args }));
   };
 };
 
-export default useFetchMissionaryRapportList;
+export default useFetchObjectifsAnnuel;

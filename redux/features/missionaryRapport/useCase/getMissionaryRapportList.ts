@@ -5,7 +5,8 @@ export const getMissionaryRapportList = createAsyncThunk(
   "missionary/getMissionaryList",
   async (data: { args?: any }, thunkAPI) => {
     try {
-      const response = await axios.get("/suivi-evaluation/missionaire-rapport");
+      const params = JSON.stringify(data.args)
+      const response = await axios.get("/suivi-evaluation/missionaire-rapport", {params});
       return response.data;
     } catch (error: any) {
       if (error.response) {

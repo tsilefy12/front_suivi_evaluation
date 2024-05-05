@@ -2,8 +2,8 @@ export interface MissionaryRapportItem {
   id?: string;
   lastNameMissionary?: string;
   firstNameMissionary?: string;
-  startDateMissionary?: string;
-  returnDateMissionary?: string;
+  startDateMissionary?: Date;
+  returnDateMissionary?: Date;
   missionResponsabilityMissionary?: string[];
   missionId?: string;
 }
