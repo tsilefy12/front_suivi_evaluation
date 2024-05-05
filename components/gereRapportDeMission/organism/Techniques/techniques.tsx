@@ -15,6 +15,7 @@ import ListLieux from "./tableLieux/organisme/ListLieux";
 import ListAutreInfoAuto from "./tableAutreInfoAuto/organisme/ListAutreInfoAuto";
 import ListContactPendantMission from "./tableContactPendantMission/organisme/ListContactPendantMission";
 import ListProgrammes from "./tableProgramme/organisme/ListProgrammes";
+import ListMissionnaires from "./tableMissionnaires/organisme/ListMissionnaires";
 
 const Techniques = () => {
   return (
@@ -79,7 +80,7 @@ const Techniques = () => {
               <ListLieux />
             </AccordionDetails>
           </Accordion>
-          {/* <Accordion>
+          <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -88,9 +89,9 @@ const Techniques = () => {
           <Typography>Missionnaire</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <ListLieux />
+              <ListMissionnaires />
             </AccordionDetails>
-          </Accordion> */}
+          </Accordion>
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}

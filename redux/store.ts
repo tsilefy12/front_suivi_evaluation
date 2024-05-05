@@ -53,6 +53,7 @@ import { calculPileRapportSlice } from "./features/calculPileRapport/calculPileR
 import { calculCarburantRapportSlice } from "./features/calculCarburantRapport/calculCarburantRapportSlice";
 import { siteSlice } from "./features/site/siteSlice";
 import { besoinVehiculeRapportSlice } from "./features/besoinVehiculeRapport/besoinVehiculeRapportSlice";
+import { missionaryRapportSlice } from "./features/missionaryRapport/missionaryRapportSlice";
 
 
 export const store = configureStore({
@@ -111,6 +112,7 @@ export const store = configureStore({
     calculCarburantRapport: calculCarburantRapportSlice.reducer,
     site: siteSlice.reducer,
     besoinVehiculeRapport: besoinVehiculeRapportSlice.reducer,
+    missionaryRapport: missionaryRapportSlice.reducer,
   },
 });
 

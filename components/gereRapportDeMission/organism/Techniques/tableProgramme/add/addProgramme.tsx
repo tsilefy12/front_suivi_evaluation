@@ -86,7 +86,7 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
     fetchtDeliverable();
   }, [router.query])
 
-  console.log("liste programme prev :", programmePrevisionList)
+  // console.log("liste programme prev :", programmePrevisionList)
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
     isEditing
       ? employees.filter((employee: any) =>
