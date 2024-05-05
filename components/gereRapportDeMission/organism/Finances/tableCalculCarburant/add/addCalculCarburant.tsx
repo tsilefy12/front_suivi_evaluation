@@ -76,9 +76,9 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
               typeCarburant: isEditing ? calculCarburantRapport?.typeCarburant : "",
               vehicule: isEditing ? calculCarburantRapport?.vehicule : "",
               nombreTrajet: isEditing ? calculCarburantRapport?.nombreTrajet : "",
-              distanceTotal: isEditing ? calculCarburantRapport?.distanceTotal : "",
-              consommationKilo: isEditing ? calculCarburantRapport?.consommationKilo : "",
-              totalCarburant: isEditing ? calculCarburantRapport?.totalCarburant : "",
+              distanceTotal: isEditing ? calculCarburantRapport?.distanceTotal : 0,
+              consommationKilo: isEditing ? calculCarburantRapport?.consommationKilo : 0,
+              // totalCarburant: isEditing ? calculCarburantRapport?.totalCarburant : "",
               missionId: isEditing ? calculCarburantRapport?.missionId: id,
             }
         }
@@ -114,6 +114,7 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
                         label="Trajet"
                         variant="outlined"
                         name="trajet"
+                        inputProps={{ autoComplete: "off" }}
                       />
                       <OSTextField
                         fullWidth
@@ -122,6 +123,7 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
                         variant="outlined"
                         name="distance"
                         type="number"
+                        inputProps={{ autoComplete: "off", min: 0 }}
                       />
                     </CustomStack>
                     <CustomStack
@@ -160,6 +162,7 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
                       variant="outlined"
                       name="nombreTrajet"
                       type="number"
+                      inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <OSTextField
                       fullWidth
@@ -167,7 +170,15 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
                       label="Distance total"
                       variant="outlined"
                       name="distanceTotal"
-                      type="number"
+                      type="text"
+                      value={formikProps.values.distanceTotal}
+                      onChange={(event: any) =>{
+                        const newValue = parseFloat(event.target.value)
+                        formikProps.setFieldValue("distanceTotal", newValue)
+                        const TotalCarburant = newValue * formikProps.values.consommationKilo
+                        formikProps.setFieldValue("totalCarburant", TotalCarburant)
+                      }}
+                      inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <OSTextField
                       fullWidth
@@ -176,6 +187,14 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
                       variant="outlined"
                       name="consommationKilo"
                       type="number"
+                      value={formikProps.values.consommationKilo}
+                      onChange={(event: any) =>{
+                        const newValue = parseFloat(event.target.value)
+                        formikProps.setFieldValue("consommationKilo", newValue)
+                        const TotalCarburant = newValue * formikProps.values.distanceTotal
+                        formikProps.setFieldValue("totalCarburant", TotalCarburant)
+                      }}
+                      inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <OSTextField
                       fullWidth
@@ -184,6 +203,8 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
                       variant="outlined"
                       name="totalCarburant"
                       type="number"
+                      value={formikProps.values.distanceTotal * formikProps.values.consommationKilo}
+                      inputProps={{ autoComplete: "off", min: 0 }}
                     />
                   </FormContainer>
                 </DialogContent>

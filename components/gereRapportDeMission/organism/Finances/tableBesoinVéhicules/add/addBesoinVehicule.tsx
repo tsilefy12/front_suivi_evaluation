@@ -166,6 +166,7 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
                       label="Trajet"
                       variant="outlined"
                       name="trajet"
+                      inputProps={{ autoComplete: "off" }}
                     />
                     <FormControl fullWidth>
                       <Autocomplete

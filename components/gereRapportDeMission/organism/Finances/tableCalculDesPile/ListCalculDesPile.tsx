@@ -244,7 +244,7 @@ const ListCalculDesPilesRapport = () => {
               </Table>
             </TableContainer>
             <Footer>
-              <KeyValue keyName="Total budget" value={"300000"} />
+              {/* <KeyValue keyName="Total budget" value={"300000"} /> */}
             </Footer>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}

@@ -212,6 +212,12 @@ const ListcalculCarburantRapport = () => {
                             {row.distanceTotal}
                           </TableCell>
                           <TableCell align="right">
+                            {row.consommationKilo}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.totalCarburant}
+                          </TableCell>
+                          <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"

@@ -168,6 +168,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                       label="Libellés"
                       variant="outlined"
                       name="libelle"
+                      inputProps={{ autoComplete: "off"}}
                     />
                     <OSTextField
                       fullWidth
@@ -176,6 +177,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                       variant="outlined"
                       name="montant"
                       type="number"
+                      inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <FormControl fullWidth>
                       <Stack spacing={2} direction="column">
@@ -204,7 +206,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                           id="outlined-basic"
                           label="Budget Line"
                           variant="outlined"
-                          name="grant"
+                          name="ligneBudgetaire"
                           options={BudgetLineGrantList}
                           dataKey={["name"]}
                           valueKey="id"

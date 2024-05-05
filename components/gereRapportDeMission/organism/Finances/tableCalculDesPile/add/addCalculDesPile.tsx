@@ -93,6 +93,7 @@ const { id }: any = router.query;
                         variant="outlined"
                         name="appareil"
                         type="text"
+                        inputProps={{ autoComplete: "off" }}
                       />
                       <OSTextField
                         fullWidth
@@ -101,6 +102,7 @@ const { id }: any = router.query;
                         variant="outlined"
                         name="type"
                         type="text"
+                        inputProps={{ autoComplete: "off" }}
                       />
                       <OSTextField
                         fullWidth
@@ -109,6 +111,7 @@ const { id }: any = router.query;
                         variant="outlined"
                         name="nombreAppareil"
                         type="number"
+                        inputProps={{ autoComplete: "off", min: 0 }}
                       />
                     </CustomStack>
                     <OSTextField
@@ -118,6 +121,7 @@ const { id }: any = router.query;
                       variant="outlined"
                       name="nombrePile"
                       type="number"
+                      inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <OSTextField
                       fullWidth
@@ -126,6 +130,7 @@ const { id }: any = router.query;
                       variant="outlined"
                       name="change"
                       type="text"
+                      inputProps={{ autoComplete: "off" }}
                     />
                     <OSTextField
                       fullWidth
@@ -134,6 +139,7 @@ const { id }: any = router.query;
                       variant="outlined"
                       name="nombrePack"
                       type="number"
+                      inputProps={{ autoComplete: "off", min: 0 }}
                     />
                   </FormContainer>
                 </DialogContent>

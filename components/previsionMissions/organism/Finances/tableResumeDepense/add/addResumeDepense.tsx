@@ -54,7 +54,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
     if (grantValue !== "vide") {
       budgetLineList.forEach((b: any) => {
         let BudgetGrant: any = b.grantId;
-        console.log("id grant :", BudgetGrant)
+        // console.log("id grant :", BudgetGrant)
         if (grantValue === BudgetGrant) {
           grantInBudgteLine.push(b.id);
           if (!uniqueValues.has(b.id)) {

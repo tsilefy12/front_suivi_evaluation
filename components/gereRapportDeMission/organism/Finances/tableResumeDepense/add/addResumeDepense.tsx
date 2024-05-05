@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
+  FormLabel,
   InputLabel,
   MenuItem,
   Select,
@@ -155,7 +156,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         value={(id) ?
                           budgetLineList.find((e: any) => e.id === resumeDepensePrevue?.grant)?.code : grantValue}
                         onChange={(e: any) => setGrantValue(e.target.value)}
-                        hyperText={grantValue == "vide" ? false : true}
                       >
                         <MenuItem value="vide">Select grant</MenuItem>
                         {
@@ -172,7 +172,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         id="outlined-basic"
                         label="Budget Line"
                         variant="outlined"
-                        name="grant"
+                        name="ligneBudgetaire"
                         options={BudgetLineGrantList}
                         dataKey={["name"]}
                         valueKey="id"
@@ -185,6 +185,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       label="Dépense prévue"
                       variant="outlined"
                       name="depensePrevue"
+                      inputProps={{ autoComplete: "off"}}
                     />
                     <OSTextField
                       fullWidth
@@ -192,6 +193,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       label="Budget de dépense"
                       variant="outlined"
                       name="budgetDepense"
+                      inputProps={{ autoComplete: "off"}}
                     />
                     <OSTextField
                       fullWidth
@@ -199,12 +201,13 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       label="Rémarque"
                       variant="outlined"
                       name="remarque"
+                      inputProps={{ autoComplete: "off" }}
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
-                        Voici la liste des
-                        <Lien>prevision de depense pendant la prévision</Lien>, vous
+                        <FormLabel sx={{color: "black"}}> Voici la liste des </FormLabel>
+                        <Lien> resumé de depense pendant la prévision</Lien>, vous
                         pouvez les réutiliser pour les rapports
                       </Typography>
                     </Stack>
@@ -263,13 +266,13 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       <Typography variant="body2" align="right">
                         TOTAL BUDGET : 30000
                       </Typography>
-                      <Typography variant="body2" align="right">
+                      {/* <Typography variant="body2" align="right">
                         Imprévu de mission(total budget-location et perdiem MV(10% )) :
                         10000
                       </Typography>
                       <Typography variant="body2" align="right">
                         TOTAL GENERAL BUDGET : 40000
-                      </Typography>
+                      </Typography> */}
                     </Footer>
                     <TablePagination
                       rowsPerPageOptions={[5, 10, 25]}

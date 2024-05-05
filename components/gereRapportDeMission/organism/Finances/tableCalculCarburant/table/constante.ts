@@ -38,6 +38,18 @@ export const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: "Distance total",
   },
+  {
+    id: "consommation",
+    numeric: true,
+    disablePadding: false,
+    label: "Consommation/km",
+  },
+  {
+    id: "totalCarburant",
+    numeric: true,
+    disablePadding: false,
+    label: "Total carburant"
+  },
 ];
 
 export const rows = [
@@ -47,14 +59,8 @@ export const rows = [
     "Essence",
     "1000km",
     "Antananarivo - Diego",
-    "1000km"
-  ),
-  createData(
-    "Antananarivo - Antsirabe",
-    "1010 TAB",
-    "Essence",
     "1000km",
-    "Antananarivo - Diego",
+    "1000km",
     "1000km"
   ),
 ];
