@@ -32,7 +32,7 @@ import { MissionaryRapportItem } from "../../../../../../redux/features/missiona
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import AddMissionnaireRapport from "../add/addMissionnaire";
 
-const ListMissionnaires = () => {
+const ListMissionnairesRapport = () => {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -165,7 +165,7 @@ const ListMissionnaires = () => {
   );
 };
 
-export default ListMissionnaires;
+export default ListMissionnairesRapport;
 
 const MyTableContainer = styled(Stack)(({ theme }) => ({
   borderRadius: 20,

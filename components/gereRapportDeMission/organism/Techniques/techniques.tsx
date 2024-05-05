@@ -15,7 +15,7 @@ import ListLieux from "./tableLieux/organisme/ListLieux";
 import ListAutreInfoAuto from "./tableAutreInfoAuto/organisme/ListAutreInfoAuto";
 import ListContactPendantMission from "./tableContactPendantMission/organisme/ListContactPendantMission";
 import ListProgrammes from "./tableProgramme/organisme/ListProgrammes";
-import ListMissionnaires from "./tableMissionnaires/organisme/ListMissionnaires";
+import ListMissionnairesRapport from "./tableMissionnaires/organisme/ListMissionnaires";
 
 const Techniques = () => {
   return (
@@ -89,7 +89,7 @@ const Techniques = () => {
           <Typography>Missionnaire</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <ListMissionnaires />
+              <ListMissionnairesRapport />
             </AccordionDetails>
           </Accordion>
           <Accordion>
