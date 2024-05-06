@@ -86,11 +86,11 @@ const ObjectifStrategiqueForm = ({ handleClose }: any) => {
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
                     <OSTextField
-                        fullWidth
-                        id="outlined-basic"
-                        label="Titre"
-                        variant="outlined"
-                        name="title"
+                      fullWidth
+                      id="outlined-basic"
+                      label="Titre"
+                      variant="outlined"
+                      name="title"
                     />
                       <OSTextField
                         fullWidth

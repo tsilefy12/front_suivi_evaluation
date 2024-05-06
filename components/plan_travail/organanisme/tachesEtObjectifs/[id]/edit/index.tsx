@@ -1,21 +1,28 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import AddNewTacheCle from "../../add/AddNewTacheEtObjectifs";
+
 import { useAppDispatch } from "../../../../../../hooks/reduxHooks";
-import { editTacheEtObjectifs, getTacheEtObjectifs } from "../../../../../../redux/features/tachesEtObjectifs";
+import { editTacheEtObjectifs } from "../../../../../../redux/features/tachesEtObjectifs";
 import AddNewTacheEtObjectifs from "../../add/AddNewTacheEtObjectifs";
 
 const EditTacheCle = () => {
     const router = useRouter();
+    const id = router.query.idT
+    
     const dispatch = useAppDispatch();
+ 
     useEffect(() => {
-        if (router.query.idT) {
-            getTacheCle(router.query.idT as string);
+        if (id) {
+            getTacheCle(id as string);
         }
     }, [router.query]);
 
     const getTacheCle = async (id: string) => {
-        await dispatch(editTacheEtObjectifs({ id }));
+        await dispatch(editTacheEtObjectifs({ id , args:{
+            include : {
+                objectifAnnuel : true
+            }
+        }}));
     };
     return (
         <AddNewTacheEtObjectifs></AddNewTacheEtObjectifs>
