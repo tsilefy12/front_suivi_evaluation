@@ -123,7 +123,7 @@ const ListGrantsEnCours = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {grantEncoursList.filter((g: any) =>g.id!=reliquatGrantList.grant)
+                  {grantEncoursList.filter((g: any) =>g.id !== reliquatGrantList.map((rg: any) =>rg.grant))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: GrantEncoursItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
