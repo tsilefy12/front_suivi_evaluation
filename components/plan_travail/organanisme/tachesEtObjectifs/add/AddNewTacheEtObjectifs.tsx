@@ -14,6 +14,7 @@ import { EmployeItem } from "../../../../../redux/features/employe/employeSlice.
 import { getStatuslist } from "../../../../../redux/features/status";
 import NewTacheEtObjectifs from "./NewTacheEtObjectifs";
 import { createObejectifAnnuel, deleteObjectifAnnuel, updateObjectifAnnuel } from "../../../../../redux/features/objectifAnnuels";
+import { TacheEtObjectifItem } from "../../../../../redux/features/tachesEtObjectifs/tacheETObjectifs.interface";
 
 const AddNewTacheEtObjectifs = () => {
     const router = useRouter();
@@ -48,10 +49,27 @@ const AddNewTacheEtObjectifs = () => {
             )
             : []
     );
+
+    const generateSerialNumber = (items: TacheEtObjectifItem[]): string => {
+        let maxSn = 0;
+        items.forEach(item => {
+            if (item.sn) {
+                const sn = parseInt(item.sn);
+                if (!isNaN(sn) && sn > maxSn) {
+                    maxSn = sn;
+                }
+            }
+        });
+        const newSn = (maxSn + 1).toString().padStart(4, '0'); 
+        return newSn;
+    };
+ 
     const handleSubmit = async (values: any) => {
         values.participantsId = [...selectedEmployes.map((item) => item.id)]
         console.log("valeur participant id :", values.participantId)
-
+        if (!values.sn) {
+            values.sn = generateSerialNumber([tacheEtObjectif]); 
+        }
         try {
             if (isEditing) {
                 const res =   await dispatch(updateTacheEtObjectifs({idT, tacheEtObjectif }))

@@ -7,6 +7,11 @@ import {
     FormLabel,
     FormControl,
     Stack,
+    TableRow,
+    TableHead,
+    TableCell,
+    Table,
+    TableBody,
 } from "@mui/material";
 import Link from "next/link";
 import React, { useEffect } from "react";
@@ -21,6 +26,10 @@ import { SectionNavigation } from "../../ListTacheEtObjectifs";
 import useFetchTacheCle from "../../hooks/useFetchTacheEtObjectifs";
 import useFetchProject from "../../../../../GrantsEnCours/hooks/getProject";
 import { getTacheEtObjectifs } from "../../../../../../redux/features/tachesEtObjectifs";
+import { TacheEtObjectifItem } from "../../../../../../redux/features/tachesEtObjectifs/tacheETObjectifs.interface";
+import useFetchMissionListe from "../../../../../home/Missions/hooks/useFetchMissionListe";
+import Moment from "react-moment";
+import useFetchStatus from "../../../../../configurations/status/hooks/useFetchStatus";
 
 const DetailTacheCles = () => {
     const router = useRouter()
@@ -28,21 +37,18 @@ const DetailTacheCles = () => {
     const { idT }: any = router.query;
     const { id }: any = router.query;
 
-    const { tacheEtObjectif } = useAppSelector((state: any) => state.tacheEtObjectifs)
+    const { tacheEtObjectif, tacheEtObjectifList } = useAppSelector((state: any) => state.tacheEtObjectifs)
     const fetchTacheCle = useFetchTacheCle();
     const fetchResponsable = useFetchEmploys();
     const { employees } = useAppSelector((state: any) => state.employe)
-    const fetchProject = useFetchProject();
-    const { projectList } = useAppSelector((state: any) => state.project);
-    const fetchPlanTravail = useFetchPlanTravaile()
-    const { planTravaillist } = useAppSelector((state: any) =>state.planTravail)
+    const fetchStatus = useFetchStatus();
+    const { statuslist } = useAppSelector((state: any) => state.status)
 
     useEffect(() => {
         getTacheCleDetails();
         fetchResponsable();
-        fetchTacheCle()
-        fetchProject();
-        fetchPlanTravail();
+        fetchTacheCle();
+        fetchStatus();
     }, [idT])
 
     const getTacheCleDetails = () => {
@@ -78,63 +84,62 @@ const DetailTacheCles = () => {
                         Retour
                     </Button>
                 </Link>
-                <Typography variant="h4" color="GrayText" style={{marginRight: "15px"}}>
+                <Typography variant="h4" color="GrayText" style={{ marginRight: "15px" }}>
                     Détail taches clés
                 </Typography>
             </SectionNavigation>
             <DetailsContainer sx={{ backgroundColor: "#fff", pb: 5 }}>
-                 <Grid container spacing={4} my={1}>
-                 <Grid item xs={12} md={12}>
-                 <FormLabel>
-                        <span>Tache : </span>
-                        <span style={{color: "black"}}>
-                            {tacheEtObjectif?.keyTasks}
-                        </span>
-                    </FormLabel>
-                 </Grid>
-                </Grid>
-                <Grid container spacing={4} my={1}>
-                    <Grid item xs={12} md={12}>
-
-                        <Stack direction="column" spacing={2}>
-                            <span style={{ color: "black" }}>Tous les projets </span>
-                            <FormLabel> <b style={{ color: "black" }}>  Titre Français : </b>
-                                <span style={{ color: "black" }}>
-                                    {projectList.find((e: any) => e.id === tacheEtObjectif.projet)?.titleFr}
-                                </span>
-                            </FormLabel>
-                            <FormLabel> <b style={{ color: "black" }}>  Titre Anglais  : </b>
-                                <span style={{ color: "black" }}>
-                                    {projectList.find((e: any) => e.id === tacheEtObjectif.projet)?.titleEn}
-                                </span>
-                            </FormLabel>
-                        </Stack>
-                    </Grid>
-                </Grid>
-                <Grid container spacing={4} my={1}>
-                    <Grid item xs={12} md={12}>
-                        Responsables :
-                        {
-                            listResponsable.map((item: any) => (
-                                <FormLabel>
-                                    <Stack direction="row" spacing={2}>
-                                        <b style={{ color: "black" }}>Nom et Prénoms : </b>
-                                        <span style={{ color: "black" }}>
-                                            {item.name} {item.id}</span>
-                                    </Stack>
-                                </FormLabel>
-                            ))
-                        }
-                    </Grid>
-                </Grid>
-                <Grid container spacing={4} my={1}>
-                  <Grid item xs={12} md={6}>
-                    <FormLabel>
-                        <span>Plan du travail : </span>
-                        <span style={{color: "black"}}>{planTravaillist.find((e: any) =>e.id === tacheEtObjectif.planTravaileId)?.description}</span>
-                    </FormLabel>
-                  </Grid>
-                </Grid>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>S/N</TableCell>
+                            <TableCell>Date début</TableCell>
+                            <TableCell>Date fin</TableCell>
+                            <TableCell>Tache clé</TableCell>
+                            <TableCell>Time frame</TableCell>
+                            <TableCell>Resources</TableCell>
+                            <TableCell>Notes</TableCell>
+                            <TableCell>Status</TableCell>
+                            <TableCell>Participants</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {tacheEtObjectifList.filter((e: any) => e.id === idT)
+                            .slice().map((row: TacheEtObjectifItem, index: any) => (
+                                <TableRow>
+                                    <TableCell>{row.sn}</TableCell>
+                                    <TableCell>
+                                        <Moment format="DD/MM/yyyy">{row.startDate}</Moment>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Moment format="DD/MM/yyyy">{row.endDate}</Moment>
+                                    </TableCell>
+                                    <TableCell>{row.keyTasks}</TableCell>
+                                    <TableCell>{row.expectedResult}</TableCell>
+                                    <TableCell>{row.resources}</TableCell>
+                                    <TableCell>{row.notes}</TableCell>
+                                    <TableCell>
+                                        {statuslist.find((e: any) => e.id === row.statusId)?.status}
+                                    </TableCell>
+                                    <TableCell>
+                                        <FormControl sx={{ height: (row.participantsId!).length <= 2 ? "auto" : 70, overflow: "auot" }}>
+                                            {
+                                                (row.participantsId!).map((lp: any) => {
+                                                    return (
+                                                        <Stack direction="column" spacing={2}>
+                                                            {employees.find((e: any) => e.id === lp)?.name}
+                                                            {" "}
+                                                            {employees.find((e: any) => e.id === lp)?.surname}
+                                                        </Stack>
+                                                    )
+                                                })
+                                            }
+                                        </FormControl>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                    </TableBody>
+                </Table>
             </DetailsContainer>
         </Container>
     );

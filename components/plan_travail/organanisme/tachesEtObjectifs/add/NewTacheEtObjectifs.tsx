@@ -95,13 +95,13 @@ const NewTacheEtObjectifs = ({ formikProps, valuesArticle, setValuesArticle, set
                 </Stack>
                 <Stack direction="column" spacing={2}>
                     <Stack direction="row" spacing={2}>
-                        <OSTextField
+                        {/* <OSTextField
                             fullWidth
                             id="outlined-basic"
                             label="S/N"
                             variant="outlined"
                             name="sn"
-                        />
+                        /> */}
                         <OSTextField
                             fullWidth
                             id="outlined-basic"
