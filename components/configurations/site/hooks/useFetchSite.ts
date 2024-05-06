@@ -1,12 +1,13 @@
 import { useRouter } from "next/router";
-import { useAppDispatch } from "../../../../../../hooks/reduxHooks";
-import { getMissionRapportList } from "../../../../../../redux/features/missionRapport";
+import { useAppDispatch } from "../../../../hooks/reduxHooks";
+import { getStatuslist } from "../../../../redux/features/status";
+import { getSitelist } from "../../../../redux/features/site";
 
-const useFetchMissionaryRapportList = () => {
+const useFetchSite = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  return async () => {
+  return  async () => {
     let args: any = {};
     if (router.query.search) {
       args.where = {
@@ -23,8 +24,8 @@ const useFetchMissionaryRapportList = () => {
           break;
       }
     }
-    await dispatch(getMissionRapportList({ args }));
+    await dispatch(getSitelist({ args }));
   };
 };
 
-export default useFetchMissionaryRapportList;
+export default useFetchSite;

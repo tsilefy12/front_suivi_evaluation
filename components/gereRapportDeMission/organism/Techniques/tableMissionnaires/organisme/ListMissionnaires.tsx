@@ -24,13 +24,12 @@ import {
   useAppSelector,
 } from "../../../../../../hooks/reduxHooks";
 import { useConfirm } from "material-ui-confirm";
-import useFetchMissionaryList from "../hooks/useFetchMissionaryList";
-import { MissionaryItem } from "../../../../../../redux/features/missionary/missionarySlice.interface";
 import Moment from "react-moment";
 import { deleteMissionaryRapport, editMissionaryRapport } from "../../../../../../redux/features/missionaryRapport";
 import { MissionaryRapportItem } from "../../../../../../redux/features/missionaryRapport/missionaryRapportSlice.interface";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import AddMissionnaireRapport from "../add/addMissionnaire";
+import useFetchMissionaryRapportList from "../hooks/useFetchMissionaryList";
 
 const ListMissionnairesRapport = () => {
   const [open, setOpen] = React.useState(false);
@@ -43,13 +42,13 @@ const ListMissionnairesRapport = () => {
   const router = useRouter();
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
+  const fetchMissionaryRapportList = useFetchMissionaryRapportList();
   const { missionaryRapportList } = useAppSelector((state: any) => state.missionaryRapport);
-  const fetchMissionaryList = useFetchMissionaryList();
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state: any) => state.employe);
 
   React.useEffect(() => {
-    fetchMissionaryList();
+    fetchMissionaryRapportList();
     fetchEmployes();
   }, [router.query]);
 
@@ -68,7 +67,7 @@ const ListMissionnairesRapport = () => {
     })
       .then(async () => {
         await dispatch(deleteMissionaryRapport({ id }));
-        fetchMissionaryList();
+        fetchMissionaryRapportList();
       })
       .catch(() => { });
   };
@@ -92,9 +91,9 @@ const ListMissionnairesRapport = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {missionaryRapportList.map((row: MissionaryRapportItem) => (
+                {missionaryRapportList.map((row: MissionaryRapportItem, index: any) => (
                   <TableRow
-                    key={row.id}
+                    key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">

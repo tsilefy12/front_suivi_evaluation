@@ -31,7 +31,7 @@ export const siteSlice = createSlice({
     },
     [getSite.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.statut = action.payload;
+      state.site = action.payload;
     },
     [getSite.rejected.type]: (state, action) => {
       state.loading = false;
@@ -66,7 +66,7 @@ export const siteSlice = createSlice({
     //update site
     [updateSite.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.statut = {};
+      state.site = {};
       state.isEditing = false;
     },
     [updateSite.rejected.type]: (state, action) => {
@@ -91,7 +91,7 @@ export const siteSlice = createSlice({
     },
     [editSite.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.statut = action.payload;
+      state.site = action.payload;
       state.isEditing = true;
     },
     [editSite.rejected.type]: (state, action) => {

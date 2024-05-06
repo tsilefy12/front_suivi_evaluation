@@ -123,6 +123,12 @@ const menu = [
         name: "Projet",
         link: "/configurations/project",
         icon: "",
+      },
+      {
+        id:46,
+        name: "Site",
+        link: "/configurations/site",
+        icon: "",
       }
     ],
   },
