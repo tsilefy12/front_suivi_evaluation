@@ -12,7 +12,7 @@ const SiteSection = () => {
         <Grid item xs={12} md={4}>
           <SiteForm/>
         </Grid>
-        <Grid item xs={12} md={8} padding={4}>
+        <Grid item xs={12} md={8}>
           <ListeSites />
         </Grid>
       </Grid>

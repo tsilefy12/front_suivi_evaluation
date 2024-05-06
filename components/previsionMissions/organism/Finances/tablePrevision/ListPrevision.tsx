@@ -10,6 +10,7 @@ import {
   MenuItem,
   Stack,
   styled,
+  TableHead,
   TextField,
   Typography,
 } from "@mui/material";
@@ -35,8 +36,12 @@ import Moment from "react-moment";
 import useFetchGrants from "../../../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "./hooks/useFetchbudgetLine";
 import { useConfirm } from "material-ui-confirm";
-import { deletePrevisionDepense, editPrevisionDepense } from "../../../../../redux/features/PrevisionDepense";
+import { createPrevisionDepense, deletePrevisionDepense, editPrevisionDepense } from "../../../../../redux/features/PrevisionDepense";
 import OSSelectField from "../../../../shared/select/OSSelectField";
+import OSTextField from "../../../../shared/input/OSTextField";
+import OSDatePicker from "../../../../shared/date/OSDatePicker";
+import { Form, Formik } from "formik";
+import { updateTacheEtObjectifs } from "../../../../../redux/features/tachesEtObjectifs";
 
 
 const ListPrevision = () => {
@@ -54,6 +59,7 @@ const ListPrevision = () => {
   const confirm = useConfirm();
   const dispatch: any = useAppDispatch();
   const [getGrantId, setGetGrantId]: any = React.useState(0);
+  const { id }: any = router.query;
 
   React.useEffect(() => {
     fetchPrevisionDepense();
@@ -124,7 +130,7 @@ const ListPrevision = () => {
 
   previsionDepenselist.forEach((b: any) => {
     if (getGrantId !== null && getGrantId === b.grant) {
-      return listLigne.push({id: b.id, name: budgetLineList.find((e: any) =>e.id===b.ligneBudgetaire)?.code})
+      return listLigne.push({ id: b.ligneBudgetaire, name: budgetLineList.find((e: any) => e.id === b.ligneBudgetaire)?.code })
     } else {
       listLigne.push({ id: "", name: "" })
     }
@@ -141,14 +147,43 @@ const ListPrevision = () => {
   });
   // console.log(" id :", selectedBudgetLine)
   //get imprevue 
-  let getAmountBudget = ""
 
-  budgetLineList.forEach((element: any) => {
-    if (getGrantId !== "" && selectedBudgetLine !== "" && element.code === selectedBudgetLine) {
-      getAmountBudget = element.amount
+  let [regle, setRegle]: any = React.useState(0);
+  const [selectId, setSelecteId] = React.useState("")
+  let [lib, setLibelle]: any = React.useState("")
+  let [prix, setPU]: any = React.useState("")
+
+  if (getGrantId != "" && selectedBudgetLine != "") {
+    previsionDepenselist.forEach((element: any) => {
+      const budgetlineId = element.ligneBudgetaire;
+      if (budgetlineId === selectId) {
+        regle = element.regleme;
+        lib = element.libelle;
+        prix = element.pu;
+      }
+    });
+  }
+  console.log("vola :", selectId)
+  const handleSubmit = async (values: any) => {
+    values.missionId = id!
+    values.imprevue = total / 10
+    values.libelle = lib
+    values.grant = getGrantId
+    values.date = new Date()
+    values.ligneBudgetaire = selectId
+    values.nombre = 1
+    values.montant = total / 10
+    console.log("montant :", values.montant)
+    values.pu = prix
+    values.regleme = regle
+    try {
+      await dispatch(createPrevisionDepense(values));
+      fetchPrevisionDepense();
+      handleClose();
+    } catch (error) {
+      console.log("error", error);
     }
-  });
-  // console.log("vola :", getAmountBudget)
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -173,7 +208,7 @@ const ListPrevision = () => {
                   rowCount={rows.length}
                 />
                 <TableBody>
-                  {previsionDepenselist
+                  {previsionDepenselist.filter((e: any) =>e.imprevue===null)
                     .slice().map(
                       (row: PrevisionDepenseItem, index: any) => {
                         return (
@@ -195,7 +230,7 @@ const ListPrevision = () => {
                               {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
                             </TableCell>
                             <TableCell align="center">
-                             {budgetLineList.find((e: any) =>e.id === row.ligneBudgetaire)?.code}
+                              {budgetLineList.find((e: any) => e.id === row.ligneBudgetaire)?.code}
                             </TableCell>
                             <TableCell align="right">
                               <BtnActionContainer
@@ -229,72 +264,181 @@ const ListPrevision = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Footer>
-              <Typography variant="body2" align="right">
-                TOTAL BUDGET : {total} Ar
-              </Typography>
-              <Typography variant="body2" align="right" sx={{ width: "100%" }}>
-                <Stack direction="column" spacing={2}>
-                  <Stack direction="row" sx={{ textAlign: "right" }} spacing={2}>
-                    <FormLabel>Budget line selected amount : {getAmountBudget} Ar</FormLabel>
-                    <FormControl sx={{ flex: "1", textAlign: "left", paddingLeft: 10 }}>
-                      <TextField
-                        fullWidth
-                        select
-                        id="outlined-basic"
-                        label="Grant"
-                        variant="outlined"
-                        size="small"
-                        value={getGrantId}
-                        onChange={(e: any) => setGetGrantId(e.target.value)}
-                      >
-                        <MenuItem value="vide">Select grant</MenuItem>
-                        {
-                          // Filtrer les éléments uniques de grantEncoursList
-                          Array.from(new Set(previsionDepenselist.map((item: any) => item.grant))).map((grantId: any) => {
-                            const grant = grantEncoursList.find((e: any) => e.id === grantId);
-                            return grant ? (
-                              <MenuItem key={grantId} value={grantId}>
-                                {grant.code}
-                              </MenuItem>
-                            ) : null;
-                          })
-                        }
-                      </TextField>
+            <Formik
+              enableReinitialize={isEditing ? true : false}
+              initialValues={
+                {
+                  date: new Date(),
+                  libelle: isEditing ? previsionDepense?.libelle : lib,
+                  nombre: isEditing ? previsionDepense?.nombre : 1,
+                  pu: isEditing ? previsionDepense?.pu : prix,
+                  grant: isEditing ? previsionDepense?.grant : getGrantId,
+                  ligneBudgetaire: isEditing ? previsionDepense?.ligneBudgetaire : selectId,
+                  regleme: isEditing ? previsionDepense?.regleme : regle,
+                  // missionId: isEditing ? previsionDepense?.missionId : id,
+                  montant: total / 10,
+                }
+              }
+              onSubmit={(value: any, action: any) => {
+                handleSubmit(value);
+                action.resetForm();
+              }}
+            >
+              {(formikProps) => {
+                return (
+                  <Form>
+                    <Footer sx={{ marginTop: 2 }}>
+                      <Table>
+                        <TableHead sx={{backgroundColor: "#e0e0e0"}}>
+                          <TableRow>
+                            <TableCell>Date</TableCell>
+                            <TableCell>Imprevue</TableCell>
+                            <TableCell>Nombre</TableCell>
+                            <TableCell>PU</TableCell>
+                            <TableCell>Grant</TableCell>
+                            <TableCell>Ligne budgetaire</TableCell>
+                            <TableCell>Montant</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {previsionDepenselist.filter((e: any) => e.imprevue != null)
+                            .slice().map((row: PrevisionDepenseItem, index: any)=>{
+                            return (
+                          <TableRow key={index}>
+                            <TableCell align="left" scope="row" sx={{paddingLeft: 2}}>
+                              <Moment format="DD/MM/yyyy">{row.date}</Moment>
+                            </TableCell>
+                            <TableCell align="left">{row.libelle}</TableCell>
+                            <TableCell align="left">{row.nombre}</TableCell>
+                            <TableCell align="left">{row.pu}</TableCell>
+                            <TableCell align="left">
+                              {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
+                            </TableCell>
+                            <TableCell align="left">
+                              {budgetLineList.find((e: any) => e.id === row.ligneBudgetaire)?.code}
+                            </TableCell>
+                            
+                            <TableCell align="left">{row.montant} Ar</TableCell>
+                          </TableRow>
+                          )
+                          })}
+                        </TableBody>
+                      </Table>
+                      <Typography variant="body2" align="right" sx={{ width: "100%", marginTop: 4 }}>
+                        <Stack direction="column" spacing={2}>
+                          <Stack direction="row" sx={{ textAlign: "right" }} spacing={2} top={4}>
+                            {/* <FormLabel>Budget line selected amount : {getAmountBudget} Ar</FormLabel> */}
+                            <FormControl>
+                              <OSTextField
+                                fullWidth
+                                id="outlined-basic"
+                                label="Montant"
+                                variant="outlined"
+                                size="small"
+                                value={total / 10}
+                                name="montant"
+                              />
+                            </FormControl>
+                            <FormControl>
+                              <OSTextField
+                                fullWidth
+                                id="outlined-basic"
+                                label="Nombre"
+                                variant="outlined"
+                                size="small"
+                                name="nombre"
+                                value={1}
+                                disabled
+                              />
+                            </FormControl>
+                            <FormControl sx={{ flex: "1", textAlign: "left" }}>
+                              <OSTextField
+                                fullWidth
+                                select
+                                id="outlined-basic"
+                                label="Grant"
+                                variant="outlined"
+                                size="small"
+                                name="grant"
+                                value={getGrantId}
+                                onChange={(e: any) => setGetGrantId(e.target.value)}
+                              >
+                                <MenuItem value="vide">Select grant</MenuItem>
+                                {
+                                  // Filtrer les éléments uniques de grantEncoursList
+                                  Array.from(new Set(previsionDepenselist.map((item: any) => item.grant))).map((grantId: any) => {
+                                    const grant = grantEncoursList.find((e: any) => e.id === grantId);
+                                    return grant ? (
+                                      <MenuItem key={grantId} value={grantId}>
+                                        {grant.code}
+                                      </MenuItem>
+                                    ) : null;
+                                  })
+                                }
+                              </OSTextField>
 
-                    </FormControl>
-                    <FormControl sx={{ flex: "1", textAlign: "left" }}>
-                      <TextField
-                        fullWidth
-                        select
-                        id="outlined-basic"
-                        label="Ligne budgetaire"
-                        variant="outlined"
-                        size="small"
-                        value={selectedBudgetLine}
-                        onChange={(e: any) => setSelectedBudgetLine(e.target.value)}
+                            </FormControl>
+                            <FormControl sx={{ flex: "1", textAlign: "left" }}>
+                              <OSTextField
+                                fullWidth
+                                select
+                                id="outlined-basic"
+                                label="Ligne budgetaire"
+                                variant="outlined"
+                                size="small"
+                                name="ligneBudgetaire"
+                                value={selectedBudgetLine}
+                                key={selectId}
+                                onChange={(e: any) => {
+                                  setSelectedBudgetLine(e.target.value);
+                                  const selectedItem = listLigne.find((item: any) => item.name === e.target.value);
+                                  if (selectedItem) {
+                                    console.log("ID sélectionné :", selectedItem.id);
+                                    setSelecteId(selectedItem.id)
+                                  }
+                                }}
+                              >
+                                <MenuItem value="vide">Select budget line</MenuItem>
+                                {
+                                  listLigne.map((item: any) => (
+                                    <MenuItem key={item.id} value={item.name}>
+                                      {item.name}
+                                    </MenuItem>
+                                  ))
+                                }
+                              </OSTextField>
+                            </FormControl>
+                            <FormControl>
+                              {/* <Button
+                        color="warning"
                       >
-                        <MenuItem value="vide">Select budget line</MenuItem>
-                        {
-                          listLigne.map((item: any) => (
-                            <MenuItem value={item.name}>
-                              {item.name}
-                            </MenuItem>
-                          ))
-                        }
-                      </TextField>
-                    </FormControl>
-                  </Stack>
-                  <FormLabel>
-                    Imprévu de mission(total budget-location et perdiem MV(10% )) : {total / 10} Ar
-                  </FormLabel>
-                </Stack>
-              </Typography>
+                        Annuler
+                      </Button> */}
+                              <Button
+                                variant="contained"
+                                type="submit"
+                              >
+                                Enregistrer
+                              </Button>
+                            </FormControl>
+                          </Stack>
+                          <Typography variant="body2" align="right">
+                            TOTAL BUDGET : {total} Ar
+                          </Typography>
+                          <FormLabel>
+                            Imprévu de mission(total budget-location et perdiem MV(10% )) : {total / 10} Ar
+                          </FormLabel>
+                        </Stack>
+                      </Typography>
 
-              <Typography variant="body2" align="right">
-                TOTAL GENERAL BUDGET : {total} Ar
-              </Typography>
-            </Footer>
+                      <Typography variant="body2" align="right">
+                        TOTAL GENERAL BUDGET : {total} Ar
+                      </Typography>
+                    </Footer>
+                  </Form>
+                )
+              }}
+            </Formik>
           </Paper>
         </Box>
       </SectionTable>
@@ -313,6 +457,6 @@ export const Footer = styled(Stack)(({ theme }) => ({
   fontStyle: "normal",
   fontWeight: "400px",
   fontSize: "14px",
-  marginRight: "270px",
+  marginRight: "10px",
   letterSpacing: "0.25px",
 }));

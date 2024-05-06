@@ -5,6 +5,7 @@ import {
   Container,
   Dialog,
   Divider,
+  FormLabel,
   Grid,
   Stack,
   styled,
@@ -80,7 +81,7 @@ const ListObjectifStrategique = () => {
           />
         </Stack>
         <ValueDetail>
-          <KeyValue keyName="Année" value={"2023"} />
+          <FormLabel>Année : {new Date().getFullYear()}</FormLabel>
         </ValueDetail>
         <Grid container spacing={2} mt={2}>
           {planTravaillist.map((row: any) => (
