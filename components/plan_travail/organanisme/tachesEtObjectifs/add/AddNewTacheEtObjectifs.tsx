@@ -1,21 +1,9 @@
 import {
-  Button,
   Container,
   styled,
-  Typography,
-  TextField,
-  FormControl,
   Stack,
-  Autocomplete,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
 } from "@mui/material";
-import Link from "next/link";
 import React, { useState } from "react";
-import ArrowBack from "@mui/icons-material/ArrowBack";
-import { Check, Close } from "@mui/icons-material";
-import { SectionNavigation } from "../ListTacheEtObjectifs";
 import { Formik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
@@ -23,14 +11,9 @@ import useFetchEmploys from "../../../../GrantsEnCours/hooks/getResponsable";
 import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
 import { updateTacheEtObjectifs, createTacheEtObjectifs, getTacheEtObjectifsList } from "../../../../../redux/features/tachesEtObjectifs";
 import { EmployeItem } from "../../../../../redux/features/employe/employeSlice.interface";
-import useFetchProject from "../../../../GrantsEnCours/hooks/getProject";
-import OSTextField from "../../../../shared/input/OSTextField";
-import OSSelectField from "../../../../shared/select/OSSelectField";
-import { cancelEdit } from "../../../../../redux/features/tachesEtObjectifs/tacheEtObjectifsSlice";
 import { getStatuslist } from "../../../../../redux/features/status";
-import OSDatePicker from "../../../../shared/date/OSDatePicker";
 import NewTacheEtObjectifs from "./NewTacheEtObjectifs";
-import { createObejectifAnnuel, updateObjectifAnnuel } from "../../../../../redux/features/objectifAnnuels";
+import { createObejectifAnnuel, deleteObjectifAnnuel, updateObjectifAnnuel } from "../../../../../redux/features/objectifAnnuels";
 
 const AddNewTacheEtObjectifs = () => {
     const router = useRouter();
@@ -45,11 +28,19 @@ const AddNewTacheEtObjectifs = () => {
     const { id }: any = router.query;
 
     React.useEffect(() => {
+        if(isEditing){
+            setValuesArticle((prev:any[])=>{
+                console.log(prev)
+                prev = tacheEtObjectif.objectifAnnuel!
+                return prev
+            })
+        }
         fetchEmployes();
         dispatch(getStatuslist({}))
         dispatch(getTacheEtObjectifsList({}))
     }, [router.query])
   
+
     const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
         isEditing
             ? employees.filter((employee: any) =>
@@ -63,23 +54,27 @@ const AddNewTacheEtObjectifs = () => {
 
         try {
             if (isEditing) {
-               const res =   await dispatch(
-                updateTacheEtObjectifs({idT, tacheEtObjectif }))
-                console.log("value article :", valuesArticle)
-                    if (valuesArticle.length > 0) {
-                        valuesArticle?.forEach((item: any, index: any) =>{
-                            console.log("idT :", item.id)
-                            const idT = item.idT
-                            if (idT) {
-                                const objectifAnnuels = {
-                                    objectiveTitle:item.objectiveTitle,
-                                    year:item.year,
-                                    taskAndObjectiveId:res.payload.id
-                                };
-                                dispatch(updateObjectifAnnuel({id, objectifAnnuels}))
-                            }
-                        })
-                    }
+                const res =   await dispatch(updateTacheEtObjectifs({idT, tacheEtObjectif }))
+                if (valuesArticle.length > 0) {
+                    valuesArticle?.forEach((item: any, index: any) =>{
+                        console.log("idT :", item.id)
+                        const idT = item.idT
+                        const objectifAnnuels = {
+                            objectiveTitle:item.objectiveTitle,
+                            year:item.year,
+                            taskAndObjectiveId:res.payload.id
+                        };
+                        if (idT) {
+                            dispatch(updateObjectifAnnuel({id, objectifAnnuels}))
+                        }else{
+                            dispatch(createObejectifAnnuel(objectifAnnuels))
+                        }
+                    })
+                }
+                idDelete?.forEach((element:any, index:any) =>{
+                    const id = element.id
+                    dispatch(deleteObjectifAnnuel({id}));
+                })
             } else {
                 const res = await dispatch(createTacheEtObjectifs(values));
                 if(valuesArticle.length > 0 ){
@@ -120,14 +115,14 @@ const AddNewTacheEtObjectifs = () => {
                                 startDate:isEditing ? new Date(tacheEtObjectif?.startDate!): new Date(),
                                 endDate: isEditing ? new Date(tacheEtObjectif?.endDate!) : new Date(),
                                 planTravaileId: id,
-                                // objectiveTitle:"",
+                                objectiveTitle:"",
                                 year:0
                             }
                 }
                 validationSchema={Yup.object({
                     keyTasks: Yup.string().required("Champ obligatoire"),
                     resources: Yup.string().required("Champ obligatoire"),
-                    expectedResult: Yup.string().required("Champ obligatoire"),
+                    expectedResult: Yup.string().required("Champ obligatoire")
                 })}
                 onSubmit={(value: any, action: any) => {
                     handleSubmit(value);
@@ -147,18 +142,4 @@ export const CustomStack = styled(Stack)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     flexWrap: "wrap",
   },
-}));
-
-const NavigationContainer = styled(Stack)(({ theme }) => ({
-  flexDirection: "column",
-  marginBottom: theme.spacing(2),
-  flex: 1,
-  width: "100%",
-}));
-
-const FormContainer = styled(Stack)(({ theme }) => ({
-  padding: 30,
-  border: "1px solid #E0E0E0",
-  borderRadius: 20,
-  background: "#fff",
 }));

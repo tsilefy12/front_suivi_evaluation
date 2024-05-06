@@ -10,6 +10,7 @@ export interface TacheEtObjectifItem {
     participantsId?: string[];
     notes?: string;
     startDate? : Date;
+    objectifAnnuel?:any[];
     endDate? : Date;
     planTravaileId?: string;
     planTravaile?: any;
