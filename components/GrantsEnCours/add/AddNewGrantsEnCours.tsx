@@ -49,6 +49,7 @@ const AddNewGrantsEnCours = () => {
   const fetcProject = useFetchProject();
   const fetchCurreny = useFetchCurrency();
   const { currencylist } = useAppSelector((state: any) => state.currency);
+ const { projectList } = useAppSelector((state: any) =>state.project);
 
   const [open, setOpen] = React.useState(false)
 
@@ -85,15 +86,15 @@ const AddNewGrantsEnCours = () => {
   ]
 
   const handleSubmit = async (values: any) => {
-    const updateValues = {...values}
-    updateValues.responsable = [...selectedEmployes.map((item) => item.id)];
-    updateValues.projectId = null;
-    updateValues.bankId = null;
-    updateValues.postAnalyticId = null;
+   
+    values.responsable = [...selectedEmployes.map((item) => item.id)];
+    values.projectId = 1;
+    values.bankId = null;
+    values.postAnalyticId = null;
  
-    const date1 = new Date(updateValues.startDate);
+    const date1 = new Date(values.startDate);
     const DateNumber1 = date1.getTime();
-    const date2 = new Date(updateValues.endDate)
+    const date2 = new Date(values.endDate)
     const DateNumber2 = date2.getTime();
 
     if (DateNumber1 >= DateNumber2) {
@@ -221,11 +222,11 @@ const AddNewGrantsEnCours = () => {
                   <OSSelectField
                     fullWidth
                     id="outlined-basic"
-                    label="Poste analytique"
+                    label="Projet"
                     variant="outlined"
-                    name="postAnalyticId"
-                    options={postAnalytiqueList}
-                    dataKey="name"
+                    name="projectId"
+                    options={projectList}
+                    dataKey="title"
                     valueKey="id"
                     type="number"
                   />
@@ -358,7 +359,7 @@ const AddNewGrantsEnCours = () => {
                       <TextField
                         {...params}
                         id="outlined-basic"
-                        label="Sélectionnez participant"
+                        label="Responsable"
                         variant="outlined"
                       />
                     )}

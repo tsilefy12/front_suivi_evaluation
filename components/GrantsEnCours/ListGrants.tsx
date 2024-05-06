@@ -60,15 +60,6 @@ const ListGrantsEnCours = () => {
     fetchtReliquatGrant();
     fetchEpmloyes();
   }, [router.query])
- 
-  const listGrants:{id: number, grants: number, baille: string, Vtechnique: string, FValidator: string, FVerificateur: string, etat: string}[] = [];
-  grantEncoursList.forEach((g: any) => {
-    reliquatGrantList.forEach((rg: any) =>{
-      if (g.id != rg.grant) {
-        listGrants.push({id: g.id, grants: g.code, baille: g.bailleur,Vtechnique: g.techValidator, FValidator: g.financeValidator, FVerificateur: g.financeVerificator, etat: g.status})
-      }
-    })
-  });
 
   const handleClickEdit = async (id: any) => {
     router.push(`/grants/grantsEnCours/${id}/edit`);
@@ -132,9 +123,9 @@ const ListGrantsEnCours = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {listGrants
+                  {grantEncoursList.filter((g: any) =>g.id!=reliquatGrantList.grant)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: any, index: any) => {
+                    .map((row: GrantEncoursItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
                       return (
                         <TableRow
@@ -147,19 +138,19 @@ const ListGrantsEnCours = () => {
                           <TableCell
                             padding="checkbox"
                           >
-                            {row.grants}
+                            {row.code}
                           </TableCell>
                           <TableCell align="left">
-                          {employees.find((e: any) =>e.id === row.Vtechnique)?.name}
+                          {employees.find((e: any) =>e.id === row.techValidator)?.name}
                           </TableCell>
                           <TableCell align="left">
-                            {employees.find((e: any) =>e.id === row.FValidator)?.name}
+                            {employees.find((e: any) =>e.id === row.financeValidator)?.name}
                           </TableCell>
                           <TableCell align="left">
-                          {employees.find((e: any) =>e.id === row.FVerificateur)?.name}
+                          {employees.find((e: any) =>e.id === row.financeVerificator)?.name}
                           </TableCell>
                           <TableCell align="left">
-                            {row.etat}
+                            {row.status}
                           </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
