@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
-import { MissionaryRapportItem } from "../missionaryRapportSlice.interface";
+import { MissionairesItem } from "../missionaires.interface";
 
 export const createMissionaryRapport = createAsyncThunk(
   "missionary/createMissionaryRapport",
-  async (data: MissionaryRapportItem, thunkAPI) => {
+  async (data: MissionairesItem, thunkAPI) => {
     try {
       const response = await axios.post("/suivi-evaluation/missionaire-rapport", data);
       thunkAPI.dispatch(

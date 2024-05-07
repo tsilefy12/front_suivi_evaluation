@@ -119,8 +119,10 @@ const ListPrevision = () => {
 
   let total: any = useMemo(() => {
     let totalBudget: any = 0;
-    previsionDepenselist.forEach((item: any) => {
-      totalBudget += item.montant;
+    previsionDepenselist.map((p: any) =>{
+      if (p.imprevue===null) {
+        totalBudget += p.montant;
+      }
     })
     return totalBudget;
   }, [previsionDepenselist])
@@ -276,7 +278,8 @@ const ListPrevision = () => {
                   ligneBudgetaire: isEditing ? previsionDepense?.ligneBudgetaire : selectId,
                   regleme: isEditing ? previsionDepense?.regleme : regle,
                   // missionId: isEditing ? previsionDepense?.missionId : id,
-                  montant: total / 10,
+                  montant: isEditing ? previsionDepense?.montant : total / 10,
+                  imprevue: isEditing ? previsionDepense?.imprevue : total / 10
                 }
               }
               onSubmit={(value: any, action: any) => {
@@ -432,7 +435,7 @@ const ListPrevision = () => {
                       </Typography>
 
                       <Typography variant="body2" align="right">
-                        TOTAL GENERAL BUDGET : {total} Ar
+                        TOTAL GENERAL BUDGET : {total + (total / 10)} Ar
                       </Typography>
                     </Footer>
                   </Form>

@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useAppDispatch } from "../../../../../../hooks/reduxHooks";
 import { getMissionRapportList } from "../../../../../../redux/features/missionRapport";
+import { getMissionaryRapportList } from "../../../../../../redux/features/missionaires";
 
 const useFetchMissionaryRapportList = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ const useFetchMissionaryRapportList = () => {
           break;
       }
     }
-    await dispatch(getMissionRapportList({ args }));
+    await dispatch(getMissionaryRapportList({ args }));
   };
 };
 

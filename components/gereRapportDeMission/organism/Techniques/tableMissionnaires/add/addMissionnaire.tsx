@@ -17,27 +17,23 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../../../../hooks/reduxHooks";
-import {
-  createMissionary,
-  updateMissionary,
-} from "../../../../../../redux/features/missionary";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { cancelEdit } from "../../../../../../redux/features/missionary/missionarySlice";
-import OSDateTimePicker from "../../../../../shared/date/OSDateTimePicker";
-import OSDatePicker from "../../../../../shared/date/OSDatePicker";
-import { createMissionaryRapport, updateMissionaryRapport } from "../../../../../../redux/features/missionaryRapport";
 import useFetchMissionaryList from "../hooks/useFetchMissionaryList";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import { EmployeItem } from "../../../../../../redux/features/employe/employeSlice.interface";
+import { createMissionaryRapport, updateMissionaryRapport } from "../../../../../../redux/features/missionaires";
+import OSDatePicker from "../../../../../shared/date/OSDatePicker";
+
 
 const AddMissionnaireRapport = ({ handleClose }: any) => {
   const router = useRouter();
   const { id }= router.query;
   const dispatch = useAppDispatch();
 
-  const { missionaryRapport, isEditing } = useAppSelector(
-    (state: any) => state.missionaryRapport);
+  const { missionaires, isEditing } = useAppSelector(
+    (state: any) => state.missionaires);
   const fetchMissionaryList = useFetchMissionaryList();
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state: any) => state.employe);
@@ -50,7 +46,7 @@ const AddMissionnaireRapport = ({ handleClose }: any) => {
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
     isEditing
       ? employees.filter((employee: any) =>
-        missionaryRapport?.missionResponsabilityMissionary?.includes(employee.id!)
+        missionaires?.missionResponsabilityMissionary?.includes(employee.id!)
       )
       : []
   );
@@ -60,8 +56,8 @@ const AddMissionnaireRapport = ({ handleClose }: any) => {
       if (isEditing) {
         await dispatch(
           updateMissionaryRapport({
-            id: missionaryRapport.id!,
-            missionaryRapport: values,
+            id: missionaires.id!,
+            missionaires: values,
           })
         );
       } else {
@@ -79,14 +75,14 @@ const AddMissionnaireRapport = ({ handleClose }: any) => {
         enableReinitialize
         initialValues={
           isEditing
-            ? missionaryRapport
+            ? missionaires
             : {
-                lastNameMissionary: isEditing ? missionaryRapport?.lastNameMissionary : "",
-                firstNameMissionary: isEditing ? missionaryRapport?.firstNameMissionary : "",
-                startDateMissionary: isEditing ? missionaryRapport?.startDateMissionary : "",
-                returnDateMissionary: isEditing ? missionaryRapport?.returnDateMissionary : "",
-                missionResponsabilityMissionary: isEditing ? missionaryRapport?.missionResponsabilityMissionary : "",
-                missionId: isEditing ? missionaryRapport?.missionId: id,
+                lastNameMissionary: isEditing ? missionaires?.lastNameMissionary : "",
+                firstNameMissionary: isEditing ? missionaires?.firstNameMissionary : "",
+                startDateMissionary: isEditing ? missionaires?.startDateMissionary : "",
+                returnDateMissionary: isEditing ? missionaires?.returnDateMissionary : "",
+                missionResponsabilityMissionary: isEditing ? missionaires?.missionResponsabilityMissionary : "",
+                missionId: isEditing ? missionaires?.missionId: id,
               }
         }
         validationSchema={Yup.object({
@@ -150,7 +146,7 @@ const AddMissionnaireRapport = ({ handleClose }: any) => {
                           <TextField
                             {...params}
                             id="outlined-basic"
-                            label="Sélectionnez participant"
+                            label="Responsable de mission"
                             variant="outlined"
                           />
                         )}

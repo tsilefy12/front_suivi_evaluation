@@ -1,4 +1,4 @@
-export interface MissionaryRapportItem {
+export interface MissionairesItem {
   id?: string;
   lastNameMissionary?: string;
   firstNameMissionary?: string;
@@ -8,9 +8,9 @@ export interface MissionaryRapportItem {
   missionId?: string;
 }
 
-export interface MissionaryRapportInitialState {
-  missionaryRapportList: MissionaryRapportItem[];
-  missionaryRapport: MissionaryRapportItem;
+export interface MissionairesInitialState {
+  missionaireslist: MissionairesItem[];
+  missionaires: MissionairesItem;
   isEditing: boolean;
   loading: boolean;
   [key: string]: any;

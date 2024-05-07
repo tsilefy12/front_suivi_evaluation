@@ -86,7 +86,7 @@ const Techniques = () => {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-          <Typography>Missionnaire</Typography>
+          <Typography>Missionnaires</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <ListMissionnairesRapport />

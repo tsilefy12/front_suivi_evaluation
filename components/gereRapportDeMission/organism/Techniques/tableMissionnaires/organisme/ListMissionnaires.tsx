@@ -25,8 +25,8 @@ import {
 } from "../../../../../../hooks/reduxHooks";
 import { useConfirm } from "material-ui-confirm";
 import Moment from "react-moment";
-import { deleteMissionaryRapport, editMissionaryRapport } from "../../../../../../redux/features/missionaryRapport";
-import { MissionaryRapportItem } from "../../../../../../redux/features/missionaryRapport/missionaryRapportSlice.interface";
+import { deleteMissionaryRapport, editMissionaryRapport } from "../../../../../../redux/features/missionaires";
+import { MissionairesItem } from "../../../../../../redux/features/missionaires/missionaires.interface";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import AddMissionnaireRapport from "../add/addMissionnaire";
 import useFetchMissionaryRapportList from "../hooks/useFetchMissionaryList";
@@ -43,7 +43,7 @@ const ListMissionnairesRapport = () => {
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const fetchMissionaryRapportList = useFetchMissionaryRapportList();
-  const { missionaryRapportList } = useAppSelector((state: any) => state.missionaryRapport);
+  const { missionaireslist } = useAppSelector((state: any) => state.missionaires);
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state: any) => state.employe);
 
@@ -51,7 +51,7 @@ const ListMissionnairesRapport = () => {
     fetchMissionaryRapportList();
     fetchEmployes();
   }, [router.query]);
-
+ console.log("missionaire :", missionaireslist)
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer le missionnaire",
@@ -91,9 +91,9 @@ const ListMissionnairesRapport = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {missionaryRapportList.map((row: MissionaryRapportItem, index: any) => (
+                {missionaireslist.map((row: any) => (
                   <TableRow
-                    key={index}
+                    key={row.id!}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
@@ -108,7 +108,7 @@ const ListMissionnairesRapport = () => {
                     <TableCell component="th" scope="row">
                       <FormControl sx={{ height: (Array.isArray(row.missionResponsabilityMissionary) && row.missionResponsabilityMissionary.length <= 2 )? "auto" : 70, overflow: "auto"}}>
                         {
-                          (row.missionResponsabilityMissionary)?.map((lp: any) => {
+                          Array.isArray(row.missionResponsabilityMissionary) && row.missionResponsabilityMissionary.map((lp: any) => {
                             return (
                               <Stack direction="column" spacing={2}>
                                 {employees.find((e: any) => e.id === lp)?.name}

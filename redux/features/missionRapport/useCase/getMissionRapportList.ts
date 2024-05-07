@@ -9,7 +9,7 @@ export const getMissionRapportList = createAsyncThunk(
         args: JSON.stringify(data.args),
       };
       const response = await axios.get("/suivi-evaluation/mission-rapport", { params });
-      console.log("data :", response.data)
+      // console.log("data :", response.data)
       return response.data;
     } catch (error: any) {
       if (error.response) {

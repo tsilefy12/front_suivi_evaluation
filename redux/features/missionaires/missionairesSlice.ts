@@ -4,24 +4,24 @@ import { editMissionaryRapport } from "./useCase/editMissionaryRapport";
 import { getMissionaryRapport } from "./useCase/getMissionaryRapport";
 import { getMissionaryRapportList } from "./useCase/getMissionaryRapportList";
 import { updateMissionaryRapport } from "./useCase/updateMissionaryRapport";
-import { MissionaryRapportInitialState } from "./missionaryRapportSlice.interface";
+import { MissionairesInitialState } from "./missionaires.interface";
 import { deleteMissionaryRapport } from "./useCase/deleteMissionaryRapport";
 
-const missionaryRapportInitialState: MissionaryRapportInitialState = {
-  missionaryRapportList: [],
-  missionaryRapport: {},
+const missionairesInitialState: MissionairesInitialState = {
+  missionaireslist: [],
+  missionaires: {},
   isEditing: false,
   loading: false,
   error: null,
 };
 
-export const missionaryRapportSlice = createSlice({
-  name: "missionary",
-  initialState: missionaryRapportInitialState,
+export const missionairesSlice = createSlice({
+  name: "missionaires",
+  initialState: missionairesInitialState,
   reducers: {
     cancelEdit: (state) => {
       state.isEditing = false;
-      state.missionary = {};
+      state.missionaires = {};
     },
   },
   extraReducers: {
@@ -29,7 +29,7 @@ export const missionaryRapportSlice = createSlice({
       state.loading = true;
     },
     [getMissionaryRapport.fulfilled.type]: (state, action) => {
-      state.missionaryRapport = action.payload;
+      state.missionaires = action.payload;
       state.loading = false;
     },
     [getMissionaryRapport.rejected.type]: (state, action) => {
@@ -41,7 +41,7 @@ export const missionaryRapportSlice = createSlice({
       state.loading = true;
     },
     [getMissionaryRapportList.fulfilled.type]: (state, action) => {
-      state.missionaryRapportList = action.payload;
+      state.missionaireslist = action.payload;
       state.loading = false;
     },
     [getMissionaryRapportList.rejected.type]: (state, action) => {
@@ -54,7 +54,7 @@ export const missionaryRapportSlice = createSlice({
     },
     [createMissionaryRapport.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.missionaryRapportList.push(action.payload)
+      state.missionaireslist.push(action.payload)
     },
     [createMissionaryRapport.rejected.type]: (state, action) => {
       state.error = action.error;
@@ -67,7 +67,7 @@ export const missionaryRapportSlice = createSlice({
     [updateMissionaryRapport.fulfilled.type]: (state, action) => {
       state.loading = false;
       state.isEditing = false;
-      state.missionaryRapport = {};
+      state.missionaires = {};
     },
     [updateMissionaryRapport.rejected.type]: (state, action) => {
       state.error = action.error;
@@ -89,7 +89,7 @@ export const missionaryRapportSlice = createSlice({
       state.loading = true;
     },
     [editMissionaryRapport.fulfilled.type]: (state, action) => {
-      state.missionaryRapport = action.payload;
+      state.missionaires = action.payload;
       state.loading = false;
       state.isEditing = true;
     },
@@ -100,4 +100,4 @@ export const missionaryRapportSlice = createSlice({
   },
 });
 
-export const { cancelEdit } = missionaryRapportSlice.actions;
+export const { cancelEdit } = missionairesSlice.actions;
