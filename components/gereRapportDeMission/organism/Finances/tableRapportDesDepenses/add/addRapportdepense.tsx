@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
+  FormLabel,
   InputLabel,
   MenuItem,
   Select,
@@ -23,6 +24,7 @@ import {
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import InfoIcon from "@mui/icons-material/Info";
 import { Footer } from "../ListRapportDepense";
+import * as Yup from "yup";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
@@ -37,6 +39,10 @@ import OSTextField from "../../../../../shared/input/OSTextField";
 import OSSelectField from "../../../../../shared/select/OSSelectField";
 import useFetchGrants from "../../../../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "../../../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
+import useFetchPrevisionDepenseList from "../../../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchPrevisionDepense";
+import Moment from "react-moment";
+import { PrevisionDepenseItem } from "../../../../../../redux/features/PrevisionDepense/previsionDepense.interface";
+import { cancelEdit } from "../../../../../../redux/features/rapportDepense/rapportDepenseSlice";
 
 const AddRapportdepense = ({ handleClose }: any) => {
   const [page, setPage] = React.useState(0);
@@ -52,11 +58,14 @@ const AddRapportdepense = ({ handleClose }: any) => {
   const fetchligneBudgetaire = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const [grantValue, setGrantValue]: any = React.useState("vide");
+  const fetchPrevisionDepense = useFetchPrevisionDepenseList()
+  const { previsionDepenselist } = useAppSelector((state: any) => state.previsonDepense)
 
   React.useEffect(() => {
     fetchRapportDepense();
     fetchGrantList();
     fetchligneBudgetaire();
+    fetchPrevisionDepense();
   }, [router.query])
   // console.log(" id :", grantValue)
 
@@ -84,27 +93,45 @@ const AddRapportdepense = ({ handleClose }: any) => {
     if (grantValue !== "vide") {
       budgetLineList.forEach((b: any) => {
         let BudgetGrant: any = b.grantId;
-        // console.log("id grant :", BudgetGrant)
+        // console.log("id grant :", grantValue)
         if (grantValue === BudgetGrant) {
           grantInBudgteLine.push(b.id);
           if (!uniqueValues.has(b.id)) {
             uniqueValues.add(b.id);
-           return  BudgetLineGrantList.push({ id: b.id, name: b.code });
+            return BudgetLineGrantList.push({ id: b.id, name: b.code });
           }
         } else {
           if (!uniqueValues.has(b.id)) {
             uniqueValues.add(b.id);
-           return [];
+            return [];
           }
         }
       });
     }
   });
 
+  let total: any = useMemo(() => {
+    let totalBudget: any = 0;
+    previsionDepenselist.map((p: any) => {
+      if (p.imprevue === null) {
+        totalBudget += p.montant;
+      }
+    })
+    return totalBudget;
+  }, [previsionDepenselist])
+
+  const [daty, setDaty]: any = React.useState("");
+  const [lb, setLb] = React.useState("");
+  const [grt, setGrt] = React.useState(0);
+  const [bdg, setBdg] = React.useState(0);
+  const [amt, setAmt] = React.useState(0);
+
+  const clickUtiliser = (dt: Date, lib: string, grants: any, budget: any, amount: number) => {
+    setDaty(dt), setLb(lib), setGrt(grants), setBdg(budget), setAmt(amount);
+  }
   //ajout 
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
-    values.grant = grantValue;
     try {
       if (isEditing) {
         await dispatch(
@@ -113,8 +140,16 @@ const AddRapportdepense = ({ handleClose }: any) => {
             rapportDepense: values,
           })
         );
-      } else {
-        await dispatch(createRapportDepense(values))
+      } else if (daty!=="" && lb!=="" && grt!==0 && bdg!==0 && amt!==null){
+          values.date = daty;
+          values.libelle = lb;
+          values.grant = grt;
+          values.ligneBudgetaire = bdg;
+          values.montant = amt;
+          return (await dispatch(createRapportDepense(values)), fetchRapportDepense(), handleClose())
+      }else{
+        values.grant = grantValue;
+        return (await dispatch(createRapportDepense(values)), fetchRapportDepense(), handleClose()) 
       }
       fetchRapportDepense(),
         handleClose();
@@ -122,7 +157,6 @@ const AddRapportdepense = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-
   return (
     <Container
       maxWidth="xl"
@@ -137,10 +171,16 @@ const AddRapportdepense = ({ handleClose }: any) => {
               date: isEditing ? rapportDepense?.date : new Date(),
               libelle: isEditing ? rapportDepense?.libelle : "",
               montant: isEditing ? rapportDepense?.montant : "",
-              grant: isEditing ? rapportDepense?.grant : "",
+              grant: isEditing ? rapportDepense?.grant : grantValue,
               ligneBudgetaire: isEditing ? rapportDepense?.ligneBudgetaire : "",
             }
         }
+        validationSchema={Yup.object({
+          // grant: Yup.string().required("Champ obligatoire"),
+          // libelle: Yup.string().required("Champ obligatoire"),
+          // montant: Yup.string().required("Champ obligatoire"),
+          // ligneBudgetaire: Yup.string().required("Champ obligatoire"), 
+        })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
           action.resetForm();
@@ -159,7 +199,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                       label="Date"
                       variant="outlined"
                       name="date"
-                      value={formikProps.values.date}
+                      value={daty == "" ? formikProps.values.date : daty}
                       onChange={(value: any) => formikProps.setFieldValue("date", value)}
                     />
                     <OSTextField
@@ -168,7 +208,8 @@ const AddRapportdepense = ({ handleClose }: any) => {
                       label="Libellés"
                       variant="outlined"
                       name="libelle"
-                      inputProps={{ autoComplete: "off"}}
+                      inputProps={{ autoComplete: "off" }}
+                      value={lb ==="" ? formikProps.values.libelle : lb}
                     />
                     <OSTextField
                       fullWidth
@@ -178,6 +219,8 @@ const AddRapportdepense = ({ handleClose }: any) => {
                       name="montant"
                       type="number"
                       inputProps={{ autoComplete: "off", min: 0 }}
+                      value={amt === 0 ? formikProps.values.montant : amt}
+                      onChange={(e: any) =>formikProps.setFieldValue(e.target.value)}
                     />
                     <FormControl fullWidth>
                       <Stack spacing={2} direction="column">
@@ -188,19 +231,18 @@ const AddRapportdepense = ({ handleClose }: any) => {
                           label="Grant"
                           variant="outlined"
                           name="grant"
-                          value={(id) ?
-                            budgetLineList.find((e: any) => e.id === rapportDepense?.grant)?.code : grantValue}
+                          value={grantValue}
                           onChange={(e: any) => setGrantValue(e.target.value)}
                           hyperText={grantValue == "vide" ? false : true}
                         >
                           <MenuItem value="vide">Select grant</MenuItem>
                           {
                             grantEncoursList.map((item: any) => (
-                              <MenuItem value={item.id!}>{item.code!}</MenuItem>
+                              <MenuItem value={item.id}>{item.code!}</MenuItem>
                             ))
                           }
                         </OSTextField>
-                       <OSSelectField 
+                        <OSSelectField
                           fullWidth
                           select
                           id="outlined-basic"
@@ -210,51 +252,60 @@ const AddRapportdepense = ({ handleClose }: any) => {
                           options={BudgetLineGrantList}
                           dataKey={["name"]}
                           valueKey="id"
-                       >
-                       </OSSelectField>
+                          value={bdg ===0 ? formikProps.values.ligneBudgetaire : bdg}
+                        >
+                        </OSSelectField>
                       </Stack>
                     </FormControl>
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
-                        Voici la liste des
-                        <Lien>prevision de depense pendant la prévision</Lien>, vous
+                        <FormLabel> Voici la liste des </FormLabel>
+                        <Lien> prevision de depense pendant la prévision</Lien>, vous
                         pouvez les réutiliser pour les rapports
                       </Typography>
                     </Stack>
                     <Table sx={{ minWidth: 500 }} aria-label="simple table">
                       <TableHead>
                         <TableRow>
-                          <TableCell align="left">PJ#</TableCell>
                           <TableCell>Date</TableCell>
                           <TableCell align="left">Libellés</TableCell>
+                          <TableCell align="left">Grant</TableCell>
+                          <TableCell align="left">Budget line</TableCell>
                           <TableCell align="left">Montant</TableCell>
                         </TableRow>
                       </TableHead>
-                      {[1, 2, 3, 4, 5].map((item) => (
-                        <TableRow
-                          key={item}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            10
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            08/10/2021
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            Provision
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            100000
-                          </TableCell>
-                          <TableCell align="right">
-                            <Button color="primary" startIcon={<ContentCopyIcon />}>
-                              Utiliser
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {previsionDepenselist.filter((p: any) => p.imprevue === null)
+                        .map((item: PrevisionDepenseItem, index: any) => (
+                          <TableRow
+                            key={item.id!}
+                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                          >
+                            <TableCell component="th" scope="row">
+                              <Moment format="DD/MM/yyyy">{item.date}</Moment>
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.libelle}
+                            </TableCell>
+                            <TableCell align="left">
+                              {grantEncoursList.find((e: any) => e.id === item?.grant)?.code}
+                            </TableCell>
+                            <TableCell align="left">
+                              {budgetLineList.find((e: any) => e.id === item.ligneBudgetaire)?.code}
+                            </TableCell>
+
+                            <TableCell align="left">{item.montant} Ar</TableCell>
+                            <TableCell align="right">
+                              <Button
+                                color="primary"
+                                startIcon={<ContentCopyIcon />}
+                                onClick={() => clickUtiliser(item.date!, item.libelle!, item.grant!, item.ligneBudgetaire!, item.montant!)}
+                              >
+                                Utiliser
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                       {emptyRows > 0 && (
                         <TableRow
                           style={{
@@ -267,14 +318,14 @@ const AddRapportdepense = ({ handleClose }: any) => {
                     </Table>
                     <Footer>
                       <Typography variant="body2" align="right">
-                        TOTAL BUDGET : 30000
+                        TOTAL BUDGET : {total} Ar
                       </Typography>
                       <Typography variant="body2" align="right">
                         Imprévu de mission(total budget-location et perdiem MV(10% )) :
-                        10000
+                        {total / 10} Ar
                       </Typography>
                       <Typography variant="body2" align="right">
-                        TOTAL GENERAL BUDGET : 40000
+                        TOTAL GENERAL BUDGET : {total + (total / 10)} Ar
                       </Typography>
                     </Footer>
                     <TablePagination
@@ -291,7 +342,14 @@ const AddRapportdepense = ({ handleClose }: any) => {
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
-                  <Button color="warning">Annuler</Button>
+                  <Button 
+                  color="warning"
+                  onClick={() => {
+                    formikProps.resetForm();
+                    setGrt(0)
+                    dispatch(cancelEdit());
+                  }}
+                  >Annuler</Button>
                   <Button variant="contained" type="submit">
                     Enregistrer
                   </Button>

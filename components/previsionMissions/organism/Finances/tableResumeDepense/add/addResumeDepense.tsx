@@ -175,7 +175,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       label="Dépense prévue"
                       variant="outlined"
                       name="depensePrevue"
-                      type="number"
                       inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <OSTextField
@@ -184,7 +183,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       label="Budget de dépense"
                       variant="outlined"
                       name="budgetDepense"
-                      type="number"
                       inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <OSTextField

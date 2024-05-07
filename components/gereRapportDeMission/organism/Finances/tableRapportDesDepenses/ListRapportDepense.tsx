@@ -287,7 +287,7 @@ const ListRapportDepenses = () => {
               {total / 10} Ar
               </Typography>
               <Typography variant="body2" align="right">
-                TOTAL GENERAL BUDGET : {total} Ar
+                TOTAL GENERAL BUDGET : {total + (total / 10)} Ar
               </Typography>
             </Footer>
             <TablePagination

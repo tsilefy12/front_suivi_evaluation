@@ -116,7 +116,6 @@ const ListPrevision = () => {
     handleClickOpen();
   };
 
-
   let total: any = useMemo(() => {
     let totalBudget: any = 0;
     previsionDepenselist.map((p: any) =>{

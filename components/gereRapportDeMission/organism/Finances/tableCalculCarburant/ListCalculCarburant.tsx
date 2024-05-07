@@ -2,11 +2,12 @@ import {
   Button,
   Container,
   Dialog,
+  FormControl,
   IconButton,
   Stack,
   styled,
 } from "@mui/material";
-import React from "react";
+import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -32,6 +33,8 @@ import { deleteCalculCarburantRapport, editCalculCarburantRapport } from "../../
 import AddcalculCarburantRapport from "./add/addCalculCarburant";
 import { CalculCarburantRapportItem } from "../../../../../redux/features/calculCarburantRapport/calculCarburantRapport.interface";
 import useFetchVehicleList from "../../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
+import Typography from "../../../../../themes/overrides/Typography";
+import { Label } from "@mui/icons-material";
 
 const ListcalculCarburantRapport = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -42,14 +45,14 @@ const ListcalculCarburantRapport = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const fetchcalculCarburantRapport = useFetchcalculCarburantRapportList();
-  const { calculCarburantRapportList } = useAppSelector((state) =>state.calculCarburantRapport);
+  const { calculCarburantRapportList } = useAppSelector((state) => state.calculCarburantRapport);
   const router = useRouter();
   const confirm = useConfirm();
   const dispatch = useAppDispatch()
   const fetchVehicleList = useFetchVehicleList();
-  const { vehicleList } = useAppSelector((state: any) =>state.vehicle)
+  const { vehicleList } = useAppSelector((state: any) => state.vehicle)
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchcalculCarburantRapport();
     fetchVehicleList();
   }, [router.query])
@@ -120,30 +123,36 @@ const ListcalculCarburantRapport = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const handleClickDelete = async (id: any) => {
-      confirm({
-        title: "Supprimer calcul carburant",
-        description: "Voulez-vous vraiment supprimer ?",
-        cancellationText: "Annuler",
-        confirmationText: "Supprimer",
-        cancellationButtonProps: {
-          color: "warning",
-        },
-        confirmationButtonProps: {
-          color: "error",
-        },
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer calcul carburant",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteCalculCarburantRapport({ id }));
+        fetchcalculCarburantRapport();
       })
-        .then(async () => {
-          await dispatch(deleteCalculCarburantRapport({ id }));
-          fetchcalculCarburantRapport();
-        })
-        .catch(() => { });
-    };
-    const handleClickEdit = async (id: any) => {
-      await dispatch(editCalculCarburantRapport({ id }));
-      handleClickOpen();
-    };
-  
+      .catch(() => { });
+  };
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editCalculCarburantRapport({ id }));
+    handleClickOpen();
+  };
+  let total: any = useMemo(() => {
+    let calcul = 0
+    calculCarburantRapportList.map((c: any) => {
+      calcul += c.totalCarburant;
+    })
+    return calcul;
+  }, [calculCarburantRapportList])
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -151,7 +160,7 @@ const ListcalculCarburantRapport = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddcalculCarburantRapport handleClose={handleClose}/>
+          <AddcalculCarburantRapport handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -188,11 +197,11 @@ const ListcalculCarburantRapport = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.trajet}
-                          // selected={isItemSelected}
+                        // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                            // onClick={(event) => handleClick(event, row.trajet)}
+                          // onClick={(event) => handleClick(event, row.trajet)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -203,8 +212,8 @@ const ListcalculCarburantRapport = () => {
                             {row.trajet}
                           </TableCell>
                           <TableCell align="right">
-                            {vehicleList.find((e: any) =>e.id === row.vehicule)?.vehicleType}
-                            </TableCell>
+                            {vehicleList.find((e: any) => e.id === row.vehicule)?.vehicleType}
+                          </TableCell>
                           <TableCell align="right">{row.typeCarburant}</TableCell>
                           <TableCell align="right">{row.distance}</TableCell>
                           <TableCell align="right">{row.nombreTrajet}</TableCell>
@@ -226,7 +235,7 @@ const ListcalculCarburantRapport = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
-                                onClick={() =>handleClickEdit(row.id)}
+                                onClick={() => handleClickEdit(row.id)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -234,7 +243,7 @@ const ListcalculCarburantRapport = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
-                                onClick={() =>handleClickDelete(row.id)}
+                                onClick={() => handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>
@@ -254,6 +263,9 @@ const ListcalculCarburantRapport = () => {
                   )}
                 </TableBody>
               </Table>
+              {/* <FormControl fullWidth  sx={{textAlign: "right",padding: 2}}>
+                  Total carburant : {total}
+              </FormControl> */}
             </TableContainer>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}

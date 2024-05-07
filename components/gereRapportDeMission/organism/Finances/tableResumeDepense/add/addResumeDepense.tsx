@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import InfoIcon from "@mui/icons-material/Info";
+import * as Yup from "yup";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
@@ -36,6 +37,9 @@ import useFetchBudgetLine from "../../../../../previsionMissions/organism/Financ
 import { createResumeDepensePrevue, updateResumeDepensePrevue } from "../../../../../../redux/features/resumeDepensePrevue";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import OSSelectField from "../../../../../shared/select/OSSelectField";
+import useFetchResumeDepenseList from "../../../../../previsionMissions/organism/Finances/tableResumeDepense/hooks/useFetchResumeDepense";
+import { ResumeDepenseItem } from "../../../../../../redux/features/resumeDepense/reumeDepense.interface";
+import { cancelEdit } from "../../../../../../redux/features/resumeDepensePrevue/resumeDepensePrevueSlice";
 
 const AddResumeDepense = ({ handleClose }: any) => {
   const [page, setPage] = React.useState(0);
@@ -51,11 +55,14 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const [grantValue, setGrantValue]: any = React.useState("vide");
   const { id }: any = router.query;
+  const fetchResumeDepense = useFetchResumeDepenseList();
+  const { resumeDepenseList } = useAppSelector((state) => state.resumeDepense)
 
   React.useEffect(() => {
     fetchResumeDepensePrevue();
     fetchGrantList();
     fetchligneBudgetaire();
+    fetchResumeDepense();
   }, [router.query])
 
   const handleChangeRowsPerPage = (
@@ -84,7 +91,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
           grantInBudgteLine.push(b.id);
           if (!uniqueValues.has(b.id)) {
             uniqueValues.add(b.id);
-            return   BudgetLineGrantList.push({ id: b.id, name: b.code });
+            return BudgetLineGrantList.push({ id: b.id, name: b.code });
           }
         } else {
           return [];
@@ -92,12 +99,19 @@ const AddResumeDepense = ({ handleClose }: any) => {
       });
     }
   });
+  const [grts, setGrts]: any = React.useState(0)
+  const [bdgLine, setBdgLine]: any = React.useState(0)
+  const [dpns, setDpns]: any = React.useState("")
+  const [bdgt, setBdgt]: any = React.useState("")
+  const [rmq, setRmq]: any = React.useState("")
 
-  // console.log("Budget line value :", BudgetLineGrantList)
+  const clickUtiliser = (grants: any, budgetline: any, depense: any, budget: any, rem: any) => {
+    setGrts(grants), setBdgLine(budgetline), setDpns(depense), setBdgt(budget), setRmq(rem)
+  }
+  // console.log("Budget line value :", grts)
   //ajout 
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
-    values.grant = grantValue;
     try {
       if (isEditing) {
         await dispatch(
@@ -106,11 +120,23 @@ const AddResumeDepense = ({ handleClose }: any) => {
             resumeDepensePrevue: values,
           })
         );
+      } else if (grts !== 0 && bdgLine !== 0 && dpns !== "" && bdgt !== "" && rmq !== "") {
+        values.grant = grts;
+        values.ligneBudgetaire = bdgLine;
+        values.depensePrevue = dpns;
+        values.budgetDepense = bdgt;
+        values.remarque = rmq;
+        return await (dispatch(createResumeDepensePrevue(values)),
+          fetchResumeDepensePrevue(),
+          handleClose())
       } else {
-        await dispatch(createResumeDepensePrevue(values))
+        values.grant = grantValue;
+        return await (dispatch(createResumeDepensePrevue(values)),
+          fetchResumeDepensePrevue(),
+          handleClose())
       }
       fetchResumeDepensePrevue(),
-        handleClose();
+        handleClose()
     } catch (error) {
       console.log("error", error);
     }
@@ -129,10 +155,15 @@ const AddResumeDepense = ({ handleClose }: any) => {
               depensePrevue: isEditing ? resumeDepensePrevue?.depensePrevue : "",
               budgetDepense: isEditing ? resumeDepensePrevue?.budgetDepense : "",
               remarque: isEditing ? resumeDepensePrevue?.remarque : "",
-              grant: isEditing ? resumeDepensePrevue?.grant : "",
+              grant: isEditing ? resumeDepensePrevue?.grant : grantValue,
               ligneBudgetaire: isEditing ? resumeDepensePrevue?.ligneBudgetaire : "",
             }
         }
+        // validationSchema={Yup.object({
+        //   depensePrevue: Yup.string().required("Champ obligatoire"),
+        //   budgetDepense: Yup.string().required("Champ obligatoire"),
+        //   ligneBudgetaire: Yup.string().required("Champ obligatoire"),
+        // })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
           action.resetForm();
@@ -153,9 +184,9 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         label="Grant"
                         variant="outlined"
                         name="grant"
-                        value={(id) ?
-                          budgetLineList.find((e: any) => e.id === resumeDepensePrevue?.grant)?.code : grantValue}
+                        value={grts != 0 ? grts : grantValue}
                         onChange={(e: any) => setGrantValue(e.target.value)}
+                        disabled={!!grts}
                       >
                         <MenuItem value="vide">Select grant</MenuItem>
                         {
@@ -176,6 +207,8 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         options={BudgetLineGrantList}
                         dataKey={["name"]}
                         valueKey="id"
+                        value={bdgLine!=0 ? bdgLine: formikProps.values.ligneBudgetaire}
+                        disabled={!!grts}
                       >
                       </OSSelectField>
                     </FormControl>
@@ -185,7 +218,8 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       label="Dépense prévue"
                       variant="outlined"
                       name="depensePrevue"
-                      inputProps={{ autoComplete: "off"}}
+                      inputProps={{ autoComplete: "off" }}
+                      disabled={!!grts}
                     />
                     <OSTextField
                       fullWidth
@@ -193,7 +227,8 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       label="Budget de dépense"
                       variant="outlined"
                       name="budgetDepense"
-                      inputProps={{ autoComplete: "off"}}
+                      inputProps={{ autoComplete: "off" }}
+                      disabled={!!grts}
                     />
                     <OSTextField
                       fullWidth
@@ -202,11 +237,12 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       variant="outlined"
                       name="remarque"
                       inputProps={{ autoComplete: "off" }}
+                      disabled={!!grts}
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
-                        <FormLabel sx={{color: "black"}}> Voici la liste des </FormLabel>
+                        <FormLabel sx={{ color: "black" }}> Voici la liste des </FormLabel>
                         <Lien> resumé de depense pendant la prévision</Lien>, vous
                         pouvez les réutiliser pour les rapports
                       </Typography>
@@ -217,36 +253,36 @@ const AddResumeDepense = ({ handleClose }: any) => {
                           <TableCell align="left">Grant</TableCell>
                           <TableCell>Ligne Budgétaire</TableCell>
                           <TableCell align="left">Dépenses prévues</TableCell>
-                          <TableCell align="left">Dépenses Réalisées</TableCell>
-                          <TableCell align="left">Différence</TableCell>
+                          <TableCell align="left">Budget de depense</TableCell>
                           <TableCell align="left">Remarques</TableCell>
                         </TableRow>
                       </TableHead>
-                      {[1, 2].map((item) => (
+                      {resumeDepenseList.map((item: ResumeDepenseItem, index: any) => (
                         <TableRow
-                          key={item}
+                          key={index}
                           sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                         >
                           <TableCell component="th" scope="row">
-                            ADM-MOT-001
+                            {grantEncoursList.find((e: any) => e.id === item.grant)?.code}
                           </TableCell>
                           <TableCell component="th" scope="row">
-                            LB1
+                            {budgetLineList.find((e: any) => e.id === item.ligneBudgetaire)?.code}
                           </TableCell>
                           <TableCell component="th" scope="row">
-                            100000
+                            {item.depensePrevue}
                           </TableCell>
                           <TableCell component="th" scope="row">
-                            100000
+                            {item.budgetDepense}
                           </TableCell>
                           <TableCell component="th" scope="row">
-                            100000
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            test
+                            {item.remarque}
                           </TableCell>
                           <TableCell align="right">
-                            <Button color="primary" startIcon={<ContentCopyIcon />}>
+                            <Button
+                              color="primary"
+                              startIcon={<ContentCopyIcon />}
+                              onClick={() => clickUtiliser(item.grant, item.ligneBudgetaire, item.depensePrevue, item.budgetDepense, item.remarque)}
+                            >
                               Utiliser
                             </Button>
                           </TableCell>
@@ -288,7 +324,14 @@ const AddResumeDepense = ({ handleClose }: any) => {
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
-                  <Button color="warning">Annuler</Button>
+                  <Button 
+                  color="warning"
+                  onClick={() => {
+                    formikProps.resetForm();
+                    setGrts(0)
+                    dispatch(cancelEdit());
+                  }}
+                  >Annuler</Button>
                   <Button variant="contained" type="submit">
                     Enregistrer
                   </Button>
