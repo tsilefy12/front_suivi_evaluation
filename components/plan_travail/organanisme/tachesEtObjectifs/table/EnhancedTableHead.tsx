@@ -48,6 +48,12 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
           </TableSortLabel>
         </TableCell>
       ))}
+      <TableCell>
+        Objectif annuel {props.year - 1}
+      </TableCell>
+      <TableCell>
+        Objectif annuel {props.year}
+      </TableCell>
     </TableRow>
   </TableHead>
   )

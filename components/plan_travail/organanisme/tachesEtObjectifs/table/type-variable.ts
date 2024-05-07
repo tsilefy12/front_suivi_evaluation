@@ -24,6 +24,7 @@ export interface EnhancedTableToolbarProps {
 }
 
 export interface EnhancedTableProps {
+  year : number ;
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,

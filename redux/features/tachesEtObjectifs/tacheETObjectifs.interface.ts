@@ -1,3 +1,5 @@
+import { ObjectifAnnuelItem } from "../objectifAnnuels/objectifAnnuel.interface";
+
 export interface TacheEtObjectifItem {
     id?: string;
     sn?: string;
@@ -10,7 +12,7 @@ export interface TacheEtObjectifItem {
     participantsId?: string[];
     notes?: string;
     startDate? : Date;
-    objectifAnnuel?:any[];
+    objectifAnnuel?: ObjectifAnnuelItem[];
     endDate? : Date;
     planTravaileId?: string;
     planTravaile?: any;
