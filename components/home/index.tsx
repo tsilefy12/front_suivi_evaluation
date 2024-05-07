@@ -171,7 +171,7 @@ const ListMissions = () => {
                     </Link>
                   </Stack>
                   <Stack direction={{ xs: "column", sm: "row" }}>
-                    <Link href="/missions/id/bilan">
+                    <Link href={`/missions/${mission.id!}/bilan`}>
                       <Button variant="text" color="info">
                         Bilan
                       </Button>
