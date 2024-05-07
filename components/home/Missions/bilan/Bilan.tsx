@@ -7,6 +7,7 @@ import {
   Box,
   styled,
   Paper,
+  FormLabel,
 } from "@mui/material";
 import Container from "@mui/material/Container";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -16,13 +17,103 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useRouter } from "next/router";
-import Techniques from "./organism/Techniques/techniques";
-import Finances from "./organism/Finances/Finance";
+import Techniques, { PourcentageTechnique } from "./organism/Techniques/techniques";
+import Finances, { Montant } from "./organism/Finances/Finance";
 import Link from "next/link";
+import useFetchMissionListe from "../hooks/useFetchMissionListe";
+import { useAppSelector } from "../../../../hooks/reduxHooks";
+import { MissionItem } from "../../../../redux/features/mission/mission.interface";
+import useFetchPrevisionDepenseList from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchPrevisionDepense";
+import useFetchRapportDepense from "../../../gereRapportDeMission/organism/Finances/tableRapportDesDepenses/hooks/useFetchRapportDepense";
+import useFetchMissionGoalListe from "../../../previsionMissions/organism/Techniques/tableObjectif/hooks/useFetchObjectifList";
+import useFetchObjectifRapport from "../../../gereRapportDeMission/organism/Techniques/tableObjectif/hooks/useFetchObjectifRapport";
+import useFetchExceptedResultList from "../../../previsionMissions/organism/Techniques/tableResultatAttendu/hooks/useFetchExceptedResultList";
+import useFetchResultatRapport from "../../../gereRapportDeMission/organism/Techniques/tableResultatAttendu/hooks/useFetchResultatRapport";
+import useFetchPlannedActivityList from "../../../previsionMissions/organism/Techniques/tableActivitésPrévues/hooks/useFetchPlannedActivityList";
+import useFetchActiviteRapport from "../../../gereRapportDeMission/organism/Techniques/tableActivitésPrévues/hooks/useFetchActivityRapport";
+import useFetchDeliverableList from "../../../previsionMissions/organism/Techniques/tableLivrables/hooks/useFetchDeliverableList";
+import useFetchLivrableRapport from "../../../gereRapportDeMission/organism/Techniques/tableLivrables/hooks/useFetchLivrableRapport";
+import useFetchMissionLocationListe from "../../../previsionMissions/organism/Techniques/tableLieux/hooks/useFetchMissionLocationList";
+import useFetchMissionaryList from "../../../previsionMissions/organism/Techniques/tableMissionnaires/hooks/useFetchMissionaryList";
+import useFetchMissionaryRapportList from "../../../gereRapportDeMission/organism/Techniques/tableMissionnaires/hooks/useFetchMissionaryList";
+import useFetchVehicleList from "../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
+import useFetchAutreInfoRapport from "../../../gereRapportDeMission/organism/Techniques/tableAutreInfoAuto/hooks/useFetchAutreInfoRaport";
+import useFetchContactListe from "../../../previsionMissions/organism/Techniques/tableContactPendantMission/hooks/useFetchContactList";
+import useFetchLieuxRapport from "../../../gereRapportDeMission/organism/Techniques/tableLieux/hooks/useFetchLieuxRapport";
+import useFetchContactMissionRapport from "../../../gereRapportDeMission/organism/Techniques/tableContactPendantMission/hooks/useFetchContactMissionRapport";
+import useFetchProgrammePrevisionList from "../../../previsionMissions/organism/Techniques/tableProgramme/hooks/useFetchProgrammePrevision";
+import useFetchProgrammeRapport from "../../../gereRapportDeMission/organism/Techniques/tableProgramme/hooks/useFetchProgrammeRapport";
 
 const BilanMission = () => {
   const [value, setValue] = React.useState(0);
   const [age, setAge] = React.useState("");
+  const router = useRouter();
+  const fetchMission = useFetchMissionListe();
+  const { missionListe } = useAppSelector((state: any) => state.mission);
+  const { id }: any = router.query;
+  const { montant } = Montant();
+  const fetchPrevisionDepense = useFetchPrevisionDepenseList();
+  const fetchRapportDepense = useFetchRapportDepense();
+  const { percentageTechnique }: any = PourcentageTechnique();
+  //objectif
+  const fetchMissionGoalList = useFetchMissionGoalListe();
+  const fetchObjectifRapport = useFetchObjectifRapport();
+
+  //resultat
+  const fetchExceptedResultListe = useFetchExceptedResultList();
+  const fetchResultatRapport = useFetchResultatRapport();
+
+  //activity
+  const fetchPlannedActivityListe = useFetchPlannedActivityList();
+  const fetchActivityRapport = useFetchActiviteRapport();
+
+  //livrable
+  const fetchDeliverableListe = useFetchDeliverableList();
+  const fetchLivrableRapport = useFetchLivrableRapport();
+
+  //lieux
+  const fetchMissionLocationListe = useFetchMissionLocationListe();
+  const fetchLieuxRapport = useFetchLieuxRapport();
+
+  //missionaire
+  const fetchMissionaryList = useFetchMissionaryList();
+  const fetchMissionaryRapportList = useFetchMissionaryRapportList();
+
+  //autre information importante
+  const fetchVehicleListe = useFetchVehicleList();
+  const fetchAutreInfoRapport = useFetchAutreInfoRapport();
+
+  //contact pendant la mission
+  const fetchContactList = useFetchContactListe();
+  const fetchContactMissionRapport = useFetchContactMissionRapport();
+
+  //programme
+  const fetchProgrammePrevision = useFetchProgrammePrevisionList();
+  const fetchProgrammeRapport = useFetchProgrammeRapport();
+
+  React.useEffect(() => {
+    fetchMission();
+    fetchPrevisionDepense();
+    fetchRapportDepense();
+    fetchMissionGoalList();
+    fetchObjectifRapport();
+    fetchExceptedResultListe();
+    fetchResultatRapport();
+    fetchActivityRapport();
+    fetchPlannedActivityListe();
+    fetchLivrableRapport();
+    fetchDeliverableListe();
+    fetchMissionLocationListe();
+    fetchLieuxRapport();
+    fetchMissionaryList()
+    fetchMissionaryRapportList();
+    fetchAutreInfoRapport();
+    fetchVehicleListe();
+    fetchContactList();
+    fetchContactMissionRapport();
+    fetchProgrammePrevision();
+    fetchProgrammeRapport();
+  }, [router.query])
 
   const handleChangeSelect = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
@@ -35,7 +126,7 @@ const BilanMission = () => {
   const handleChangeIndex = (index: number) => {
     setValue(index);
   };
-
+//  console.log("% :", percentageTechnique)
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -54,27 +145,32 @@ const BilanMission = () => {
         <Divider />
       </NavigationContainer>
       <FormContainer spacing={2}>
-        <Grid container >
-          <Grid item xs={12} md={4}>
-            <KeyValue keyName="Ref mission" value={"MISSION_001"} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <KeyValue keyName="Responsable" value={"Ollie Mc"} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <KeyValue keyName="Gestionnaire de budget" value={"Anna"} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <KeyValue
-              keyName="Description"
-              value={"Description de la mission"}
-            />
+        {
+          missionListe.filter((e: any) => e.id == id).map((item: MissionItem, index: any) => (
+            <Grid container key={index}>
+              <Grid item xs={12} md={4}>
+                <KeyValue keyName="Ref mission" value={item.reference!} />
+                <KeyValue keyName="Description" value={item.descriptionMission!} />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                Responsable :
+                <FormLabel>
+                  {[item.missionManager].map((mm: any) => mm.name + " " + mm.surname)}
+                </FormLabel>
+              </Grid>
+              <Grid item xs={12} md={4}>
+                Gestionnaire de budget :
+                <FormLabel>
+                  {[item.budgetManager!].map((bm: any) => bm.name + " " + bm.surname)}
+                </FormLabel>
+              </Grid>
             </Grid>
-        </Grid>
+          ))
+        }
       </FormContainer>
       <BodySection>
-        <Stack 
-        direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{padding:"10px", width:"100%" }}>
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ padding: "10px", width: "100%" }}>
           <Stack width={{ xs: '100%', sm: '100%', md: '70%' }}>
             <Tabs
               value={value}
@@ -109,7 +205,7 @@ const BilanMission = () => {
                     Bilan technique
                   </Typography>
                   <Typography color="primary" variant="h3">
-                    90%
+                    {percentageTechnique}%
                   </Typography>
                 </Grid>
                 <Grid>
@@ -117,7 +213,7 @@ const BilanMission = () => {
                     Bilan financier
                   </Typography>
                   <Typography variant="h4" color="#2196F3">
-                    +200 000 Ar
+                    {montant} Ar
                   </Typography>
                 </Grid>
               </Grid>
@@ -161,7 +257,7 @@ function a11yProps(index: number) {
   };
 }
 
-export const SectionNavigation = styled(Stack)(({}) => ({}));
+export const SectionNavigation = styled(Stack)(({ }) => ({}));
 const NavigationContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   marginBottom: theme.spacing(2),

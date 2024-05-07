@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,18 +7,27 @@ import TableRow from "@mui/material/TableRow";
 import { Box } from "@mui/material";
 import { createData } from "./table/finances.function";
 import { columns } from "./table/finances.constant";
+import useFetchPrevisionDepenseList from "../../../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchPrevisionDepense";
+import { useAppSelector } from "../../../../../../hooks/reduxHooks";
+import { useRouter } from "next/router";
+import useFetchRapportDepense from "../../../../../gereRapportDeMission/organism/Finances/tableRapportDesDepenses/hooks/useFetchRapportDepense";
+
 
 const Finances = () => {
+  const router = useRouter();
+  const fetchPrevisionDepense = useFetchPrevisionDepenseList();
+  const {totalPrevision, totalRappport, montant } = Montant()
+  const fetchRapportDepense = useFetchRapportDepense();
+  React.useEffect(() =>{
+    fetchPrevisionDepense();
+    fetchRapportDepense();
+  }, [router.query])
+
+
   const rows = [
-    createData("Dépense prévue pendant la mission : 10 200 000 Ariary"),
-    createData("Dépense dans le rapport : 10 000 000 Ariary"),
-    createData("Différence: 200 000 Ariary"),
-    // createData("Livrables : 100%"),
-    // createData("Lieux : 50%"),
-    // createData("Missionnaires : 100%"),
-    // createData("Autres informations importantes : 100%"),
-    // createData("Contacts pendant la mission : 50%"),
-    // createData("Programmes : 50%"),
+    createData("Dépense prévue pendant la mission : "+totalPrevision),
+    createData("Dépense dans le rapport : "+totalRappport),
+    createData("Différence: "+montant),
   ];
 
   return (
@@ -45,7 +54,7 @@ const Finances = () => {
                       <TableCell key={column.id} align={column.align}>
                         {column.format && typeof value === "number"
                           ? column.format(value)
-                          : value}
+                          : value} Ariary
                       </TableCell>
                     );
                   })}
@@ -60,3 +69,36 @@ const Finances = () => {
 };
 
 export default Finances;
+
+export const Montant = () =>{
+  const { previsionDepenselist}: any = useAppSelector((state: any) => state.previsonDepense);
+  const { rapportDepenseList } = useAppSelector((state: any) => state.rapportDepense);
+  let totalPrevision: any = useMemo(() => {
+    let totalBudget: any = 0;
+    previsionDepenselist.map((p: any) =>{
+      if (p.imprevue===null) {
+        totalBudget += p.montant;
+      }
+    })
+    return totalBudget;
+  }, [previsionDepenselist])
+
+  
+  let totalRappport: any = useMemo(() => {
+    let totalBudget: any = 0;
+    rapportDepenseList.forEach((item: any) => {
+      totalBudget += item.montant;
+    })
+    return totalBudget;
+  }, [rapportDepenseList])
+  let montant: any = useMemo(() =>{
+    let calcul = totalPrevision - totalRappport;
+    return calcul;
+  },[totalPrevision, totalRappport])
+
+  return {
+    totalPrevision,
+    totalRappport,
+    montant
+  }
+}

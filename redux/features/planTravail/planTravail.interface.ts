@@ -1,3 +1,5 @@
+import { TacheEtObjectifItem } from "../tachesEtObjectifs/tacheETObjectifs.interface";
+
 export interface PlanTravailItem {
     id?: string;
     title?: string;
@@ -5,6 +7,7 @@ export interface PlanTravailItem {
     endDate?: Date;
     description?: string;
     projectId?: number;
+    TacheCle?: TacheEtObjectifItem[];
 }
 export interface PlanTravailInitialState {
     planTravaillist: PlanTravailItem[];
