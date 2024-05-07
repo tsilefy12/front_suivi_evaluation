@@ -1,3 +1,4 @@
+import { TacheEtObjectifItem } from "../../../../../redux/features/tachesEtObjectifs/tacheETObjectifs.interface";
 
 export default interface Data {
   sn: string;
@@ -20,7 +21,10 @@ export interface HeadCell {
 }
 
 export interface EnhancedTableToolbarProps {
+  selectYear: number;
+  setSelectYear : any;
   numSelected: number;
+  tacheEtObjectifList : TacheEtObjectifItem[];
 }
 
 export interface EnhancedTableProps {
