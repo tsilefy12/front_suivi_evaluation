@@ -222,15 +222,11 @@ const ListTacheEtObjectifs = () => {
         />
       </FormContainer>
       <BodySection>
-        <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2 }}>
-            <EnhancedTableToolbar tacheEtObjectifList={tacheEtObjectifList} numSelected={selected.length} selectYear={selectYear} setSelectYear={setSelectYear}/>
-            <TableContainer>
-              <Table
-                sx={{ minWidth: 750 }}
-                aria-labelledby="tableTitle"
-                size={dense ? "small" : "medium"}
-              >
+          <Box sx={{ width: "100%" }}>
+            <Paper sx={{ width: "100%", mb: 2 ,pt:2}}>
+              <EnhancedTableToolbar tacheEtObjectifList={tacheEtObjectifList} numSelected={selected.length} selectYear={selectYear} setSelectYear={setSelectYear}/>
+              <TableContainer>
+                <Table sx={{  width: "100%",padding: 2 , overflow:"auto"}}>
                 <EnhancedTableHead
                   numSelected={selected.length}
                   order={order}
@@ -241,8 +237,6 @@ const ListTacheEtObjectifs = () => {
                   year={selectYear}
                 />
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                rows.slice().sort(getComparator(order, orderBy)) */}
                   {tacheEtObjectifList.filter((e: any) => e.planTravaileId === id!)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: TacheEtObjectifItem, index: any) => {

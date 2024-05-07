@@ -36,34 +36,38 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         </Typography>
       ) : (
         <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        spacing={{ xs: 1, sm: 2, md: 4 }}
-          sx={{
-            flex: "1 1 100%",
-            justifyContent: "space-between",
-          }}
-        
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={{ xs: 1, sm: 2, md: 4 }}
+            sx={{
+              flex: "1 1 100%",
+              justifyContent: "space-between",
+            }}
+          
         >
-          <Typography variant="h6" id="tableTitle" component="div">
-            Liste des tâches et objectifs
-          </Typography>
-          <TextField
-              select
-              label ="Année"
-              value={props.selectYear}
-              onChange={(e)=> props.setSelectYear(parseInt(e.target.value))}
-            >
-              {Array.from(new Set(props.tacheEtObjectifList.flatMap(e=>e.objectifAnnuel?.map(i=>i.year)))).map(item=>(
-                <MenuItem key={item} value={item}>{item}</MenuItem>
-              ))}  
-          </TextField>
-          <TextField
-            variant="outlined"
-            id="search"
-            name="search"
-            placeholder="Recherche"
-            size="small"
-          />
+           <Typography variant="h6" id="tableTitle" component="div">
+              Liste des tâches et objectifs
+            </Typography>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
+              <TextField
+                  select
+                  variant="outlined"
+                  size="small"
+                  label ="Année"
+                  value={props.selectYear}
+                  onChange={(e)=> props.setSelectYear(parseInt(e.target.value))}
+                >
+                  {Array.from(new Set(props.tacheEtObjectifList.flatMap(e=>e.objectifAnnuel?.map(i=>i.year)))).map(item=>(
+                    <MenuItem key={item} value={item}>{item}</MenuItem>
+                  ))}  
+              </TextField>
+              <TextField
+                variant="outlined"
+                id="search"
+                name="search"
+                placeholder="Recherche"
+                size="small"
+              />
+          </Stack>
         </Stack>
       )}
       {numSelected > 0 && (
