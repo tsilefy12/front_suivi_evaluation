@@ -7,7 +7,11 @@ const useFetchTacheEtObjectifs = () => {
   const dispatch = useAppDispatch();
 
   return async () => {
-    let args: any = {};
+    let args: any = {
+      include : {
+        objectifAnnuel : true
+      }
+    };
     if (router.query.search) {
       args.where = {
         OR: [],

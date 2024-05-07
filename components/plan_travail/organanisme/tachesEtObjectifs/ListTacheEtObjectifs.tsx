@@ -4,12 +4,14 @@ import {
   Dialog,
   Divider,
   IconButton,
+  MenuItem,
   Stack,
   styled,
+  TextField,
   Typography,
 } from "@mui/material";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -45,9 +47,11 @@ import { getPlanTravail } from "../../../../redux/features/planTravail";
 import Moment from "react-moment";
 import { getStatuslist } from "../../../../redux/features/status";
 import { TacheEtObjectifItem } from "../../../../redux/features/tachesEtObjectifs/tacheETObjectifs.interface";
+import { array } from "prop-types";
 
 const ListTacheEtObjectifs = () => {
   const [order, setOrder] = React.useState<Order>("asc");
+  const [ selectYear, setSelectYear] = useState<number>(new Date().getFullYear())
   const [orderBy, setOrderBy] = React.useState<keyof Data>("startDate");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
@@ -130,6 +134,10 @@ const ListTacheEtObjectifs = () => {
 
     setSelected(newSelected);
   };
+
+  useEffect(()=>{
+    console.log(new Set(tacheEtObjectifList.flatMap(e=>e.objectifAnnuel?.map(i=>i.year))))
+  },[tacheEtObjectifList])
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -217,6 +225,16 @@ const ListTacheEtObjectifs = () => {
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />
+              <TextField
+                  select
+                  label ="Année"
+                  value={selectYear}
+                  onChange={(e)=> setSelectYear(parseInt(e.target.value))}
+                >
+                  {Array.from(new Set(tacheEtObjectifList.flatMap(e=>e.objectifAnnuel?.map(i=>i.year)))).map(item=>(
+                    <MenuItem key={item} value={item}>{item}</MenuItem>
+                  ))}  
+              </TextField>
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -230,6 +248,7 @@ const ListTacheEtObjectifs = () => {
                   onSelectAllClick={handleSelectAllClick}
                   onRequestSort={handleRequestSort}
                   rowCount={rows.length}
+                  year={selectYear}
                 />
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
@@ -239,7 +258,6 @@ const ListTacheEtObjectifs = () => {
                     .map((row: TacheEtObjectifItem, index: any) => {
                       // const isItemSelected = isSelected(row.id);
                       const labelId = `enhanced-table-checkbox-${index}`;
-
                       return (
                         <TableRow
                           hover
@@ -280,6 +298,16 @@ const ListTacheEtObjectifs = () => {
                             <Moment format="DD/MM/YYYY">
                               {row.endDate}
                             </Moment>
+                          </TableCell>
+                          <TableCell>
+                            {row.objectifAnnuel?.filter((e) => e.year === (selectYear - 1)).map((item) =>(
+                               <p key={item.id}>{item.objectiveTitle}</p>
+                            ))}
+                          </TableCell>
+                          <TableCell>
+                            {row.objectifAnnuel?.filter((e) => e.year === selectYear).map((item) =>(
+                               <p key={item.id}>{item.objectiveTitle}</p>
+                            ))}
                           </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
