@@ -5,7 +5,9 @@ export const getPlanTravaillist = createAsyncThunk(
   "planTravail/getPlanTravaillist",
   async (data: { args?: any }, thunkAPI) => {
     try {
-      const params = JSON.stringify(data.args);
+      const params = {
+        args:JSON.stringify(data.args)
+      };
       const response = await axios.get("/suivi-evaluation/plan-travaile", { params });
       return response.data;
     } catch (error: any) {

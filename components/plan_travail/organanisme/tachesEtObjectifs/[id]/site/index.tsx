@@ -11,172 +11,204 @@ import OSTextField from "../../../../../shared/input/OSTextField";
 import { updateSite } from "../../../../../../redux/features/site";
 import { Form, Formik } from "formik";
 import { position } from "polished";
+import useFetchPlanTravaile from "../../../../hooks/useFetchPlanTravail";
+import useFetchTacheEtObjectifs from "../../hooks/useFetchTacheEtObjectifs";
+import { TacheEtObjectifItem } from "../../../../../../redux/features/tachesEtObjectifs/tacheETObjectifs.interface";
+import { PlanTravailItem } from "../../../../../../redux/features/planTravail/planTravail.interface";
 
 
 const ListSite = () => {
-    const router = useRouter()
-    const { id }: any = router.query;
-    const { idT }: any = router.query;
-    const fetchObjectifAnnuel = useFetchObjectifsAnnuel();
-    const { objectifsAnnuelList } = useAppSelector((state: any) => state.objectifsAnnuels)
-    const fetchSite = useFetchSite();
-    const { sitelist, isEditing, site } = useAppSelector((state: any) => state.site);
-    const dispatch: any = useAppDispatch();
-    const [open, setOpen] = React.useState(false);
+  const router = useRouter()
+  const { id }: any = router.query;
+  const { idT }: any = router.query;
+  const fetchObjectifAnnuel = useFetchObjectifsAnnuel();
+  const { objectifsAnnuelList } = useAppSelector((state: any) => state.objectifsAnnuels)
+  const fetchSite = useFetchSite();
+  const { sitelist, isEditing, site } = useAppSelector((state) => state.site);
+  const dispatch: any = useAppDispatch();
+  const [open, setOpen] = React.useState(false);
+  const fetchObjectStrategique = useFetchPlanTravaile();
+  const { planTravaillist } = useAppSelector((state) => state.planTravail);
+  const fetchTacheCle: any = useFetchTacheEtObjectifs()
+  const { tacheEtObjectifList } = useAppSelector((state) => state.tacheEtObjectifs)
 
-    React.useEffect(() => {
-        fetchObjectifAnnuel();
-        fetchSite();
-    }, [router.query])
+  React.useEffect(() => {
+    fetchObjectifAnnuel();
+    fetchSite();
+    fetchObjectStrategique();
+    fetchTacheCle();
+  }, [router.query])
 
-    const tempObjectifAnnuel = objectifsAnnuelList.filter((e: any) => e.taskAndObjectiveId === idT);
-    //    console.log("tempObjectif :", tempObjectifAnnuel)
-    const Choix = [
-        { id: 1, name: 1 },
-        { id: 0, name: 0 }
-    ]
+  const tempObjectifAnnuel = objectifsAnnuelList.filter((e: any) => e.taskAndObjectiveId === idT);
+  //    console.log("tempObjectif :", tempObjectifAnnuel)
+  const Choix = [
+    { id: 1, name: 1 },
+    { id: 0, name: 0 }
+  ]
 
-    const [test, setTest]: any = React.useState("");
-    const [valeur, setValeur]: any = React.useState("");
-    console.log("val :", test)
-    const click = () => {
-        if (test == 1 || test == 0) {
-            console.log("OK")
-            setOpen(true)
-        }
+  const [test, setTest]: any = React.useState("");
+  const [valeur, setValeur]: any = React.useState("");
+  console.log("val :", test)
+  const click = () => {
+    if (test == 1 || test == 0) {
+      console.log("OK")
+      setOpen(true)
     }
-    const handleSubmit = async (values: any) => {
-        try {
-            await dispatch(
-              updateSite({
-                id: valeur!,
-                site: {
-                    ...site,
-                    but: (test).toString(),
-                    objectifAnnuelId: idT!
-                }
-              })
-            );
-         setOpen(false);
-        } catch (error) {
-          console.log("error", error);
-        }
-      };
-    return (
-        <>
-            <Container maxWidth="xl">
-                <SectionNavigation direction={{ xs: 'column', sm: 'row' }}
-                    spacing={{ xs: 1, sm: 2, md: 4 }}
-                    justifyContent="space-between"
-                    sx={{ mb: 2 }}>
-                    <Stack flexDirection={"row"}>
-                        <Link href={`/plan_travail/${id}/tachesEtObjectifs`}>
-                            <Button color="info" variant="text" startIcon={<ArrowBack />}>
-                                Retour
-                            </Button>
-                        </Link>
-                    </Stack>
-                    <Typography variant="h4" color="GrayText">
-                        Liste des sites
-                    </Typography>
+  }
+  const handleSubmit = async (values: any) => {
+    try {
+      await dispatch(
+        updateSite({
+          id: valeur!,
+          site: {
+            ...site,
+            but: (test).toString(),
+            objectifAnnuelId: idT!
+          }
+        })
+      );
+      setOpen(false);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  return (
+    <>
+      <Container maxWidth="xl">
+        <SectionNavigation direction={{ xs: 'column', sm: 'row' }}
+          spacing={{ xs: 1, sm: 2, md: 4 }}
+          justifyContent="space-between"
+          sx={{ mb: 2 }}>
+          <Stack flexDirection={"row"}>
+            <Link href={`/plan_travail/${id}/tachesEtObjectifs`}>
+              <Button color="info" variant="text" startIcon={<ArrowBack />}>
+                Retour
+              </Button>
+            </Link>
+          </Stack>
+          <Typography variant="h4" color="GrayText">
+            Liste des sites
+          </Typography>
 
-                </SectionNavigation>
-                <BodySection>
-                    <Box sx={{ width: "100%" }}>
-                        <Paper sx={{ width: "100%", mb: 2 }}>
-                            <TableContainer>
-                                <Table sx={{ padding: 2 }}>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell
-                                                sx={{ position: "fixed", left: 40, fontSize: "1.2em", zIndex: 10 }}>Objectif annuel</TableCell>
-                                            {sitelist.map((s: any) => (
-                                                <TableCell
-                                                    key={s.id}
-                                                    align="left"
-                                                    sx={{ paddingLeft: 25 }}
-                                                >
-                                                    {s.lieu}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {tempObjectifAnnuel.map((oba: any, yearIndex: any) => (
-                                            <TableRow key={oba.id}>
-                                                <TableCell sx={{ position: "fixed", left: 60, marginTop: 1, fontSize: "1.5em", backgroundColor: "#e0e0e0", zIndex: 4 }}>
-                                                    {oba.year}
-                                                </TableCell>
-                                                {sitelist.map((s: any, siteIndex: any) => (
-                                                    <TableCell key={s.id} sx={{ paddingLeft: sitelist.length >= 5 ? 22 : 0 }} align="right">
-                                                        <TextField
-                                                            fullWidth
-                                                            select
-                                                            id={`outlined-basic-${s.id!}`}
-                                                            variant="outlined"
-                                                            value={test[yearIndex + 1] && test[yearIndex + 1][siteIndex + 1]}
-                                                            onChange={(e: any) => {
-                                                                const selectedValue = parseInt(e.target.value);
-                                                                setTest(selectedValue);
-                                                                setValeur(s.id)
-                                                            }}
-                                                            name="but"
-                                                            onClick={() => click()}
-                                                            sx={{display: (s.objectifAnnuelId !=null && s.objectifAnnuelId === idT) ? 'none': 'block'}}
-                                                        >
-                                                            {Choix.map((c: any) => (
-                                                                <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
-                                                            ))}
-                                                        </TextField>
-                                                        
-                                                    </TableCell>
-                                                ))}
-                                            </TableRow>
+        </SectionNavigation>
+        <BodySection>
+          <Box sx={{ width: "100%" }}>
+            <Paper sx={{ width: "100%", mb: 2 }}>
+              <TableContainer>
+                <Table sx={{ padding: 2 }}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>
+                        Goals
+                      </TableCell>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell sx={{ minWidth: 100, maxWidth: 100, paddingLeft: 4 }}>
+                              S/N
+                            </TableCell>
+                            <TableCell sx={{ minWidth: 250, maxWidth: 250, paddingLeft: 1 }}>
+                              Key Tasks
+                            </TableCell>
+                                    <TableCell sx={{minWidth: 250, maxWidth: 250, paddingLeft: 1}}>
+                                      Goals
+                                    </TableCell>
+                                    {sitelist.map(s=>(
+                                      <TableCell key={s.id} sx={{minWidth: 150, maxWidth: 150, paddingLeft: 1}}>{s.lieu}</TableCell>
+                                    ))}
+                                  
+                          </TableRow>
+                        </TableHead>
+                      </Table>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {planTravaillist.map((plan: PlanTravailItem, yearIndex: any) => (
+                      <TableRow key={yearIndex}>
+                        <TableCell align="center">
+                          {plan.description}
+                        </TableCell>
+                        <TableCell>
+                          <Table>
+                            <TableBody>
+                              {plan.TacheCle?.map(t => (
+                                <TableRow key={t.id}>
+                                  <TableCell sx={{ minWidth: 70, maxWidth: 70 }}>
+                                    {t.sn}
+                                  </TableCell>
+                                  <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
+                                    {t.keyTasks}
+                                  </TableCell>
+                                  <TableCell>
+                                    <Table>
+                                      <TableBody>
+                                    {t.objectifAnnuel?.map(o => (
+                                      <TableRow>
+                                        <TableCell sx={{minWidth: 250, maxWidth: 250}}>{o.objectiveTitle}</TableCell>
+                                        {sitelist.map(s=>(
+                                          <TableCell key={s.id} sx={{minWidth: 150, maxWidth: 150}}>
+                                            <TextField select sx={{width: 140}}>
+                                              <MenuItem value={0}>0</MenuItem>
+                                              <MenuItem value={1}>1</MenuItem>
+                                            </TextField>
+                                          </TableCell>
                                         ))}
+                                      </TableRow>
+                                    ))}
                                     </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Paper>
-                    </Box>
-                </BodySection >
-                <Formik
-                    enableReinitialize
-                    initialValues={
-                        isEditing
-                            ? site
-                            : {
-                                but: isEditing ? site?.but : "",
-                                objectifAnnuelId: isEditing ? site?.objectifAnnuelId : "",
-                            }
-                    }
-                    onSubmit={(value: any, action: any) => {
-                        handleSubmit(value);
-                        action.resetForm();
-                    }}
+                                    </Table>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
+          </Box>
+        </BodySection >
+        <Formik
+          enableReinitialize
+          initialValues={
+            isEditing
+              ? site
+              : {
+                but: isEditing ? site?.but : "",
+                objectifAnnuelId: isEditing ? site?.objectifAnnuelId : "",
+              }
+          }
+          onSubmit={(value: any, action: any) => {
+            handleSubmit(value);
+            action.resetForm();
+          }}
+        >
+          {(formikProps) => {
+            return (
+              <Form>
+                <Dialog
+                  open={open}
+                  sx={styleDialog}
                 >
-                    {(formikProps) => {
-                        return (
-                            <Form>
-                                <Dialog
-                                    open={open}
-                                    sx={styleDialog}
-                                >
-                                    <DialogContentText>{test}</DialogContentText>
-                                    <DialogActions>
-                                     <Stack direction={"row"} spacing={2}>
-                                     <Button onClick={() => setOpen(false)}>Annuler</Button>
-                                        <Button type="button" onClick={formikProps.submitForm}>Enregistrer</Button>
-                                     </Stack>
-                                    </DialogActions>
-                                </Dialog>
-                            </Form>
-                        )
-                    }}
-                </Formik>
-            </Container >
+                  <DialogContentText>{test}</DialogContentText>
+                  <DialogActions>
+                    <Stack direction={"row"} spacing={2}>
+                      <Button onClick={() => setOpen(false)}>Annuler</Button>
+                      <Button type="button" onClick={formikProps.submitForm}>Enregistrer</Button>
+                    </Stack>
+                  </DialogActions>
+                </Dialog>
+              </Form>
+            )
+          }}
+        </Formik>
+      </Container >
 
-        </>
-    );
+    </>
+  );
 };
 
 export default ListSite;
@@ -206,8 +238,8 @@ export default ListSite;
 //     width: "100%",
 // }));
 const styleDialog = {
-    position: "fixed",
-    left: 50,
-    top: 0
+  position: "fixed",
+  left: 50,
+  top: 0
 }
 
