@@ -51,7 +51,7 @@ const ListMissionnairesRapport = () => {
     fetchMissionaryRapportList();
     fetchEmployes();
   }, [router.query]);
- console.log("missionaire :", missionaireslist)
+//  console.log("missionaire :", missionaireslist)
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer le missionnaire",

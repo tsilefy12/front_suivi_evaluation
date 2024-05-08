@@ -162,8 +162,6 @@ const ListResumeDepense = () => {
     handleClickOpen();
   };
 
-
-
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>

@@ -164,7 +164,7 @@ const ListPrevision = () => {
       }
     });
   }
-  console.log("vola :", selectId)
+  // console.log("vola :", selectId)
   const handleSubmit = async (values: any) => {
     values.missionId = id!
     values.imprevue = total / 10

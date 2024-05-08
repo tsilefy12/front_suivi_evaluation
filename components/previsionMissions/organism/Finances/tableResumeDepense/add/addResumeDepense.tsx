@@ -36,7 +36,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
-  const [grantValue, setGrantValue]: any = React.useState("vide");
+  const [grantValue, setGrantValue]: any = React.useState(0);
 
   React.useEffect(() => {
     fetchResumeDepense();
@@ -44,6 +44,9 @@ const AddResumeDepense = ({ handleClose }: any) => {
     fetchGrant();
   }, [router.query])
 
+  const handleGrantChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setGrantValue(event.target.value as number);
+  };
   const grantInBudgteLine: any = []
   const BudgetLineGrantList: { id: string, name: any }[] = [];
 
@@ -51,7 +54,8 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const uniqueValues = new Set();
 
   grantEncoursList.forEach((g: any) => {
-    if (grantValue !== "vide") {
+    console.log("grant value :", grantValue)
+    if (grantValue !== 0) {
       budgetLineList.forEach((b: any) => {
         let BudgetGrant: any = b.grantId;
         // console.log("id grant :", BudgetGrant)
@@ -71,22 +75,16 @@ const AddResumeDepense = ({ handleClose }: any) => {
     }
   });
 
-  // let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
-  //   isEditing
-  //     ? budgetLineList.filter((pg: any) =>
-  //       Array.isArray(resumeDepense?.ligneBudgetaire) && resumeDepense?.ligneBudgetaire?.includes(pg.id)
-  //     )
-  //     : BudgetLineGrantList
-  // );
   const handleSubmit = async (values: any) => {
     // values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) => bl.id)];
     values.grant = grantValue;
     try {
       if (isEditing) {
+        values.grant = resumeDepense?.grant;
         await dispatch(
           updateResumeDepense({
             id: resumeDepense.id!,
-            resumeDepense: values,
+            resumeDepense: values
           })
         );
       } else {
@@ -98,7 +96,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-
+//  console.log("lb :", isEditing ? resumeDepense?.grant : "")
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -107,7 +105,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
           isEditing
             ? resumeDepense
             : {
-              grant: isEditing ? resumeDepense?.grant : "",
+              grant: isEditing ? resumeDepense?.grant : 0,
               depensePrevue: isEditing ? resumeDepense?.depensePrevue : "",
               ligneBudgetaire: isEditing ? resumeDepense?.ligneBudgetaire : "",
               remarque: isEditing ? resumeDepense?.remarque : "",
@@ -142,12 +140,10 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         label="Grant"
                         variant="outlined"
                         name="grant"
-                        value={(id) ?
-                         resumeDepense?.grant: grantValue}
-                        onChange={(e: any) => setGrantValue(e.target.value)}
-                        hyperText={grantValue == "vide" ? false : true}
+                        value={grantValue!=0 ? grantValue : ""}
+                        onChange = {handleGrantChange}
                       >
-                        <MenuItem value="vide">Select grant</MenuItem>
+                        <MenuItem value={0}>Select grant</MenuItem>
                         {
                           grantEncoursList.map((item: any) => (
                             <MenuItem value={item.id!}>{item.code!}</MenuItem>

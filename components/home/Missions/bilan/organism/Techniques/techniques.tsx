@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -31,58 +31,48 @@ import useFetchProgrammeRapport from "../../../../../gereRapportDeMission/organi
 const Techniques = () => {
   const router = useRouter()
   //objectif
-  const { missionGoalList } = useAppSelector((state: any) => state.missionGoal);
   const fetchMissionGoalList = useFetchMissionGoalListe();
   const fetchObjectifRapport = useFetchObjectifRapport();
-  const { objectifRapportlist } = useAppSelector((state: any) => state.objectifRapport);
 
   //resultat
-  const { exceptedResultList } = useAppSelector((state) => state.exceptedResult);
   const fetchExceptedResultListe = useFetchExceptedResultList();
   const fetchResultatRapport = useFetchResultatRapport();
-  const { resultatRapportlist } = useAppSelector((state) => state.resultatRapport);
 
   //activity
-  const { plannedActivityList } = useAppSelector((state) => state.plannedActivity);
   const fetchPlannedActivityListe = useFetchPlannedActivityList();
   const fetchActivityRapport = useFetchActiviteRapport();
-  const { activiteRapportlist } = useAppSelector((state: any) => state.activiteRapport);
 
   //livrable
-  const { deliverableList } = useAppSelector((state) => state.deliverable);
   const fetchDeliverableListe = useFetchDeliverableList();
   const fetchLivrableRapport = useFetchLivrableRapport();
-  const { livrableRapportlist } = useAppSelector((state: any) => state.livrableRapport);
 
   //lieux
-  const { missionLocationList } = useAppSelector((state: any) => state.missionLocation);
   const fetchMissionLocationListe = useFetchMissionLocationListe();
   const fetchLieuxRapport = useFetchLieuxRapport();
-  const { lieuxRapportlist } = useAppSelector((state: any) => state.lieuxRapport);
 
   //missionaire
-  const { missionaryList } = useAppSelector((state) => state.missionary);
   const fetchMissionaryList = useFetchMissionaryList();
   const fetchMissionaryRapportList = useFetchMissionaryRapportList();
-  const { missionaireslist } = useAppSelector((state: any) => state.missionaires);
 
   //autre information importante
-  const { vehicleList } = useAppSelector((state) => state.vehicle);
   const fetchVehicleListe = useFetchVehicleList();
   const fetchAutreInfoRapport = useFetchAutreInfoRapport();
-  const { autreInfoRapportList } = useAppSelector((state: any) => state.autreInfoRapport);
 
   //contact pendant la mission
-  const { contactList } = useAppSelector((state) => state.contact);
   const fetchContactList = useFetchContactListe();
   const fetchContactMissionRapport = useFetchContactMissionRapport();
-  const { missionRapportList } = useAppSelector((state: any) => state.missionRapport);
 
   //programme
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
-  const { programmePrevisionList } = useAppSelector((state: any) => state.programmePrevision);
-  const { programmeRapportList } = useAppSelector((state: any) => state.programmeRapport);
   const fetchProgrammeRapport = useFetchProgrammeRapport();
+
+  const {
+    percentageObjectif, percentageActivity, 
+    percentageAutreInfo, percentageContactPendantMission,
+    percentageExceptedResult, percentageLivrable,
+    percentageLocation, percentageMissionary,
+    percentageTechnique, percentageProgramme,
+  }: any = PourcentageTechnique()
 
  React.useEffect(() =>{
   fetchMissionGoalList();
@@ -104,15 +94,7 @@ const Techniques = () => {
   fetchProgrammePrevision();
   fetchProgrammeRapport();
  }, [router.query])
- const percentageObjectif = (objectifRapportlist.length * 100) / missionGoalList.length;
- const percentageExceptedResult = (resultatRapportlist.length * 100) / exceptedResultList.length;
- const percentageActivity = (activiteRapportlist.length * 100) / plannedActivityList.length;
- const percentageLivrable = (livrableRapportlist.length * 100) / deliverableList.length;
- const percentageLocation = (lieuxRapportlist.length * 100) / missionLocationList.length;
- const percentageMissionary = (missionaireslist.length * 100) / missionaryList.length;
- const percentageAutreInfo = (autreInfoRapportList.length * 100) / vehicleList.length;
- const percentageContactPendantMission = (missionRapportList.length * 100) / contactList.length;
- const percentageProgramme = (programmeRapportList.length * 100) / programmePrevisionList.length;
+
 
   const rows = [
     createData("Objectifs : "+percentageObjectif),
@@ -167,3 +149,73 @@ const Techniques = () => {
 };
 
 export default Techniques;
+
+export const PourcentageTechnique = () =>{
+  const { missionGoalList } = useAppSelector((state: any) => state.missionGoal);
+  const { objectifRapportlist } = useAppSelector((state: any) => state.objectifRapport);
+
+  //resultat
+  const { exceptedResultList } = useAppSelector((state) => state.exceptedResult);
+  const { resultatRapportlist } = useAppSelector((state) => state.resultatRapport);
+
+  //activity
+  const { plannedActivityList } = useAppSelector((state) => state.plannedActivity);
+  const { activiteRapportlist } = useAppSelector((state: any) => state.activiteRapport);
+
+  //livrable
+  const { deliverableList } = useAppSelector((state) => state.deliverable);
+  const { livrableRapportlist } = useAppSelector((state: any) => state.livrableRapport);
+
+  //lieux
+  const { missionLocationList } = useAppSelector((state: any) => state.missionLocation);
+  const { lieuxRapportlist } = useAppSelector((state: any) => state.lieuxRapport);
+
+  //missionaire
+  const { missionaryList } = useAppSelector((state) => state.missionary);
+  const { missionaireslist } = useAppSelector((state: any) => state.missionaires);
+
+  //autre information importante
+  const { vehicleList } = useAppSelector((state) => state.vehicle);
+  const { autreInfoRapportList } = useAppSelector((state: any) => state.autreInfoRapport);
+
+  //contact pendant la mission
+  const { contactList } = useAppSelector((state) => state.contact);
+  const { missionRapportList } = useAppSelector((state: any) => state.missionRapport);
+
+  //programme
+  const { programmePrevisionList } = useAppSelector((state: any) => state.programmePrevision);
+  const { programmeRapportList } = useAppSelector((state: any) => state.programmeRapport);
+ 
+  let percentageObjectif = (objectifRapportlist.length * 100) / missionGoalList.length;
+  let percentageExceptedResult = (resultatRapportlist.length * 100) / exceptedResultList.length;
+  let percentageActivity = (activiteRapportlist.length * 100) / plannedActivityList.length;
+  let percentageLivrable = (livrableRapportlist.length * 100) / deliverableList.length;
+  let percentageLocation = (lieuxRapportlist.length * 100) / missionLocationList.length;
+  let percentageMissionary = (missionaireslist.length * 100) / missionaryList.length;
+  let percentageAutreInfo = (autreInfoRapportList.length * 100) / vehicleList.length;
+  let percentageContactPendantMission = (missionRapportList.length * 100) / contactList.length;
+  let percentageProgramme = (programmeRapportList.length * 100) / programmePrevisionList.length;
+ 
+  let percentageTechnique = useMemo(() =>{
+      let calculPourcentage =( (objectifRapportlist.length + resultatRapportlist.length + activiteRapportlist.length + 
+        livrableRapportlist.length + lieuxRapportlist.length + missionaireslist.length + autreInfoRapportList.length +
+        missionRapportList.length + programmeRapportList.length) * 100 / (missionGoalList.length + exceptedResultList.length + 
+          plannedActivityList.length + deliverableList.length + missionLocationList.length + missionaryList.length + vehicleList.length + 
+          contactList.length +  programmePrevisionList.length)).toFixed(2);
+
+          return calculPourcentage;
+  }, [
+    percentageObjectif, percentageActivity, 
+    percentageAutreInfo, percentageContactPendantMission,
+    percentageExceptedResult, percentageLivrable,
+    percentageLocation, percentageMissionary, percentageProgramme,
+  ])
+//  console.log("PT :", percentageTechnique)
+  return {
+    percentageObjectif, percentageActivity, 
+    percentageAutreInfo, percentageContactPendantMission,
+    percentageExceptedResult, percentageLivrable,
+    percentageLocation, percentageMissionary,
+    percentageTechnique, percentageProgramme,
+  }
+}
