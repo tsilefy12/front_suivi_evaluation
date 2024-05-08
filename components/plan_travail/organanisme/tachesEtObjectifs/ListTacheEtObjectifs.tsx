@@ -24,7 +24,7 @@ import Data, { Order } from "./table/type-variable";
 import { rows } from "./table/constante";
 import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
 import EnhancedTableHead from "./table/EnhancedTableHead";
-import { getComparator, stableSort } from "./table/function";
+
 import Add from "@mui/icons-material/Add";
 import {
   defaultLabelDisplayedRows,
@@ -222,25 +222,11 @@ const ListTacheEtObjectifs = () => {
         />
       </FormContainer>
       <BodySection>
-        <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2 }}>
-            <EnhancedTableToolbar numSelected={selected.length} />
-              <TextField
-                  select
-                  label ="Année"
-                  value={selectYear}
-                  onChange={(e)=> setSelectYear(parseInt(e.target.value))}
-                >
-                  {Array.from(new Set(tacheEtObjectifList.flatMap(e=>e.objectifAnnuel?.map(i=>i.year)))).map(item=>(
-                    <MenuItem key={item} value={item}>{item}</MenuItem>
-                  ))}  
-              </TextField>
-            <TableContainer>
-              <Table
-                sx={{ minWidth: 750 }}
-                aria-labelledby="tableTitle"
-                size={dense ? "small" : "medium"}
-              >
+          <Box sx={{ width: "100%" }}>
+            <Paper sx={{ width: "100%", mb: 2 ,pt:2}}>
+              <EnhancedTableToolbar tacheEtObjectifList={tacheEtObjectifList} numSelected={selected.length} selectYear={selectYear} setSelectYear={setSelectYear}/>
+              <TableContainer>
+                <Table sx={{  width: "100%",padding: 2 , overflow:"auto"}}>
                 <EnhancedTableHead
                   numSelected={selected.length}
                   order={order}
@@ -251,8 +237,6 @@ const ListTacheEtObjectifs = () => {
                   year={selectYear}
                 />
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                rows.slice().sort(getComparator(order, orderBy)) */}
                   {tacheEtObjectifList.filter((e: any) => e.planTravaileId === id!)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: TacheEtObjectifItem, index: any) => {
@@ -301,12 +285,12 @@ const ListTacheEtObjectifs = () => {
                           </TableCell>
                           <TableCell>
                             {row.objectifAnnuel?.filter((e) => e.year === (selectYear - 1)).map((item) =>(
-                               <p key={item.id}>{item.objectiveTitle}</p>
+                               item.objectiveTitle ? (<p key={item.id}>{item.objectiveTitle}</p>):"-"
                             ))}
                           </TableCell>
                           <TableCell>
                             {row.objectifAnnuel?.filter((e) => e.year === selectYear).map((item) =>(
-                               <p key={item.id}>{item.objectiveTitle}</p>
+                               item.objectiveTitle ? (<p key={item.id}>{item.objectiveTitle}</p>):"-"
                             ))}
                           </TableCell>
                           <TableCell align="right">
