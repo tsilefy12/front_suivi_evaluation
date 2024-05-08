@@ -11,7 +11,11 @@ const useFetchPlanTravaile = () => {
       include: {
         TacheCle: {
           include: {
-            objectifAnnuel: true
+            objectifAnnuel: {
+              include: {
+                notes: true,
+              }
+            }
           }
         }
       }

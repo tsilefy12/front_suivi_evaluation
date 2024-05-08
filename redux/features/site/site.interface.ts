@@ -1,5 +1,5 @@
 export interface SiteItem {
-    id?: number;
+    id?: string;
     lieu?: string;
     objectifAnnuelId?: string;
     but?: string;
