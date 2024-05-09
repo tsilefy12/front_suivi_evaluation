@@ -1,3 +1,5 @@
+import { BudgetLineItem } from "../budgetLine/budgetLine.interface";
+
 export interface GrantEncoursItem {
     id?: string;
     code?: string;
@@ -20,6 +22,7 @@ export interface GrantEncoursItem {
     techValidator?: string;
     financeValidator?: string;
     financeVerificator?: string;
+    budgetLines?: BudgetLineItem[];
   }
   
   export interface GrantEncoursInitialState {

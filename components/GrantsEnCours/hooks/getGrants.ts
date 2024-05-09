@@ -7,7 +7,11 @@ const useFetchGrants = () => {
   const dispatch = useAppDispatch();
 
   return async () => {
-    let args: any = {};
+    let args: any = {
+      include: {
+        budgetLines: true
+      }
+    };
     if (router.query.search) {
       args.where = {
         OR: [],

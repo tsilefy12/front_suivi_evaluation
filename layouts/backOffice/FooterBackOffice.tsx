@@ -9,11 +9,11 @@ const FooterBackOffice = () => {
       <Container maxWidth="xl">
         <Stack spacing={0} direction="column" alignItems="center" py={1}>
           <Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
-            Copyright © 2022 | <Lien>HAISOA</Lien>{" "}
+            Copyright © 2024 | <Lien>HAISOA</Lien>{" "}
           </Typography>
           <Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
-            Version ¤ <Lien>1.0.0</Lien>, dernière mise à jour :{" "}
-            <Lien>10/01/2023</Lien>{" "}
+            Version ¤ <Lien>2.0.0</Lien>, dernière mise à jour :{" "}
+            <Lien>04/03/2024</Lien>{" "}
           </Typography>
         </Stack>
       </Container>

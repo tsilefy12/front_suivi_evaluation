@@ -1,8 +1,14 @@
 const menu = [
   {
+    name: "Dashboard",
+    link: "/",
+    icon: "dashboardIcon",
+    items: []
+  },
+  {
     id: 1,
     name: "Missions",
-    link: "/",
+    link: "/missions",
     icon: "descriptionIcon",
     items: [
       // {
