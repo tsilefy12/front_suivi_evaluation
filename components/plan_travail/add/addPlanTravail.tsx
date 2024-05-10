@@ -21,13 +21,14 @@ import OSTextField from "../../shared/input/OSTextField";
 import { getProjectList } from "../../../redux/features/project/useCase/getProjectList";
 import OSSelectField from "../../shared/select/OSSelectField";
 
-const ObjectifStrategiqueForm = ({ handleClose }: any) => {
+const ObjectifStrategiqueForm = ({ handleClose, getId}: any) => {
   const dispatch = useAppDispatch();
-  // const fetchPlanTravail = ();
+  // const fetchPlanTravail = ();*
   const router = useRouter();
   const { isEditing, planTravail } = useAppSelector((state) => state.planTravail);
 
   const { projectList } = useAppSelector((state: any) => state.project)
+ 
   React.useEffect(() => {
     dispatch(getProjectList({}))
   }, [router.query])
@@ -61,7 +62,7 @@ const ObjectifStrategiqueForm = ({ handleClose }: any) => {
           isEditing
             ? planTravail
               : {
-                title: isEditing ? planTravail?.title : "",
+                title: (isEditing && getId !== "") ? planTravail?.title : "",
                 startDate: isEditing && planTravail?.startDate? new Date(planTravail?.startDate) : new Date(),
                 endDate: isEditing && planTravail?.endDate ?  new Date(planTravail?.endDate) : new Date(),
                 description: isEditing ? planTravail?.description : "",

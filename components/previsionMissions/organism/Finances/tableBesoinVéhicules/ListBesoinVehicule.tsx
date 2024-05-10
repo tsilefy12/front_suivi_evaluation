@@ -194,7 +194,7 @@ const ListBesoinVehicule = () => {
                           role="checkbox"
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.id}
+                          key={index}
                         // selected={isItemSelected}
                         >
                           <TableCell
@@ -218,12 +218,12 @@ const ListBesoinVehicule = () => {
                             {vehicleList.find((e: any) => e.id === row.vehicule)?.vehicleType}
                           </TableCell>
                           <TableCell align="right">{row.trajet}</TableCell>
-                          <TableCell align="right">
-                            <FormControl sx={{height: (row.responsable!).length <= 2 ? "auto" : 70, overflow: "auto"}}>
+                          <TableCell align="right" key={index}>
+                            <FormControl key={index} sx={{height: (row.responsable!).length <= 2 ? "auto" : 70, overflow: "auto"}}>
                             {
                               (row.responsable!).map((lp: any) => {
                                 return (
-                                  <Stack direction="column" spacing={2} height={25} overflow="auto">
+                                  <Stack direction="column" spacing={2} height={25} overflow="auto" key={lp.id!}>
                                     {employees.find((e: any) => e.id === lp)?.name}
                                     {" "}
                                     {employees.find((e: any) => e.id === lp)?.surname}

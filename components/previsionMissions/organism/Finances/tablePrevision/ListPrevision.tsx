@@ -395,7 +395,6 @@ const ListPrevision = () => {
                                   setSelectedBudgetLine(e.target.value);
                                   const selectedItem = listLigne.find((item: any) => item.name === e.target.value);
                                   if (selectedItem) {
-                                    console.log("ID sélectionné :", selectedItem.id);
                                     setSelecteId(selectedItem.id)
                                   }
                                 }}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
@@ -33,7 +33,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
   const { isEditing, previsionDepense } = useAppSelector((state) => state.previsonDepense)
   const fetchPrevisionDepense = useFetchPrevisionDepenseList();
   const fetchGrant = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const { grantEncoursList } = useAppSelector(state => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state) => state.budgetLine);
   const router = useRouter()
@@ -46,32 +46,22 @@ const AddPrevisionMission = ({ handleClose }: any) => {
     fetchBudgetLine();
   }, [router.query])
 
-  const grantInBudgteLine: any = []
-  const BudgetLineGrantList: { id: string, name: any }[] = []
+  let BudgetLineGrantList: any= useState<{}>([])
 
   //select budget line depends grant
   const uniqueValues = new Set();
 
-  grantEncoursList.forEach((g: any) => {
+  grantEncoursList.forEach(g => {
     if (grantValue !== "vide") {
-      budgetLineList.forEach((b: any) => {
-        let BudgetGrant: any = b.grantId;
-        console.log("id grant :", BudgetGrant)
-        if (grantValue === BudgetGrant) {
-          grantInBudgteLine.push(b.id);
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-           return BudgetLineGrantList.push({ id: b.id, name: b.code });
-          }
-        } else {
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-            return  [];
-          }
-        }
-      });
+      if (!uniqueValues.has(g.id)) {
+        uniqueValues.add(g.id)
+         return BudgetLineGrantList = g.budgetLines
+      }
     }
+    uniqueValues.add(g.id)
+    return [];
   });
+  // console.log(BudgetLineGrantList)
   const handleSubmit = async (values: any) => {
     values.grant = grantValue;
     try {
@@ -129,7 +119,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                 <DialogTitle> Créer/modifier prévision de dépense </DialogTitle>
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
-                    <OSDatePicker
+                  <OSDatePicker
                       fullWidth
                       id="outlined-basic"
                       label="Date"
@@ -182,17 +172,6 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                           formikProps.setFieldValue("montant", newMontant);
                         }}
                       />
-                      {/* <OSTextField
-                        fullWidth
-                        id="outlined-basic"
-                        label="Montant"
-                        variant="outlined"
-                        value={(formikProps.values.nombre ?? 0) * (formikProps.values.pu ?? 0)}
-                        name="montant"
-                        type="number"
-                        min="0"
-                        disabled
-                      /> */}
                     </CustomStack>
                     <FormControl fullWidth>
                       <OSTextField
@@ -205,11 +184,10 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                         value={(id) ?
                           budgetLineList.find((e: any) => e.id === previsionDepense?.grant)?.code : grantValue}
                         onChange={(e: any) => setGrantValue(e.target.value)}
-                        hyperText={grantValue == "vide" ? false : true}
                       >
                         <MenuItem value="vide">Select grant</MenuItem>
                         {
-                          grantEncoursList.map((item: any) => (
+                          grantEncoursList.map(item => (
                             <MenuItem value={item.id!}>{item.code!}</MenuItem>
                           ))
                         }
@@ -224,7 +202,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                         variant="outlined"
                         name="ligneBudgetaire"
                         options={BudgetLineGrantList}
-                        dataKey={["name"]}
+                        dataKey={["code"]}
                         valueKey="id"
                       >
                       </OSSelectField>

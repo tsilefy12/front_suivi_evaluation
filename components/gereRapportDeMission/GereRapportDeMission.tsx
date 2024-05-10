@@ -50,7 +50,7 @@ const GereRapportDeMission = () => {
           justifyContent="space-between"
           sx={{ mb: 2 }}>
           <Stack direction={{ xs: 'column', sm: 'row' }}>
-            <Link href="/">
+            <Link href="/missions">
               <Button
                 color="info"
                 variant="text"

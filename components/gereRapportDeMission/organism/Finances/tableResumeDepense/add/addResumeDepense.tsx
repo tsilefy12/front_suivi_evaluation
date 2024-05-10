@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
@@ -50,7 +50,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const dispatch: any = useAppDispatch();
   const router = useRouter();
   const fetchGrantList = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
+  const { grantEncoursList } = useAppSelector(state => state.grantEncours);
   const fetchligneBudgetaire = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const [grantValue, setGrantValue]: any = React.useState("vide");
@@ -78,25 +78,17 @@ const AddResumeDepense = ({ handleClose }: any) => {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [1, 2].length) : 0;
 
   //select budget line depends grant
-  const grantInBudgteLine: any = []
-  const BudgetLineGrantList: { id: string, name: any }[] = []
+  let BudgetLineGrantList: any = useState<{}>([])
   const uniqueValues = new Set();
 
-  grantEncoursList.forEach((g: any) => {
+  grantEncoursList.forEach(g => {
     if (grantValue !== "vide") {
-      budgetLineList.forEach((b: any) => {
-        let BudgetGrant: any = b.grantId;
-        // console.log("id grant :", BudgetGrant)
-        if (grantValue === BudgetGrant) {
-          grantInBudgteLine.push(b.id);
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-            return BudgetLineGrantList.push({ id: b.id, name: b.code });
-          }
-        } else {
-          return [];
-        }
-      });
+      if (!uniqueValues.has(g.id)) {
+        uniqueValues.add(g.id)
+        return BudgetLineGrantList = g.budgetLines;
+      }
+    }else{
+      return BudgetLineGrantList = [];
     }
   });
   const [grts, setGrts]: any = React.useState(0)
@@ -205,7 +197,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         variant="outlined"
                         name="ligneBudgetaire"
                         options={BudgetLineGrantList}
-                        dataKey={["name"]}
+                        dataKey={["code"]}
                         valueKey="id"
                         value={bdgLine!=0 ? bdgLine: formikProps.values.ligneBudgetaire}
                         disabled={!!grts}

@@ -69,7 +69,7 @@ const Dashboard: NextPage = () => {
                 BUDGET ENGAGE
               </TableCell>
               <TableCell align="center">
-                RESTE SOLDE
+                SOLDE
               </TableCell>
             </TableRow>
           </TableHead>

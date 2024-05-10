@@ -29,11 +29,12 @@ import useFetchPlannedActivityList from "../../tableActivitésPrévues/hooks/use
 import useFetchDeliverableList from "../../tableLivrables/hooks/useFetchDeliverableList";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import { deleteProgrammePrevision, editProgrammePrevision } from "../../../../../../redux/features/programmePrevision";
+import { ProgrammePrevisionItem } from "../../../../../../redux/features/programmePrevision/programmePrevision.interface";
 
 const ListProgrammes = () => {
   const [open, setOpen] = React.useState(false);
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
-  const { programmePrevisionList } = useAppSelector((state: any) => state.programmePrevision)
+  const { programmePrevisionList } = useAppSelector(state => state.programmePrevision)
   const dispatch: any = useDispatch()
   const router = useRouter()
   const confirm = useConfirm();
@@ -98,9 +99,9 @@ const ListProgrammes = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {programmePrevisionList.map((row: any) => (
+                  {programmePrevisionList.map((row: ProgrammePrevisionItem, index) => (
                     <TableRow
-                      key={row.id}
+                      key={index}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
@@ -115,12 +116,12 @@ const ListProgrammes = () => {
                       <TableCell component="th" scope="row">
                         {deliverableList.find((e: any) => e.id === row.livrable)?.description}
                       </TableCell>
-                      <TableCell component="th" scope="row">
-                        <FormControl sx={{height: (row.responsable).length <= 2 ? "auto" : 70, overflow: "auot"}}>
+                      <TableCell component="th" scope="row" key={index}>
+                        <FormControl key={index} sx={{height: (row.responsable!).length <= 2 ? "auto" : 70, overflow: "auot"}}>
                         {
-                          (row.responsable).map((lp: any) => {
+                          (Array.from(row.responsable!)).map((lp: any) => {
                             return (
-                              <Stack direction="column" spacing={2}>
+                              <Stack direction="column" spacing={2} key={index}>
                                 {employees.find((e: any) => e.id === lp)?.name}
                                 {" "}
                                 {employees.find((e: any) => e.id === lp)?.surname}
@@ -130,10 +131,11 @@ const ListProgrammes = () => {
                         }
                         </FormControl>
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell align="right" key={row. id!}>
                         <BtnActionContainer
                           direction="row"
                           justifyContent="right"
+                          key={row.id}
                         >
                           <IconButton
                             color="primary"

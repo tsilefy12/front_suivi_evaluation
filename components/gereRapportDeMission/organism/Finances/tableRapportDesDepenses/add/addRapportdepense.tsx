@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
@@ -54,7 +54,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
   const { id }: any = router.query;
   const fetchRapportDepense = useFetchRapportDepense();
   const fetchGrantList = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
+  const { grantEncoursList } = useAppSelector(state => state.grantEncours);
   const fetchligneBudgetaire = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const [grantValue, setGrantValue]: any = React.useState("vide");
@@ -85,29 +85,17 @@ const AddRapportdepense = ({ handleClose }: any) => {
 
 
   //select budget line depends grant
-  const grantInBudgteLine: any = []
-  const BudgetLineGrantList: { id: string, name: any }[] = []
+  let BudgetLineGrantList: any = useState<{}>([])
   const uniqueValues = new Set();
 
-  grantEncoursList.forEach((g: any) => {
+  grantEncoursList.forEach(g => {
     if (grantValue !== "vide") {
-      budgetLineList.forEach((b: any) => {
-        let BudgetGrant: any = b.grantId;
-        // console.log("id grant :", grantValue)
-        if (grantValue === BudgetGrant) {
-          grantInBudgteLine.push(b.id);
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-            return BudgetLineGrantList.push({ id: b.id, name: b.code });
-          }
-        } else {
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-            return [];
-          }
-        }
-      });
+      if (!uniqueValues.has(g.id)) {
+        uniqueValues.add(g.id);
+        return BudgetLineGrantList = g.budgetLines;
+      }
     }
+    return BudgetLineGrantList = [];
   });
 
   let total: any = useMemo(() => {
@@ -191,8 +179,9 @@ const AddRapportdepense = ({ handleClose }: any) => {
             <Form>
               <SectionNavigation>
                 <DialogTitle>{!isEditing ? "Créer" : "Modifier"} rapport de depense</DialogTitle>
+                
                 <DialogContent>
-                  <FormContainer spacing={2} mt={2}>
+                  <FormContainer spacing={2} mt={2} sx={{display: amt !== 0 ? "none" : "block"}}>
                     <OSDatePicker
                       fullWidth
                       id="outlined-basic"
@@ -219,8 +208,6 @@ const AddRapportdepense = ({ handleClose }: any) => {
                       name="montant"
                       type="number"
                       inputProps={{ autoComplete: "off", min: 0 }}
-                      value={amt === 0 ? formikProps.values.montant : amt}
-                      onChange={(e: any) =>formikProps.setFieldValue(e.target.value)}
                     />
                     <FormControl fullWidth>
                       <Stack spacing={2} direction="column">
@@ -250,7 +237,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                           variant="outlined"
                           name="ligneBudgetaire"
                           options={BudgetLineGrantList}
-                          dataKey={["name"]}
+                          dataKey={["code"]}
                           valueKey="id"
                           value={bdg ===0 ? formikProps.values.ligneBudgetaire : bdg}
                         >
@@ -348,6 +335,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                     formikProps.resetForm();
                     setGrt(0)
                     dispatch(cancelEdit());
+                    handleClose();
                   }}
                   >Annuler</Button>
                   <Button variant="contained" type="submit">
