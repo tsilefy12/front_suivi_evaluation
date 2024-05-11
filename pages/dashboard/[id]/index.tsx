@@ -2,9 +2,9 @@ import React from "react";
 import { Container } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
-import BackOfficeLayout from "../layouts/backOffice";
-import useBasePath from "../hooks/useBasePath";
-import Dashboard from "../components/dashboard";
+import BackOfficeLayout from "../../../layouts/backOffice";
+import useBasePath from "../../../hooks/useBasePath";
+import DetailsDashboard from "../../../components/dashboard/[id]";
 
 const Home: NextPage = () => {
   const basePath = useBasePath();
@@ -16,7 +16,7 @@ const Home: NextPage = () => {
         <link rel="icon" href={`${basePath}/favicon.ico`} />
       </Head>
       <Container maxWidth="xl">
-        <Dashboard />
+        <DetailsDashboard />
       </Container>
     </BackOfficeLayout>
   );

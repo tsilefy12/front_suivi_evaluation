@@ -29,7 +29,6 @@ const Dashboard: NextPage = () => {
   const fetchBudgetEngagedList = useFetchBudgetEngaged();
   const { budgetEngagedList } = useAppSelector(state => state.budgetsEngaged)
   const fetchtReliquatGrant = useFetchReliquatGrant();
-  const { reliquatGrantList } = useAppSelector(state => state.reliquatGrant)
   const fetchBudgetInitial = useFetchBudgetInitial();
   const { budgetInitialList } = useAppSelector((state) => state.budgetInitial)
 
@@ -40,6 +39,8 @@ const Dashboard: NextPage = () => {
     fetchBudgetInitial();
     fetchBudgetLine();
   }, [router.query])
+
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
@@ -78,28 +79,32 @@ const Dashboard: NextPage = () => {
               grantEncoursList.filter(g =>
                 budgetLineList.some(bl => bl.grantId === g.id) &&
                 budgetInitialList.some(bi => bi.grant === g.id) &&
-                budgetEngagedList.some(be => be.grantsId === g.id) &&
-                reliquatGrantList.some(rg => rg.grant === g.id)
+                budgetEngagedList.some(be => be.grantsId === g.id)
               ).map(row => (
                 <TableRow key={row.id!}>
                   <TableCell>
                     {row.code}
                   </TableCell>
                   <TableCell>
-                    <Stack direction={"column"} spacing={2} sx={{height: (row.budgetLines!).length <= 2 ? "auto" : 70, overflow: "auot"}}>
+                    <Link href={`/suivi-evaluation/dashboard/${row.id}`}>
+                      <Button variant="outlined" color="accent" startIcon={<Add />}>
+                        Voir détails
+                      </Button>
+                    </Link>
+                    {/* <Stack direction={"column"} spacing={2} sx={{ height: (row.budgetLines!).length <= 2 ? "auto" : 70, overflow: "auot" }}>
                       {row.budgetLines!.map(bl => (
                         <span key={bl.id}>{bl.code}</span>
                       ))}
-                    </Stack>
+                    </Stack> */}
                   </TableCell>
                   <TableCell align="center">
-                    {budgetInitialList.find(e => e.grant === row.id)?.montant} Ar
+                    {budgetInitialList.reduce((acc, curr) => acc + curr.montant!, 0)} Ar
                   </TableCell>
                   <TableCell align="center">
-                    {budgetEngagedList.find(be => be.grantsId === row.id)?.amount} Ar
+                    {budgetEngagedList.reduce((acc, curr) => acc + curr.amount!, 0)} Ar
                   </TableCell>
                   <TableCell align="center">
-                    {reliquatGrantList.find(rg => rg.grant === row.id)?.montantTotal} Ar
+                    {budgetInitialList.reduce((acc, curr) => acc + curr.montant!, 0)! - budgetEngagedList.reduce((acc, curr) => acc + curr.amount!, 0)!} Ar
                   </TableCell>
                 </TableRow>
               ))
