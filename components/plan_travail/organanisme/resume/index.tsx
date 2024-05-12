@@ -138,18 +138,10 @@ const ListResume = () => {
                                       <TableBody>
                                         {t.objectifAnnuel?.filter(o=>typeof filtre === "number" ? o.year === filtre : o).map(o => (
                                           <TableRow key={o.id}>
-                                            <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>{o.objectiveTitle}</TableCell>
+                                            <TableCell sx={{ minWidth: 250, maxWidth: 250 }} align="center">{o.objectiveTitle}</TableCell>
                                             {sitelist.map(s => (
-                                              <TableCell key={s.id} sx={{ minWidth: 150, maxWidth: 150 }}>
-                                                {/* <TextField
-                                                  defaultValue={o.notes?.find(n=>n.siteId === s.id) ? o.notes!.find(n=>n.siteId === s.id)!.note : ""}
-                                                  select 
-                                                  sx={{ width: 140, textAlign: "center" }}
-                                                  onChange={(e) => handleChange(s.id!, o.id!, parseInt(e.target.value))}
-                                                >
-                                                  <MenuItem value={0}>0</MenuItem>
-                                                  <MenuItem value={1}>1</MenuItem>
-                                                </TextField> */}
+                                              <TableCell key={s.id} sx={{ minWidth: 150, maxWidth: 150 }} align="center">
+                                                {o.notes?.find(n=>n.siteId === s.id) ? o.notes!.find(n=>n.siteId === s.id)!.note : ""}
                                               </TableCell>
                                             ))}
                                           </TableRow>
