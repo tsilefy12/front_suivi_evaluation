@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
-import { getObjectifAnnuelslist } from "../../../../../../../redux/features/objectifAnnuels";
-import { useAppDispatch } from "../../../../../../../hooks/reduxHooks";
+import { useAppDispatch } from "../../../../../hooks/reduxHooks";
+import { getObjectifAnnuelslist } from "../../../../../redux/features/objectifAnnuels";
 
 const useFetchObjectifsAnnuel = () => {
   const router = useRouter();

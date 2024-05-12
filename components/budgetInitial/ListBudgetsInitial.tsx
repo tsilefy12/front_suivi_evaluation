@@ -185,6 +185,7 @@ const ListBudgetInitial = () => {
   const handleClickEdit = async (id: any) => {
     router.push(`/grants/budgetInitial/${id}/edit`);
   };
+  // console.log("ligne :", budgetInitialList)
   return (
     <Container maxWidth="xl">
 
@@ -200,14 +201,14 @@ const ListBudgetInitial = () => {
               Créer
             </Button>
           </Link>
-          <Button
+          {/* <Button
             variant="text"
             startIcon={<Visibility />}
             color="accent"
             sx={{ marginInline: 3 }}
           >
             Affiche Tableau de bord
-          </Button>
+          </Button> */}
         </Stack>
         <Typography variant="h4" color="GrayText">
           Budget initial
@@ -232,27 +233,21 @@ const ListBudgetInitial = () => {
                   rowCount={rows.length}
                 />
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
                   {budgetInitialList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: any) => {
+                    .map((row: BudgetInitialItem, index: any) => {
                       // const isItemSelected = isSelected(row.id);
                       const labelId = `enhanced-table-checkbox-${row.id}`;
 
                       return (
                         <TableRow
                           hover
-                          //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.id}
-                        // selected={isItemSelected}
+                          key={index}
                         >
                           <TableCell
                             padding="checkbox"
-                          // onClick={(event) => handleClick(event, row.id)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -263,12 +258,12 @@ const ListBudgetInitial = () => {
                             {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
                           </TableCell>
                           <TableCell sx={{ height: "10vh", overflow: "auto", width: "300px" }} align="right">
-                          <FormControl sx={{ height: (row.ligneBudgetaire).length <= 2 ? "auto": 70, overflow: "auto" }}>
+                          <FormControl sx={{ height: row.ligneBudgetaire!.length <= 2 ? "auto": 70, overflow: "auto" }}>
                               {
-                                (row.ligneBudgetaire).map((lb: any) => {
+                                row.ligneBudgetaire?.map(lb => {
                                   return (
-                                    <Stack direction="column" spacing={2}>
-                                      {budgetLineList.find((b: any) => b.id === lb)?.code}
+                                    <Stack direction="column" spacing={2} key={index}>
+                                      {budgetLineList.find((b: any) => b.id == lb)?.code}
                                     </Stack>
                                   )
                                 })
@@ -279,7 +274,7 @@ const ListBudgetInitial = () => {
                             {
                               (row.periodeId! as any).map((lp: any) => {
                                 return (
-                                  <Stack direction="column" spacing={2} height={25} overflow="auto">
+                                  <Stack key={index} direction="column" spacing={2} height={25} overflow="auto">
                                     {periodelist.find((e: any) => e.id === lp)?.periode}
                                   </Stack>
                                 )
@@ -287,19 +282,11 @@ const ListBudgetInitial = () => {
                             }
                           </TableCell>
                           <TableCell align="right">{row.montant}</TableCell>
-                          {/* <TableCell align="right">{row.total}</TableCell> */}
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
                             >
-                              {/* <IconButton
-                                color="accent"
-                                aria-label="Details"
-                                component="span"
-                              >
-                                <VisibilityIcon />
-                              </IconButton> */}
                               <IconButton
                                 color="primary"
                                 aria-label="Modifier"
@@ -345,10 +332,6 @@ const ListBudgetInitial = () => {
               labelDisplayedRows={defaultLabelDisplayedRows}
             />
           </Paper>
-          {/* <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      /> */}
         </Box>
       </SectionTable>
     </Container>

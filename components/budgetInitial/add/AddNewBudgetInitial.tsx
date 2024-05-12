@@ -13,7 +13,7 @@ import {
   Autocomplete,
 } from "@mui/material";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { Check, Close } from "@mui/icons-material";
@@ -30,22 +30,22 @@ import useFetchGrants from "../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
 import useFetchPeriode from "../../periode/hooks/useFetchPeriode";
 import { PeriodeItem } from "../../../redux/features/periode/periode.interface";
+import { getValueAndUnit } from "polished";
 
 const AddNewBudgetInitial = () => {
   const fetchBudgetInitial = useFetchBudgetInitial();
-  const { isEditing, budgetInitial } = useAppSelector((state: any) => state.budgetInitial);
+  const { isEditing, budgetInitial } = useAppSelector(state => state.budgetInitial);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const fetchGrant = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours)
+  const { grantEncoursList } = useAppSelector(state => state.grantEncours)
   const fetchligneBudgetaire = useFetchBudgetLine();
-  const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
+  const { budgetLineList } = useAppSelector(state => state.budgetLine);
   const fetchPeriode = useFetchPeriode();
-  const { periodelist } = useAppSelector((state: any) => state.periode)
-  const [grantValue, setGrantValue]: any = React.useState("vide");
+  const { periodelist } = useAppSelector(state => state.periode)
+  const [grantValue, setGrantValue] = React.useState<string>("vide");
   const { id }: any = router.query;
   const uniqueValues = new Set();
-
   React.useEffect(() => {
     fetchGrant();
     fetchligneBudgetaire();
@@ -53,73 +53,59 @@ const AddNewBudgetInitial = () => {
   }, [router.query])
 
   //get grant dans periode
-  const grantInPeriode: any = []
-  const periodeGrantList: { id: string, name: any, montant: number }[] = []
+  let periodeGrantList: any = [...periodelist];
   let [selectedPeriode, setSelectedPeriode] = React.useState<any[]>(
     isEditing
-      ? budgetLineList.filter((pg: any) =>
+      ? periodelist.filter(pg =>
         budgetInitial?.periodeId?.includes(pg.id!)
       )
       : periodeGrantList
   );
-  grantEncoursList.forEach((g: any) => {
-    if (grantValue!=="vide") {
-      periodelist.forEach((p: any) => {
-        let periodeGrant: any = p.grant;
-        if (grantValue === periodeGrant) {
-          grantInPeriode.push(p.id)
-          if (!uniqueValues.has(p.id)) {
-            uniqueValues.add(p.id);
-            return periodeGrantList.push({ id: p.id, name: p.periode, montant: p.montant })
-          }else{
-            return [];
-          }
+    periodeGrantList.map((p: any) => {
+      if (grantValue != "vide" && p.grant == grantValue) {
+        if (!uniqueValues.has(p.id!)) {
+          uniqueValues.add(p.id!)
+          return periodeGrantList.map((pL: any) =>(pL.id, pL.periode, pL.montant))
         }
-      })
-    }
-  })
+      }
+      return periodeGrantList = [];
+    })
 
   //get grant dans budget
-  const grantInBudgteLine: any = []
-  const BudgetLineGrantList: { id: string, name: any, montant: number }[] = []
+  let BudgetLineGrantList: any = []
   let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
     isEditing
       ? budgetLineList.filter((pg: any) =>
-        budgetInitial?.ligneBudgetaire?.includes(pg.id!)
+        Array.isArray(budgetInitial.ligneBudgetaire) && budgetInitial.ligneBudgetaire.includes(pg.id)
       )
       : BudgetLineGrantList
   );
-
-  grantEncoursList.forEach((g: any) => {
-    if (grantValue !== "vide") {
-      budgetLineList.forEach((b: any) => {
-        let BudgetGrant: any = b.grantId;
-        console.log("id grant :", BudgetGrant)
-        if (grantValue === BudgetGrant) {
-          grantInBudgteLine.push(b.id);
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-            BudgetLineGrantList.push({ id: b.id, name: b.code, montant: b.amount });
-          }
+  // console.log("budget :",grantValue)
+    grantEncoursList.map(g =>{
+      if (grantValue !="vide" && g.id === grantValue) {
+        if (!uniqueValues.has(g.id)) {
+          uniqueValues.add(g.id)
+          return BudgetLineGrantList = g.budgetLines
         }
-      });
-    }
-  });
- 
-  const handleSubmit = async (values: any) => {
-    values.periodeId = [...selectedPeriode.map((p: any) => p.id)];
+      }
+      return BudgetLineGrantList = [];
+    })
 
-    values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) =>bl.id)];
+  console.log("bi :", budgetInitial)
+
+  const handleSubmit = async (values: any) => {
+    values.periodeId = [...selectedPeriode.map(p => p.id)];
+    values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
     values.grant = grantValue;
-    let totalMontantBudget = selectedBudgetLine.reduce((total: number, currentItem: any) => total + currentItem.montant, 0);
+    let totalMontantBudget = selectedBudgetLine.reduce((total: number, currentItem: any) => total + currentItem.amount, 0);
     let totalMontantPeriode = selectedPeriode.reduce((total: number, currentItem: any) => total + currentItem.montant, 0);
 
-    console.log("montant budget :", totalMontantBudget)
-    console.log("montant periode :", totalMontantPeriode)
     let somme = totalMontantBudget + totalMontantPeriode;
     values.montant = somme;
+    // console.log("montant :", selectedBudgetLine)
     try {
       if (isEditing) {
+        console.log("periode id :", values.periodeId)
         await dispatch(
           updateBudgetInitial({
             id: budgetInitial.id!,
@@ -136,10 +122,6 @@ const AddNewBudgetInitial = () => {
     }
   };
 
-
-interface OSTextFieldProps {
-  hyperText?: boolean;
-}
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -148,20 +130,15 @@ interface OSTextFieldProps {
           isEditing
             ? budgetInitial
             : {
-              grant: isEditing ? budgetInitial?.grant : grantValue,
+              grant: isEditing ? budgetInitial?.grant : "",
               ligneBudgetaire: isEditing ? budgetInitial?.ligneBudgetaire : "",
               periodeId: isEditing ? budgetInitial?.periodeId : "",
               // montant: isEditing ? budgetInitial?.montant : ,
             }
         }
-        // validationSchema={Yup.object({
-        //   grant: Yup.string().when("grantValue", {
-        //     is: (grantValue: any) => grantValue !== "vide",then: Yup.string().required("Champ obligatoire"),
-        //   }),
-        //   ligneBudgetaire: Yup.string().required("Champ obligatoire"),
-        //   periodeId: Yup.string().required("Champ obligatoire"),
-        //   montant: Yup.string().required("Champ obligatoire"),
-        // })}
+        validationSchema={Yup.object({
+          // periodeId: Yup.string().required("Cham obligatoire"),
+        })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
           action.resetForm();
@@ -221,24 +198,22 @@ interface OSTextFieldProps {
                   label="Grant"
                   variant="outlined"
                   name="grant"
-                  value={(id) ? 
-                  budgetLineList.find((e: any) =>e.id === budgetInitial?.grant)?.code: grantValue}
-                  onChange={(e: any) => setGrantValue(e.target.value)}
-                  hyperText={grantValue == "vide" ? false: true}
+                  value={grantValue}
+                  onChange={(e: any) =>setGrantValue(e.target.value)}
                 >
                   <MenuItem value="vide">Select grant</MenuItem>
                   {
-                    grantEncoursList.map((item: any) => (
-                      <MenuItem value={item.id!}>{item.code!}</MenuItem>
+                    grantEncoursList.map(item => (
+                      <MenuItem key={item.id} value={item.id!}>{item.code!}</MenuItem>
                     ))
                   }
                 </OSTextField>
                 <Autocomplete
                   multiple
                   id="tags-standard"
-                  options={grantValue!="vide" ? BudgetLineGrantList: []}
-                  getOptionLabel={(option) => option.name}
-                  value={grantValue!="vide" ? selectedBudgetLine: []}
+                  options={BudgetLineGrantList}
+                  getOptionLabel={(option) =>option.code as string}
+                  value={selectedBudgetLine}
                   onChange={(event, newValue) => {
                     setSelectedBudgetLine(newValue!);
                   }}
@@ -255,9 +230,9 @@ interface OSTextFieldProps {
                 <Autocomplete
                   multiple
                   id="tags-standard"
-                  options={grantValue!="vide" ? periodeGrantList: []}
-                  getOptionLabel={(option) => option.name}
-                  value={grantValue!="vide" ? selectedPeriode: []}
+                  options={periodeGrantList}
+                  getOptionLabel={(option) =>option.periode! as string}
+                  value={selectedPeriode}
                   onChange={(event, newValue) => {
                     setSelectedPeriode(newValue!);
                   }}

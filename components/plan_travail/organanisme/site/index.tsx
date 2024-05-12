@@ -1,18 +1,19 @@
 import { ArrowBack } from "@mui/icons-material";
 import { Box, Button, Container, MenuItem, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import Link from "next/link";
-import { BodySection, SectionNavigation } from "../../ListTacheEtObjectifs";
 import { useRouter } from "next/router";
 import useFetchObjectifsAnnuel from "./hooks/useFetchObjectifAnnuel";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
 import React, { Fragment, useState } from "react";
-import useFetchSite from "../../../../../configurations/site/hooks/useFetchSite";
-import useFetchPlanTravaile from "../../../../hooks/useFetchPlanTravail";
-import useFetchTacheEtObjectifs from "../../hooks/useFetchTacheEtObjectifs";
-import { PlanTravailItem } from "../../../../../../redux/features/planTravail/planTravail.interface";
-import { enqueueSnackbar } from "../../../../../../redux/features/notification/notificationSlice";
-import { axios } from "../../../../../../axios";
-
+import useFetchSite from "../../../configurations/site/hooks/useFetchSite";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
+import useFetchPlanTravaile from "../../hooks/useFetchPlanTravail";
+import useFetchTacheEtObjectifs from "../tachesEtObjectifs/hooks/useFetchTacheEtObjectifs";
+import { enqueueSnackbar } from "../../../../redux/features/notification/notificationSlice";
+import { axios } from "../../../../axios";
+import { SectionNavigation } from "../../objectifStrategique";
+import { BodySection } from "../tachesEtObjectifs/ListTacheEtObjectifs";
+import { PlanTravailItem } from "../../../../redux/features/planTravail/planTravail.interface";
+import Add from "@mui/icons-material/Add";
 
 const ListSite = () => {
   const router = useRouter()
@@ -33,7 +34,7 @@ const ListSite = () => {
     fetchTacheCle();
   }, [router.query])
 
- 
+
   const handleChange = async (siteId: string, objectifAnnuelId: string, note: number) => {
     try {
       await axios.post("/suivi-evaluation/note", {
@@ -63,9 +64,14 @@ const ListSite = () => {
                 Retour
               </Button>
             </Link>
-            <TextField label="Année" size="small" sx={{width: 100}} select onChange={(e)=> setFiltre(e.target.value === "" ? "" : parseInt(e.target.value))}>
+            <Link href={`/plan_travail/${id}/resume`}>
+              <Button color="primary" variant="text" startIcon={<Add />}>
+                Résumé des sites
+              </Button>
+            </Link>
+            <TextField label="Année" size="small" sx={{ width: 100 }} select onChange={(e) => setFiltre(e.target.value === "" ? "" : parseInt(e.target.value))}>
               <MenuItem value="">Tous</MenuItem>
-              {Array.from(new Set(planTravaillist.flatMap(p=>p.TacheCle!.flatMap(t=>t.objectifAnnuel!.map(o=>o.year))))).map(y=>(
+              {Array.from(new Set(planTravaillist.flatMap(p => p.TacheCle!.flatMap(t => t.objectifAnnuel!.map(o => o.year))))).map(y => (
                 <MenuItem value={y}>
                   {y}
                 </MenuItem>
@@ -100,7 +106,7 @@ const ListSite = () => {
                               {filtre} Targets
                             </TableCell>
                             {sitelist.map(s => (
-                              <TableCell key={s.id} sx={{ minWidth: 150, maxWidth: 150, paddingLeft: 1 }}>{s.lieu}</TableCell>
+                              <TableCell key={s.id} sx={{ minWidth: 150, maxWidth: 150 }} align="center">{s.lieu}</TableCell>
                             ))}
 
                           </TableRow>
@@ -112,51 +118,51 @@ const ListSite = () => {
                     {planTravaillist.map((plan: PlanTravailItem, yearIndex: any) => (
                       <Fragment key={yearIndex}>
                         <TableRow >
-                        <TableCell align="center">
-                          {plan.description}
-                        </TableCell>
-                        <TableCell>
-                          <Table>
-                            <TableBody>
-                              {plan.TacheCle?.map(t => (
-                                <TableRow key={t.id}>
-                                  <TableCell sx={{ minWidth: 70, maxWidth: 70 }}>
-                                    {t.sn}
-                                  </TableCell>
-                                  <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
-                                    {t.keyTasks}
-                                  </TableCell>
-                                  <TableCell>
-                                    <Table>
-                                      <TableBody>
-                                        {t.objectifAnnuel?.filter(o=>typeof filtre === "number" ? o.year === filtre : o).map(o => (
-                                          <TableRow key={o.id}>
-                                            <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>{o.objectiveTitle}</TableCell>
-                                            {sitelist.map(s => (
-                                              <TableCell key={s.id} sx={{ minWidth: 150, maxWidth: 150 }}>
-                                                <TextField
-                                                  defaultValue={o.notes?.find(n=>n.siteId === s.id) ? o.notes!.find(n=>n.siteId === s.id)!.note : ""}
-                                                  select 
-                                                  sx={{ width: 140, textAlign: "center" }}
-                                                  onChange={(e) => handleChange(s.id!, o.id!, parseInt(e.target.value))}
-                                                >
-                                                  <MenuItem value={0}>0</MenuItem>
-                                                  <MenuItem value={1}>1</MenuItem>
-                                                </TextField>
-                                              </TableCell>
-                                            ))}
-                                          </TableRow>
-                                        ))}
-                                      </TableBody>
-                                    </Table>
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
+                          <TableCell align="center">
+                            {plan.description}
+                          </TableCell>
+                          <TableCell>
+                            <Table>
+                              <TableBody>
+                                {plan.TacheCle?.map(t => (
+                                  <TableRow key={t.id}>
+                                    <TableCell sx={{ minWidth: 70, maxWidth: 70 }}>
+                                      {t.sn}
+                                    </TableCell>
+                                    <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
+                                      {t.keyTasks}
+                                    </TableCell>
+                                    <TableCell>
+                                      <Table>
+                                        <TableBody>
+                                          {t.objectifAnnuel?.filter(o => typeof filtre === "number" ? o.year === filtre : o).map(o => (
+                                            <TableRow key={o.id}>
+                                              <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>{o.objectiveTitle}</TableCell>
+                                              {sitelist.map(s => (
+                                                <TableCell key={s.id} sx={{ minWidth: 150, maxWidth: 150 }}>
+                                                  <TextField
+                                                    defaultValue={o.notes?.find(n => n.siteId === s.id) ? o.notes!.find(n => n.siteId === s.id)!.note : ""}
+                                                    select
+                                                    sx={{ width: 140, textAlign: "center" }}
+                                                    onChange={(e) => handleChange(s.id!, o.id!, parseInt(e.target.value))}
+                                                  >
+                                                    <MenuItem value={0}>0</MenuItem>
+                                                    <MenuItem value={1}>1</MenuItem>
+                                                  </TextField>
+                                                </TableCell>
+                                              ))}
+                                            </TableRow>
+                                          ))}
+                                        </TableBody>
+                                      </Table>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </TableCell>
+                        </TableRow>
+                        {/* <TableRow>
                       <TableCell align="center">
                         Sous-total 
                       </TableCell>
@@ -191,12 +197,12 @@ const ListSite = () => {
                           </TableBody>
                         </Table>
                       </TableCell>
-                    </TableRow>
+                    </TableRow> */}
                       </Fragment>
                     ))}
-                    
+
                   </TableBody>
-                  <TableHead>
+                  {/* <TableHead>
                   <TableRow>
                       <TableCell align="center">
                         Total
@@ -235,7 +241,7 @@ const ListSite = () => {
                         </Table>
                       </TableCell>
                     </TableRow>
-                  </TableHead>
+                  </TableHead> */}
                 </Table>
               </TableContainer>
             </Paper>

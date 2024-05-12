@@ -1,8 +1,8 @@
 export interface BudgetInitialItem {
     id?: string;
     grant?: number;
-    ligneBudgetaire?: number;
-    periodeId?: string;
+    ligneBudgetaire?: number[];
+    periodeId?: string[];
     montant?: number;
     periode?: any;
 }

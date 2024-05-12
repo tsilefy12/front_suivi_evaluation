@@ -51,7 +51,7 @@ import { array } from "prop-types";
 
 const ListTacheEtObjectifs = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [ selectYear, setSelectYear] = useState<number>(new Date().getFullYear())
+  const [selectYear, setSelectYear] = useState<number>(new Date().getFullYear())
   const [orderBy, setOrderBy] = React.useState<keyof Data>("startDate");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
@@ -135,9 +135,9 @@ const ListTacheEtObjectifs = () => {
     setSelected(newSelected);
   };
 
-  useEffect(()=>{
-    console.log(new Set(tacheEtObjectifList.flatMap(e=>e.objectifAnnuel?.map(i=>i.year))))
-  },[tacheEtObjectifList])
+  useEffect(() => {
+    console.log(new Set(tacheEtObjectifList.flatMap(e => e.objectifAnnuel?.map(i => i.year))))
+  }, [tacheEtObjectifList])
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -222,11 +222,11 @@ const ListTacheEtObjectifs = () => {
         />
       </FormContainer>
       <BodySection>
-          <Box sx={{ width: "100%" }}>
-            <Paper sx={{ width: "100%", mb: 2 ,pt:2}}>
-              <EnhancedTableToolbar tacheEtObjectifList={tacheEtObjectifList} numSelected={selected.length} selectYear={selectYear} setSelectYear={setSelectYear}/>
-              <TableContainer>
-                <Table sx={{  width: "100%",padding: 2 , overflow:"auto"}}>
+        <Box sx={{ width: "100%" }}>
+          <Paper sx={{ width: "100%", mb: 2, pt: 2 }}>
+            <EnhancedTableToolbar tacheEtObjectifList={tacheEtObjectifList} numSelected={selected.length} selectYear={selectYear} setSelectYear={setSelectYear} />
+            <TableContainer>
+              <Table sx={{ width: "100%", padding: 2, overflow: "auto" }}>
                 <EnhancedTableHead
                   numSelected={selected.length}
                   order={order}
@@ -284,13 +284,13 @@ const ListTacheEtObjectifs = () => {
                             </Moment>
                           </TableCell>
                           <TableCell>
-                            {row.objectifAnnuel?.filter((e) => e.year === (selectYear - 1)).map((item) =>(
-                               item.objectiveTitle ? (<p key={item.id}>{item.objectiveTitle}</p>):"-"
+                            {row.objectifAnnuel?.filter((e) => e.year === (selectYear - 1)).map((item) => (
+                              item.objectiveTitle ? (<p key={item.id}>{item.objectiveTitle}</p>) : "-"
                             ))}
                           </TableCell>
                           <TableCell>
-                            {row.objectifAnnuel?.filter((e) => e.year === selectYear).map((item) =>(
-                               item.objectiveTitle ? (<p key={item.id}>{item.objectiveTitle}</p>):"-"
+                            {row.objectifAnnuel?.filter((e) => e.year === selectYear).map((item) => (
+                              item.objectiveTitle ? (<p key={item.id}>{item.objectiveTitle}</p>) : "-"
                             ))}
                           </TableCell>
                           <TableCell align="right">
@@ -298,11 +298,6 @@ const ListTacheEtObjectifs = () => {
                               direction="row"
                               justifyContent="right"
                             >
-                              <Link href={`/plan_travail/${id}/tachesEtObjectifs/${row.id}/site`}>
-                                <Button variant="outlined" color="accent" startIcon={<Add />}>
-                                  Site
-                                </Button>
-                              </Link>
                               <Link href={`/plan_travail/${id}/tachesEtObjectifs/${row.id}/details`}>
                                 <IconButton
                                   color="accent"

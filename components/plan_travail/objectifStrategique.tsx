@@ -134,26 +134,18 @@ const ListObjectifStrategique = () => {
                     {row.title} : {row.description}
                   </Typography>
                   <Typography>
-                   <Button>
-                   <MoreVertIcon key={row.id!}>
-                      <MenuItem>
-                      <IconButton
-                          onClick={() => handleClickEdit(row.id)}
-                          color="success"
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      </MenuItem>
-                      <MenuItem>
-                        <IconButton
-                          onClick={() => handleClickDelete(row.id)}
-                          color="warning"
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                        </MenuItem>
-                    </MoreVertIcon>
-                   </Button>
+                    <IconButton
+                      onClick={() => handleClickEdit(row.id)}
+                      color="success"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleClickDelete(row.id)}
+                      color="warning"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </Typography>
                 </Stack>
                 <Link href={`/plan_travail/${row.id}/tachesEtObjectifs`}>
@@ -166,6 +158,11 @@ const ListObjectifStrategique = () => {
                       Tâches et objectifs
                     </Button>
                   </Box>
+                </Link>
+                <Link href={`/plan_travail/${row.id}/site`}>
+                  <Button variant="outlined" color="accent" startIcon={<Add />}>
+                    Site
+                  </Button>
                 </Link>
               </LinkContainer>
             </Grid>

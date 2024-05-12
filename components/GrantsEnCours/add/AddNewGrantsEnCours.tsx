@@ -78,7 +78,7 @@ const AddNewGrantsEnCours = () => {
   } else {
     listBank.push({ id: "", name: "" })
   }
-  console.log("grant :", grantEncoursList)
+  // console.log("grant :", grantEncoursList)
   const listStatus = [
     { id: "PENDING", name: "PENDING" },
     { id: "IN_PROGRESS", name: "IN_PROGRESS" },
@@ -89,7 +89,6 @@ const AddNewGrantsEnCours = () => {
    
     values.responsable = [...selectedEmployes.map((item) => item.id)];
     values.projectId = 1;
-    values.bankId = null;
     values.postAnalyticId = null;
  
     const date1 = new Date(values.startDate);
@@ -154,6 +153,7 @@ const AddNewGrantsEnCours = () => {
           bailleur: Yup.string().required("Champ obligatoire"),
           amount: Yup.string().required("Champ obligatoire"),
           amountMGA: Yup.string().required("Champ obligatoire"),
+          bankId:  Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
