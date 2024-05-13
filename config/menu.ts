@@ -88,38 +88,38 @@ const menu = [
     link: "/configurations",
     icon: "settingsIcon",
     items: [
+      // {
+      //   id: 41,
+      //   name: "Devise",
+      //   link: "/configurations/devise",
+      //   icon: "",
+      // },
       {
-        id: 41,
-        name: "Devise",
-        link: "/configurations/devise",
-        icon: "",
-      },
-      {
-        id:42,
+        id:41,
         name: "Poste Analytique",
         link: "/configurations/postAnalytic",
         icon: "",
       },
       {
-        id:43,
+        id:42,
         name: "Type",
         link: "/configurations/type",
         icon: "",
       },
       {
-        id:44,
+        id:43,
         name: "Organisation",
         link: "/configurations/organisation",
         icon: "",
       },
       {
-        id:45,
+        id:44,
         name: "Ligne de Budget",
         link: "/configurations/lineBudget",
         icon: "",
       },
       {
-        id:46,
+        id:45,
         name: "Status",
         link: "/configurations/status",
         icon: "",
@@ -131,7 +131,7 @@ const menu = [
         icon: "",
       },
       {
-        id:46,
+        id:47,
         name: "Site",
         link: "/configurations/site",
         icon: "",
