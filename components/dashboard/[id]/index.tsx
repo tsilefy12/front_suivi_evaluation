@@ -49,10 +49,10 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
   });
 
   return (
-    <Box sx={{minWidth: "auto", maxWidth: "auto"}}>
+    <Box sx={{ minWidth: "auto", maxWidth: "auto" }}>
       <DialogTitle>
         <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
-        <Typography variant="h4" color="GrayText" marginLeft={4}>
+          <Typography variant="h4" color="GrayText" marginLeft={4}>
             Budget engagé
           </Typography>
           <IconButton
@@ -73,16 +73,16 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{minWidth: 250, maxWidth: 250}}>
+                      <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
                         LIGNE BUDGETAIRE
                       </TableCell>
-                      <TableCell sx={{minWidth: 250, maxWidth: 250}}>
+                      <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
                         BUDGET INITIAL
                       </TableCell>
-                      <TableCell sx={{minWidth: 250, maxWidth: 250}}>
+                      <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
                         BUDGET ENGAGE
                       </TableCell>
-                      <TableCell sx={{minWidth: 250, maxWidth: 250}}>
+                      <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
                         SOLDE
                       </TableCell>
                     </TableRow>
@@ -97,28 +97,28 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
                 </TableCell>
                 <Table>
                   <TableBody>
-                   
-                    {
-                  budgetLineList.filter(f => f.grantId == getId).map((row, index) => (
-                    <TableRow>
-                    <TableCell>
-                      <TableCell sx={{minWidth: 250, maxWidth: 250}}>
-                        {row.code}
-                      </TableCell>
-                      <TableCell sx={{minWidth: 250, maxWidth: 250}}>
-                        {budgetInitialList.find(e => e.ligneBudgetaire == row.id)?.montant} Ar
-                      </TableCell>
-                      <TableCell sx={{minWidth: 250, maxWidth: 250}}>
-                        {budgetEngagedList.find(be => be.budgetLineId == row.id)?.amount} Ar
-                      </TableCell>
-                      <TableCell sx={{minWidth: 250, maxWidth: 250}}>
-                        {(budgetInitialList.find(e => e.ligneBudgetaire == row.id)?.montant)! - budgetEngagedList.find(be => be.budgetLineId == row.id)?.amount!} Ar
-                      </TableCell>
-                    </TableCell>
 
-                    </TableRow>
-                  ))
-                }
+                    {
+                      budgetLineList.filter(f => f.grantId == getId).map((row, index) => (
+                        <TableRow>
+                          <TableCell>
+                            <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
+                              {row.code}
+                            </TableCell>
+                            <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
+                              {budgetInitialList.find(e => e.ligneBudgetaire == row.id)?.montant} Ar
+                            </TableCell>
+                            <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
+                              {budgetEngagedList.find(be => be.budgetLineId == row.id)?.amount} Ar
+                            </TableCell>
+                            <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
+                              {(budgetInitialList.find(e => e.ligneBudgetaire == row.id)?.montant)! - budgetEngagedList.find(be => be.budgetLineId == row.id)?.amount!} Ar
+                            </TableCell>
+                          </TableCell>
+
+                        </TableRow>
+                      ))
+                    }
                   </TableBody>
                 </Table>
               </TableRow>
