@@ -124,7 +124,7 @@ const Dashboard: NextPage = () => {
           </TableBody>
         </Table>
       </BodySection>
-      <Dialog open={open} onClose={handleClose} sx={{position: "fixed", left: 5}}>
+      <Dialog open={open} onClose={handleClose} sx={{position: "fixed", left: 5}} disablePortal={false}>
         <DetailsDashboard handleClose={handleClose} getId={getId}/>
       </Dialog>
     </Container>

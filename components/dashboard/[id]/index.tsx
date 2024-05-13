@@ -14,7 +14,7 @@ import { SectionNavigation } from "../../home";
 import { BodySection } from "../../gereRapportDeMission/GereRapportDeMission";
 import { Add, ArrowBack, Close } from "@mui/icons-material";
 
-const DetailsDashboard: NextPage = ({ handleClose, getId}: any) => {
+const DetailsDashboard = ({ handleClose, getId}: any) => {
     const basePath = useBasePath();
     const dispatch = useDispatch();
     const router = useRouter();
