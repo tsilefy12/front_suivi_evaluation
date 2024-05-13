@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, Link, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { Button, Container, DialogContent, DialogTitle, Link, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import type { NextPage } from "next";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
@@ -12,9 +12,9 @@ import useFetchReliquatGrant from "../../reliquetGrant/hooks/useFetchEliquatGran
 import useFetchBudgetInitial from "../../budgetInitial/hooks/useFetchBudgetInitial";
 import { SectionNavigation } from "../../home";
 import { BodySection } from "../../gereRapportDeMission/GereRapportDeMission";
-import { Add, ArrowBack } from "@mui/icons-material";
+import { Add, ArrowBack, Close } from "@mui/icons-material";
 
-const DetailsDashboard: NextPage = () => {
+const DetailsDashboard: NextPage = ({ handleClose, getId}: any) => {
     const basePath = useBasePath();
     const dispatch = useDispatch();
     const router = useRouter();
@@ -40,62 +40,69 @@ const DetailsDashboard: NextPage = () => {
 
     return (
         <Container maxWidth="xl">
-            <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
-                <Link href="/suivi-evaluation">
-                    <Button color="primary" variant="contained" startIcon={<ArrowBack />}>
-                        Retour
-                    </Button>
-                </Link>
-                <Typography variant="h4" color="GrayText">
-                    Dashboard details list
-                </Typography>
-            </SectionNavigation>
-            <BodySection>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                GRANT
-                            </TableCell>
-                            <TableCell>
-                                LIGNE BUDGETAIRE
-                            </TableCell>
-                            <TableCell align="center">
-                                BUDGET INITIAL
-                            </TableCell>
-                            <TableCell align="center">
-                                BUDGET ENGAGE
-                            </TableCell>
-                            <TableCell align="center">
-                                SOLDE
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {
-                            budgetLineList.map(row => (
-                                <TableRow key={row.id!}>
-                                    <TableCell>
-                                        {grantEncoursList.find(g => g.id === row.grantId)?.code}
-                                    </TableCell>
-                                    <TableCell>
-                                        {row.code}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {budgetInitialList.find(e => e.ligneBudgetaire == row.id)?.montant} Ar
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {budgetEngagedList.find(be => be.budgetLineId == row.id)?.amount} Ar
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {(budgetInitialList.find(e => e.ligneBudgetaire == row.id)?.montant)! - budgetEngagedList.find(be => be.budgetLineId == row.id)?.amount!} Ar
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        }
-                    </TableBody>
-                </Table>
-            </BodySection>
+            <DialogTitle>
+                <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
+                        <Button
+                            color="warning"
+                            variant="contained"
+                            startIcon={<Close />}
+                            onClick={handleClose}
+                        >
+                            Fermer
+                        </Button>
+                    <Typography variant="h4" color="GrayText">
+                        Dashboard details list
+                    </Typography>
+                </SectionNavigation>
+            </DialogTitle>
+            <DialogContent>
+                <BodySection>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>
+                                    GRANT
+                                </TableCell>
+                                <TableCell>
+                                    LIGNE BUDGETAIRE
+                                </TableCell>
+                                <TableCell align="center">
+                                    BUDGET INITIAL
+                                </TableCell>
+                                <TableCell align="center">
+                                    BUDGET ENGAGE
+                                </TableCell>
+                                <TableCell align="center">
+                                    SOLDE
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
+                                budgetLineList.filter(f =>f.grantId == getId).map(row => (
+                                    <TableRow key={row.id!}>
+                                        <TableCell>
+                                            {grantEncoursList.find(g => g.id === row.grantId)?.code}
+                                        </TableCell>
+                                        <TableCell>
+                                            {row.code}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {budgetInitialList.find(e => e.ligneBudgetaire == row.id)?.montant} Ar
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {budgetEngagedList.find(be => be.budgetLineId == row.id)?.amount} Ar
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {(budgetInitialList.find(e => e.ligneBudgetaire == row.id)?.montant)! - budgetEngagedList.find(be => be.budgetLineId == row.id)?.amount!} Ar
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            }
+                        </TableBody>
+                    </Table>
+                </BodySection>
+            </DialogContent>
         </Container>
     );
 };

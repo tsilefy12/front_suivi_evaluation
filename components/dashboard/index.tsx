@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, FormControl, Link, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { Button, Container, Dialog, FormControl, Link, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
 import BackOfficeLayout from "../../layouts/backOffice";
@@ -17,6 +17,7 @@ import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 import useFetchReliquatGrant from "../reliquetGrant/hooks/useFetchEliquatGrant";
 import useFetchBudgetInitial from "../budgetInitial/hooks/useFetchBudgetInitial";
 import useFetchBudgetLine from "../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
+import DetailsDashboard from "./[id]";
 
 const Dashboard: NextPage = () => {
   const basePath = useBasePath();
@@ -31,6 +32,8 @@ const Dashboard: NextPage = () => {
   const fetchtReliquatGrant = useFetchReliquatGrant();
   const fetchBudgetInitial = useFetchBudgetInitial();
   const { budgetInitialList } = useAppSelector((state) => state.budgetInitial)
+  const [open, setOpen] = React.useState(false)
+  const [getId, setGetId] = React.useState("");
 
   React.useEffect(() => {
     fetchBudgetEngagedList();
@@ -40,7 +43,13 @@ const Dashboard: NextPage = () => {
     fetchBudgetLine();
   }, [router.query])
 
-
+  const handleClick = (id: any) => {
+    setOpen(true);
+    setGetId(id);
+  }
+  const handleClose = () => {
+    setOpen(false);
+  }
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
@@ -86,11 +95,14 @@ const Dashboard: NextPage = () => {
                     {row.code}
                   </TableCell>
                   <TableCell>
-                    <Link href={`/suivi-evaluation/dashboard/${row.id}`}>
-                      <Button variant="outlined" color="accent" startIcon={<Add />}>
+                      <Button
+                        variant="outlined"
+                        color="accent"
+                        startIcon={<Add />}
+                        onClick={() =>handleClick(row.id!)}
+                      >
                         Voir détails
                       </Button>
-                    </Link>
                     {/* <Stack direction={"column"} spacing={2} sx={{ height: (row.budgetLines!).length <= 2 ? "auto" : 70, overflow: "auot" }}>
                       {row.budgetLines!.map(bl => (
                         <span key={bl.id}>{bl.code}</span>
@@ -112,6 +124,9 @@ const Dashboard: NextPage = () => {
           </TableBody>
         </Table>
       </BodySection>
+      <Dialog open={open} onClose={handleClose} sx={{position: "fixed", left: 5}}>
+        <DetailsDashboard handleClose={handleClose} getId={getId}/>
+      </Dialog>
     </Container>
   );
 };
