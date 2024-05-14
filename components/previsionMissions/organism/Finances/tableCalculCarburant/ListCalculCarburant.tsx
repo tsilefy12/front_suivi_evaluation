@@ -188,7 +188,7 @@ const ListCalculCarburant = () => {
                           role="checkbox"
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.trajet}
+                          key={row.id!}
                           // selected={isItemSelected}
                         >
                           <TableCell
@@ -216,7 +216,7 @@ const ListCalculCarburant = () => {
                           <TableCell align="right">
                             {row.totalCarburant} Ar
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="right" key={index}>
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"

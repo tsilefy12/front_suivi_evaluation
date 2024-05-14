@@ -99,7 +99,7 @@ const ListProgrammes = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {programmePrevisionList.map((row: ProgrammePrevisionItem, index) => (
+                  {programmePrevisionList.map((row: ProgrammePrevisionItem, index: any) => (
                     <TableRow
                       key={index}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -117,14 +117,14 @@ const ListProgrammes = () => {
                         {deliverableList.find((e: any) => e.id === row.livrable)?.description}
                       </TableCell>
                       <TableCell component="th" scope="row" key={index}>
-                        <FormControl key={index} sx={{height: (row.responsable!).length <= 2 ? "auto" : 70, overflow: "auot"}}>
+                        <FormControl key={index} sx={{height: Array.isArray(row.responsable) && row.responsable.length <= 2 ? "auto" : 70, overflow: "auot"}}>
                         {
-                          (Array.from(row.responsable!)).map((lp: any) => {
+                          Array.isArray(row.responsable) && row.responsable.map(lp => {
                             return (
-                              <Stack direction="column" spacing={2} key={index}>
-                                {employees.find((e: any) => e.id === lp)?.name}
+                              <Stack direction="column" spacing={2} key={lp}>
+                                {employees.find((e: any) => e.id! === lp)?.name}
                                 {" "}
-                                {employees.find((e: any) => e.id === lp)?.surname}
+                                {employees.find((e: any) => e.id! === lp)?.surname}
                               </Stack>
                             )
                           })

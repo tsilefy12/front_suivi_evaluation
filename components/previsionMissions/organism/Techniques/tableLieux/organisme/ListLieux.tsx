@@ -89,9 +89,9 @@ const ListLieux = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {missionLocationList.map((row: MissionLocationItem) => (
+                {missionLocationList.map((row: MissionLocationItem, index: any) => (
                   <TableRow
-                    key={row.id}
+                    key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
@@ -103,7 +103,7 @@ const ListLieux = () => {
                     <TableCell component="th" scope="row">
                       {row.district}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" key={index}>
                       <BtnActionContainer
                         direction="row"
                         justifyContent="right"

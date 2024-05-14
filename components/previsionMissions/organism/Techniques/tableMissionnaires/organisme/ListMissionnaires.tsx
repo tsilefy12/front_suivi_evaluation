@@ -97,9 +97,9 @@ const ListMissionnaires = () => {
                   </TableRow>
                 </TableHead>
               <TableBody>
-                {missionaryList.map((row: MissionaryItem) => (
+                {missionaryList.map((row: MissionaryItem, index: any) => (
                   <TableRow
-                    key={row.id}
+                    key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
@@ -111,11 +111,11 @@ const ListMissionnaires = () => {
                     <TableCell component="th" scope="row">
                     {<Moment format="DD/MM/YYYY">{row.returnDateMissionary}</Moment>}
                     </TableCell>
-                    <TableCell component="th" scope="row">
+                    <TableCell component="th" scope="row" key={index}>
                       {employees.find(e =>e.id === row.missionResponsabilityMissionary)?.name} {" "}
                       {employees.find(e =>e.id == row.missionResponsabilityMissionary)?.surname}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" key={index}>
                       <BtnActionContainer
                         direction="row"
                         justifyContent="right"

@@ -186,7 +186,7 @@ const ListCalculDesPiles = () => {
                           role="checkbox"
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.appareil}
+                          key={row.id!}
                           // selected={isItemSelected}
                         >
                           <TableCell
@@ -206,7 +206,7 @@ const ListCalculDesPiles = () => {
                           <TableCell align="right">{row.change}</TableCell>
                           <TableCell align="right">20</TableCell>
                           <TableCell align="right">{row.nombrePack}</TableCell>
-                          <TableCell align="right">
+                          <TableCell align="right" key={index}>
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"

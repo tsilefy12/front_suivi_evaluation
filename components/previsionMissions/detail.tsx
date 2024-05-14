@@ -21,28 +21,28 @@ const Detail = () => {
 
   return (
     <FormContainer spacing={2}>
-    {
-      missionListe.filter((e: any) =>e.id === id).map((item: MissionItem, index: any) => (
-        <Grid container key={index}>
-        <Grid item xs={12} md={4}>
-          <KeyValue keyName="Ref mission" value={item.reference!} />
-          <KeyValue keyName="Description" value={item.descriptionMission!} />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          Responsable : <span> </span>
-          <FormLabel>
-            {[item.missionManager].map((mm: any) => mm.name + " " + mm.surname)}
-          </FormLabel>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          Gestionnaire de budget :  <span> </span>
-          <FormLabel>
-            {[item.budgetManager!].map((bm: any) => bm.name + " " + bm.surname)}
-          </FormLabel>
-        </Grid>
-      </Grid>
-      ))
-    }
+      {
+        missionListe.filter((e: any) => e.id === id).map((item: MissionItem, index: any) => (
+          <Grid container key={index}>
+            <Grid item xs={12} md={4}>
+              <KeyValue keyName="Ref mission" value={item.reference!} />
+              <KeyValue keyName="Description" value={item.descriptionMission!} />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              Responsable : <span> </span>
+              <FormLabel>
+                {[item.missionManager].map((mm: any) => mm.name + " " + mm.surname)}
+              </FormLabel>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              Gestionnaire de budget :  <span> </span>
+              <FormLabel>
+                {[item.budgetManager!].map((bm: any) => bm.name + " " + bm.surname)}
+              </FormLabel>
+            </Grid>
+          </Grid>
+        ))
+      }
     </FormContainer>
   );
 };

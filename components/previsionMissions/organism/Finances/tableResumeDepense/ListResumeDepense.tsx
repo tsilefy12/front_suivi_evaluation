@@ -202,7 +202,7 @@ const ListResumeDepense = () => {
                           //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
                           tabIndex={-1}
-                          key={row.id}
+                          key={row.id!}
                         >
                           <TableCell
                             padding="checkbox"
@@ -221,7 +221,7 @@ const ListResumeDepense = () => {
                           <TableCell align="right">{row.depensePrevue}</TableCell>
                           <TableCell align="right">{row.budgetDepense}</TableCell>
                           <TableCell align="right">{row.remarque}</TableCell>
-                          <TableCell align="right">
+                          <TableCell align="right" key={index}>
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"

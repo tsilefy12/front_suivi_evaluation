@@ -306,7 +306,7 @@ const ListPrevision = () => {
                           {previsionDepenselist.filter((e: any) => e.imprevue != null)
                             .slice().map((row: PrevisionDepenseItem, index: any)=>{
                             return (
-                          <TableRow key={index}>
+                          <TableRow key={row.id!}>
                             <TableCell align="left" scope="row" sx={{paddingLeft: 2}}>
                               <Moment format="DD/MM/yyyy">{row.date}</Moment>
                             </TableCell>
@@ -402,7 +402,7 @@ const ListPrevision = () => {
                                 <MenuItem value="vide">Select budget line</MenuItem>
                                 {
                                   listLigne.map((item: any) => (
-                                    <MenuItem key={item.id} value={item.name}>
+                                    <MenuItem key={item.id!} value={item.name}>
                                       {item.name}
                                     </MenuItem>
                                   ))

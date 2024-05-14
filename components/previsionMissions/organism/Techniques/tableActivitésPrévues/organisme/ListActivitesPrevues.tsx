@@ -83,15 +83,15 @@ const ListActivitesPrevues = () => {
           <MyTableContainer>
             <Table sx={{ minWidth: 700 }} aria-label="simple table">
               <TableBody>
-                {plannedActivityList.map((row: PlannedActivityItem) => (
+                {plannedActivityList.map((row: PlannedActivityItem, index: any) => (
                   <TableRow
-                    key={row.id}
+                    key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
                       {row.description}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" key={index}>
                       <BtnActionContainer
                         direction="row"
                         justifyContent="right"

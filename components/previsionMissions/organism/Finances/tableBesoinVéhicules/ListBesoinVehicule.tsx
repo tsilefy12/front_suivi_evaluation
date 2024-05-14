@@ -183,7 +183,7 @@ const ListBesoinVehicule = () => {
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {besoinVehiculeList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: BesoinvehiculeItem, index) => {
+                    .map((row: BesoinvehiculeItem, index: any) => {
                       // const isItemSelected = isSelected(row.dateDébut);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -194,7 +194,7 @@ const ListBesoinVehicule = () => {
                           role="checkbox"
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={index}
+                          key={row.id!}
                         // selected={isItemSelected}
                         >
                           <TableCell
@@ -219,7 +219,7 @@ const ListBesoinVehicule = () => {
                           </TableCell>
                           <TableCell align="right">{row.trajet}</TableCell>
                           <TableCell align="right" key={index}>
-                            <FormControl key={index} sx={{height: (row.responsable!).length <= 2 ? "auto" : 70, overflow: "auto"}}>
+                            <FormControl key={row.id!} sx={{height: (row.responsable!).length <= 2 ? "auto" : 70, overflow: "auto"}}>
                             {
                               (row.responsable!).map((lp: any) => {
                                 return (
@@ -234,7 +234,7 @@ const ListBesoinVehicule = () => {
                             </FormControl>
                           </TableCell>
                           <TableCell align="right">{row.nombreJour}</TableCell>
-                          <TableCell align="right">
+                          <TableCell align="right" key={index}>
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
