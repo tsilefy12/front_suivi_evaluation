@@ -112,8 +112,8 @@ const ListMissionnaires = () => {
                     {<Moment format="DD/MM/YYYY">{row.returnDateMissionary}</Moment>}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {employees.find(employe =>employe.id === row.missionResponsabilityMissionary)?.name} {" "}
-                      {employees.find(employe =>employe.id === row.missionResponsabilityMissionary)?.surname}
+                      {employees.find(e =>e.id === row.missionResponsabilityMissionary)?.name} {" "}
+                      {employees.find(e =>e.id == row.missionResponsabilityMissionary)?.surname}
                     </TableCell>
                     <TableCell align="right">
                       <BtnActionContainer
