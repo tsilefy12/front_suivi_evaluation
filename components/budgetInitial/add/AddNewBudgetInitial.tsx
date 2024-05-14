@@ -91,7 +91,7 @@ const AddNewBudgetInitial = () => {
       return BudgetLineGrantList = [];
     })
 
-  console.log("bi :", budgetInitial)
+  // console.log("bi :", budgetInitial)
 
   const handleSubmit = async (values: any) => {
     values.periodeId = [...selectedPeriode.map(p => p.id)];

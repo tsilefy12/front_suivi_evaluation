@@ -24,13 +24,16 @@ import {
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { cancelEdit } from "../../../../../../redux/features/missionary/missionarySlice";
-import OSDateTimePicker from "../../../../../shared/date/OSDateTimePicker";
 import OSDatePicker from "../../../../../shared/date/OSDatePicker";
+import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
+import OSSelectField from "../../../../../shared/select/OSSelectField";
 
 const AddMissionnaire = ({ handleClose }: any) => {
   const router = useRouter();
   const { id }= router.query;
   const dispatch = useAppDispatch();
+  const fetchEmployes = useFetchEmploys();
+  const { employees } = useAppSelector(state =>state.employe)
 
   const { missionary, isEditing } = useAppSelector(
     (state) => state.missionary
@@ -39,6 +42,7 @@ const AddMissionnaire = ({ handleClose }: any) => {
 
   useEffect(() => {
     fetchMissionaryList();
+    fetchEmployes();
   }, []);
 
   const handleSubmit = async (values: any) => {
@@ -121,10 +125,13 @@ const AddMissionnaire = ({ handleClose }: any) => {
                           formikProps.setFieldValue("returnDateMissionary", value)
                         }
                       />
-                      <OSTextField
+                      <OSSelectField
                         id="outlined-basic"
                         label="Responsable"
                         name="missionResponsabilityMissionary"
+                        options={employees}
+                        dataKey={"name"}
+                        valueKey="id"
                         inputProps={{ autoComplete: "off" }}
                       />
                     </FormContainer>

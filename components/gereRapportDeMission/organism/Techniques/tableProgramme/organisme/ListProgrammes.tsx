@@ -36,17 +36,17 @@ const ListProgrammes = () => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const dispatch: any = useAppDispatch();
-  const { isEditing, programmeRapport, programmeRapportList } = useAppSelector((state: any) => state.programmeRapport);
+  const { isEditing, programmeRapport, programmeRapportList } = useAppSelector(state => state.programmeRapport);
   const fetchProgrammeRapport = useFetchProgrammeRapport();
   const { id }: any = router.query;
   const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) => state.employe);
+  const { employees } = useAppSelector(state => state.employe);
   const fetchLivrable = useFetchLivrableRapport();
-  const { livrableRapportlist } = useAppSelector((state: any) => state.livrableRapport);
+  const { livrableRapportlist } = useAppSelector(state => state.livrableRapport);
   const fetchPlannedActivityListe = useFetchPlannedActivityList();
-  const { plannedActivityList } = useAppSelector((state: any) => state.plannedActivity);
+  const { plannedActivityList } = useAppSelector(state => state.plannedActivity);
   const fetchActivityRapport = useFetchActiviteRapport();
-  const { activiteRapportlist } = useAppSelector((state: any) => state.activiteRapport);
+  const { activiteRapportlist } = useAppSelector(state => state.activiteRapport);
   const confirm = useConfirm();
 
   React.useEffect(() => {
@@ -125,7 +125,7 @@ const ListProgrammes = () => {
                         {row.activiteRealise}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {livrableRapportlist.find((e: any) =>e.id===row.livrableR).livrablee}
+                        {Array.isArray(livrableRapportlist) && livrableRapportlist.find(e =>e.id===row.livrableR)?.livrablee}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         <FormControl sx={{height: (row.responsableR).length <= 2 ? "auto": 70, overflow: "auto"}}>

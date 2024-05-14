@@ -32,9 +32,15 @@ import useFetchMissionaryList from "../hooks/useFetchMissionaryList";
 import { deleteMissionary, editMissionary } from "../../../../../../redux/features/missionary";
 import { MissionaryItem } from "../../../../../../redux/features/missionary/missionarySlice.interface";
 import Moment from "react-moment";
+import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 
 const ListMissionnaires = () => {
   const [open, setOpen] = React.useState(false);
+  const fetchEmployes = useFetchEmploys();
+  const { employees } = useAppSelector(state =>state.employe);
+  React.useEffect(() =>{
+    fetchEmployes();
+  })
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -73,6 +79,7 @@ const ListMissionnaires = () => {
   const handleClickEdit = async (id: any) => {
     await dispatch(editMissionary({ id }));
     handleClickOpen();
+    console.log("edit ")
   };
 
   return (
@@ -105,7 +112,8 @@ const ListMissionnaires = () => {
                     {<Moment format="DD/MM/YYYY">{row.returnDateMissionary}</Moment>}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {row.missionResponsabilityMissionary}
+                      {employees.find(employe =>employe.id === row.missionResponsabilityMissionary)?.name} {" "}
+                      {employees.find(employe =>employe.id === row.missionResponsabilityMissionary)?.surname}
                     </TableCell>
                     <TableCell align="right">
                       <BtnActionContainer
@@ -116,7 +124,7 @@ const ListMissionnaires = () => {
                           color="primary"
                           aria-label="Modifier"
                           component="span"
-                          onClick={() => handleClickEdit(row.id)}
+                          onClick={() => handleClickEdit(row.id!)}
                         >
                           <EditIcon />
                         </IconButton>
@@ -125,7 +133,7 @@ const ListMissionnaires = () => {
                           aria-label="Supprimer"
                           component="span"
                           onClick={() => {
-                            handleClickDelete(row.id);
+                            handleClickDelete(row.id!);
                           }}
                         >
                           <DeleteIcon />

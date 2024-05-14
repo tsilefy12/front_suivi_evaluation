@@ -9,7 +9,7 @@ export const deleteExceptedResult = createAsyncThunk(
       const response = await axios.delete(`/excepted-result/${data.id}`);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Objectif supprimé avec succès",
+          message: "Résultat supprimé avec succès",
           options: {
             variant: "success",
           },

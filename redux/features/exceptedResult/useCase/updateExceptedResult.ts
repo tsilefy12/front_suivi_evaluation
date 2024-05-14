@@ -17,7 +17,7 @@ export const updateExceptedResult = createAsyncThunk(
       );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Resultat mis à jour avec succès",
+          message: "Résultat mis à jour avec succès",
           options: {
             variant: "success",
           },

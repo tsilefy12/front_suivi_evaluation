@@ -12,7 +12,7 @@ export const createExceptedResult = createAsyncThunk(
       const response = await axios.post("/excepted-result", data);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Resultat créé avec succès",
+          message: "Résultat créé avec succès",
           options: {
             variant: "success",
           },

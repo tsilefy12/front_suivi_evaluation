@@ -135,7 +135,7 @@ const BilanMission = () => {
           justifyContent="space-between"
           mb={1}
         >
-          <Link href="/">
+          <Link href="/missions">
             <Button color="info" variant="text" startIcon={<ArrowBackIcon />}>
               Retour
             </Button>
