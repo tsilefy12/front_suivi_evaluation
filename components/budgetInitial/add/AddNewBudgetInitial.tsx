@@ -94,17 +94,18 @@ const AddNewBudgetInitial = () => {
   // console.log("bi :", budgetInitial)
 
   const handleSubmit = async (values: any) => {
-    values.periodeId = [...selectedPeriode.map(p => p.id)];
-    values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
-    values.grant = grantValue;
     let totalMontantBudget = selectedBudgetLine.reduce((total: number, currentItem: any) => total + currentItem.amount, 0);
     let totalMontantPeriode = selectedPeriode.reduce((total: number, currentItem: any) => total + currentItem.montant, 0);
 
     let somme = totalMontantBudget + totalMontantPeriode;
-    values.montant = somme;
+
     // console.log("montant :", selectedBudgetLine)
     try {
       if (isEditing) {
+        values.periodeId = [...selectedPeriode.map(p => p.id)];
+        values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
+        values.grant = grantValue;
+        values.montant = somme;
         console.log("periode id :", values.periodeId)
         await dispatch(
           updateBudgetInitial({
@@ -113,6 +114,10 @@ const AddNewBudgetInitial = () => {
           })
         );
       } else {
+        values.periodeId = [...selectedPeriode.map(p => p.id)];
+        values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
+        values.grant = grantValue;
+        values.montant = somme;
         await dispatch(createBudgetInitial(values))
       }
       fetchBudgetInitial()
@@ -136,9 +141,9 @@ const AddNewBudgetInitial = () => {
               // montant: isEditing ? budgetInitial?.montant : ,
             }
         }
-        validationSchema={Yup.object({
-          // periodeId: Yup.string().required("Cham obligatoire"),
-        })}
+        // validationSchema={Yup.object({
+        //   // periodeId: Yup.string().required("Cham obligatoire"),
+        // })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
           action.resetForm();
