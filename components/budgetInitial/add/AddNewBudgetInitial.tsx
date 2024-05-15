@@ -46,14 +46,15 @@ const AddNewBudgetInitial = () => {
   const [grantValue, setGrantValue] = React.useState<string>("vide");
   const { id }: any = router.query;
   const uniqueValues = new Set();
+
   React.useEffect(() => {
     fetchGrant();
     fetchligneBudgetaire();
-    fetchPeriode()
+    fetchPeriode();
   }, [router.query])
-
+  //  console.log("value key :", grantValue)
   //get grant dans periode
-  let periodeGrantList: any = [...periodelist];
+  let periodeGrantList: { id: any, name: any }[] = [];
   let [selectedPeriode, setSelectedPeriode] = React.useState<any[]>(
     isEditing
       ? periodelist.filter(pg =>
@@ -61,52 +62,63 @@ const AddNewBudgetInitial = () => {
       )
       : periodeGrantList
   );
-    periodeGrantList.map((p: any) => {
-      if (grantValue != "vide" && p.grant == grantValue) {
-        if (!uniqueValues.has(p.id!)) {
-          uniqueValues.add(p.id!)
-          return periodeGrantList.map((pL: any) =>(pL.id, pL.periode, pL.montant))
+  grantEncoursList.map((g: any) => {
+    if (grantValue !== "vide") {
+      periodelist.map(p => {
+        let PeriodeGrant: any = p.grant;
+        if (grantValue === PeriodeGrant) {
+          if (!uniqueValues.has(p.id)) {
+            uniqueValues.add(p.id);
+            return periodeGrantList.push({ id: p.id, name: p.periode })
+          }
         }
-      }
-      return periodeGrantList = [];
-    })
+      })
+    }
+    uniqueValues.add(g.id)
+    return periodeGrantList = [];
+  })
 
   //get grant dans budget
-  let BudgetLineGrantList: any = []
+  let BudgetLineGrantList: { id: string, name: string }[] = [];
   let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
     isEditing
       ? budgetLineList.filter((pg: any) =>
-        Array.isArray(budgetInitial.ligneBudgetaire) && budgetInitial.ligneBudgetaire.includes(pg.id)
+        Array.isArray(budgetInitial?.ligneBudgetaire) && budgetInitial?.ligneBudgetaire.includes(pg.id)
       )
       : BudgetLineGrantList
   );
-  // console.log("budget :",grantValue)
-    grantEncoursList.map(g =>{
-      if (grantValue !="vide" && g.id === grantValue) {
-        if (!uniqueValues.has(g.id)) {
-          uniqueValues.add(g.id)
-          return BudgetLineGrantList = g.budgetLines
+  grantEncoursList.map(g => {
+    if (grantValue !== "vide") {
+      budgetLineList.forEach((b: any) => {
+        let BudgetGrant: any = b.grantId;
+        if (grantValue === BudgetGrant) {
+          if (!uniqueValues.has(b.id)) {
+            uniqueValues.add(b.id);
+            return BudgetLineGrantList.push({ id: b.id, name: b.code });
+          }
         }
-      }
-      return BudgetLineGrantList = [];
-    })
+      });
+    }
+    uniqueValues.add(g.id)
+    return BudgetLineGrantList = [];
+  })
 
   // console.log("bi :", budgetInitial)
 
   const handleSubmit = async (values: any) => {
+    values.periodeId = [...selectedPeriode.map(p => p.id)];
+    values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
+    values.grant = grantValue;
+
     let totalMontantBudget = selectedBudgetLine.reduce((total: number, currentItem: any) => total + currentItem.amount, 0);
     let totalMontantPeriode = selectedPeriode.reduce((total: number, currentItem: any) => total + currentItem.montant, 0);
 
     let somme = totalMontantBudget + totalMontantPeriode;
-
+    values.montant = somme;
     // console.log("montant :", selectedBudgetLine)
     try {
       if (isEditing) {
-        values.periodeId = [...selectedPeriode.map(p => p.id)];
-        values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
-        values.grant = grantValue;
-        values.montant = somme;
-        console.log("periode id :", values.periodeId)
+        // console.log("periode id :", values.periodeId)
         await dispatch(
           updateBudgetInitial({
             id: budgetInitial.id!,
@@ -114,10 +126,6 @@ const AddNewBudgetInitial = () => {
           })
         );
       } else {
-        values.periodeId = [...selectedPeriode.map(p => p.id)];
-        values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
-        values.grant = grantValue;
-        values.montant = somme;
         await dispatch(createBudgetInitial(values))
       }
       fetchBudgetInitial()
@@ -202,23 +210,23 @@ const AddNewBudgetInitial = () => {
                   id="outlined-basic"
                   label="Grant"
                   variant="outlined"
-                  name="grant"
                   value={grantValue}
-                  onChange={(e: any) =>setGrantValue(e.target.value)}
+                  onChange={(e: any) => setGrantValue(e.target.value)}
+                  name="grant"
                 >
                   <MenuItem value="vide">Select grant</MenuItem>
                   {
-                    grantEncoursList.map(item => (
-                      <MenuItem key={item.id} value={item.id!}>{item.code!}</MenuItem>
+                    grantEncoursList.map(g => (
+                      <MenuItem key={g.id!} value={g.id!}>{g.code}</MenuItem>
                     ))
                   }
                 </OSTextField>
                 <Autocomplete
                   multiple
                   id="tags-standard"
-                  options={BudgetLineGrantList}
-                  getOptionLabel={(option) =>option.code as string}
-                  value={selectedBudgetLine}
+                  options={grantValue!=="vide" ? BudgetLineGrantList : []}
+                  getOptionLabel={(option) => option.name}
+                  value={grantValue!=="vide" ? selectedBudgetLine : []}
                   onChange={(event, newValue) => {
                     setSelectedBudgetLine(newValue!);
                   }}
@@ -236,7 +244,7 @@ const AddNewBudgetInitial = () => {
                   multiple
                   id="tags-standard"
                   options={periodeGrantList}
-                  getOptionLabel={(option) =>option.periode! as string}
+                  getOptionLabel={(option) => option.name}
                   value={selectedPeriode}
                   onChange={(event, newValue) => {
                     setSelectedPeriode(newValue!);

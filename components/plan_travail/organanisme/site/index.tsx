@@ -64,11 +64,6 @@ const ListSite = () => {
                 Retour
               </Button>
             </Link>
-            <Link href={`/plan_travail/${id}/resume`}>
-              <Button color="primary" variant="text" startIcon={<Add />}>
-                Résumé des sites
-              </Button>
-            </Link>
             <TextField label="Année" size="small" sx={{ width: 100 }} select onChange={(e) => setFiltre(e.target.value === "" ? "" : parseInt(e.target.value))}>
               <MenuItem value="">Tous</MenuItem>
               {Array.from(new Set(planTravaillist.flatMap(p => p.TacheCle!.flatMap(t => t.objectifAnnuel!.map(o => o.year))))).map(y => (
@@ -90,7 +85,7 @@ const ListSite = () => {
                 <Table sx={{ padding: 2 }}>
                   <TableHead>
                     <TableRow>
-                      <TableCell>
+                      <TableCell sx={{minWidth: 300, maxWidth: 300}}>
                         Goals
                       </TableCell>
                       <Table>
@@ -118,7 +113,7 @@ const ListSite = () => {
                     {planTravaillist.map((plan: PlanTravailItem, yearIndex: any) => (
                       <Fragment key={yearIndex}>
                         <TableRow >
-                          <TableCell align="center">
+                          <TableCell align="left" sx={{minWidth: 300, maxWidth: 300}}>
                             {plan.description}
                           </TableCell>
                           <TableCell>
@@ -162,8 +157,8 @@ const ListSite = () => {
                             </Table>
                           </TableCell>
                         </TableRow>
-                        {/* <TableRow>
-                      <TableCell align="center">
+                        <TableRow>
+                      <TableCell align="left" sx={{minWidth: 300, maxWidth: 300}}>
                         Sous-total 
                       </TableCell>
                       <TableCell>
@@ -197,7 +192,7 @@ const ListSite = () => {
                           </TableBody>
                         </Table>
                       </TableCell>
-                    </TableRow> */}
+                    </TableRow>
                       </Fragment>
                     ))}
 

@@ -244,7 +244,7 @@ const ListBudgetInitial = () => {
                           hover
                           role="checkbox"
                           tabIndex={-1}
-                          key={index}
+                          key={row.id!}
                         >
                           <TableCell
                             padding="checkbox"

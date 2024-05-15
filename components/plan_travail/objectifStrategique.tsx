@@ -114,13 +114,20 @@ const ListObjectifStrategique = () => {
           <Typography variant="h6" id="tableTitle" component="div">
             Liste de plan de travail
           </Typography>
-          <TextField
-            variant="outlined"
-            id="search"
-            name="search"
-            placeholder="Recherche"
-            size="small"
-          />
+          <Stack direction={"row"} spacing={2}>
+            <Link href={`/plan_travail/resume`}>
+              <Button color="primary" variant="text" startIcon={<Add />}>
+                Résumé des sites
+              </Button>
+            </Link>
+            <TextField
+              variant="outlined"
+              id="search"
+              name="search"
+              placeholder="Recherche"
+              size="small"
+            />
+          </Stack>
         </Stack>
         <ValueDetail>
           <FormLabel>Année : {new Date().getFullYear()}</FormLabel>

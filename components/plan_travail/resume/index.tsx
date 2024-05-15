@@ -4,27 +4,26 @@ import { Box, Button, Container, MenuItem, Paper, Stack, Table, TableBody, Table
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Fragment, useState } from "react";
-import useFetchSite from "../../../configurations/site/hooks/useFetchSite";
-import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
-import useFetchPlanTravaile from "../../hooks/useFetchPlanTravail";
-import useFetchTacheEtObjectifs from "../tachesEtObjectifs/hooks/useFetchTacheEtObjectifs";
-import { enqueueSnackbar } from "../../../../redux/features/notification/notificationSlice";
-import { axios } from "../../../../axios";
-import { SectionNavigation } from "../../objectifStrategique";
-import { BodySection } from "../tachesEtObjectifs/ListTacheEtObjectifs";
-import { PlanTravailItem } from "../../../../redux/features/planTravail/planTravail.interface";
-import Add from "@mui/icons-material/Add";
-import useFetchObjectifsAnnuel from "../site/hooks/useFetchObjectifAnnuel";
+import useFetchObjectifsAnnuel from "../organanisme/site/hooks/useFetchObjectifAnnuel";
+import useFetchSite from "../../configurations/site/hooks/useFetchSite";
+import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
+import useFetchPlanTravaile from "../hooks/useFetchPlanTravail";
+import useFetchTacheEtObjectifs from "../organanisme/tachesEtObjectifs/hooks/useFetchTacheEtObjectifs";
+import { axios } from "../../../axios";
+import { enqueueSnackbar } from "../../../redux/features/notification/notificationSlice";
+import { SectionNavigation } from "../objectifStrategique";
+import { BodySection } from "../../gereRapportDeMission/GereRapportDeMission";
+import { PlanTravailItem } from "../../../redux/features/planTravail/planTravail.interface";
 
 const ListResume = () => {
   const router = useRouter()
   const { id }: any = router.query;
   const fetchObjectifAnnuel = useFetchObjectifsAnnuel();
   const fetchSite = useFetchSite();
-  const { sitelist, isEditing, site } = useAppSelector((state) => state.site);
+  const { sitelist, isEditing, site } = useAppSelector(state => state.site);
   const dispatch: any = useAppDispatch();
   const fetchObjectStrategique = useFetchPlanTravaile();
-  const { planTravaillist } = useAppSelector((state) => state.planTravail);
+  const { planTravaillist } = useAppSelector(state => state.planTravail);
   const fetchTacheCle: any = useFetchTacheEtObjectifs()
   const [filtre, setFiltre] = useState<number | "">("")
 
@@ -60,7 +59,7 @@ const ListResume = () => {
           justifyContent="space-between"
           sx={{ mb: 2 }}>
           <Stack direction={"row"} spacing={2} alignItems={"center"}>
-            <Link href={`/plan_travail/${id}/site`}>
+            <Link href={`/plan_travail`}>
               <Button color="info" variant="text" startIcon={<ArrowBack />}>
                 Retour
               </Button>

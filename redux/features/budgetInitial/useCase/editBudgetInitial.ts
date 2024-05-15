@@ -6,6 +6,7 @@ export const editBudgetInitial = createAsyncThunk(
   async (data: { id: string }, thunkAPI) => {
     try {
       const response = await axios.get(`/suivi-evaluation/budget-initial/${data.id}`);
+      console.log(response.data)
       return response.data;
     } catch (error: any) {
       if (error.response) {

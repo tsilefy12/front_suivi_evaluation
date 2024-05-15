@@ -14,7 +14,7 @@ import React, { useEffect } from "react";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { Check, Close } from "@mui/icons-material";
 import { SectionNavigation } from "../ListBudgetsEngage";
-import { Form, Formik} from "formik";
+import { Form, Formik } from "formik";
 import OSDatePicker from "../../shared/date/OSDatePicker";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
 import { getGrantEncoursList } from "../../../redux/features/grantEncours";
@@ -23,6 +23,7 @@ import OSTextField from "../../shared/input/OSTextField";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { createBudgetEngaged, updateBudgetEngaged } from "../../../redux/features/budgetEngaged/budgetEngagedSlice";
+import OSSelectField from "../../shared/select/OSSelectField";
 
 const BudgetEngagedForm = () => {
   const dispatch = useAppDispatch();
@@ -45,7 +46,7 @@ const BudgetEngagedForm = () => {
 
   //get grant dans budget
   const grantInBudgteLine: any = []
-  const BudgetLineGrantList: { id: string, name: any }[] = []
+  let BudgetLineGrantList:{ id: string, name: any }[] = []
   let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
     isEditing
       ? budgetLineList.filter((pg: any) =>
@@ -63,15 +64,16 @@ const BudgetEngagedForm = () => {
           grantInBudgteLine.push(b.id);
           if (!uniqueValues.has(b.id)) {
             uniqueValues.add(b.id);
-            BudgetLineGrantList.push({ id: b.id, name: b.code });
+            return BudgetLineGrantList.push({ id: b.id, name: b.code });
           }
         }
       });
     }
+    return BudgetLineGrantList = []
   });
 
   const handleSubmit = async (values: any) => {
-    values.budgetLineId = [...selectedBudgetLine.map((bl: any) =>bl.id)];
+    values.budgetLineId = [...selectedBudgetLine.map((bl: any) => bl.id)];
     values.grantsId = grantValue;
     // console.log("id grant :", values.ligneBudgetaire)
     try {
@@ -165,25 +167,16 @@ const BudgetEngagedForm = () => {
                   />
                 </FormControl>
                 <FormControl fullWidth>
-                  <OSTextField
+                  <OSSelectField
                     fullWidth
-                    select
                     id="outlined-basic"
                     label="Grant"
                     variant="outlined"
-                    name="grantsId"
-                    value={(id) ?
-                      budgetLineList.find((e: any) => e.id === budgetEngaged?.grantsId)?.code : grantValue === "vide" ? '' : grantValue}
-                    onChange={(e: any) => setGrantValue(e.target.value)}
-                    hyperText={grantValue == "vide" ? false : true}
-                  >
-                    <MenuItem value="vide">Select grant</MenuItem>
-                    {
-                      grantEncoursList.map((item: any) => (
-                        <MenuItem value={item.id!}>{item.code!}</MenuItem>
-                      ))
-                    }
-                  </OSTextField>
+                    options={grantEncoursList}
+                    dataKey={["code"]}
+                    valueKey="id"
+                    name="grant"
+                  />
                 </FormControl>
                 <FormControl fullWidth>
                   <Autocomplete
@@ -191,7 +184,7 @@ const BudgetEngagedForm = () => {
                     id="tags-standard"
                     options={grantValue != "vide" ? BudgetLineGrantList : []}
                     getOptionLabel={(option) => option.name}
-                    value={grantValue != "vide" ? selectedBudgetLine : []}
+                    value={selectedBudgetLine}
                     onChange={(event, newValue) => {
                       setSelectedBudgetLine(newValue!);
                     }}
