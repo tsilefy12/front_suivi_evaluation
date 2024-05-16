@@ -37,15 +37,15 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const { grantEncoursList } = useAppSelector(state => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
-  const { budgetLineList } = useAppSelector((state) => state.budgetLine);
+  const { budgetLineList } = useAppSelector(state => state.budgetLine);
   const fetchBudgetEngagedList = useFetchBudgetEngaged();
-  const { budgetEngagedList } = useAppSelector((state) => state.budgetsEngaged);
+  const { budgetEngagedList } = useAppSelector(state => state.budgetsEngaged);
   const fetchtReliquatGrant = useFetchReliquatGrant();
-  const { reliquatGrantList } = useAppSelector((state) => state.reliquatGrant);
+  const { reliquatGrantList } = useAppSelector(state => state.reliquatGrant);
   const fetchBudgetInitial = useFetchBudgetInitial();
-  const { budgetInitialList } = useAppSelector((state) => state.budgetInitial);
+  const { budgetInitialList } = useAppSelector(state => state.budgetInitial);
 
   React.useEffect(() => {
     fetchBudgetEngagedList();
@@ -113,7 +113,7 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
                 <Table>
                   <TableBody>
                     {budgetLineList
-                      .filter((f) => f.grantId == getId)
+                      .filter((f: any) => f.grantId == getId)
                       .map((row, index) => (
                         <TableRow key={index}>
                           <TableCell>
@@ -123,24 +123,20 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
                             <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="center">
                               {budgetInitialList.find(
                                 (e) => e.ligneBudgetaire == row.id
-                              )?.montant}{" "}
+                              )?.montant ?? 0}{" "}
                               Ar
                             </TableCell>
                             <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="center">
                               {budgetEngagedList.find(
                                 (be) => be.budgetLineId == row.id
-                              )?.amount}{" "}
+                              )?.amount ?? 0}{" "}
                               Ar
                             </TableCell>
-                            <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="left">
-                              {(
-                                budgetInitialList.find(
-                                  (e) => e.ligneBudgetaire == row.id
-                                )?.montant! -
-                                budgetEngagedList.find(
-                                  (be) => be.budgetLineId == row.id
-                                )?.amount!
-                              ).toFixed(2)}{" "}
+                            <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align={`${!isNaN ? "left" : "center"}`}>
+                              {
+                                (budgetInitialList.find(e => e.ligneBudgetaire == row.id)?.montant ?? 0) -
+                                (budgetEngagedList.find(be => be.budgetLineId == row.id)?.amount ?? 0)
+                              }{" "}
                               Ar
                             </TableCell>
                           </TableCell>

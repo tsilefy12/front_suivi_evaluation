@@ -165,7 +165,7 @@ const BudgetEngagedForm = () => {
                   label="Grant"
                   variant="outlined"
                   name="grant"
-                  value={(isEditing) ? grantEncoursList.find(g =>g.id == budgetEngaged?.grantsId)?.code : grantValue}
+                  value={grantValue}
                   onChange={(e: any) =>setGrantValue(e.target.value)}
                   >
                     <MenuItem value="vide">Select grant</MenuItem>

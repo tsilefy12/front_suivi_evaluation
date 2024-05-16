@@ -95,20 +95,20 @@ const AddNewBudgetInitial = () => {
     return [];
   });
 
-
+ console.log(id)
   const handleSubmit = async (values: any) => {
-    let totalMontantBudget = selectedBudgetLine.reduce((total: number, currentItem: any) => total + currentItem.amount, 0);
-    let totalMontantPeriode = selectedPeriode.reduce((total: number, currentItem: any) => total + currentItem.amount, 0);
+    const totalMontantBudget = selectedBudgetLine.reduce((total: number, currentItem: any) => total + currentItem.amount, 0);
+    const totalMontantPeriode = selectedPeriode.reduce((total: number, currentItem: any) => total + currentItem.amount, 0);
 
     const somme = totalMontantBudget + totalMontantPeriode;
-    // console.log("montant :", selectedBudgetLine)
+    console.log("montant :", somme)
     try {
       if (isEditing) {
         values.periodeId = [...selectedPeriode.map(p => p.id)];
         values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
         values.grant = grantValue;
         values.montant = somme;
-        console.log("periode id :", values.montant)
+        // console.log("periode id :", values.montant)
         await dispatch(
           updateBudgetInitial({
             id: budgetInitial.id!,

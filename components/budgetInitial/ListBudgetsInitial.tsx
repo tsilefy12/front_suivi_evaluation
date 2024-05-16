@@ -291,7 +291,7 @@ const ListBudgetInitial = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
-                                onClick={() => handleClickEdit(row.id)}
+                                onClick={() => handleClickEdit(row.id!)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -299,7 +299,7 @@ const ListBudgetInitial = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
-                                onClick={() => handleClickDelete(row.id)}
+                                onClick={() => handleClickDelete(row.id!)}
                               >
                                 <DeleteIcon />
                               </IconButton>
