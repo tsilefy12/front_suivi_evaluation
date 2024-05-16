@@ -96,7 +96,7 @@ const AddNewMission = () => {
                   justifyContent="space-between"
                 >
                   <Stack flexDirection={"row"}>
-                    <Link href="/">
+                    <Link href="/missions">
                       <Button
                         color="info"
                         variant="text"

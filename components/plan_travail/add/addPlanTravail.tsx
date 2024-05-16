@@ -34,10 +34,11 @@ const ObjectifStrategiqueForm = ({ handleClose, getId}: any) => {
   }, [router.query])
 
   const handleSubmit = async (values: any) => {
-    values.startDate = new Date(values.startDate).toISOString()
-    values.endDate = new Date(values.endDate).toISOString()
+
     try {
       if (isEditing) {
+        values.startDate = new Date(values.startDate).toISOString()
+        values.endDate = new Date(values.endDate).toISOString()
         await dispatch(
           updatePlanTravail({
             id: planTravail.id!,
@@ -46,6 +47,8 @@ const ObjectifStrategiqueForm = ({ handleClose, getId}: any) => {
         );
         handleClose()
       } else {
+        values.startDate = new Date(values.startDate).toISOString()
+        values.endDate = new Date(values.endDate).toISOString()
         await dispatch(createPlanTravail(values));
         handleClose();
       }

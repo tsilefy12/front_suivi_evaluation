@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import Link from "next/link";
-import React from "react";
+import React, { Fragment } from "react";
 import Add from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ObjectifStrategiqueForm from "./add/addPlanTravail";
@@ -25,13 +25,14 @@ import useFetchPlanTravaile from "./hooks/useFetchPlanTravail";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useConfirm } from "material-ui-confirm";
 import { useRouter } from "next/router";
-import { PlanTravailItem } from "../../redux/features/planTravail/planTravail.interface";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deletePlanTravail, editPlanTravail } from "../../redux/features/planTravail";
+import { PlanTravailItem } from "../../redux/features/planTravail/planTravail.interface";
+import { idID } from "@mui/material/locale";
 
-const ListObjectifStrategique = () => {
+const ListObjectifStrategique = ({ row, handleClickEdit, handleClickDelete }: any) => {
   const [open, setOpen] = React.useState(false);
   const fetchPlanTravail = useFetchPlanTravaile();
   const { planTravaillist, isEditing } = useAppSelector(state => state.planTravail)
@@ -53,7 +54,7 @@ const ListObjectifStrategique = () => {
     setOpen(false);
   };
 
-  const handleClickDelete = async (id: any) => {
+  handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer le plan de travail",
       description: "Voulez-vous vraiment supprimer ?",
@@ -72,19 +73,24 @@ const ListObjectifStrategique = () => {
       })
       .catch(() => { });
   };
-
-  const handleClickEdit = async (id: any) => {
+  const [getSelectId, setGetSelectedId]: any = React.useState(null)
+  handleClickEdit = async (id: any) => {
     dispatch(editPlanTravail({ id }))
     handleClickOpen()
+    setAnchorEl(id)
   };
 
-  const [anchorEl, setAnchorEl]: any = React.useState(null);
-  const handleClick = (event: any) => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleMenuClick = (event: any, id: string) => {
     setAnchorEl(event);
+    setGetSelectedId(id);
   };
-  const handleClosee: any = () => {
+  const handleMenuClose = () => {
     setAnchorEl(null);
+    setGetSelectedId(null);
   };
+
+  // console.log("id selected :", getSelectId)
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
@@ -133,7 +139,7 @@ const ListObjectifStrategique = () => {
           <FormLabel>Année : {new Date().getFullYear()}</FormLabel>
         </ValueDetail>
         <Grid container spacing={2} mt={2}>
-          {planTravaillist.map((row: any) => (
+          {planTravaillist.slice().map((row: PlanTravailItem, index: any) => (
             <Grid key={row.id!} item xs={12} md={6} lg={4}>
               <LinkContainer>
                 <Stack direction={"row"} spacing={4}>
@@ -141,18 +147,33 @@ const ListObjectifStrategique = () => {
                     {row.title} : {row.description}
                   </Typography>
                   <Typography>
-                    <IconButton
-                      onClick={() => handleClickEdit(row.id)}
-                      color="success"
-                    >
-                      <EditIcon />
+                    <IconButton onClick={(event: any) =>handleMenuClick(event.currentTarget, row.id!)}>
+                      <MoreVertIcon />
                     </IconButton>
-                    <IconButton
-                      onClick={() => handleClickDelete(row.id)}
-                      color="warning"
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleMenuClose}
                     >
-                      <DeleteIcon />
-                    </IconButton>
+                      <MenuItem
+                        onClick={() => {
+                          handleClickEdit(getSelectId);
+                          handleMenuClose();
+                        }}
+                      >
+                        <EditIcon color="primary" />
+                        Modifier
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleClickDelete(getSelectId);
+                          handleMenuClose();
+                        }}
+                      >
+                        <DeleteIcon color="warning" />
+                        Supprimer
+                      </MenuItem>
+                    </Menu>
                   </Typography>
                 </Stack>
                 <Link href={`/plan_travail/${row.id}/tachesEtObjectifs`}>

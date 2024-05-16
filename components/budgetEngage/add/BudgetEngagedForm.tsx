@@ -24,6 +24,8 @@ import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { createBudgetEngaged, updateBudgetEngaged } from "../../../redux/features/budgetEngaged/budgetEngagedSlice";
 import OSSelectField from "../../shared/select/OSSelectField";
+import useFetchGrants from "../../GrantsEnCours/hooks/getGrants";
+import useFetchBudgetEngaged from "../hooks/useFetchBudgetEngaged";
 
 const BudgetEngagedForm = () => {
   const dispatch = useAppDispatch();
@@ -34,19 +36,16 @@ const BudgetEngagedForm = () => {
   const [grantValue, setGrantValue]: any = React.useState("vide");
   const uniqueValues = new Set();
   const { id }: any = router.query;
-
-  const fetchUtilsData = () => {
-    dispatch(getGrantEncoursList({}));
-    dispatch(getBudgetLineList({}));
-  };
+ const fetchGrant = useFetchGrants();
+ const fetchBudgetEngaged = useFetchBudgetEngaged();
 
   useEffect(() => {
-    fetchUtilsData();
-  }, []);
+    fetchGrant();
+    fetchBudgetEngaged();
+  }, [router.query]);
 
   //get grant dans budget
-  const grantInBudgteLine: any = []
-  let BudgetLineGrantList:{ id: string, name: any }[] = []
+  let BudgetLineGrantList: any = []
   let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
     isEditing
       ? budgetLineList.filter((pg: any) =>
@@ -55,22 +54,14 @@ const BudgetEngagedForm = () => {
       : BudgetLineGrantList
   );
 
-  grantEncoursList.forEach((g: any) => {
-    if (grantValue !== "vide") {
-      budgetLineList.forEach((b: any) => {
-        let BudgetGrant: any = b.grantId;
-        console.log("id grant :", BudgetGrant)
-        if (grantValue === BudgetGrant) {
-          grantInBudgteLine.push(b.id);
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-            return BudgetLineGrantList.push({ id: b.id, name: b.code });
-          }
+  grantEncoursList.forEach(g => {
+    if (grantValue !=="vide" && grantValue === g.id) {
+          return BudgetLineGrantList = g.budgetLines!;
         }
-      });
-    }
-    return BudgetLineGrantList = []
+        return [];
   });
+
+//  console.log(BudgetLineGrantList)
 
   const handleSubmit = async (values: any) => {
     values.budgetLineId = [...selectedBudgetLine.map((bl: any) => bl.id)];
@@ -87,7 +78,7 @@ const BudgetEngagedForm = () => {
       } else {
         await dispatch(createBudgetEngaged(values));
       }
-      fetchUtilsData();
+      fetchBudgetEngaged();
       router.push("/grants/budgetEngage");
     } catch (error) {
       console.log("error", error);
@@ -167,24 +158,31 @@ const BudgetEngagedForm = () => {
                   />
                 </FormControl>
                 <FormControl fullWidth>
-                  <OSSelectField
-                    fullWidth
-                    id="outlined-basic"
-                    label="Grant"
-                    variant="outlined"
-                    options={grantEncoursList}
-                    dataKey={["code"]}
-                    valueKey="id"
-                    name="grant"
-                  />
+                  <OSTextField
+                  fullWidth
+                  select
+                  id="outlined-basic"
+                  label="Grant"
+                  variant="outlined"
+                  name="grant"
+                  value={(isEditing) ? grantEncoursList.find(g =>g.id == budgetEngaged?.grantsId)?.code : grantValue}
+                  onChange={(e: any) =>setGrantValue(e.target.value)}
+                  >
+                    <MenuItem value="vide">Select grant</MenuItem>
+                    {
+                       grantEncoursList.map(g =>(
+                        <MenuItem key={g.id!} value={g.id}>{g.code}</MenuItem>
+                       ))
+                    }
+                  </OSTextField>
                 </FormControl>
                 <FormControl fullWidth>
                   <Autocomplete
                     multiple
                     id="tags-standard"
-                    options={grantValue != "vide" ? BudgetLineGrantList : []}
-                    getOptionLabel={(option) => option.name}
-                    value={selectedBudgetLine}
+                    options={grantValue!="vide" ? BudgetLineGrantList : []}
+                    getOptionLabel={(option) => option.code}
+                    value={grantValue!= "vide" ? selectedBudgetLine : []}
                     onChange={(event, newValue) => {
                       setSelectedBudgetLine(newValue!);
                     }}

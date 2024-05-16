@@ -43,7 +43,7 @@ const AddNewBudgetInitial = () => {
   const { budgetLineList } = useAppSelector(state => state.budgetLine);
   const fetchPeriode = useFetchPeriode();
   const { periodelist } = useAppSelector(state => state.periode)
-  const [grantValue, setGrantValue] = React.useState<string>("vide");
+  const [grantValue, setGrantValue]: any = React.useState<string>("vide");
   const { id }: any = router.query;
   const uniqueValues = new Set();
 
@@ -54,7 +54,7 @@ const AddNewBudgetInitial = () => {
   }, [router.query])
   //  console.log("value key :", grantValue)
   //get grant dans periode
-  let periodeGrantList: { id: any, name: any }[] = [];
+  let periodeGrantList: { id: any, name: any, amount: number }[] = [];
   let [selectedPeriode, setSelectedPeriode] = React.useState<any[]>(
     isEditing
       ? periodelist.filter(pg =>
@@ -69,53 +69,46 @@ const AddNewBudgetInitial = () => {
         if (grantValue === PeriodeGrant) {
           if (!uniqueValues.has(p.id)) {
             uniqueValues.add(p.id);
-            periodeGrantList.push({ id: p.id, name: p.periode })
+            periodeGrantList.push({ id: p.id, name: p.periode, amount: p.montant! })
           }
         }
       })
     }
     uniqueValues.add(g.id)
-    periodeGrantList.push({id: "", name: ""});
+    periodeGrantList.push({ id: "", name: "", amount: 0 });
   })
 
   //get grant dans budget
-  let BudgetLineGrantList:any = [];
+  let BudgetLineGrantList: any = [];
+
   let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
     isEditing
       ? budgetLineList.filter((pg: any) =>
         Array.isArray(budgetInitial?.ligneBudgetaire) && budgetInitial?.ligneBudgetaire.includes(pg.id)
       )
-      : BudgetLineGrantList
+      : BudgetLineGrantList.lenght > 0 ? BudgetLineGrantList : []
   );
-  grantEncoursList.map(g => {
-    if (grantValue !=="vide") {
-        if (grantValue === g.id!) {
-          if (!uniqueValues.has(g.id)) {
-            uniqueValues.add(g.id);
-            return BudgetLineGrantList = g.budgetLines;
-          }
-        }
+  grantEncoursList.forEach(g => {
+    if (grantValue !== "vide" && grantValue === g.id) {
+      return BudgetLineGrantList = g.budgetLines!;
     }
-    uniqueValues.add(g.id)
-    return BudgetLineGrantList = [];
-  })
+    return [];
+  });
 
-  // console.log("bi :", BudgetLineGrantList)
 
   const handleSubmit = async (values: any) => {
-    values.periodeId = [...selectedPeriode.map(p => p.id)];
-    values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
-    values.grant = grantValue;
-
     let totalMontantBudget = selectedBudgetLine.reduce((total: number, currentItem: any) => total + currentItem.amount, 0);
-    let totalMontantPeriode = selectedPeriode.reduce((total: number, currentItem: any) => total + currentItem.montant, 0);
+    let totalMontantPeriode = selectedPeriode.reduce((total: number, currentItem: any) => total + currentItem.amount, 0);
 
-    let somme = totalMontantBudget + totalMontantPeriode;
-    values.montant = somme;
+    const somme = totalMontantBudget + totalMontantPeriode;
     // console.log("montant :", selectedBudgetLine)
     try {
       if (isEditing) {
-        // console.log("periode id :", values.periodeId)
+        values.periodeId = [...selectedPeriode.map(p => p.id)];
+        values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
+        values.grant = grantValue;
+        values.montant = somme;
+        console.log("periode id :", values.montant)
         await dispatch(
           updateBudgetInitial({
             id: budgetInitial.id!,
@@ -123,6 +116,10 @@ const AddNewBudgetInitial = () => {
           })
         );
       } else {
+        values.periodeId = [...selectedPeriode.map(p => p.id)];
+        values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
+        values.grant = grantValue;
+        values.montant = somme;
         await dispatch(createBudgetInitial(values))
       }
       fetchBudgetInitial()
@@ -221,10 +218,10 @@ const AddNewBudgetInitial = () => {
                 <Autocomplete
                   multiple
                   id="tags-standard"
-                  options={BudgetLineGrantList}
-                  getOptionLabel={(option) => option.name}
+                  options={grantValue != "vide" ? BudgetLineGrantList : []}
+                  getOptionLabel={(option) => option.code}
                   value={selectedBudgetLine}
-                  onChange={(event, newValue) => {
+                  onChange={(event: any, newValue) => {
                     setSelectedBudgetLine(newValue!);
                   }}
                   isOptionEqualToValue={(option, value) => option.id === value.id}

@@ -59,7 +59,7 @@ const ListSite = () => {
           justifyContent="space-between"
           sx={{ mb: 2 }}>
           <Stack direction={"row"} spacing={2} alignItems={"center"}>
-            <Link href={`/plan_travail/${id}/tachesEtObjectifs`}>
+            <Link href={`/plan_travail`}>
               <Button color="info" variant="text" startIcon={<ArrowBack />}>
                 Retour
               </Button>

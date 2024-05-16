@@ -29,6 +29,7 @@ import { deleteMission, editMission } from "../../redux/features/mission";
 import Recherche from "./recherch";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { rows } from "../budgetEngage/table/constante";
 
 const ListMissions = () => {
   const router = useRouter();
@@ -67,8 +68,10 @@ const ListMissions = () => {
     router.push(`/missions/${id}/edit`);
   };
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const handleClick = (event: any) => {
-    setAnchorEl(event.currentTarget);
+  const [getSelectId, setGetSelectedId]: any = React.useState(null);
+  const handleClick = (event: any, id: string) => {
+    setAnchorEl(event);
+    setGetSelectedId(id)
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -103,9 +106,9 @@ const ListMissions = () => {
         </Stack>
 
         <Grid container spacing={2} mt={2}>
-          {missionListe.map((mission: MissionItem) => (
+          {missionListe.map((mission: MissionItem, index: any) => (
             <Grid key={mission?.id} item xs={12} md={6} lg={4}>
-              <LinkContainer>
+              <LinkContainer key={mission.id}>
                 <CardHeader
                   direction="row"
                   justifyContent="space-between"
@@ -115,7 +118,7 @@ const ListMissions = () => {
                     Mission {mission?.descriptionMission}
                   </Typography>
                   <div>
-                    <IconButton onClick={handleClick}>
+                    <IconButton onClick={(event) =>handleClick(event.currentTarget, mission.id!)}>
                       <MoreVertIcon />
                     </IconButton>
                     <Menu
@@ -124,14 +127,14 @@ const ListMissions = () => {
                       onClose={handleClose}
                     >
                       <MenuItem onClick={() => {
-                        handleClickEdit(mission.id);
+                        handleClickEdit(getSelectId);
                         handleClose();
                       }}>
                         <EditIcon color="primary" />
                         Modifier
                       </MenuItem>
                       <MenuItem onClick={() => {
-                        handleClickDelete(mission.id);
+                        handleClickDelete(getSelectId);
                         handleClose();
                       }}>
                         <DeleteIcon color="warning" />

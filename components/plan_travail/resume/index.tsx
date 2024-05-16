@@ -155,7 +155,7 @@ const ListResume = () => {
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                      <TableCell align="center">
+                      <TableCell align="left">
                         Sous-total 
                       </TableCell>
                       <TableCell>
@@ -196,7 +196,7 @@ const ListResume = () => {
                   </TableBody>
                   <TableHead>
                   <TableRow>
-                      <TableCell align="center">
+                      <TableCell align="left">
                         TOTAUX
                       </TableCell>
                       <TableCell>

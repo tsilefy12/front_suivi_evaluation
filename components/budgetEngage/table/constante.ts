@@ -12,13 +12,13 @@ export const headCells: readonly HeadCell[] = [
       id: 'grants',
       numeric: true,
       disablePadding: false,
-      label: 'GRANTS',
+      label: 'Grants',
     },
     {
       id: 'lb',
       numeric: true,
       disablePadding: false,
-      label: 'LB',
+      label: 'Ligne budgetaire',
     },
     {
       id: 'libelle',
