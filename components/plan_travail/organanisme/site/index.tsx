@@ -103,7 +103,6 @@ const ListSite = () => {
                             {sitelist.map(s => (
                               <TableCell key={s.id} sx={{ minWidth: 150, maxWidth: 150 }} align="center">{s.lieu}</TableCell>
                             ))}
-
                           </TableRow>
                         </TableHead>
                       </Table>

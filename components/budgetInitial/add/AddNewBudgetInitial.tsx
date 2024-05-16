@@ -69,17 +69,17 @@ const AddNewBudgetInitial = () => {
         if (grantValue === PeriodeGrant) {
           if (!uniqueValues.has(p.id)) {
             uniqueValues.add(p.id);
-            return periodeGrantList.push({ id: p.id, name: p.periode })
+            periodeGrantList.push({ id: p.id, name: p.periode })
           }
         }
       })
     }
     uniqueValues.add(g.id)
-    return periodeGrantList = [];
+    periodeGrantList.push({id: "", name: ""});
   })
 
   //get grant dans budget
-  let BudgetLineGrantList: { id: string, name: string }[] = [];
+  let BudgetLineGrantList:any = [];
   let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
     isEditing
       ? budgetLineList.filter((pg: any) =>
@@ -88,22 +88,19 @@ const AddNewBudgetInitial = () => {
       : BudgetLineGrantList
   );
   grantEncoursList.map(g => {
-    if (grantValue !== "vide") {
-      budgetLineList.forEach((b: any) => {
-        let BudgetGrant: any = b.grantId;
-        if (grantValue === BudgetGrant) {
-          if (!uniqueValues.has(b.id)) {
-            uniqueValues.add(b.id);
-            return BudgetLineGrantList.push({ id: b.id, name: b.code });
+    if (grantValue !=="vide") {
+        if (grantValue === g.id!) {
+          if (!uniqueValues.has(g.id)) {
+            uniqueValues.add(g.id);
+            return BudgetLineGrantList = g.budgetLines;
           }
         }
-      });
     }
     uniqueValues.add(g.id)
     return BudgetLineGrantList = [];
   })
 
-  // console.log("bi :", budgetInitial)
+  // console.log("bi :", BudgetLineGrantList)
 
   const handleSubmit = async (values: any) => {
     values.periodeId = [...selectedPeriode.map(p => p.id)];
@@ -224,9 +221,9 @@ const AddNewBudgetInitial = () => {
                 <Autocomplete
                   multiple
                   id="tags-standard"
-                  options={grantValue!=="vide" ? BudgetLineGrantList : []}
+                  options={BudgetLineGrantList}
                   getOptionLabel={(option) => option.name}
-                  value={grantValue!=="vide" ? selectedBudgetLine : []}
+                  value={selectedBudgetLine}
                   onChange={(event, newValue) => {
                     setSelectedBudgetLine(newValue!);
                   }}

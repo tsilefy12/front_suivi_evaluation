@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, Dialog, FormControl, Link, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { Button, Container, Dialog, FormControl, Link, Modal, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
 import BackOfficeLayout from "../../layouts/backOffice";
@@ -95,14 +95,14 @@ const Dashboard: NextPage = () => {
                     {row.code}
                   </TableCell>
                   <TableCell>
-                      <Button
-                        variant="outlined"
-                        color="accent"
-                        startIcon={<Add />}
-                        onClick={() =>handleClick(row.id!)}
-                      >
-                        Voir détails
-                      </Button>
+                    <Button
+                      variant="outlined"
+                      color="accent"
+                      startIcon={<Add />}
+                      onClick={() => handleClick(row.id!)}
+                    >
+                      Voir détails
+                    </Button>
                     {/* <Stack direction={"column"} spacing={2} sx={{ height: (row.budgetLines!).length <= 2 ? "auto" : 70, overflow: "auot" }}>
                       {row.budgetLines!.map(bl => (
                         <span key={bl.id}>{bl.code}</span>
@@ -124,8 +124,20 @@ const Dashboard: NextPage = () => {
           </TableBody>
         </Table>
       </BodySection>
-      <Dialog open={open} onClose={handleClose} sx={{position: "fixed", left: 5}} disablePortal={false}>
-        <DetailsDashboard handleClose={handleClose} getId={getId}/>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        disablePortal={false}
+        maxWidth="lg"
+        fullWidth
+        PaperProps={{
+          style: {
+            maxHeight: '80vh',
+            width: '60vw',
+          },
+        }}
+      >
+        <DetailsDashboard handleClose={handleClose} getId={getId} />
       </Dialog>
     </Container>
   );
