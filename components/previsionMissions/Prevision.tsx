@@ -1,4 +1,13 @@
-import { Button, Stack, Typography, styled, Box, Paper } from "@mui/material";
+import {
+  Button,
+  Stack,
+  Typography,
+  styled,
+  Box,
+  Paper,
+  Divider,
+  FormLabel,
+} from "@mui/material";
 import Container from "@mui/material/Container";
 import React from "react";
 import KeyValue from "../shared/keyValue";
@@ -21,12 +30,13 @@ const PrevisionDeMission = () => {
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
-        <SectionNavigation 
-        direction={{ xs: 'column', sm: 'row' }}
-        spacing={{ xs: 1, sm: 2, md: 4 }}
-        justifyContent="space-between"
-        sx={{ mb: 2 }}>
-          <Stack direction={{ xs: 'column', sm: 'row' }}>
+        <SectionNavigation
+          direction={{ xs: "column", sm: "row" }}
+          spacing={{ xs: 1, sm: 2, md: 4 }}
+          justifyContent="space-between"
+          sx={{ mb: 2 }}
+        >
+          <Stack direction={{ xs: "column", sm: "row" }}>
             <Link href="/missions">
               <Button
                 color="info"
@@ -60,9 +70,12 @@ const PrevisionDeMission = () => {
       </NavigationContainer>
       <Detail />
       <BodySection>
-        {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 1, md: 2 }} */}
-        {/* sx={{padding:"10px", width:"100%" }}> */}
-          <Stack width={{xs:"100%", sm:"100%", md:"100%" }}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={{ xs: 1, sm: 1, md: 2 }}
+          sx={{ padding: "10px", width: "100%" }}
+        >
+          <Stack width={{ xs: "100%", sm: "100%", md: "70%" }}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -77,32 +90,73 @@ const PrevisionDeMission = () => {
               <Tab label="FINANCE" {...a11yProps(1)} />
             </Tabs>
             <TabPanel value={value} index={0}>
-              <Techniques />
+              <Techniques key={value} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <Finances />
+              <Finances key={value} />
             </TabPanel>
           </Stack>
-          {/* <Stack width={{xs:"100%", sm:"100%", md:"50%" }}>
-            <CardPrevision>
+          <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>
+            <CardPrevision key={0}>
               <Typography sx={{ mb: 2 }} variant="h5">
                 Etat de prévision
               </Typography>
               <Stack spacing={2}>
                 <KeyValue keyName="Elaboré par" value={"Nom du responsable"} />
-                <KeyValue
-                  keyName="Vérifié financièrement par"
-                  value={"Nom du responsable"}
-                />
-                <KeyValue
-                  keyName="Vérifié techniquement par"
-                  value={"Nom  du responsable"}
-                />
-                <KeyValue keyName="Payé par" value={"Nom du responsable"} />
+                <Divider />
+                <Typography>
+                  Vérifié financièrement par :
+                  <Stack
+                    direction={"column"}
+                    gap={2}
+                    justifyContent={"space-between"}
+                    alignItems={"start"}
+                  >
+                    <FormLabel>Nom du responsable</FormLabel>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      startIcon={<DoneIcon />}
+                    >
+                      Vérifier financièrement
+                    </Button>
+                  </Stack>
+                </Typography>
+                <Divider />
+                <Typography>
+                  Vérifié techniquement par :
+                  <Stack
+                    direction={"column"}
+                    gap={2}
+                    justifyContent={"space-between"}
+                    alignItems={"start"}
+                  >
+                    <FormLabel>Nom du responsable</FormLabel>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      startIcon={<DoneIcon />}
+                    >
+                      Vérifier Techniquement
+                    </Button>
+                  </Stack>
+                </Typography>
+                <Divider />
+                <Typography>
+                  <KeyValue keyName="Payé par" value={"Nom du responsable"} />
+                  <Button
+                    variant="contained"
+                    size="small"
+                    startIcon={<DoneIcon />}
+                    sx={{ marginInline: 0 }}
+                  >
+                    Vérsé
+                  </Button>
+                </Typography>
               </Stack>
             </CardPrevision>
-          </Stack> */}
-        {/* </Stack> */}
+          </Stack>
+        </Stack>
       </BodySection>
     </Container>
   );
@@ -150,6 +204,7 @@ export const BodySection = styled(Paper)(({ theme }) => ({
   padding: "8px 20px",
   gap: "16px",
   border: `1px solid ${theme.palette.grey[100]}`,
+  width: "100%",
 }));
 
 const CardPrevision = styled("div")(({ theme }) => ({

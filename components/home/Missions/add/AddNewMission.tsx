@@ -67,13 +67,13 @@ const AddNewMission = () => {
           isEditing
             ? mission
             : {
-              reference: isEditing ? mission?.reference : "",
-              missionManagerId: isEditing ? mission?.missionManagerId : "",
-              budgetManagerId: isEditing ? mission?.budgetManagerId : "",
-              descriptionMission: isEditing
-                ? mission?.descriptionMission
-                : "",
-            }
+                reference: isEditing ? mission?.reference : "",
+                missionManagerId: isEditing ? mission?.missionManagerId : "",
+                budgetManagerId: isEditing ? mission?.budgetManagerId : "",
+                descriptionMission: isEditing
+                  ? mission?.descriptionMission
+                  : "",
+              }
         }
         validationSchema={Yup.object({
           reference: Yup.string().required("Champ obligatoire"),

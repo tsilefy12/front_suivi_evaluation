@@ -29,12 +29,18 @@ import {
 } from "../../../../../config/table.config";
 import AddBesoinVehicule from "./add/addBesoinVehicule";
 import useFetchBesoinEnVehiculeList from "./hooks/useFetchBesoinEnVehicule";
-import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import { BesoinvehiculeItem } from "../../../../../redux/features/besoinVehicule/besoinVehicule.interface";
 import Moment from "react-moment";
 import { useConfirm } from "material-ui-confirm";
-import { deleteBesoinVehicule, editBesoinVehicule } from "../../../../../redux/features/besoinVehicule";
+import {
+  deleteBesoinVehicule,
+  editBesoinVehicule,
+} from "../../../../../redux/features/besoinVehicule";
 import useFetchVehicleList from "../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
 import useFetchEmploys from "../../../../GrantsEnCours/hooks/getResponsable";
 
@@ -47,12 +53,14 @@ const ListBesoinVehicule = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const fetchBesoinEnVehicule = useFetchBesoinEnVehiculeList();
-  const { besoinVehiculeList } = useAppSelector((state) => state.besoinVehicule);
+  const { besoinVehiculeList } = useAppSelector(
+    (state) => state.besoinVehicule
+  );
   const fetchVehicule = useFetchVehicleList();
   const { vehicleList } = useAppSelector((state: any) => state.vehicle);
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state: any) => state.employe);
-  const router = useRouter()
+  const router = useRouter();
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
 
@@ -60,7 +68,7 @@ const ListBesoinVehicule = () => {
     fetchBesoinEnVehicule();
     fetchVehicule();
     fetchEmployes();
-  }, [router.query])
+  }, [router.query]);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -144,7 +152,7 @@ const ListBesoinVehicule = () => {
         await dispatch(deleteBesoinVehicule({ id }));
         fetchBesoinEnVehicule();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
   const handleClickEdit = async (id: any) => {
     await dispatch(editBesoinVehicule({ id }));
@@ -195,13 +203,13 @@ const ListBesoinVehicule = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id!}
-                        // selected={isItemSelected}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                          // onClick={(event) =>
-                          //   handleClick(event, row.dateDébut)
-                          // }
+                            // onClick={(event) =>
+                            //   handleClick(event, row.dateDébut)
+                            // }
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -215,26 +223,46 @@ const ListBesoinVehicule = () => {
                             <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                           </TableCell>
                           <TableCell align="right">
-                            {vehicleList.find((e: any) => e.id === row.vehicule)?.vehicleType}
+                            {
+                              vehicleList.find(
+                                (e: any) => e.id === row.vehicule
+                              )?.vehicleType
+                            }
                           </TableCell>
                           <TableCell align="right">{row.trajet}</TableCell>
                           <TableCell align="right" key={index}>
-                            <FormControl key={row.id!} sx={{height: (row.responsable!).length <= 2 ? "auto" : 70, overflow: "auto"}}>
-                            {
-                              (row.responsable!).map((lp: any) => {
+                            <FormControl
+                              key={row.id!}
+                              sx={{
+                                height:
+                                  row.responsable!.length <= 2 ? "auto" : 70,
+                                overflow: "auto",
+                              }}
+                            >
+                              {row.responsable!.map((lp: any) => {
                                 return (
-                                  <Stack direction="column" spacing={2} height={25} overflow="auto" key={lp.id!}>
-                                    {employees.find((e: any) => e.id === lp)?.name}
-                                    {" "}
-                                    {employees.find((e: any) => e.id === lp)?.surname}
+                                  <Stack
+                                    direction="column"
+                                    spacing={2}
+                                    height={25}
+                                    overflow="auto"
+                                    key={lp.id!}
+                                  >
+                                    {
+                                      employees.find((e: any) => e.id === lp)
+                                        ?.name
+                                    }{" "}
+                                    {
+                                      employees.find((e: any) => e.id === lp)
+                                        ?.surname
+                                    }
                                   </Stack>
-                                )
-                              })
-                            }
+                                );
+                              })}
                             </FormControl>
                           </TableCell>
                           <TableCell align="right">{row.nombreJour}</TableCell>
-                          <TableCell align="right" key={index}>
+                          <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"

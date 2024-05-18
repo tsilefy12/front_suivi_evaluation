@@ -28,11 +28,17 @@ import {
 import KeyValue from "../../../../shared/keyValue";
 import AddCalculDesPile from "./add/addCalculDesPile";
 import useFetchCalculPileList from "./hooks/useFetchCalculPile";
-import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import { CalculPileItem } from "../../../../../redux/features/calculPile/calculPile.interface";
 import { useConfirm } from "material-ui-confirm";
-import { deleteCalculPile, editCalculPile } from "../../../../../redux/features/calculPile";
+import {
+  deleteCalculPile,
+  editCalculPile,
+} from "../../../../../redux/features/calculPile";
 
 const ListCalculDesPiles = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -43,14 +49,14 @@ const ListCalculDesPiles = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const fetchCalculPile = useFetchCalculPileList();
-  const { calculPileList } = useAppSelector((state) =>state.calculPile)
+  const { calculPileList } = useAppSelector((state) => state.calculPile);
   const router = useRouter();
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchCalculPile();
-  }, [router.query])
+  }, [router.query]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -118,7 +124,6 @@ const ListCalculDesPiles = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer pile",
@@ -136,7 +141,7 @@ const ListCalculDesPiles = () => {
         await dispatch(deleteCalculPile({ id }));
         fetchCalculPile();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
   const handleClickEdit = async (id: any) => {
     await dispatch(editCalculPile({ id }));
@@ -150,7 +155,7 @@ const ListCalculDesPiles = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddCalculDesPile handleClose={handleClose}/>
+          <AddCalculDesPile handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -173,8 +178,7 @@ const ListCalculDesPiles = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {
-                    calculPileList
+                  {calculPileList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: CalculPileItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
@@ -189,9 +193,7 @@ const ListCalculDesPiles = () => {
                           key={row.id!}
                           // selected={isItemSelected}
                         >
-                          <TableCell
-                            padding="checkbox"
-                          ></TableCell>
+                          <TableCell padding="checkbox"></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
@@ -201,12 +203,14 @@ const ListCalculDesPiles = () => {
                             {row.appareil}
                           </TableCell>
                           <TableCell align="right">{row.type}</TableCell>
-                          <TableCell align="right">{row.nombreAppareil}</TableCell>
+                          <TableCell align="right">
+                            {row.nombreAppareil}
+                          </TableCell>
                           <TableCell align="right">{row.nombrePile}</TableCell>
                           <TableCell align="right">{row.change}</TableCell>
                           <TableCell align="right">20</TableCell>
                           <TableCell align="right">{row.nombrePack}</TableCell>
-                          <TableCell align="right" key={index}>
+                          <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"

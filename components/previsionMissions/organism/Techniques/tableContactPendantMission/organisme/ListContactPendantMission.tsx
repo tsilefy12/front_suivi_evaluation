@@ -89,7 +89,7 @@ const ListContactPendantMission = () => {
               <TableBody>
                 {contactList.map((row: ContactItem, index: any) => (
                   <TableRow
-                    key={index}
+                    key={row.id!}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
@@ -104,7 +104,7 @@ const ListContactPendantMission = () => {
                     <TableCell component="th" scope="row">
                       {row.noteContact}
                     </TableCell>
-                    <TableCell align="right" key={index}>
+                    <TableCell align="right">
                       <BtnActionContainer
                         direction="row"
                         justifyContent="right"

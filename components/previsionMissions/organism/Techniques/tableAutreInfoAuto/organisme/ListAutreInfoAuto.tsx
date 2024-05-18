@@ -91,7 +91,7 @@ const ListAutreInfoAuto = () => {
               <TableBody>
                 {vehicleList.map((row: VehicleItem, index: any) => (
                   <TableRow
-                    key={index}
+                    key={row.id!}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
@@ -104,9 +104,9 @@ const ListAutreInfoAuto = () => {
                       {row.vehicleType}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {row.safetyBeltVehicle==true ? "OUI": "NON"}
+                      {row.safetyBeltVehicle == true ? "OUI" : "NON"}
                     </TableCell>
-                    <TableCell align="right" key={index}>
+                    <TableCell align="right">
                       <BtnActionContainer
                         direction="row"
                         justifyContent="right"

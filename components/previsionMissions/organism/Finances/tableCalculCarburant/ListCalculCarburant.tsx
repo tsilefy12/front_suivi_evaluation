@@ -27,10 +27,16 @@ import {
 } from "../../../../../config/table.config";
 import AddCalculCarburant from "./add/addCalculCarburant";
 import useFetchCalculCarburantList from "./hooks/useFetchCarbuant";
-import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import { useConfirm } from "material-ui-confirm";
-import { deleteCalculCarburant, editCalculCarburant } from "../../../../../redux/features/calculCarburant";
+import {
+  deleteCalculCarburant,
+  editCalculCarburant,
+} from "../../../../../redux/features/calculCarburant";
 import { CalculCarburantItem } from "../../../../../redux/features/calculCarburant/calculCarburant.interface";
 import useFetchVehicleList from "../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
 
@@ -43,17 +49,19 @@ const ListCalculCarburant = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const fetchCalculCarburant = useFetchCalculCarburantList();
-  const { calculCarburantList } = useAppSelector((state) =>state.calculCarburant);
+  const { calculCarburantList } = useAppSelector(
+    (state) => state.calculCarburant
+  );
   const router = useRouter();
   const confirm = useConfirm();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const fetchVehicule = useFetchVehicleList();
-  const { vehicleList } = useAppSelector((state: any) =>state.vehicle)
+  const { vehicleList } = useAppSelector((state: any) => state.vehicle);
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchCalculCarburant();
     fetchVehicule();
-  }, [router.query])
+  }, [router.query]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -121,30 +129,30 @@ const ListCalculCarburant = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    const handleClickDelete = async (id: any) => {
-      confirm({
-        title: "Supprimer calcul carburant",
-        description: "Voulez-vous vraiment supprimer ?",
-        cancellationText: "Annuler",
-        confirmationText: "Supprimer",
-        cancellationButtonProps: {
-          color: "warning",
-        },
-        confirmationButtonProps: {
-          color: "error",
-        },
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer calcul carburant",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteCalculCarburant({ id }));
+        fetchCalculCarburant();
       })
-        .then(async () => {
-          await dispatch(deleteCalculCarburant({ id }));
-          fetchCalculCarburant();
-        })
-        .catch(() => { });
-    };
-    const handleClickEdit = async (id: any) => {
-      await dispatch(editCalculCarburant({ id }));
-      handleClickOpen();
-    };
-  
+      .catch(() => {});
+  };
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editCalculCarburant({ id }));
+    handleClickOpen();
+  };
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -152,7 +160,7 @@ const ListCalculCarburant = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddCalculCarburant handleClose={handleClose}/>
+          <AddCalculCarburant handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -204,19 +212,29 @@ const ListCalculCarburant = () => {
                             {row.trajet}
                           </TableCell>
                           <TableCell align="right">
-                            {vehicleList.find((e: any) =>e.id === row.vehicule)?.vehicleType}
+                            {
+                              vehicleList.find(
+                                (e: any) => e.id === row.vehicule
+                              )?.vehicleType
+                            }
                           </TableCell>
-                          <TableCell align="right">{row.typeCarburant}</TableCell>
-                          <TableCell align="right">{row.nombreTrajet}</TableCell>
+                          <TableCell align="right">
+                            {row.typeCarburant}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.nombreTrajet}
+                          </TableCell>
                           <TableCell align="right">{row.distance}</TableCell>
-                          <TableCell align="right">{row.consommationKilo}</TableCell>
+                          <TableCell align="right">
+                            {row.consommationKilo}
+                          </TableCell>
                           <TableCell align="right">
                             {row.distanceTotal}
                           </TableCell>
                           <TableCell align="right">
                             {row.totalCarburant} Ar
                           </TableCell>
-                          <TableCell align="right" key={index}>
+                          <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
@@ -225,7 +243,7 @@ const ListCalculCarburant = () => {
                                 color="primary"
                                 aria-label="Modifier"
                                 component="span"
-                                onClick={() =>handleClickEdit(row.id)}
+                                onClick={() => handleClickEdit(row.id)}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -233,7 +251,7 @@ const ListCalculCarburant = () => {
                                 color="warning"
                                 aria-label="Supprimer"
                                 component="span"
-                                onClick={() =>handleClickDelete(row.id)}
+                                onClick={() => handleClickDelete(row.id)}
                               >
                                 <DeleteIcon />
                               </IconButton>

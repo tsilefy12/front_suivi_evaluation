@@ -30,13 +30,19 @@ import {
 import AddResumeDepense from "./add/addResumeDepense";
 import KeyValue from "../../../../shared/keyValue";
 import useFetchResumeDepenseList from "./hooks/useFetchResumeDepense";
-import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import { ResumeDepenseItem } from "../../../../../redux/features/resumeDepense/reumeDepense.interface";
 import useFetchGrants from "../../../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "../tablePrevision/hooks/useFetchbudgetLine";
 import { useConfirm } from "material-ui-confirm";
-import { deleteResumeDepense, editResumeDepense } from "../../../../../redux/features/resumeDepense";
+import {
+  deleteResumeDepense,
+  editResumeDepense,
+} from "../../../../../redux/features/resumeDepense";
 import Typography from "../../../../../themes/overrides/Typography";
 
 const ListResumeDepense = () => {
@@ -49,27 +55,27 @@ const ListResumeDepense = () => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const fetchResumeDepense = useFetchResumeDepenseList();
-  const { resumeDepenseList } = useAppSelector((state) => state.resumeDepense)
+  const { resumeDepenseList } = useAppSelector((state) => state.resumeDepense);
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
-  const fetchGrant = useFetchGrants()
+  const fetchGrant = useFetchGrants();
   const { budgetLineList } = useAppSelector((state) => state.budgetLine);
   const fetchLigneBudgetaire = useFetchBudgetLine();
   const confirm = useConfirm();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     fetchResumeDepense();
     fetchGrant();
     fetchLigneBudgetaire();
-  }, [router.query])
+  }, [router.query]);
 
   let total: any = useMemo(() => {
     let totalBudget: any = 0;
     resumeDepenseList.forEach((item: any) => {
       totalBudget += parseInt(item.budgetDepense);
-    })
-    return totalBudget
-  }, [resumeDepenseList])
+    });
+    return totalBudget;
+  }, [resumeDepenseList]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -137,7 +143,6 @@ const ListResumeDepense = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer resumé de depense",
@@ -155,7 +160,7 @@ const ListResumeDepense = () => {
         await dispatch(deleteResumeDepense({ id }));
         fetchResumeDepense();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
   const handleClickEdit = async (id: any) => {
     await dispatch(editResumeDepense({ id }));
@@ -192,8 +197,8 @@ const ListResumeDepense = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {resumeDepenseList
-                    .map((row: ResumeDepenseItem, index: any) => {
+                  {resumeDepenseList.map(
+                    (row: ResumeDepenseItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -204,24 +209,34 @@ const ListResumeDepense = () => {
                           tabIndex={-1}
                           key={row.id!}
                         >
-                          <TableCell
-                            padding="checkbox"
-                          ></TableCell>
+                          <TableCell padding="checkbox"></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             padding="none"
                           >
-                            {grantEncoursList.find((e: any) => e.id === row?.grant)?.code}
+                            {
+                              grantEncoursList.find(
+                                (e: any) => e.id === row?.grant
+                              )?.code
+                            }
                           </TableCell>
                           <TableCell align="right">
-                          {budgetLineList.find((e: any) =>e.id === row.ligneBudgetaire)?.code}
+                            {
+                              budgetLineList.find(
+                                (e: any) => e.id === row.ligneBudgetaire
+                              )?.code
+                            }
                           </TableCell>
-                          <TableCell align="right">{row.depensePrevue}</TableCell>
-                          <TableCell align="right">{row.budgetDepense}</TableCell>
+                          <TableCell align="right">
+                            {row.depensePrevue}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.budgetDepense}
+                          </TableCell>
                           <TableCell align="right">{row.remarque}</TableCell>
-                          <TableCell align="right" key={index}>
+                          <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
@@ -246,7 +261,8 @@ const ListResumeDepense = () => {
                           </TableCell>
                         </TableRow>
                       );
-                    })}
+                    }
+                  )}
                   {emptyRows > 0 && (
                     <TableRow
                       style={{
@@ -259,9 +275,7 @@ const ListResumeDepense = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Footer>
-                TOTAL BUDGET : {total} Ar
-            </Footer>
+            <Footer>TOTAL BUDGET : {total} Ar</Footer>
 
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}

@@ -89,47 +89,49 @@ const ListLieux = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {missionLocationList.map((row: MissionLocationItem, index: any) => (
-                  <TableRow
-                    key={index}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.village}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.commune}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.district}
-                    </TableCell>
-                    <TableCell align="right" key={index}>
-                      <BtnActionContainer
-                        direction="row"
-                        justifyContent="right"
-                      >
-                        <IconButton
-                          color="primary"
-                          aria-label="Modifier"
-                          component="span"
-                          onClick={() => handleClickEdit(row.id)}
+                {missionLocationList.map(
+                  (row: MissionLocationItem, index: any) => (
+                    <TableRow
+                      key={row.id!}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.village}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.commune}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.district}
+                      </TableCell>
+                      <TableCell align="right">
+                        <BtnActionContainer
+                          direction="row"
+                          justifyContent="right"
                         >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          color="warning"
-                          aria-label="Supprimer"
-                          component="span"
-                          onClick={() => {
-                            handleClickDelete(row.id);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </BtnActionContainer>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          <IconButton
+                            color="primary"
+                            aria-label="Modifier"
+                            component="span"
+                            onClick={() => handleClickEdit(row.id)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="warning"
+                            aria-label="Supprimer"
+                            component="span"
+                            onClick={() => {
+                              handleClickDelete(row.id);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </BtnActionContainer>
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
               </TableBody>
             </Table>
           </MyTableContainer>

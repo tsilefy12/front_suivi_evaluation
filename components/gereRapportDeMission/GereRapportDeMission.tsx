@@ -8,6 +8,7 @@ import {
   Box,
   Paper,
   Dialog,
+  FormLabel,
 } from "@mui/material";
 import Container from "@mui/material/Container";
 import React from "react";
@@ -29,7 +30,7 @@ import { useAppSelector } from "../../hooks/reduxHooks";
 const GereRapportDeMission = () => {
   const [value, setValue] = React.useState(0);
   const router = useRouter();
- 
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -45,11 +46,12 @@ const GereRapportDeMission = () => {
     <Container maxWidth="xl">
       <NavigationContainer>
         <SectionNavigation
-          direction={{ xs: 'column', sm: 'row' }}
+          direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 1, sm: 2, md: 4 }}
           justifyContent="space-between"
-          sx={{ mb: 2 }}>
-          <Stack direction={{ xs: 'column', sm: 'row' }}>
+          sx={{ mb: 2 }}
+        >
+          <Stack direction={{ xs: "column", sm: "row" }}>
             <Link href="/missions">
               <Button
                 color="info"
@@ -84,9 +86,12 @@ const GereRapportDeMission = () => {
       </NavigationContainer>
       <Detail />
       <BodySection>
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 1, md: 2 }}
-          sx={{ padding: "10px", width: "100%" }}>
-          <Stack width={{ xs: "100%", sm: "100%" }}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={{ xs: 1, sm: 1, md: 2 }}
+          sx={{ padding: "10px", width: "100%" }}
+        >
+          <Stack width={{ xs: "100%", sm: "100%", md: "70%" }}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -107,42 +112,67 @@ const GereRapportDeMission = () => {
               <Finances />
             </TabPanel>
           </Stack>
-          {/* <Stack width={{xs:"100%", sm:"100%", md:"40%" }}>
+          <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>
             <CardBody>
-              <Typography variant="h6" sx={{ textTransform: "uppercase"}}>Etat des rapports</Typography>
-              <Stack spacing={1}>
-                <KeyValue
-                  keyName="Vérifié financièrement par"
-                  value={"Nom du responsable"}
-                />
-                <Typography variant="caption" color="GrayText">
-                  Poste du reponsable | 11/11/2222
-                </Typography>
-                <Divider />
+              <Typography variant="h6" sx={{ textTransform: "uppercase" }}>
+                Etat des rapports
+              </Typography>
+              <Stack spacing={2}>
                 <KeyValue keyName="Elaboré par" value={"Nom du responsable"} />
-                <Typography variant="caption" color="GrayText">
-                  Poste du reponsable | 11/11/2222
+                <Divider />
+                <Typography>
+                  Vérifié financièrement par :
+                  <Stack
+                    direction={"column"}
+                    gap={2}
+                    justifyContent={"space-between"}
+                    alignItems={"start"}
+                  >
+                    <FormLabel>Nom du responsable</FormLabel>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      startIcon={<DoneIcon />}
+                    >
+                      Vérifier financièrement
+                    </Button>
+                  </Stack>
                 </Typography>
                 <Divider />
-
-                <KeyValue
-                  keyName="Vérifié techniquement par"
-                  value={"Nom  du responsable"}
-                />
-                <Typography variant="caption" color="GrayText">
-                  Poste du reponsable | 11/11/2222
+                <Typography>
+                  Vérifié techniquement par :
+                  <Stack
+                    direction={"column"}
+                    gap={2}
+                    justifyContent={"space-between"}
+                    alignItems={"start"}
+                  >
+                    <FormLabel>Nom du responsable</FormLabel>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      startIcon={<DoneIcon />}
+                    >
+                      Vérifier Techniquement
+                    </Button>
+                  </Stack>
                 </Typography>
-
                 <Divider />
-
-                <KeyValue keyName="Versé par" value={"Nom du responsable"} />
-                <Typography variant="caption" color="GrayText">
-                  Poste du reponsable | 11/11/2222
+                <Typography>
+                  <KeyValue keyName="Payé par" value={"Nom du responsable"} />
+                  <Button
+                    variant="contained"
+                    size="small"
+                    startIcon={<DoneIcon />}
+                    sx={{ marginInline: 0 }}
+                  >
+                    Vérsé
+                  </Button>
                 </Typography>
               </Stack>
             </CardBody>
             <CardFooter>
-              <Stack flexDirection={{xs:"column", sm:"row"}}>
+              <Stack flexDirection={{ xs: "column", sm: "row" }}>
                 <Typography
                   variant="h6"
                   sx={{ textTransform: "uppercase", marginTop: "3px" }}
@@ -166,7 +196,6 @@ const GereRapportDeMission = () => {
                       keyName="1er responsable"
                       value={"Nom du responsable"}
                     />
-                    
                   </CardMain>
                   <Divider />
                 </Grid>
@@ -184,7 +213,7 @@ const GereRapportDeMission = () => {
                 />
               </CardMain>
             </CardFooter>
-          </Stack> */}
+          </Stack>
         </Stack>
       </BodySection>
     </Container>
@@ -223,7 +252,7 @@ function a11yProps(index: number) {
   };
 }
 
-export const SectionNavigation = styled(Stack)(({ }) => ({}));
+export const SectionNavigation = styled(Stack)(({}) => ({}));
 export const BodySection = styled(Paper)(({ theme }) => ({
   borderRadius: "32px",
   marginBlock: 15,
