@@ -20,6 +20,10 @@ import ArrowBack from "@mui/icons-material/ArrowBack";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import Detail from "./detail";
+import { Check, Close } from "@mui/icons-material";
+import { axios } from "../../axios";
+import { useAppDispatch } from "../../hooks/reduxHooks";
+import { enqueueSnackbar } from "../../redux/features/notification/notificationSlice";
 
 const PrevisionDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -27,6 +31,52 @@ const PrevisionDeMission = () => {
     setValue(newValue);
   };
 
+  const [changeFinance, setChangeFinance] = React.useState(true);
+  const [changeTechnique, setChangeTechnique] = React.useState(true);
+  const [changePaye, setChangePaye] = React.useState(true);
+  const dispatch = useAppDispatch();
+
+  const handleValidationFinance = async (
+    responsableId: string,
+    missionId: string,
+    validation: boolean
+  ) => {
+    console.log("Ok");
+    try {
+      await axios.post("/suivi-evaluation/validation-prevision", {
+        responsableId,
+        missionId,
+        validation,
+      });
+      dispatch(
+        enqueueSnackbar({
+          message: "Validation reated successfully",
+          options: { variant: "success" },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+    if (changeFinance) {
+      setChangeFinance(false);
+    } else {
+      setChangeFinance(true);
+    }
+  };
+  const handleValidationTechnique = () => {
+    if (changeTechnique) {
+      setChangeTechnique(false);
+    } else {
+      setChangeTechnique(true);
+    }
+  };
+  const handleValidationPaye = () => {
+    if (changePaye) {
+      setChangePaye(false);
+    } else {
+      setChangePaye(true);
+    }
+  };
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -113,13 +163,32 @@ const PrevisionDeMission = () => {
                     alignItems={"start"}
                   >
                     <FormLabel>Nom du responsable</FormLabel>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      startIcon={<DoneIcon />}
-                    >
-                      Vérifier financièrement
-                    </Button>
+                    <Stack direction={"row"} gap={4}>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        startIcon={<DoneIcon />}
+                        onClick={() =>
+                          handleValidationFinance(
+                            "663377c8ce5ca85b983d75c3",
+                            "663377c8ce5ca85b983d75c3",
+                            changeFinance ? true : false
+                          )
+                        }
+                      >
+                        Vérifier financièrement
+                      </Button>
+                      <FormLabel
+                        sx={{ display: changeFinance ? "block" : "none" }}
+                      >
+                        <Close color="error" />
+                      </FormLabel>
+                      <FormLabel
+                        sx={{ display: changeFinance ? "none" : "block" }}
+                      >
+                        <Check color="primary" />
+                      </FormLabel>
+                    </Stack>
                   </Stack>
                 </Typography>
                 <Divider />
@@ -132,26 +201,47 @@ const PrevisionDeMission = () => {
                     alignItems={"start"}
                   >
                     <FormLabel>Nom du responsable</FormLabel>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      startIcon={<DoneIcon />}
-                    >
-                      Vérifier Techniquement
-                    </Button>
+                    <Stack direction={"row"} gap={4}>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        startIcon={<DoneIcon />}
+                        onClick={handleValidationTechnique}
+                      >
+                        Vérifier Techniquement
+                      </Button>
+                      <FormLabel
+                        sx={{ display: changeTechnique ? "block" : "none" }}
+                      >
+                        <Close color="error" />
+                      </FormLabel>
+                      <FormLabel
+                        sx={{ display: changeTechnique ? "none" : "block" }}
+                      >
+                        <Check color="primary" />
+                      </FormLabel>
+                    </Stack>
                   </Stack>
                 </Typography>
                 <Divider />
                 <Typography>
                   <KeyValue keyName="Payé par" value={"Nom du responsable"} />
-                  <Button
-                    variant="contained"
-                    size="small"
-                    startIcon={<DoneIcon />}
-                    sx={{ marginInline: 0 }}
-                  >
-                    Vérsé
-                  </Button>
+                  <Stack direction={"row"} gap={4}>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      startIcon={<DoneIcon />}
+                      onClick={handleValidationPaye}
+                    >
+                      Vérsé
+                    </Button>
+                    <FormLabel sx={{ display: changePaye ? "block" : "none" }}>
+                      <Close color="error" />
+                    </FormLabel>
+                    <FormLabel sx={{ display: changePaye ? "none" : "block" }}>
+                      <Check color="primary" />
+                    </FormLabel>
+                  </Stack>
                 </Typography>
               </Stack>
             </CardPrevision>

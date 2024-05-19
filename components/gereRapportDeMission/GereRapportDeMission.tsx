@@ -26,6 +26,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddDepositionDesRapports from "./add/addDepositionDesRapports";
 import useFetchMissionListe from "../home/Missions/hooks/useFetchMissionListe";
 import { useAppSelector } from "../../hooks/reduxHooks";
+import { Check, Close } from "@mui/icons-material";
 
 const GereRapportDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -42,6 +43,30 @@ const GereRapportDeMission = () => {
     setOpen(false);
   };
 
+  const [changeFinance, setChangeFinance] = React.useState(true);
+  const [changeTechnique, setChangeTechnique] = React.useState(true);
+  const [changePaye, setChangePaye] = React.useState(true);
+  const handleValidationFinance = () => {
+    if (changeFinance) {
+      setChangeFinance(false);
+    } else {
+      setChangeFinance(true);
+    }
+  };
+  const handleValidationTechnique = () => {
+    if (changeTechnique) {
+      setChangeTechnique(false);
+    } else {
+      setChangeTechnique(true);
+    }
+  };
+  const handleValidationPaye = () => {
+    if (changePaye) {
+      setChangePaye(false);
+    } else {
+      setChangePaye(true);
+    }
+  };
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -129,13 +154,26 @@ const GereRapportDeMission = () => {
                     alignItems={"start"}
                   >
                     <FormLabel>Nom du responsable</FormLabel>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      startIcon={<DoneIcon />}
-                    >
-                      Vérifier financièrement
-                    </Button>
+                    <Stack direction={"row"} gap={4}>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        startIcon={<DoneIcon />}
+                        onClick={handleValidationFinance}
+                      >
+                        Vérifier financièrement
+                      </Button>
+                      <FormLabel
+                        sx={{ display: changeFinance ? "block" : "none" }}
+                      >
+                        <Close color="error" />
+                      </FormLabel>
+                      <FormLabel
+                        sx={{ display: changeFinance ? "none" : "block" }}
+                      >
+                        <Check color="primary" />
+                      </FormLabel>
+                    </Stack>
                   </Stack>
                 </Typography>
                 <Divider />
@@ -148,26 +186,47 @@ const GereRapportDeMission = () => {
                     alignItems={"start"}
                   >
                     <FormLabel>Nom du responsable</FormLabel>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      startIcon={<DoneIcon />}
-                    >
-                      Vérifier Techniquement
-                    </Button>
+                    <Stack direction={"row"} gap={4}>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        startIcon={<DoneIcon />}
+                        onClick={handleValidationTechnique}
+                      >
+                        Vérifier Techniquement
+                      </Button>
+                      <FormLabel
+                        sx={{ display: changeTechnique ? "block" : "none" }}
+                      >
+                        <Close color="error" />
+                      </FormLabel>
+                      <FormLabel
+                        sx={{ display: changeTechnique ? "none" : "block" }}
+                      >
+                        <Check color="primary" />
+                      </FormLabel>
+                    </Stack>
                   </Stack>
                 </Typography>
                 <Divider />
                 <Typography>
                   <KeyValue keyName="Payé par" value={"Nom du responsable"} />
-                  <Button
-                    variant="contained"
-                    size="small"
-                    startIcon={<DoneIcon />}
-                    sx={{ marginInline: 0 }}
-                  >
-                    Vérsé
-                  </Button>
+                  <Stack direction={"row"} gap={4}>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      startIcon={<DoneIcon />}
+                      onClick={handleValidationPaye}
+                    >
+                      Vérsé
+                    </Button>
+                    <FormLabel sx={{ display: changePaye ? "block" : "none" }}>
+                      <Close color="error" />
+                    </FormLabel>
+                    <FormLabel sx={{ display: changePaye ? "none" : "block" }}>
+                      <Check color="primary" />
+                    </FormLabel>
+                  </Stack>
                 </Typography>
               </Stack>
             </CardBody>
