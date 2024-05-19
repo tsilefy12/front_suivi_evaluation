@@ -57,7 +57,7 @@ const PrevisionDeMission = () => {
   ) => {
     try {
       const newValidationState = !validate[index];
-      await axios.post("/suivi-evaluation/validation-rapport", {
+      await axios.post("/suivi-evaluation/validation-prevision", {
         responsableId,
         missionId,
         validation: newValidationState,
