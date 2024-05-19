@@ -25,12 +25,15 @@ import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import AddDepositionDesRapports from "./add/addDepositionDesRapports";
 import useFetchMissionListe from "../home/Missions/hooks/useFetchMissionListe";
-import { useAppSelector } from "../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { Check, Close } from "@mui/icons-material";
+import { axios } from "../../axios";
+import { enqueueSnackbar } from "../../redux/features/notification/notificationSlice";
 
 const GereRapportDeMission = () => {
   const [value, setValue] = React.useState(0);
   const router = useRouter();
+  const { id }: any = router.query;
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -43,24 +46,94 @@ const GereRapportDeMission = () => {
     setOpen(false);
   };
 
+  const fetchMission = useFetchMissionListe();
+  const { missionListe } = useAppSelector((state) => state.mission);
+  React.useEffect(() => {
+    fetchMission();
+  }, [router.query]);
+
+  // console.log(missionListe.find((m) => m.validationRapport));
+
   const [changeFinance, setChangeFinance] = React.useState(true);
   const [changeTechnique, setChangeTechnique] = React.useState(true);
   const [changePaye, setChangePaye] = React.useState(true);
-  const handleValidationFinance = () => {
+  const dispatch = useAppDispatch();
+
+  const handleValidationFinance = async (
+    responsableId: string,
+    missionId: string,
+    validation: boolean
+  ) => {
+    try {
+      await axios.post("/suivi-evaluation/validation-rapport", {
+        responsableId,
+        missionId,
+        validation,
+      });
+      dispatch(
+        enqueueSnackbar({
+          message: "Validation financière du rapport créée avec succès",
+          options: { variant: "success" },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
     if (changeFinance) {
       setChangeFinance(false);
     } else {
       setChangeFinance(true);
     }
   };
-  const handleValidationTechnique = () => {
+  const handleValidationTechnique = async (
+    responsableId: string,
+    missionId: string,
+    validation: boolean
+  ) => {
+    try {
+      await axios.post("/suivi-evaluation/validation-rapport", {
+        responsableId,
+        missionId,
+        validation,
+      });
+      dispatch(
+        enqueueSnackbar({
+          message: "Validation technique du rapport créée avec succès",
+          options: { variant: "success" },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(changeTechnique);
     if (changeTechnique) {
       setChangeTechnique(false);
     } else {
       setChangeTechnique(true);
     }
   };
-  const handleValidationPaye = () => {
+  //validation paiement
+  const handleValidationPaye = async (
+    responsableId: string,
+    missionId: string,
+    validation: boolean
+  ) => {
+    try {
+      await axios.post("/suivi-evaluation/validation-rapport", {
+        responsableId,
+        missionId,
+        validation,
+      });
+      dispatch(
+        enqueueSnackbar({
+          message: "Validation du paiement du rapport créée avec succès",
+          options: { variant: "success" },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(changePaye);
     if (changePaye) {
       setChangePaye(false);
     } else {
@@ -159,7 +232,13 @@ const GereRapportDeMission = () => {
                         variant="contained"
                         size="small"
                         startIcon={<DoneIcon />}
-                        onClick={handleValidationFinance}
+                        onClick={() =>
+                          handleValidationFinance(
+                            "663377c8ce5ca85b983d75c3",
+                            id,
+                            changeFinance
+                          )
+                        }
                       >
                         Vérifier financièrement
                       </Button>
@@ -191,7 +270,9 @@ const GereRapportDeMission = () => {
                         variant="contained"
                         size="small"
                         startIcon={<DoneIcon />}
-                        onClick={handleValidationTechnique}
+                        onClick={() =>
+                          handleValidationTechnique(id, id, changeTechnique)
+                        }
                       >
                         Vérifier Techniquement
                       </Button>
@@ -216,7 +297,7 @@ const GereRapportDeMission = () => {
                       variant="contained"
                       size="small"
                       startIcon={<DoneIcon />}
-                      onClick={handleValidationPaye}
+                      onClick={() => handleValidationPaye(id, id, changePaye)}
                     >
                       Vérsé
                     </Button>

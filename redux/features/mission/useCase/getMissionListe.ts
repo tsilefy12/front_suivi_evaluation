@@ -8,10 +8,10 @@ export const getMissionListe = createAsyncThunk(
   "mission/getMissionListe",
   async (data: { args?: any }, thunkAPI) => {
     try {
-      const params = JSON.stringify(data.args);
-      const response = await axios.get("/mission", {
-        params: { args: params },
-      });
+      const params = {
+        args: JSON.stringify(data.args),
+      };
+      const response = await axios.get("/mission", { params });
       let newData: any = [];
       if (response.data.length > 0) {
         await Promise.all(

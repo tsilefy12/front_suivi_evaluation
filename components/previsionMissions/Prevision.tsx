@@ -22,15 +22,27 @@ import CloseIcon from "@mui/icons-material/Close";
 import Detail from "./detail";
 import { Check, Close } from "@mui/icons-material";
 import { axios } from "../../axios";
-import { useAppDispatch } from "../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { enqueueSnackbar } from "../../redux/features/notification/notificationSlice";
+import useFetchMissionListe from "../home/Missions/hooks/useFetchMissionListe";
+import { useRouter } from "next/router";
 
 const PrevisionDeMission = () => {
   const [value, setValue] = React.useState(0);
+  const router = useRouter();
+  const { id }: any = router.query;
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+  const fetchMission = useFetchMissionListe();
+  const { missionListe } = useAppSelector((state) => state.mission);
+  React.useEffect(() => {
+    fetchMission();
+  }, [missionListe]);
 
+  console.log(
+    missionListe.find((m) => m.validationPrevision?.find((v) => v.validation!))
+  );
   const [changeFinance, setChangeFinance] = React.useState(true);
   const [changeTechnique, setChangeTechnique] = React.useState(true);
   const [changePaye, setChangePaye] = React.useState(true);
@@ -50,7 +62,7 @@ const PrevisionDeMission = () => {
       });
       dispatch(
         enqueueSnackbar({
-          message: "Validation reated successfully",
+          message: "Validation financière de la prevision créée avec succès",
           options: { variant: "success" },
         })
       );
@@ -63,14 +75,56 @@ const PrevisionDeMission = () => {
       setChangeFinance(true);
     }
   };
-  const handleValidationTechnique = () => {
+
+  //validation technic
+  const handleValidationTechnique = async (
+    responsableId: string,
+    missionId: string,
+    validation: boolean
+  ) => {
+    try {
+      await axios.post("/suivi-evaluation/validation-prevision", {
+        responsableId,
+        missionId,
+        validation,
+      });
+      dispatch(
+        enqueueSnackbar({
+          message: "Validation technique de la prevision créée avec succès",
+          options: { variant: "success" },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+
     if (changeTechnique) {
       setChangeTechnique(false);
     } else {
       setChangeTechnique(true);
     }
   };
-  const handleValidationPaye = () => {
+  //validation paiement
+  const handleValidationPaye = async (
+    responsableId: string,
+    missionId: string,
+    validation: boolean
+  ) => {
+    try {
+      await axios.post("/suivi-evaluation/validation-prevision", {
+        responsableId,
+        missionId,
+        validation,
+      });
+      dispatch(
+        enqueueSnackbar({
+          message: "Validation du paiement de la prevision créée avec succès",
+          options: { variant: "success" },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
     if (changePaye) {
       setChangePaye(false);
     } else {
@@ -170,8 +224,8 @@ const PrevisionDeMission = () => {
                         startIcon={<DoneIcon />}
                         onClick={() =>
                           handleValidationFinance(
-                            "663377c8ce5ca85b983d75c3",
-                            "663377c8ce5ca85b983d75c3",
+                            id,
+                            id,
                             changeFinance ? true : false
                           )
                         }
@@ -206,7 +260,9 @@ const PrevisionDeMission = () => {
                         variant="contained"
                         size="small"
                         startIcon={<DoneIcon />}
-                        onClick={handleValidationTechnique}
+                        onClick={() =>
+                          handleValidationTechnique(id, id, changeTechnique)
+                        }
                       >
                         Vérifier Techniquement
                       </Button>
@@ -231,7 +287,7 @@ const PrevisionDeMission = () => {
                       variant="contained"
                       size="small"
                       startIcon={<DoneIcon />}
-                      onClick={handleValidationPaye}
+                      onClick={() => handleValidationPaye(id, id, changePaye)}
                     >
                       Vérsé
                     </Button>

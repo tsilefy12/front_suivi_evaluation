@@ -9,7 +9,12 @@ const useFetchMissionListe = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   return () => {
-    let args: any = {};
+    let args: any = {
+      include: {
+        validationPrevision: true,
+        validationRapport: true,
+      },
+    };
     if (router.query.search) {
       args.where = {
         OR: [

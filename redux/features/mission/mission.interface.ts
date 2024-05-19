@@ -6,6 +6,16 @@ export interface MissionItem {
   missionManagerId?: string;
   descriptionMission?: string;
   reference?: string;
+  validationPrevision: {
+    responsableId: string;
+    missionId: string;
+    validation: boolean;
+  }[];
+  validationRapport: {
+    responsableId: string;
+    missionId: string;
+    validation: boolean;
+  }[];
   [x: string]: any;
 }
 
