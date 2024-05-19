@@ -233,11 +233,7 @@ const GereRapportDeMission = () => {
                         size="small"
                         startIcon={<DoneIcon />}
                         onClick={() =>
-                          handleValidationFinance(
-                            "663377c8ce5ca85b983d75c3",
-                            id,
-                            changeFinance
-                          )
+                          handleValidationFinance(id, id, changeFinance)
                         }
                       >
                         Vérifier financièrement
