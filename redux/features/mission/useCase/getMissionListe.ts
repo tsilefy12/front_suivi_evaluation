@@ -32,6 +32,8 @@ export const getMissionListe = createAsyncThunk(
               missionManager: detailEmployeeMM,
               budgetManager: detailEmployeeBM,
               reference: cons.reference,
+              validationPrevision: cons.validationPrevision,
+              validationRapport: cons.validationRapport,
             };
             newData.push(oneCons);
           })

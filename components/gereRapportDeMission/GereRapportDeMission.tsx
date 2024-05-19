@@ -48,28 +48,35 @@ const GereRapportDeMission = () => {
 
   const fetchMission = useFetchMissionListe();
   const { missionListe } = useAppSelector((state) => state.mission);
+  const dispatch = useAppDispatch();
+  const [validate, setValidate]: any = React.useState(false);
+
   React.useEffect(() => {
     fetchMission();
   }, [router.query]);
 
-  // console.log(missionListe.find((m) => m.validationRapport));
-
-  const [changeFinance, setChangeFinance] = React.useState(true);
-  const [changeTechnique, setChangeTechnique] = React.useState(true);
-  const [changePaye, setChangePaye] = React.useState(true);
-  const dispatch = useAppDispatch();
-
-  const handleValidationFinance = async (
+  React.useEffect(() => {
+    const V = missionListe.flatMap((m) =>
+      m.validationRapport.map((v) => v.validation!)
+    );
+    setValidate(V);
+  }, [missionListe]);
+  console.log(validate[0]);
+  const handleValidation = async (
     responsableId: string,
     missionId: string,
-    validation: boolean
+    index: number
   ) => {
     try {
+      const newValidationState = !validate[index];
       await axios.post("/suivi-evaluation/validation-rapport", {
         responsableId,
         missionId,
-        validation,
+        validation: newValidationState,
       });
+      setValidate((prev: any) =>
+        prev.map((val: any, i: any) => (i === index ? newValidationState : val))
+      );
       dispatch(
         enqueueSnackbar({
           message: "Validation financière du rapport créée avec succès",
@@ -79,67 +86,9 @@ const GereRapportDeMission = () => {
     } catch (error) {
       console.log(error);
     }
-    if (changeFinance) {
-      setChangeFinance(false);
-    } else {
-      setChangeFinance(true);
-    }
   };
-  const handleValidationTechnique = async (
-    responsableId: string,
-    missionId: string,
-    validation: boolean
-  ) => {
-    try {
-      await axios.post("/suivi-evaluation/validation-rapport", {
-        responsableId,
-        missionId,
-        validation,
-      });
-      dispatch(
-        enqueueSnackbar({
-          message: "Validation technique du rapport créée avec succès",
-          options: { variant: "success" },
-        })
-      );
-    } catch (error) {
-      console.log(error);
-    }
-    console.log(changeTechnique);
-    if (changeTechnique) {
-      setChangeTechnique(false);
-    } else {
-      setChangeTechnique(true);
-    }
-  };
-  //validation paiement
-  const handleValidationPaye = async (
-    responsableId: string,
-    missionId: string,
-    validation: boolean
-  ) => {
-    try {
-      await axios.post("/suivi-evaluation/validation-rapport", {
-        responsableId,
-        missionId,
-        validation,
-      });
-      dispatch(
-        enqueueSnackbar({
-          message: "Validation du paiement du rapport créée avec succès",
-          options: { variant: "success" },
-        })
-      );
-    } catch (error) {
-      console.log(error);
-    }
-    console.log(changePaye);
-    if (changePaye) {
-      setChangePaye(false);
-    } else {
-      setChangePaye(true);
-    }
-  };
+
+  // console.log("v :", validate[0]);
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -232,19 +181,21 @@ const GereRapportDeMission = () => {
                         variant="contained"
                         size="small"
                         startIcon={<DoneIcon />}
-                        onClick={() =>
-                          handleValidationFinance(id, id, changeFinance)
-                        }
+                        onClick={() => handleValidation(id, id, 0)}
                       >
                         Vérifier financièrement
                       </Button>
                       <FormLabel
-                        sx={{ display: changeFinance ? "block" : "none" }}
+                        sx={{
+                          display: validate[0] == true ? "none" : "block",
+                        }}
                       >
                         <Close color="error" />
                       </FormLabel>
                       <FormLabel
-                        sx={{ display: changeFinance ? "none" : "block" }}
+                        sx={{
+                          display: validate[0] == true ? "block" : "none",
+                        }}
                       >
                         <Check color="primary" />
                       </FormLabel>
@@ -266,19 +217,21 @@ const GereRapportDeMission = () => {
                         variant="contained"
                         size="small"
                         startIcon={<DoneIcon />}
-                        onClick={() =>
-                          handleValidationTechnique(id, id, changeTechnique)
-                        }
+                        onClick={() => handleValidation(id, id, 0)}
                       >
                         Vérifier Techniquement
                       </Button>
                       <FormLabel
-                        sx={{ display: changeTechnique ? "block" : "none" }}
+                        sx={{
+                          display: validate[0] == true ? "none" : "block",
+                        }}
                       >
                         <Close color="error" />
                       </FormLabel>
                       <FormLabel
-                        sx={{ display: changeTechnique ? "none" : "block" }}
+                        sx={{
+                          display: validate[0] == true ? "block" : "none",
+                        }}
                       >
                         <Check color="primary" />
                       </FormLabel>
@@ -293,14 +246,22 @@ const GereRapportDeMission = () => {
                       variant="contained"
                       size="small"
                       startIcon={<DoneIcon />}
-                      onClick={() => handleValidationPaye(id, id, changePaye)}
+                      onClick={() => handleValidation(id, id, 0)}
                     >
                       Vérsé
                     </Button>
-                    <FormLabel sx={{ display: changePaye ? "block" : "none" }}>
+                    <FormLabel
+                      sx={{
+                        display: validate[0] == true ? "none" : "block",
+                      }}
+                    >
                       <Close color="error" />
                     </FormLabel>
-                    <FormLabel sx={{ display: changePaye ? "none" : "block" }}>
+                    <FormLabel
+                      sx={{
+                        display: validate[0] == true ? "block" : "none",
+                      }}
+                    >
                       <Check color="primary" />
                     </FormLabel>
                   </Stack>
