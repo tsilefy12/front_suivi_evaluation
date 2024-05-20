@@ -57,12 +57,39 @@ const GereRapportDeMission = () => {
 
   React.useEffect(() => {
     const V = missionListe.flatMap((m) =>
-      m.validationRapport.map((v) => v.validation!)
+      m.validationRapport.filter((v) => v.missionId === m.id)
     );
     setValidate(V);
   }, [missionListe]);
   console.log(validate[0]);
-  const handleValidation = async (
+
+  const handleValidationFinance = async (
+    responsableId: string,
+    missionId: string,
+    index: number
+  ) => {
+    try {
+      const newValidationState = !validate[0];
+      await axios.post("/suivi-evaluation/validation-rapport", {
+        responsableId,
+        missionId,
+        validation: newValidationState,
+      });
+      setValidate((prev: any) =>
+        prev.map((val: any, i: any) => (i === index ? newValidationState : val))
+      );
+      dispatch(
+        enqueueSnackbar({
+          message: " Rapport validé avec succès",
+          options: { variant: "success" },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //validation technique
+  const handleValidationTechnique = async (
     responsableId: string,
     missionId: string,
     index: number
@@ -79,7 +106,7 @@ const GereRapportDeMission = () => {
       );
       dispatch(
         enqueueSnackbar({
-          message: "Validation financière du rapport créée avec succès",
+          message: " Rapport validé avec succès",
           options: { variant: "success" },
         })
       );
@@ -88,7 +115,32 @@ const GereRapportDeMission = () => {
     }
   };
 
-  // console.log("v :", validate[0]);
+  //validation paye
+  const handleValidationPaye = async (
+    responsableId: string,
+    missionId: string,
+    index: number
+  ) => {
+    try {
+      const newValidationState = !validate[index];
+      await axios.post("/suivi-evaluation/validation-rapport", {
+        responsableId,
+        missionId,
+        validation: newValidationState,
+      });
+      setValidate((prev: any) =>
+        prev.map((val: any, i: any) => (i === index ? newValidationState : val))
+      );
+      dispatch(
+        enqueueSnackbar({
+          message: " Rapport validé avec succès",
+          options: { variant: "success" },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -181,7 +233,7 @@ const GereRapportDeMission = () => {
                         variant="contained"
                         size="small"
                         startIcon={<DoneIcon />}
-                        onClick={() => handleValidation(id, id, 0)}
+                        onClick={() => handleValidationFinance(id, id, 0)}
                       >
                         Vérifier financièrement
                       </Button>
@@ -217,7 +269,7 @@ const GereRapportDeMission = () => {
                         variant="contained"
                         size="small"
                         startIcon={<DoneIcon />}
-                        onClick={() => handleValidation(id, id, 0)}
+                        onClick={() => handleValidationTechnique(id, id, 0)}
                       >
                         Vérifier Techniquement
                       </Button>
@@ -246,7 +298,7 @@ const GereRapportDeMission = () => {
                       variant="contained"
                       size="small"
                       startIcon={<DoneIcon />}
-                      onClick={() => handleValidation(id, id, 0)}
+                      onClick={() => handleValidationPaye(id, id, 0)}
                     >
                       Vérsé
                     </Button>

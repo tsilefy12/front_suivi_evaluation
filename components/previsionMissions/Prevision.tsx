@@ -40,23 +40,20 @@ const PrevisionDeMission = () => {
   const [validate, setValidate]: any = React.useState(false);
 
   React.useEffect(() => {
-    fetchMission();
-  }, [missionListe]);
-
-  React.useEffect(() => {
     const V = missionListe.flatMap((m) =>
-      m.validationRapport.map((v) => v.validation!)
+      m.validationPrevision.filter((v) => v.missionId === m.id)
     );
     setValidate(V);
   }, [missionListe]);
   console.log(validate[0]);
-  const handleValidation = async (
+
+  const handleValidationFinance = async (
     responsableId: string,
     missionId: string,
     index: number
   ) => {
     try {
-      const newValidationState = !validate[index];
+      const newValidationState = !validate[0];
       await axios.post("/suivi-evaluation/validation-prevision", {
         responsableId,
         missionId,
@@ -67,7 +64,33 @@ const PrevisionDeMission = () => {
       );
       dispatch(
         enqueueSnackbar({
-          message: "Validation financière du rapport créée avec succès",
+          message: " Prévision validée avec succès",
+          options: { variant: "success" },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //validation technique
+  const handleValidationTechnique = async (
+    responsableId: string,
+    missionId: string,
+    index: number
+  ) => {
+    try {
+      const newValidationState = !validate[0];
+      await axios.post("/suivi-evaluation/validation-prevision", {
+        responsableId,
+        missionId,
+        validation: newValidationState,
+      });
+      setValidate((prev: any) =>
+        prev.map((val: any, i: any) => (i === index ? newValidationState : val))
+      );
+      dispatch(
+        enqueueSnackbar({
+          message: " Prévision validée avec succès",
           options: { variant: "success" },
         })
       );
@@ -76,61 +99,32 @@ const PrevisionDeMission = () => {
     }
   };
 
-  // //validation technic
-  // const handleValidationTechnique = async (
-  //   responsableId: string,
-  //   missionId: string,
-  //   validation: boolean
-  // ) => {
-  //   try {
-  //     await axios.post("/suivi-evaluation/validation-prevision", {
-  //       responsableId,
-  //       missionId,
-  //       validation,
-  //     });
-  //     dispatch(
-  //       enqueueSnackbar({
-  //         message: "Validation technique de la prevision créée avec succès",
-  //         options: { variant: "success" },
-  //       })
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-
-  //   if (changeTechnique) {
-  //     setChangeTechnique(false);
-  //   } else {
-  //     setChangeTechnique(true);
-  //   }
-  // };
-  // //validation paiement
-  // const handleValidationPaye = async (
-  //   responsableId: string,
-  //   missionId: string,
-  //   validation: boolean
-  // ) => {
-  //   try {
-  //     await axios.post("/suivi-evaluation/validation-prevision", {
-  //       responsableId,
-  //       missionId,
-  //       validation,
-  //     });
-  //     dispatch(
-  //       enqueueSnackbar({
-  //         message: "Validation du paiement de la prevision créée avec succès",
-  //         options: { variant: "success" },
-  //       })
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   if (changePaye) {
-  //     setChangePaye(false);
-  //   } else {
-  //     setChangePaye(true);
-  //   }
-  // };
+  //validation paye
+  const handleValidationPaye = async (
+    responsableId: string,
+    missionId: string,
+    index: number
+  ) => {
+    try {
+      const newValidationState = !validate[0];
+      await axios.post("/suivi-evaluation/validation-prevision", {
+        responsableId,
+        missionId,
+        validation: newValidationState,
+      });
+      setValidate((prev: any) =>
+        prev.map((val: any, i: any) => (i === index ? newValidationState : val))
+      );
+      dispatch(
+        enqueueSnackbar({
+          message: " Prévision validée avec succès",
+          options: { variant: "success" },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -222,7 +216,7 @@ const PrevisionDeMission = () => {
                         variant="contained"
                         size="small"
                         startIcon={<DoneIcon />}
-                        onClick={() => handleValidation(id, id, 0)}
+                        onClick={() => handleValidationFinance(id, id, 0)}
                       >
                         Vérifier financièrement
                       </Button>
@@ -258,7 +252,7 @@ const PrevisionDeMission = () => {
                         variant="contained"
                         size="small"
                         startIcon={<DoneIcon />}
-                        onClick={() => handleValidation(id, id, 0)}
+                        onClick={() => handleValidationTechnique(id, id, 0)}
                       >
                         Vérifier Techniquement
                       </Button>
@@ -287,7 +281,7 @@ const PrevisionDeMission = () => {
                       variant="contained"
                       size="small"
                       startIcon={<DoneIcon />}
-                      onClick={() => handleValidation(id, id, 0)}
+                      onClick={() => handleValidationPaye(id, id, 0)}
                     >
                       Vérsé
                     </Button>
