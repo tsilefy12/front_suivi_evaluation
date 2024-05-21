@@ -163,6 +163,7 @@ const AddNewMission = () => {
                     id="outlined-basic"
                     label="Référence"
                     name="reference"
+                    inputProps={{ autoComplete: "off" }}
                   />
                   <OSSelectField
                     id="outlined-basic"
@@ -181,11 +182,7 @@ const AddNewMission = () => {
                     valueKey="id"
                   />
                 </CustomStack>
-                <Stack
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                >
+                <Stack direction={"row"} gap={4}>
                   <OSSelectField
                     id="outlined-basic"
                     label="Grant"
@@ -200,6 +197,7 @@ const AddNewMission = () => {
                     name="descriptionMission"
                     rows={5}
                     type="textarea"
+                    inputProps={{ autoComplete: "off" }}
                   />
                 </Stack>
               </FormContainer>
