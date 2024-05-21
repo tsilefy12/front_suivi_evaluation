@@ -6,6 +6,7 @@ export interface MissionItem {
   missionManagerId?: string;
   descriptionMission?: string;
   reference?: string;
+  grantId?: number;
   validationPrevision: {
     responsableId: string;
     missionId: string;

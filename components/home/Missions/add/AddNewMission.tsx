@@ -28,6 +28,7 @@ import { cancelEdit } from "../../../../redux/features/mission/missionSlice";
 import OSSelectField from "../../../shared/select/OSSelectField";
 import OSTextField from "../../../shared/input/OSTextField";
 import useFetchEmployes from "../hooks/useFetchEmployees";
+import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
 
 const AddNewMission = () => {
   const router = useRouter();
@@ -37,9 +38,12 @@ const AddNewMission = () => {
   const { employees } = useAppSelector((state) => state.employe);
   const dispatch = useAppDispatch();
   const fetchEmployeesListe = useFetchEmployes();
+  const fetchGrants = useFetchGrants();
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
 
   useEffect(() => {
     fetchEmployeesListe();
+    fetchGrants();
   }, []);
 
   const handleSubmit = async (values: any) => {
@@ -73,6 +77,7 @@ const AddNewMission = () => {
                 descriptionMission: isEditing
                   ? mission?.descriptionMission
                   : "",
+                grantId: isEditing ? mission?.grantId : "",
               }
         }
         validationSchema={Yup.object({
@@ -80,6 +85,7 @@ const AddNewMission = () => {
           missionManagerId: Yup.string().required("Champ obligatoire"),
           budgetManagerId: Yup.string().required("Champ obligatoire"),
           descriptionMission: Yup.string().required("Champ obligatoire"),
+          grantId: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -175,13 +181,27 @@ const AddNewMission = () => {
                     valueKey="id"
                   />
                 </CustomStack>
-                <OSTextField
-                  id="outlined-basic"
-                  label="Description de la mission"
-                  name="descriptionMission"
-                  rows={5}
-                  type="textarea"
-                />
+                <CustomStack
+                  direction={"row"}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                >
+                  <OSSelectField
+                    id="outlined-basic"
+                    label="Grant"
+                    name="grantId"
+                    options={grantEncoursList}
+                    dataKey={"code"}
+                    valueKey="id"
+                  />
+                  <OSTextField
+                    id="outlined-basic"
+                    label="Description de la mission"
+                    name="descriptionMission"
+                    rows={5}
+                    type="textarea"
+                  />
+                </CustomStack>
               </FormContainer>
             </Form>
           );
