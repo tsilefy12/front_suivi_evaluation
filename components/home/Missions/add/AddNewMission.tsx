@@ -54,7 +54,7 @@ const AddNewMission = () => {
       } else {
         await dispatch(createMission(values));
       }
-      router.push("/");
+      router.push("/missions");
     } catch (error) {
       console.log("error", error);
     }
