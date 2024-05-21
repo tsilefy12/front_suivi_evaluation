@@ -181,7 +181,7 @@ const AddNewMission = () => {
                     valueKey="id"
                   />
                 </CustomStack>
-                <CustomStack
+                <Stack
                   direction={"row"}
                   justifyContent={"space-between"}
                   alignItems={"center"}
@@ -201,7 +201,7 @@ const AddNewMission = () => {
                     rows={5}
                     type="textarea"
                   />
-                </CustomStack>
+                </Stack>
               </FormContainer>
             </Form>
           );
