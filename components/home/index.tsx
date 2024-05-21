@@ -60,7 +60,7 @@ const ListMissions = () => {
         await dispatch(deleteMission({ id }));
         fetchMissionListe();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const handleClickEdit = async (id: any) => {
@@ -71,7 +71,7 @@ const ListMissions = () => {
   const [getSelectId, setGetSelectedId]: any = React.useState(null);
   const handleClick = (event: any, id: string) => {
     setAnchorEl(event);
-    setGetSelectedId(id)
+    setGetSelectedId(id);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -118,7 +118,11 @@ const ListMissions = () => {
                     Mission {mission?.descriptionMission}
                   </Typography>
                   <div>
-                    <IconButton onClick={(event) =>handleClick(event.currentTarget, mission.id!)}>
+                    <IconButton
+                      onClick={(event) =>
+                        handleClick(event.currentTarget, mission.id!)
+                      }
+                    >
                       <MoreVertIcon />
                     </IconButton>
                     <Menu
@@ -126,17 +130,21 @@ const ListMissions = () => {
                       open={Boolean(anchorEl)}
                       onClose={handleClose}
                     >
-                      <MenuItem onClick={() => {
-                        handleClickEdit(getSelectId);
-                        handleClose();
-                      }}>
+                      <MenuItem
+                        onClick={() => {
+                          handleClickEdit(getSelectId);
+                          handleClose();
+                        }}
+                      >
                         <EditIcon color="primary" />
                         Modifier
                       </MenuItem>
-                      <MenuItem onClick={() => {
-                        handleClickDelete(getSelectId);
-                        handleClose();
-                      }}>
+                      <MenuItem
+                        onClick={() => {
+                          handleClickDelete(getSelectId);
+                          handleClose();
+                        }}
+                      >
                         <DeleteIcon color="warning" />
                         Supprimer
                       </MenuItem>
@@ -149,13 +157,18 @@ const ListMissions = () => {
                     {mission?.descriptionMission}
                   </Typography>
                   <Stack spacing={1}>
+                    <Typography color="GrayText" my={2} variant="caption">
+                      Référence : {mission?.reference}
+                    </Typography>
                     <FormLabel>
                       Responsable : <span></span>
-                      {mission?.missionManager?.name} {mission?.missionManager?.surname!}
+                      {mission?.missionManager?.name}{" "}
+                      {mission?.missionManager?.surname!}
                     </FormLabel>
                     <FormLabel>
                       Gestionnaire : <span></span>
-                      {mission?.budgetManager?.name} {mission?.budgetManager?.surname}
+                      {mission?.budgetManager?.name}{" "}
+                      {mission?.budgetManager?.surname}
                     </FormLabel>
                   </Stack>
                 </CardBody>
@@ -192,7 +205,7 @@ const ListMissions = () => {
 
 export default ListMissions;
 
-export const SectionNavigation = styled(Stack)(({ }) => ({}));
+export const SectionNavigation = styled(Stack)(({}) => ({}));
 
 const SectionDetails = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
