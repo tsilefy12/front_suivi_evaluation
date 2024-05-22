@@ -1,3 +1,6 @@
+import { LivrableRapportItem } from "../LivrableRapport/livrableRapport.interface";
+import { ActiviteRapportItem } from "../activitesRapport/activiteRapport.interface";
+
 export interface MissionItem {
   id?: string;
   budgetManager?: any;
@@ -7,6 +10,8 @@ export interface MissionItem {
   descriptionMission?: string;
   reference?: string;
   grantId?: number;
+  activites?: ActiviteRapportItem[];
+  livrables?: LivrableRapportItem[];
   validationPrevision: {
     responsableId: string;
     missionId: string;

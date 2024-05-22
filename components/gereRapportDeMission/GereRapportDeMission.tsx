@@ -9,9 +9,10 @@ import {
   Paper,
   Dialog,
   FormLabel,
+  MenuItem,
 } from "@mui/material";
 import Container from "@mui/material/Container";
-import React from "react";
+import React, { Fragment } from "react";
 import KeyValue from "../shared/keyValue";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -29,6 +30,10 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { Check, Close } from "@mui/icons-material";
 import { axios } from "../../axios";
 import { enqueueSnackbar } from "../../redux/features/notification/notificationSlice";
+import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
+import useFetchEmploys from "../GrantsEnCours/hooks/getResponsable";
+import { MissionItem } from "../../redux/features/mission/mission.interface";
+import Moment from "react-moment";
 
 const GereRapportDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -49,38 +54,154 @@ const GereRapportDeMission = () => {
   const fetchMission = useFetchMissionListe();
   const { missionListe } = useAppSelector((state) => state.mission);
   const dispatch = useAppDispatch();
-  const [validate, setValidate]: any = React.useState(false);
-
+  const fetchGrants = useFetchGrants();
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const fetchEmployes = useFetchEmploys();
+  const { employees } = useAppSelector((state) => state.employe);
+  const [getVF, setGetVerificateurFinance] = React.useState<
+    { id: string; nom: string }[]
+  >([]);
+  const [getVT, setGetVerificateurTechnique] = React.useState<
+    { id: string; nom: string }[]
+  >([]);
+  const [getFV, setGetFinanceValidator] = React.useState<
+    { id: string; nom: string }[]
+  >([]);
+  // console.log(missionListe.map((m) => m.activites));
   React.useEffect(() => {
     fetchMission();
+    fetchGrants();
+    fetchEmployes();
   }, [router.query]);
 
   React.useEffect(() => {
-    const V = missionListe.flatMap((m) =>
-      m.validationRapport.filter((v) => v.missionId === m.id)
+    const getGrantId = missionListe
+      .filter((m) => m.id === id)
+      .map((m) => m.grantId);
+
+    //get finance verificator
+    const tableauFinanceVerificateur: { id: string; nom: string }[] = [];
+    const validateurFinance = grantEncoursList
+      .filter((g) => g.id == getGrantId[0])
+      .map((g) => g.financeVerificator);
+
+    const idFinanceVerificator = employees.find(
+      (e) => e.id === validateurFinance[0]
     );
-    setValidate(V);
+    const financeVerify: string = idFinanceVerificator
+      ? `${idFinanceVerificator.name} ${idFinanceVerificator.surname}`
+      : "Employee not found";
+
+    tableauFinanceVerificateur.push({
+      id: idFinanceVerificator?.id!,
+      nom: financeVerify!,
+    });
+
+    setGetVerificateurFinance(tableauFinanceVerificateur);
+
+    //get validator technique
+    const tableauTechniqueVerificateur: { id: any; nom: string }[] = [];
+    const validateurTechnique = grantEncoursList
+      .filter((g) => g.id == getGrantId[0])
+      .map((g) => g.techValidator);
+
+    const idValidatorTechnique = employees.find(
+      (e) => e.id === validateurTechnique[0]
+    );
+    const verifyTechnic: string = idValidatorTechnique
+      ? `${idValidatorTechnique.name} ${idValidatorTechnique.surname}`
+      : "Employee not found";
+    tableauTechniqueVerificateur.push({
+      id: idValidatorTechnique?.id!,
+      nom: verifyTechnic!,
+    });
+
+    setGetVerificateurTechnique(tableauTechniqueVerificateur);
+    //get finance validator
+    const tableauFinanceValidateur: { id: any; nom: string }[] = [];
+    const financeValidateur = grantEncoursList
+      .filter((g) => g.id == getGrantId[0])
+      .map((g) => g.financeValidator);
+
+    const idFinanceValidator = employees.find(
+      (e) => e.id === financeValidateur[0]
+    );
+    const financeValidator: string = idFinanceValidator
+      ? `${idFinanceValidator.name} ${idFinanceValidator.surname}`
+      : "Employee not found";
+
+    tableauFinanceValidateur.push({
+      id: idFinanceValidator?.id,
+      nom: financeValidator,
+    });
+
+    setGetFinanceValidator(tableauFinanceValidateur);
   }, [missionListe]);
-  console.log(validate[0]);
+
+  const [getValidationVF, setGetValidationVF]: any = React.useState<string[]>(
+    []
+  );
+  const [getValidationPaye, setGetValidationPay]: any = React.useState<
+    string[]
+  >([]);
+  React.useEffect(() => {
+    const VF = getVF.map((vf) => vf.id);
+    // console.log(test[0]);
+    const VFF = missionListe.flatMap((m) =>
+      m.validationRapport.filter(
+        (v) => v.missionId === m.id && v.responsableId == VF[0]
+      )
+    );
+    const valeurBool: any = VFF.map((v) => v.validation!);
+    setGetValidationVF(valeurBool);
+
+    const VT = getVT.map((vf) => vf.id);
+    // console.log(test[0]);
+    const VTT = missionListe.flatMap((m) =>
+      m.validationRapport.filter(
+        (v) => v.missionId === m.id && v.responsableId == VT[0]
+      )
+    );
+    const valeurBoolTech: any = VTT.map((v) => v.validation!);
+
+    setGetValidationT(valeurBoolTech);
+
+    const VP = getFV.map((vf) => vf.id);
+    // console.log(test[0]);
+    const VPP = missionListe.flatMap((m) =>
+      m.validationRapport.filter(
+        (v) => v.missionId === m.id && v.responsableId == VP[0]
+      )
+    );
+    const valeurBoolPaye: any = VPP.map((v) => v.validation!);
+
+    setGetValidationPay(valeurBoolPaye);
+  }, [missionListe]);
+
+  const valueGetFV =
+    getValidationVF.length > 0 ? getValidationVF[0] : "Array is empty";
 
   const handleValidationFinance = async (
     responsableId: string,
     missionId: string,
-    index: number
+    validation: number
   ) => {
     try {
-      const newValidationState = !validate[0];
+      const newValidationState =
+        !getValidationVF[0] || getValidationVF[0] === "false";
+
+      // Send the updated validation state to the server
       await axios.post("/suivi-evaluation/validation-rapport", {
         responsableId,
         missionId,
         validation: newValidationState,
       });
-      setValidate((prev: any) =>
-        prev.map((val: any, i: any) => (i === index ? newValidationState : val))
-      );
+
+      setGetValidationVF([newValidationState ? true : false]);
+
       dispatch(
         enqueueSnackbar({
-          message: " Rapport validé avec succès",
+          message: "Rapport validé avec succès",
           options: { variant: "success" },
         })
       );
@@ -88,22 +209,26 @@ const GereRapportDeMission = () => {
       console.log(error);
     }
   };
+
   //validation technique
+  const [getValidationT, setGetValidationT]: any = React.useState<string[]>([]);
+  const valueGetTechnic =
+    getValidationT.length > 0 ? getValidationT[0] : "Array is empty";
   const handleValidationTechnique = async (
     responsableId: string,
     missionId: string,
-    index: number
+    validation: number
   ) => {
     try {
-      const newValidationState = !validate[index];
+      const newValidationState =
+        !getValidationT[0] || getValidationT[0] === false;
       await axios.post("/suivi-evaluation/validation-rapport", {
         responsableId,
         missionId,
         validation: newValidationState,
       });
-      setValidate((prev: any) =>
-        prev.map((val: any, i: any) => (i === index ? newValidationState : val))
-      );
+      setGetValidationT([newValidationState ? true : false]);
+
       dispatch(
         enqueueSnackbar({
           message: " Rapport validé avec succès",
@@ -116,21 +241,21 @@ const GereRapportDeMission = () => {
   };
 
   //validation paye
+
   const handleValidationPaye = async (
     responsableId: string,
     missionId: string,
     index: number
   ) => {
     try {
-      const newValidationState = !validate[index];
+      const newValidationState =
+        !getValidationPaye || getValidationPaye === false;
       await axios.post("/suivi-evaluation/validation-rapport", {
         responsableId,
         missionId,
         validation: newValidationState,
       });
-      setValidate((prev: any) =>
-        prev.map((val: any, i: any) => (i === index ? newValidationState : val))
-      );
+      setGetValidationPay(newValidationState ? true : false);
       dispatch(
         enqueueSnackbar({
           message: " Rapport validé avec succès",
@@ -141,6 +266,7 @@ const GereRapportDeMission = () => {
       console.log(error);
     }
   };
+  // console.log(getValidationPaye);
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -221,102 +347,124 @@ const GereRapportDeMission = () => {
                 <Divider />
                 <Typography>
                   Vérifié financièrement par :
-                  <Stack
-                    direction={"column"}
-                    gap={2}
-                    justifyContent={"space-between"}
-                    alignItems={"start"}
-                  >
-                    <FormLabel>Nom du responsable</FormLabel>
-                    <Stack direction={"row"} gap={4}>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        startIcon={<DoneIcon />}
-                        onClick={() => handleValidationFinance(id, id, 0)}
-                      >
-                        Vérifier financièrement
-                      </Button>
-                      <FormLabel
-                        sx={{
-                          display: validate[0] == true ? "none" : "block",
-                        }}
-                      >
-                        <Close color="error" />
-                      </FormLabel>
-                      <FormLabel
-                        sx={{
-                          display: validate[0] == true ? "block" : "none",
-                        }}
-                      >
-                        <Check color="primary" />
-                      </FormLabel>
+                  {getVF.map((row: any, index: number) => (
+                    <Stack
+                      direction={"column"}
+                      gap={2}
+                      justifyContent={"space-between"}
+                      alignItems={"start"}
+                      key={row.id!}
+                    >
+                      <FormLabel>{row.nom}</FormLabel>
+                      <Stack direction={"row"} gap={4}>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          startIcon={<DoneIcon />}
+                          onClick={() =>
+                            handleValidationFinance(row.id, id, index)
+                          }
+                        >
+                          Vérifier financièrement
+                        </Button>
+                        <FormLabel
+                          sx={{
+                            display:
+                              getValidationVF[0] == true ? "none" : "block",
+                          }}
+                        >
+                          <Close color="error" />
+                        </FormLabel>
+                        <FormLabel
+                          sx={{
+                            display:
+                              getValidationVF[0] == true ? "block" : "none",
+                          }}
+                        >
+                          <Check color="primary" />
+                        </FormLabel>
+                      </Stack>
                     </Stack>
-                  </Stack>
+                  ))}
                 </Typography>
                 <Divider />
                 <Typography>
                   Vérifié techniquement par :
-                  <Stack
-                    direction={"column"}
-                    gap={2}
-                    justifyContent={"space-between"}
-                    alignItems={"start"}
-                  >
-                    <FormLabel>Nom du responsable</FormLabel>
-                    <Stack direction={"row"} gap={4}>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        startIcon={<DoneIcon />}
-                        onClick={() => handleValidationTechnique(id, id, 0)}
-                      >
-                        Vérifier Techniquement
-                      </Button>
-                      <FormLabel
-                        sx={{
-                          display: validate[0] == true ? "none" : "block",
-                        }}
-                      >
-                        <Close color="error" />
-                      </FormLabel>
-                      <FormLabel
-                        sx={{
-                          display: validate[0] == true ? "block" : "none",
-                        }}
-                      >
-                        <Check color="primary" />
-                      </FormLabel>
+                  {getVT.map((row: any) => (
+                    <Stack
+                      direction={"column"}
+                      gap={2}
+                      justifyContent={"space-between"}
+                      alignItems={"start"}
+                      key={row.id!}
+                    >
+                      <FormLabel>{row.nom}</FormLabel>
+                      <Stack direction={"row"} gap={4}>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          startIcon={<DoneIcon />}
+                          onClick={() =>
+                            handleValidationTechnique(row.id, id, 0)
+                          }
+                          disabled={getValidationVF[0] == false}
+                        >
+                          Vérifier Techniquement
+                        </Button>
+                        <FormLabel
+                          sx={{
+                            display: valueGetTechnic == true ? "none" : "block",
+                          }}
+                          disabled={getValidationVF[0] == false}
+                        >
+                          <Close color="error" />
+                        </FormLabel>
+                        <FormLabel
+                          sx={{
+                            display: valueGetTechnic == true ? "block" : "none",
+                          }}
+                        >
+                          <Check color="primary" />
+                        </FormLabel>
+                      </Stack>
                     </Stack>
-                  </Stack>
+                  ))}
                 </Typography>
                 <Divider />
                 <Typography>
-                  <KeyValue keyName="Payé par" value={"Nom du responsable"} />
-                  <Stack direction={"row"} gap={4}>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      startIcon={<DoneIcon />}
-                      onClick={() => handleValidationPaye(id, id, 0)}
-                    >
-                      Vérsé
-                    </Button>
-                    <FormLabel
-                      sx={{
-                        display: validate[0] == true ? "none" : "block",
-                      }}
-                    >
-                      <Close color="error" />
-                    </FormLabel>
-                    <FormLabel
-                      sx={{
-                        display: validate[0] == true ? "block" : "none",
-                      }}
-                    >
-                      <Check color="primary" />
-                    </FormLabel>
-                  </Stack>
+                  {getFV.map((row: any) => (
+                    <Fragment key={row.id}>
+                      Payé par :<br></br>
+                      {row.nom}
+                      <Stack direction={"row"} gap={4}>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          startIcon={<DoneIcon />}
+                          onClick={() => handleValidationPaye(row.id, id, 0)}
+                          disabled={getValidationT[0] === false}
+                        >
+                          Vérsé
+                        </Button>
+                        <FormLabel
+                          sx={{
+                            display:
+                              getValidationPaye[0] == true ? "none" : "block",
+                          }}
+                        >
+                          <Close color="error" />
+                        </FormLabel>
+                        <FormLabel
+                          sx={{
+                            display:
+                              getValidationPaye[0] == true ? "block" : "none",
+                          }}
+                        >
+                          <Check color="primary" />
+                        </FormLabel>
+                      </Stack>
+                    </Fragment>
+                  ))}
                 </Typography>
               </Stack>
             </CardBody>
@@ -332,35 +480,61 @@ const GereRapportDeMission = () => {
                   <AddDepositionDesRapports />
                 </Dialog>
               </Stack>
-              {[1, 2].map((item) => (
-                <Grid key={item}>
-                  <CardMain>
-                    <KeyValue keyName="Date" value={"dd/MM/yyyy"} />
-                    <KeyValue
-                      keyName="Activités"
-                      value={"Préparation des matériels pour ...."}
-                    />
-                    <KeyValue keyName="Livrables" value={"Matériels ..."} />
-                    <KeyValue
-                      keyName="1er responsable"
-                      value={"Nom du responsable"}
-                    />
-                  </CardMain>
-                  <Divider />
-                </Grid>
-              ))}
-              <CardMain>
-                <KeyValue keyName="Date" value={"dd/MM/yyyy"} />
-                <KeyValue
-                  keyName="Activités"
-                  value={"Préparation des matériels pour ...."}
-                />
-                <KeyValue keyName="Livrables" value={"Matériels ..."} />
-                <KeyValue
-                  keyName="1er responsable"
-                  value={"Nom du responsable"}
-                />
-              </CardMain>
+              {missionListe
+                .filter((f) => f.id === id)
+                .map((item: MissionItem) => (
+                  <Grid key={item.id}>
+                    <CardMain gap={2} alignItems={"flex-start"}>
+                      <Stack direction={"row"} gap={2} flexWrap={"wrap"}>
+                        <FormLabel>Date : </FormLabel>
+                        <Moment
+                          format="DD/MM/yyyy"
+                          style={{ color: "GrayText" }}
+                        >
+                          {new Date()}
+                        </Moment>
+                      </Stack>
+                      <FormLabel>
+                        Activités :
+                        {item?.activites!.map((a) => (
+                          <Stack
+                            direction={"column"}
+                            gap={2}
+                            alignItems={"flex-start"}
+                            key={a.id}
+                          >
+                            - {a.activite!}
+                          </Stack>
+                        ))}
+                      </FormLabel>
+                      <FormLabel>
+                        Livrables :{" "}
+                        {item?.livrables!.map((l) => (
+                          <Stack
+                            direction={"column"}
+                            gap={2}
+                            alignItems={"flex-start"}
+                            key={l.id}
+                          >
+                            - {l.livrablee!}
+                          </Stack>
+                        ))}
+                      </FormLabel>
+                      <FormLabel>
+                        1er responsable :{" "}
+                        {
+                          employees.find((e) => e.id === item.missionManagerId!)
+                            ?.name
+                        }{" "}
+                        {
+                          employees.find((e) => e.id === item.missionManagerId!)
+                            ?.surname
+                        }
+                      </FormLabel>
+                    </CardMain>
+                    <Divider />
+                  </Grid>
+                ))}
             </CardFooter>
           </Stack>
         </Stack>
