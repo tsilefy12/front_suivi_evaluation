@@ -21,7 +21,10 @@ import { SectionNavigation } from "../ListBudgetsInitial";
 import { Form, Formik } from "formik";
 import useFetchBudgetInitial from "../hooks/useFetchBudgetInitial";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { createBudgetInitial, updateBudgetInitial } from "../../../redux/features/budgetInitial";
+import {
+  createBudgetInitial,
+  updateBudgetInitial,
+} from "../../../redux/features/budgetInitial";
 import { useRouter } from "next/router";
 import { cancelEdit } from "../../../redux/features/budgetInitial/budgetInitialSlice";
 import OSTextField from "../../shared/input/OSTextField";
@@ -34,15 +37,17 @@ import { getValueAndUnit } from "polished";
 
 const AddNewBudgetInitial = () => {
   const fetchBudgetInitial = useFetchBudgetInitial();
-  const { isEditing, budgetInitial } = useAppSelector(state => state.budgetInitial);
+  const { isEditing, budgetInitial } = useAppSelector(
+    (state) => state.budgetInitial
+  );
   const router = useRouter();
   const dispatch = useAppDispatch();
   const fetchGrant = useFetchGrants();
-  const { grantEncoursList } = useAppSelector(state => state.grantEncours)
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchligneBudgetaire = useFetchBudgetLine();
-  const { budgetLineList } = useAppSelector(state => state.budgetLine);
+  const { budgetLineList } = useAppSelector((state) => state.budgetLine);
   const fetchPeriode = useFetchPeriode();
-  const { periodelist } = useAppSelector(state => state.periode)
+  const { periodelist } = useAppSelector((state) => state.periode);
   const [grantValue, setGrantValue]: any = React.useState<string>("vide");
   const { id }: any = router.query;
   const uniqueValues = new Set();
@@ -51,61 +56,73 @@ const AddNewBudgetInitial = () => {
     fetchGrant();
     fetchligneBudgetaire();
     fetchPeriode();
-  }, [router.query])
+  }, [router.query]);
   //  console.log("value key :", grantValue)
   //get grant dans periode
-  let periodeGrantList: { id: any, name: any, amount: number }[] = [];
+  let periodeGrantList: { id: any; name: any; amount: number }[] = [];
   let [selectedPeriode, setSelectedPeriode] = React.useState<any[]>(
     isEditing
-      ? periodelist.filter(pg =>
-        budgetInitial?.periodeId?.includes(pg.id!)
-      )
+      ? periodelist.filter((pg) => budgetInitial?.periodeId?.includes(pg.id!))
       : periodeGrantList
   );
   grantEncoursList.map((g: any) => {
     if (grantValue !== "vide") {
-      periodelist.map(p => {
+      periodelist.map((p) => {
         let PeriodeGrant: any = p.grant;
         if (grantValue === PeriodeGrant) {
           if (!uniqueValues.has(p.id)) {
             uniqueValues.add(p.id);
-            periodeGrantList.push({ id: p.id, name: p.periode, amount: p.montant! })
+            periodeGrantList.push({
+              id: p.id,
+              name: p.periode,
+              amount: p.montant!,
+            });
           }
         }
-      })
+      });
     }
-    uniqueValues.add(g.id)
+    uniqueValues.add(g.id);
     periodeGrantList.push({ id: "", name: "", amount: 0 });
-  })
+  });
 
   //get grant dans budget
   let BudgetLineGrantList: any = [];
 
   let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
     isEditing
-      ? budgetLineList.filter((pg: any) =>
-        Array.isArray(budgetInitial?.ligneBudgetaire) && budgetInitial?.ligneBudgetaire.includes(pg.id)
-      )
-      : BudgetLineGrantList.lenght > 0 ? BudgetLineGrantList : []
+      ? budgetLineList.filter(
+          (pg: any) =>
+            Array.isArray(budgetInitial?.ligneBudgetaire) &&
+            budgetInitial?.ligneBudgetaire.includes(pg.id)
+        )
+      : BudgetLineGrantList.lenght > 0
+      ? BudgetLineGrantList
+      : []
   );
-  grantEncoursList.forEach(g => {
+  grantEncoursList.forEach((g) => {
     if (grantValue !== "vide" && grantValue === g.id) {
-      return BudgetLineGrantList = g.budgetLines!;
+      return (BudgetLineGrantList = g.budgetLines!);
     }
     return [];
   });
 
- console.log(id)
+  console.log(id);
   const handleSubmit = async (values: any) => {
-    const totalMontantBudget = selectedBudgetLine.reduce((total: number, currentItem: any) => total + currentItem.amount, 0);
-    const totalMontantPeriode = selectedPeriode.reduce((total: number, currentItem: any) => total + currentItem.amount, 0);
+    const totalMontantBudget = selectedBudgetLine.reduce(
+      (total: number, currentItem: any) => total + currentItem.amount,
+      0
+    );
+    const totalMontantPeriode = selectedPeriode.reduce(
+      (total: number, currentItem: any) => total + currentItem.amount,
+      0
+    );
 
     const somme = totalMontantBudget + totalMontantPeriode;
-    console.log("montant :", somme)
+    console.log("montant :", somme);
     try {
       if (isEditing) {
-        values.periodeId = [...selectedPeriode.map(p => p.id)];
-        values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
+        values.periodeId = [...selectedPeriode.map((p) => p.id)];
+        values.ligneBudgetaire = [...selectedBudgetLine.map((bl) => bl.id)];
         values.grant = grantValue;
         values.montant = somme;
         // console.log("periode id :", values.montant)
@@ -116,13 +133,13 @@ const AddNewBudgetInitial = () => {
           })
         );
       } else {
-        values.periodeId = [...selectedPeriode.map(p => p.id)];
-        values.ligneBudgetaire = [...selectedBudgetLine.map(bl => bl.id)];
+        values.periodeId = [...selectedPeriode.map((p) => p.id)];
+        values.ligneBudgetaire = [...selectedBudgetLine.map((bl) => bl.id)];
         values.grant = grantValue;
         values.montant = somme;
-        await dispatch(createBudgetInitial(values))
+        await dispatch(createBudgetInitial(values));
       }
-      fetchBudgetInitial()
+      fetchBudgetInitial();
       router.push("/grants/budgetInitial");
     } catch (error) {
       console.log("error", error);
@@ -137,11 +154,13 @@ const AddNewBudgetInitial = () => {
           isEditing
             ? budgetInitial
             : {
-              grant: isEditing ? budgetInitial?.grant : "",
-              ligneBudgetaire: isEditing ? budgetInitial?.ligneBudgetaire : "",
-              periodeId: isEditing ? budgetInitial?.periodeId : "",
-              // montant: isEditing ? budgetInitial?.montant : ,
-            }
+                grant: isEditing ? budgetInitial?.grant : "",
+                ligneBudgetaire: isEditing
+                  ? budgetInitial?.ligneBudgetaire
+                  : "",
+                periodeId: isEditing ? budgetInitial?.periodeId : "",
+                // montant: isEditing ? budgetInitial?.montant : ,
+              }
         }
         // validationSchema={Yup.object({
         //   // periodeId: Yup.string().required("Cham obligatoire"),
@@ -156,14 +175,18 @@ const AddNewBudgetInitial = () => {
             <Form>
               <NavigationContainer>
                 <SectionNavigation
-                  direction={{ xs: 'column', sm: 'row' }}
+                  direction={{ xs: "column", sm: "row" }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                   justifyContent="space-between"
                   sx={{ mb: 2 }}
                 >
                   <Stack flexDirection={"row"}>
                     <Link href="/grants/budgetInitial">
-                      <Button color="info" variant="text" startIcon={<ArrowBack />}>
+                      <Button
+                        color="info"
+                        variant="text"
+                        startIcon={<ArrowBack />}
+                      >
                         Retour
                       </Button>
                     </Link>
@@ -192,7 +215,11 @@ const AddNewBudgetInitial = () => {
                       Annuler
                     </Button>
                   </Stack>
-                  <Typography variant="h5">{isEditing ? "Modifier Budget initial" : "Créer Budget initial"}</Typography>
+                  <Typography variant="h5">
+                    {isEditing
+                      ? "Modifier Budget initial"
+                      : "Créer Budget initial"}
+                  </Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}
               </NavigationContainer>
@@ -209,11 +236,11 @@ const AddNewBudgetInitial = () => {
                   name="grant"
                 >
                   <MenuItem value="vide">Select grant</MenuItem>
-                  {
-                    grantEncoursList.map(g => (
-                      <MenuItem key={g.id!} value={g.id!}>{g.code}</MenuItem>
-                    ))
-                  }
+                  {grantEncoursList.map((g) => (
+                    <MenuItem key={g.id!} value={g.id!}>
+                      {g.code}
+                    </MenuItem>
+                  ))}
                 </OSTextField>
                 <Autocomplete
                   multiple
@@ -224,7 +251,9 @@ const AddNewBudgetInitial = () => {
                   onChange={(event: any, newValue) => {
                     setSelectedBudgetLine(newValue!);
                   }}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  isOptionEqualToValue={(option, value) =>
+                    option.id === value.id
+                  }
                   renderInput={(params: any) => (
                     <TextField
                       {...params}
@@ -235,7 +264,6 @@ const AddNewBudgetInitial = () => {
                   )}
                 />
                 <Autocomplete
-                  multiple
                   id="tags-standard"
                   options={periodeGrantList}
                   getOptionLabel={(option) => option.name}
@@ -243,7 +271,9 @@ const AddNewBudgetInitial = () => {
                   onChange={(event, newValue) => {
                     setSelectedPeriode(newValue!);
                   }}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  isOptionEqualToValue={(option, value) =>
+                    option.id === value.id
+                  }
                   renderInput={(params: any) => (
                     <TextField
                       {...params}
@@ -255,7 +285,7 @@ const AddNewBudgetInitial = () => {
                 />
               </FormContainer>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>

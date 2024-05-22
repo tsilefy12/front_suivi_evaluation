@@ -157,7 +157,9 @@ const ListMissions = () => {
                     {mission?.descriptionMission}
                   </Typography>
                   <Stack spacing={1}>
-                    <FormLabel>Référence : {mission?.reference}</FormLabel>
+                    <FormLabel>
+                      Référence : {"MISSION_" + mission?.reference}
+                    </FormLabel>
                     <FormLabel>
                       Responsable : <span></span>
                       {mission?.missionManager?.name}{" "}

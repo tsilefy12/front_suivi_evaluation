@@ -1,4 +1,11 @@
-import { Button, Container, IconButton, Stack, styled, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  IconButton,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
 import Link from "next/link";
 import React from "react";
 import Box from "@mui/material/Box";
@@ -39,17 +46,17 @@ const ListBudgetsInitial = () => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const router = useRouter();
-  const fetchPeriode = useFetchPeriode()
-  const { periodelist } = useAppSelector((state) => state.periode)
+  const fetchPeriode = useFetchPeriode();
+  const { periodelist } = useAppSelector((state) => state.periode);
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) =>state.grantEncours)
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
 
   React.useEffect(() => {
     fetchPeriode();
     fetchGrants();
-  }, [router.query])
+  }, [router.query]);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -127,7 +134,7 @@ const ListBudgetsInitial = () => {
         await dispatch(deletePeriode({ id }));
         fetchPeriode();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const handleClickEdit = async (id: any) => {
@@ -145,7 +152,7 @@ const ListBudgetsInitial = () => {
           Periode GRANTS
         </Typography>
       </SectionNavigation>
-      <SectionTable sx={{ backgroundColor: '#fff' }}>
+      <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />
@@ -180,20 +187,23 @@ const ListBudgetsInitial = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                        // selected={isItemSelected}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                          // onClick={(event) => handleClick(event, row.id)}
-                          >
-                          </TableCell>
+                            // onClick={(event) => handleClick(event, row.id)}
+                          ></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             padding="none"
                           >
-                             {grantEncoursList.find((e:any)=> e.id === row?.grant)?.code}
+                            {
+                              grantEncoursList.find(
+                                (e: any) => e.id === row?.grant
+                              )?.code
+                            }
                           </TableCell>
                           <TableCell align="right">{row.periode}</TableCell>
                           <TableCell align="right">
@@ -202,9 +212,7 @@ const ListBudgetsInitial = () => {
                           <TableCell align="right">
                             <Moment format="DD/MM/yyyy">{row.fin}</Moment>
                           </TableCell>
-                          <TableCell align="right">
-                            {row.montant} Ar
-                          </TableCell>
+                          <TableCell align="right">{row.montant}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"

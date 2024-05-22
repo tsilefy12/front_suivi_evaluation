@@ -29,12 +29,11 @@ import OSSelectField from "../../../shared/select/OSSelectField";
 import OSTextField from "../../../shared/input/OSTextField";
 import useFetchEmployes from "../hooks/useFetchEmployees";
 import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
+import { MissionItem } from "../../../../redux/features/mission/mission.interface";
 
 const AddNewMission = () => {
   const router = useRouter();
-  const { isEditing, mission, employeeList } = useAppSelector(
-    (state) => state.mission
-  );
+  const { isEditing, mission } = useAppSelector((state) => state.mission);
   const { employees } = useAppSelector((state) => state.employe);
   const dispatch = useAppDispatch();
   const fetchEmployeesListe = useFetchEmployes();
@@ -46,22 +45,42 @@ const AddNewMission = () => {
     fetchGrants();
   }, []);
 
-  const handleSubmit = async (values: any) => {
-    try {
-      if (isEditing) {
-        await dispatch(
-          updateMission({
-            id: mission.id!,
-            mission: values,
-          })
-        );
-      } else {
-        await dispatch(createMission(values));
+  const generateSerialNumber = (items: MissionItem[]): string => {
+    let maxRef = 0;
+    items.forEach((item) => {
+      if (item.reference) {
+        console.log("ref", item.reference);
+        const ref = parseInt(item.reference);
+        if (!isNaN(ref) && ref > maxRef) {
+          maxRef = ref;
+        }
       }
-      router.push("/missions");
-    } catch (error) {
-      console.log("error", error);
+    });
+    // console.log(maxRef);
+    const newRef = (maxRef + 1).toString().padStart(3, "0");
+    return newRef.toString();
+  };
+
+  const handleSubmit = async (values: any) => {
+    if (!values.reference) {
+      values.reference = generateSerialNumber([mission]);
+      console.log(values.reference);
     }
+    // try {
+    //   if (isEditing) {
+    //     await dispatch(
+    //       updateMission({
+    //         id: mission.id!,
+    //         mission: values,
+    //       })
+    //     );
+    //   } else {
+    //     await dispatch(createMission(values));
+    //   }
+    //   router.push("/missions");
+    // } catch (error) {
+    //   console.log("error", error);
+    // }
   };
   return (
     <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>
@@ -81,7 +100,7 @@ const AddNewMission = () => {
               }
         }
         validationSchema={Yup.object({
-          reference: Yup.string().required("Champ obligatoire"),
+          // reference: Yup.string().required("Champ obligatoire"),
           missionManagerId: Yup.string().required("Champ obligatoire"),
           budgetManagerId: Yup.string().required("Champ obligatoire"),
           descriptionMission: Yup.string().required("Champ obligatoire"),
@@ -147,24 +166,21 @@ const AddNewMission = () => {
                 {/* <Divider /> */}
               </NavigationContainer>
 
-              <FormContainer sx={{ backgroundColor: "#fff" }} spacing={2}>
+              <FormContainer sx={{ backgroundColor: "#fff" }} gap={2}>
                 {/* <TextField
                   fullWidth
                   id="outlined-basic"
                   label="Référence mission"
                   variant="outlined"
                 /> */}
-                <CustomStack
-                  direction={{ xs: "column", sm: "column", md: "row" }}
-                  spacing={{ xs: 2, sm: 2, md: 1 }}
-                >
-                  <OSTextField
+                <Stack direction={"row"} gap={2}>
+                  {/* <OSTextField
                     fullWidth
                     id="outlined-basic"
                     label="Référence"
                     name="reference"
                     inputProps={{ autoComplete: "off" }}
-                  />
+                  /> */}
                   <OSSelectField
                     id="outlined-basic"
                     label="Responsable"
@@ -181,8 +197,8 @@ const AddNewMission = () => {
                     dataKey={["name", "surname"]}
                     valueKey="id"
                   />
-                </CustomStack>
-                <Stack direction={"row"} gap={4}>
+                </Stack>
+                <Stack direction={"row"} gap={2}>
                   <OSSelectField
                     id="outlined-basic"
                     label="Grant"

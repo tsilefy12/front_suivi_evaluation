@@ -3,7 +3,7 @@ const menu = [
     name: "Dashboard",
     link: "/",
     icon: "dashboardIcon",
-    items: []
+    items: [],
   },
   {
     id: 1,
@@ -61,18 +61,18 @@ const menu = [
         link: "/grants/budgetInitial",
         icon: "",
       },
-      {
-        id: 26,
-        name: "Budget engagé",
-        link: "/grants/budgetEngage",
-        icon: "",
-      },
-      {
-        id: 27,
-        name: "Ligne budgetaire",
-        link: "/grants/ligneBudgetaire",
-        icon: "",
-      },
+      // // {
+      //   id: 26,
+      //   name: "Budget engagé",
+      //   link: "/grants/budgetEngage",
+      //   icon: "",
+      // },
+      // {
+      //   id: 27,
+      //   name: "Ligne budgetaire",
+      //   link: "/grants/ligneBudgetaire",
+      //   icon: "",
+      // },
     ],
   },
   {
@@ -94,51 +94,45 @@ const menu = [
       //   link: "/configurations/devise",
       //   icon: "",
       // },
+
       {
-        id:41,
-        name: "Poste Analytique",
-        link: "/configurations/postAnalytic",
-        icon: "",
-      },
-      {
-        id:42,
+        id: 42,
         name: "Type",
         link: "/configurations/type",
         icon: "",
       },
       {
-        id:43,
+        id: 43,
         name: "Organisation",
         link: "/configurations/organisation",
         icon: "",
       },
       {
-        id:44,
+        id: 44,
         name: "Ligne de Budget",
         link: "/configurations/lineBudget",
         icon: "",
       },
       {
-        id:45,
+        id: 45,
         name: "Status",
         link: "/configurations/status",
         icon: "",
       },
       {
-        id:46,
+        id: 46,
         name: "Projet",
         link: "/configurations/project",
         icon: "",
       },
       {
-        id:47,
+        id: 47,
         name: "Site",
         link: "/configurations/site",
         icon: "",
-      }
+      },
     ],
   },
-  
 ];
 
 export default menu;
