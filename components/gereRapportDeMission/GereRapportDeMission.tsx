@@ -267,7 +267,7 @@ const GereRapportDeMission = () => {
       console.log(error);
     }
   };
-  console.log(valueGetPaye);
+  // console.log(valueGetPaye);
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -347,10 +347,13 @@ const GereRapportDeMission = () => {
                 <KeyValue
                   keyName="Elaboré par"
                   value={`
-    ${employees.find((e) => e.id === missionListe[0].missionManagerId)?.name!} 
+    ${employees.find(
+      (e: any) => e.id === missionListe.map((m) => m.missionManagerId!)
+    )?.name!} 
     ${" "} 
-    ${employees.find((e) => e.id === missionListe[0].missionManagerId)
-      ?.surname!}
+    ${employees.find(
+      (e: any) => e.id === missionListe.map((m) => m.missionManagerId!)
+    )?.surname!}
   `}
                 />
 
