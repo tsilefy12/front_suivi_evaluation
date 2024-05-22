@@ -241,7 +241,8 @@ const GereRapportDeMission = () => {
   };
 
   //validation paye
-
+  const valueGetPaye =
+    getValidationPaye.length > 0 ? getValidationPaye[0] : "Array is empty";
   const handleValidationPaye = async (
     responsableId: string,
     missionId: string,
@@ -249,7 +250,7 @@ const GereRapportDeMission = () => {
   ) => {
     try {
       const newValidationState =
-        !getValidationPaye || getValidationPaye === false;
+        !getValidationPaye[0] || getValidationPaye[0] === false;
       await axios.post("/suivi-evaluation/validation-rapport", {
         responsableId,
         missionId,
@@ -266,7 +267,7 @@ const GereRapportDeMission = () => {
       console.log(error);
     }
   };
-  // console.log(getValidationPaye);
+  console.log(valueGetPaye);
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -343,7 +344,16 @@ const GereRapportDeMission = () => {
                 Etat des rapports
               </Typography>
               <Stack spacing={2}>
-                <KeyValue keyName="Elaboré par" value={"Nom du responsable"} />
+                <KeyValue
+                  keyName="Elaboré par"
+                  value={`
+    ${employees.find((e) => e.id === missionListe[0].missionManagerId)?.name!} 
+    ${" "} 
+    ${employees.find((e) => e.id === missionListe[0].missionManagerId)
+      ?.surname!}
+  `}
+                />
+
                 <Divider />
                 <Typography>
                   Vérifié financièrement par :
@@ -369,16 +379,14 @@ const GereRapportDeMission = () => {
                         </Button>
                         <FormLabel
                           sx={{
-                            display:
-                              getValidationVF[0] == true ? "none" : "block",
+                            display: valueGetFV == true ? "none" : "block",
                           }}
                         >
                           <Close color="error" />
                         </FormLabel>
                         <FormLabel
                           sx={{
-                            display:
-                              getValidationVF[0] == true ? "block" : "none",
+                            display: valueGetFV == true ? "block" : "none",
                           }}
                         >
                           <Check color="primary" />
@@ -387,6 +395,7 @@ const GereRapportDeMission = () => {
                     </Stack>
                   ))}
                 </Typography>
+
                 <Divider />
                 <Typography>
                   Vérifié techniquement par :
@@ -407,7 +416,7 @@ const GereRapportDeMission = () => {
                           onClick={() =>
                             handleValidationTechnique(row.id, id, 0)
                           }
-                          disabled={getValidationVF[0] == false}
+                          disabled={valueGetFV == false}
                         >
                           Vérifier Techniquement
                         </Button>
@@ -415,7 +424,7 @@ const GereRapportDeMission = () => {
                           sx={{
                             display: valueGetTechnic == true ? "none" : "block",
                           }}
-                          disabled={getValidationVF[0] == false}
+                          disabled={valueGetFV == false}
                         >
                           <Close color="error" />
                         </FormLabel>
@@ -442,22 +451,20 @@ const GereRapportDeMission = () => {
                           size="small"
                           startIcon={<DoneIcon />}
                           onClick={() => handleValidationPaye(row.id, id, 0)}
-                          disabled={getValidationT[0] === false}
+                          disabled={valueGetTechnic == false}
                         >
                           Vérsé
                         </Button>
                         <FormLabel
                           sx={{
-                            display:
-                              getValidationPaye[0] == true ? "none" : "block",
+                            display: valueGetPaye == true ? "none" : "block",
                           }}
                         >
                           <Close color="error" />
                         </FormLabel>
                         <FormLabel
                           sx={{
-                            display:
-                              getValidationPaye[0] == true ? "block" : "none",
+                            display: valueGetPaye == true ? "block" : "none",
                           }}
                         >
                           <Check color="primary" />
@@ -483,7 +490,7 @@ const GereRapportDeMission = () => {
               {missionListe
                 .filter((f) => f.id === id)
                 .map((item: MissionItem) => (
-                  <Grid key={item.id}>
+                  <Grid key={item.id!}>
                     <CardMain gap={2} alignItems={"flex-start"}>
                       <Stack direction={"row"} gap={2} flexWrap={"wrap"}>
                         <FormLabel>Date : </FormLabel>
@@ -508,7 +515,7 @@ const GereRapportDeMission = () => {
                         ))}
                       </FormLabel>
                       <FormLabel>
-                        Livrables :{" "}
+                        Livrables :
                         {item?.livrables!.map((l) => (
                           <Stack
                             direction={"column"}
