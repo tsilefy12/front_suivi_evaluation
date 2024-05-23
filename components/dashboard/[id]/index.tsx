@@ -56,15 +56,18 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
   }, [router.query]);
 
   const uniqueValues: any = new Set();
-  let grantBI: any = "";
-  budgetLineList.forEach((element) => {
-    if (element.grantId == getId) {
-      if (!uniqueValues.has(element.grantId)) {
-        uniqueValues.add(element.grantId);
-        grantBI = grantEncoursList.find((e) => e.id === getId)?.code;
+  const [grantBI, setGrantBI] = React.useState("");
+  React.useEffect(() => {
+    budgetLineList.forEach((element) => {
+      if (element.grantId == getId) {
+        if (!uniqueValues.has(element.grantId)) {
+          uniqueValues.add(element.grantId);
+          setGrantBI(grantEncoursList.find((e) => e.id === getId)?.code!);
+        }
+        return grantBI;
       }
-    }
-  });
+    });
+  }, [budgetLineList]);
 
   return (
     <div>

@@ -1,13 +1,13 @@
 import { Container } from "@mui/material";
 import React from "react";
 import BackOfficeLayout from "../../../layouts/backOffice";
-import ListBudgetEngage from "../../../components/budgetEngage/ListBudgetsEngage";
+import ListPlanFinancement from "../../../components/planFinancement";
 
 const PlanFinancement = () => {
   return (
     <BackOfficeLayout>
       <Container maxWidth="xl">
-        <ListBudgetEngage />
+        <ListPlanFinancement />
       </Container>
     </BackOfficeLayout>
   );
