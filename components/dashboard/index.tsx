@@ -1,5 +1,19 @@
 import React from "react";
-import { Button, Container, Dialog, FormControl, Link, Modal, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  Dialog,
+  FormControl,
+  Link,
+  Modal,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
 import BackOfficeLayout from "../../layouts/backOffice";
@@ -24,15 +38,15 @@ const Dashboard: NextPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector(state => state.grantEncours);
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
-  const { budgetLineList } = useAppSelector(state => state.budgetLine);
+  const { budgetLineList } = useAppSelector((state) => state.budgetLine);
   const fetchBudgetEngagedList = useFetchBudgetEngaged();
-  const { budgetEngagedList } = useAppSelector(state => state.budgetsEngaged)
+  const { budgetEngagedList } = useAppSelector((state) => state.budgetsEngaged);
   const fetchtReliquatGrant = useFetchReliquatGrant();
   const fetchBudgetInitial = useFetchBudgetInitial();
-  const { budgetInitialList } = useAppSelector((state) => state.budgetInitial)
-  const [open, setOpen] = React.useState(false)
+  const { budgetInitialList } = useAppSelector((state) => state.budgetInitial);
+  const [open, setOpen] = React.useState(false);
   const [getId, setGetId] = React.useState("");
 
   React.useEffect(() => {
@@ -41,15 +55,15 @@ const Dashboard: NextPage = () => {
     fetchtReliquatGrant();
     fetchBudgetInitial();
     fetchBudgetLine();
-  }, [router.query])
+  }, [router.query]);
 
   const handleClick = (id: any) => {
     setOpen(true);
     setGetId(id);
-  }
+  };
   const handleClose = () => {
     setOpen(false);
-  }
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
@@ -66,34 +80,24 @@ const Dashboard: NextPage = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>
-                GRANT
-              </TableCell>
-              <TableCell>
-                LIGNE BUDGETAIRE
-              </TableCell>
-              <TableCell align="center">
-                BUDGET INITIAL
-              </TableCell>
-              <TableCell align="center">
-                BUDGET ENGAGE
-              </TableCell>
-              <TableCell align="center">
-                SOLDE
-              </TableCell>
+              <TableCell>GRANT</TableCell>
+              <TableCell>LIGNE BUDGETAIRE</TableCell>
+              <TableCell align="center">BUDGET INITIAL</TableCell>
+              <TableCell align="center">BUDGET ENGAGE</TableCell>
+              <TableCell align="center">SOLDE</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {
-              grantEncoursList.filter(g =>
-                budgetLineList.some(bl => bl.grantId === g.id) &&
-                budgetInitialList.some(bi => bi.grant === g.id) &&
-                budgetEngagedList.some(be => be.grantsId === g.id)
-              ).map(row => (
+            {grantEncoursList
+              .filter(
+                (g) =>
+                  budgetLineList.some((bl) => bl.grantId === g.id) &&
+                  budgetInitialList.some((bi) => bi.grant === g.id) &&
+                  budgetEngagedList.some((be) => be.grantsId === g.id)
+              )
+              .map((row) => (
                 <TableRow key={row.id!}>
-                  <TableCell>
-                    {row.code}
-                  </TableCell>
+                  <TableCell>{row.code}</TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"
@@ -110,17 +114,32 @@ const Dashboard: NextPage = () => {
                     </Stack> */}
                   </TableCell>
                   <TableCell align="center">
-                    {budgetInitialList.reduce((acc, curr) => acc + curr.montant!, 0)} Ar
+                    {budgetInitialList.reduce(
+                      (acc, curr) => acc + curr.montant!,
+                      0
+                    )}{" "}
+                    Ar
                   </TableCell>
                   <TableCell align="center">
-                    {budgetEngagedList.reduce((acc, curr) => acc + curr.amount!, 0)} Ar
+                    {budgetEngagedList.reduce(
+                      (acc, curr) => acc + curr.amount!,
+                      0
+                    )}{" "}
+                    Ar
                   </TableCell>
                   <TableCell align="center">
-                    {budgetInitialList.reduce((acc, curr) => acc + curr.montant!, 0)! - budgetEngagedList.reduce((acc, curr) => acc + curr.amount!, 0)!} Ar
+                    {budgetInitialList.reduce(
+                      (acc, curr) => acc + curr.montant!,
+                      0
+                    )! -
+                      budgetEngagedList.reduce(
+                        (acc, curr) => acc + curr.amount!,
+                        0
+                      )!}{" "}
+                    Ar
                   </TableCell>
                 </TableRow>
-              ))
-            }
+              ))}
           </TableBody>
         </Table>
       </BodySection>
@@ -132,8 +151,8 @@ const Dashboard: NextPage = () => {
         fullWidth
         PaperProps={{
           style: {
-            maxHeight: '80vh',
-            width: '60vw',
+            maxHeight: "80vh",
+            width: "60vw",
           },
         }}
       >

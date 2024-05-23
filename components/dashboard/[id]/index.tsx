@@ -37,15 +37,15 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector(state => state.grantEncours);
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
-  const { budgetLineList } = useAppSelector(state => state.budgetLine);
+  const { budgetLineList } = useAppSelector((state) => state.budgetLine);
   const fetchBudgetEngagedList = useFetchBudgetEngaged();
-  const { budgetEngagedList } = useAppSelector(state => state.budgetsEngaged);
+  const { budgetEngagedList } = useAppSelector((state) => state.budgetsEngaged);
   const fetchtReliquatGrant = useFetchReliquatGrant();
-  const { reliquatGrantList } = useAppSelector(state => state.reliquatGrant);
+  const { reliquatGrantList } = useAppSelector((state) => state.reliquatGrant);
   const fetchBudgetInitial = useFetchBudgetInitial();
-  const { budgetInitialList } = useAppSelector(state => state.budgetInitial);
+  const { budgetInitialList } = useAppSelector((state) => state.budgetInitial);
 
   React.useEffect(() => {
     fetchBudgetEngagedList();
@@ -70,18 +70,28 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
     <div>
       <Stack direction={"column"} spacing={2}>
         <Stack direction={"row"} justifyContent={"space-between"}>
-          <Typography variant="h4" color="GrayText" marginLeft={4} marginTop={2}>
+          <Typography
+            variant="h4"
+            color="GrayText"
+            marginLeft={4}
+            marginTop={2}
+          >
             Budget engagé
           </Typography>
           <IconButton onClick={handleClose}>
             <Close />
           </IconButton>
         </Stack>
-        <TableContainer component={Paper} sx={{ width: "auto", overflowX: "auto" }}>
+        <TableContainer
+          component={Paper}
+          sx={{ width: "auto", overflowX: "auto" }}
+        >
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ minWidth: 120, maxWidth: 120 }}>GRANT</TableCell>
+                <TableCell sx={{ minWidth: 120, maxWidth: 120 }}>
+                  GRANT
+                </TableCell>
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -94,7 +104,10 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
                       <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
                         BUDGET ENGAGE
                       </TableCell>
-                      <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="left">
+                      <TableCell
+                        sx={{ minWidth: 160, maxWidth: 160 }}
+                        align="left"
+                      >
                         SOLDE
                       </TableCell>
                     </TableRow>
@@ -117,26 +130,49 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
                       .map((row, index) => (
                         <TableRow key={index}>
                           <TableCell>
-                            <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="left">
+                            <TableCell
+                              sx={{ minWidth: 160, maxWidth: 160 }}
+                              align="left"
+                            >
                               {row.code}
                             </TableCell>
-                            <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="center">
-                              {budgetInitialList.find(
-                                (e) => e.ligneBudgetaire == row.id
-                              )?.montant ?? 0}{" "}
-                              Ar
+                            <TableCell
+                              sx={{ minWidth: 160, maxWidth: 160 }}
+                              align="center"
+                            >
+                              {budgetInitialList
+                                .filter((e) =>
+                                  e.ligneBudgetaire?.includes(Number(row.id))
+                                )
+                                .reduce(
+                                  (acc, curr) => acc + (curr.montant || 0),
+                                  0
+                                )}
                             </TableCell>
-                            <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="center">
+                            <TableCell
+                              sx={{ minWidth: 160, maxWidth: 160 }}
+                              align="center"
+                            >
                               {budgetEngagedList.find(
                                 (be) => be.budgetLineId == row.id
                               )?.amount ?? 0}{" "}
                               Ar
                             </TableCell>
-                            <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align={`${!isNaN ? "left" : "center"}`}>
-                              {
-                                (budgetInitialList.find(e => e.ligneBudgetaire == row.id)?.montant ?? 0) -
-                                (budgetEngagedList.find(be => be.budgetLineId == row.id)?.amount ?? 0)
-                              }{" "}
+                            <TableCell
+                              sx={{ minWidth: 160, maxWidth: 160 }}
+                              align={`${!isNaN ? "left" : "center"}`}
+                            >
+                              {budgetInitialList
+                                .filter((e) =>
+                                  e.ligneBudgetaire?.includes(Number(row.id))
+                                )
+                                .reduce(
+                                  (acc, curr) => acc + (curr.montant || 0),
+                                  0
+                                ) -
+                                (budgetEngagedList.find(
+                                  (be) => be.budgetLineId == row.id
+                                )?.amount ?? 0)}{" "}
                               Ar
                             </TableCell>
                           </TableCell>

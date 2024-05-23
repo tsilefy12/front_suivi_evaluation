@@ -61,12 +61,12 @@ const menu = [
         link: "/grants/budgetInitial",
         icon: "",
       },
-      // // {
-      //   id: 26,
-      //   name: "Budget engagé",
-      //   link: "/grants/budgetEngage",
-      //   icon: "",
-      // },
+      {
+        id: 26,
+        name: "Plan financement",
+        link: "/grants/planFinancement",
+        icon: "",
+      },
       // {
       //   id: 27,
       //   name: "Ligne budgetaire",
