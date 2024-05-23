@@ -104,25 +104,23 @@ const AddNewBudgetInitial = () => {
 
   // console.log(id);
   const handleSubmit = async (values: any) => {
-    const totalMontantBudget = selectedBudgetLine.reduce(
-      (total: number, currentItem: any) => total + currentItem.amount,
-      0
-    );
+    // const totalMontantBudget = selectedBudgetLine.reduce(
+    //   (total: number, currentItem: any) => total + currentItem.amount,
+    //   0
+    // );
 
-    const somme =
-      totalMontantBudget +
-      periodeGrantList
-        .filter((p) => p.id === values.periodeId)
-        .reduce((acc, curr) => acc + curr.amount, 0);
+    // const somme =
+    //   totalMontantBudget +
+    //   periodeGrantList
+    //     .filter((p) => p.id === values.periodeId)
+    //     .reduce((acc, curr) => acc + curr.amount, 0);
 
-    console.log("montant :", somme);
+    // console.log("montant :", somme);
     try {
-      // Create a new object to avoid mutating `values` directly
       const updatedValues = {
         ...values,
         ligneBudgetaire: selectedBudgetLine.map((bl) => bl.id),
         grant: grantValue,
-        montant: somme,
       };
 
       if (isEditing) {
@@ -155,7 +153,7 @@ const AddNewBudgetInitial = () => {
                 ligneBudgetaire: isEditing
                   ? budgetInitial?.ligneBudgetaire
                   : "",
-                periodeId: isEditing ? budgetInitial?.periodeId : "",
+                periodeId: isEditing ? budgetInitial?.periodeId : id!,
                 // montant: isEditing ? budgetInitial?.montant : ,
               }
         }
@@ -224,6 +222,16 @@ const AddNewBudgetInitial = () => {
               <FormContainer spacing={2}>
                 <OSTextField
                   fullWidth
+                  id="outlined-basic"
+                  label="Période"
+                  variant="outlined"
+                  name="periodeId"
+                  value={
+                    id ? periodelist.find((p) => p.id === id)?.periode : ""
+                  }
+                />
+                <OSTextField
+                  fullWidth
                   select
                   id="outlined-basic"
                   label="Grant"
@@ -260,40 +268,6 @@ const AddNewBudgetInitial = () => {
                     />
                   )}
                 />
-                {/* <Autocomplete
-                  id="tags-standard"
-                  options={periodeGrantList}
-                  value={selectedPeriode}
-                  onChange={(event, newValue) => {
-                    setSelectedPeriode(newValue!);
-                  }}
-                  isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
-                  }
-                  renderInput={(params: any) => (
-                    <TextField
-                      {...params}
-                      id="outlined-basic"
-                      label="Sélectionnez periode"
-                      variant="outlined"
-                    />
-                  )}
-                /> */}
-                <OSTextField
-                  fullWidth
-                  select
-                  id="outlined-basic"
-                  label="Période"
-                  variant="outlined"
-                  name="periodeId"
-                >
-                  <MenuItem value="vide">Select periode</MenuItem>
-                  {periodeGrantList.map((p) => (
-                    <MenuItem key={p.id!} value={p.id!}>
-                      {p.name}
-                    </MenuItem>
-                  ))}
-                </OSTextField>
               </FormContainer>
             </Form>
           );

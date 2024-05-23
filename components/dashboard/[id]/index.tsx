@@ -1,13 +1,11 @@
-import React, { Fragment } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Box,
   Button,
   Container,
   DialogContent,
   DialogTitle,
   FormControl,
   IconButton,
-  Link,
   Stack,
   Table,
   TableBody,
@@ -18,7 +16,6 @@ import {
   Typography,
   Paper,
 } from "@mui/material";
-import type { NextPage } from "next";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import useBasePath from "../../../hooks/useBasePath";
@@ -28,9 +25,7 @@ import useFetchBudgetLine from "../../previsionMissions/organism/Finances/tableP
 import useFetchBudgetEngaged from "../../budgetEngage/hooks/useFetchBudgetEngaged";
 import useFetchReliquatGrant from "../../reliquetGrant/hooks/useFetchEliquatGrant";
 import useFetchBudgetInitial from "../../budgetInitial/hooks/useFetchBudgetInitial";
-import { SectionNavigation } from "../../home";
-import { BodySection } from "../../gereRapportDeMission/GereRapportDeMission";
-import { Add, ArrowBack, Close } from "@mui/icons-material";
+import { Add, Close } from "@mui/icons-material";
 
 const DetailsDashboard = ({ handleClose, getId }: any) => {
   const basePath = useBasePath();
@@ -42,32 +37,27 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
   const { budgetLineList } = useAppSelector((state) => state.budgetLine);
   const fetchBudgetEngagedList = useFetchBudgetEngaged();
   const { budgetEngagedList } = useAppSelector((state) => state.budgetsEngaged);
-  const fetchtReliquatGrant = useFetchReliquatGrant();
+  const fetchReliquatGrant = useFetchReliquatGrant();
   const { reliquatGrantList } = useAppSelector((state) => state.reliquatGrant);
   const fetchBudgetInitial = useFetchBudgetInitial();
   const { budgetInitialList } = useAppSelector((state) => state.budgetInitial);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchBudgetEngagedList();
     fetchGrants();
-    fetchtReliquatGrant();
+    fetchReliquatGrant();
     fetchBudgetInitial();
     fetchBudgetLine();
   }, [router.query]);
 
-  const uniqueValues: any = new Set();
-  const [grantBI, setGrantBI] = React.useState("");
-  React.useEffect(() => {
-    budgetLineList.forEach((element) => {
-      if (element.grantId == getId) {
-        if (!uniqueValues.has(element.grantId)) {
-          uniqueValues.add(element.grantId);
-          setGrantBI(grantEncoursList.find((e) => e.id === getId)?.code!);
-        }
-        return grantBI;
-      }
-    });
-  }, [budgetLineList]);
+  const [grantBI, setGrantBI] = useState("");
+
+  useEffect(() => {
+    const grant = grantEncoursList.find((e) => e.id === getId);
+    if (grant) {
+      setGrantBI(grant.code!);
+    }
+  }, [grantEncoursList, getId]);
 
   return (
     <div>
@@ -95,95 +85,72 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
                 <TableCell sx={{ minWidth: 120, maxWidth: 120 }}>
                   GRANT
                 </TableCell>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
-                        LIGNE BUDGETAIRE
-                      </TableCell>
-                      <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
-                        BUDGET INITIAL
-                      </TableCell>
-                      <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
-                        BUDGET ENGAGE
-                      </TableCell>
-                      <TableCell
-                        sx={{ minWidth: 160, maxWidth: 160 }}
-                        align="left"
-                      >
-                        SOLDE
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                </Table>
+                <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                  LIGNE BUDGETAIRE
+                </TableCell>
+                <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                  BUDGET INITIAL
+                </TableCell>
+                <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                  BUDGET ENGAGE
+                </TableCell>
+                <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                  SOLDE
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell
-                  rowSpan={budgetLineList.length}
-                  sx={{ minWidth: 120, maxWidth: 120 }}
-                >
-                  {grantBI}
-                </TableCell>
-                <Table>
-                  <TableBody>
-                    {budgetLineList
-                      .filter((f: any) => f.grantId == getId)
-                      .map((row, index) => (
-                        <TableRow key={index}>
-                          <TableCell>
-                            <TableCell
-                              sx={{ minWidth: 160, maxWidth: 160 }}
-                              align="left"
-                            >
-                              {row.code}
-                            </TableCell>
-                            <TableCell
-                              sx={{ minWidth: 160, maxWidth: 160 }}
-                              align="center"
-                            >
-                              {budgetInitialList
-                                .filter((e) =>
-                                  e.ligneBudgetaire?.includes(Number(row.id))
-                                )
-                                .reduce(
-                                  (acc, curr) => acc + (curr.montant || 0),
-                                  0
-                                )}
-                            </TableCell>
-                            <TableCell
-                              sx={{ minWidth: 160, maxWidth: 160 }}
-                              align="center"
-                            >
-                              {budgetEngagedList.find(
-                                (be) => be.budgetLineId == row.id
-                              )?.amount ?? 0}{" "}
-                              Ar
-                            </TableCell>
-                            <TableCell
-                              sx={{ minWidth: 160, maxWidth: 160 }}
-                              align={`${!isNaN ? "left" : "center"}`}
-                            >
-                              {budgetInitialList
-                                .filter((e) =>
-                                  e.ligneBudgetaire?.includes(Number(row.id))
-                                )
-                                .reduce(
-                                  (acc, curr) => acc + (curr.montant || 0),
-                                  0
-                                ) -
-                                (budgetEngagedList.find(
-                                  (be) => be.budgetLineId == row.id
-                                )?.amount ?? 0)}{" "}
-                              Ar
-                            </TableCell>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-              </TableRow>
+              {budgetLineList
+                .filter((bl) => bl.grantId === getId)
+                .map((row, index) => (
+                  <TableRow key={index}>
+                    {index === 0 && (
+                      <TableCell
+                        rowSpan={budgetLineList.length}
+                        sx={{ minWidth: 120, maxWidth: 120 }}
+                      >
+                        {grantBI}
+                      </TableCell>
+                    )}
+                    <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                      {row.code}
+                    </TableCell>
+                    <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                      {budgetInitialList
+                        .filter((bi) =>
+                          bi.ligneBudgetaire!.includes(Number(row.id))
+                        )
+                        .reduce((total, bi) => {
+                          const budgetLine = budgetLineList.find(
+                            (bl) => bl.id === row.id
+                          );
+                          return total + (budgetLine ? budgetLine.amount! : 0);
+                        }, 0)}
+                    </TableCell>
+                    <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                      {budgetEngagedList.find(
+                        (be) => be.budgetLineId === row.id
+                      )?.amount ?? 0}{" "}
+                      Ar
+                    </TableCell>
+                    <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                      {budgetInitialList
+                        .filter((bi) =>
+                          bi.ligneBudgetaire!.includes(Number(row.id))
+                        )
+                        .reduce((total, bi) => {
+                          const budgetLine = budgetLineList.find(
+                            (bl) => bl.id === row.id
+                          );
+                          return total + (budgetLine ? budgetLine.amount! : 0);
+                        }, 0) -
+                        (budgetEngagedList.find(
+                          (be) => be.budgetLineId === row.id
+                        )?.amount ?? 0)}{" "}
+                      Ar
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

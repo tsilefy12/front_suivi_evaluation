@@ -11,6 +11,7 @@ import {
   TableRow,
   Typography,
   Paper,
+  Divider,
 } from "@mui/material";
 import Link from "next/link";
 import Add from "@mui/icons-material/Add";
@@ -89,7 +90,10 @@ const ListPlanFinancement = () => {
             {Object.keys(groupedBudgets).map((grantCode) => {
               const budgets = groupedBudgets[grantCode];
               return budgets.map((budget, index) => (
-                <TableRow key={`${grantCode}-${index}`}>
+                <TableRow
+                  key={`${grantCode}-${index}`}
+                  sx={{ borderBottomColor: "black" }}
+                >
                   {index === 0 && (
                     <TableCell rowSpan={budgets.length}>{grantCode}</TableCell>
                   )}

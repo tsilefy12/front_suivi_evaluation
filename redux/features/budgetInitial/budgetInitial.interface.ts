@@ -5,7 +5,7 @@ export interface BudgetInitialItem {
   grant?: number;
   ligneBudgetaire?: number[];
   periodeId?: string;
-  montant?: number;
+  //   montant?: number;
   periodes?: PeriodeItem[];
 }
 export interface BugdgetInitialInitialState {

@@ -1,4 +1,11 @@
-import { Button, Container, IconButton, Stack, styled, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  IconButton,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
 import Link from "next/link";
 import React from "react";
 import Box from "@mui/material/Box";
@@ -47,19 +54,23 @@ const ListGrantsEnCours = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const router = useRouter();
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours)
+  const { grantEncoursList } = useAppSelector(
+    (state: any) => state.grantEncours
+  );
   const fetchProject = useFetchProject();
-  const { projectList } = useAppSelector((state: any) => state.project)
+  const { projectList } = useAppSelector((state: any) => state.project);
   const fetchtReliquatGrant = useFetchReliquatGrant();
-  const { reliquatGrantList } = useAppSelector((state: any) =>state.reliquatGrant)
+  const { reliquatGrantList } = useAppSelector(
+    (state: any) => state.reliquatGrant
+  );
   const fetchEpmloyes = useFetchEmployes();
-  const { employees } = useAppSelector((state: any) =>state.employe)
+  const { employees } = useAppSelector((state: any) => state.employe);
   React.useEffect(() => {
     fetchGrants();
     fetchProject();
     fetchtReliquatGrant();
     fetchEpmloyes();
-  }, [router.query])
+  }, [router.query]);
 
   const handleClickEdit = async (id: any) => {
     router.push(`/grants/grantsEnCours/${id}/edit`);
@@ -67,7 +78,7 @@ const ListGrantsEnCours = () => {
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-  // console.log("list :", grantEncoursList)
+  console.log("list :", grantEncoursList);
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -77,7 +88,9 @@ const ListGrantsEnCours = () => {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - grantEncoursList.length) : 0;
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - grantEncoursList.length)
+      : 0;
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer le grant",
@@ -95,7 +108,7 @@ const ListGrantsEnCours = () => {
         await dispatch(deleteGrantEncours({ id }));
         fetchGrants();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
   return (
     <Container maxWidth="xl">
@@ -109,7 +122,7 @@ const ListGrantsEnCours = () => {
           GRANTS en Cours
         </Typography>
       </SectionNavigation>
-      <SectionTable sx={{ backgroundColor: '#fff' }}>
+      <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2, ml: 4 }}>
             <EnhancedTableToolbar numSelected={selected.length} />
@@ -123,7 +136,11 @@ const ListGrantsEnCours = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {grantEncoursList.filter((g: any) =>g.id != reliquatGrantList.map((rg: any) =>rg.grant))
+                  {grantEncoursList
+                    .filter(
+                      (g: any) =>
+                        g.id != reliquatGrantList.map((rg: any) => rg.grant)
+                    )
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: GrantEncoursItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
@@ -135,34 +152,48 @@ const ListGrantsEnCours = () => {
                           tabIndex={-1}
                           key={row.id}
                         >
-                          <TableCell
-                            padding="checkbox"
-                          >
-                            {row.code}
+                          <TableCell padding="checkbox">{row.code}</TableCell>
+                          <TableCell align="left">
+                            {
+                              employees.find(
+                                (e: any) => e.id === row.techValidator
+                              )?.name
+                            }
                           </TableCell>
                           <TableCell align="left">
-                          {employees.find((e: any) =>e.id === row.techValidator)?.name}
+                            {
+                              employees.find(
+                                (e: any) => e.id === row.financeValidator
+                              )?.name
+                            }
                           </TableCell>
                           <TableCell align="left">
-                            {employees.find((e: any) =>e.id === row.financeValidator)?.name}
+                            {
+                              employees.find(
+                                (e: any) => e.id === row.financeVerificator
+                              )?.name
+                            }
                           </TableCell>
-                          <TableCell align="left">
-                          {employees.find((e: any) =>e.id === row.financeVerificator)?.name}
-                          </TableCell>
-                          <TableCell align="left">
-                            {row.status}
-                          </TableCell>
+                          <TableCell align="left">{row.status}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
                             >
-                              <Link href={`/grants/ligneBudgetaire/${row.id}/add`}>
-                                <Button variant="outlined" color="accent" startIcon={<Add />}>
+                              <Link
+                                href={`/grants/ligneBudgetaire/${row.id}/add`}
+                              >
+                                <Button
+                                  variant="outlined"
+                                  color="accent"
+                                  startIcon={<Add />}
+                                >
                                   Ligne budgetaire
                                 </Button>
                               </Link>
-                              <Link href={`/grants/grantsEnCours/${row.id}/detail`}>
+                              <Link
+                                href={`/grants/grantsEnCours/${row.id}/detail`}
+                              >
                                 <IconButton
                                   color="accent"
                                   aria-label="Details"

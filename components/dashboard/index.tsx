@@ -114,12 +114,23 @@ const Dashboard: NextPage = () => {
                     </Stack> */}
                   </TableCell>
                   <TableCell align="center">
-                    {budgetInitialList.reduce(
-                      (acc, curr) => acc + curr.montant!,
-                      0
-                    )}{" "}
-                    Ar
+                    {budgetInitialList
+                      .filter((bi: any) => bi.grant === row.id)
+                      .reduce((acc, curr) => {
+                        const totalLigneBudgetaire = (
+                          curr.ligneBudgetaire ?? []
+                        ).reduce((ligneAcc, ligneId) => {
+                          const budgetLine = budgetLineList.find(
+                            (bl: any) => bl.id === ligneId
+                          );
+                          return (
+                            ligneAcc + (budgetLine ? budgetLine.amount! : 0)
+                          );
+                        }, 0);
+                        return acc + totalLigneBudgetaire;
+                      }, 0)}
                   </TableCell>
+
                   <TableCell align="center">
                     {budgetEngagedList.reduce(
                       (acc, curr) => acc + curr.amount!,
@@ -128,10 +139,21 @@ const Dashboard: NextPage = () => {
                     Ar
                   </TableCell>
                   <TableCell align="center">
-                    {budgetInitialList.reduce(
-                      (acc, curr) => acc + curr.montant!,
-                      0
-                    )! -
+                    {budgetInitialList
+                      .filter((bi: any) => bi.grant === row.id!)
+                      .reduce((acc, curr) => {
+                        const totalLigneBudgetaire = (
+                          curr.ligneBudgetaire ?? []
+                        ).reduce((ligneAcc, ligneId) => {
+                          const budgetLine = budgetLineList.find(
+                            (bl: any) => bl.id === ligneId
+                          );
+                          return (
+                            ligneAcc + (budgetLine ? budgetLine.amount! : 0)
+                          );
+                        }, 0);
+                        return acc + totalLigneBudgetaire;
+                      }, 0) -
                       budgetEngagedList.reduce(
                         (acc, curr) => acc + curr.amount!,
                         0

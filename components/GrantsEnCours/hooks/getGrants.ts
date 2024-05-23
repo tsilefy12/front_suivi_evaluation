@@ -9,8 +9,9 @@ const useFetchGrants = () => {
   return async () => {
     let args: any = {
       include: {
-        budgetLines: true
-      }
+        budgetLines: true,
+        journalBanks: true,
+      },
     };
     if (router.query.search) {
       args.where = {

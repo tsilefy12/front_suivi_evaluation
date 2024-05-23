@@ -175,11 +175,11 @@ const ListBudgetInitial = () => {
         sx={{ mb: 2 }}
       >
         <Stack flexDirection={"row"}>
-          <Link href="/grants/budgetInitial/add">
+          {/* <Link href="/grants/budgetInitial/add">
             <Button variant="contained" startIcon={<Add />}>
               Créer
             </Button>
-          </Link>
+          </Link> */}
         </Stack>
         <Typography variant="h4" color="GrayText">
           Budget initial
@@ -191,7 +191,7 @@ const ListBudgetInitial = () => {
             <EnhancedTableToolbar numSelected={selected.length} />
             <TableContainer>
               <Table
-                sx={{ minWidth: 750 }}
+                sx={{ minWidth: 700 }}
                 aria-labelledby="tableTitle"
                 size={dense ? "small" : "medium"}
               >
@@ -230,11 +230,17 @@ const ListBudgetInitial = () => {
                               )?.code
                             }
                           </TableCell>
+                          <TableCell sx={{ width: "300px" }} align="center">
+                            {
+                              periodelist.find((p) => p.id == row?.periodeId)
+                                ?.periode
+                            }
+                          </TableCell>
                           <TableCell
                             sx={{
                               height: "10vh",
                               overflow: "auto",
-                              width: "300px",
+                              // width: "300px",
                             }}
                             align="center"
                           >
@@ -264,17 +270,26 @@ const ListBudgetInitial = () => {
                               })}
                             </FormControl>
                           </TableCell>
-                          <TableCell sx={{ width: "300px" }} align="center">
-                            {
-                              periodelist.find((p) => p.id == row?.periodeId)
-                                ?.periode
-                            }
+                          <TableCell align="center">
+                            {row.ligneBudgetaire?.map((lb) => {
+                              return (
+                                <Stack
+                                  direction="column"
+                                  spacing={2}
+                                  key={index}
+                                >
+                                  {
+                                    budgetLineList.find((b: any) => b.id == lb)
+                                      ?.amount
+                                  }
+                                </Stack>
+                              );
+                            })}
                           </TableCell>
-                          <TableCell align="center">{row.montant}</TableCell>
                           <TableCell align="center">
                             <BtnActionContainer
                               direction="row"
-                              justifyContent="right"
+                              justifyContent="left"
                             >
                               <IconButton
                                 color="primary"

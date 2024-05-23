@@ -2,15 +2,15 @@ import Data, { Order } from "./type-variable";
 
 export function createData(
   grant: string,
-  ligneBudgetaire: string,
   periode: string,
-  montant: string,
+  ligneBudgetaire: string,
+  montant: string
   // total: string,
 ): Data {
   return {
     grant,
-    ligneBudgetaire,
     periode,
+    ligneBudgetaire,
     montant,
     // total,
   };

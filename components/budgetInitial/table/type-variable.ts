@@ -1,15 +1,12 @@
-
 export default interface Data {
   grant: string;
-  ligneBudgetaire: string;
   periode: string;
+  ligneBudgetaire: string;
   montant: string;
   // total: string;
-  }
-  
+}
 
-export type Order = 'asc' | 'desc';
-
+export type Order = "asc" | "desc";
 
 export interface HeadCell {
   disablePadding: boolean;

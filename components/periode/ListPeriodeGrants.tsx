@@ -218,13 +218,17 @@ const ListBudgetsInitial = () => {
                               direction="row"
                               justifyContent="right"
                             >
-                              {/* <IconButton
+                              <Link
+                                href={`/grants/budgetInitial/${row.id}/add`}
+                              >
+                                <Button
+                                  variant="outlined"
                                   color="accent"
-                                  aria-label="Details"
-                                  component="span"
+                                  startIcon={<Add />}
                                 >
-                                  <VisibilityIcon />
-                                </IconButton> */}
+                                  Budget initial
+                                </Button>
+                              </Link>
                               <IconButton
                                 color="primary"
                                 aria-label="Modifier"

@@ -51,18 +51,18 @@ const menu = [
       },
       {
         id: 24,
-        name: "Période",
+        name: "Période et budget initial",
         link: "/grants/periode",
         icon: "",
       },
+      // {
+      //   id: 25,
+      //   name: "Budget initial",
+      //   link: "/grants/budgetInitial",
+      //   icon: "",
+      // },
       {
         id: 25,
-        name: "Budget initial",
-        link: "/grants/budgetInitial",
-        icon: "",
-      },
-      {
-        id: 26,
         name: "Plan financement",
         link: "/grants/planFinancement",
         icon: "",
