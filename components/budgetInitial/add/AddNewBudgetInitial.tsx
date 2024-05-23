@@ -60,11 +60,7 @@ const AddNewBudgetInitial = () => {
   //  console.log("value key :", grantValue)
   //get grant dans periode
   let periodeGrantList: { id: any; name: any; amount: number }[] = [];
-  let [selectedPeriode, setSelectedPeriode] = React.useState<any[]>(
-    isEditing
-      ? periodelist.filter((pg) => budgetInitial?.periodeId?.includes(pg.id!))
-      : periodeGrantList
-  );
+
   grantEncoursList.map((g: any) => {
     if (grantValue !== "vide") {
       periodelist.map((p) => {
@@ -106,39 +102,40 @@ const AddNewBudgetInitial = () => {
     return [];
   });
 
-  console.log(id);
+  // console.log(id);
   const handleSubmit = async (values: any) => {
     const totalMontantBudget = selectedBudgetLine.reduce(
       (total: number, currentItem: any) => total + currentItem.amount,
       0
     );
-    const totalMontantPeriode = selectedPeriode.reduce(
-      (total: number, currentItem: any) => total + currentItem.amount,
-      0
-    );
 
-    const somme = totalMontantBudget + totalMontantPeriode;
+    const somme =
+      totalMontantBudget +
+      periodeGrantList
+        .filter((p) => p.id === values.periodeId)
+        .reduce((acc, curr) => acc + curr.amount, 0);
+
     console.log("montant :", somme);
     try {
+      // Create a new object to avoid mutating `values` directly
+      const updatedValues = {
+        ...values,
+        ligneBudgetaire: selectedBudgetLine.map((bl) => bl.id),
+        grant: grantValue,
+        montant: somme,
+      };
+
       if (isEditing) {
-        values.periodeId = [...selectedPeriode.map((p) => p.id)];
-        values.ligneBudgetaire = [...selectedBudgetLine.map((bl) => bl.id)];
-        values.grant = grantValue;
-        values.montant = somme;
-        // console.log("periode id :", values.montant)
         await dispatch(
           updateBudgetInitial({
             id: budgetInitial.id!,
-            budgetInitial: values,
+            budgetInitial: updatedValues,
           })
         );
       } else {
-        values.periodeId = [...selectedPeriode.map((p) => p.id)];
-        values.ligneBudgetaire = [...selectedBudgetLine.map((bl) => bl.id)];
-        values.grant = grantValue;
-        values.montant = somme;
-        await dispatch(createBudgetInitial(values));
+        await dispatch(createBudgetInitial(updatedValues));
       }
+
       fetchBudgetInitial();
       router.push("/grants/budgetInitial");
     } catch (error) {
@@ -162,9 +159,9 @@ const AddNewBudgetInitial = () => {
                 // montant: isEditing ? budgetInitial?.montant : ,
               }
         }
-        // validationSchema={Yup.object({
-        //   // periodeId: Yup.string().required("Cham obligatoire"),
-        // })}
+        validationSchema={Yup.object({
+          periodeId: Yup.string().required("Cham obligatoire"),
+        })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
           action.resetForm();
@@ -263,10 +260,9 @@ const AddNewBudgetInitial = () => {
                     />
                   )}
                 />
-                <Autocomplete
+                {/* <Autocomplete
                   id="tags-standard"
                   options={periodeGrantList}
-                  getOptionLabel={(option) => option.name}
                   value={selectedPeriode}
                   onChange={(event, newValue) => {
                     setSelectedPeriode(newValue!);
@@ -282,7 +278,22 @@ const AddNewBudgetInitial = () => {
                       variant="outlined"
                     />
                   )}
-                />
+                /> */}
+                <OSTextField
+                  fullWidth
+                  select
+                  id="outlined-basic"
+                  label="Période"
+                  variant="outlined"
+                  name="periodeId"
+                >
+                  <MenuItem value="vide">Select periode</MenuItem>
+                  {periodeGrantList.map((p) => (
+                    <MenuItem key={p.id!} value={p.id!}>
+                      {p.name}
+                    </MenuItem>
+                  ))}
+                </OSTextField>
               </FormContainer>
             </Form>
           );
