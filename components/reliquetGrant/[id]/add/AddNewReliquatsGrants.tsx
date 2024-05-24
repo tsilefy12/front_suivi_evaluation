@@ -29,11 +29,13 @@ import { cancelEdit } from "../../../../redux/features/reliquatGrants/reliquatGr
 import OSTextField from "../../../shared/input/OSTextField";
 import OSSelectField from "../../../shared/select/OSSelectField";
 import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
+import useFetchCaisee from "../../hooks/useFetchCaisse";
 
 const AddNewReliquatsGrants = () => {
   const router = useRouter();
+  const { id }: any = router.query;
   const dispatch = useAppDispatch();
-  const { isEditing, reliquatGrant } = useAppSelector(
+  const { isEditing, reliquatGrant, caisselist } = useAppSelector(
     (state: any) => state.reliquatGrant
   );
   const fetchEliquatGrant = useFetchEliquatGrant();
@@ -41,12 +43,14 @@ const AddNewReliquatsGrants = () => {
   const { grantEncoursList } = useAppSelector(
     (state: any) => state.grantEncours
   );
+  const fetchCaisse = useFetchCaisee();
 
   React.useEffect(() => {
     fetchEliquatGrant();
     fetchGrant();
+    fetchCaisse();
   }, [router.query]);
-
+  // console.log(caisselist);
   const handleSubmit = async (values: any) => {
     try {
       if (isEditing) {
@@ -65,6 +69,34 @@ const AddNewReliquatsGrants = () => {
       console.log("error", error);
     }
   };
+
+  const [soldeBankByGrant, setSoldeBankByGrant] = React.useState(0);
+
+  React.useEffect(() => {
+    let totalSolde = 0;
+    grantEncoursList.forEach((grant: any) => {
+      if (Array.isArray(grant.journalBanks)) {
+        grant.journalBanks.forEach((jb: any) => {
+          if (jb.id == id) {
+            totalSolde = jb.debit - jb.credit;
+          }
+        });
+      }
+    });
+    setSoldeBankByGrant(totalSolde);
+  }, [grantEncoursList, id]);
+  // console.log(soldeBankByGrant);
+  const [soldeCaisses, setSoldeCaisse] = React.useState(0);
+  React.useEffect(() => {
+    let CalculSoldeCaisses = 0;
+    caisselist
+      .filter((c: any) => c.grantId == id)
+      .map((solde: any) => {
+        CalculSoldeCaisses = solde.debit - solde.credit;
+        setSoldeCaisse(CalculSoldeCaisses);
+      });
+  });
+  // console.log(soldeCaisses);
   return (
     <Container maxWidth="xl" sx={{ pb: 5 }}>
       <Formik
@@ -142,16 +174,25 @@ const AddNewReliquatsGrants = () => {
 
               <FormContainer spacing={2} sx={{ backgroundColor: "#fff" }}>
                 <FormControl fullWidth>
-                  <OSSelectField
+                  <OSTextField
                     fullWidth
+                    select
                     id="outlined-basic"
                     label="Grant"
                     variant="outlined"
                     name="grant"
-                    options={grantEncoursList}
-                    dataKey={["code"]}
-                    valueKey="id"
-                  />
+                    value={id !== "undefined" ? id : formikProps.values.grant}
+                    onChange={(event: any) =>
+                      formikProps.setFieldValue("grant", event.target.value)
+                    }
+                  >
+                    <MenuItem value="undefined">Select grant</MenuItem>
+                    {grantEncoursList.map((g: any) => (
+                      <MenuItem key={g.id} value={g.id}>
+                        {g.code}
+                      </MenuItem>
+                    ))}
+                  </OSTextField>
                 </FormControl>
                 <OSTextField
                   fullWidth
@@ -160,7 +201,11 @@ const AddNewReliquatsGrants = () => {
                   variant="outlined"
                   name="soldeCaisse"
                   type="number"
-                  value={formikProps.values.soldeCaisse}
+                  value={
+                    id != "undefined"
+                      ? soldeCaisses
+                      : formikProps.values.soldeCaisse
+                  }
                   onChange={(event: any) => {
                     const newValue = parseFloat(event.target.value);
                     formikProps.setFieldValue("soldeCaisse", newValue);
@@ -176,7 +221,11 @@ const AddNewReliquatsGrants = () => {
                   variant="outlined"
                   name="soldeBank"
                   type="number"
-                  value={formikProps.values.soldeBank}
+                  value={
+                    id != "undefined"
+                      ? soldeBankByGrant
+                      : formikProps.values.soldeBank
+                  }
                   onChange={(event: any) => {
                     const newValue = parseFloat(event.target.value);
                     formikProps.setFieldValue("soldeBank", newValue);
@@ -192,10 +241,14 @@ const AddNewReliquatsGrants = () => {
                   variant="outlined"
                   name="montantTotal"
                   type="number"
-                  value={parseFloat(
-                    formikProps.values.soldeCaisse! +
-                      formikProps.values.soldeBank!
-                  )}
+                  value={
+                    id != "undefined"
+                      ? soldeBankByGrant + soldeCaisses
+                      : parseFloat(
+                          formikProps.values.soldeCaisse! +
+                            formikProps.values.soldeBank!
+                        )
+                  }
                 />
               </FormContainer>
             </Form>

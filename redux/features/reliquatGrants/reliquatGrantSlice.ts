@@ -6,9 +6,11 @@ import { createReliquatGrant } from "./useCase/createReliquatGrant";
 import { editReliquatGrant } from "./useCase/editReliquatGrant";
 import { updateReliquatGrant } from "./useCase/updateReliquatGrant";
 import { deleteReliquatGrant } from "./useCase/deleteReliquatGrant";
+import { getCaisse } from "./useCase/getCaisse";
 
 const reliquatGrantInitialState: ReliquatGrantsInitialState = {
   reliquatGrantList: [],
+  caisselist: [],
   reliquatGrant: {},
   isEditing: false,
   loading: false,
@@ -50,7 +52,18 @@ export const reliquatGrantSlice = createSlice({
       state.loading = false;
       state.error = action.error;
     },
-
+    //get caisse
+    [getCaisse.pending.type]: (state) => {
+      state.loading = true;
+    },
+    [getCaisse.fulfilled.type]: (state, action) => {
+      state.loading = false;
+      state.caisselist = action.payload;
+    },
+    [getCaisse.rejected.type]: (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    },
     // create pile
     [createReliquatGrant.pending.type]: (state) => {
       state.loading = true;
@@ -64,7 +77,7 @@ export const reliquatGrantSlice = createSlice({
       state.error = action.error;
     },
 
-    // edit pile 
+    // edit pile
     [editReliquatGrant.pending.type]: (state) => {
       state.loading = true;
     },
@@ -78,7 +91,7 @@ export const reliquatGrantSlice = createSlice({
       state.error = action.error;
     },
 
-    // update pile 
+    // update pile
     [updateReliquatGrant.pending.type]: (state) => {
       state.loading = true;
     },
@@ -103,7 +116,7 @@ export const reliquatGrantSlice = createSlice({
       state.loading = false;
       state.error = action.error;
     },
-}
+  },
 });
 
 export const { cancelEdit } = reliquatGrantSlice.actions;

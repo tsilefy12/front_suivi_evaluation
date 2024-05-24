@@ -23,7 +23,7 @@ export interface GrantEncoursItem {
   financeValidator?: string;
   financeVerificator?: string;
   budgetLines?: BudgetLineItem[];
-  journalBanks?: { debit: number; credit: number }[];
+  journalBanks?: { grantId: number; debit: number; credit: number }[];
 }
 
 export interface GrantEncoursInitialState {

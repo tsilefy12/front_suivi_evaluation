@@ -64,6 +64,42 @@ const Dashboard: NextPage = () => {
   const handleClose = () => {
     setOpen(false);
   };
+  const [soldeBankByGrant, setSoldeBankByGrant] = React.useState<{
+    [key: string]: number;
+  }>({});
+
+  React.useEffect(() => {
+    const soldeByGrant: { [key: string]: { debit: number; credit: number } } =
+      {};
+
+    grantEncoursList.forEach((grant) => {
+      if (Array.isArray(grant.journalBanks)) {
+        grant.journalBanks.forEach((jb) => {
+          const grantId = grant.id;
+          if (!soldeByGrant[grantId!]) {
+            soldeByGrant[grantId!] = { debit: 0, credit: 0 };
+          }
+          if (jb.debit !== undefined) {
+            soldeByGrant[grantId!].debit += jb.debit;
+          }
+          if (jb.credit !== undefined) {
+            soldeByGrant[grantId!].credit += jb.credit;
+          }
+        });
+      }
+    });
+
+    const finalSoldeByGrant: { [grantId: string]: number } = {};
+    Object.keys(soldeByGrant).forEach((grantId) => {
+      finalSoldeByGrant[grantId] =
+        soldeByGrant[grantId].debit - soldeByGrant[grantId].credit;
+    });
+
+    setSoldeBankByGrant(finalSoldeByGrant);
+  }, [grantEncoursList]);
+
+  console.log("soldeBankByGrant :", soldeBankByGrant);
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
@@ -130,23 +166,21 @@ const Dashboard: NextPage = () => {
                         return acc + totalLigneBudgetaire;
                       }, 0)}
                   </TableCell>
+                  <TableCell align="center">
+                    {soldeBankByGrant[row.id!] !== undefined
+                      ? soldeBankByGrant[row.id!]
+                      : 0}
+                  </TableCell>
 
                   <TableCell align="center">
-                    {budgetEngagedList.reduce(
-                      (acc, curr) => acc + curr.amount!,
-                      0
-                    )}{" "}
-                    Ar
-                  </TableCell>
-                  <TableCell align="center">
                     {budgetInitialList
-                      .filter((bi: any) => bi.grant === row.id!)
+                      .filter((bi) => bi.grant === row.id)
                       .reduce((acc, curr) => {
                         const totalLigneBudgetaire = (
                           curr.ligneBudgetaire ?? []
                         ).reduce((ligneAcc, ligneId) => {
                           const budgetLine = budgetLineList.find(
-                            (bl: any) => bl.id === ligneId
+                            (bl: any) => bl.id == ligneId
                           );
                           return (
                             ligneAcc + (budgetLine ? budgetLine.amount! : 0)
@@ -154,11 +188,9 @@ const Dashboard: NextPage = () => {
                         }, 0);
                         return acc + totalLigneBudgetaire;
                       }, 0) -
-                      budgetEngagedList.reduce(
-                        (acc, curr) => acc + curr.amount!,
-                        0
-                      )!}{" "}
-                    Ar
+                      (soldeBankByGrant[row.id!] !== undefined
+                        ? soldeBankByGrant[row.id!]
+                        : 0)}
                   </TableCell>
                 </TableRow>
               ))}
