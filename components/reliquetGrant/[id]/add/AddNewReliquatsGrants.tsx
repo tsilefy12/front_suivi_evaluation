@@ -16,32 +16,38 @@ import React from "react";
 import * as Yup from "yup";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { Check, Close } from "@mui/icons-material";
-import { SectionNavigation } from "../ListReliquetsGrants";
+import { SectionNavigation } from "../../ListReliquetsGrants";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import useFetchEliquatGrant from "../hooks/useFetchEliquatGrant";
-import { createReliquatGrant, updateReliquatGrant } from "../../../redux/features/reliquatGrants";
-import { cancelEdit } from "../../../redux/features/reliquatGrants/reliquatGrantSlice";
-import OSTextField from "../../shared/input/OSTextField";
-import OSSelectField from "../../shared/select/OSSelectField";
-import useFetchGrants from "../../GrantsEnCours/hooks/getGrants";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
+import useFetchEliquatGrant from "../../hooks/useFetchEliquatGrant";
+import {
+  createReliquatGrant,
+  updateReliquatGrant,
+} from "../../../../redux/features/reliquatGrants";
+import { cancelEdit } from "../../../../redux/features/reliquatGrants/reliquatGrantSlice";
+import OSTextField from "../../../shared/input/OSTextField";
+import OSSelectField from "../../../shared/select/OSSelectField";
+import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
 
 const AddNewReliquatsGrants = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isEditing, reliquatGrant } = useAppSelector((state: any) => state.reliquatGrant)
+  const { isEditing, reliquatGrant } = useAppSelector(
+    (state: any) => state.reliquatGrant
+  );
   const fetchEliquatGrant = useFetchEliquatGrant();
   const fetchGrant = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours)
+  const { grantEncoursList } = useAppSelector(
+    (state: any) => state.grantEncours
+  );
 
   React.useEffect(() => {
     fetchEliquatGrant();
     fetchGrant();
-  }, [router.query])
+  }, [router.query]);
 
   const handleSubmit = async (values: any) => {
-
     try {
       if (isEditing) {
         await dispatch(
@@ -67,11 +73,11 @@ const AddNewReliquatsGrants = () => {
           isEditing
             ? reliquatGrant
             : {
-              grant: isEditing ? reliquatGrant?.grant : "",
-              soldeCaisse: isEditing ? reliquatGrant?.soldeCaisse : "",
-              soldeBank: isEditing ? reliquatGrant?.soldeBank : "",
-              // montantTotal: isEditing ? reliquatGrant?.montantTotal : "",
-            }
+                grant: isEditing ? reliquatGrant?.grant : "",
+                soldeCaisse: isEditing ? reliquatGrant?.soldeCaisse : "",
+                soldeBank: isEditing ? reliquatGrant?.soldeBank : "",
+                // montantTotal: isEditing ? reliquatGrant?.montantTotal : "",
+              }
         }
         validationSchema={Yup.object({
           grant: Yup.number().required("Champ obligatoire"),
@@ -89,14 +95,18 @@ const AddNewReliquatsGrants = () => {
             <Form>
               <NavigationContainer>
                 <SectionNavigation
-                  direction={{ xs: 'column', sm: 'row' }}
+                  direction={{ xs: "column", sm: "row" }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                   justifyContent="space-between"
                   sx={{ mb: 2 }}
                 >
                   <Stack flexDirection={"row"}>
                     <Link href="/grants/reliquatGrants">
-                      <Button color="info" variant="text" startIcon={<ArrowBack />}>
+                      <Button
+                        color="info"
+                        variant="text"
+                        startIcon={<ArrowBack />}
+                      >
                         Retour
                       </Button>
                     </Link>
@@ -154,7 +164,8 @@ const AddNewReliquatsGrants = () => {
                   onChange={(event: any) => {
                     const newValue = parseFloat(event.target.value);
                     formikProps.setFieldValue("soldeCaisse", newValue);
-                    const newMontant = parseFloat(formikProps.values.soldeBank!) + newValue;
+                    const newMontant =
+                      parseFloat(formikProps.values.soldeBank!) + newValue;
                     formikProps.setFieldValue("montantTotal", newMontant);
                   }}
                 />
@@ -169,7 +180,8 @@ const AddNewReliquatsGrants = () => {
                   onChange={(event: any) => {
                     const newValue = parseFloat(event.target.value);
                     formikProps.setFieldValue("soldeBank", newValue);
-                    const newMontant = parseFloat(formikProps.values.soldeCaisse! )+ newValue;
+                    const newMontant =
+                      parseFloat(formikProps.values.soldeCaisse!) + newValue;
                     formikProps.setFieldValue("montantTotal", newMontant);
                   }}
                 />
@@ -180,11 +192,14 @@ const AddNewReliquatsGrants = () => {
                   variant="outlined"
                   name="montantTotal"
                   type="number"
-                  value={parseFloat(formikProps.values.soldeCaisse! + formikProps.values.soldeBank!)}
+                  value={parseFloat(
+                    formikProps.values.soldeCaisse! +
+                      formikProps.values.soldeBank!
+                  )}
                 />
               </FormContainer>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>

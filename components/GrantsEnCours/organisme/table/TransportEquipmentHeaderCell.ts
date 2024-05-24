@@ -2,33 +2,33 @@ import { HeadCell } from "./HeadCell.interface";
 
 export const transportEquipmentHeadCells: readonly HeadCell[] = [
   {
-    id: 'grants',
+    id: "grants",
     numeric: false,
     disablePadding: true,
-    label: 'GRANTS',
+    label: "GRANTS",
   },
   {
-    id: 'bailleur',
+    id: "bailleur",
     numeric: true,
     disablePadding: false,
-    label: 'VALIDATEUR TECHNIQUE',
+    label: "VALIDATEUR TECHNIQUE",
   },
   {
-    id: 'anglais',
+    id: "anglais",
     numeric: true,
     disablePadding: false,
-    label: 'FINANCE VALIDATEUR',
+    label: "VALIDATEUR FINANCE",
   },
   {
-    id: 'francais',
+    id: "francais",
     numeric: true,
     disablePadding: false,
-    label: 'FINANCE VERIFICATEUR'
+    label: "VERIFICATEUR FINANCE",
   },
-  {
-    id: 'status',
-    numeric: true,
-    disablePadding: false,
-    label: 'STATUS',
-  },
+  // {
+  //   id: "status",
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: "STATUS",
+  // },
 ];

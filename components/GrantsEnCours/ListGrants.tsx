@@ -155,30 +155,44 @@ const ListGrantsEnCours = () => {
                           <TableCell padding="checkbox">{row.code}</TableCell>
                           <TableCell align="left">
                             {
-                              employees.find(
-                                (e: any) => e.id === row.techValidator
-                              )?.name
+                              employees.find((e) => e.id === row.techValidator)
+                                ?.name
+                            }{" "}
+                            {
+                              employees.find((e) => e.id === row.techValidator)
+                                ?.surname
                             }
                           </TableCell>
                           <TableCell align="left">
                             {
                               employees.find(
-                                (e: any) => e.id === row.financeValidator
+                                (e) => e.id === row.financeValidator
                               )?.name
+                            }{" "}
+                            {
+                              employees.find(
+                                (e) => e.id === row.financeValidator
+                              )?.surname
                             }
                           </TableCell>
                           <TableCell align="left">
                             {
                               employees.find(
-                                (e: any) => e.id === row.financeVerificator
+                                (e) => e.id === row.financeVerificator
                               )?.name
+                            }{" "}
+                            {
+                              employees.find(
+                                (e) => e.id === row.financeVerificator
+                              )?.surname
                             }
                           </TableCell>
-                          <TableCell align="left">{row.status}</TableCell>
+                          {/* <TableCell align="left">{row.status}</TableCell> */}
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
+                              gap={2}
                             >
                               <Link
                                 href={`/grants/ligneBudgetaire/${row.id}/add`}
@@ -188,7 +202,18 @@ const ListGrantsEnCours = () => {
                                   color="accent"
                                   startIcon={<Add />}
                                 >
-                                  Ligne budgetaire
+                                  L. Budg
+                                </Button>
+                              </Link>
+                              <Link
+                                href={`/grants/reliquatGrants/${row.id}/add`}
+                              >
+                                <Button
+                                  variant="outlined"
+                                  color="accent"
+                                  startIcon={<Add />}
+                                >
+                                  Reliquat
                                 </Button>
                               </Link>
                               <Link
