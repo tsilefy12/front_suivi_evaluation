@@ -32,6 +32,7 @@ import useFetchReliquatGrant from "../reliquetGrant/hooks/useFetchEliquatGrant";
 import useFetchBudgetInitial from "../budgetInitial/hooks/useFetchBudgetInitial";
 import useFetchBudgetLine from "../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
 import DetailsDashboard from "./[id]";
+import useFetchCaisee from "../reliquetGrant/hooks/useFetchCaisse";
 
 const Dashboard: NextPage = () => {
   const basePath = useBasePath();
@@ -49,12 +50,16 @@ const Dashboard: NextPage = () => {
   const [open, setOpen] = React.useState(false);
   const [getId, setGetId] = React.useState("");
 
+  const { caisselist } = useAppSelector((state: any) => state.reliquatGrant);
+  const fetchCaisse = useFetchCaisee();
+
   React.useEffect(() => {
     fetchBudgetEngagedList();
     fetchGrants();
     fetchtReliquatGrant();
     fetchBudgetInitial();
     fetchBudgetLine();
+    fetchCaisse();
   }, [router.query]);
 
   const handleClick = (id: any) => {
@@ -72,6 +77,7 @@ const Dashboard: NextPage = () => {
     const soldeByGrant: { [key: string]: { debit: number; credit: number } } =
       {};
 
+    // Accumulate debits and credits from journalBanks by grant
     grantEncoursList.forEach((grant) => {
       if (Array.isArray(grant.journalBanks)) {
         grant.journalBanks.forEach((jb) => {
@@ -90,15 +96,22 @@ const Dashboard: NextPage = () => {
     });
 
     const finalSoldeByGrant: { [grantId: string]: number } = {};
+
     Object.keys(soldeByGrant).forEach((grantId) => {
-      finalSoldeByGrant[grantId] =
+      const bankSolde =
         soldeByGrant[grantId].debit - soldeByGrant[grantId].credit;
+
+      const caisseSolde = caisselist
+        .filter((f: any) => f.grantId == grantId)
+        .reduce((sum: any, m: any) => sum + (m.debit - m.credit), 0);
+      // console.log(caisseSolde);
+      finalSoldeByGrant[grantId] = bankSolde + caisseSolde;
     });
 
     setSoldeBankByGrant(finalSoldeByGrant);
-  }, [grantEncoursList]);
+  }, [grantEncoursList, caisselist]);
 
-  console.log("soldeBankByGrant :", soldeBankByGrant);
+  // console.log("soldeBankByGrant :", soldeBankByGrant);
 
   return (
     <Container maxWidth="xl">
