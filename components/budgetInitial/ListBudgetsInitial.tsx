@@ -42,6 +42,7 @@ import { BudgetInitialItem } from "../../redux/features/budgetInitial/budgetInit
 import { useConfirm } from "material-ui-confirm";
 import { deleteBudgetInitial } from "../../redux/features/budgetInitial";
 import useFetchPeriode from "../periode/hooks/useFetchPeriode";
+import formatMontant from "../../hooks/format";
 
 const ListBudgetInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -278,10 +279,13 @@ const ListBudgetInitial = () => {
                                   spacing={2}
                                   key={index}
                                 >
-                                  {
-                                    budgetLineList.find((b: any) => b.id == lb)
-                                      ?.amount
-                                  }
+                                  {formatMontant(
+                                    Number(
+                                      budgetLineList.find(
+                                        (b: any) => b.id == lb
+                                      )?.amount
+                                    )
+                                  )}
                                 </Stack>
                               );
                             })}

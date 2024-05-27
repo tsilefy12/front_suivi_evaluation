@@ -26,6 +26,7 @@ import useFetchBudgetEngaged from "../../budgetEngage/hooks/useFetchBudgetEngage
 import useFetchReliquatGrant from "../../reliquetGrant/hooks/useFetchEliquatGrant";
 import useFetchBudgetInitial from "../../budgetInitial/hooks/useFetchBudgetInitial";
 import { Add, Close } from "@mui/icons-material";
+import formatMontant from "../../../hooks/format";
 
 const DetailsDashboard = ({ handleClose, getId }: any) => {
   const basePath = useBasePath();
@@ -116,38 +117,46 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
                       {row.code}
                     </TableCell>
                     <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
-                      {budgetInitialList
-                        .filter((bi) =>
-                          bi.ligneBudgetaire!.includes(Number(row.id))
-                        )
-                        .reduce((total, bi) => {
-                          const budgetLine = budgetLineList.find(
-                            (bl) => bl.id === row.id
-                          );
-                          return total + (budgetLine ? budgetLine.amount! : 0);
-                        }, 0)}
+                      {formatMontant(
+                        budgetInitialList
+                          .filter((bi) =>
+                            bi.ligneBudgetaire!.includes(Number(row.id))
+                          )
+                          .reduce((total, bi) => {
+                            const budgetLine = budgetLineList.find(
+                              (bl) => bl.id === row.id
+                            );
+                            return (
+                              total + (budgetLine ? budgetLine.amount! : 0)
+                            );
+                          }, 0)
+                      )}
                     </TableCell>
                     <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
-                      {budgetEngagedList.find(
-                        (be) => be.budgetLineId === row.id
-                      )?.amount ?? 0}{" "}
-                      Ar
-                    </TableCell>
-                    <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
-                      {budgetInitialList
-                        .filter((bi) =>
-                          bi.ligneBudgetaire!.includes(Number(row.id))
-                        )
-                        .reduce((total, bi) => {
-                          const budgetLine = budgetLineList.find(
-                            (bl) => bl.id === row.id
-                          );
-                          return total + (budgetLine ? budgetLine.amount! : 0);
-                        }, 0) -
-                        (budgetEngagedList.find(
+                      {formatMontant(
+                        budgetEngagedList.find(
                           (be) => be.budgetLineId === row.id
-                        )?.amount ?? 0)}{" "}
-                      Ar
+                        )?.amount ?? 0
+                      )}
+                    </TableCell>
+                    <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                      {formatMontant(
+                        budgetInitialList
+                          .filter((bi) =>
+                            bi.ligneBudgetaire!.includes(Number(row.id))
+                          )
+                          .reduce((total, bi) => {
+                            const budgetLine = budgetLineList.find(
+                              (bl) => bl.id === row.id
+                            );
+                            return (
+                              total + (budgetLine ? budgetLine.amount! : 0)
+                            );
+                          }, 0) -
+                          (budgetEngagedList.find(
+                            (be) => be.budgetLineId === row.id
+                          )?.amount ?? 0)
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

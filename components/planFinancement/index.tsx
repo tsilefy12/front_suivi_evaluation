@@ -22,6 +22,7 @@ import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 import useFetchPeriode from "../periode/hooks/useFetchPeriode";
 import Moment from "react-moment";
 import useFetchBudgetLine from "../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
+import formatMontant from "../../hooks/format";
 
 const ListPlanFinancement = () => {
   const router = useRouter();
@@ -142,27 +143,33 @@ const ListPlanFinancement = () => {
                         );
                         return (
                           <Stack key={index} direction={"column"} gap={10}>
-                            {budgetLine ? budgetLine.amount : ""}
+                            {budgetLine
+                              ? formatMontant(Number(budgetLine.amount))
+                              : ""}
                           </Stack>
                         );
                       })}
                   </TableCell>
                   <TableCell>
-                    {budgetInitialList
-                      .filter((bi) => bi.periodeId === budget.periodeId)
-                      .flatMap((bi) => bi.ligneBudgetaire ?? [])
-                      .map((ligneId) => {
-                        const budgetLine = budgetLineList.find(
-                          (bl: any) => bl.id === ligneId
-                        );
-                        return budgetLine ? budgetLine.amount : 0;
-                      })
-                      .reduce((acc: any, curr: any) => acc + curr, 0)}
+                    {formatMontant(
+                      Number(
+                        budgetInitialList
+                          .filter((bi) => bi.periodeId === budget.periodeId)
+                          .flatMap((bi) => bi.ligneBudgetaire ?? [])
+                          .map((ligneId) => {
+                            const budgetLine = budgetLineList.find(
+                              (bl: any) => bl.id === ligneId
+                            );
+                            return budgetLine ? budgetLine.amount : 0;
+                          })
+                          .reduce((acc: any, curr: any) => acc + curr, 0)
+                      )
+                    )}
                   </TableCell>
                   <TableCell rowSpan={budgets.length}>
                     {index === 0 && (
                       <TableCell rowSpan={budgets.length}>
-                        {grantTotals[grantCode]}
+                        {formatMontant(Number(grantTotals[grantCode]))}
                       </TableCell>
                     )}
                   </TableCell>

@@ -24,7 +24,10 @@ import { Formik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { useAppSelector, useAppDispatch } from "../../../hooks/reduxHooks";
-import { createGrantEncours, updateGrantEncours } from "../../../redux/features/grantEncours";
+import {
+  createGrantEncours,
+  updateGrantEncours,
+} from "../../../redux/features/grantEncours";
 import OSDatePicker from "../../shared/date/OSDatePicker";
 import { cancelEdit } from "../../../redux/features/grantEncours/grantEncoursSlice";
 import useFetchBank from "../hooks";
@@ -38,26 +41,30 @@ import useFetchCurrency from "../hooks/getCurrency";
 
 const AddNewGrantsEnCours = () => {
   const router = useRouter();
-  const { isEditing, grantEncour, grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
+  const { isEditing, grantEncour, grantEncoursList } = useAppSelector(
+    (state: any) => state.grantEncours
+  );
   const dispatch = useAppDispatch();
   const fetchBank = useFetchBank();
   const fetchEmploys = useFetchEmploys();
   const { bankList } = useAppSelector((state: any) => state.bank);
-  const { employees } = useAppSelector((state: any) => state.employe)
+  const { employees } = useAppSelector((state: any) => state.employe);
   const fetchPostAnalytique = useFetchPostAnalytique();
-  const { postAnalytiqueList } = useAppSelector((state: any) => state.postAnalytique);
+  const { postAnalytiqueList } = useAppSelector(
+    (state: any) => state.postAnalytique
+  );
   const fetcProject = useFetchProject();
   const fetchCurreny = useFetchCurrency();
   const { currencylist } = useAppSelector((state: any) => state.currency);
- const { projectList } = useAppSelector((state: any) =>state.project);
+  const { projectList } = useAppSelector((state: any) => state.project);
 
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
 
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
     isEditing
       ? employees.filter((employee: any) =>
-        grantEncour?.responsable?.includes(employee.id!)
-      )
+          grantEncour?.responsable?.includes(employee.id!)
+        )
       : []
   );
 
@@ -67,37 +74,36 @@ const AddNewGrantsEnCours = () => {
     fetchPostAnalytique();
     fetcProject();
     fetchCurreny();
-  }, [router.query])
+  }, [router.query]);
 
-  const listBank: { id: string, name: string }[] = []
+  const listBank: { id: string; name: string }[] = [];
   //get list bank
   if (bankList.length > 0) {
     bankList.forEach((element: any) => {
-      listBank.push({ id: element["id"], name: element['name'] })
+      listBank.push({ id: element["id"], name: element["name"] });
     });
   } else {
-    listBank.push({ id: "", name: "" })
+    listBank.push({ id: "", name: "" });
   }
   // console.log("grant :", grantEncoursList)
   const listStatus = [
     { id: "PENDING", name: "PENDING" },
     { id: "IN_PROGRESS", name: "IN_PROGRESS" },
-    { id: "COMPLETED", name: "COMPLETED" }
-  ]
+    { id: "COMPLETED", name: "COMPLETED" },
+  ];
 
   const handleSubmit = async (values: any) => {
-   
     values.responsable = [...selectedEmployes.map((item) => item.id)];
     values.projectId = 1;
     values.postAnalyticId = null;
- 
+
     const date1 = new Date(values.startDate);
     const DateNumber1 = date1.getTime();
-    const date2 = new Date(values.endDate)
+    const date2 = new Date(values.endDate);
     const DateNumber2 = date2.getTime();
 
     if (DateNumber1 >= DateNumber2) {
-      setOpen(true)
+      setOpen(true);
     } else {
       try {
         if (isEditing) {
@@ -108,7 +114,6 @@ const AddNewGrantsEnCours = () => {
             })
           );
         } else {
-
           await dispatch(createGrantEncours(values));
         }
         router.push("/grants/grantsEnCours");
@@ -125,35 +130,49 @@ const AddNewGrantsEnCours = () => {
           isEditing
             ? grantEncour
             : {
-              code: isEditing ? grantEncour?.code : "",
-              postAnalyticId: isEditing ? grantEncour?.postAnalyticId : 0,
-              projectId: isEditing ? grantEncour?.projectId : 0,
-              bankId: isEditing ? grantEncour?.bankId : "",
-              // titleFr: isEditing ? grantEncour?.titleFr : "",
-              // titleEn: isEditing ? grantEncour?.titleEn : "",
-              bailleur: isEditing ? grantEncour?.bailleur : "",
-              amount: isEditing ? grantEncour?.amount : 0,
-              amountMGA: isEditing ? grantEncour?.amountMGA : 0,
-              responsable: isEditing ? grantEncour?.responsable : "",
-              startDate: isEditing ? grantEncour?.startDate : new Date().toISOString(),
-              endDate: isEditing ? grantEncour?.endDate : new Date().toISOString(),
-              techDate: isEditing ? grantEncour?.techDate : new Date().toISOString(),
-              financeDate: isEditing ? grantEncour?.financeDate : new Date().toISOString(),
-              status: isEditing ? grantEncour?.status : "",
-              financeValidator: isEditing ? grantEncour?.financeValidator : "",
-              financeVerificator: isEditing ? grantEncour?.financeVerificator : "",
-              techValidator: isEditing ? grantEncour?.techValidator : "",
-              currencyId: isEditing ? grantEncour?.currencyId : "",
-              deadline: isEditing ? grantEncour?.deadline : new Date().toISOString(),
-              // duration: isEditing ? grantEncour?.duration : 0,
-            }
+                code: isEditing ? grantEncour?.code : "",
+                postAnalyticId: isEditing ? grantEncour?.postAnalyticId : 0,
+                projectId: isEditing ? grantEncour?.projectId : 0,
+                bankId: isEditing ? grantEncour?.bankId : "",
+                // titleFr: isEditing ? grantEncour?.titleFr : "",
+                // titleEn: isEditing ? grantEncour?.titleEn : "",
+                bailleur: isEditing ? grantEncour?.bailleur : "",
+                amount: isEditing ? grantEncour?.amount : 0,
+                amountMGA: isEditing ? grantEncour?.amountMGA : 0,
+                responsable: isEditing ? grantEncour?.responsable : "",
+                startDate: isEditing
+                  ? grantEncour?.startDate
+                  : new Date().toISOString(),
+                endDate: isEditing
+                  ? grantEncour?.endDate
+                  : new Date().toISOString(),
+                techDate: isEditing
+                  ? grantEncour?.techDate
+                  : new Date().toISOString(),
+                financeDate: isEditing
+                  ? grantEncour?.financeDate
+                  : new Date().toISOString(),
+                status: isEditing ? grantEncour?.status : "",
+                financeValidator: isEditing
+                  ? grantEncour?.financeValidator
+                  : "",
+                financeVerificator: isEditing
+                  ? grantEncour?.financeVerificator
+                  : "",
+                techValidator: isEditing ? grantEncour?.techValidator : "",
+                currencyId: isEditing ? grantEncour?.currencyId : "",
+                deadline: isEditing
+                  ? grantEncour?.deadline
+                  : new Date().toISOString(),
+                // duration: isEditing ? grantEncour?.duration : 0,
+              }
         }
         validationSchema={Yup.object({
           code: Yup.string().required("Champ obligatoire"),
           bailleur: Yup.string().required("Champ obligatoire"),
           amount: Yup.string().required("Champ obligatoire"),
           amountMGA: Yup.string().required("Champ obligatoire"),
-          bankId:  Yup.string().required("Champ obligatoire"),
+          bankId: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -165,7 +184,7 @@ const AddNewGrantsEnCours = () => {
             <Container maxWidth="xl" sx={{ pb: 5 }}>
               <NavigationContainer>
                 <SectionNavigation
-                  direction={{ xs: 'column', sm: 'row' }}
+                  direction={{ xs: "column", sm: "row" }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                   justifyContent="space-between"
                   sx={{ mb: 4 }}
@@ -205,12 +224,17 @@ const AddNewGrantsEnCours = () => {
                       Annuler
                     </Button>
                   </Stack>
-                  <Typography variant="h5">{isEditing ? "Modif GRANT" : "Créer GRANT"}</Typography>
+                  <Typography variant="h5">
+                    {isEditing ? "Modif GRANT" : "Créer GRANT"}
+                  </Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}
               </NavigationContainer>
 
-              <FormContainer sx={{ backgroundColor: "#fff", pb: 5 }} spacing={2}>
+              <FormContainer
+                sx={{ backgroundColor: "#fff", pb: 5 }}
+                spacing={2}
+              >
                 <Stack direction="row" spacing={2}>
                   <OSTextField
                     fullWidth
@@ -260,7 +284,7 @@ const AddNewGrantsEnCours = () => {
                     variant="outlined"
                     name="financeValidator"
                     options={employees}
-                    dataKey={["name"]}
+                    dataKey={["name", "surname"]}
                     valueKey="id"
                   />
                   <OSSelectField
@@ -270,7 +294,7 @@ const AddNewGrantsEnCours = () => {
                     variant="outlined"
                     name="financeVerificator"
                     options={employees}
-                    dataKey={["name"]}
+                    dataKey={["name", "surname"]}
                     valueKey="id"
                   />
                   <OSSelectField
@@ -280,27 +304,38 @@ const AddNewGrantsEnCours = () => {
                     variant="outlined"
                     name="techValidator"
                     options={employees}
-                    dataKey={["name"]}
+                    dataKey={["name", "surname"]}
                     valueKey="id"
                   />
                 </CustomStack>
-                <CustomStack direction="row" spacing={4}
-                >
+                <CustomStack direction="row" spacing={4}>
                   <OSDatePicker
                     fullWidth
                     id="outlined-basic"
                     label="Date de début"
                     variant="outlined"
-                    value={!isEditing ? formikProps.values.startDate : grantEncour?.startDate}
-                    onChange={(value: any) => formikProps.setFieldValue("startDate", value)}
+                    value={
+                      !isEditing
+                        ? formikProps.values.startDate
+                        : grantEncour?.startDate
+                    }
+                    onChange={(value: any) =>
+                      formikProps.setFieldValue("startDate", value)
+                    }
                   />
                   <OSDatePicker
                     fullWidth
                     id="outlined-basic"
                     label="Date de fin"
                     variant="outlined"
-                    value={!isEditing ? formikProps.values.endDate : grantEncour?.endDate}
-                    onChange={(value: any) => formikProps.setFieldValue("endDate", value)}
+                    value={
+                      !isEditing
+                        ? formikProps.values.endDate
+                        : grantEncour?.endDate
+                    }
+                    onChange={(value: any) =>
+                      formikProps.setFieldValue("endDate", value)
+                    }
                   />
                   <OSDatePicker
                     fullWidth
@@ -308,8 +343,14 @@ const AddNewGrantsEnCours = () => {
                     label="Date tech"
                     variant="outlined"
                     name="techDate"
-                    value={!isEditing ? formikProps.values.techDate : grantEncour?.techDate}
-                    onChange={(value: any) => formikProps.setFieldValue("techDate", value)}
+                    value={
+                      !isEditing
+                        ? formikProps.values.techDate
+                        : grantEncour?.techDate
+                    }
+                    onChange={(value: any) =>
+                      formikProps.setFieldValue("techDate", value)
+                    }
                   />
                   <OSDatePicker
                     fullWidth
@@ -317,8 +358,14 @@ const AddNewGrantsEnCours = () => {
                     label="Deadline"
                     variant="outlined"
                     name="deadline"
-                    value={!isEditing ? formikProps.values.deadline : grantEncour?.deadline}
-                    onChange={(value: any) => formikProps.setFieldValue("deadline", value)}
+                    value={
+                      !isEditing
+                        ? formikProps.values.deadline
+                        : grantEncour?.deadline
+                    }
+                    onChange={(value: any) =>
+                      formikProps.setFieldValue("deadline", value)
+                    }
                   />
                 </CustomStack>
                 <FormControl fullWidth>
@@ -369,7 +416,6 @@ const AddNewGrantsEnCours = () => {
                   direction={{ xs: "column", sm: "column", md: "row" }}
                   spacing={{ xs: 2, sm: 2, md: 1 }}
                 >
-
                   <OSTextField
                     fullWidth
                     id="outlined-basic"
@@ -389,14 +435,10 @@ const AddNewGrantsEnCours = () => {
                 </CustomStack>
               </FormContainer>
             </Container>
-          )
+          );
         }}
       </Formik>
-      <Dialog
-        open={open}
-        disablePortal={false}
-        sx={styleDialog}
-      >
+      <Dialog open={open} disablePortal={false} sx={styleDialog}>
         <DialogTitle color="red">Attention!!</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -438,5 +480,5 @@ const styleDialog = {
   //left: 150,
   top: 20,
   width: "auto",
-  alignItem: "center"
-}
+  alignItem: "center",
+};

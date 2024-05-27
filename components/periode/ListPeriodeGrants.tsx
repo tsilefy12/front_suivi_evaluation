@@ -37,6 +37,7 @@ import { useConfirm } from "material-ui-confirm";
 import { deletePeriode } from "../../redux/features/periode";
 import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 import { PeriodeItem } from "../../redux/features/periode/periode.interface";
+import formatMontant from "../../hooks/format";
 
 const ListBudgetsInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -212,7 +213,9 @@ const ListBudgetsInitial = () => {
                           <TableCell align="right">
                             <Moment format="DD/MM/yyyy">{row.fin}</Moment>
                           </TableCell>
-                          <TableCell align="right">{row.montant}</TableCell>
+                          <TableCell align="right">
+                            {formatMontant(Number(row.montant))}
+                          </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"

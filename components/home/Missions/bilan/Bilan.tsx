@@ -17,7 +17,9 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useRouter } from "next/router";
-import Techniques, { PourcentageTechnique } from "./organism/Techniques/techniques";
+import Techniques, {
+  PourcentageTechnique,
+} from "./organism/Techniques/techniques";
 import Finances, { Montant } from "./organism/Finances/Finance";
 import Link from "next/link";
 import useFetchMissionListe from "../hooks/useFetchMissionListe";
@@ -43,6 +45,7 @@ import useFetchLieuxRapport from "../../../gereRapportDeMission/organism/Techniq
 import useFetchContactMissionRapport from "../../../gereRapportDeMission/organism/Techniques/tableContactPendantMission/hooks/useFetchContactMissionRapport";
 import useFetchProgrammePrevisionList from "../../../previsionMissions/organism/Techniques/tableProgramme/hooks/useFetchProgrammePrevision";
 import useFetchProgrammeRapport from "../../../gereRapportDeMission/organism/Techniques/tableProgramme/hooks/useFetchProgrammeRapport";
+import formatMontant from "../../../../hooks/format";
 
 const BilanMission = () => {
   const [value, setValue] = React.useState(0);
@@ -105,7 +108,7 @@ const BilanMission = () => {
     fetchDeliverableListe();
     fetchMissionLocationListe();
     fetchLieuxRapport();
-    fetchMissionaryList()
+    fetchMissionaryList();
     fetchMissionaryRapportList();
     fetchAutreInfoRapport();
     fetchVehicleListe();
@@ -113,7 +116,7 @@ const BilanMission = () => {
     fetchContactMissionRapport();
     fetchProgrammePrevision();
     fetchProgrammeRapport();
-  }, [router.query])
+  }, [router.query]);
 
   const handleChangeSelect = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
@@ -126,7 +129,7 @@ const BilanMission = () => {
   const handleChangeIndex = (index: number) => {
     setValue(index);
   };
-//  console.log("% :", percentageTechnique)
+  //  console.log("% :", percentageTechnique)
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -145,33 +148,43 @@ const BilanMission = () => {
         <Divider />
       </NavigationContainer>
       <FormContainer spacing={2}>
-        {
-          missionListe.filter((e: any) => e.id == id).map((item: MissionItem, index: any) => (
+        {missionListe
+          .filter((e: any) => e.id == id)
+          .map((item: MissionItem, index: any) => (
             <Grid container key={index}>
               <Grid item xs={12} md={4}>
                 <KeyValue keyName="Ref mission" value={item.reference!} />
-                <KeyValue keyName="Description" value={item.descriptionMission!} />
+                <KeyValue
+                  keyName="Description"
+                  value={item.descriptionMission!}
+                />
               </Grid>
               <Grid item xs={12} md={4}>
                 Responsable :
                 <FormLabel>
-                  {[item.missionManager].map((mm: any) => mm.name + " " + mm.surname)}
+                  {[item.missionManager].map(
+                    (mm: any) => mm.name + " " + mm.surname
+                  )}
                 </FormLabel>
               </Grid>
               <Grid item xs={12} md={4}>
                 Gestionnaire de budget :
                 <FormLabel>
-                  {[item.budgetManager!].map((bm: any) => bm.name + " " + bm.surname)}
+                  {[item.budgetManager!].map(
+                    (bm: any) => bm.name + " " + bm.surname
+                  )}
                 </FormLabel>
               </Grid>
             </Grid>
-          ))
-        }
+          ))}
       </FormContainer>
       <BodySection>
         <Stack
-          direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ padding: "10px", width: "100%" }}>
-          <Stack width={{ xs: '100%', sm: '100%', md: '70%' }}>
+          direction={{ xs: "column", sm: "row" }}
+          spacing={2}
+          sx={{ padding: "10px", width: "100%" }}
+        >
+          <Stack width={{ xs: "100%", sm: "100%", md: "70%" }}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -192,7 +205,7 @@ const BilanMission = () => {
               <Finances />
             </TabPanel>
           </Stack>
-          <Stack width={{ xs: '100%', sm: '100%', md: '30%' }}>
+          <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>
             <CardBody>
               <Typography variant="h5">Bilan global</Typography>
               <Typography color="secondary" variant="body2">
@@ -213,7 +226,7 @@ const BilanMission = () => {
                     Bilan financier
                   </Typography>
                   <Typography variant="h4" color="#2196F3">
-                    {montant} Ar
+                    {formatMontant(Number(montant))}
                   </Typography>
                 </Grid>
               </Grid>
@@ -257,7 +270,7 @@ function a11yProps(index: number) {
   };
 }
 
-export const SectionNavigation = styled(Stack)(({ }) => ({}));
+export const SectionNavigation = styled(Stack)(({}) => ({}));
 const NavigationContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "column",
   marginBottom: theme.spacing(2),

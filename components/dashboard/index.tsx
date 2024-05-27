@@ -33,6 +33,7 @@ import useFetchBudgetInitial from "../budgetInitial/hooks/useFetchBudgetInitial"
 import useFetchBudgetLine from "../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
 import DetailsDashboard from "./[id]";
 import useFetchCaisee from "../reliquetGrant/hooks/useFetchCaisse";
+import formatMontant from "../../hooks/format";
 
 const Dashboard: NextPage = () => {
   const basePath = useBasePath();
@@ -163,47 +164,53 @@ const Dashboard: NextPage = () => {
                     </Stack> */}
                   </TableCell>
                   <TableCell align="center">
-                    {budgetInitialList
-                      .filter((bi: any) => bi.grant === row.id)
-                      .reduce((acc, curr) => {
-                        const totalLigneBudgetaire = (
-                          curr.ligneBudgetaire ?? []
-                        ).reduce((ligneAcc, ligneId) => {
-                          const budgetLine = budgetLineList.find(
-                            (bl: any) => bl.id === ligneId
-                          );
-                          return (
-                            ligneAcc + (budgetLine ? budgetLine.amount! : 0)
-                          );
-                        }, 0);
-                        return acc + totalLigneBudgetaire;
-                      }, 0)}
+                    {formatMontant(
+                      budgetInitialList
+                        .filter((bi: any) => bi.grant === row.id)
+                        .reduce((acc, curr) => {
+                          const totalLigneBudgetaire = (
+                            curr.ligneBudgetaire ?? []
+                          ).reduce((ligneAcc, ligneId) => {
+                            const budgetLine = budgetLineList.find(
+                              (bl: any) => bl.id === ligneId
+                            );
+                            return (
+                              ligneAcc + (budgetLine ? budgetLine.amount! : 0)
+                            );
+                          }, 0);
+                          return acc + totalLigneBudgetaire;
+                        }, 0)
+                    )}
                   </TableCell>
                   <TableCell align="center">
-                    {soldeBankByGrant[row.id!] !== undefined
-                      ? soldeBankByGrant[row.id!]
-                      : 0}
+                    {formatMontant(
+                      soldeBankByGrant[row.id!] !== undefined
+                        ? soldeBankByGrant[row.id!]
+                        : 0
+                    )}
                   </TableCell>
 
                   <TableCell align="center">
-                    {budgetInitialList
-                      .filter((bi) => bi.grant === row.id)
-                      .reduce((acc, curr) => {
-                        const totalLigneBudgetaire = (
-                          curr.ligneBudgetaire ?? []
-                        ).reduce((ligneAcc, ligneId) => {
-                          const budgetLine = budgetLineList.find(
-                            (bl: any) => bl.id == ligneId
-                          );
-                          return (
-                            ligneAcc + (budgetLine ? budgetLine.amount! : 0)
-                          );
-                        }, 0);
-                        return acc + totalLigneBudgetaire;
-                      }, 0) -
-                      (soldeBankByGrant[row.id!] !== undefined
-                        ? soldeBankByGrant[row.id!]
-                        : 0)}
+                    {formatMontant(
+                      budgetInitialList
+                        .filter((bi) => bi.grant === row.id)
+                        .reduce((acc, curr) => {
+                          const totalLigneBudgetaire = (
+                            curr.ligneBudgetaire ?? []
+                          ).reduce((ligneAcc, ligneId) => {
+                            const budgetLine = budgetLineList.find(
+                              (bl: any) => bl.id == ligneId
+                            );
+                            return (
+                              ligneAcc + (budgetLine ? budgetLine.amount! : 0)
+                            );
+                          }, 0);
+                          return acc + totalLigneBudgetaire;
+                        }, 0) -
+                        (soldeBankByGrant[row.id!] !== undefined
+                          ? soldeBankByGrant[row.id!]
+                          : 0)
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

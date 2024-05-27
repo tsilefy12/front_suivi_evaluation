@@ -30,13 +30,20 @@ import {
   labelRowsPerPage,
 } from "../../../../../config/table.config";
 import useFetchResumeDepensePrevue from "./hooks/useFetchResumeDepensePrevue";
-import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import { ResumeDepensePrevueItem } from "../../../../../redux/features/resumeDepensePrevue/reumeDepensePrevue.interface";
 import useFetchGrants from "../../../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "../../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
 import { useConfirm } from "material-ui-confirm";
-import { deleteResumeDepensePrevue, editResumeDepensePrevue } from "../../../../../redux/features/resumeDepensePrevue";
+import {
+  deleteResumeDepensePrevue,
+  editResumeDepensePrevue,
+} from "../../../../../redux/features/resumeDepensePrevue";
+import formatMontant from "../../../../../hooks/format";
 
 const ListResumeDepense = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -47,10 +54,14 @@ const ListResumeDepense = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const fetchResumeDepensePrevue = useFetchResumeDepensePrevue();
-  const { resumeDepensePrevueList } = useAppSelector((state: any) => state.resumeDepensePrevue);
+  const { resumeDepensePrevueList } = useAppSelector(
+    (state: any) => state.resumeDepensePrevue
+  );
   const router = useRouter();
   const fetchGrantList = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
+  const { grantEncoursList } = useAppSelector(
+    (state: any) => state.grantEncours
+  );
   const fetchligneBudgetaire = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const confirm = useConfirm();
@@ -60,7 +71,7 @@ const ListResumeDepense = () => {
     fetchResumeDepensePrevue();
     fetchGrantList();
     fetchligneBudgetaire();
-  }, [router.query])
+  }, [router.query]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -73,10 +84,10 @@ const ListResumeDepense = () => {
     let totalBudget: any = 0;
     resumeDepensePrevueList.forEach((item: any) => {
       totalBudget += parseInt(item.budgetDepense);
-    })
-    return totalBudget
-  }, [resumeDepensePrevueList])
-  
+    });
+    return totalBudget;
+  }, [resumeDepensePrevueList]);
+
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -153,7 +164,7 @@ const ListResumeDepense = () => {
         await dispatch(deleteResumeDepensePrevue({ id }));
         fetchResumeDepensePrevue();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const handleClickEdit = async (id: any) => {
@@ -205,11 +216,11 @@ const ListResumeDepense = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.grant}
-                        // selected={isItemSelected}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                          // onClick={(event) => handleClick(event, row.grant)}
+                            // onClick={(event) => handleClick(event, row.grant)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -217,10 +228,18 @@ const ListResumeDepense = () => {
                             scope="row"
                             padding="none"
                           >
-                            {grantEncoursList.find((e: any) => e.id === row.grant)?.code}
+                            {
+                              grantEncoursList.find(
+                                (e: any) => e.id === row.grant
+                              )?.code
+                            }
                           </TableCell>
                           <TableCell align="right">
-                          {budgetLineList.find((e: any) =>e.id === row.ligneBudgetaire)?.code}
+                            {
+                              budgetLineList.find(
+                                (e: any) => e.id === row.ligneBudgetaire
+                              )?.code
+                            }
                             {/* <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auot" : 70, overflow: "auto" }}>
                               {
                                  Array.isArray(row.ligneBudgetaire) && (row.ligneBudgetaire).map((lb: any) => {
@@ -233,8 +252,12 @@ const ListResumeDepense = () => {
                               }
                             </FormControl> */}
                           </TableCell>
-                          <TableCell align="right">{row.depensePrevue}</TableCell>
-                          <TableCell align="right">{row.budgetDepense}</TableCell>
+                          <TableCell align="right">
+                            {formatMontant(Number(row.depensePrevue))}
+                          </TableCell>
+                          <TableCell align="right">
+                            {formatMontant(Number(row.budgetDepense))}
+                          </TableCell>
                           <TableCell align="right">{row.remarque}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
@@ -276,7 +299,7 @@ const ListResumeDepense = () => {
             </TableContainer>
             <Footer>
               <Typography variant="body2" align="right">
-                Total Budget : {total} Ar
+                Total Budget : {formatMontant(Number(total))}
               </Typography>
             </Footer>
             <TablePagination

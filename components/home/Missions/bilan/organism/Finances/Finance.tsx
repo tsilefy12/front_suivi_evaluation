@@ -11,23 +11,27 @@ import useFetchPrevisionDepenseList from "../../../../../previsionMissions/organ
 import { useAppSelector } from "../../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import useFetchRapportDepense from "../../../../../gereRapportDeMission/organism/Finances/tableRapportDesDepenses/hooks/useFetchRapportDepense";
-
+import formatMontant from "../../../../../../hooks/format";
 
 const Finances = () => {
   const router = useRouter();
   const fetchPrevisionDepense = useFetchPrevisionDepenseList();
-  const {totalPrevision, totalRappport, montant } = Montant()
+  const { totalPrevision, totalRappport, montant } = Montant();
   const fetchRapportDepense = useFetchRapportDepense();
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchPrevisionDepense();
     fetchRapportDepense();
-  }, [router.query])
-
+  }, [router.query]);
 
   const rows = [
-    createData("Dépense prévue pendant la mission : "+totalPrevision),
-    createData("Dépense dans le rapport : "+totalRappport),
-    createData("Différence: "+montant),
+    createData(
+      "Dépense prévue pendant la mission : " +
+        formatMontant(Number(totalPrevision))
+    ),
+    createData(
+      "Dépense dans le rapport : " + formatMontant(Number(totalRappport))
+    ),
+    createData("Différence: " + formatMontant(Number(montant))),
   ];
 
   return (
@@ -37,24 +41,20 @@ const Finances = () => {
           <TableBody>
             <TableRow hover tabIndex={-1}>
               <TableCell colSpan={3}>
-              Comparaison des prévisions techniques par rapport aux rapport de mission
+                Comparaison des prévisions techniques par rapport aux rapport de
+                mission
               </TableCell>
             </TableRow>
             {rows.map((row) => {
               return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  tabIndex={-1}
-                  key={row.finance}
-                >
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.finance}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
                       <TableCell key={column.id} align={column.align}>
                         {column.format && typeof value === "number"
                           ? column.format(value)
-                          : value} Ariary
+                          : value}{" "}
                       </TableCell>
                     );
                   })}
@@ -70,35 +70,38 @@ const Finances = () => {
 
 export default Finances;
 
-export const Montant = () =>{
-  const { previsionDepenselist}: any = useAppSelector((state: any) => state.previsonDepense);
-  const { rapportDepenseList } = useAppSelector((state: any) => state.rapportDepense);
+export const Montant = () => {
+  const { previsionDepenselist }: any = useAppSelector(
+    (state: any) => state.previsonDepense
+  );
+  const { rapportDepenseList } = useAppSelector(
+    (state: any) => state.rapportDepense
+  );
   let totalPrevision: any = useMemo(() => {
     let totalBudget: any = 0;
-    previsionDepenselist.map((p: any) =>{
-      if (p.imprevue===null) {
+    previsionDepenselist.map((p: any) => {
+      if (p.imprevue === null) {
         totalBudget += p.montant;
       }
-    })
+    });
     return totalBudget;
-  }, [previsionDepenselist])
+  }, [previsionDepenselist]);
 
-  
   let totalRappport: any = useMemo(() => {
     let totalBudget: any = 0;
     rapportDepenseList.forEach((item: any) => {
       totalBudget += item.montant;
-    })
+    });
     return totalBudget;
-  }, [rapportDepenseList])
-  let montant: any = useMemo(() =>{
+  }, [rapportDepenseList]);
+  let montant: any = useMemo(() => {
     let calcul = totalPrevision - totalRappport;
     return calcul;
-  },[totalPrevision, totalRappport])
+  }, [totalPrevision, totalRappport]);
 
   return {
     totalPrevision,
     totalRappport,
-    montant
-  }
-}
+    montant,
+  };
+};

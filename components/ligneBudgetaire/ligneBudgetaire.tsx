@@ -1,4 +1,11 @@
-import { Button, Container, IconButton, Stack, styled, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  IconButton,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
 import Link from "next/link";
 import React from "react";
 import Box from "@mui/material/Box";
@@ -32,6 +39,7 @@ import { deleteBudgetLine } from "../../redux/features/budgetLine";
 import { getOrganisation } from "../../redux/features/organisation";
 import { getLineBudget } from "../../redux/features/lineBudget";
 import { getType } from "../../redux/features/type";
+import formatMontant from "../../hooks/format";
 
 const ListBudgetLine = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -44,58 +52,64 @@ const ListBudgetLine = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const router = useRouter();
   const { id }: any = router.query;
-  const { budgetLineList } = useAppSelector((state: any) =>state.budgetLine)
+  const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const fetchBudgetLine = useFetchBudgetLine();
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state: any) =>state.grantEncours);
-  const {organisationList } = useAppSelector((state: any) =>state.organisations);
-  const {  lineBudgetList } = useAppSelector((state: any) => state.lineBudget)
-  const {  typeList } = useAppSelector((state: any) => state.types)
+  const { grantEncoursList } = useAppSelector(
+    (state: any) => state.grantEncours
+  );
+  const { organisationList } = useAppSelector(
+    (state: any) => state.organisations
+  );
+  const { lineBudgetList } = useAppSelector((state: any) => state.lineBudget);
+  const { typeList } = useAppSelector((state: any) => state.types);
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchGrants();
     fetchBudgetLine();
-    dispatch(getOrganisation({}))
-    dispatch(getLineBudget({}))
-    dispatch(getType({}))
-  }, [router.query])
+    dispatch(getOrganisation({}));
+    dispatch(getLineBudget({}));
+    dispatch(getType({}));
+  }, [router.query]);
 
   const handleClickEdit = async (id: any) => {
     router.push(`/grants/ligneBudgetaire/${id}/edit`);
   };
-    const handleChangePage = (event: unknown, newPage: number) => {
-      setPage(newPage);
-    };
-  
-    const handleChangeRowsPerPage = (
-      event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
-      setPage(0);
-    };
-  
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows =
-      page > 0 ? Math.max(0, (1 + page) * rowsPerPage - budgetLineList.length) : 0;
-      const handleClickDelete = async (id: any) => {
-        confirm({
-          title: "Supprimer ligne budgetaire",
-          description: "Voulez-vous vraiment supprimer ?",
-          cancellationText: "Annuler",
-          confirmationText: "Supprimer",
-          cancellationButtonProps: {
-            color: "warning",
-          },
-          confirmationButtonProps: {
-            color: "error",
-          },
-        })
-          .then(async () => {
-            await dispatch(deleteBudgetLine({ id }));
-            fetchBudgetLine();
-          })
-          .catch(() => {});
-      };
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - budgetLineList.length)
+      : 0;
+  const handleClickDelete = async (id: any) => {
+    confirm({
+      title: "Supprimer ligne budgetaire",
+      description: "Voulez-vous vraiment supprimer ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(deleteBudgetLine({ id }));
+        fetchBudgetLine();
+      })
+      .catch(() => {});
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -109,7 +123,7 @@ const ListBudgetLine = () => {
 
         </Typography> */}
       </SectionNavigation>
-      <SectionTable sx={{backgroundColor: '#fff'}}>
+      <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2, ml: 4 }}>
             <EnhancedTableToolbar numSelected={selected.length} />
@@ -119,7 +133,7 @@ const ListBudgetLine = () => {
                 aria-labelledby="tableTitle"
                 size={dense ? "small" : "medium"}
               >
-                <TransportEquipmentTableHeader/>
+                <TransportEquipmentTableHeader />
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
@@ -135,25 +149,37 @@ const ListBudgetLine = () => {
                           tabIndex={-1}
                           key={row.id}
                         >
-                          <TableCell
-                            padding="checkbox"
-                          >
-                                 {row.code}
+                          <TableCell padding="checkbox">{row.code}</TableCell>
+                          <TableCell align="center">
+                            {
+                              grantEncoursList.find(
+                                (e: any) => e.id === row.grantId
+                              )?.code
+                            }
                           </TableCell>
                           <TableCell align="center">
-                            {grantEncoursList.find((e: any) =>e.id === row.grantId)?.code}
+                            {
+                              typeList.find(
+                                (e: any) => e.id === row.budgetTypeId
+                              )?.name
+                            }
                           </TableCell>
                           <TableCell align="center">
-                            {typeList.find((e: any) =>e.id === row.budgetTypeId)?.name}
+                            {
+                              lineBudgetList.find(
+                                (e: any) => e.id === row.configBudgetLineId
+                              )?.name
+                            }
                           </TableCell>
                           <TableCell align="center">
-                            {lineBudgetList.find((e: any) =>e.id === row.configBudgetLineId)?.name}
+                            {
+                              organisationList.find(
+                                (e: any) => e.id === row.configOrganisationId
+                              )?.name
+                            }
                           </TableCell>
                           <TableCell align="center">
-                            {organisationList.find((e: any) =>e.id === row.configOrganisationId)?.name}
-                          </TableCell>
-                          <TableCell align="center">
-                            {row.amount}
+                            {formatMontant(Number(row.amount))}
                           </TableCell>
                           {/* <TableCell align="center">
                             <BtnActionContainer

@@ -44,6 +44,7 @@ import {
   editResumeDepense,
 } from "../../../../../redux/features/resumeDepense";
 import Typography from "../../../../../themes/overrides/Typography";
+import formatMontant from "../../../../../hooks/format";
 
 const ListResumeDepense = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -230,10 +231,10 @@ const ListResumeDepense = () => {
                             }
                           </TableCell>
                           <TableCell align="right">
-                            {row.depensePrevue}
+                            {formatMontant(Number(row.depensePrevue))}
                           </TableCell>
                           <TableCell align="right">
-                            {row.budgetDepense}
+                            {formatMontant(Number(row.budgetDepense))}
                           </TableCell>
                           <TableCell align="right">{row.remarque}</TableCell>
                           <TableCell align="right">
@@ -275,7 +276,7 @@ const ListResumeDepense = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Footer>TOTAL BUDGET : {total} Ar</Footer>
+            <Footer>TOTAL BUDGET : {formatMontant(Number(total))}</Footer>
 
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}

@@ -29,14 +29,21 @@ import {
 } from "../../../../../config/table.config";
 import AddRapportdepense from "./add/addRapportdepense";
 import useFetchRapportDepense from "./hooks/useFetchRapportDepense";
-import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import { useConfirm } from "material-ui-confirm";
 import { RapportDepenseItem } from "../../../../../redux/features/rapportDepense/rapportDepense.interface";
 import Moment from "react-moment";
 import useFetchGrants from "../../../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "../../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
-import { deleteRapportDepense, editRapportDepense } from "../../../../../redux/features/rapportDepense";
+import {
+  deleteRapportDepense,
+  editRapportDepense,
+} from "../../../../../redux/features/rapportDepense";
+import formatMontant from "../../../../../hooks/format";
 
 const ListRapportDepenses = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -50,9 +57,13 @@ const ListRapportDepenses = () => {
   const dispatch: any = useAppDispatch();
   const confirm = useConfirm();
   const fetchRapportDepense = useFetchRapportDepense();
-  const { rapportDepenseList } = useAppSelector((state: any) => state.rapportDepense);
+  const { rapportDepenseList } = useAppSelector(
+    (state: any) => state.rapportDepense
+  );
   const fetchGrantList = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours);
+  const { grantEncoursList } = useAppSelector(
+    (state: any) => state.grantEncours
+  );
   const fetchligneBudgetaire = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
 
@@ -60,7 +71,7 @@ const ListRapportDepenses = () => {
     fetchRapportDepense();
     fetchGrantList();
     fetchligneBudgetaire();
-  }, [router.query])
+  }, [router.query]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -145,7 +156,7 @@ const ListRapportDepenses = () => {
         await dispatch(deleteRapportDepense({ id }));
         fetchRapportDepense();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const handleClickEdit = async (id: any) => {
@@ -157,9 +168,9 @@ const ListRapportDepenses = () => {
     let totalBudget: any = 0;
     rapportDepenseList.forEach((item: any) => {
       totalBudget += item.montant;
-    })
+    });
     return totalBudget;
-  }, [rapportDepenseList])
+  }, [rapportDepenseList]);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -204,11 +215,11 @@ const ListRapportDepenses = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                        // selected={isItemSelected}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                          // onClick={(event) => handleClick(event, row.dpj)}
+                            // onClick={(event) => handleClick(event, row.dpj)}
                           ></TableCell>
                           {/* <TableCell
                             component="th"
@@ -222,12 +233,22 @@ const ListRapportDepenses = () => {
                             <Moment format="DD/MM/yyyy">{row.date}</Moment>
                           </TableCell>
                           <TableCell align="right">{row.libelle}</TableCell>
-                          <TableCell align="right">{row.montant}</TableCell>
                           <TableCell align="right">
-                            {grantEncoursList.find((e: any) => e.id === row.grant)?.code}
+                            {formatMontant(Number(row.montant))}
                           </TableCell>
                           <TableCell align="right">
-                          {budgetLineList.find((e: any) =>e.id === row.ligneBudgetaire)?.code}
+                            {
+                              grantEncoursList.find(
+                                (e: any) => e.id === row.grant
+                              )?.code
+                            }
+                          </TableCell>
+                          <TableCell align="right">
+                            {
+                              budgetLineList.find(
+                                (e: any) => e.id === row.ligneBudgetaire
+                              )?.code
+                            }
                             {/* <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auot" : 70, overflow: "auto" }}>
                               {
                                 (row.ligneBudgetaire!).map((lb: any) => {
@@ -280,14 +301,15 @@ const ListRapportDepenses = () => {
             </TableContainer>
             <Footer>
               <Typography variant="body2" align="right">
-                TOTAL BUDGET : {total} Ar
+                TOTAL BUDGET : {formatMontant(Number(total))}
               </Typography>
               <Typography variant="body2" align="right">
                 Imprévu de mission(total budget-location et perdiem MV(10% )) :
-              {total / 10} Ar
+                {formatMontant(Number(total / 10))}
               </Typography>
               <Typography variant="body2" align="right">
-                TOTAL GENERAL BUDGET : {total + (total / 10)} Ar
+                TOTAL GENERAL BUDGET :{" "}
+                {formatMontant(Number(total + total / 10))}
               </Typography>
             </Footer>
             <TablePagination

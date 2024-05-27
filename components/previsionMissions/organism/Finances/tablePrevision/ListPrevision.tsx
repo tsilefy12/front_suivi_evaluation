@@ -49,6 +49,8 @@ import OSTextField from "../../../../shared/input/OSTextField";
 import OSDatePicker from "../../../../shared/date/OSDatePicker";
 import { Form, Formik } from "formik";
 import { updateTacheEtObjectifs } from "../../../../../redux/features/tachesEtObjectifs";
+import formatMontant from "../../../../../hooks/format";
+import { margin } from "polished";
 
 const ListPrevision = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -244,8 +246,12 @@ const ListPrevision = () => {
                           </TableCell>
                           <TableCell align="right">{row.libelle}</TableCell>
                           <TableCell align="right">{row.nombre}</TableCell>
-                          <TableCell align="right">{row.pu}</TableCell>
-                          <TableCell align="right">{row.montant} Ar</TableCell>
+                          <TableCell align="right">
+                            {formatMontant(Number(row.pu))}
+                          </TableCell>
+                          <TableCell align="right">
+                            {formatMontant(Number(row.montant))}
+                          </TableCell>
                           <TableCell align="right">
                             {
                               grantEncoursList.find(
@@ -350,7 +356,9 @@ const ListPrevision = () => {
                                   <TableCell align="left">
                                     {row.nombre}
                                   </TableCell>
-                                  <TableCell align="left">{row.pu}</TableCell>
+                                  <TableCell align="left">
+                                    {formatMontant(Number(row.pu))}
+                                  </TableCell>
                                   <TableCell align="left">
                                     {
                                       grantEncoursList.find(
@@ -367,7 +375,7 @@ const ListPrevision = () => {
                                   </TableCell>
 
                                   <TableCell align="left">
-                                    {row.montant} Ar
+                                    {formatMontant(Number(row.montant))}
                                   </TableCell>
                                 </TableRow>
                               );
@@ -383,24 +391,23 @@ const ListPrevision = () => {
                           <Stack
                             direction="row"
                             sx={{ textAlign: "right" }}
-                            spacing={2}
+                            gap={1}
                             top={4}
                           >
                             {/* <FormLabel>Budget line selected amount : {getAmountBudget} Ar</FormLabel> */}
-                            <FormControl>
+                            <FormControl sx={{ maxWidth: 150 }}>
                               <OSTextField
                                 fullWidth
                                 id="outlined-basic"
                                 label="Montant"
                                 variant="outlined"
                                 size="small"
-                                value={total / 10}
+                                value={formatMontant(Number(total / 10))}
                                 name="montant"
                               />
                             </FormControl>
-                            <FormControl>
+                            <FormControl sx={{ maxWidth: 100 }}>
                               <OSTextField
-                                fullWidth
                                 id="outlined-basic"
                                 label="Nombre"
                                 variant="outlined"
@@ -410,7 +417,10 @@ const ListPrevision = () => {
                                 disabled
                               />
                             </FormControl>
-                            <FormControl sx={{ flex: "1", textAlign: "left" }}>
+                            <FormControl
+                              sx={{ flex: "1", textAlign: "left" }}
+                              fullWidth
+                            >
                               <OSTextField
                                 fullWidth
                                 select
@@ -489,17 +499,18 @@ const ListPrevision = () => {
                             </FormControl>
                           </Stack>
                           <Typography variant="body2" align="right">
-                            TOTAL BUDGET : {total} Ar
+                            TOTAL BUDGET : {formatMontant(Number(total))}
                           </Typography>
                           <FormLabel>
                             Imprévu de mission(total budget-location et perdiem
-                            MV(10% )) : {total / 10} Ar
+                            MV(10% )) : {formatMontant(Number(total / 10))}
                           </FormLabel>
                         </Stack>
                       </Typography>
 
                       <Typography variant="body2" align="right">
-                        TOTAL GENERAL BUDGET : {total + total / 10} Ar
+                        TOTAL GENERAL BUDGET :{" "}
+                        {formatMontant(Number(total + total / 10))}
                       </Typography>
                     </Footer>
                   </Form>

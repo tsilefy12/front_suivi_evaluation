@@ -39,6 +39,7 @@ import {
   deleteReliquatGrant,
   editReliquatGrant,
 } from "../../redux/features/reliquatGrants";
+import formatMontant from "../../hooks/format";
 
 const ListReliquetsGrants = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -212,10 +213,14 @@ const ListReliquetsGrants = () => {
                               )?.code
                             }
                           </TableCell>
-                          <TableCell align="right">{row.soldeCaisse}</TableCell>
-                          <TableCell align="right">{row.soldeBank}</TableCell>
                           <TableCell align="right">
-                            {row.montantTotal} Ar
+                            {formatMontant(Number(row.soldeCaisse))}
+                          </TableCell>
+                          <TableCell align="right">
+                            {formatMontant(Number(row.soldeBank))}
+                          </TableCell>
+                          <TableCell align="right">
+                            {formatMontant(Number(row.montantTotal))}
                           </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
