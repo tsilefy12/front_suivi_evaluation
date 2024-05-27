@@ -30,57 +30,51 @@ import OSTextField from "../../../shared/input/OSTextField";
 import useFetchEmployes from "../hooks/useFetchEmployees";
 import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
 import { MissionItem } from "../../../../redux/features/mission/mission.interface";
+import useFetchMissionListe from "../hooks/useFetchMissionListe";
 
 const AddNewMission = () => {
   const router = useRouter();
-  const { isEditing, mission } = useAppSelector((state) => state.mission);
+  const { isEditing, mission, missionListe } = useAppSelector(
+    (state) => state.mission
+  );
   const { employees } = useAppSelector((state) => state.employe);
   const dispatch = useAppDispatch();
   const fetchEmployeesListe = useFetchEmployes();
   const fetchGrants = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
-
+  const fetchMission = useFetchMissionListe();
   useEffect(() => {
     fetchEmployeesListe();
     fetchGrants();
+    fetchMission();
   }, []);
 
-  const generateSerialNumber = (items: MissionItem[]): string => {
-    let maxRef = 0;
-    items.forEach((item) => {
-      if (item.reference) {
-        console.log("ref", item.reference);
-        const ref = parseInt(item.reference);
-        if (!isNaN(ref) && ref > maxRef) {
-          maxRef = ref;
-        }
-      }
-    });
-    // console.log(maxRef);
-    const newRef = (maxRef + 1).toString().padStart(3, "0");
-    return newRef.toString();
-  };
+  const [ref, setReference] = React.useState(0);
+  React.useEffect(() => {
+    const refer = missionListe.map((m: any) => Number(m.reference));
+    setReference(Math.max(...refer) + 1);
+  }, [missionListe]);
 
   const handleSubmit = async (values: any) => {
     if (!values.reference) {
-      values.reference = generateSerialNumber([mission]);
+      values.reference = ref.toString().padStart(3, "0");
       console.log(values.reference);
     }
-    // try {
-    //   if (isEditing) {
-    //     await dispatch(
-    //       updateMission({
-    //         id: mission.id!,
-    //         mission: values,
-    //       })
-    //     );
-    //   } else {
-    //     await dispatch(createMission(values));
-    //   }
-    //   router.push("/missions");
-    // } catch (error) {
-    //   console.log("error", error);
-    // }
+    try {
+      if (isEditing) {
+        await dispatch(
+          updateMission({
+            id: mission.id!,
+            mission: values,
+          })
+        );
+      } else {
+        await dispatch(createMission(values));
+      }
+      router.push("/missions");
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   return (
     <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>

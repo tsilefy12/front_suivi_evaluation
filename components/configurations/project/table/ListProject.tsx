@@ -32,7 +32,7 @@ import ProjectTableHeader from "../organisme/table/ProjectTableHeader";
 
 const ListProject = () => {
   const fetchProject = useFetchProject();
-  const { projectList } = useAppSelector((state) =>state.project);
+  const { projectList } = useAppSelector((state) => state.project);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -41,9 +41,9 @@ const ListProject = () => {
   const router = useRouter();
   const { id }: any = router.query;
 
-  React.useEffect(() =>{
-      fetchProject();
-  }, [router.query])
+  React.useEffect(() => {
+    fetchProject();
+  }, [router.query]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -58,8 +58,6 @@ const ListProject = () => {
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - projectList.length) : 0;
-
-
 
   const handleClickDelete = async (id: any) => {
     confirm({
@@ -80,7 +78,7 @@ const ListProject = () => {
       })
       .catch(() => {});
   };
-  
+
   const handleClickEdit = async (id: any) => {
     router.push(`/configurations/project/${id}/edit`);
   };
@@ -97,29 +95,23 @@ const ListProject = () => {
             >
               <ProjectTableHeader />
               <TableBody>
-                { projectList
+                {projectList
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row: ProjectItem, index: any) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
-                      <TableRow
-                      >
+                      <TableRow>
                         <TableCell
                           component="th"
                           id={labelId}
                           scope="row"
                           padding="none"
-                          align="left"
                         >
                           {row.title}
                         </TableCell>
-                        <TableCell align="right">
-                          {row.descriptionEn}
-                        </TableCell>
-                        <TableCell align="right">
-                          {row.descriptionFr}
-                        </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">{row.descriptionEn}</TableCell>
+                        <TableCell align="left">{row.descriptionFr}</TableCell>
+                        <TableCell align="left">
                           <BtnActionContainer
                             direction="row"
                             justifyContent="flex-end"

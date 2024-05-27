@@ -41,10 +41,10 @@ import useFetchCurrency from "../hooks/getCurrency";
 
 const AddNewGrantsEnCours = () => {
   const router = useRouter();
-  const { isEditing, grantEncour, grantEncoursList } = useAppSelector(
+  const { isEditing, grantEncour, grantEncoursList }: any = useAppSelector(
     (state: any) => state.grantEncours
   );
-  const dispatch = useAppDispatch();
+  const dispatch: any = useAppDispatch();
   const fetchBank = useFetchBank();
   const fetchEmploys = useFetchEmploys();
   const { bankList } = useAppSelector((state: any) => state.bank);
@@ -96,6 +96,7 @@ const AddNewGrantsEnCours = () => {
     values.responsable = [...selectedEmployes.map((item) => item.id)];
     values.projectId = 1;
     values.postAnalyticId = null;
+    values.bankId = null;
 
     const date1 = new Date(values.startDate);
     const DateNumber1 = date1.getTime();
@@ -172,7 +173,7 @@ const AddNewGrantsEnCours = () => {
           bailleur: Yup.string().required("Champ obligatoire"),
           amount: Yup.string().required("Champ obligatoire"),
           amountMGA: Yup.string().required("Champ obligatoire"),
-          bankId: Yup.string().required("Champ obligatoire"),
+          // bankId: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);

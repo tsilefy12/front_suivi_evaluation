@@ -153,7 +153,10 @@ const BilanMission = () => {
           .map((item: MissionItem, index: any) => (
             <Grid container key={index}>
               <Grid item xs={12} md={4}>
-                <KeyValue keyName="Ref mission" value={item.reference!} />
+                <KeyValue
+                  keyName="Ref mission"
+                  value={"MISSION_" + item.reference!}
+                />
                 <KeyValue
                   keyName="Description"
                   value={item.descriptionMission!}
