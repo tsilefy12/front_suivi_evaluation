@@ -131,15 +131,12 @@ const DetailGrantsEnCours = () => {
                 <Grid item xs={12} md={12}>
                   Responsables :
                   {employees &&
-                    employees.map(
-                      (e: any) => (
-                        console.log(row.respo!),
-                        row.respo!.includes(e.id) ? (
-                          <Stack key={e.id} direction="column" spacing={2}>
-                            Nom et prénoms : {e.name} {e.surname}
-                          </Stack>
-                        ) : null
-                      )
+                    employees.map((e: any) =>
+                      row.respo!.includes(e.id) ? (
+                        <Stack key={e.id} direction="column" spacing={2}>
+                          Nom et prénoms : {e.name} {e.surname}
+                        </Stack>
+                      ) : null
                     )}
                 </Grid>
                 <Grid item xs={12} md={6}>

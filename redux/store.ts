@@ -54,7 +54,7 @@ import { calculCarburantRapportSlice } from "./features/calculCarburantRapport/c
 import { siteSlice } from "./features/site/siteSlice";
 import { besoinVehiculeRapportSlice } from "./features/besoinVehiculeRapport/besoinVehiculeRapportSlice";
 import { missionairesSlice } from "./features/missionaires/missionairesSlice";
-
+import { grantMonitoringSlice } from "./features/grantMonitoring/grantMonitoringSlice";
 
 export const store = configureStore({
   reducer: {
@@ -94,8 +94,8 @@ export const store = configureStore({
     reliquatGrant: reliquatGrantSlice.reducer,
     budgetsEngaged: budgetEngagedSlice.reducer,
     types: typeSlice.reducer,
-    organisations : organisationSlice.reducer,
-    lineBudget : lineBudgetSlice.reducer,
+    organisations: organisationSlice.reducer,
+    lineBudget: lineBudgetSlice.reducer,
     currency: currencySlice.reducer,
     status: statusSlice.reducer,
     objectifRapport: objectifRapportSlice.reducer,
@@ -113,6 +113,7 @@ export const store = configureStore({
     site: siteSlice.reducer,
     besoinVehiculeRapport: besoinVehiculeRapportSlice.reducer,
     missionaires: missionairesSlice.reducer,
+    grantMonitoring: grantMonitoringSlice.reducer,
   },
 });
 
