@@ -1,5 +1,5 @@
 import { Order } from "../../../../config/table.config";
-import { TransportationEquipmentItem } from "../../../../redux/features/transportation_equipment/transportationEquipment.interface";
+import { GrantEncoursItem } from "../../../../redux/features/grantEncours/grantEncours.interface";
 
 export interface HeadCell {
   disablePadding: boolean;
@@ -12,7 +12,7 @@ export interface TimesheetEnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof TransportationEquipmentItem
+    property: keyof GrantEncoursItem
   ) => void;
   order: Order;
   orderBy: string;
