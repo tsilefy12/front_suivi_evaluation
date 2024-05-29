@@ -10,6 +10,9 @@ export interface MissionItem {
   descriptionMission?: string;
   reference?: string;
   grantId?: number;
+  dateDebut?: Date;
+  dateFin?: Date;
+  status?: string;
   activites?: ActiviteRapportItem[];
   livrables?: LivrableRapportItem[];
   validationPrevision: {

@@ -60,13 +60,13 @@ const AddNewGrantsEnCours = () => {
 
   const [open, setOpen] = React.useState(false);
 
-  const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
-    isEditing
-      ? employees.filter((employee: any) =>
-          grantEncour?.responsable?.includes(employee.id!)
-        )
-      : []
-  );
+  // const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
+  //   isEditing
+  //     ? employees.filter((employee: any) =>
+  //         grantEncour?.responsable?.includes(employee.id!)
+  //       )
+  //     : []
+  // );
 
   React.useEffect(() => {
     fetchBank();
@@ -93,7 +93,6 @@ const AddNewGrantsEnCours = () => {
   ];
 
   const handleSubmit = async (values: any) => {
-    values.responsable = [...selectedEmployes.map((item) => item.id)];
     values.projectId = 1;
     values.postAnalyticId = null;
     values.bankId = null;
@@ -165,7 +164,7 @@ const AddNewGrantsEnCours = () => {
                 deadline: isEditing
                   ? grantEncour?.deadline
                   : new Date().toISOString(),
-                // duration: isEditing ? grantEncour?.duration : 0,
+                note: isEditing ? grantEncour?.note : "",
               }
         }
         validationSchema={Yup.object({
@@ -173,7 +172,7 @@ const AddNewGrantsEnCours = () => {
           bailleur: Yup.string().required("Champ obligatoire"),
           amount: Yup.string().required("Champ obligatoire"),
           amountMGA: Yup.string().required("Champ obligatoire"),
-          // bankId: Yup.string().required("Champ obligatoire"),
+          note: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -392,25 +391,15 @@ const AddNewGrantsEnCours = () => {
                   valueKey="id"
                 />
                 <FormControl>
-                  <Autocomplete
-                    multiple
-                    id="tags-standard"
+                  <OSSelectField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Responsable"
+                    variant="outlined"
+                    name="responsable"
                     options={employees}
-                    getOptionLabel={(employee: any) =>
-                      `${employee.name} ${employee.surname}` as string
-                    }
-                    value={selectedEmployes}
-                    onChange={(event, newValue) => {
-                      setSelectedEmployes(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        id="outlined-basic"
-                        label="Responsable"
-                        variant="outlined"
-                      />
-                    )}
+                    dataKey={["name", "surname"]}
+                    valueKey="id"
                   />
                 </FormControl>
                 <CustomStack
@@ -434,6 +423,15 @@ const AddNewGrantsEnCours = () => {
                     type="number"
                   />
                 </CustomStack>
+                <OSTextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Notes"
+                  variant="outlined"
+                  name="note"
+                  multiline
+                  rows={3}
+                />
               </FormContainer>
             </Container>
           );

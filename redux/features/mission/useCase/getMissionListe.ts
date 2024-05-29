@@ -37,6 +37,9 @@ export const getMissionListe = createAsyncThunk(
               grantId: cons.grantId,
               activites: cons.activites,
               livrables: cons.livrables,
+              status: cons.status,
+              dateDebut: cons.dateDebut,
+              dateFin: cons.dateFin,
             };
             newData.push(oneCons);
           })

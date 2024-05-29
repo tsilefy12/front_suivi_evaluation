@@ -30,6 +30,7 @@ import Recherche from "./recherch";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { rows } from "../budgetEngage/table/constante";
+import Moment from "react-moment";
 
 const ListMissions = () => {
   const router = useRouter();
@@ -115,7 +116,13 @@ const ListMissions = () => {
                   alignItems="center"
                 >
                   <Typography variant="h6" color="GrayText">
-                    Mission {mission?.descriptionMission}
+                    <Stack>
+                      <FormLabel>
+                        {" "}
+                        Mission: {mission?.descriptionMission}
+                      </FormLabel>
+                      <FormLabel>Status : {mission.status}</FormLabel>
+                    </Stack>
                   </Typography>
                   <div>
                     <IconButton
@@ -153,9 +160,14 @@ const ListMissions = () => {
                 </CardHeader>
 
                 <CardBody>
-                  <Typography color="GrayText" my={2} variant="caption">
+                  {/* <Typography
+                    color="GrayText"
+                    my={2}
+                    variant="caption"
+                    fontSize={10}
+                  >
                     {mission?.descriptionMission}
-                  </Typography>
+                  </Typography> */}
                   <Stack spacing={1}>
                     <FormLabel>
                       Référence : {"MISSION_" + mission?.reference}
@@ -170,6 +182,18 @@ const ListMissions = () => {
                       {mission?.budgetManager?.name}{" "}
                       {mission?.budgetManager?.surname}
                     </FormLabel>
+                    <Stack direction={"row"} gap={2} flexWrap={"wrap"}>
+                      <FormLabel>
+                        Début :{" "}
+                        <Moment format="DD/MM/yyyy">
+                          {mission.dateDebut!}
+                        </Moment>
+                      </FormLabel>
+                      <FormLabel>
+                        Fin :{" "}
+                        <Moment format="DD/MM/yyyy">{mission.dateFin!}</Moment>
+                      </FormLabel>
+                    </Stack>
                   </Stack>
                 </CardBody>
 

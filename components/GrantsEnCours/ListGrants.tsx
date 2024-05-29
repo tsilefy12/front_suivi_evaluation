@@ -187,12 +187,12 @@ const ListGrantsEnCours = () => {
                               )?.surname
                             }
                           </TableCell>
-                          {/* <TableCell align="left">{row.status}</TableCell> */}
+                          <TableCell align="left">{row.bailleur}</TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
-                              gap={2}
+                              gap={1}
                             >
                               <Link
                                 href={`/grants/ligneBudgetaire/${row.id}/add`}

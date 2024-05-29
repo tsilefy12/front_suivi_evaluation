@@ -93,7 +93,14 @@ const AddNewTacheEtObjectifs = () => {
               taskAndObjectiveId: res.payload.id,
             };
             if (idT) {
-              dispatch(updateObjectifAnnuel({ id, objectifAnnuels }));
+              dispatch(
+                updateObjectifAnnuel({
+                  id,
+                  objectifAnnuels: {
+                    notes: values.notes,
+                  },
+                })
+              );
             } else {
               dispatch(createObejectifAnnuel(objectifAnnuels));
             }

@@ -8,7 +8,7 @@ export const transportEquipmentHeadCells: readonly HeadCell[] = [
     label: "GRANTS",
   },
   {
-    id: "bailleur",
+    id: "validateurTech",
     numeric: true,
     disablePadding: false,
     label: "VALIDATEUR TECHNIQUE",
@@ -23,12 +23,12 @@ export const transportEquipmentHeadCells: readonly HeadCell[] = [
     id: "francais",
     numeric: true,
     disablePadding: false,
-    label: "VERIFICATEUR FINANCE",
+    label: "VERIF. FINANCE",
   },
-  // {
-  //   id: "status",
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: "STATUS",
-  // },
+  {
+    id: "bailleur",
+    numeric: true,
+    disablePadding: false,
+    label: "BAILLEUR",
+  },
 ];

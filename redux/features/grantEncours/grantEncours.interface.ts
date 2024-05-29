@@ -22,6 +22,7 @@ export interface GrantEncoursItem {
   techValidator?: string;
   financeValidator?: string;
   financeVerificator?: string;
+  note?: string;
   budgetLines?: BudgetLineItem[];
   journalBanks?: { grantId: number; debit: number; credit: number }[];
 }

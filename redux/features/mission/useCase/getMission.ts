@@ -24,6 +24,9 @@ export const getMission = createAsyncThunk(
         budgetManagerId: response.data?.budgetManagerId,
         missionManager: detailEmployeeMM,
         budgerManager: detailEmployeeBM,
+        dateDebut: response.data?.dateDebut,
+        dateFin: response.data?.dateFin,
+        status: response.data?.status,
       };
       return oneCons;
     } catch (error: any) {

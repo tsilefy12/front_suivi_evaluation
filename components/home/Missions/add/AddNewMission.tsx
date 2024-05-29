@@ -10,6 +10,11 @@ import {
   MenuItem,
   Stack,
   Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import Link from "next/link";
 import React, { useEffect } from "react";
@@ -31,6 +36,7 @@ import useFetchEmployes from "../hooks/useFetchEmployees";
 import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
 import { MissionItem } from "../../../../redux/features/mission/mission.interface";
 import useFetchMissionListe from "../hooks/useFetchMissionListe";
+import OSDatePicker from "../../../shared/date/OSDatePicker";
 
 const AddNewMission = () => {
   const router = useRouter();
@@ -43,6 +49,8 @@ const AddNewMission = () => {
   const fetchGrants = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchMission = useFetchMissionListe();
+  const [open, setOpen] = React.useState(false);
+  const [statut, setStatut] = React.useState("vide");
   useEffect(() => {
     fetchEmployeesListe();
     fetchGrants();
@@ -52,13 +60,31 @@ const AddNewMission = () => {
   const [ref, setReference] = React.useState(0);
   React.useEffect(() => {
     const refer = missionListe.map((m: any) => Number(m.reference));
-    setReference(Math.max(...refer) + 1);
+    if (refer.length == 0) {
+      refer.push(0);
+      return setReference(Math.max(...refer) + 1);
+    }
+    return setReference(Math.max(...refer) + 1);
   }, [missionListe]);
 
   const handleSubmit = async (values: any) => {
+    const now = new Date().getTime();
+    const startDaty = new Date(values.dateDebut).getTime();
+    const endDaty = new Date(values.dateFin).getTime();
+    if (startDaty >= endDaty) {
+      return setOpen(true);
+    }
     if (!values.reference) {
       values.reference = ref.toString().padStart(3, "0");
-      console.log(values.reference);
+    }
+    if (startDaty > now && statut == "vide") {
+      values.status = "En attente";
+    } else if (startDaty <= now && endDaty >= now && statut == "vide") {
+      values.status = "Encours";
+    } else if (endDaty <= now && statut == "vide") {
+      values.status = "Terminé";
+    } else {
+      values.status = statut;
     }
     try {
       if (isEditing) {
@@ -76,6 +102,41 @@ const AddNewMission = () => {
       console.log("error", error);
     }
   };
+  const statusList = [
+    { id: "En attente", name: "En attente" },
+    { id: "Encours", name: "Encours" },
+    { id: "Terminé", name: "Terminé" },
+    { id: "Annuler", name: "Annuler" },
+  ];
+
+  React.useEffect(() => {
+    const dateNow = new Date().getTime();
+    missionListe.map((m) => {
+      const start = new Date(m.dateDebut!).getTime();
+      const end = new Date(m.dateFin!).getTime();
+      if (m.status === "En attente" && start == dateNow) {
+        const values = "Encours";
+        return updateMission({
+          id: m.id!,
+          mission: {
+            status: values,
+            validationPrevision: m.validationPrevision,
+            validationRapport: m.validationRapport,
+          },
+        });
+      } else if (m.status === "Encours" && end < dateNow) {
+        const values = "Terminé";
+        return updateMission({
+          id: m.id!,
+          mission: {
+            status: values,
+            validationPrevision: m.validationPrevision,
+            validationRapport: m.validationRapport,
+          },
+        });
+      }
+    });
+  }, [missionListe]);
   return (
     <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>
       <Formik
@@ -91,6 +152,9 @@ const AddNewMission = () => {
                   ? mission?.descriptionMission
                   : "",
                 grantId: isEditing ? mission?.grantId : "",
+                dateDebut: isEditing ? mission?.dateDebut : new Date(),
+                dateFin: isEditing ? mission?.dateFin : new Date(),
+                status: isEditing ? mission?.status : "",
               }
         }
         validationSchema={Yup.object({
@@ -99,6 +163,9 @@ const AddNewMission = () => {
           budgetManagerId: Yup.string().required("Champ obligatoire"),
           descriptionMission: Yup.string().required("Champ obligatoire"),
           grantId: Yup.string().required("Champ obligatoire"),
+          dateDebut: Yup.string().required("Champ obligatoire"),
+          dateFin: Yup.string().required("Champ obligatoire"),
+          // status: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -161,20 +228,7 @@ const AddNewMission = () => {
               </NavigationContainer>
 
               <FormContainer sx={{ backgroundColor: "#fff" }} gap={2}>
-                {/* <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Référence mission"
-                  variant="outlined"
-                /> */}
                 <Stack direction={"row"} gap={2}>
-                  {/* <OSTextField
-                    fullWidth
-                    id="outlined-basic"
-                    label="Référence"
-                    name="reference"
-                    inputProps={{ autoComplete: "off" }}
-                  /> */}
                   <OSSelectField
                     id="outlined-basic"
                     label="Responsable"
@@ -209,12 +263,64 @@ const AddNewMission = () => {
                     type="textarea"
                     inputProps={{ autoComplete: "off" }}
                   />
+                  <OSDatePicker
+                    fullWidth
+                    id="outlined-basic"
+                    label="Date début"
+                    name="dateDebut"
+                    value={formikProps.values.dateDebut}
+                    onChange={(value: any) =>
+                      formikProps.setFieldValue("dateDebut", value)
+                    }
+                  />
+                  <OSDatePicker
+                    fullWidth
+                    id="outlined-basic"
+                    label="Date fin"
+                    name="dateFin"
+                    value={formikProps.values.dateFin}
+                    onChange={(value: any) =>
+                      formikProps.setFieldValue("dateFin", value)
+                    }
+                  />
+
+                  <OSTextField
+                    fullWidth
+                    select
+                    id="outlined-basic"
+                    label="Status"
+                    name="status"
+                    value={
+                      statut != "vide" ? statut : formikProps.values.status
+                    }
+                    onChange={(e: any) => setStatut(e.target.value)}
+                  >
+                    <MenuItem value="vide">Select status</MenuItem>
+                    {statusList.map((s) => (
+                      <MenuItem key={s.id} value={s.id}>
+                        {s.name}
+                      </MenuItem>
+                    ))}
+                  </OSTextField>
                 </Stack>
               </FormContainer>
             </Form>
           );
         }}
       </Formik>
+      <Dialog open={open}>
+        <DialogTitle sx={{ color: "red" }}>Information</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            La date début doit être inférieure que la date fin
+          </DialogContentText>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)}>
+              <Check color="primary" />
+            </Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 };
