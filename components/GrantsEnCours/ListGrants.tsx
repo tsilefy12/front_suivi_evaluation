@@ -190,7 +190,10 @@ const ListGrantsEnCours = () => {
                             }
                           </TableCell>
                           <TableCell align="left">{row.bailleur}</TableCell>
-                          <TableCell align="right">
+                          <TableCell
+                            align="right"
+                            sx={{ minWidth: 400, maxWidth: 400 }}
+                          >
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"

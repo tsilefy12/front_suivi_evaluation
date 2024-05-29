@@ -180,7 +180,7 @@ const ListGrantsMonitoring = () => {
                                 .join(", ")}
                           </TableCell>
 
-                          <TableCell>-</TableCell>
+                          <TableCell>{row.note}</TableCell>
                           <TableCell align="center">
                             {Math.ceil(
                               (new Date().getTime() -

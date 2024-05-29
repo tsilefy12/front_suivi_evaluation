@@ -18,8 +18,6 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import BackOfficeLayout from "../../layouts/backOffice";
 import useBasePath from "../../hooks/useBasePath";
-import { SectionNavigation } from "../home";
-import { Add, Details } from "@mui/icons-material";
 import { BodySection } from "../gereRapportDeMission/GereRapportDeMission";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import useFetchBudgetEngaged from "../budgetEngage/hooks/useFetchBudgetEngaged";
@@ -34,6 +32,8 @@ import useFetchBudgetLine from "../previsionMissions/organism/Finances/tablePrev
 import DetailsDashboard from "./[id]";
 import useFetchCaisee from "../reliquetGrant/hooks/useFetchCaisse";
 import formatMontant from "../../hooks/format";
+import { SectionNavigation } from "../GrantsEnCours/ListGrants";
+import Add from "@mui/icons-material/Add";
 
 const Dashboard: NextPage = () => {
   const basePath = useBasePath();

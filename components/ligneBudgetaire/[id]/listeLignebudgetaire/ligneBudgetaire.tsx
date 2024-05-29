@@ -16,30 +16,30 @@ import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Data, { Order } from "./table/type-variable";
+import Data, { Order } from "../../table/type-variable";
 // import { rows } from "./table/constante";
-import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
-import EnhancedTableHead from "./table/EnhancedTableHead";
+import EnhancedTableToolbar from "../../table/EnhancedTableToolbar";
+import EnhancedTableHead from "../../table/EnhancedTableHead";
 // import { getComparator, stableSort } from "./table/function";
 import Add from "@mui/icons-material/Add";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
-} from "../../config/table.config";
+} from "../../../../config/table.config";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
-import TransportEquipmentTableHeader from "./organisme/table/TransportEquipmentTableHeader";
+import TransportEquipmentTableHeader from "../../organisme/table/TransportEquipmentTableHeader";
 import { Edit } from "@mui/icons-material";
 import { useConfirm } from "material-ui-confirm";
-import useFetchBudgetLine from "../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
-import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
-import { BudgetLineItem } from "../../redux/features/budgetLine/budgetLine.interface";
-import { deleteBudgetLine } from "../../redux/features/budgetLine";
-import { getOrganisation } from "../../redux/features/organisation";
-import { getLineBudget } from "../../redux/features/lineBudget";
-import { getType } from "../../redux/features/type";
-import formatMontant from "../../hooks/format";
+import useFetchBudgetLine from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
+import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
+import { BudgetLineItem } from "../../../../redux/features/budgetLine/budgetLine.interface";
+import { deleteBudgetLine } from "../../../../redux/features/budgetLine";
+import { getOrganisation } from "../../../../redux/features/organisation";
+import { getLineBudget } from "../../../../redux/features/lineBudget";
+import { getType } from "../../../../redux/features/type";
+import formatMontant from "../../../../hooks/format";
 
 const ListBudgetLine = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -138,6 +138,7 @@ const ListBudgetLine = () => {
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {budgetLineList
+                    .filter((f: any) => f.grantId == id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: BudgetLineItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
