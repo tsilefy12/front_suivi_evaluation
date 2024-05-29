@@ -96,9 +96,7 @@ const AddNewTacheEtObjectifs = () => {
               dispatch(
                 updateObjectifAnnuel({
                   id,
-                  objectifAnnuels: {
-                    notes: values.notes,
-                  },
+                  objectifAnnuels,
                 })
               );
             } else {

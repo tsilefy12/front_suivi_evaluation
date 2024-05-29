@@ -155,35 +155,37 @@ const ListGrantsEnCours = () => {
                           <TableCell padding="checkbox">{row.code}</TableCell>
                           <TableCell align="left">
                             {
-                              employees.find((e) => e.id === row.techValidator)
-                                ?.name
-                            }{" "}
-                            {
-                              employees.find((e) => e.id === row.techValidator)
-                                ?.surname
-                            }
-                          </TableCell>
-                          <TableCell align="left">
-                            {
                               employees.find(
-                                (e) => e.id === row.financeValidator
+                                (e: any) => e.id === row.techValidator
                               )?.name
                             }{" "}
                             {
                               employees.find(
-                                (e) => e.id === row.financeValidator
+                                (e: any) => e.id === row.techValidator
                               )?.surname
                             }
                           </TableCell>
                           <TableCell align="left">
                             {
                               employees.find(
-                                (e) => e.id === row.financeVerificator
+                                (e: any) => e.id === row.financeValidator
                               )?.name
                             }{" "}
                             {
                               employees.find(
-                                (e) => e.id === row.financeVerificator
+                                (e: any) => e.id === row.financeValidator
+                              )?.surname
+                            }
+                          </TableCell>
+                          <TableCell align="left">
+                            {
+                              employees.find(
+                                (e: any) => e.id === row.financeVerificator
+                              )?.name
+                            }{" "}
+                            {
+                              employees.find(
+                                (e: any) => e.id === row.financeVerificator
                               )?.surname
                             }
                           </TableCell>
