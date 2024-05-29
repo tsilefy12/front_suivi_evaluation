@@ -100,7 +100,7 @@ const ListGrantsMonitoring = () => {
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2 }}>
+          <Paper sx={{ width: "100%", mb: 2, ml: 2 }}>
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -133,62 +133,98 @@ const ListGrantsMonitoring = () => {
                           >
                             {row.code}
                           </TableCell>
-                          <TableCell align="left">
+
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                          >
                             {
                               projectList.find((p) => p.id === row.projectId)
                                 ?.title
                             }
                           </TableCell>
-                          <TableCell align="left">
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                          >
                             <Moment format="DD/MM/yyyy">{row.deadline}</Moment>
                           </TableCell>
-                          <TableCell align="left">
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                          >
                             <Moment format="DD/MM/yyyy">{row.startDate}</Moment>
                           </TableCell>
-                          <TableCell align="left">
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                          >
                             <Moment format="DD/MM/yyyy">{row.endDate}</Moment>
                           </TableCell>
-                          <TableCell align="left">
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                          >
                             <Moment format="DD/MM/yyyy">{row.techDate}</Moment>
                           </TableCell>
-                          <TableCell align="left">
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                          >
                             <Moment format="DD/MM/yyyy">
                               {row.financeDate}
                             </Moment>
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                          >
                             {Math.ceil(
                               (new Date(row.techDate!).getTime() -
                                 new Date(row.deadline!).getTime()) /
                                 (1000 * 60 * 60 * 24)
                             )}
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                          >
                             {Math.ceil(
                               (new Date(row.financeDate!).getTime() -
                                 new Date(row.deadline!).getTime()) /
                                 (1000 * 60 * 60 * 24)
                             )}
                           </TableCell>
-                          <TableCell>
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                          >
                             {employees &&
                               employees
                                 .filter((e: any) =>
                                   row.responsable!.includes(e.id)
                                 )
-                                .map((e: any) => e.name)
+                                .map((e: any) => e.name + " " + e.surname)
                                 .join(", ")}
                           </TableCell>
 
-                          <TableCell>{row.note}</TableCell>
-                          <TableCell align="center">
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 400, maxWidth: 400 }}
+                          >
+                            {row.note}
+                          </TableCell>
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                          >
                             {Math.ceil(
                               (new Date().getTime() -
                                 new Date(row.deadline!).getTime()) /
                                 (1000 * 60 * 60 * 24)
                             )}
                           </TableCell>
-                          <TableCell>
+                          <TableCell align="center">
                             {new Date(row.deadline!).getFullYear()}
                           </TableCell>
                         </TableRow>
