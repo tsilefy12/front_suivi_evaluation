@@ -21,29 +21,17 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import React, { useEffect } from "react";
-import Add from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Moment from "react-moment";
 import { useRouter } from "next/router";
-import { useConfirm } from "material-ui-confirm";
-import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
+import { useAppSelector } from "../../../../hooks/reduxHooks";
 import useFetchMissionListe from "../hooks/useFetchMissionListe";
-import {
-  deleteMission,
-  editMission,
-  updateMission,
-} from "../../../../redux/features/mission";
+import { updateMission } from "../../../../redux/features/mission";
 import { MissionItem } from "../../../../redux/features/mission/mission.interface";
-import Recherche from "../../recherch";
 import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
 import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
 import formatMontant from "../../../../hooks/format";
 import useFetchPrevisionDepenseList from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchPrevisionDepense";
 import { Visibility } from "@mui/icons-material";
-import { mt } from "date-fns/locale";
-
 const DashboardMission = () => {
   const router = useRouter();
   // const id: any = router.query;
@@ -154,10 +142,6 @@ const DashboardMission = () => {
                 <TableCell sx={{ minWidth: 130, maxWidth: 130 }} align="left">
                   Status
                 </TableCell>
-                {/* <TableCell
-                  sx={{ minWidth: 20, maxWidth: 50 }}
-                  align="left"
-                ></TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
