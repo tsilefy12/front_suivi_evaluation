@@ -107,7 +107,12 @@ const DashboardMission = () => {
           >
             Dashboard mission
           </Typography>
-          <Stack direction={"row"} gap={2} flexWrap={"wrap"}>
+          <Stack
+            direction={"row"}
+            gap={2}
+            flexWrap={"wrap"}
+            sx={{ paddingRight: 2 }}
+          >
             <Link href={"/missions/ListMission"}>
               <Button color="primary" variant="contained">
                 Liste des missions
