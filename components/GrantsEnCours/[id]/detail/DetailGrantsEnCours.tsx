@@ -111,106 +111,119 @@ const DetailGrantsEnCours = () => {
       </SectionNavigation>
       <DetailsContainer sx={{ backgroundColor: "#fff", pb: 5 }}>
         {listDetailGrantEncours.map((row: any, index: any) => (
-          <Container key={row.idD!} maxWidth="xl" sx={{ pb: 5 }}>
-            <Stack direction="row" justifyContent="space-around">
-              <Stack direction="column" spacing={2}>
-                <Grid item xs={12} md={12}>
-                  <KeyValue keyName="Code" value={row.cd!} />
-                </Grid>
-                <Grid item xs={12} md={12}>
-                  <KeyValue keyName="Bailleur" value={row.baille!} />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <KeyValue
-                    keyName="Currency"
-                    value={
-                      currencylist.find((e: any) => e.id === row.curr)?.name
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12} md={12}>
-                  Responsables :
-                  {employees &&
-                    employees.map((e: any) =>
-                      row.respo!.includes(e.id) ? (
-                        <Stack key={e.id} direction="column" spacing={2}>
-                          Nom et prénoms : {e.name} {e.surname}
-                        </Stack>
-                      ) : null
-                    )}
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <KeyValue
-                    keyName="Finance validateur"
-                    value={`
+          <Stack
+            key={row.idD!}
+            maxWidth="xl"
+            sx={{ pb: 5 }}
+            direction={"row"}
+            justifyContent={"space-between"}
+            padding={1}
+          >
+            <Stack direction={"column"} gap={2}>
+              <Grid item xs={12} md={12}>
+                <KeyValue keyName="Code" value={row.cd!} />
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <KeyValue keyName="Bailleur" value={row.baille!} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <KeyValue
+                  keyName="Currency"
+                  value={currencylist.find((e: any) => e.id === row.curr)?.name}
+                />
+              </Grid>
+              <Grid item xs={12} md={12}>
+                Responsables :
+                {employees &&
+                  employees.map((e: any) =>
+                    row.respo!.includes(e.id) ? (
+                      <span style={{ color: "GrayText" }}>
+                        {" "}
+                        {e.name} {e.surname}
+                      </span>
+                    ) : null
+                  )}
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <KeyValue
+                  keyName="Finance validateur"
+                  value={`
                       ${
                         employees.find((e: any) => e.id === row.FValidator)
                           ?.name
                       }  ${
-                      employees.find((e: any) => e.id === row.FValidator)
-                        ?.surname
-                    }`}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <KeyValue
-                    keyName="Finance vérificateur"
-                    value={`
+                    employees.find((e: any) => e.id === row.FValidator)?.surname
+                  }`}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <KeyValue
+                  keyName="Finance vérificateur"
+                  value={`
                       ${
                         employees.find((e: any) => e.id === row.FVerifcator)
                           ?.name
                       } ${
-                      employees.find((e: any) => e.id === row.FVerifcator)
-                        ?.surname
-                    }`}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <KeyValue
-                    keyName="Validateur technique"
-                    value={`
+                    employees.find((e: any) => e.id === row.FVerifcator)
+                      ?.surname
+                  }`}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <KeyValue
+                  keyName="Validateur technique"
+                  value={`
                       ${
                         employees.find((e: any) => e.id === row.techValide)
                           ?.name
                       } ${
-                      employees.find((e: any) => e.id === row.techValide)
-                        ?.surname
-                    }`}
-                  />
-                </Grid>
-              </Stack>
-              <Stack direction="column" spacing={2}>
-                <Grid item xs={12} md={6}>
-                  Tech date : <span></span>
-                  <Moment format="DD/MM/yyyy">{row.techD}</Moment>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  Date finance : <span></span>
-                  <Moment format="DD/MM/yyyy">{row.FDate}</Moment>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  Date début : <span></span>
-                  <Moment format="DD/MM/yyyy">{row.debut!}</Moment>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  Date fin : <span></span>
-                  <Moment format="DD/MM/yyyy">{row.fin!}</Moment>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  Durée : <span></span>
-                  <Moment format="DD/MM/yyyy">{row.duree!}</Moment>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  Montant en devise : <span></span>
-                  <FormLabel>{formatMontant(Number(row.devise))}</FormLabel>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  Montant en MGA : <span></span>
-                  <FormLabel>{formatMontant(Number(row.mga))}</FormLabel>
-                </Grid>
-              </Stack>
+                    employees.find((e: any) => e.id === row.techValide)?.surname
+                  }`}
+                />
+              </Grid>
             </Stack>
-          </Container>
+            <Stack direction={"column"} gap={2}>
+              <Grid item xs={12} md={6}>
+                Tech date : <span></span>
+                <Moment format="DD/MM/yyyy" style={{ color: "GrayText" }}>
+                  {row.techD}
+                </Moment>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                Date finance : <span></span>
+                <Moment format="DD/MM/yyyy" style={{ color: "GrayText" }}>
+                  {row.FDate}
+                </Moment>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                Date début : <span></span>
+                <Moment format="DD/MM/yyyy" style={{ color: "GrayText" }}>
+                  {row.debut!}
+                </Moment>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                Date fin : <span></span>
+                <Moment format="DD/MM/yyyy" style={{ color: "GrayText" }}>
+                  {row.fin!}
+                </Moment>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                Durée : <span></span>
+                <Moment format="DD/MM/yyyy" style={{ color: "GrayText" }}>
+                  {row.duree!}
+                </Moment>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                Montant en devise : <span></span>
+                <FormLabel>{formatMontant(Number(row.devise))}</FormLabel>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                Montant en MGA : <span></span>
+                <FormLabel>{formatMontant(Number(row.mga))}</FormLabel>
+              </Grid>
+            </Stack>
+            <Stack></Stack>
+          </Stack>
         ))}
       </DetailsContainer>
     </Container>

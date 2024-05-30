@@ -93,10 +93,6 @@ const AddNewGrantsEnCours = () => {
   ];
 
   const handleSubmit = async (values: any) => {
-    values.projectId = 1;
-    values.postAnalyticId = null;
-    values.bankId = null;
-
     const date1 = new Date(values.startDate);
     const DateNumber1 = date1.getTime();
     const date2 = new Date(values.endDate);
@@ -133,7 +129,7 @@ const AddNewGrantsEnCours = () => {
                 code: isEditing ? grantEncour?.code : "",
                 postAnalyticId: isEditing ? grantEncour?.postAnalyticId : 0,
                 projectId: isEditing ? grantEncour?.projectId : 0,
-                bankId: isEditing ? grantEncour?.bankId : "",
+                bankId: isEditing ? grantEncour?.bankId : 0,
                 // titleFr: isEditing ? grantEncour?.titleFr : "",
                 // titleEn: isEditing ? grantEncour?.titleEn : "",
                 bailleur: isEditing ? grantEncour?.bailleur : "",
