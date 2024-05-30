@@ -25,7 +25,11 @@ import { useRouter } from "next/router";
 import { useConfirm } from "material-ui-confirm";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
 import useFetchMissionListe from "../hooks/useFetchMissionListe";
-import { deleteMission, editMission } from "../../../../redux/features/mission";
+import {
+  deleteMission,
+  editMission,
+  updateMission,
+} from "../../../../redux/features/mission";
 import { MissionItem } from "../../../../redux/features/mission/mission.interface";
 import Recherche from "../../recherch";
 
@@ -73,6 +77,31 @@ const ListMissions = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  React.useEffect(() => {
+    const dateNow = new Date().getDate();
+
+    missionListe.forEach((m) => {
+      const start = new Date(m.dateDebut!).getDate();
+      const end = new Date(m.dateFin!).getDate();
+
+      if (m.status === "En attente" && start === dateNow) {
+        updateMission({
+          id: m.id!,
+          mission: {
+            status: "Encours",
+          },
+        });
+        console.log(start, dateNow);
+      } else if (m.status === "Encours" && end < dateNow) {
+        updateMission({
+          id: m.id!,
+          mission: {
+            status: "Terminé",
+          },
+        });
+      }
+    });
+  }, []);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>

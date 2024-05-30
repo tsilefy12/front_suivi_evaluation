@@ -62,7 +62,7 @@ const DashboardMission = () => {
   }, [missionListe]);
   React.useEffect(() => {
     const dateNow = new Date().getTime();
-    console.log("ok");
+    // console.log("ok");
     missionListe.map((m) => {
       const start = new Date(m.dateDebut!).getTime();
       const end = new Date(m.dateFin!).getTime();
@@ -101,87 +101,81 @@ const DashboardMission = () => {
           <Typography variant="h4" id="tableTitle" component="div">
             Dashboard mission
           </Typography>
-          <Recherche />
+          <Stack direction={"row"} gap={2} flexWrap={"wrap"}>
+            <Link href={"/missions/ListMission"}>
+              <Button
+                color="accent"
+                aria-label="Details"
+                component="span"
+                sx={{ fontSize: "1.2em" }}
+              >
+                Liste des missions
+              </Button>
+            </Link>
+            <Recherche />
+          </Stack>
         </Stack>
         <div style={{ overflow: "auto" }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Mission
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Grant
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Gestionnaire de budget
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Date debut mission
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Date fin mission
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Montant Prevision
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Montant Imprevu
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Montant depense realisé
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Responsable
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Status
                 </TableCell>
                 <TableCell
                   sx={{ minWidth: 50, maxWidth: 50 }}
-                  align="center"
+                  align="left"
                 ></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {missionListe.map((row: MissionItem, index: any) => (
                 <TableRow key={row.id}>
-                  <TableCell
-                    align="center"
-                    sx={{ minWidth: 200, maxWidth: 200 }}
-                  >
+                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     Mission_{row.reference}
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{ minWidth: 200, maxWidth: 200 }}
-                  >
+                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {grantEncoursList.find((g) => g.id == row.grantId)?.code}
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{ minWidth: 200, maxWidth: 200 }}
-                  >
+                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {[row.budgetManager].map(
                       (m: any) => `${m.name!} ${" "}  ${m.surname}`
                     )}
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{ minWidth: 200, maxWidth: 200 }}
-                  >
+                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{ minWidth: 200, maxWidth: 200 }}
-                  >
+                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{ minWidth: 200, maxWidth: 200 }}
-                  >
+                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {formatMontant(
                       Number(
                         row.previsionDepense?.reduce(
@@ -191,10 +185,7 @@ const DashboardMission = () => {
                       )
                     )}
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{ minWidth: 200, maxWidth: 200 }}
-                  >
+                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {formatMontant(
                       Number(
                         row.previsionDepense?.reduce(
@@ -204,10 +195,7 @@ const DashboardMission = () => {
                       )
                     )}
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{ minWidth: 200, maxWidth: 200 }}
-                  >
+                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {formatMontant(
                       Number(
                         row.rapportDepense?.reduce(
@@ -217,22 +205,16 @@ const DashboardMission = () => {
                       )
                     )}
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{ minWidth: 200, maxWidth: 200 }}
-                  >
+                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {[row.missionManager].map(
                       (m: any) => `${m.name!} ${" "}  ${m.surname}`
                     )}
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{ minWidth: 200, maxWidth: 200 }}
-                  >
+                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {row.status}
                   </TableCell>
                   <TableCell>
-                    <Link href={`/missions/${row.id}/details`}>
+                    <Link href={`/missions/${row.id}/bilan`}>
                       <Button
                         color="accent"
                         aria-label="Details"

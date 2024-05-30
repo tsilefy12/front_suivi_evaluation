@@ -97,7 +97,7 @@ const AddNewMission = () => {
       } else {
         await dispatch(createMission(values));
       }
-      router.push("/missions");
+      router.push("/missions/ListMission");
     } catch (error) {
       console.log("error", error);
     }
@@ -177,19 +177,21 @@ const AddNewMission = () => {
                     >
                       Enregistrer
                     </Button>
-                    <Button
-                      variant="text"
-                      color="warning"
-                      size="small"
-                      startIcon={<Close />}
-                      sx={{ marginInline: 3 }}
-                      onClick={() => {
-                        formikProps.resetForm();
-                        dispatch(cancelEdit());
-                      }}
-                    >
-                      Annuler
-                    </Button>
+                    <Link href="/missions/ListMission">
+                      <Button
+                        variant="text"
+                        color="warning"
+                        size="small"
+                        startIcon={<Close />}
+                        sx={{ marginInline: 3 }}
+                        onClick={() => {
+                          formikProps.resetForm();
+                          dispatch(cancelEdit());
+                        }}
+                      >
+                        Annuler
+                      </Button>
+                    </Link>
                   </Stack>
                   <Typography variant="h5">
                     {" "}
