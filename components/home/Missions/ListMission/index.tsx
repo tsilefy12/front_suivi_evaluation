@@ -77,22 +77,43 @@ const ListMissions = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  React.useEffect(() => {
-    const dateNow = new Date().getDate();
-
+  const updateMissions = async () => {
+    const currentMonth = new Date().getMonth() + 1;
+    const currentDay = new Date().getDate();
+    const currentYear = new Date().getFullYear();
+    let promises: Promise<any>[] = [];
     missionListe.forEach((m) => {
-      const start = new Date(m.dateDebut!).getDate();
-      const end = new Date(m.dateFin!).getDate();
+      const startDay = new Date(m.dateDebut!).getDate();
+      const startMonth = new Date(m.dateDebut!).getMonth() + 1;
+      const startYear = new Date(m.dateDebut!).getFullYear();
 
-      if (m.status === "En attente" && start === dateNow) {
-        updateMission({
-          id: m.id!,
-          mission: {
-            status: "Encours",
-          },
-        });
-        console.log(start, dateNow);
-      } else if (m.status === "Encours" && end < dateNow) {
+      const endDay = new Date(m.dateFin!).getDate();
+      const endMonth = new Date(m.dateFin!).getMonth() + 1;
+      const endYear = new Date(m.dateFin!).getFullYear();
+
+      // const end = new Date(m.dateFin!).getDate();
+      if (
+        m.status === "En attente" &&
+        startDay === currentDay &&
+        currentMonth === startMonth &&
+        startYear === currentYear
+      ) {
+        promises.push(
+          dispatch(
+            updateMission({
+              id: m.id!,
+              mission: {
+                status: "Encours",
+              },
+            })
+          )
+        );
+      } else if (
+        m.status === "Encours" &&
+        endDay === currentDay &&
+        endMonth === currentMonth &&
+        endYear === currentYear
+      ) {
         updateMission({
           id: m.id!,
           mission: {
@@ -101,7 +122,12 @@ const ListMissions = () => {
         });
       }
     });
-  }, []);
+    await Promise.all(promises);
+    fetchMissionListe();
+  };
+  React.useEffect(() => {
+    updateMissions();
+  }, [missionListe]);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
