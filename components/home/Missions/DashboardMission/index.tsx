@@ -42,6 +42,7 @@ import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
 import formatMontant from "../../../../hooks/format";
 import useFetchPrevisionDepenseList from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchPrevisionDepense";
 import { Visibility } from "@mui/icons-material";
+import { mt } from "date-fns/locale";
 
 const DashboardMission = () => {
   const router = useRouter();
@@ -93,26 +94,25 @@ const DashboardMission = () => {
           direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 1, sm: 2, md: 4 }}
           sx={{
-            flex: "1 1 100%",
+            flex: "100%",
             justifyContent: "space-between",
             alignItems: "center",
           }}
         >
-          <Typography variant="h4" id="tableTitle" component="div">
+          <Typography
+            variant="h4"
+            id="tableTitle"
+            component="div"
+            sx={{ paddingLeft: 2 }}
+          >
             Dashboard mission
           </Typography>
           <Stack direction={"row"} gap={2} flexWrap={"wrap"}>
             <Link href={"/missions/ListMission"}>
-              <Button
-                color="accent"
-                aria-label="Details"
-                component="span"
-                sx={{ fontSize: "1.2em" }}
-              >
+              <Button color="primary" variant="contained">
                 Liste des missions
               </Button>
             </Link>
-            <Recherche />
           </Stack>
         </Stack>
         <div style={{ overflow: "auto" }}>
@@ -134,25 +134,25 @@ const DashboardMission = () => {
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Date fin mission
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Montant Prevision
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Montant Imprevu
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Montant depense realisé
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Responsable
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 130, maxWidth: 130 }} align="left">
                   Status
                 </TableCell>
-                <TableCell
-                  sx={{ minWidth: 50, maxWidth: 50 }}
+                {/* <TableCell
+                  sx={{ minWidth: 20, maxWidth: 50 }}
                   align="left"
-                ></TableCell>
+                ></TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -175,7 +175,10 @@ const DashboardMission = () => {
                   <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                   </TableCell>
-                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 120, maxWidth: 120 }}
+                  >
                     {formatMontant(
                       Number(
                         row.previsionDepense?.reduce(
@@ -185,7 +188,10 @@ const DashboardMission = () => {
                       )
                     )}
                   </TableCell>
-                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 120, maxWidth: 120 }}
+                  >
                     {formatMontant(
                       Number(
                         row.previsionDepense?.reduce(
@@ -195,7 +201,10 @@ const DashboardMission = () => {
                       )
                     )}
                   </TableCell>
-                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 120, maxWidth: 120 }}
+                  >
                     {formatMontant(
                       Number(
                         row.rapportDepense?.reduce(
@@ -210,7 +219,7 @@ const DashboardMission = () => {
                       (m: any) => `${m.name!} ${" "}  ${m.surname}`
                     )}
                   </TableCell>
-                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
+                  <TableCell align="left" sx={{ minWidth: 130, maxWidth: 130 }}>
                     {row.status}
                   </TableCell>
                   <TableCell>
@@ -239,19 +248,13 @@ export default DashboardMission;
 export const SectionNavigation = styled(Stack)(({}) => ({}));
 
 const SectionDetails = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(3),
+  padding: theme.spacing(1),
   marginBlock: 15,
   background: theme.palette.common.white,
   borderRadius: 20,
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
-}));
-
-const LinkContainer = styled("div")(({ theme }) => ({
-  borderRadius: theme.spacing(2),
-  background: "#fff",
-  border: `1px solid ${theme.palette.grey[100]}`,
 }));
 
 export const InfoItems = styled(Stack)(({ theme }) => ({}));
@@ -263,14 +266,3 @@ export const CardFooter = styled("div")(({ theme }) => ({
   borderBottomLeftRadius: theme.spacing(2),
   borderBottomRightRadius: theme.spacing(2),
 }));
-
-const CardHeader = styled(Stack)(({ theme }) => ({
-  paddingInline: theme.spacing(3),
-  marginTop: theme.spacing(2),
-}));
-
-const CardBody = styled(Stack)(({ theme }) => ({
-  paddingInline: theme.spacing(3),
-  paddingBottom: theme.spacing(1),
-}));
-const SectionDetailsTitle = styled(Box)(({ theme }) => ({}));
