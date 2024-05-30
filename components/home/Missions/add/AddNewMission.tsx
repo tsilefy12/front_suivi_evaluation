@@ -109,34 +109,6 @@ const AddNewMission = () => {
     { id: "Annuler", name: "Annuler" },
   ];
 
-  React.useEffect(() => {
-    const dateNow = new Date().getTime();
-    missionListe.map((m) => {
-      const start = new Date(m.dateDebut!).getTime();
-      const end = new Date(m.dateFin!).getTime();
-      if (m.status === "En attente" && start == dateNow) {
-        const values = "Encours";
-        return updateMission({
-          id: m.id!,
-          mission: {
-            status: values,
-            validationPrevision: m.validationPrevision,
-            validationRapport: m.validationRapport,
-          },
-        });
-      } else if (m.status === "Encours" && end < dateNow) {
-        const values = "Terminé";
-        return updateMission({
-          id: m.id!,
-          mission: {
-            status: values,
-            validationPrevision: m.validationPrevision,
-            validationRapport: m.validationRapport,
-          },
-        });
-      }
-    });
-  }, [missionListe]);
   return (
     <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>
       <Formik
@@ -182,7 +154,7 @@ const AddNewMission = () => {
                   justifyContent="space-between"
                 >
                   <Stack flexDirection={"row"}>
-                    <Link href="/missions">
+                    <Link href="/missions/ListMission">
                       <Button
                         color="info"
                         variant="text"

@@ -1,10 +1,10 @@
 import React from "react";
 import { Container } from "@mui/material";
 import type { NextPage } from "next";
+import BackOfficeLayout from "../../../layouts/backOffice";
 import Head from "next/head";
-import useBasePath from "../../hooks/useBasePath";
-import BackOfficeLayout from "../../layouts/backOffice";
-import ListMissions from "../../components/home/Missions/DetailMission";
+import ListMissions from "../../../components/home/Missions/ListMission";
+import useBasePath from "../../../hooks/useBasePath";
 
 const Home: NextPage = () => {
   const basePath = useBasePath();

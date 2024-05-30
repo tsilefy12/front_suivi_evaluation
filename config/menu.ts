@@ -11,18 +11,18 @@ const menu = [
     link: "/missions",
     icon: "descriptionIcon",
     items: [
-      // {
-      //   id: 11,
-      //   name: "Rapport de mission",
-      //   link: "/missions/validation/validationRapportMission",
-      //   icon: "",
-      // },
-      // {
-      //   id: 12,
-      //   name: "Prevision de mission",
-      //   link: "/missions/validation/validationPrevisionMission",
-      //   icon: "",
-      // },
+      {
+        id: 11,
+        name: "Liste des missions",
+        link: "/missions/ListMission",
+        icon: "",
+      },
+      {
+        id: 12,
+        name: "Dashboard mission",
+        link: "/missions/DashboardMission",
+        icon: "",
+      },
     ],
   },
   {

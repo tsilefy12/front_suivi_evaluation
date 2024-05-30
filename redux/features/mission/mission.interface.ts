@@ -1,5 +1,7 @@
 import { LivrableRapportItem } from "../LivrableRapport/livrableRapport.interface";
+import { PrevisionDepenseItem } from "../PrevisionDepense/previsionDepense.interface";
 import { ActiviteRapportItem } from "../activitesRapport/activiteRapport.interface";
+import { RapportDepenseItem } from "../rapportDepense/rapportDepense.interface";
 
 export interface MissionItem {
   id?: string;
@@ -15,12 +17,14 @@ export interface MissionItem {
   status?: string;
   activites?: ActiviteRapportItem[];
   livrables?: LivrableRapportItem[];
-  validationPrevision: {
+  previsionDepense?: PrevisionDepenseItem[];
+  rapportDepense?: RapportDepenseItem[];
+  validationPrevision?: {
     responsableId: string;
     missionId: string;
     validation: boolean;
   }[];
-  validationRapport: {
+  validationRapport?: {
     responsableId: string;
     missionId: string;
     validation: boolean;

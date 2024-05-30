@@ -40,6 +40,8 @@ export const getMissionListe = createAsyncThunk(
               status: cons.status,
               dateDebut: cons.dateDebut,
               dateFin: cons.dateFin,
+              previsionDepense: cons.previsionDepense,
+              rapportDepense: cons.rapportDepense,
             };
             newData.push(oneCons);
           })

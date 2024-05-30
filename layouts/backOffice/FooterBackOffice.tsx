@@ -5,7 +5,7 @@ import React from "react";
 const FooterBackOffice = () => {
   const theme = useTheme();
   return (
-    <ContainerFooter sx={{ mt: 2 }}>
+    <ContainerFooter sx={{ position: "fixed", mb: 0 }}>
       <Container maxWidth="xl">
         <Stack spacing={0} direction="column" alignItems="center" py={1}>
           <Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
