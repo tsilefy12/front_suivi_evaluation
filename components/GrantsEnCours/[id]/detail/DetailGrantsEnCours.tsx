@@ -91,7 +91,6 @@ const DetailGrantsEnCours = () => {
     }
   });
 
-  console.log("list details :", listDetailGrantEncours);
   return (
     <Container maxWidth="xl" sx={{ pb: 5 }}>
       <SectionNavigation
@@ -118,6 +117,8 @@ const DetailGrantsEnCours = () => {
             direction={"row"}
             justifyContent={"space-between"}
             padding={1}
+            flexWrap={"wrap"}
+            gap={2}
           >
             <Stack direction={"column"} gap={2}>
               <Grid item xs={12} md={12}>
