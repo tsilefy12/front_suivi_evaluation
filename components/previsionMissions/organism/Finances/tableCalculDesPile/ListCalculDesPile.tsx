@@ -51,6 +51,7 @@ const ListCalculDesPiles = () => {
   const fetchCalculPile = useFetchCalculPileList();
   const { calculPileList } = useAppSelector((state) => state.calculPile);
   const router = useRouter();
+  const { id } = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
 
@@ -179,6 +180,7 @@ const ListCalculDesPiles = () => {
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {calculPileList
+                    .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: CalculPileItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;

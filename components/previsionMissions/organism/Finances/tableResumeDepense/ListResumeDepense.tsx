@@ -55,6 +55,7 @@ const ListResumeDepense = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+  const { id } = router.query;
   const fetchResumeDepense = useFetchResumeDepenseList();
   const { resumeDepenseList } = useAppSelector((state) => state.resumeDepense);
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
@@ -198,8 +199,9 @@ const ListResumeDepense = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {resumeDepenseList.map(
-                    (row: ResumeDepenseItem, index: any) => {
+                  {resumeDepenseList
+                    .filter((f: any) => f.missionId === id)
+                    .map((row: ResumeDepenseItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -262,8 +264,7 @@ const ListResumeDepense = () => {
                           </TableCell>
                         </TableRow>
                       );
-                    }
-                  )}
+                    })}
                   {emptyRows > 0 && (
                     <TableRow
                       style={{

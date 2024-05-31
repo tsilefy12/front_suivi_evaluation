@@ -53,6 +53,7 @@ const ListCalculCarburant = () => {
     (state) => state.calculCarburant
   );
   const router = useRouter();
+  const { id } = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const fetchVehicule = useFetchVehicleList();
@@ -184,6 +185,7 @@ const ListCalculCarburant = () => {
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {calculCarburantList
+                    .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: CalculCarburantItem, index) => {
                       // const isItemSelected = isSelected(row.trajet);

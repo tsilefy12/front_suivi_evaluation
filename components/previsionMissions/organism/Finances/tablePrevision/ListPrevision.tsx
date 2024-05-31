@@ -230,7 +230,9 @@ const ListPrevision = () => {
                 />
                 <TableBody>
                   {previsionDepenselist
-                    .filter((e: any) => e.imprevue === null)
+                    .filter(
+                      (e: any) => e.imprevue === null && e.missionId === id
+                    )
                     .slice()
                     .map((row: PrevisionDepenseItem, index: any) => {
                       return (
