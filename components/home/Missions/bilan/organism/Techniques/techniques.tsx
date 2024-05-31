@@ -114,7 +114,7 @@ const Techniques = () => {
   );
 
   return (
-    <Box>
+    <Box paddingBottom={8}>
       <TableContainer>
         <Table>
           <TableBody>
