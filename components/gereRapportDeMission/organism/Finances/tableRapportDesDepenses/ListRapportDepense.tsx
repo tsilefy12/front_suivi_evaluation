@@ -167,9 +167,11 @@ const ListRapportDepenses = () => {
 
   let total: any = useMemo(() => {
     let totalBudget: any = 0;
-    rapportDepenseList.forEach((item: any) => {
-      totalBudget += item.montant;
-    });
+    rapportDepenseList
+      .filter((f: any) => f.missionId === id)
+      .forEach((item: any) => {
+        totalBudget += item.montant;
+      });
     return totalBudget;
   }, [rapportDepenseList]);
   return (

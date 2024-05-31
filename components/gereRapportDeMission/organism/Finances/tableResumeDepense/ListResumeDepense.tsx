@@ -83,9 +83,11 @@ const ListResumeDepense = () => {
 
   let total: any = useMemo(() => {
     let totalBudget: any = 0;
-    resumeDepensePrevueList.forEach((item: any) => {
-      totalBudget += parseInt(item.budgetDepense);
-    });
+    resumeDepensePrevueList
+      .filter((f: any) => f.missionId === id)
+      .forEach((item: any) => {
+        totalBudget += parseInt(item.budgetDepense);
+      });
     return totalBudget;
   }, [resumeDepensePrevueList]);
 
