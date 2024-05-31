@@ -61,8 +61,8 @@ const PrevisionDeMission = () => {
     fetchEmployes();
     fetchMission();
     fetchGrants();
-  }, [missionListe]);
-  console.log(employees);
+  }, []);
+
   React.useEffect(() => {
     const getGrantId = missionListe
       .filter((m) => m.id === id)
@@ -133,28 +133,34 @@ const PrevisionDeMission = () => {
   const [getValidationPaye, setGetValidationPay]: any = React.useState<
     string[]
   >([]);
+
   React.useEffect(() => {
-    const VF = getVF.map((vf) => vf.id);
-    // console.log(test[0]);
-    const VFF = missionListe.flatMap((m) =>
-      m.validationPrevision!.filter(
-        (v) => v.missionId === m.id && v.responsableId == VF[0]
-      )
-    );
-    const valeurBool: any = VFF.map((v) => v.validation!);
-    setGetValidationVF(valeurBool);
+    if (missionListe.length > 0 && getVF.length > 0) {
+      const VF = getVF.map((vf) => vf.id);
+      const VFF = missionListe.flatMap((m) =>
+        m.validationPrevision!.filter(
+          (v) => v.missionId === m.id && v.responsableId == VF[0]
+        )
+      );
+      const valeurBool: any = VFF.map((v) => v.validation!);
+      setGetValidationVF(valeurBool);
+    }
+  }, [missionListe, getVF]);
 
-    const VT = getVT.map((vf) => vf.id);
-    // console.log(test[0]);
-    const VTT = missionListe.flatMap((m) =>
-      m.validationPrevision!.filter(
-        (v) => v.missionId === m.id && v.responsableId == VT[0]
-      )
-    );
-    const valeurBoolTech: any = VTT.map((v) => v.validation!);
+  React.useEffect(() => {
+    if (missionListe.length > 0 && getVT.length > 0) {
+      const VT = getVT.map((vf) => vf.id);
+      const VTT = missionListe.flatMap((m) =>
+        m.validationPrevision!.filter(
+          (v) => v.missionId === m.id && v.responsableId == VT[0]
+        )
+      );
+      const valeurBoolTech: any = VTT.map((v) => v.validation!);
+      setGetValidationT(valeurBoolTech);
+    }
+  }, [missionListe, getVT]);
 
-    setGetValidationT(valeurBoolTech);
-
+  React.useEffect(() => {
     const VP = getFV.map((vf) => vf.id);
     // console.log(test[0]);
     const VPP = missionListe.flatMap((m) =>
@@ -165,7 +171,7 @@ const PrevisionDeMission = () => {
     const valeurBoolPaye: any = VPP.map((v) => v.validation!);
 
     setGetValidationPay(valeurBoolPaye);
-  }, [missionListe]);
+  }, [missionListe, getFV]);
 
   const valueGetFV =
     getValidationVF.length > 0 ? getValidationVF[0] : "Array is empty";
