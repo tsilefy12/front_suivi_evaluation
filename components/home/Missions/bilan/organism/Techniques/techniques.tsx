@@ -1,10 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import { Box, FormLabel } from "@mui/material";
+import { Box } from "@mui/material";
 import { createData } from "./table/techniques.function";
 import { columns } from "./table/techniques.constant";
 import { useRouter } from "next/router";
@@ -29,84 +29,90 @@ import useFetchProgrammePrevisionList from "../../../../../previsionMissions/org
 import useFetchProgrammeRapport from "../../../../../gereRapportDeMission/organism/Techniques/tableProgramme/hooks/useFetchProgrammeRapport";
 
 const Techniques = () => {
-  const router = useRouter()
-  //objectif
+  const router = useRouter();
+  const { id } = router.query;
+
+  // Fetch functions
   const fetchMissionGoalList = useFetchMissionGoalListe();
   const fetchObjectifRapport = useFetchObjectifRapport();
-
-  //resultat
   const fetchExceptedResultListe = useFetchExceptedResultList();
   const fetchResultatRapport = useFetchResultatRapport();
-
-  //activity
   const fetchPlannedActivityListe = useFetchPlannedActivityList();
   const fetchActivityRapport = useFetchActiviteRapport();
-
-  //livrable
   const fetchDeliverableListe = useFetchDeliverableList();
   const fetchLivrableRapport = useFetchLivrableRapport();
-
-  //lieux
   const fetchMissionLocationListe = useFetchMissionLocationListe();
   const fetchLieuxRapport = useFetchLieuxRapport();
-
-  //missionaire
   const fetchMissionaryList = useFetchMissionaryList();
   const fetchMissionaryRapportList = useFetchMissionaryRapportList();
-
-  //autre information importante
   const fetchVehicleListe = useFetchVehicleList();
   const fetchAutreInfoRapport = useFetchAutreInfoRapport();
-
-  //contact pendant la mission
   const fetchContactList = useFetchContactListe();
   const fetchContactMissionRapport = useFetchContactMissionRapport();
-
-  //programme
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
   const fetchProgrammeRapport = useFetchProgrammeRapport();
 
+  // Fetch data when the component is mounted or when id changes
+  useEffect(() => {
+    fetchMissionGoalList();
+    fetchObjectifRapport();
+    fetchExceptedResultListe();
+    fetchResultatRapport();
+    fetchActivityRapport();
+    fetchPlannedActivityListe();
+    fetchLivrableRapport();
+    fetchDeliverableListe();
+    fetchMissionLocationListe();
+    fetchLieuxRapport();
+    fetchMissionaryList();
+    fetchMissionaryRapportList();
+    fetchAutreInfoRapport();
+    fetchVehicleListe();
+    fetchContactList();
+    fetchContactMissionRapport();
+    fetchProgrammePrevision();
+    fetchProgrammeRapport();
+  }, [id]);
+
   const {
-    percentageObjectif, percentageActivity, 
-    percentageAutreInfo, percentageContactPendantMission,
-    percentageExceptedResult, percentageLivrable,
-    percentageLocation, percentageMissionary,
-    percentageTechnique, percentageProgramme,
-  }: any = PourcentageTechnique()
+    percentageObjectif,
+    percentageActivity,
+    percentageAutreInfo,
+    percentageContactPendantMission,
+    percentageExceptedResult,
+    percentageLivrable,
+    percentageLocation,
+    percentageMissionary,
+    percentageTechnique,
+    percentageProgramme,
+  } = PourcentageTechnique();
 
- React.useEffect(() =>{
-  fetchMissionGoalList();
-  fetchObjectifRapport();
-  fetchExceptedResultListe();
-  fetchResultatRapport();
-  fetchActivityRapport();
-  fetchPlannedActivityListe();
-  fetchLivrableRapport();
-  fetchDeliverableListe();
-  fetchMissionLocationListe();
-  fetchLieuxRapport();
-  fetchMissionaryList()
-  fetchMissionaryRapportList();
-  fetchAutreInfoRapport();
-  fetchVehicleListe();
-  fetchContactList();
-  fetchContactMissionRapport();
-  fetchProgrammePrevision();
-  fetchProgrammeRapport();
- }, [router.query])
-
-
-  const rows = [
-    createData("Objectifs : "+percentageObjectif),
-    createData("Resultats attendus : "+percentageExceptedResult),
-    createData("Activités prévues : "+percentageActivity),
-    createData("Livrables : "+percentageLivrable),
-    createData("Lieux : "+percentageLocation),
-    createData("Missionnaires : "+percentageMissionary),
-    createData("Autres informations importantes : "+percentageAutreInfo),
-    createData("Contacts pendant la mission : "+percentageContactPendantMission),
-    createData("Programmes : "+percentageProgramme),
-  ];
+  const rows = useMemo(
+    () => [
+      createData("Objectifs : " + percentageObjectif),
+      createData("Resultats attendus : " + percentageExceptedResult),
+      createData("Activités prévues : " + percentageActivity),
+      createData("Livrables : " + percentageLivrable),
+      createData("Lieux : " + percentageLocation),
+      createData("Missionnaires : " + percentageMissionary),
+      createData("Autres informations importantes : " + percentageAutreInfo),
+      createData(
+        "Contacts pendant la mission : " + percentageContactPendantMission
+      ),
+      createData("Programmes : " + percentageProgramme),
+    ],
+    [
+      percentageObjectif,
+      percentageActivity,
+      percentageAutreInfo,
+      percentageContactPendantMission,
+      percentageExceptedResult,
+      percentageLivrable,
+      percentageLocation,
+      percentageMissionary,
+      percentageProgramme,
+    ]
+  );
 
   return (
     <Box>
@@ -119,28 +125,21 @@ const Techniques = () => {
                 mission
               </TableCell>
             </TableRow>
-            {rows.map((row) => {
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  tabIndex={-1}
-                  key={row.technique}
-                >
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === "number"
-                          ? column.format(value)
-                          : value} %
-                      </TableCell>
-                      
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
+            {rows.map((row) => (
+              <TableRow hover role="checkbox" tabIndex={-1} key={row.technique}>
+                {columns.map((column) => {
+                  const value = row[column.id];
+                  return (
+                    <TableCell key={column.id} align={column.align}>
+                      {column.format && typeof value === "number"
+                        ? column.format(value)
+                        : value}{" "}
+                      %
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -150,72 +149,186 @@ const Techniques = () => {
 
 export default Techniques;
 
-export const PourcentageTechnique = () =>{
-  const { missionGoalList } = useAppSelector((state: any) => state.missionGoal);
-  const { objectifRapportlist } = useAppSelector((state: any) => state.objectifRapport);
+export const PourcentageTechnique = () => {
+  const router = useRouter();
+  const { id } = router.query;
 
-  //resultat
-  const { exceptedResultList } = useAppSelector((state) => state.exceptedResult);
-  const { resultatRapportlist } = useAppSelector((state) => state.resultatRapport);
-
-  //activity
-  const { plannedActivityList } = useAppSelector((state) => state.plannedActivity);
-  const { activiteRapportlist } = useAppSelector((state: any) => state.activiteRapport);
-
-  //livrable
+  const { missionGoalList } = useAppSelector((state) => state.missionGoal);
+  const { objectifRapportlist } = useAppSelector(
+    (state) => state.objectifRapport
+  );
+  const { exceptedResultList } = useAppSelector(
+    (state) => state.exceptedResult
+  );
+  const { resultatRapportlist } = useAppSelector(
+    (state) => state.resultatRapport
+  );
+  const { plannedActivityList } = useAppSelector(
+    (state) => state.plannedActivity
+  );
+  const { activiteRapportlist } = useAppSelector(
+    (state) => state.activiteRapport
+  );
   const { deliverableList } = useAppSelector((state) => state.deliverable);
-  const { livrableRapportlist } = useAppSelector((state: any) => state.livrableRapport);
-
-  //lieux
-  const { missionLocationList } = useAppSelector((state: any) => state.missionLocation);
-  const { lieuxRapportlist } = useAppSelector((state: any) => state.lieuxRapport);
-
-  //missionaire
+  const { livrableRapportlist } = useAppSelector(
+    (state) => state.livrableRapport
+  );
+  const { missionLocationList } = useAppSelector(
+    (state) => state.missionLocation
+  );
+  const { lieuxRapportlist } = useAppSelector((state) => state.lieuxRapport);
   const { missionaryList } = useAppSelector((state) => state.missionary);
-  const { missionaireslist } = useAppSelector((state: any) => state.missionaires);
-
-  //autre information importante
+  const { missionaireslist } = useAppSelector((state) => state.missionaires);
   const { vehicleList } = useAppSelector((state) => state.vehicle);
-  const { autreInfoRapportList } = useAppSelector((state: any) => state.autreInfoRapport);
-
-  //contact pendant la mission
+  const { autreInfoRapportList } = useAppSelector(
+    (state) => state.autreInfoRapport
+  );
   const { contactList } = useAppSelector((state) => state.contact);
-  const { missionRapportList } = useAppSelector((state: any) => state.missionRapport);
+  const { missionRapportList } = useAppSelector(
+    (state) => state.missionRapport
+  );
+  const { programmePrevisionList } = useAppSelector(
+    (state) => state.programmePrevision
+  );
+  const { programmeRapportList } = useAppSelector(
+    (state) => state.programmeRapport
+  );
 
-  //programme
-  const { programmePrevisionList } = useAppSelector((state: any) => state.programmePrevision);
-  const { programmeRapportList } = useAppSelector((state: any) => state.programmeRapport);
- 
-  let percentageObjectif = (objectifRapportlist.length * 100) / missionGoalList.length;
-  let percentageExceptedResult = (resultatRapportlist.length * 100) / exceptedResultList.length;
-  let percentageActivity = (activiteRapportlist.length * 100) / plannedActivityList.length;
-  let percentageLivrable = (livrableRapportlist.length * 100) / deliverableList.length;
-  let percentageLocation = (lieuxRapportlist.length * 100) / missionLocationList.length;
-  let percentageMissionary = (missionaireslist.length * 100) / missionaryList.length;
-  let percentageAutreInfo = (autreInfoRapportList.length * 100) / vehicleList.length;
-  let percentageContactPendantMission = (missionRapportList.length * 100) / contactList.length;
-  let percentageProgramme = (programmeRapportList.length * 100) / programmePrevisionList.length;
- 
-  let percentageTechnique = useMemo(() =>{
-      let calculPourcentage =( (objectifRapportlist.length + resultatRapportlist.length + activiteRapportlist.length + 
-        livrableRapportlist.length + lieuxRapportlist.length + missionaireslist.length + autreInfoRapportList.length +
-        missionRapportList.length + programmeRapportList.length) * 100 / (missionGoalList.length + exceptedResultList.length + 
-          plannedActivityList.length + deliverableList.length + missionLocationList.length + missionaryList.length + vehicleList.length + 
-          contactList.length +  programmePrevisionList.length)).toFixed(2);
+  // Filtrer les listes par ID
+  const filteredMissionGoalList = missionGoalList.filter(
+    (item) => item.id === id
+  );
+  const filteredObjectifRapportlist = objectifRapportlist.filter(
+    (item) => item.id === id
+  );
+  const filteredExceptedResultList = exceptedResultList.filter(
+    (item) => item.id === id
+  );
+  const filteredResultatRapportlist = resultatRapportlist.filter(
+    (item) => item.id === id
+  );
+  const filteredPlannedActivityList = plannedActivityList.filter(
+    (item) => item.id === id
+  );
+  const filteredActiviteRapportlist = activiteRapportlist.filter(
+    (item) => item.id === id
+  );
+  const filteredDeliverableList = deliverableList.filter(
+    (item) => item.id === id
+  );
+  const filteredLivrableRapportlist = livrableRapportlist.filter(
+    (item) => item.id === id
+  );
+  const filteredMissionLocationList = missionLocationList.filter(
+    (item) => item.id === id
+  );
+  const filteredLieuxRapportlist = lieuxRapportlist.filter(
+    (item) => item.id === id
+  );
+  const filteredMissionaryList = missionaryList.filter(
+    (item) => item.id === id
+  );
+  const filteredMissionaireslist = missionaireslist.filter(
+    (item) => item.id === id
+  );
+  const filteredVehicleList = vehicleList.filter((item) => item.id === id);
+  const filteredAutreInfoRapportList = autreInfoRapportList.filter(
+    (item) => item.id === id
+  );
+  const filteredContactList = contactList.filter((item) => item.id === id);
+  const filteredMissionRapportList = missionRapportList.filter(
+    (item) => item.id === id
+  );
+  const filteredProgrammePrevisionList = programmePrevisionList.filter(
+    (item) => item.id === id
+  );
+  const filteredProgrammeRapportList = programmeRapportList.filter(
+    (item) => item.id === id
+  );
 
-          return calculPourcentage;
+  // Calculer les pourcentages
+  const percentageObjectif =
+    (filteredObjectifRapportlist.length * 100) /
+      filteredMissionGoalList.length || 0;
+  const percentageExceptedResult =
+    (filteredResultatRapportlist.length * 100) /
+      filteredExceptedResultList.length || 0;
+  const percentageActivity =
+    (filteredActiviteRapportlist.length * 100) /
+      filteredPlannedActivityList.length || 0;
+  const percentageLivrable =
+    (filteredLivrableRapportlist.length * 100) /
+      filteredDeliverableList.length || 0;
+  const percentageLocation =
+    (filteredLieuxRapportlist.length * 100) /
+      filteredMissionLocationList.length || 0;
+  const percentageMissionary =
+    (filteredMissionaireslist.length * 100) / filteredMissionaryList.length ||
+    0;
+  const percentageAutreInfo =
+    (filteredAutreInfoRapportList.length * 100) / filteredVehicleList.length ||
+    0;
+  const percentageContactPendantMission =
+    (filteredMissionRapportList.length * 100) / filteredContactList.length || 0;
+  const percentageProgramme =
+    (filteredProgrammeRapportList.length * 100) /
+      filteredProgrammePrevisionList.length || 0;
+
+  const percentageTechnique = useMemo(() => {
+    const totalRapportList =
+      filteredObjectifRapportlist.length +
+      filteredResultatRapportlist.length +
+      filteredActiviteRapportlist.length +
+      filteredLivrableRapportlist.length +
+      filteredLieuxRapportlist.length +
+      filteredMissionaireslist.length +
+      filteredAutreInfoRapportList.length +
+      filteredMissionRapportList.length +
+      filteredProgrammeRapportList.length;
+
+    const totalPrevisionList =
+      filteredMissionGoalList.length +
+      filteredExceptedResultList.length +
+      filteredPlannedActivityList.length +
+      filteredDeliverableList.length +
+      filteredMissionLocationList.length +
+      filteredMissionaryList.length +
+      filteredVehicleList.length +
+      filteredContactList.length +
+      filteredProgrammePrevisionList.length;
+
+    return ((totalRapportList * 100) / totalPrevisionList).toFixed(2) || 0;
   }, [
-    percentageObjectif, percentageActivity, 
-    percentageAutreInfo, percentageContactPendantMission,
-    percentageExceptedResult, percentageLivrable,
-    percentageLocation, percentageMissionary, percentageProgramme,
-  ])
-//  console.log("PT :", percentageTechnique)
+    filteredObjectifRapportlist.length,
+    filteredResultatRapportlist.length,
+    filteredActiviteRapportlist.length,
+    filteredLivrableRapportlist.length,
+    filteredLieuxRapportlist.length,
+    filteredMissionaireslist.length,
+    filteredAutreInfoRapportList.length,
+    filteredMissionRapportList.length,
+    filteredProgrammeRapportList.length,
+    filteredMissionGoalList.length,
+    filteredExceptedResultList.length,
+    filteredPlannedActivityList.length,
+    filteredDeliverableList.length,
+    filteredMissionLocationList.length,
+    filteredMissionaryList.length,
+    filteredVehicleList.length,
+    filteredContactList.length,
+    filteredProgrammePrevisionList.length,
+  ]);
+
   return {
-    percentageObjectif, percentageActivity, 
-    percentageAutreInfo, percentageContactPendantMission,
-    percentageExceptedResult, percentageLivrable,
-    percentageLocation, percentageMissionary,
-    percentageTechnique, percentageProgramme,
-  }
-}
+    percentageObjectif,
+    percentageActivity,
+    percentageAutreInfo,
+    percentageContactPendantMission,
+    percentageExceptedResult,
+    percentageLivrable,
+    percentageLocation,
+    percentageMissionary,
+    percentageTechnique,
+    percentageProgramme,
+  };
+};

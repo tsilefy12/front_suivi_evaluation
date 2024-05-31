@@ -138,7 +138,7 @@ const BilanMission = () => {
           justifyContent="space-between"
           mb={1}
         >
-          <Link href="/missions">
+          <Link href="/missions/ListMission">
             <Button color="info" variant="text" startIcon={<ArrowBackIcon />}>
               Retour
             </Button>
@@ -221,7 +221,7 @@ const BilanMission = () => {
                     Bilan technique
                   </Typography>
                   <Typography color="primary" variant="h3">
-                    {percentageTechnique}%
+                    {!isNaN ? percentageTechnique : 0}%
                   </Typography>
                 </Grid>
                 <Grid>

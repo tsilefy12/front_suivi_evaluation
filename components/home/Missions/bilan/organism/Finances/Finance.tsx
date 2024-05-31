@@ -71,6 +71,8 @@ const Finances = () => {
 export default Finances;
 
 export const Montant = () => {
+  const router = useRouter();
+  const { id } = router.query;
   const { previsionDepenselist }: any = useAppSelector(
     (state: any) => state.previsonDepense
   );
@@ -79,19 +81,23 @@ export const Montant = () => {
   );
   let totalPrevision: any = useMemo(() => {
     let totalBudget: any = 0;
-    previsionDepenselist.map((p: any) => {
-      if (p.imprevue === null) {
-        totalBudget += p.montant;
-      }
-    });
+    previsionDepenselist
+      .filter((f: any) => f.missionId == id)
+      .map((p: any) => {
+        if (p.imprevue === null) {
+          totalBudget += p.montant;
+        }
+      });
     return totalBudget;
   }, [previsionDepenselist]);
 
   let totalRappport: any = useMemo(() => {
     let totalBudget: any = 0;
-    rapportDepenseList.forEach((item: any) => {
-      totalBudget += item.montant;
-    });
+    rapportDepenseList
+      .filter((f: any) => f.missionId == id)
+      .forEach((item: any) => {
+        totalBudget += item.montant;
+      });
     return totalBudget;
   }, [rapportDepenseList]);
   let montant: any = useMemo(() => {
