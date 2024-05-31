@@ -35,7 +35,6 @@ import Recherche from "../../recherch";
 
 const ListMissions = () => {
   const router = useRouter();
-  // const id: any = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const { missionListe } = useAppSelector((state) => state.mission);
@@ -43,11 +42,12 @@ const ListMissions = () => {
 
   useEffect(() => {
     fetchMissionListe();
-  }, []);
+  }, []); // fetchMissionListe will be called once when component mounts
+
   const handleClickDelete = async (id: any) => {
     confirm({
-      title: "Supprimer le Mission",
-      description: "Voulez-vous vraiment supprimer ce Mission ?",
+      title: "Supprimer la Mission",
+      description: "Voulez-vous vraiment supprimer cette mission ?",
       cancellationText: "Annuler",
       confirmationText: "Supprimer",
       cancellationButtonProps: {
@@ -68,15 +68,19 @@ const ListMissions = () => {
     await dispatch(editMission({ id }));
     router.push(`/missions/${id}/edit`);
   };
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [getSelectId, setGetSelectedId]: any = React.useState(null);
+
   const handleClick = (event: any, id: string) => {
     setAnchorEl(event);
     setGetSelectedId(id);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const updateMissions = async () => {
     const currentMonth = new Date().getMonth() + 1;
     const currentDay = new Date().getDate();
@@ -91,7 +95,6 @@ const ListMissions = () => {
       const endMonth = new Date(m.dateFin!).getMonth() + 1;
       const endYear = new Date(m.dateFin!).getFullYear();
 
-      // const end = new Date(m.dateFin!).getDate();
       if (
         m.status === "En attente" &&
         startDay === currentDay &&
@@ -114,20 +117,43 @@ const ListMissions = () => {
         endMonth === currentMonth &&
         endYear === currentYear
       ) {
-        updateMission({
-          id: m.id!,
-          mission: {
-            status: "Terminé",
-          },
-        });
+        dispatch(
+          updateMission({
+            id: m.id!,
+            mission: {
+              status: "Terminé",
+            },
+          })
+        );
       }
     });
     await Promise.all(promises);
     fetchMissionListe();
   };
-  React.useEffect(() => {
-    updateMissions();
-  }, [missionListe]);
+
+  useEffect(() => {
+    const now = new Date();
+    const nextRun = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1,
+      0,
+      0,
+      0
+    ); // Next midnight
+    const timeUntilNextRun = nextRun.getTime() - now.getTime();
+
+    const timeout = setTimeout(() => {
+      updateMissions();
+
+      // Set an interval to run updateMissions every 24 hours after the first execution
+      setInterval(updateMissions, 24 * 60 * 60 * 1000);
+    }, timeUntilNextRun);
+
+    // Cleanup timeout on unmount
+    return () => clearTimeout(timeout);
+  }, [missionListe]); // Depend on missionListe to ensure the latest data is used
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
@@ -211,14 +237,6 @@ const ListMissions = () => {
                 </CardHeader>
 
                 <CardBody>
-                  {/* <Typography
-                      color="GrayText"
-                      my={2}
-                      variant="caption"
-                      fontSize={10}
-                    >
-                      {mission?.descriptionMission}
-                    </Typography> */}
                   <Stack spacing={1}>
                     <FormLabel>
                       Référence : {"MISSION_" + mission?.reference}

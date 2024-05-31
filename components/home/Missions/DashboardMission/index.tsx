@@ -48,31 +48,6 @@ const DashboardMission = () => {
     fetchGrants();
     fetchEmployes();
     fetchPrevisionDepense();
-  }, [missionListe]);
-  React.useEffect(() => {
-    const dateNow = new Date().getTime();
-    // console.log("ok");
-    missionListe.map((m) => {
-      const start = new Date(m.dateDebut!).getTime();
-      const end = new Date(m.dateFin!).getTime();
-      if (m.status === "En attente" && start == dateNow) {
-        const values = "Encours";
-        return updateMission({
-          id: m.id!,
-          mission: {
-            status: values,
-          },
-        });
-      } else if (m.status === "Encours" && end < dateNow) {
-        const values = "Terminé";
-        return updateMission({
-          id: m.id!,
-          mission: {
-            status: values,
-          },
-        });
-      }
-    });
   }, []);
 
   return (
