@@ -52,7 +52,6 @@ const Techniques = () => {
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
   const fetchProgrammeRapport = useFetchProgrammeRapport();
 
-  // Fetch data when the component is mounted or when id changes
   useEffect(() => {
     fetchMissionGoalList();
     fetchObjectifRapport();

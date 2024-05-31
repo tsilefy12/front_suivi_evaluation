@@ -25,7 +25,10 @@ import {
 } from "../../../../../../hooks/reduxHooks";
 import { useConfirm } from "material-ui-confirm";
 import Moment from "react-moment";
-import { deleteMissionaryRapport, editMissionaryRapport } from "../../../../../../redux/features/missionaires";
+import {
+  deleteMissionaryRapport,
+  editMissionaryRapport,
+} from "../../../../../../redux/features/missionaires";
 import { MissionairesItem } from "../../../../../../redux/features/missionaires/missionaires.interface";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import AddMissionnaireRapport from "../add/addMissionnaire";
@@ -40,10 +43,13 @@ const ListMissionnairesRapport = () => {
     setOpen(false);
   };
   const router = useRouter();
+  const { id } = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const fetchMissionaryRapportList = useFetchMissionaryRapportList();
-  const { missionaireslist } = useAppSelector((state: any) => state.missionaires);
+  const { missionaireslist } = useAppSelector(
+    (state: any) => state.missionaires
+  );
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state: any) => state.employe);
 
@@ -51,7 +57,7 @@ const ListMissionnairesRapport = () => {
     fetchMissionaryRapportList();
     fetchEmployes();
   }, [router.query]);
-//  console.log("missionaire :", missionaireslist)
+  //  console.log("missionaire :", missionaireslist)
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer le missionnaire",
@@ -69,7 +75,7 @@ const ListMissionnairesRapport = () => {
         await dispatch(deleteMissionaryRapport({ id }));
         fetchMissionaryRapportList();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
   const handleClickEdit = async (id: any) => {
     await dispatch(editMissionaryRapport({ id }));
@@ -91,62 +97,89 @@ const ListMissionnairesRapport = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {missionaireslist.map((row: any) => (
-                  <TableRow
-                    key={row.id!}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.lastNameMissionary} {row.firstNameMissionary}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {<Moment format="DD/MM/YYYY">{row.startDateMissionary}</Moment>}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {<Moment format="DD/MM/YYYY">{row.returnDateMissionary}</Moment>}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <FormControl sx={{ height: (Array.isArray(row.missionResponsabilityMissionary) && row.missionResponsabilityMissionary.length <= 2 )? "auto" : 70, overflow: "auto"}}>
+                {missionaireslist
+                  .filter((f: any) => f.missionId === id)
+                  .map((row: any) => (
+                    <TableRow
+                      key={row.id!}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.lastNameMissionary} {row.firstNameMissionary}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
                         {
-                          Array.isArray(row.missionResponsabilityMissionary) && row.missionResponsabilityMissionary.map((lp: any) => {
-                            return (
-                              <Stack direction="column" spacing={2}>
-                                {employees.find((e: any) => e.id === lp)?.name}
-                                {" "}
-                                {employees.find((e: any) => e.id === lp)?.surname}
-                              </Stack>
-                            )
-                          })
+                          <Moment format="DD/MM/YYYY">
+                            {row.startDateMissionary}
+                          </Moment>
                         }
-                      </FormControl>
-                    </TableCell>
-                    <TableCell align="right">
-                      <BtnActionContainer
-                        direction="row"
-                        justifyContent="right"
-                      >
-                        <IconButton
-                          color="primary"
-                          aria-label="Modifier"
-                          component="span"
-                          onClick={() => handleClickEdit(row.id)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          color="warning"
-                          aria-label="Supprimer"
-                          component="span"
-                          onClick={() => {
-                            handleClickDelete(row.id);
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {
+                          <Moment format="DD/MM/YYYY">
+                            {row.returnDateMissionary}
+                          </Moment>
+                        }
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <FormControl
+                          sx={{
+                            height:
+                              Array.isArray(
+                                row.missionResponsabilityMissionary
+                              ) &&
+                              row.missionResponsabilityMissionary.length <= 2
+                                ? "auto"
+                                : 70,
+                            overflow: "auto",
                           }}
                         >
-                          <DeleteIcon />
-                        </IconButton>
-                      </BtnActionContainer>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          {Array.isArray(row.missionResponsabilityMissionary) &&
+                            row.missionResponsabilityMissionary.map(
+                              (lp: any) => {
+                                return (
+                                  <Stack direction="column" spacing={2}>
+                                    {
+                                      employees.find((e: any) => e.id === lp)
+                                        ?.name
+                                    }{" "}
+                                    {
+                                      employees.find((e: any) => e.id === lp)
+                                        ?.surname
+                                    }
+                                  </Stack>
+                                );
+                              }
+                            )}
+                        </FormControl>
+                      </TableCell>
+                      <TableCell align="right">
+                        <BtnActionContainer
+                          direction="row"
+                          justifyContent="right"
+                        >
+                          <IconButton
+                            color="primary"
+                            aria-label="Modifier"
+                            component="span"
+                            onClick={() => handleClickEdit(row.id)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="warning"
+                            aria-label="Supprimer"
+                            component="span"
+                            onClick={() => {
+                              handleClickDelete(row.id);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </BtnActionContainer>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </MyTableContainer>

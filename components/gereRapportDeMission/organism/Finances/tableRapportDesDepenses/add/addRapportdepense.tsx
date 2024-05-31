@@ -30,9 +30,15 @@ import {
   labelRowsPerPage,
 } from "../../../../../../config/table.config";
 import { Form, Formik } from "formik";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
-import { createRapportDepense, updateRapportDepense } from "../../../../../../redux/features/rapportDepense";
+import {
+  createRapportDepense,
+  updateRapportDepense,
+} from "../../../../../../redux/features/rapportDepense";
 import useFetchRapportDepense from "../hooks/useFetchRapportDepense";
 import OSDatePicker from "../../../../../shared/date/OSDatePicker";
 import OSTextField from "../../../../../shared/input/OSTextField";
@@ -48,25 +54,29 @@ const AddRapportdepense = ({ handleClose }: any) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dense, setDense] = React.useState(false);
-  const { isEditing, rapportDepense, rapportDepenseList } = useAppSelector((state: any) => state.rapportDepense);
+  const { isEditing, rapportDepense, rapportDepenseList } = useAppSelector(
+    (state: any) => state.rapportDepense
+  );
   const router = useRouter();
   const dispatch: any = useAppDispatch();
   const { id }: any = router.query;
   const fetchRapportDepense = useFetchRapportDepense();
   const fetchGrantList = useFetchGrants();
-  const { grantEncoursList } = useAppSelector(state => state.grantEncours);
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchligneBudgetaire = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const [grantValue, setGrantValue]: any = React.useState("vide");
-  const fetchPrevisionDepense = useFetchPrevisionDepenseList()
-  const { previsionDepenselist } = useAppSelector((state: any) => state.previsonDepense)
+  const fetchPrevisionDepense = useFetchPrevisionDepenseList();
+  const { previsionDepenselist } = useAppSelector(
+    (state: any) => state.previsonDepense
+  );
 
   React.useEffect(() => {
     fetchRapportDepense();
     fetchGrantList();
     fetchligneBudgetaire();
     fetchPrevisionDepense();
-  }, [router.query])
+  }, [router.query]);
   // console.log(" id :", grantValue)
 
   const handleChangeRowsPerPage = (
@@ -83,19 +93,18 @@ const AddRapportdepense = ({ handleClose }: any) => {
       ? Math.max(0, (1 + page) * rowsPerPage - [1, 2, 3, 4, 5].length)
       : 0;
 
-
   //select budget line depends grant
-  let BudgetLineGrantList: any = useState<{}>([])
+  let BudgetLineGrantList: any = useState<{}>([]);
   const uniqueValues = new Set();
 
-  grantEncoursList.forEach(g => {
+  grantEncoursList.forEach((g) => {
     if (grantValue !== "vide") {
       if (!uniqueValues.has(g.id)) {
         uniqueValues.add(g.id);
-        return BudgetLineGrantList = g.budgetLines;
+        return (BudgetLineGrantList = g.budgetLines);
       }
     }
-    return BudgetLineGrantList = [];
+    return (BudgetLineGrantList = []);
   });
 
   let total: any = useMemo(() => {
@@ -104,9 +113,9 @@ const AddRapportdepense = ({ handleClose }: any) => {
       if (p.imprevue === null) {
         totalBudget += p.montant;
       }
-    })
+    });
     return totalBudget;
-  }, [previsionDepenselist])
+  }, [previsionDepenselist]);
 
   const [daty, setDaty]: any = React.useState("");
   const [lb, setLb] = React.useState("");
@@ -114,10 +123,16 @@ const AddRapportdepense = ({ handleClose }: any) => {
   const [bdg, setBdg] = React.useState(0);
   const [amt, setAmt] = React.useState(0);
 
-  const clickUtiliser = (dt: Date, lib: string, grants: any, budget: any, amount: number) => {
+  const clickUtiliser = (
+    dt: Date,
+    lib: string,
+    grants: any,
+    budget: any,
+    amount: number
+  ) => {
     setDaty(dt), setLb(lib), setGrt(grants), setBdg(budget), setAmt(amount);
-  }
-  //ajout 
+  };
+  //ajout
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
     try {
@@ -128,19 +143,32 @@ const AddRapportdepense = ({ handleClose }: any) => {
             rapportDepense: values,
           })
         );
-      } else if (daty!=="" && lb!=="" && grt!==0 && bdg!==0 && amt!==null){
-          values.date = daty;
-          values.libelle = lb;
-          values.grant = grt;
-          values.ligneBudgetaire = bdg;
-          values.montant = amt;
-          return (await dispatch(createRapportDepense(values)), fetchRapportDepense(), handleClose())
-      }else{
+      } else if (
+        daty !== "" &&
+        lb !== "" &&
+        grt !== 0 &&
+        bdg !== 0 &&
+        amt !== null
+      ) {
+        values.date = daty;
+        values.libelle = lb;
+        values.grant = grt;
+        values.ligneBudgetaire = bdg;
+        values.montant = amt;
+        return (
+          await dispatch(createRapportDepense(values)),
+          fetchRapportDepense(),
+          handleClose()
+        );
+      } else {
         values.grant = grantValue;
-        return (await dispatch(createRapportDepense(values)), fetchRapportDepense(), handleClose()) 
+        return (
+          await dispatch(createRapportDepense(values)),
+          fetchRapportDepense(),
+          handleClose()
+        );
       }
-      fetchRapportDepense(),
-        handleClose();
+      fetchRapportDepense(), handleClose();
     } catch (error) {
       console.log("error", error);
     }
@@ -156,18 +184,20 @@ const AddRapportdepense = ({ handleClose }: any) => {
           isEditing
             ? rapportDepense
             : {
-              date: isEditing ? rapportDepense?.date : new Date(),
-              libelle: isEditing ? rapportDepense?.libelle : "",
-              montant: isEditing ? rapportDepense?.montant : "",
-              grant: isEditing ? rapportDepense?.grant : grantValue,
-              ligneBudgetaire: isEditing ? rapportDepense?.ligneBudgetaire : "",
-            }
+                date: isEditing ? rapportDepense?.date : new Date(),
+                libelle: isEditing ? rapportDepense?.libelle : "",
+                montant: isEditing ? rapportDepense?.montant : "",
+                grant: isEditing ? rapportDepense?.grant : grantValue,
+                ligneBudgetaire: isEditing
+                  ? rapportDepense?.ligneBudgetaire
+                  : "",
+              }
         }
         validationSchema={Yup.object({
           // grant: Yup.string().required("Champ obligatoire"),
           // libelle: Yup.string().required("Champ obligatoire"),
           // montant: Yup.string().required("Champ obligatoire"),
-          // ligneBudgetaire: Yup.string().required("Champ obligatoire"), 
+          // ligneBudgetaire: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -178,10 +208,16 @@ const AddRapportdepense = ({ handleClose }: any) => {
           return (
             <Form>
               <SectionNavigation>
-                <DialogTitle>{!isEditing ? "Créer" : "Modifier"} rapport de depense</DialogTitle>
-                
+                <DialogTitle>
+                  {!isEditing ? "Créer" : "Modifier"} rapport de depense
+                </DialogTitle>
+
                 <DialogContent>
-                  <FormContainer spacing={2} mt={2} sx={{display: amt !== 0 ? "none" : "block"}}>
+                  <FormContainer
+                    spacing={2}
+                    mt={2}
+                    sx={{ display: amt !== 0 ? "none" : "block" }}
+                  >
                     <OSDatePicker
                       fullWidth
                       id="outlined-basic"
@@ -189,7 +225,9 @@ const AddRapportdepense = ({ handleClose }: any) => {
                       variant="outlined"
                       name="date"
                       value={daty == "" ? formikProps.values.date : daty}
-                      onChange={(value: any) => formikProps.setFieldValue("date", value)}
+                      onChange={(value: any) =>
+                        formikProps.setFieldValue("date", value)
+                      }
                     />
                     <OSTextField
                       fullWidth
@@ -198,7 +236,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                       variant="outlined"
                       name="libelle"
                       inputProps={{ autoComplete: "off" }}
-                      value={lb ==="" ? formikProps.values.libelle : lb}
+                      value={lb === "" ? formikProps.values.libelle : lb}
                     />
                     <OSTextField
                       fullWidth
@@ -223,11 +261,9 @@ const AddRapportdepense = ({ handleClose }: any) => {
                           hyperText={grantValue == "vide" ? false : true}
                         >
                           <MenuItem value="vide">Select grant</MenuItem>
-                          {
-                            grantEncoursList.map((item: any) => (
-                              <MenuItem value={item.id}>{item.code!}</MenuItem>
-                            ))
-                          }
+                          {grantEncoursList.map((item: any) => (
+                            <MenuItem value={item.id}>{item.code!}</MenuItem>
+                          ))}
                         </OSTextField>
                         <OSSelectField
                           fullWidth
@@ -239,17 +275,18 @@ const AddRapportdepense = ({ handleClose }: any) => {
                           options={BudgetLineGrantList}
                           dataKey={["code"]}
                           valueKey="id"
-                          value={bdg ===0 ? formikProps.values.ligneBudgetaire : bdg}
-                        >
-                        </OSSelectField>
+                          value={
+                            bdg === 0 ? formikProps.values.ligneBudgetaire : bdg
+                          }
+                        ></OSSelectField>
                       </Stack>
                     </FormControl>
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
                         <FormLabel> Voici la liste des </FormLabel>
-                        <Lien> prevision de depense pendant la prévision</Lien>, vous
-                        pouvez les réutiliser pour les rapports
+                        <Lien> prevision de depense pendant la prévision</Lien>,
+                        vous pouvez les réutiliser pour les rapports
                       </Typography>
                     </Stack>
                     <Table sx={{ minWidth: 500 }} aria-label="simple table">
@@ -262,11 +299,16 @@ const AddRapportdepense = ({ handleClose }: any) => {
                           <TableCell align="left">Montant</TableCell>
                         </TableRow>
                       </TableHead>
-                      {previsionDepenselist.filter((p: any) => p.imprevue === null)
+                      {previsionDepenselist
+                        .filter(
+                          (p: any) => p.imprevue === null && p.missionId === id
+                        )
                         .map((item: PrevisionDepenseItem, index: any) => (
                           <TableRow
                             key={item.id!}
-                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
                           >
                             <TableCell component="th" scope="row">
                               <Moment format="DD/MM/yyyy">{item.date}</Moment>
@@ -275,18 +317,36 @@ const AddRapportdepense = ({ handleClose }: any) => {
                               {item.libelle}
                             </TableCell>
                             <TableCell align="left">
-                              {grantEncoursList.find((e: any) => e.id === item?.grant)?.code}
+                              {
+                                grantEncoursList.find(
+                                  (e: any) => e.id === item?.grant
+                                )?.code
+                              }
                             </TableCell>
                             <TableCell align="left">
-                              {budgetLineList.find((e: any) => e.id === item.ligneBudgetaire)?.code}
+                              {
+                                budgetLineList.find(
+                                  (e: any) => e.id === item.ligneBudgetaire
+                                )?.code
+                              }
                             </TableCell>
 
-                            <TableCell align="left">{item.montant} Ar</TableCell>
+                            <TableCell align="left">
+                              {item.montant} Ar
+                            </TableCell>
                             <TableCell align="right">
                               <Button
                                 color="primary"
                                 startIcon={<ContentCopyIcon />}
-                                onClick={() => clickUtiliser(item.date!, item.libelle!, item.grant!, item.ligneBudgetaire!, item.montant!)}
+                                onClick={() =>
+                                  clickUtiliser(
+                                    item.date!,
+                                    item.libelle!,
+                                    item.grant!,
+                                    item.ligneBudgetaire!,
+                                    item.montant!
+                                  )
+                                }
                               >
                                 Utiliser
                               </Button>
@@ -308,11 +368,11 @@ const AddRapportdepense = ({ handleClose }: any) => {
                         TOTAL BUDGET : {total} Ar
                       </Typography>
                       <Typography variant="body2" align="right">
-                        Imprévu de mission(total budget-location et perdiem MV(10% )) :
-                        {total / 10} Ar
+                        Imprévu de mission(total budget-location et perdiem
+                        MV(10% )) :{total / 10} Ar
                       </Typography>
                       <Typography variant="body2" align="right">
-                        TOTAL GENERAL BUDGET : {total + (total / 10)} Ar
+                        TOTAL GENERAL BUDGET : {total + total / 10} Ar
                       </Typography>
                     </Footer>
                     <TablePagination
@@ -329,22 +389,24 @@ const AddRapportdepense = ({ handleClose }: any) => {
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
-                  <Button 
-                  color="warning"
-                  onClick={() => {
-                    formikProps.resetForm();
-                    setGrt(0)
-                    dispatch(cancelEdit());
-                    handleClose();
-                  }}
-                  >Annuler</Button>
+                  <Button
+                    color="warning"
+                    onClick={() => {
+                      formikProps.resetForm();
+                      setGrt(0);
+                      dispatch(cancelEdit());
+                      handleClose();
+                    }}
+                  >
+                    Annuler
+                  </Button>
                   <Button variant="contained" type="submit">
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>

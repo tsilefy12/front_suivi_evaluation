@@ -104,7 +104,7 @@ const ListObjectif = () => {
                           aria-label="Supprimer"
                           component="span"
                           onClick={() => {
-                            handleClickDelete(row.id);
+                            handleClickDelete(row.id!);
                           }}
                         >
                           <DeleteIcon />

@@ -27,12 +27,19 @@ import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../../../../config/table.config";
-import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import Moment from "react-moment";
 import { useConfirm } from "material-ui-confirm";
 import useFetchEmploys from "../../../../GrantsEnCours/hooks/getResponsable";
-import { deleteBesoinVehiculeRapport, editBesoinVehiculeRapport, getBesoinVehiculeRapportList } from "../../../../../redux/features/besoinVehiculeRapport";
+import {
+  deleteBesoinVehiculeRapport,
+  editBesoinVehiculeRapport,
+  getBesoinVehiculeRapportList,
+} from "../../../../../redux/features/besoinVehiculeRapport";
 import AddbesoinVehiculeRapport from "./add/addBesoinVehicule";
 import { BesoinvehiculeRapportItem } from "../../../../../redux/features/besoinVehiculeRapport/besoinVehiculeRapport.interface";
 import useFetchBesoinEnVehiculeRapportList from "./hooks/useFetchBesoinEnVehicule";
@@ -45,19 +52,23 @@ const ListbesoinVehiculeRapportRapport = () => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
-  const { besoinVehiculeRapportList } = useAppSelector((state) => state.besoinVehiculeRapport);
+  const { besoinVehiculeRapportList } = useAppSelector(
+    (state) => state.besoinVehiculeRapport
+  );
   const { vehicleList } = useAppSelector((state: any) => state.vehicle);
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state: any) => state.employe);
-  const router = useRouter()
+  const router = useRouter();
+  const { id } = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
-  const fetchBesoinEnVehiculeRapportList = useFetchBesoinEnVehiculeRapportList();
+  const fetchBesoinEnVehiculeRapportList =
+    useFetchBesoinEnVehiculeRapportList();
 
   React.useEffect(() => {
     fetchBesoinEnVehiculeRapportList();
     fetchEmployes();
-  }, [router.query])
+  }, [router.query]);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -139,9 +150,9 @@ const ListbesoinVehiculeRapportRapport = () => {
     })
       .then(async () => {
         await dispatch(deleteBesoinVehiculeRapport({ id }));
-       fetchBesoinEnVehiculeRapportList();
+        fetchBesoinEnVehiculeRapportList();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
   const handleClickEdit = async (id: any) => {
     await dispatch(editBesoinVehiculeRapport({ id }));
@@ -179,6 +190,7 @@ const ListbesoinVehiculeRapportRapport = () => {
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {besoinVehiculeRapportList
+                    .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: BesoinvehiculeRapportItem, index) => {
                       // const isItemSelected = isSelected(row.dateDébut);
@@ -192,13 +204,13 @@ const ListbesoinVehiculeRapportRapport = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                        // selected={isItemSelected}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                          // onClick={(event) =>
-                          //   handleClick(event, row.dateDébut)
-                          // }
+                            // onClick={(event) =>
+                            //   handleClick(event, row.dateDébut)
+                            // }
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -212,22 +224,40 @@ const ListbesoinVehiculeRapportRapport = () => {
                             <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                           </TableCell>
                           <TableCell align="right">
-                            {vehicleList.find((e: any) => e.id === row.vehicule)?.vehicleType}
+                            {
+                              vehicleList.find(
+                                (e: any) => e.id === row.vehicule
+                              )?.vehicleType
+                            }
                           </TableCell>
                           <TableCell align="right">{row.trajet}</TableCell>
                           <TableCell align="right">
-                            <FormControl sx={{ height: (row.responsable!).length <= 2 ? "auto" : 70, overflow: "auto" }}>
-                              {
-                                (row.responsable!).map((lp: any) => {
-                                  return (
-                                    <Stack direction="column" spacing={2} height={25} overflow="auto">
-                                      {employees.find((e: any) => e.id === lp)?.name}
-                                      {" "}
-                                      {employees.find((e: any) => e.id === lp)?.surname}
-                                    </Stack>
-                                  )
-                                })
-                              }
+                            <FormControl
+                              sx={{
+                                height:
+                                  row.responsable!.length <= 2 ? "auto" : 70,
+                                overflow: "auto",
+                              }}
+                            >
+                              {row.responsable!.map((lp: any) => {
+                                return (
+                                  <Stack
+                                    direction="column"
+                                    spacing={2}
+                                    height={25}
+                                    overflow="auto"
+                                  >
+                                    {
+                                      employees.find((e: any) => e.id === lp)
+                                        ?.name
+                                    }{" "}
+                                    {
+                                      employees.find((e: any) => e.id === lp)
+                                        ?.surname
+                                    }
+                                  </Stack>
+                                );
+                              })}
                             </FormControl>
                           </TableCell>
                           <TableCell align="right">{row.nombreJour}</TableCell>

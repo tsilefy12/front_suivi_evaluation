@@ -41,7 +41,7 @@ const PrevisionDeMission = () => {
 
   React.useEffect(() => {
     const V = missionListe.flatMap((m) =>
-      m.validationPrevision.filter((v) => v.missionId === m.id)
+      m.validationPrevision!.filter((v) => v.missionId === m.id)
     );
     setValidate(V);
   }, [missionListe]);
@@ -135,7 +135,7 @@ const PrevisionDeMission = () => {
           sx={{ mb: 2 }}
         >
           <Stack direction={{ xs: "column", sm: "row" }}>
-            <Link href="/missions">
+            <Link href="/missions/ListMission">
               <Button
                 color="info"
                 variant="text"

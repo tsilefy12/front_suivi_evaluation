@@ -17,11 +17,17 @@ import {
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import InfoIcon from "@mui/icons-material/Info";
 import * as Yup from "yup";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import useFetchContactMissionRapport from "../hooks/useFetchContactMissionRapport";
 import { updateContact } from "../../../../../../redux/features/contact";
-import { createMissionRapport, updateMissionRapport } from "../../../../../../redux/features/missionRapport";
+import {
+  createMissionRapport,
+  updateMissionRapport,
+} from "../../../../../../redux/features/missionRapport";
 import { Form, Formik } from "formik";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { MissionRapportItem } from "../../../../../../redux/features/missionRapport/missionRapport.interface";
@@ -30,7 +36,9 @@ import useFetchContactListe from "../../../../../previsionMissions/organism/Tech
 import { ContactItem } from "../../../../../../redux/features/contact/contactSlice.interface";
 
 const AddContactPendantMission = ({ handleClose }: any) => {
-  const { isEditing, missionRapport, missionRapportList } = useAppSelector((state: any) => state.missionRapport);
+  const { isEditing, missionRapport, missionRapportList } = useAppSelector(
+    (state: any) => state.missionRapport
+  );
   const dispatch: any = useAppDispatch();
   const router = useRouter();
   const fetchContactMissionRapport = useFetchContactMissionRapport();
@@ -46,7 +54,7 @@ const AddContactPendantMission = ({ handleClose }: any) => {
   React.useEffect(() => {
     fetchContactMissionRapport();
     fetchContactList();
-  }, [router.query])
+  }, [router.query]);
 
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
@@ -66,22 +74,32 @@ const AddContactPendantMission = ({ handleClose }: any) => {
           values.numero = getNumero;
           values.remarque = getNote;
 
-          return (await dispatch(createMissionRapport(values)), fetchContactMissionRapport(),
-            handleClose());
+          return (
+            await dispatch(createMissionRapport(values)),
+            fetchContactMissionRapport(),
+            handleClose()
+          );
         }
-        return (await dispatch(createMissionRapport(values)), fetchContactMissionRapport(),
-          handleClose());
+        return (
+          await dispatch(createMissionRapport(values)),
+          fetchContactMissionRapport(),
+          handleClose()
+        );
       }
-      fetchContactMissionRapport()
-      handleClose()
+      fetchContactMissionRapport();
+      handleClose();
     } catch (error) {
       console.log("error", error);
     }
   };
 
-  const ClickHandler = ((id: any, nom: any, lieu: any, num: any, note: any) => {
-    setGetId(id); setGetNom(nom); setGetLieu(lieu); setGetNumero(num); setGetNote(note);
-  })
+  const ClickHandler = (id: any, nom: any, lieu: any, num: any, note: any) => {
+    setGetId(id);
+    setGetNom(nom);
+    setGetLieu(lieu);
+    setGetNumero(num);
+    setGetNote(note);
+  };
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -90,12 +108,14 @@ const AddContactPendantMission = ({ handleClose }: any) => {
           isEditing
             ? missionRapport
             : {
-              nomPrenom: isEditing ? missionRapport?.nomPrenom : "",
-              lieuInstitution: isEditing ? missionRapport?.lieuInstitution : "",
-              numero: isEditing ? missionRapport?.numero : "",
-              remarque: isEditing ? missionRapport?.remarque : "",
-              // missiomId: id!
-            }
+                nomPrenom: isEditing ? missionRapport?.nomPrenom : "",
+                lieuInstitution: isEditing
+                  ? missionRapport?.lieuInstitution
+                  : "",
+                numero: isEditing ? missionRapport?.numero : "",
+                remarque: isEditing ? missionRapport?.remarque : "",
+                // missiomId: id!
+              }
         }
         // validationSchema={Yup.object({
         //   nomPrenom: Yup.string().required("Champ obligatoire"),
@@ -125,8 +145,16 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       name="nomPrenom"
                       type="text"
                       inputProps={{ autoComplete: "off" }}
-                      value={getId != "" ? getNom : formikProps.values.nomPrenom}
-                      disabled={!!contactList.find((e: any) => (e.firstNameContact + " " + e.lastNameContact) === formikProps.values.nomPrenom && isEditing)}
+                      value={
+                        getId != "" ? getNom : formikProps.values.nomPrenom
+                      }
+                      disabled={
+                        !!contactList.find(
+                          (e: any) =>
+                            e.firstNameContact + " " + e.lastNameContact ===
+                              formikProps.values.nomPrenom && isEditing
+                        )
+                      }
                     />
                     <OSTextField
                       fullWidth
@@ -136,8 +164,18 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       name="lieuInstitution"
                       type="text"
                       inputProps={{ autoComplete: "off" }}
-                      value={getId != "" ? getLieu : formikProps.values.lieuInstitution}
-                      disabled={!!contactList.find((e: any) => e.locationContact === formikProps.values.lieuInstitution && isEditing)}
+                      value={
+                        getId != ""
+                          ? getLieu
+                          : formikProps.values.lieuInstitution
+                      }
+                      disabled={
+                        !!contactList.find(
+                          (e: any) =>
+                            e.locationContact ===
+                              formikProps.values.lieuInstitution && isEditing
+                        )
+                      }
                     />
                     <OSTextField
                       fullWidth
@@ -147,8 +185,16 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       name="numero"
                       type="text"
                       inputProps={{ autoComplete: "off" }}
-                      value={getId != "" ? getNumero : formikProps.values.numero}
-                      disabled={!!contactList.find((e: any) => e.numberContact === formikProps.values.numero && isEditing)}
+                      value={
+                        getId != "" ? getNumero : formikProps.values.numero
+                      }
+                      disabled={
+                        !!contactList.find(
+                          (e: any) =>
+                            e.numberContact === formikProps.values.numero &&
+                            isEditing
+                        )
+                      }
                     />
                     <OSTextField
                       fullWidth
@@ -158,14 +204,23 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                       name="remarque"
                       type="text"
                       inputProps={{ autoComplete: "off" }}
-                      value={getId != "" ? getNote : formikProps.values.remarque}
-                      disabled={!!contactList.find((e: any) => e.noteContact === formikProps.values.remarque && isEditing)}
+                      value={
+                        getId != "" ? getNote : formikProps.values.remarque
+                      }
+                      disabled={
+                        !!contactList.find(
+                          (e: any) =>
+                            e.noteContact === formikProps.values.remarque &&
+                            isEditing
+                        )
+                      }
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
-                        Voici la liste des <Lien>Contact pendant la prévision</Lien>,
-                        vous pouvez les réutiliser pour les rapports
+                        Voici la liste des{" "}
+                        <Lien>Contact pendant la prévision</Lien>, vous pouvez
+                        les réutiliser pour les rapports
                       </Typography>
                     </Stack>
                     <Table sx={{ minWidth: 500 }} aria-label="simple table">
@@ -177,40 +232,49 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                           <TableCell align="left">Remarques</TableCell>
                         </TableRow>
                       </TableHead>
-                      {contactList.map((item: ContactItem, index: any) => (
-                        <TableRow
-                          key={item.id!}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {item.firstNameContact}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {item.locationContact}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {item.numberContact}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {item.noteContact}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Button
-                              color="primary"
-                              startIcon={<ContentCopyIcon />}
-                              onClick={() => ClickHandler(
-                                item.id, (item.firstNameContact + " " + item.lastNameContact),
-                                item.locationContact,
-                                item.numberContact,
-                                item.noteContact
-                              )}
-                              disabled={isEditing}
-                            >
-                              Utiliser
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {contactList
+                        .filter((f: any) => f.missionId === id)
+                        .map((item: ContactItem, index: any) => (
+                          <TableRow
+                            key={item.id!}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {item.firstNameContact}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.locationContact}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.numberContact}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.noteContact}
+                            </TableCell>
+                            <TableCell align="right">
+                              <Button
+                                color="primary"
+                                startIcon={<ContentCopyIcon />}
+                                onClick={() =>
+                                  ClickHandler(
+                                    item.id,
+                                    item.firstNameContact +
+                                      " " +
+                                      item.lastNameContact,
+                                    item.locationContact,
+                                    item.numberContact,
+                                    item.noteContact
+                                  )
+                                }
+                                disabled={isEditing}
+                              >
+                                Utiliser
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </Table>
                   </FormContainer>
                 </DialogContent>
@@ -219,18 +283,18 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                     color="warning"
                     onClick={() => {
                       formikProps.resetForm();
-                      dispatch(cancelEdit())
+                      dispatch(cancelEdit());
                     }}
-                  >Annuler</Button>
-                  <Button
-                    variant="contained"
-                    type="submit">
+                  >
+                    Annuler
+                  </Button>
+                  <Button variant="contained" type="submit">
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>

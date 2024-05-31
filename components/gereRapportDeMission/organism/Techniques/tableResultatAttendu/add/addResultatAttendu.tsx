@@ -18,9 +18,15 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import InfoIcon from "@mui/icons-material/Info";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import useFetchResultatRapport from "../hooks/useFetchResultatRapport";
-import { createResultatAttendu, updateResultRapport } from "../../../../../../redux/features/resultatAttendu";
+import {
+  createResultatAttendu,
+  updateResultRapport,
+} from "../../../../../../redux/features/resultatAttendu";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { ResultatRapportItem } from "../../../../../../redux/features/resultatAttendu/resultatRapport.interface";
 import { cancelEdit } from "../../../../../../redux/features/resultatAttendu/resultatRapportSlice";
@@ -30,10 +36,12 @@ import { ExceptedResultItem } from "../../../../../../redux/features/exceptedRes
 const AddResultatAttendu = ({ handleClose }: any) => {
   const router = useRouter();
   const dispatch: any = useAppDispatch();
-  const { resultatRapport, isEditing, resultatRapportlist } = useAppSelector((state: any) => state.resultatRapport);
+  const { resultatRapport, isEditing, resultatRapportlist } = useAppSelector(
+    (state: any) => state.resultatRapport
+  );
   const fetchRapport = useFetchResultatRapport();
   const { id }: any = router.query;
-  const [getUtiliser, setGetUtiliser]: any = React.useState("")
+  const [getUtiliser, setGetUtiliser]: any = React.useState("");
   const { exceptedResultList } = useAppSelector(
     (state: any) => state.exceptedResult
   );
@@ -42,11 +50,11 @@ const AddResultatAttendu = ({ handleClose }: any) => {
   React.useEffect(() => {
     fetchRapport();
     fetchExceptedResultListe();
-  }, [router.query])
+  }, [router.query]);
 
   const ClikUtiliser = (valeur: any) => {
     setGetUtiliser(valeur);
-  }
+  };
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
     try {
@@ -61,18 +69,13 @@ const AddResultatAttendu = ({ handleClose }: any) => {
         if (getUtiliser !== "") {
           values.missionId = id!;
           values.resultat = getUtiliser;
-          return (await dispatch(createResultatAttendu(values)),
-            handleClose()
-          );
+          return await dispatch(createResultatAttendu(values)), handleClose();
         } else if (values.resultat != "") {
-          console.log("mandalo ato io")
-          return (await dispatch(createResultatAttendu(values)),
-            handleClose()
-          );
+          console.log("mandalo ato io");
+          return await dispatch(createResultatAttendu(values)), handleClose();
         }
       }
-      fetchRapport(),
-        handleClose();
+      fetchRapport(), handleClose();
     } catch (error) {
       console.log("error", error);
     }
@@ -86,9 +89,9 @@ const AddResultatAttendu = ({ handleClose }: any) => {
           isEditing
             ? resultatRapport
             : {
-              resultat: isEditing ? resultatRapport?.resultat : "",
-              // missiomId: id!
-            }
+                resultat: isEditing ? resultatRapport?.resultat : "",
+                // missiomId: id!
+              }
         }
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -108,38 +111,55 @@ const AddResultatAttendu = ({ handleClose }: any) => {
                       label="Résultat"
                       variant="outlined"
                       name="resultat"
-                      value={getUtiliser != "" ? getUtiliser : formikProps.values.resultat}
-                      disabled={!!exceptedResultList.find((e: any) => e.description === formikProps.values.resultat && isEditing)}
+                      value={
+                        getUtiliser != ""
+                          ? getUtiliser
+                          : formikProps.values.resultat
+                      }
+                      disabled={
+                        !!exceptedResultList.find(
+                          (e: any) =>
+                            e.description === formikProps.values.resultat &&
+                            isEditing
+                        )
+                      }
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
-                        Voici la liste des <Lien>Resultat pendant la prévision</Lien>,
-                        vous pouvez les réutiliser pour les rapports
+                        Voici la liste des{" "}
+                        <Lien>Resultat pendant la prévision</Lien>, vous pouvez
+                        les réutiliser pour les rapports
                       </Typography>
                     </Stack>
                     <FormContainer sx={{ height: 200, overflow: "auto" }}>
                       <Table sx={{ minWidth: 500 }} aria-label="simple table">
-                        {exceptedResultList.map((item: ExceptedResultItem, index: any) => (
-                          <TableRow
-                            key={index}
-                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                          >
-                            <TableCell component="th" scope="row">
-                              {item.description}
-                            </TableCell>
-                            <TableCell align="right">
-                              <Button
-                                color="primary"
-                                startIcon={<ContentCopyIcon />}
-                                onClick={() => ClikUtiliser(item.description)}
-                                disabled={isEditing}
-                              >
-                                Utiliser
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                        {exceptedResultList
+                          .filter((f: any) => f.missiomId === id)
+                          .map((item: ExceptedResultItem, index: any) => (
+                            <TableRow
+                              key={index}
+                              sx={{
+                                "&:last-child td, &:last-child th": {
+                                  border: 0,
+                                },
+                              }}
+                            >
+                              <TableCell component="th" scope="row">
+                                {item.description}
+                              </TableCell>
+                              <TableCell align="right">
+                                <Button
+                                  color="primary"
+                                  startIcon={<ContentCopyIcon />}
+                                  onClick={() => ClikUtiliser(item.description)}
+                                  disabled={isEditing}
+                                >
+                                  Utiliser
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
                       </Table>
                     </FormContainer>
                   </FormContainer>
@@ -153,22 +173,29 @@ const AddResultatAttendu = ({ handleClose }: any) => {
                       handleClose();
                     }}
                   >
-                    Annuler</Button>
+                    Annuler
+                  </Button>
                   <Button
                     variant="contained"
                     type="button"
                     onClick={formikProps.submitForm}
-                    disabled={!!exceptedResultList.find((e: any) => e.description === formikProps.values.resultat && isEditing)}
+                    disabled={
+                      !!exceptedResultList.find(
+                        (e: any) =>
+                          e.description === formikProps.values.resultat &&
+                          isEditing
+                      )
+                    }
                   >
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
             </Form>
-          )
+          );
         }}
       </Formik>
-    </Container >
+    </Container>
   );
 };
 

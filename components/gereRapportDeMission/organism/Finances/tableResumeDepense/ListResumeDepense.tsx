@@ -58,6 +58,7 @@ const ListResumeDepense = () => {
     (state: any) => state.resumeDepensePrevue
   );
   const router = useRouter();
+  const { id } = router.query;
   const fetchGrantList = useFetchGrants();
   const { grantEncoursList } = useAppSelector(
     (state: any) => state.grantEncours
@@ -203,6 +204,7 @@ const ListResumeDepense = () => {
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {resumeDepensePrevueList
+                    .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: any) => {
                       // const isItemSelected = isSelected(row.grant);

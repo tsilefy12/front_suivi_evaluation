@@ -24,9 +24,15 @@ import {
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import InfoIcon from "@mui/icons-material/Info";
 import { useRouter } from "next/router";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import useFetchProgrammeRapport from "../hooks/useFetchProgrammeRapport";
-import { createProgrammeRapport, updateProgrammeRapport } from "../../../../../../redux/features/programmeRapport";
+import {
+  createProgrammeRapport,
+  updateProgrammeRapport,
+} from "../../../../../../redux/features/programmeRapport";
 import OSDatePicker from "../../../../../shared/date/OSDatePicker";
 import { Form, Formik } from "formik";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
@@ -47,19 +53,27 @@ import useFetchDeliverableList from "../../../../../previsionMissions/organism/T
 const AddProgrammesRapport = ({ handleClose }: any) => {
   const router = useRouter();
   const dispatch: any = useAppDispatch();
-  const { isEditing, programmeRapport } = useAppSelector((state: any) => state.programmeRapport);
+  const { isEditing, programmeRapport } = useAppSelector(
+    (state: any) => state.programmeRapport
+  );
   const fetchProgrammeRapport = useFetchProgrammeRapport();
   const { id }: any = router.query;
   const [getUtiliser, setGetUtiliser]: any = React.useState("");
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state: any) => state.employe);
   const fetchLivrable = useFetchLivrableRapport();
-  const { livrableRapportlist } = useAppSelector((state: any) => state.livrableRapport);
+  const { livrableRapportlist } = useAppSelector(
+    (state: any) => state.livrableRapport
+  );
   const fetchActivitePrevueR = useFetchActiviteRapport();
-  const { activiteRapportlist } = useAppSelector((state: any) => state.activiteRapport);
+  const { activiteRapportlist } = useAppSelector(
+    (state: any) => state.activiteRapport
+  );
   const [open, setOpen]: any = React.useState(false);
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
-  const { programmePrevisionList } = useAppSelector((state: any) => state.programmePrevision)
+  const { programmePrevisionList } = useAppSelector(
+    (state: any) => state.programmePrevision
+  );
   const [dateD, setDateD] = React.useState("01/01/2000");
   const [dateF, setDateF] = React.useState("01/01/2000");
   const [activity, setActivitty] = React.useState("");
@@ -75,7 +89,6 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
   const fetchtDeliverable = useFetchDeliverableList();
   const { deliverableList } = useAppSelector((state: any) => state.deliverable);
 
-
   React.useEffect(() => {
     fetchProgrammeRapport();
     fetchEmployes();
@@ -84,23 +97,29 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
     fetchProgrammePrevision();
     fetchPlannedActivityListe();
     fetchtDeliverable();
-  }, [router.query])
+  }, [router.query]);
 
   // console.log("liste programme prev :", programmePrevisionList)
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
     isEditing
       ? employees.filter((employee: any) =>
-        programmeRapport?.responsableR?.includes(employee.id!)
-      )
+          programmeRapport?.responsableR?.includes(employee.id!)
+        )
       : []
   );
-  const ClikUtiliser = (id: any, date1: any, date2: any, activity1: any, activity2: any) => {
-    setGetId(id)
+  const ClikUtiliser = (
+    id: any,
+    date1: any,
+    date2: any,
+    activity1: any,
+    activity2: any
+  ) => {
+    setGetId(id);
     setDateD(date1);
     setDateF(date2);
     setActivitty(activity1);
     setActivityRealise(activity2);
-  }
+  };
 
   const handleSubmit = async (values: any) => {
     // console.log("id responsable :", values.responsableR)
@@ -108,7 +127,7 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
 
     const date1 = new Date(values.dateDebut);
     const DateNumber1 = date1.getTime();
-    const date2 = new Date(values.dateFin)
+    const date2 = new Date(values.dateFin);
     const DateNumber2 = date2.getTime();
     if (DateNumber1 >= DateNumber2) {
       return setOpen(true);
@@ -121,26 +140,26 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
             programmeRapport: values,
           })
         );
-      }
-      else {
-        if (dateD !== null && dateF !== null && activity !== "" && liverable !== "" && respo.length != 0) {
+      } else {
+        if (
+          dateD !== null &&
+          dateF !== null &&
+          activity !== "" &&
+          liverable !== "" &&
+          respo.length != 0
+        ) {
           values.dateDebut = dateD;
           values.dateFin = dateF;
           values.activitePrevueR = activity;
           values.livrableR = liverable;
           values.responsableR = respo;
-          return (await dispatch(createProgrammeRapport(values)),
-            handleClose()
-          );
+          return await dispatch(createProgrammeRapport(values)), handleClose();
         } else if (values.activitePrevueR !== "" && values.livrableR !== "") {
-          values.responsableR = [...selectedEmployes.map(e => e.id)];
-          return (await dispatch(createProgrammeRapport(values)),
-            handleClose()
-          );
+          values.responsableR = [...selectedEmployes.map((e) => e.id)];
+          return await dispatch(createProgrammeRapport(values)), handleClose();
         }
       }
-      fetchProgrammeRapport(),
-      handleClose();
+      fetchProgrammeRapport(), handleClose();
     } catch (error) {
       console.log("error", error);
     }
@@ -154,14 +173,18 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
           isEditing
             ? programmeRapport
             : {
-              dateDebut: isEditing ? programmeRapport?.dateDebut : new Date(),
-              dateFin: isEditing ? programmeRapport?.dateFin : new Date(),
-              activitePrevueR: isEditing ? programmeRapport?.activitePrevueR : "",
-              activtiteRealise: isEditing ? programmeRapport?.activtiteRealise : "",
-              livrableR: isEditing ? programmeRapport?.livrableR : "",
-              responsableR: isEditing ? programmeRapport?.responsableR : ""
-              // missiomId: id!
-            }
+                dateDebut: isEditing ? programmeRapport?.dateDebut : new Date(),
+                dateFin: isEditing ? programmeRapport?.dateFin : new Date(),
+                activitePrevueR: isEditing
+                  ? programmeRapport?.activitePrevueR
+                  : "",
+                activtiteRealise: isEditing
+                  ? programmeRapport?.activtiteRealise
+                  : "",
+                livrableR: isEditing ? programmeRapport?.livrableR : "",
+                responsableR: isEditing ? programmeRapport?.responsableR : "",
+                // missiomId: id!
+              }
         }
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -181,8 +204,14 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                       label="Date de début"
                       variant="outlined"
                       name="dateDebut"
-                      value={(dateD != "01/01/2000") ? dateD : formikProps.values.dateDebut}
-                      onChange={(value: any) => formikProps.setFieldValue("dateDebut", value)}
+                      value={
+                        dateD != "01/01/2000"
+                          ? dateD
+                          : formikProps.values.dateDebut
+                      }
+                      onChange={(value: any) =>
+                        formikProps.setFieldValue("dateDebut", value)
+                      }
                     />
                     <OSDatePicker
                       fullWidth
@@ -190,8 +219,14 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                       label="Date de fin "
                       variant="outlined"
                       name="dateFin"
-                      value={(dateF != "01/01/2000") ? dateF : formikProps.values.dateFin}
-                      onChange={(value: any) => formikProps.setFieldValue("dateFin", value)}
+                      value={
+                        dateF != "01/01/2000"
+                          ? dateF
+                          : formikProps.values.dateFin
+                      }
+                      onChange={(value: any) =>
+                        formikProps.setFieldValue("dateFin", value)
+                      }
                     />
                     <OSSelectField
                       fullWidth
@@ -209,7 +244,9 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                       label="Activité réalisées "
                       variant="outlined"
                       options={activiteRapportlist}
-                      dataKey={activityRealise !== "" ? activityRealise : ["activite"]}
+                      dataKey={
+                        activityRealise !== "" ? activityRealise : ["activite"]
+                      }
                       valueKey="id"
                       name="activiteRealise"
                     />
@@ -249,8 +286,10 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                       <InfoIcon />
                       <Typography variant="subtitle2">
                         Voici la liste des{" "}
-                        <Lien>Contact(durant la mission) pendant la prévision</Lien>,
-                        vous pouvez les réutiliser pour les rapports
+                        <Lien>
+                          Contact(durant la mission) pendant la prévision
+                        </Lien>
+                        , vous pouvez les réutiliser pour les rapports
                       </Typography>
                     </Stack>
                     <Table sx={{ minWidth: 500 }} aria-label="simple table">
@@ -263,52 +302,79 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                           <TableCell align="left">Responsable</TableCell>
                         </TableRow>
                       </TableHead>
-                      {programmePrevisionList.map((item: any) => (
-                        <TableRow
-                          key={item.id!}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            <Moment format="DD/MM/yyyy">{item.dateDebut}</Moment>
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            <Moment format="DD/MM/yyyy">{item.dateFin}</Moment>
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {plannedActivityList.find((e: any) => e.id === item.activitePrevue)?.description}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {deliverableList.find((e: any) => e.id === item.livrable)?.description}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {
-                              (item.responsable).map((lp: any) => {
+                      {programmePrevisionList
+                        .filter((f: any) => f.missionId === id)
+                        .map((item: any) => (
+                          <TableRow
+                            key={item.id!}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell component="th" scope="row">
+                              <Moment format="DD/MM/yyyy">
+                                {item.dateDebut}
+                              </Moment>
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              <Moment format="DD/MM/yyyy">
+                                {item.dateFin}
+                              </Moment>
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {
+                                plannedActivityList.find(
+                                  (e: any) => e.id === item.activitePrevue
+                                )?.description
+                              }
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {
+                                deliverableList.find(
+                                  (e: any) => e.id === item.livrable
+                                )?.description
+                              }
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.responsable.map((lp: any) => {
                                 return (
-                                  <Stack direction="column" spacing={2} height={25} overflow="auto">
-                                    {employees.find((e: any) => e.id === lp)?.name}
-                                    {" "}
-                                    {employees.find((e: any) => e.id === lp)?.surname}
+                                  <Stack
+                                    direction="column"
+                                    spacing={2}
+                                    height={25}
+                                    overflow="auto"
+                                  >
+                                    {
+                                      employees.find((e: any) => e.id === lp)
+                                        ?.name
+                                    }{" "}
+                                    {
+                                      employees.find((e: any) => e.id === lp)
+                                        ?.surname
+                                    }
                                   </Stack>
-                                )
-                              })
-                            }
-                          </TableCell>
-                          <TableCell align="right">
-                            <Button
-                              color="primary"
-                              startIcon={<ContentCopyIcon />}
-                              onClick={() => ClikUtiliser(
-                                item.id!,
-                                item.dateDebut,
-                                item.dateFin,
-                                item.activitePrevue,
-                                item.activitePrevue)}
-                            >
-                              Utiliser
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                                );
+                              })}
+                            </TableCell>
+                            <TableCell align="right">
+                              <Button
+                                color="primary"
+                                startIcon={<ContentCopyIcon />}
+                                onClick={() =>
+                                  ClikUtiliser(
+                                    item.id!,
+                                    item.dateDebut,
+                                    item.dateFin,
+                                    item.activitePrevue,
+                                    item.activitePrevue
+                                  )
+                                }
+                              >
+                                Utiliser
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </Table>
                   </FormContainer>
                 </DialogContent>
@@ -320,17 +386,15 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                       dispatch(cancelEdit());
                     }}
                     disabled={isEditing}
-                  >Annuler</Button>
+                  >
+                    Annuler
+                  </Button>
                   <Button variant="contained" type="submit">
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
-              <Dialog
-                open={open}
-                disablePortal={false}
-                sx={styleDialog}
-              >
+              <Dialog open={open} disablePortal={false} sx={styleDialog}>
                 <DialogTitle color="red">Attention!!</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
@@ -344,7 +408,7 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                 </DialogContent>
               </Dialog>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>
@@ -378,5 +442,5 @@ const styleDialog = {
   //left: 150,
   top: 20,
   width: "auto",
-  alignItem: "center"
-}
+  alignItem: "center",
+};

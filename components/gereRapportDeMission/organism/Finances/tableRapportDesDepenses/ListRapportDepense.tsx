@@ -54,6 +54,7 @@ const ListRapportDepenses = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+  const { id } = router.query;
   const dispatch: any = useAppDispatch();
   const confirm = useConfirm();
   const fetchRapportDepense = useFetchRapportDepense();
@@ -202,6 +203,7 @@ const ListRapportDepenses = () => {
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {rapportDepenseList
+                    .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: RapportDepenseItem, index: any) => {
                       // const isItemSelected = isSelected(row.id);

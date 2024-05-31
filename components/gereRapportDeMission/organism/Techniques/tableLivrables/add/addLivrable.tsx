@@ -12,22 +12,29 @@ import {
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import useFetchlivrableRapport from "../../tableActivitésPrévues/hooks/useFetchActivityRapport";
-import { createLivrableRapport, updateLivrableRapport } from "../../../../../../redux/features/LivrableRapport";
+import {
+  createLivrableRapport,
+  updateLivrableRapport,
+} from "../../../../../../redux/features/LivrableRapport";
 import { cancelEdit } from "../../../../../../redux/features/LivrableRapport/livrableRapportSlice";
 
 const AddlivrableRapport = ({ handleClose }: any) => {
-  const { isEditing, livrableRapport } = useAppSelector((state: any) => state.livrableRapport);
+  const { isEditing, livrableRapport } = useAppSelector(
+    (state: any) => state.livrableRapport
+  );
   const dispatch: any = useAppDispatch();
   const router = useRouter();
   const fetchlivrableRapport = useFetchlivrableRapport();
   const { id }: any = router.query;
   React.useEffect(() => {
-    fetchlivrableRapport()
-  }, [router.query])
-
+    fetchlivrableRapport();
+  }, [router.query]);
 
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
@@ -57,9 +64,9 @@ const AddlivrableRapport = ({ handleClose }: any) => {
           isEditing
             ? livrableRapport
             : {
-              livrablee: isEditing ? livrableRapport?.livrablee : "",
-              // missiomId: id!
-            }
+                livrablee: isEditing ? livrableRapport?.livrablee : "",
+                // missiomId: id!
+              }
         }
         validationSchema={Yup.object({
           livrablee: Yup.string().required("Champ obligatoire"),
@@ -68,43 +75,47 @@ const AddlivrableRapport = ({ handleClose }: any) => {
           handleSubmit(value);
           action.resetForm();
         }}
-      >{(formikProps) => {
-        return (
-          <Form>
-            <SectionNavigation>
-              <DialogTitle>Créer/modifier livrableRapports</DialogTitle>
-              <DialogContent>
-                <FormContainer spacing={2} mt={2}>
-                  <OSTextField
-                    fullWidth
-                    id="outlined-basic"
-                    label="Livrable de rapport"
-                    variant="outlined"
-                    name="livrablee"
-                    inputProps={{ autoComplete: "off"}}
-                  />
-                </FormContainer>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  color="warning"
-                  onClick={() => {
-                    formikProps.resetForm();
-                    dispatch(cancelEdit())
-                  }}
-                >Annuler</Button>
-                <Button
-                  variant="contained"
-                  type="button"
-                  onClick={formikProps.submitForm}
-                >
-                  Enregistrer
-                </Button>
-              </DialogActions>
-            </SectionNavigation>
-          </Form>
-        )
-      }}
+      >
+        {(formikProps) => {
+          return (
+            <Form>
+              <SectionNavigation>
+                <DialogTitle>Créer/modifier livrableRapports</DialogTitle>
+                <DialogContent>
+                  <FormContainer spacing={2} mt={2}>
+                    <OSTextField
+                      fullWidth
+                      id="outlined-basic"
+                      label="Livrable de rapport"
+                      variant="outlined"
+                      name="livrablee"
+                      inputProps={{ autoComplete: "off" }}
+                    />
+                  </FormContainer>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    color="warning"
+                    onClick={() => {
+                      formikProps.resetForm();
+                      dispatch(cancelEdit());
+                      handleClose();
+                    }}
+                  >
+                    Annuler
+                  </Button>
+                  <Button
+                    variant="contained"
+                    type="button"
+                    onClick={formikProps.submitForm}
+                  >
+                    Enregistrer
+                  </Button>
+                </DialogActions>
+              </SectionNavigation>
+            </Form>
+          );
+        }}
       </Formik>
     </Container>
   );

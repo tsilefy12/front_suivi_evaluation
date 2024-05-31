@@ -26,10 +26,16 @@ import {
   labelRowsPerPage,
 } from "../../../../../config/table.config";
 import useFetchcalculCarburantRapportList from "./hooks/useFetchCarbuant";
-import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import { useConfirm } from "material-ui-confirm";
-import { deleteCalculCarburantRapport, editCalculCarburantRapport } from "../../../../../redux/features/calculCarburantRapport";
+import {
+  deleteCalculCarburantRapport,
+  editCalculCarburantRapport,
+} from "../../../../../redux/features/calculCarburantRapport";
 import AddcalculCarburantRapport from "./add/addCalculCarburant";
 import { CalculCarburantRapportItem } from "../../../../../redux/features/calculCarburantRapport/calculCarburantRapport.interface";
 import useFetchVehicleList from "../../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
@@ -45,17 +51,20 @@ const ListcalculCarburantRapport = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const fetchcalculCarburantRapport = useFetchcalculCarburantRapportList();
-  const { calculCarburantRapportList } = useAppSelector((state) => state.calculCarburantRapport);
+  const { calculCarburantRapportList } = useAppSelector(
+    (state) => state.calculCarburantRapport
+  );
   const router = useRouter();
+  const { id } = router.query;
   const confirm = useConfirm();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const fetchVehicleList = useFetchVehicleList();
-  const { vehicleList } = useAppSelector((state: any) => state.vehicle)
+  const { vehicleList } = useAppSelector((state: any) => state.vehicle);
 
   React.useEffect(() => {
     fetchcalculCarburantRapport();
     fetchVehicleList();
-  }, [router.query])
+  }, [router.query]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -140,19 +149,19 @@ const ListcalculCarburantRapport = () => {
         await dispatch(deleteCalculCarburantRapport({ id }));
         fetchcalculCarburantRapport();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
   const handleClickEdit = async (id: any) => {
     await dispatch(editCalculCarburantRapport({ id }));
     handleClickOpen();
   };
   let total: any = useMemo(() => {
-    let calcul = 0
+    let calcul = 0;
     calculCarburantRapportList.map((c: any) => {
       calcul += c.totalCarburant;
-    })
+    });
     return calcul;
-  }, [calculCarburantRapportList])
+  }, [calculCarburantRapportList]);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -184,6 +193,7 @@ const ListcalculCarburantRapport = () => {
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {calculCarburantRapportList
+                    .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: CalculCarburantRapportItem, index) => {
                       // const isItemSelected = isSelected(row.trajet);
@@ -197,11 +207,11 @@ const ListcalculCarburantRapport = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.trajet}
-                        // selected={isItemSelected}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                          // onClick={(event) => handleClick(event, row.trajet)}
+                            // onClick={(event) => handleClick(event, row.trajet)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -212,11 +222,19 @@ const ListcalculCarburantRapport = () => {
                             {row.trajet}
                           </TableCell>
                           <TableCell align="right">
-                            {vehicleList.find((e: any) => e.id === row.vehicule)?.vehicleType}
+                            {
+                              vehicleList.find(
+                                (e: any) => e.id === row.vehicule
+                              )?.vehicleType
+                            }
                           </TableCell>
-                          <TableCell align="right">{row.typeCarburant}</TableCell>
+                          <TableCell align="right">
+                            {row.typeCarburant}
+                          </TableCell>
                           <TableCell align="right">{row.distance}</TableCell>
-                          <TableCell align="right">{row.nombreTrajet}</TableCell>
+                          <TableCell align="right">
+                            {row.nombreTrajet}
+                          </TableCell>
                           <TableCell align="right">
                             {row.distanceTotal}
                           </TableCell>

@@ -25,10 +25,16 @@ import {
   labelRowsPerPage,
 } from "../../../../../config/table.config";
 import KeyValue from "../../../../shared/keyValue";
-import { useAppDispatch, useAppSelector } from "../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import { useConfirm } from "material-ui-confirm";
-import { deleteCalculPileRapport, editCalculPileRapport } from "../../../../../redux/features/calculPileRapport";
+import {
+  deleteCalculPileRapport,
+  editCalculPileRapport,
+} from "../../../../../redux/features/calculPileRapport";
 import { CalculPileRapportItem } from "../../../../../redux/features/calculPileRapport/calculPileRapport.interface";
 import AddCalculDesPileRapport from "./add/addCalculDesPile";
 import useFetchCalculPileRapportList from "./hooks/useFetchCalculPile";
@@ -41,15 +47,18 @@ const ListCalculDesPilesRapport = () => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
-  const { calculPileRapportList } = useAppSelector((state) =>state.calculPileRapport)
+  const { calculPileRapportList } = useAppSelector(
+    (state) => state.calculPileRapport
+  );
   const router = useRouter();
+  const { id } = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const fetchCalculPileRapport = useFetchCalculPileRapportList();
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchCalculPileRapport();
-  }, [router.query])
+  }, [router.query]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -117,7 +126,6 @@ const ListCalculDesPilesRapport = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer pile",
@@ -135,7 +143,7 @@ const ListCalculDesPilesRapport = () => {
         await dispatch(deleteCalculPileRapport({ id }));
         fetchCalculPileRapport();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
   const handleClickEdit = async (id: any) => {
     await dispatch(editCalculPileRapport({ id }));
@@ -149,7 +157,7 @@ const ListCalculDesPilesRapport = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddCalculDesPileRapport handleClose={handleClose}/>
+          <AddCalculDesPileRapport handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -172,8 +180,8 @@ const ListCalculDesPilesRapport = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {
-                    calculPileRapportList
+                  {calculPileRapportList
+                    .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: CalculPileRapportItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
@@ -188,9 +196,7 @@ const ListCalculDesPilesRapport = () => {
                           key={row.appareil}
                           // selected={isItemSelected}
                         >
-                          <TableCell
-                            padding="checkbox"
-                          ></TableCell>
+                          <TableCell padding="checkbox"></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
@@ -200,7 +206,9 @@ const ListCalculDesPilesRapport = () => {
                             {row.appareil}
                           </TableCell>
                           <TableCell align="right">{row.type}</TableCell>
-                          <TableCell align="right">{row.nombreAppareil}</TableCell>
+                          <TableCell align="right">
+                            {row.nombreAppareil}
+                          </TableCell>
                           <TableCell align="right">{row.nombrePile}</TableCell>
                           <TableCell align="right">{row.change}</TableCell>
                           <TableCell align="right">20</TableCell>

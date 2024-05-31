@@ -22,9 +22,15 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import InfoIcon from "@mui/icons-material/Info";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import useFetchAutreInfoRapport from "../hooks/useFetchAutreInfoRaport";
-import { createAutreInfoRapport, updateAutreInfoRapport } from "../../../../../../redux/features/autreInfoRapport";
+import {
+  createAutreInfoRapport,
+  updateAutreInfoRapport,
+} from "../../../../../../redux/features/autreInfoRapport";
 import { Field, Form, Formik } from "formik";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import useFetchVehicleList from "../../../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
@@ -35,12 +41,14 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
   const { id }: any = router.query;
   const dispatch: any = useAppDispatch();
   const fetchAutreInfoRapport = useFetchAutreInfoRapport();
-  const { autreInfoRapport, isEditing, autreInfoRapportList } = useAppSelector((state: any) => state.autreInfoRapport);
+  const { autreInfoRapport, isEditing, autreInfoRapportList } = useAppSelector(
+    (state: any) => state.autreInfoRapport
+  );
 
   const { vehicleList } = useAppSelector((state: any) => state.vehicle);
   const fetchVehicleListe = useFetchVehicleList();
   const [getId, setGetId]: any = React.useState("");
-  const [getAssurance, setGetAssurance]: any = React.useState("")
+  const [getAssurance, setGetAssurance]: any = React.useState("");
   const [getVisite, setGetVisite]: any = React.useState("");
   const [getTypeVehicule, setGetTypeVehicule]: any = React.useState("");
   const [getCenture, setGetCenture]: any = React.useState(false);
@@ -61,36 +69,51 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
           })
         );
       } else {
-          if (getId!=="") {
-            values.missionId = id!;
-            values.assurance = getAssurance;
-            values.visiteTechnic = getVisite;
-            values.voiture = getTypeVehicule;
-            values.centureSecurite = getCenture;
+        if (getId !== "") {
+          values.missionId = id!;
+          values.assurance = getAssurance;
+          values.visiteTechnic = getVisite;
+          values.voiture = getTypeVehicule;
+          values.centureSecurite = getCenture;
 
-            return ( dispatch(createAutreInfoRapport(values)),   useFetchAutreInfoRapport(),
-            handleClose());
-          }else if (values.assurance!="" &&  values.visiteTechnic!=="" && values.voiture!=="" ) {
-            return (dispatch(createAutreInfoRapport(values)), useFetchAutreInfoRapport(), handleClose());
-          }
+          return (
+            dispatch(createAutreInfoRapport(values)),
+            useFetchAutreInfoRapport(),
+            handleClose()
+          );
+        } else if (
+          values.assurance != "" &&
+          values.visiteTechnic !== "" &&
+          values.voiture !== ""
+        ) {
+          return (
+            dispatch(createAutreInfoRapport(values)),
+            useFetchAutreInfoRapport(),
+            handleClose()
+          );
+        }
       }
-      fetchAutreInfoRapport()
+      fetchAutreInfoRapport();
       handleClose();
-    
     } catch (error) {
       console.log("error", error);
     }
   };
 
-
-  const ClickHandler = (id: any, ass: any, visity: any, type: any, centure: boolean) =>{
+  const ClickHandler = (
+    id: any,
+    ass: any,
+    visity: any,
+    type: any,
+    centure: boolean
+  ) => {
     setGetId(id);
     setGetAssurance(ass);
     setGetTypeVehicule(type);
     setGetVisite(visity);
     setGetCenture(centure);
-  }
-  console.log("type :", getTypeVehicule)
+  };
+  console.log("type :", getTypeVehicule);
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -99,12 +122,16 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
           isEditing
             ? autreInfoRapport
             : {
-              assurance: isEditing ? autreInfoRapport?.assurance : "",
-              visiteTechnic: isEditing ? autreInfoRapport?.visiteTechnic : "OUI",
-              voiture: isEditing ? autreInfoRapport?.voiture : "OTHER",
-              centureSecurite: isEditing ? autreInfoRapport?.centureSecurite: true,
-              // missionId: isEditing ? autreInfoRapport?.missionId: id,
-            }
+                assurance: isEditing ? autreInfoRapport?.assurance : "",
+                visiteTechnic: isEditing
+                  ? autreInfoRapport?.visiteTechnic
+                  : "OUI",
+                voiture: isEditing ? autreInfoRapport?.voiture : "OTHER",
+                centureSecurite: isEditing
+                  ? autreInfoRapport?.centureSecurite
+                  : true,
+                // missionId: isEditing ? autreInfoRapport?.missionId: id,
+              }
         }
         validationSchema={Yup.object({
           // assurance: Yup.string().required("Veuillez choisir type d'operation "),
@@ -134,26 +161,63 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                       variant="outlined"
                       name="assurance"
                       inputProps={{ autoComplete: "off" }}
-                      value={getId != "" ? getAssurance : formikProps.values.assurance}
-                      disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
+                      value={
+                        getId != ""
+                          ? getAssurance
+                          : formikProps.values.assurance
+                      }
+                      disabled={
+                        !!vehicleList.find(
+                          (e: any) =>
+                            e.insuranceVehicle ===
+                              formikProps.values.assurance && isEditing
+                        )
+                      }
                     />
                     <CustomStack
                       direction={{ xs: "column", sm: "column", md: "row" }}
                       spacing={{ xs: 2, sm: 2, md: 1 }}
                     >
                       <FormControlLabel
-                        control={<Switch defaultChecked={getId != "" ? getVisite :formikProps.values.visiteTechnic=="OUI"} />}
+                        control={
+                          <Switch
+                            defaultChecked={
+                              getId != ""
+                                ? getVisite
+                                : formikProps.values.visiteTechnic == "OUI"
+                            }
+                          />
+                        }
                         label="Visite technique"
                         name="visiteTechnic"
-                        onChange={(e,c) =>formikProps.setFieldValue("visiteTechnic", c ? "OUI": "NON")}
-                        disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
+                        onChange={(e, c) =>
+                          formikProps.setFieldValue(
+                            "visiteTechnic",
+                            c ? "OUI" : "NON"
+                          )
+                        }
+                        disabled={
+                          !!vehicleList.find(
+                            (e: any) =>
+                              e.insuranceVehicle ===
+                                formikProps.values.assurance && isEditing
+                          )
+                        }
                       />
                       <FormControlLabel
-                        control={<Switch defaultChecked={getCenture==true}/>}
+                        control={<Switch defaultChecked={getCenture == true} />}
                         label="Ceinture de sécurité"
                         name="centureSecurite"
-                        onChange={(e,c) =>formikProps.setFieldValue("centureSecurite", c)}
-                        disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
+                        onChange={(e, c) =>
+                          formikProps.setFieldValue("centureSecurite", c)
+                        }
+                        disabled={
+                          !!vehicleList.find(
+                            (e: any) =>
+                              e.insuranceVehicle ===
+                                formikProps.values.assurance && isEditing
+                          )
+                        }
                       />
                     </CustomStack>
                     <CustomStack
@@ -161,34 +225,65 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                       spacing={{ xs: 2, sm: 2, md: 1 }}
                     >
                       <Field as={RadioGroup} row name="OperationType">
-                          <FormControlLabel
-                            value="OTHER"
-                            control={<Radio defaultChecked={getTypeVehicule==="OTHER"}/>}
-                            label="Autre de location"
-                            name="voiture"
-                            disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
-                          />
-                          <FormControlLabel
-                            value="RENTAL"
-                            control={<Radio defaultChecked={getTypeVehicule==="RENTAL"}/>}
-                            label="Voiture de location"
-                            name="voiture"
-                            disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
-                          />
-                          <FormControlLabel
-                            value="PRIVATE"
-                            control={<Radio defaultChecked={getTypeVehicule==="PRIVATE"}/>}
-                            label="Voiture privé"
-                            name="voiture"
-                            disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
-                          />
-                        </Field>
+                        <FormControlLabel
+                          value="OTHER"
+                          control={
+                            <Radio
+                              defaultChecked={getTypeVehicule === "OTHER"}
+                            />
+                          }
+                          label="Autre de location"
+                          name="voiture"
+                          disabled={
+                            !!vehicleList.find(
+                              (e: any) =>
+                                e.insuranceVehicle ===
+                                  formikProps.values.assurance && isEditing
+                            )
+                          }
+                        />
+                        <FormControlLabel
+                          value="RENTAL"
+                          control={
+                            <Radio
+                              defaultChecked={getTypeVehicule === "RENTAL"}
+                            />
+                          }
+                          label="Voiture de location"
+                          name="voiture"
+                          disabled={
+                            !!vehicleList.find(
+                              (e: any) =>
+                                e.insuranceVehicle ===
+                                  formikProps.values.assurance && isEditing
+                            )
+                          }
+                        />
+                        <FormControlLabel
+                          value="PRIVATE"
+                          control={
+                            <Radio
+                              defaultChecked={getTypeVehicule === "PRIVATE"}
+                            />
+                          }
+                          label="Voiture privé"
+                          name="voiture"
+                          disabled={
+                            !!vehicleList.find(
+                              (e: any) =>
+                                e.insuranceVehicle ===
+                                  formikProps.values.assurance && isEditing
+                            )
+                          }
+                        />
+                      </Field>
                     </CustomStack>
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
-                        Voici la liste des <Lien>Lieux pendant la prévision</Lien>, vous
-                        pouvez les réutiliser pour les rapports
+                        Voici la liste des{" "}
+                        <Lien>Lieux pendant la prévision</Lien>, vous pouvez les
+                        réutiliser pour les rapports
                       </Typography>
                     </Stack>
                     <Table sx={{ minWidth: 500 }} aria-label="simple table">
@@ -199,61 +294,83 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                           <TableCell align="left">
                             Voiture de location ou privé?
                           </TableCell>
-                          <TableCell align="left">Ceinture de securite</TableCell>
+                          <TableCell align="left">
+                            Ceinture de securite
+                          </TableCell>
                         </TableRow>
                       </TableHead>
-                      {vehicleList.map((item: any) => (
-                        <TableRow
-                          key={item.id!}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {item.insuranceVehicle}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {item.technicalVisitVehicle}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {item.vehicleType}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {item.safetyBeltVehicle ? "OUI": "NON"}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Button 
-                            color="primary" 
-                            startIcon={<ContentCopyIcon />}
-                            onClick={() =>ClickHandler(item.id!, item.insuranceVehicle, item.technicalVisitVehicle, item.vehicleType, item.safetyBeltVehicle!)}
-                            disabled={isEditing}
-                            >
-                              Utiliser
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {vehicleList
+                        .filter((f: any) => f.missionId === id)
+                        .map((item: any) => (
+                          <TableRow
+                            key={item.id!}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {item.insuranceVehicle}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.technicalVisitVehicle}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.vehicleType}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.safetyBeltVehicle ? "OUI" : "NON"}
+                            </TableCell>
+                            <TableCell align="right">
+                              <Button
+                                color="primary"
+                                startIcon={<ContentCopyIcon />}
+                                onClick={() =>
+                                  ClickHandler(
+                                    item.id!,
+                                    item.insuranceVehicle,
+                                    item.technicalVisitVehicle,
+                                    item.vehicleType,
+                                    item.safetyBeltVehicle!
+                                  )
+                                }
+                                disabled={isEditing}
+                              >
+                                Utiliser
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </Table>
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
-                  <Button 
-                  color="warning"
-                  onClick={() => {
-                    formikProps.resetForm();
-                    dispatch(cancelEdit());
-                    handleClose();
-                  }}
-                  >Annuler</Button>
-                  <Button 
-                  variant="contained" 
-                  type="submit"
-                  disabled={!!vehicleList.find((e: any) => e.insuranceVehicle===formikProps.values.assurance && isEditing)}
+                  <Button
+                    color="warning"
+                    onClick={() => {
+                      formikProps.resetForm();
+                      dispatch(cancelEdit());
+                      handleClose();
+                    }}
+                  >
+                    Annuler
+                  </Button>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    disabled={
+                      !!vehicleList.find(
+                        (e: any) =>
+                          e.insuranceVehicle === formikProps.values.assurance &&
+                          isEditing
+                      )
+                    }
                   >
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
-              </Form>
-          )
+            </Form>
+          );
         }}
       </Formik>
     </Container>

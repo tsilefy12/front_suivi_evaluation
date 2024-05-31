@@ -19,7 +19,10 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useRouter } from "next/router";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import useFetchProgrammeRapport from "../hooks/useFetchProgrammeRapport";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import useFetchLivrableRapport from "../../tableLivrables/hooks/useFetchLivrableRapport";
@@ -27,7 +30,10 @@ import useFetchActiviteRapport from "../../tableActivitésPrévues/hooks/useFetc
 import { ProgrammeRapportItem } from "../../../../../../redux/features/programmeRapport/programmeRapport.interface";
 import Moment from "react-moment";
 import { useConfirm } from "material-ui-confirm";
-import { deleteProgrammeRapport, editProgrammeRapport } from "../../../../../../redux/features/programmeRapport";
+import {
+  deleteProgrammeRapport,
+  editProgrammeRapport,
+} from "../../../../../../redux/features/programmeRapport";
 import AddProgrammesRapport from "../add/addProgramme";
 import { editAcitiviteRapport } from "../../../../../../redux/features/activitesRapport";
 import useFetchPlannedActivityList from "../../../../../previsionMissions/organism/Techniques/tableActivitésPrévues/hooks/useFetchPlannedActivityList";
@@ -36,17 +42,25 @@ const ListProgrammes = () => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const dispatch: any = useAppDispatch();
-  const { isEditing, programmeRapport, programmeRapportList } = useAppSelector(state => state.programmeRapport);
+  const { isEditing, programmeRapport, programmeRapportList } = useAppSelector(
+    (state) => state.programmeRapport
+  );
   const fetchProgrammeRapport = useFetchProgrammeRapport();
   const { id }: any = router.query;
   const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector(state => state.employe);
+  const { employees } = useAppSelector((state) => state.employe);
   const fetchLivrable = useFetchLivrableRapport();
-  const { livrableRapportlist } = useAppSelector(state => state.livrableRapport);
+  const { livrableRapportlist } = useAppSelector(
+    (state) => state.livrableRapport
+  );
   const fetchPlannedActivityListe = useFetchPlannedActivityList();
-  const { plannedActivityList } = useAppSelector(state => state.plannedActivity);
+  const { plannedActivityList } = useAppSelector(
+    (state) => state.plannedActivity
+  );
   const fetchActivityRapport = useFetchActiviteRapport();
-  const { activiteRapportlist } = useAppSelector(state => state.activiteRapport);
+  const { activiteRapportlist } = useAppSelector(
+    (state) => state.activiteRapport
+  );
   const confirm = useConfirm();
 
   React.useEffect(() => {
@@ -55,7 +69,7 @@ const ListProgrammes = () => {
     fetchPlannedActivityListe();
     fetchLivrable();
     fetchActivityRapport();
-  }, [router.query])
+  }, [router.query]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -82,7 +96,7 @@ const ListProgrammes = () => {
         await dispatch(deleteProgrammeRapport({ id }));
         fetchProgrammeRapport();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const handleClickEdit = async (id: any) => {
@@ -107,66 +121,86 @@ const ListProgrammes = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {programmeRapportList.map((row: any) => (
-                    <TableRow
-                      key={row.id}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {plannedActivityList.find((e: any) =>e.id === row.activitePrevueR)?.description}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {row.activiteRealise}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {Array.isArray(livrableRapportlist) && livrableRapportlist.find(e =>e.id===row.livrableR)?.livrablee}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <FormControl sx={{height: (row.responsableR).length <= 2 ? "auto": 70, overflow: "auto"}}>
-                        {
-                          (row.responsableR).map((lp: any) => {
-                            return (
-                              <Stack direction="column" spacing={2}>
-                                {employees.find((e: any) => e.id === lp)?.name}
-                                {" "}
-                                {employees.find((e: any) => e.id === lp)?.surname}
-                              </Stack>
-                            )
-                          })
-                        }
-                        </FormControl>
-                      </TableCell>
-                      <TableCell align="right">
-                        <BtnActionContainer
-                          direction="row"
-                          justifyContent="right"
-                        >
-                          <IconButton
-                            color="primary"
-                            aria-label="Modifier"
-                            component="span"
-                            onClick={() => handleClickEdit(row.id!)}
+                  {programmeRapportList
+                    .filter((f: any) => f.missionId === id)
+                    .map((row: any) => (
+                      <TableRow
+                        key={row.id}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {
+                            plannedActivityList.find(
+                              (e: any) => e.id === row.activitePrevueR
+                            )?.description
+                          }
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {row.activiteRealise}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {Array.isArray(livrableRapportlist) &&
+                            livrableRapportlist.find(
+                              (e) => e.id === row.livrableR
+                            )?.livrablee}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          <FormControl
+                            sx={{
+                              height:
+                                row.responsableR.length <= 2 ? "auto" : 70,
+                              overflow: "auto",
+                            }}
                           >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            color="warning"
-                            aria-label="Supprimer"
-                            component="span"
-                            onClick={() => handleClickDelete(row.id!)}
+                            {row.responsableR.map((lp: any) => {
+                              return (
+                                <Stack direction="column" spacing={2}>
+                                  {
+                                    employees.find((e: any) => e.id === lp)
+                                      ?.name
+                                  }{" "}
+                                  {
+                                    employees.find((e: any) => e.id === lp)
+                                      ?.surname
+                                  }
+                                </Stack>
+                              );
+                            })}
+                          </FormControl>
+                        </TableCell>
+                        <TableCell align="right">
+                          <BtnActionContainer
+                            direction="row"
+                            justifyContent="right"
                           >
-                            <DeleteIcon />
-                          </IconButton>
-                        </BtnActionContainer>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                            <IconButton
+                              color="primary"
+                              aria-label="Modifier"
+                              component="span"
+                              onClick={() => handleClickEdit(row.id!)}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              color="warning"
+                              aria-label="Supprimer"
+                              component="span"
+                              onClick={() => handleClickDelete(row.id!)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </BtnActionContainer>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </MyTableContainer>

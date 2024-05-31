@@ -17,9 +17,15 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import InfoIcon from "@mui/icons-material/Info";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import useFetchActiviteRapport from "../hooks/useFetchActivityRapport";
-import { createActiviteRapport, updateActiviteRapport } from "../../../../../../redux/features/activitesRapport";
+import {
+  createActiviteRapport,
+  updateActiviteRapport,
+} from "../../../../../../redux/features/activitesRapport";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { ActiviteRapportItem } from "../../../../../../redux/features/activitesRapport/activiteRapport.interface";
 import { cancelEdit } from "../../../../../../redux/features/activitesRapport/activiteRapportSlice";
@@ -30,7 +36,9 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
   const router = useRouter();
   const dispatch: any = useAppDispatch();
   const fetchActivityRapport = useFetchActiviteRapport();
-  const { activiteRapport, isEditing, activiteRapportlist } = useAppSelector((state: any) => state.activiteRapport);
+  const { activiteRapport, isEditing, activiteRapportlist } = useAppSelector(
+    (state: any) => state.activiteRapport
+  );
   const [getUtiliser, setGetUtiliser] = React.useState("");
   const { id }: any = router.query;
   const { plannedActivityList } = useAppSelector(
@@ -41,12 +49,11 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
   React.useEffect(() => {
     fetchActivityRapport();
     fetchPlannedActivityListe();
-  }, [router.query])
-
+  }, [router.query]);
 
   const ClikUtiliser = (valeur: any) => {
     setGetUtiliser(valeur);
-  }
+  };
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
     try {
@@ -61,17 +68,12 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
         if (getUtiliser !== "") {
           values.missionId = id!;
           values.activite = getUtiliser;
-          return (await dispatch(createActiviteRapport(values)),
-            handleClose()
-          );
+          return await dispatch(createActiviteRapport(values)), handleClose();
         } else if (values.activite != "") {
-          return (await dispatch(createActiviteRapport(values)),
-            handleClose()
-          );
+          return await dispatch(createActiviteRapport(values)), handleClose();
         }
       }
-      fetchActivityRapport(),
-        handleClose();
+      fetchActivityRapport(), handleClose();
     } catch (error) {
       console.log("error", error);
     }
@@ -85,9 +87,9 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
           isEditing
             ? activiteRapport
             : {
-              activite: isEditing ? activiteRapport?.activite : "",
-              // missiomId: id!
-            }
+                activite: isEditing ? activiteRapport?.activite : "",
+                // missiomId: id!
+              }
         }
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -108,39 +110,55 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
                       variant="outlined"
                       name="activite"
                       inputProps={{ autoComplete: "off" }}
-                      value={getUtiliser != "" ? getUtiliser : formikProps.values.activite}
-                      disabled={!!plannedActivityList.find((e: any) => e.description === formikProps.values.activite && isEditing)}
+                      value={
+                        getUtiliser != ""
+                          ? getUtiliser
+                          : formikProps.values.activite
+                      }
+                      disabled={
+                        !!plannedActivityList.find(
+                          (e: any) =>
+                            e.description == formikProps.values.activite &&
+                            isEditing
+                        )
+                      }
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
                         Voici la liste des{" "}
-                        <Lien>activites prevus pendant la prévision</Lien>, vous pouvez
-                        les réutiliser pour les rapports
+                        <Lien>activites prevus pendant la prévision</Lien>, vous
+                        pouvez les réutiliser pour les rapports
                       </Typography>
                     </Stack>
                     <FormContainer sx={{ height: 200, overflow: "auto" }}>
                       <Table sx={{ minWidth: 500 }} aria-label="simple table">
-                        {plannedActivityList.map((item: PlannedActivityItem, index: any) => (
-                          <TableRow
-                            key={index}
-                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                          >
-                            <TableCell component="th" scope="row">
-                              {item.description}
-                            </TableCell>
-                            <TableCell align="right">
-                              <Button
-                                color="primary"
-                                startIcon={<ContentCopyIcon />}
-                                onClick={() => ClikUtiliser(item.description)}
-                                disabled={isEditing}
-                              >
-                                Utiliser
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                        {plannedActivityList
+                          .filter((f: any) => f.missionId === id)
+                          .map((item: PlannedActivityItem, index: any) => (
+                            <TableRow
+                              key={index}
+                              sx={{
+                                "&:last-child td, &:last-child th": {
+                                  border: 0,
+                                },
+                              }}
+                            >
+                              <TableCell component="th" scope="row">
+                                {item.description}
+                              </TableCell>
+                              <TableCell align="right">
+                                <Button
+                                  color="primary"
+                                  startIcon={<ContentCopyIcon />}
+                                  onClick={() => ClikUtiliser(item.description)}
+                                  disabled={isEditing}
+                                >
+                                  Utiliser
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
                       </Table>
                     </FormContainer>
                   </FormContainer>
@@ -153,19 +171,26 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
                       dispatch(cancelEdit());
                       handleClose();
                     }}
-                  >Annuler
+                  >
+                    Annuler
                   </Button>
-                  <Button 
-                  variant="contained" 
-                  type="submit"
-                  disabled={!!plannedActivityList.find((e: any) => e.description === formikProps.values.activite && isEditing)}
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    disabled={
+                      !!plannedActivityList.find(
+                        (e: any) =>
+                          e.description === formikProps.values.activite &&
+                          isEditing
+                      )
+                    }
                   >
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>

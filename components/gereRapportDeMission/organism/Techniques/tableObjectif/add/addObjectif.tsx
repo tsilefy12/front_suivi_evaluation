@@ -17,20 +17,27 @@ import InfoIcon from "@mui/icons-material/Info";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { useRouter } from "next/router";
-import { createObjectifRapport, updateObjectifRapport } from "../../../../../../redux/features/objectifRapport";
+import {
+  createObjectifRapport,
+  updateObjectifRapport,
+} from "../../../../../../redux/features/objectifRapport";
 import useFetchObjectifRapport from "../hooks/useFetchObjectifRapport";
 import { cancelEdit } from "../../../../../../redux/features/objectifRapport/objectifRapportSlice";
 import useFetchMissionGoalListe from "../../../../../previsionMissions/organism/Techniques/tableObjectif/hooks/useFetchObjectifList";
 import KeyValue from "../../../../../shared/keyValue";
 
-
 const AddObjectif = ({ handleClose }: any) => {
   const router = useRouter();
   const dispatch: any = useAppDispatch();
-  const { isEditing, objectifRapport, objectifRapportlist } = useAppSelector((state: any) => state.objectifRapport);
+  const { isEditing, objectifRapport, objectifRapportlist } = useAppSelector(
+    (state: any) => state.objectifRapport
+  );
   const fetchObjectifRapport = useFetchObjectifRapport();
   const { id }: any = router.query;
   const [getUtiliser, setGetUtiliser]: any = React.useState("");
@@ -40,8 +47,7 @@ const AddObjectif = ({ handleClose }: any) => {
   React.useEffect(() => {
     fetchObjectifRapport();
     fetchMissionGoalList();
-  }, [router.query])
-
+  }, [router.query]);
 
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
@@ -56,25 +62,20 @@ const AddObjectif = ({ handleClose }: any) => {
       } else {
         if (getUtiliser !== "") {
           values.objectif = getUtiliser;
-          return (await dispatch(createObjectifRapport(values)),
-            handleClose()
-          );
+          return await dispatch(createObjectifRapport(values)), handleClose();
         } else if (values.objectif != "") {
-          return (await dispatch(createObjectifRapport(values)),
-            handleClose()
-          );
+          return await dispatch(createObjectifRapport(values)), handleClose();
         }
       }
-      fetchObjectifRapport(),
-      handleClose();
-      getUtiliser("")
+      fetchObjectifRapport(), handleClose();
+      getUtiliser("");
     } catch (error) {
       console.log("error", error);
     }
   };
-  const ClikUtiliser = ((valeur: any) => {
+  const ClikUtiliser = (valeur: any) => {
     setGetUtiliser(valeur);
-    })
+  };
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -83,9 +84,9 @@ const AddObjectif = ({ handleClose }: any) => {
           isEditing
             ? objectifRapport
             : {
-              objectif: isEditing ?  objectifRapport?.objectif : "",
-              missiomId: id!
-            }
+                objectif: isEditing ? objectifRapport?.objectif : "",
+                missionId: id!,
+              }
         }
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -106,49 +107,67 @@ const AddObjectif = ({ handleClose }: any) => {
                       variant="outlined"
                       name="objectif"
                       inputProps={{ autoComplete: "off" }}
-                      value={(getUtiliser !== "" && !isEditing) ? getUtiliser : formikProps.values.objectif}
-                      disabled={!!missionGoalList.find((e: any) => e.description === formikProps.values.objectif && isEditing)}
+                      value={
+                        getUtiliser !== "" && !isEditing
+                          ? getUtiliser
+                          : formikProps.values.objectif
+                      }
+                      disabled={
+                        !!missionGoalList.find(
+                          (e: any) =>
+                            e.description === formikProps.values.objectif &&
+                            isEditing
+                        )
+                      }
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
-                        Voici la liste des <Lien>objectifs pendant la prévision</Lien>,
-                        vous pouvez les réutiliser pour les rapports
+                        Voici la liste des{" "}
+                        <Lien>objectifs pendant la prévision</Lien>, vous pouvez
+                        les réutiliser pour les rapports
                       </Typography>
                     </Stack>
                     <FormContainer sx={{ height: 200, overflow: "auto" }}>
                       <Table sx={{ minWidth: 500 }} aria-label="simple table">
-                        {missionGoalList.map((item: any) => (
-                          <TableRow
-                            key={item.id}
-                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                          >
-                            <TableCell component="th" scope="row">
-                              {item.description}
-                            </TableCell>
-                            <TableCell align="right">
-                              <Button
-                                color="primary"
-                                startIcon={<ContentCopyIcon />}
-                                onClick={() => ClikUtiliser(item.description)}
-                                disabled={isEditing}
-                              >
-                                Utiliser
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-
-                        ))}
+                        {missionGoalList
+                          .filter((f: any) => f.missionId == id)
+                          .map((item: any) => (
+                            <TableRow
+                              key={item.id}
+                              sx={{
+                                "&:last-child td, &:last-child th": {
+                                  border: 0,
+                                },
+                              }}
+                            >
+                              <TableCell component="th" scope="row">
+                                {item.description}
+                              </TableCell>
+                              <TableCell align="right">
+                                <Button
+                                  color="primary"
+                                  startIcon={<ContentCopyIcon />}
+                                  onClick={() => ClikUtiliser(item.description)}
+                                  disabled={isEditing}
+                                >
+                                  Utiliser
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
                       </Table>
                     </FormContainer>
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
-                  <Button color="warning" onClick={() => {
-                    formikProps.resetForm();
-                    dispatch(cancelEdit());
-                    handleClose();
-                  }}
+                  <Button
+                    color="warning"
+                    onClick={() => {
+                      formikProps.resetForm();
+                      dispatch(cancelEdit());
+                      handleClose();
+                    }}
                   >
                     Annuler
                   </Button>
@@ -156,15 +175,20 @@ const AddObjectif = ({ handleClose }: any) => {
                     variant="contained"
                     type="button"
                     onClick={formikProps.submitForm}
-                    disabled={!!missionGoalList.find((e: any) => e.description === formikProps.values.objectif && isEditing)}
+                    disabled={
+                      !!missionGoalList.find(
+                        (e: any) =>
+                          e.description === formikProps.values.objectif &&
+                          isEditing
+                      )
+                    }
                   >
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
-
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>

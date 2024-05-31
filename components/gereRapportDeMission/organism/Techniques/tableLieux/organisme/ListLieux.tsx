@@ -18,18 +18,27 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddLieux from "../add/addLieux";
 import useFetchLieuxRapport from "../hooks/useFetchLieuxRapport";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import { LieuxRapportItem } from "../../../../../../redux/features/lieuxRapport/lieuxRapport.interface";
-import { deleteLieuxRapport, editLieuxRapport } from "../../../../../../redux/features/lieuxRapport";
+import {
+  deleteLieuxRapport,
+  editLieuxRapport,
+} from "../../../../../../redux/features/lieuxRapport";
 import { useConfirm } from "material-ui-confirm";
 import useFetchMissionLocationListe from "../../../../../previsionMissions/organism/Techniques/tableLieux/hooks/useFetchMissionLocationList";
 
 const ListLieux = () => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+  const { id } = router.query;
   const fetchLieuxRapport = useFetchLieuxRapport();
-  const { lieuxRapportlist } = useAppSelector((state: any) => state.lieuxRapport);
+  const { lieuxRapportlist } = useAppSelector(
+    (state: any) => state.lieuxRapport
+  );
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const { missionLocationList } = useAppSelector(
@@ -40,7 +49,7 @@ const ListLieux = () => {
   React.useEffect(() => {
     fetchLieuxRapport();
     fetchMissionLocationListe();
-  }, [router.query])
+  }, [router.query]);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -65,7 +74,7 @@ const ListLieux = () => {
         await dispatch(deleteLieuxRapport({ id }));
         fetchLieuxRapport();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const handleClickEdit = async (id: any) => {
@@ -86,48 +95,53 @@ const ListLieux = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {lieuxRapportlist.map((row: LieuxRapportItem, index: any) => (
-                  <TableRow
-                    key={index}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {
-                        missionLocationList.find((ml: any) => ml.id === row.fokontany)?.village || row.fokontany
-                      }
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {
-                        missionLocationList.find((ml: any) => ml.id === row.commune)?.commune || row.commune
-                      }
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {
-                        missionLocationList.find((ml: any) => ml.id === row.district)?.district || row.district
-                      }
-                    </TableCell>
-                    <TableCell align="right">
-                      <BtnActionContainer direction="row" justifyContent="right">
-                        <IconButton
-                          color="primary"
-                          aria-label="Modifier"
-                          component="span"
-                          onClick={() => handleClickEdit(row.id!)}
+                {lieuxRapportlist
+                  .filter((f: any) => f.missiomId === id)
+                  .map((row: LieuxRapportItem, index: any) => (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {missionLocationList.find(
+                          (ml: any) => ml.id === row.fokontany
+                        )?.village || row.fokontany}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {missionLocationList.find(
+                          (ml: any) => ml.id === row.commune
+                        )?.commune || row.commune}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {missionLocationList.find(
+                          (ml: any) => ml.id === row.district
+                        )?.district || row.district}
+                      </TableCell>
+                      <TableCell align="right">
+                        <BtnActionContainer
+                          direction="row"
+                          justifyContent="right"
                         >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          color="warning"
-                          aria-label="Supprimer"
-                          component="span"
-                          onClick={() => handleClickDelete(row.id!)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </BtnActionContainer>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          <IconButton
+                            color="primary"
+                            aria-label="Modifier"
+                            component="span"
+                            onClick={() => handleClickEdit(row.id!)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="warning"
+                            aria-label="Supprimer"
+                            component="span"
+                            onClick={() => handleClickDelete(row.id!)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </BtnActionContainer>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </MyTableContainer>

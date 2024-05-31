@@ -148,7 +148,7 @@ const GereRapportDeMission = () => {
     const VF = getVF.map((vf) => vf.id);
     // console.log(test[0]);
     const VFF = missionListe.flatMap((m) =>
-      m.validationRapport.filter(
+      m.validationRapport!.filter(
         (v) => v.missionId === m.id && v.responsableId == VF[0]
       )
     );
@@ -158,7 +158,7 @@ const GereRapportDeMission = () => {
     const VT = getVT.map((vf) => vf.id);
     // console.log(test[0]);
     const VTT = missionListe.flatMap((m) =>
-      m.validationRapport.filter(
+      m.validationRapport!.filter(
         (v) => v.missionId === m.id && v.responsableId == VT[0]
       )
     );
@@ -169,7 +169,7 @@ const GereRapportDeMission = () => {
     const VP = getFV.map((vf) => vf.id);
     // console.log(test[0]);
     const VPP = missionListe.flatMap((m) =>
-      m.validationRapport.filter(
+      m.validationRapport!.filter(
         (v) => v.missionId === m.id && v.responsableId == VP[0]
       )
     );
@@ -278,7 +278,7 @@ const GereRapportDeMission = () => {
           sx={{ mb: 2 }}
         >
           <Stack direction={{ xs: "column", sm: "row" }}>
-            <Link href="/missions">
+            <Link href="/missions/ListMission">
               <Button
                 color="info"
                 variant="text"

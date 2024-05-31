@@ -19,10 +19,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddAutreInfoAutoRapport from "../add/addAutreInfoAuto";
 import useFetchAutreInfoRapport from "../hooks/useFetchAutreInfoRaport";
 import { useRouter } from "next/router";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import { useConfirm } from "material-ui-confirm";
 import { AutreInfoRapportItem } from "../../../../../../redux/features/autreInfoRapport/autreInfoRapport.interface";
-import { deleteAutreInfoRapport, editAutreInfoRapport } from "../../../../../../redux/features/autreInfoRapport";
+import {
+  deleteAutreInfoRapport,
+  editAutreInfoRapport,
+} from "../../../../../../redux/features/autreInfoRapport";
 
 const ListAutreInfoAuto = () => {
   const [open, setOpen] = React.useState(false);
@@ -31,11 +37,13 @@ const ListAutreInfoAuto = () => {
   const dispatch: any = useAppDispatch();
   const confirm = useConfirm();
   const fetchAutreInfoRapport = useFetchAutreInfoRapport();
-  const { autreInfoRapportList } = useAppSelector((state: any) => state.autreInfoRapport);
+  const { autreInfoRapportList } = useAppSelector(
+    (state: any) => state.autreInfoRapport
+  );
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchAutreInfoRapport();
-  }, [router.query])
+  }, [router.query]);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -60,7 +68,7 @@ const ListAutreInfoAuto = () => {
         await dispatch(deleteAutreInfoRapport({ id }));
         fetchAutreInfoRapport();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const handleClickEdit = async (id: any) => {
@@ -70,68 +78,75 @@ const ListAutreInfoAuto = () => {
   return (
     <Container>
       <Box sx={{ overflow: "auto" }}>
-    <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
-      <MyTableContainer>
-        <Table sx={{ minWidth: 700 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Assurance</TableCell>
-              <TableCell align="left">Visite technique</TableCell>
-              <TableCell align="left">Voiture de location ou privé?</TableCell>
-              <TableCell align="left">Ceinture de securite</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {autreInfoRapportList.map((row: AutreInfoRapportItem, index: any) => (
-              <TableRow
-                key={index}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.assurance}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {row.visiteTechnic}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {row.voiture}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {row.centureSecurite ? "OUI": "NON" }
-                </TableCell>
-                <TableCell align="right">
-                  <BtnActionContainer direction="row" justifyContent="right">
-                    <IconButton
-                      color="primary"
-                      aria-label="Modifier"
-                      component="span"
-                      onClick={() =>handleClickEdit(row.id!)}
+        <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
+          <MyTableContainer>
+            <Table sx={{ minWidth: 700 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Assurance</TableCell>
+                  <TableCell align="left">Visite technique</TableCell>
+                  <TableCell align="left">
+                    Voiture de location ou privé?
+                  </TableCell>
+                  <TableCell align="left">Ceinture de securite</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {autreInfoRapportList
+                  .filter((f: any) => f.missionId === id)
+                  .map((row: AutreInfoRapportItem, index: any) => (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      color="warning"
-                      aria-label="Supprimer"
-                      component="span"
-                      onClick={() =>handleClickDelete(row.id!)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </BtnActionContainer>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </MyTableContainer>
-      </Box>
+                      <TableCell component="th" scope="row">
+                        {row.assurance}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.visiteTechnic}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.voiture}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.centureSecurite ? "OUI" : "NON"}
+                      </TableCell>
+                      <TableCell align="right">
+                        <BtnActionContainer
+                          direction="row"
+                          justifyContent="right"
+                        >
+                          <IconButton
+                            color="primary"
+                            aria-label="Modifier"
+                            component="span"
+                            onClick={() => handleClickEdit(row.id!)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="warning"
+                            aria-label="Supprimer"
+                            component="span"
+                            onClick={() => handleClickDelete(row.id!)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </BtnActionContainer>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </MyTableContainer>
+        </Box>
       </Box>
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
         <Button variant="text" color="info" onClick={handleClickOpen}>
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddAutreInfoAutoRapport handleClose={handleClose}/>
+          <AddAutreInfoAutoRapport handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
     </Container>

@@ -15,11 +15,17 @@ import {
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import InfoIcon from "@mui/icons-material/Info";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import useFetchLieuxRapport from "../hooks/useFetchLieuxRapport";
-import { createLieuxRapport, updateLieuxRapport } from "../../../../../../redux/features/lieuxRapport";
+import {
+  createLieuxRapport,
+  updateLieuxRapport,
+} from "../../../../../../redux/features/lieuxRapport";
 import { Form, Formik } from "formik";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { cancelEdit } from "../../../../../../redux/features/lieuxRapport/lieuxSlice";
@@ -27,7 +33,9 @@ import useFetchMissionLocationListe from "../../../../../previsionMissions/organ
 import { MissionLocationItem } from "../../../../../../redux/features/missionLocation/missionLocationSlice.interface";
 
 const AddLieux = ({ handleClose }: any) => {
-  const { isEditing, lieuxRapport } = useAppSelector((state: any) => state.lieuxRapport);
+  const { isEditing, lieuxRapport } = useAppSelector(
+    (state: any) => state.lieuxRapport
+  );
   const dispatch: any = useAppDispatch();
   const router = useRouter();
   const fetchLieuxRapport = useFetchLieuxRapport();
@@ -41,11 +49,10 @@ const AddLieux = ({ handleClose }: any) => {
   const [getCommune, setGetCommune]: any = React.useState("");
   const [getDisctrict, setGetDistrict]: any = React.useState("");
 
-
   React.useEffect(() => {
     fetchLieuxRapport();
     fetchMissionLocationListe();
-  }, [router.query])
+  }, [router.query]);
 
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
@@ -62,24 +69,32 @@ const AddLieux = ({ handleClose }: any) => {
           values.fokontany = getFokontany;
           values.commune = getCommune;
           values.district = getDisctrict;
-          return (dispatch(createLieuxRapport(values)), handleClose());
-        }else if (values.fokontany != "" && values.commune!=="" && values.district!=="" ) {
-          return  (await dispatch(createLieuxRapport(values)), handleClose())
+          return dispatch(createLieuxRapport(values)), handleClose();
+        } else if (
+          values.fokontany != "" &&
+          values.commune !== "" &&
+          values.district !== ""
+        ) {
+          return await dispatch(createLieuxRapport(values)), handleClose();
         }
       }
-      fetchLieuxRapport(),
-        handleClose();
+      fetchLieuxRapport(), handleClose();
     } catch (error) {
       console.log("error", error);
     }
   };
 
-  const ClickHandler = (id: any, FokontanyValue: any, CommuneValue: any, DistrictValue: any) => {
+  const ClickHandler = (
+    id: any,
+    FokontanyValue: any,
+    CommuneValue: any,
+    DistrictValue: any
+  ) => {
     setGetId(id);
     setGetFokontany(FokontanyValue);
     setGetCommune(CommuneValue);
     setGetDistrict(DistrictValue);
-  }
+  };
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -88,11 +103,11 @@ const AddLieux = ({ handleClose }: any) => {
           isEditing
             ? lieuxRapport
             : {
-              fokontany: isEditing ? lieuxRapport?.fokontany : "",
-              commune: isEditing ? lieuxRapport?.commune : "",
-              district: isEditing ? lieuxRapport?.district : "",
-              // missiomId: id!
-            }
+                fokontany: isEditing ? lieuxRapport?.fokontany : "",
+                commune: isEditing ? lieuxRapport?.commune : "",
+                district: isEditing ? lieuxRapport?.district : "",
+                // missiomId: id!
+              }
         }
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -112,8 +127,18 @@ const AddLieux = ({ handleClose }: any) => {
                       label="Fokontany"
                       variant="outlined"
                       name="fokontany"
-                      value={getId!= "" ? getFokontany : formikProps.values.fokontany}
-                      disabled={!!missionLocationList.find((e: any) => e.village===formikProps.values.fokontany && isEditing)}
+                      value={
+                        getId != ""
+                          ? getFokontany
+                          : formikProps.values.fokontany
+                      }
+                      disabled={
+                        !!missionLocationList.find(
+                          (e: any) =>
+                            e.village === formikProps.values.fokontany &&
+                            isEditing
+                        )
+                      }
                     />
                     <OSTextField
                       fullWidth
@@ -121,8 +146,16 @@ const AddLieux = ({ handleClose }: any) => {
                       label="Commune"
                       variant="outlined"
                       name="commune"
-                      value={getId != "" ? getCommune : formikProps.values.commune}
-                      disabled={!!missionLocationList.find((e: any) => e.commune===formikProps.values.commune && isEditing)}
+                      value={
+                        getId != "" ? getCommune : formikProps.values.commune
+                      }
+                      disabled={
+                        !!missionLocationList.find(
+                          (e: any) =>
+                            e.commune === formikProps.values.commune &&
+                            isEditing
+                        )
+                      }
                     />
                     <OSTextField
                       fullWidth
@@ -130,43 +163,63 @@ const AddLieux = ({ handleClose }: any) => {
                       label="Disctrict"
                       variant="outlined"
                       name="district"
-                      value={getId != "" ? getDisctrict : formikProps.values.district}
-                      disabled={!!missionLocationList.find((e: any) => e.district===formikProps.values.district && isEditing)}
+                      value={
+                        getId != "" ? getDisctrict : formikProps.values.district
+                      }
+                      disabled={
+                        !!missionLocationList.find(
+                          (e: any) =>
+                            e.district === formikProps.values.district &&
+                            isEditing
+                        )
+                      }
                     />
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
-                        Voici la liste des <Lien>Lieux pendant la prévision</Lien>, vous
-                        pouvez les réutiliser pour les rapports
+                        Voici la liste des{" "}
+                        <Lien>Lieux pendant la prévision</Lien>, vous pouvez les
+                        réutiliser pour les rapports
                       </Typography>
                     </Stack>
                     <Table sx={{ minWidth: 500 }} aria-label="simple table">
-                      {missionLocationList.map((item: MissionLocationItem, index: any) => (
-                        <TableRow
-                          key={index}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {item.village}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {item.commune}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {item.district}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Button
-                              color="primary"
-                              startIcon={<ContentCopyIcon />}
-                              onClick={() => ClickHandler(item.id, item.village, item.commune, item.district)}
-                              disabled={isEditing}
-                            >
-                              Utiliser
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {missionLocationList
+                        .filter((f: any) => f.missionId === id)
+                        .map((item: MissionLocationItem, index: any) => (
+                          <TableRow
+                            key={index}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {item.village}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.commune}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.district}
+                            </TableCell>
+                            <TableCell align="right">
+                              <Button
+                                color="primary"
+                                startIcon={<ContentCopyIcon />}
+                                onClick={() =>
+                                  ClickHandler(
+                                    item.id,
+                                    item.village,
+                                    item.commune,
+                                    item.district
+                                  )
+                                }
+                                disabled={isEditing}
+                              >
+                                Utiliser
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </Table>
                   </FormContainer>
                 </DialogContent>
@@ -175,25 +228,38 @@ const AddLieux = ({ handleClose }: any) => {
                     color="warning"
                     onClick={() => {
                       formikProps.resetForm();
-                      dispatch(cancelEdit())
-                      handleClose()
+                      dispatch(cancelEdit());
+                      handleClose();
                     }}
-                  >Annuler</Button>
+                  >
+                    Annuler
+                  </Button>
                   <Button
                     variant="contained"
                     type="submit"
                     disabled={
-                    !!missionLocationList.find((e: any) => e.district===formikProps.values.district && isEditing) 
-                    &&  !!missionLocationList.find((e: any) => e.commune===formikProps.values.commune && isEditing) 
-                    && !!missionLocationList.find((e: any) => e.district===formikProps.values.district && isEditing)
-                  }
+                      !!missionLocationList.find(
+                        (e: any) =>
+                          e.district === formikProps.values.district &&
+                          isEditing
+                      ) &&
+                      !!missionLocationList.find(
+                        (e: any) =>
+                          e.commune === formikProps.values.commune && isEditing
+                      ) &&
+                      !!missionLocationList.find(
+                        (e: any) =>
+                          e.district === formikProps.values.district &&
+                          isEditing
+                      )
+                    }
                   >
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>

@@ -29,12 +29,18 @@ import {
   labelRowsPerPage,
 } from "../../../../../../config/table.config";
 import { Form, Formik } from "formik";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import useFetchResumeDepensePrevue from "../hooks/useFetchResumeDepensePrevue";
 import { useRouter } from "next/router";
 import useFetchGrants from "../../../../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "../../../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
-import { createResumeDepensePrevue, updateResumeDepensePrevue } from "../../../../../../redux/features/resumeDepensePrevue";
+import {
+  createResumeDepensePrevue,
+  updateResumeDepensePrevue,
+} from "../../../../../../redux/features/resumeDepensePrevue";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import OSSelectField from "../../../../../shared/select/OSSelectField";
 import useFetchResumeDepenseList from "../../../../../previsionMissions/organism/Finances/tableResumeDepense/hooks/useFetchResumeDepense";
@@ -45,25 +51,27 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dense, setDense] = React.useState(false);
-  const { isEditing, resumeDepensePrevue } = useAppSelector((state: any) => state.resumeDepensePrevue);
+  const { isEditing, resumeDepensePrevue } = useAppSelector(
+    (state: any) => state.resumeDepensePrevue
+  );
   const fetchResumeDepensePrevue = useFetchResumeDepensePrevue();
   const dispatch: any = useAppDispatch();
   const router = useRouter();
   const fetchGrantList = useFetchGrants();
-  const { grantEncoursList } = useAppSelector(state => state.grantEncours);
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchligneBudgetaire = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const [grantValue, setGrantValue]: any = React.useState("vide");
   const { id }: any = router.query;
   const fetchResumeDepense = useFetchResumeDepenseList();
-  const { resumeDepenseList } = useAppSelector((state) => state.resumeDepense)
+  const { resumeDepenseList } = useAppSelector((state) => state.resumeDepense);
 
   React.useEffect(() => {
     fetchResumeDepensePrevue();
     fetchGrantList();
     fetchligneBudgetaire();
     fetchResumeDepense();
-  }, [router.query])
+  }, [router.query]);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -78,30 +86,40 @@ const AddResumeDepense = ({ handleClose }: any) => {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [1, 2].length) : 0;
 
   //select budget line depends grant
-  let BudgetLineGrantList: any = useState<{}>([])
+  let BudgetLineGrantList: any = useState<{}>([]);
   const uniqueValues = new Set();
 
-  grantEncoursList.forEach(g => {
+  grantEncoursList.forEach((g) => {
     if (grantValue !== "vide") {
       if (!uniqueValues.has(g.id)) {
-        uniqueValues.add(g.id)
-        return BudgetLineGrantList = g.budgetLines;
+        uniqueValues.add(g.id);
+        return (BudgetLineGrantList = g.budgetLines);
       }
-    }else{
-      return BudgetLineGrantList = [];
+    } else {
+      return (BudgetLineGrantList = []);
     }
   });
-  const [grts, setGrts]: any = React.useState(0)
-  const [bdgLine, setBdgLine]: any = React.useState(0)
-  const [dpns, setDpns]: any = React.useState("")
-  const [bdgt, setBdgt]: any = React.useState("")
-  const [rmq, setRmq]: any = React.useState("")
+  const [grts, setGrts]: any = React.useState(0);
+  const [bdgLine, setBdgLine]: any = React.useState(0);
+  const [dpns, setDpns]: any = React.useState("");
+  const [bdgt, setBdgt]: any = React.useState("");
+  const [rmq, setRmq]: any = React.useState("");
 
-  const clickUtiliser = (grants: any, budgetline: any, depense: any, budget: any, rem: any) => {
-    setGrts(grants), setBdgLine(budgetline), setDpns(depense), setBdgt(budget), setRmq(rem)
-  }
+  const clickUtiliser = (
+    grants: any,
+    budgetline: any,
+    depense: any,
+    budget: any,
+    rem: any
+  ) => {
+    setGrts(grants),
+      setBdgLine(budgetline),
+      setDpns(depense),
+      setBdgt(budget),
+      setRmq(rem);
+  };
   // console.log("Budget line value :", grts)
-  //ajout 
+  //ajout
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
     try {
@@ -112,23 +130,28 @@ const AddResumeDepense = ({ handleClose }: any) => {
             resumeDepensePrevue: values,
           })
         );
-      } else if (grts !== 0 && bdgLine !== 0 && dpns !== "" && bdgt !== "" && rmq !== "") {
+      } else if (
+        grts !== 0 &&
+        bdgLine !== 0 &&
+        dpns !== "" &&
+        bdgt !== "" &&
+        rmq !== ""
+      ) {
         values.grant = grts;
         values.ligneBudgetaire = bdgLine;
         values.depensePrevue = dpns;
         values.budgetDepense = bdgt;
         values.remarque = rmq;
         return await (dispatch(createResumeDepensePrevue(values)),
-          fetchResumeDepensePrevue(),
-          handleClose())
+        fetchResumeDepensePrevue(),
+        handleClose());
       } else {
         values.grant = grantValue;
         return await (dispatch(createResumeDepensePrevue(values)),
-          fetchResumeDepensePrevue(),
-          handleClose())
+        fetchResumeDepensePrevue(),
+        handleClose());
       }
-      fetchResumeDepensePrevue(),
-        handleClose()
+      fetchResumeDepensePrevue(), handleClose();
     } catch (error) {
       console.log("error", error);
     }
@@ -144,12 +167,18 @@ const AddResumeDepense = ({ handleClose }: any) => {
           isEditing
             ? resumeDepensePrevue
             : {
-              depensePrevue: isEditing ? resumeDepensePrevue?.depensePrevue : "",
-              budgetDepense: isEditing ? resumeDepensePrevue?.budgetDepense : "",
-              remarque: isEditing ? resumeDepensePrevue?.remarque : "",
-              grant: isEditing ? resumeDepensePrevue?.grant : grantValue,
-              ligneBudgetaire: isEditing ? resumeDepensePrevue?.ligneBudgetaire : "",
-            }
+                depensePrevue: isEditing
+                  ? resumeDepensePrevue?.depensePrevue
+                  : "",
+                budgetDepense: isEditing
+                  ? resumeDepensePrevue?.budgetDepense
+                  : "",
+                remarque: isEditing ? resumeDepensePrevue?.remarque : "",
+                grant: isEditing ? resumeDepensePrevue?.grant : grantValue,
+                ligneBudgetaire: isEditing
+                  ? resumeDepensePrevue?.ligneBudgetaire
+                  : "",
+              }
         }
         // validationSchema={Yup.object({
         //   depensePrevue: Yup.string().required("Champ obligatoire"),
@@ -181,11 +210,9 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         disabled={!!grts}
                       >
                         <MenuItem value="vide">Select grant</MenuItem>
-                        {
-                          grantEncoursList.map((item: any) => (
-                            <MenuItem value={item.id!}>{item.code!}</MenuItem>
-                          ))
-                        }
+                        {grantEncoursList.map((item: any) => (
+                          <MenuItem value={item.id!}>{item.code!}</MenuItem>
+                        ))}
                       </OSTextField>
                     </FormControl>
                     <FormControl fullWidth>
@@ -199,10 +226,13 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         options={BudgetLineGrantList}
                         dataKey={["code"]}
                         valueKey="id"
-                        value={bdgLine!=0 ? bdgLine: formikProps.values.ligneBudgetaire}
+                        value={
+                          bdgLine != 0
+                            ? bdgLine
+                            : formikProps.values.ligneBudgetaire
+                        }
                         disabled={!!grts}
-                      >
-                      </OSSelectField>
+                      ></OSSelectField>
                     </FormControl>
                     <OSTextField
                       fullWidth
@@ -234,9 +264,12 @@ const AddResumeDepense = ({ handleClose }: any) => {
                     <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
-                        <FormLabel sx={{ color: "black" }}> Voici la liste des </FormLabel>
-                        <Lien> resumé de depense pendant la prévision</Lien>, vous
-                        pouvez les réutiliser pour les rapports
+                        <FormLabel sx={{ color: "black" }}>
+                          {" "}
+                          Voici la liste des{" "}
+                        </FormLabel>
+                        <Lien> resumé de depense pendant la prévision</Lien>,
+                        vous pouvez les réutiliser pour les rapports
                       </Typography>
                     </Stack>
                     <Table sx={{ width: "300px" }} aria-label="simple table">
@@ -249,37 +282,57 @@ const AddResumeDepense = ({ handleClose }: any) => {
                           <TableCell align="left">Remarques</TableCell>
                         </TableRow>
                       </TableHead>
-                      {resumeDepenseList.map((item: ResumeDepenseItem, index: any) => (
-                        <TableRow
-                          key={index}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {grantEncoursList.find((e: any) => e.id === item.grant)?.code}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {budgetLineList.find((e: any) => e.id === item.ligneBudgetaire)?.code}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {item.depensePrevue}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {item.budgetDepense}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {item.remarque}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Button
-                              color="primary"
-                              startIcon={<ContentCopyIcon />}
-                              onClick={() => clickUtiliser(item.grant, item.ligneBudgetaire, item.depensePrevue, item.budgetDepense, item.remarque)}
-                            >
-                              Utiliser
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {resumeDepenseList
+                        .filter((f: any) => f.missionId === id)
+                        .map((item: ResumeDepenseItem, index: any) => (
+                          <TableRow
+                            key={index}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {
+                                grantEncoursList.find(
+                                  (e: any) => e.id === item.grant
+                                )?.code
+                              }
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {
+                                budgetLineList.find(
+                                  (e: any) => e.id === item.ligneBudgetaire
+                                )?.code
+                              }
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.depensePrevue}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.budgetDepense}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {item.remarque}
+                            </TableCell>
+                            <TableCell align="right">
+                              <Button
+                                color="primary"
+                                startIcon={<ContentCopyIcon />}
+                                onClick={() =>
+                                  clickUtiliser(
+                                    item.grant,
+                                    item.ligneBudgetaire,
+                                    item.depensePrevue,
+                                    item.budgetDepense,
+                                    item.remarque
+                                  )
+                                }
+                              >
+                                Utiliser
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                       {emptyRows > 0 && (
                         <TableRow
                           style={{
@@ -316,21 +369,23 @@ const AddResumeDepense = ({ handleClose }: any) => {
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
-                  <Button 
-                  color="warning"
-                  onClick={() => {
-                    formikProps.resetForm();
-                    setGrts(0)
-                    dispatch(cancelEdit());
-                  }}
-                  >Annuler</Button>
+                  <Button
+                    color="warning"
+                    onClick={() => {
+                      formikProps.resetForm();
+                      setGrts(0);
+                      dispatch(cancelEdit());
+                    }}
+                  >
+                    Annuler
+                  </Button>
                   <Button variant="contained" type="submit">
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>
