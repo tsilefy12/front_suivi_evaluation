@@ -3,9 +3,9 @@ import { FormLabel, styled } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import KeyValue from "../shared/keyValue";
-import { useRouter } from "next/router";
 import useFetchMissionListe from "../home/Missions/hooks/useFetchMissionListe";
 import { useAppSelector } from "../../hooks/reduxHooks";
+import { useRouter } from "next/router";
 import { MissionItem } from "../../redux/features/mission/mission.interface";
 
 const Detail = () => {
@@ -18,10 +18,11 @@ const Detail = () => {
     fetchMission();
   }, [router.query]);
 
+  // console.log("list mission :", missionListe)
   return (
     <FormContainer spacing={2}>
       {missionListe
-        .filter((e: any) => e.id === id)
+        .filter((e: any) => e.id == id)
         .map((item: MissionItem, index: any) => (
           <Grid container key={index}>
             <Grid item xs={12} md={4}>
@@ -65,4 +66,5 @@ const FormContainer = styled(Stack)(({ theme }) => ({
   borderRadius: 20,
   background: "#fff",
   border: `1px solid ${theme.palette.grey[100]}`,
+  marginTop: -80,
 }));

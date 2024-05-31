@@ -344,19 +344,16 @@ const GereRapportDeMission = () => {
                 Etat des rapports
               </Typography>
               <Stack spacing={2}>
-                <KeyValue
-                  keyName="Elaboré par"
-                  value={`
-    ${employees.find(
-      (e: any) => e.id === missionListe.map((m) => m.missionManagerId!)
-    )?.name!} 
-    ${" "} 
-    ${employees.find(
-      (e: any) => e.id === missionListe.map((m) => m.missionManagerId!)
-    )?.surname!}
-  `}
-                />
-
+                <div>
+                  <FormLabel>Elaboré par : </FormLabel>
+                  {missionListe
+                    .filter((f: any) => f.id === id)
+                    .map((row: MissionItem) => (
+                      <span>
+                        {row.missionManager.name} {row.missionManager.surname}
+                      </span>
+                    ))}
+                </div>
                 <Divider />
                 <Typography>
                   Vérifié financièrement par :
@@ -592,7 +589,7 @@ export const BodySection = styled(Paper)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
   alignItems: "flex-start",
-  padding: "8px 20px",
+  padding: "8px 20px 60px",
   gap: "16px",
   border: `1px solid ${theme.palette.grey[100]}`,
 }));
