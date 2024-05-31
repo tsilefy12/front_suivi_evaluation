@@ -133,6 +133,7 @@ const PrevisionDeMission = () => {
           spacing={{ xs: 1, sm: 2, md: 4 }}
           justifyContent="space-between"
           sx={{ mb: 2 }}
+          paddingBottom={10}
         >
           <Stack direction={{ xs: "column", sm: "row" }}>
             <Link href="/missions/ListMission">

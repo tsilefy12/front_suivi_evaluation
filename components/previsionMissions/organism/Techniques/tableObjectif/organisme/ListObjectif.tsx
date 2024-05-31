@@ -39,7 +39,7 @@ const ListObjectif = () => {
   const router = useRouter();
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
-  const { idfile }: any = router.query;
+  const { id }: any = router.query;
   const { missionGoalList } = useAppSelector((state) => state.missionGoal);
   const fetchMissionGoalList = useFetchMissionGoalListe();
 
@@ -78,41 +78,43 @@ const ListObjectif = () => {
           <MyTableContainer>
             <Table sx={{ minWidth: 700 }} aria-label="simple table">
               <TableBody>
-                {missionGoalList.map((row: MissionGoalItem, index: any) => (
-                  <TableRow
-                    key={row.id!}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.description}
-                    </TableCell>
-                    <TableCell align="right">
-                      <BtnActionContainer
-                        direction="row"
-                        justifyContent="right"
-                      >
-                        <IconButton
-                          color="primary"
-                          aria-label="Modifier"
-                          component="span"
-                          onClick={() => handleClickEdit(row.id)}
+                {missionGoalList
+                  .filter((f: any) => f.missionId === id)
+                  .map((row: MissionGoalItem, index: any) => (
+                    <TableRow
+                      key={row.id!}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.description}
+                      </TableCell>
+                      <TableCell align="right">
+                        <BtnActionContainer
+                          direction="row"
+                          justifyContent="right"
                         >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          color="warning"
-                          aria-label="Supprimer"
-                          component="span"
-                          onClick={() => {
-                            handleClickDelete(row.id!);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </BtnActionContainer>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          <IconButton
+                            color="primary"
+                            aria-label="Modifier"
+                            component="span"
+                            onClick={() => handleClickEdit(row.id)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="warning"
+                            aria-label="Supprimer"
+                            component="span"
+                            onClick={() => {
+                              handleClickDelete(row.id!);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </BtnActionContainer>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </MyTableContainer>

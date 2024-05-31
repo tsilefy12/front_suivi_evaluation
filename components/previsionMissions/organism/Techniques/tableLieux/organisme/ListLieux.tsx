@@ -41,7 +41,7 @@ const ListLieux = () => {
   const router = useRouter();
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
-  const { idfile }: any = router.query;
+  const { id }: any = router.query;
   const { missionLocationList } = useAppSelector(
     (state: any) => state.missionLocation
   );
@@ -89,8 +89,9 @@ const ListLieux = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {missionLocationList.map(
-                  (row: MissionLocationItem, index: any) => (
+                {missionLocationList
+                  .filter((f: any) => f.missionId === id)
+                  .map((row: MissionLocationItem, index: any) => (
                     <TableRow
                       key={row.id!}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -130,8 +131,7 @@ const ListLieux = () => {
                         </BtnActionContainer>
                       </TableCell>
                     </TableRow>
-                  )
-                )}
+                  ))}
               </TableBody>
             </Table>
           </MyTableContainer>

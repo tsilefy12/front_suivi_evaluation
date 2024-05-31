@@ -39,9 +39,9 @@ const ListActivitesPrevues = () => {
   };
 
   const router = useRouter();
+  const { id } = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
-  const { idfile }: any = router.query;
   const { plannedActivityList } = useAppSelector(
     (state) => state.plannedActivity
   );
@@ -83,8 +83,9 @@ const ListActivitesPrevues = () => {
           <MyTableContainer>
             <Table sx={{ minWidth: 700 }} aria-label="simple table">
               <TableBody>
-                {plannedActivityList.map(
-                  (row: PlannedActivityItem, index: any) => (
+                {plannedActivityList
+                  .filter((f: any) => f.missionId === id)
+                  .map((row: PlannedActivityItem, index: any) => (
                     <TableRow
                       key={row.id!}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -120,8 +121,7 @@ const ListActivitesPrevues = () => {
                         </BtnActionContainer>
                       </TableCell>
                     </TableRow>
-                  )
-                )}
+                  ))}
               </TableBody>
             </Table>
           </MyTableContainer>

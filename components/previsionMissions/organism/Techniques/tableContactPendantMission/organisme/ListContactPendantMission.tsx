@@ -40,7 +40,7 @@ const ListContactPendantMission = () => {
   const router = useRouter();
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
-  const { idfile }: any = router.query;
+  const { id }: any = router.query;
   const { contactList } = useAppSelector((state) => state.contact);
   const fetchContactList = useFetchContactListe();
 
@@ -87,50 +87,52 @@ const ListContactPendantMission = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {contactList.map((row: ContactItem, index: any) => (
-                  <TableRow
-                    key={row.id!}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.lastNameContact} {row.firstNameContact}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.locationContact}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.numberContact}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.noteContact}
-                    </TableCell>
-                    <TableCell align="right">
-                      <BtnActionContainer
-                        direction="row"
-                        justifyContent="right"
-                      >
-                        <IconButton
-                          color="primary"
-                          aria-label="Modifier"
-                          component="span"
-                          onClick={() => handleClickEdit(row.id)}
+                {contactList
+                  .filter((f: any) => f.missionId === id)
+                  .map((row: ContactItem, index: any) => (
+                    <TableRow
+                      key={row.id!}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.lastNameContact} {row.firstNameContact}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.locationContact}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.numberContact}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.noteContact}
+                      </TableCell>
+                      <TableCell align="right">
+                        <BtnActionContainer
+                          direction="row"
+                          justifyContent="right"
                         >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          color="warning"
-                          aria-label="Supprimer"
-                          component="span"
-                          onClick={() => {
-                            handleClickDelete(row.id);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </BtnActionContainer>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          <IconButton
+                            color="primary"
+                            aria-label="Modifier"
+                            component="span"
+                            onClick={() => handleClickEdit(row.id)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="warning"
+                            aria-label="Supprimer"
+                            component="span"
+                            onClick={() => {
+                              handleClickDelete(row.id);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </BtnActionContainer>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </MyTableContainer>

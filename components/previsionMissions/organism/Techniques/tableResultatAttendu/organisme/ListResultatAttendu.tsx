@@ -40,7 +40,7 @@ const ListResultatAttendu = () => {
   const router = useRouter();
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
-  const { idfile }: any = router.query;
+  const { id }: any = router.query;
   const { exceptedResultList } = useAppSelector(
     (state) => state.exceptedResult
   );
@@ -82,8 +82,9 @@ const ListResultatAttendu = () => {
           <MyTableContainer>
             <Table sx={{ minWidth: 700 }} aria-label="simple table">
               <TableBody>
-                {exceptedResultList.map(
-                  (row: ExceptedResultItem, index: any) => (
+                {exceptedResultList
+                  .filter((f: any) => f.missionId === id)
+                  .map((row: ExceptedResultItem, index: any) => (
                     <TableRow
                       key={row.id!}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -119,8 +120,7 @@ const ListResultatAttendu = () => {
                         </BtnActionContainer>
                       </TableCell>
                     </TableRow>
-                  )
-                )}
+                  ))}
               </TableBody>
             </Table>
           </MyTableContainer>

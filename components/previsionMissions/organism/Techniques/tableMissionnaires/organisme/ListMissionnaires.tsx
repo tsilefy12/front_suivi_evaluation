@@ -29,7 +29,10 @@ import {
   editMissionGoal,
 } from "../../../../../../redux/features/missionGoal";
 import useFetchMissionaryList from "../hooks/useFetchMissionaryList";
-import { deleteMissionary, editMissionary } from "../../../../../../redux/features/missionary";
+import {
+  deleteMissionary,
+  editMissionary,
+} from "../../../../../../redux/features/missionary";
 import { MissionaryItem } from "../../../../../../redux/features/missionary/missionarySlice.interface";
 import Moment from "react-moment";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
@@ -37,10 +40,10 @@ import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 const ListMissionnaires = () => {
   const [open, setOpen] = React.useState(false);
   const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector(state =>state.employe);
-  React.useEffect(() =>{
+  const { employees } = useAppSelector((state) => state.employe);
+  React.useEffect(() => {
     fetchEmployes();
-  })
+  });
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -48,6 +51,7 @@ const ListMissionnaires = () => {
     setOpen(false);
   };
   const router = useRouter();
+  const { id } = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const { missionaryList } = useAppSelector((state) => state.missionary);
@@ -79,7 +83,7 @@ const ListMissionnaires = () => {
   const handleClickEdit = async (id: any) => {
     await dispatch(editMissionary({ id }));
     handleClickOpen();
-    console.log("edit ")
+    console.log("edit ");
   };
 
   return (
@@ -89,59 +93,77 @@ const ListMissionnaires = () => {
           <MyTableContainer>
             <Table sx={{ minWidth: 700 }} aria-label="simple table">
               <TableHead>
-                  <TableRow>
-                    <TableCell>Nom</TableCell>
-                    <TableCell>Date de début</TableCell>
-                    <TableCell>Date de retour</TableCell>
-                    <TableCell>Responsable de mission</TableCell>
-                  </TableRow>
-                </TableHead>
+                <TableRow>
+                  <TableCell>Nom</TableCell>
+                  <TableCell>Date de début</TableCell>
+                  <TableCell>Date de retour</TableCell>
+                  <TableCell>Responsable de mission</TableCell>
+                </TableRow>
+              </TableHead>
               <TableBody>
-                {missionaryList.map((row: MissionaryItem, index: any) => (
-                  <TableRow
-                    key={index}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.lastNameMissionary} {row.firstNameMissionary}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {<Moment format="DD/MM/YYYY">{row.startDateMissionary}</Moment>}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                    {<Moment format="DD/MM/YYYY">{row.returnDateMissionary}</Moment>}
-                    </TableCell>
-                    <TableCell component="th" scope="row" key={index}>
-                      {employees.find(e =>e.id === row.missionResponsabilityMissionary)?.name} {" "}
-                      {employees.find(e =>e.id == row.missionResponsabilityMissionary)?.surname}
-                    </TableCell>
-                    <TableCell align="right" key={index}>
-                      <BtnActionContainer
-                        direction="row"
-                        justifyContent="right"
-                      >
-                        <IconButton
-                          color="primary"
-                          aria-label="Modifier"
-                          component="span"
-                          onClick={() => handleClickEdit(row.id!)}
+                {missionaryList
+                  .filter((f: any) => f.missionId === id)
+                  .map((row: MissionaryItem, index: any) => (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.lastNameMissionary} {row.firstNameMissionary}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {
+                          <Moment format="DD/MM/YYYY">
+                            {row.startDateMissionary}
+                          </Moment>
+                        }
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {
+                          <Moment format="DD/MM/YYYY">
+                            {row.returnDateMissionary}
+                          </Moment>
+                        }
+                      </TableCell>
+                      <TableCell component="th" scope="row" key={index}>
+                        {
+                          employees.find(
+                            (e) => e.id === row.missionResponsabilityMissionary
+                          )?.name
+                        }{" "}
+                        {
+                          employees.find(
+                            (e) => e.id == row.missionResponsabilityMissionary
+                          )?.surname
+                        }
+                      </TableCell>
+                      <TableCell align="right" key={index}>
+                        <BtnActionContainer
+                          direction="row"
+                          justifyContent="right"
                         >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          color="warning"
-                          aria-label="Supprimer"
-                          component="span"
-                          onClick={() => {
-                            handleClickDelete(row.id!);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </BtnActionContainer>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          <IconButton
+                            color="primary"
+                            aria-label="Modifier"
+                            component="span"
+                            onClick={() => handleClickEdit(row.id!)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="warning"
+                            aria-label="Supprimer"
+                            component="span"
+                            onClick={() => {
+                              handleClickDelete(row.id!);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </BtnActionContainer>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </MyTableContainer>

@@ -19,117 +19,117 @@ import ListMissionnaires from "./tableMissionnaires/organisme/ListMissionnaires"
 
 const Techniques = () => {
   return (
-    <Box >
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Objectifs</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ListObjectif />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Resultats attendus</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ListResultatAttendu />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Activités prévues</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ListActivitesPrevues />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Livrables</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ListLivrables />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Lieux</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ListLieux />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Missionnaire</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ListMissionnaires />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>
-                Autres informations importantes (véhicules utilisés)
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ListAutreInfoAuto />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Contacts pendant la mission</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ListContactPendantMission />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Programmes</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ListProgrammes />
-            </AccordionDetails>
-          </Accordion>
+    <Box sx={{ paddingBottom: 10 }}>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Objectifs</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListObjectif />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Resultats attendus</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListResultatAttendu />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Activités prévues</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListActivitesPrevues />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Livrables</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListLivrables />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Lieux</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListLieux />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Missionnaire</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListMissionnaires />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>
+            Autres informations importantes (véhicules utilisés)
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListAutreInfoAuto />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Contacts pendant la mission</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListContactPendantMission />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Programmes</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ListProgrammes />
+        </AccordionDetails>
+      </Accordion>
     </Box>
   );
 };

@@ -40,7 +40,7 @@ const ListAutreInfoAuto = () => {
   const router = useRouter();
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
-  const { idfile }: any = router.query;
+  const { id }: any = router.query;
   const { vehicleList } = useAppSelector((state) => state.vehicle);
   const usefetchVehicleListe = useFetchVehicleList();
 
@@ -89,50 +89,52 @@ const ListAutreInfoAuto = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {vehicleList.map((row: VehicleItem, index: any) => (
-                  <TableRow
-                    key={row.id!}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.insuranceVehicle}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.technicalVisitVehicle}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.vehicleType}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.safetyBeltVehicle == true ? "OUI" : "NON"}
-                    </TableCell>
-                    <TableCell align="right">
-                      <BtnActionContainer
-                        direction="row"
-                        justifyContent="right"
-                      >
-                        <IconButton
-                          color="primary"
-                          aria-label="Modifier"
-                          component="span"
-                          onClick={() => handleClickEdit(row.id)}
+                {vehicleList
+                  .filter((f: any) => f.missionId === id)
+                  .map((row: VehicleItem, index: any) => (
+                    <TableRow
+                      key={row.id!}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.insuranceVehicle}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.technicalVisitVehicle}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.vehicleType}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.safetyBeltVehicle == true ? "OUI" : "NON"}
+                      </TableCell>
+                      <TableCell align="right">
+                        <BtnActionContainer
+                          direction="row"
+                          justifyContent="right"
                         >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          color="warning"
-                          aria-label="Supprimer"
-                          component="span"
-                          onClick={() => {
-                            handleClickDelete(row.id);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </BtnActionContainer>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          <IconButton
+                            color="primary"
+                            aria-label="Modifier"
+                            component="span"
+                            onClick={() => handleClickEdit(row.id)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="warning"
+                            aria-label="Supprimer"
+                            component="span"
+                            onClick={() => {
+                              handleClickDelete(row.id);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </BtnActionContainer>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </MyTableContainer>

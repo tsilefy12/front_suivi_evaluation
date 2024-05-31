@@ -28,18 +28,26 @@ import { useConfirm } from "material-ui-confirm";
 import useFetchPlannedActivityList from "../../tableActivitésPrévues/hooks/useFetchPlannedActivityList";
 import useFetchDeliverableList from "../../tableLivrables/hooks/useFetchDeliverableList";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
-import { deleteProgrammePrevision, editProgrammePrevision } from "../../../../../../redux/features/programmePrevision";
+import {
+  deleteProgrammePrevision,
+  editProgrammePrevision,
+} from "../../../../../../redux/features/programmePrevision";
 import { ProgrammePrevisionItem } from "../../../../../../redux/features/programmePrevision/programmePrevision.interface";
 
 const ListProgrammes = () => {
   const [open, setOpen] = React.useState(false);
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
-  const { programmePrevisionList } = useAppSelector(state => state.programmePrevision)
-  const dispatch: any = useDispatch()
-  const router = useRouter()
+  const { programmePrevisionList } = useAppSelector(
+    (state) => state.programmePrevision
+  );
+  const dispatch: any = useDispatch();
+  const router = useRouter();
+  const { id } = router.query;
   const confirm = useConfirm();
   const fetchActivitePrevue = useFetchPlannedActivityList();
-  const { plannedActivityList } = useAppSelector((state: any) => state.plannedActivity);
+  const { plannedActivityList } = useAppSelector(
+    (state: any) => state.plannedActivity
+  );
   const fetchLivrable = useFetchDeliverableList();
   const { deliverableList } = useAppSelector((state: any) => state.deliverable);
   const fetchEmployes = useFetchEmploys();
@@ -49,7 +57,7 @@ const ListProgrammes = () => {
     fetchActivitePrevue();
     fetchLivrable();
     fetchEmployes();
-  }, [router.query])
+  }, [router.query]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -75,7 +83,7 @@ const ListProgrammes = () => {
         await dispatch(deleteProgrammePrevision({ id }));
         fetchProgrammePrevision();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const handleClickEdit = async (id: any) => {
@@ -99,64 +107,94 @@ const ListProgrammes = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {programmePrevisionList.map((row: ProgrammePrevisionItem, index: any) => (
-                    <TableRow
-                      key={index}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {plannedActivityList.find((e: any) => e.id === row.activitePrevue)?.description}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {deliverableList.find((e: any) => e.id === row.livrable)?.description}
-                      </TableCell>
-                      <TableCell component="th" scope="row" key={index}>
-                        <FormControl key={index} sx={{height: Array.isArray(row.responsable) && row.responsable.length <= 2 ? "auto" : 70, overflow: "auot"}}>
-                        {
-                          Array.isArray(row.responsable) && row.responsable.map(lp => {
-                            return (
-                              <Stack direction="column" spacing={2} key={lp}>
-                                {employees.find((e: any) => e.id! === lp)?.name}
-                                {" "}
-                                {employees.find((e: any) => e.id! === lp)?.surname}
-                              </Stack>
-                            )
-                          })
-                        }
-                        </FormControl>
-                      </TableCell>
-                      <TableCell align="right" key={row. id!}>
-                        <BtnActionContainer
-                          direction="row"
-                          justifyContent="right"
-                          key={row.id}
-                        >
-                          <IconButton
-                            color="primary"
-                            aria-label="Modifier"
-                            component="span"
-                            onClick={() => handleClickEdit(row.id)}
+                  {programmePrevisionList
+                    .filter((f: any) => f.missionId === id)
+                    .map((row: ProgrammePrevisionItem, index: any) => (
+                      <TableRow
+                        key={index}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {
+                            plannedActivityList.find(
+                              (e: any) => e.id === row.activitePrevue
+                            )?.description
+                          }
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {
+                            deliverableList.find(
+                              (e: any) => e.id === row.livrable
+                            )?.description
+                          }
+                        </TableCell>
+                        <TableCell component="th" scope="row" key={index}>
+                          <FormControl
+                            key={index}
+                            sx={{
+                              height:
+                                Array.isArray(row.responsable) &&
+                                row.responsable.length <= 2
+                                  ? "auto"
+                                  : 70,
+                              overflow: "auot",
+                            }}
                           >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            color="warning"
-                            aria-label="Supprimer"
-                            component="span"
-                            onClick={() => handleClickDelete(row.id)}
+                            {Array.isArray(row.responsable) &&
+                              row.responsable.map((lp) => {
+                                return (
+                                  <Stack
+                                    direction="column"
+                                    spacing={2}
+                                    key={lp}
+                                  >
+                                    {
+                                      employees.find((e: any) => e.id! === lp)
+                                        ?.name
+                                    }{" "}
+                                    {
+                                      employees.find((e: any) => e.id! === lp)
+                                        ?.surname
+                                    }
+                                  </Stack>
+                                );
+                              })}
+                          </FormControl>
+                        </TableCell>
+                        <TableCell align="right" key={row.id!}>
+                          <BtnActionContainer
+                            direction="row"
+                            justifyContent="right"
+                            key={row.id}
                           >
-                            <DeleteIcon />
-                          </IconButton>
-                        </BtnActionContainer>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                            <IconButton
+                              color="primary"
+                              aria-label="Modifier"
+                              component="span"
+                              onClick={() => handleClickEdit(row.id)}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              color="warning"
+                              aria-label="Supprimer"
+                              component="span"
+                              onClick={() => handleClickDelete(row.id)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </BtnActionContainer>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </MyTableContainer>
