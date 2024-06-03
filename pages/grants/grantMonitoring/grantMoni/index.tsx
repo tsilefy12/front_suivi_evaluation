@@ -1,13 +1,13 @@
 import { Container } from "@mui/material";
 import React from "react";
-import BackOfficeLayout from "../../../layouts/backOffice";
-import GrantsList from "../../../components/grantsMonitoring";
+import ListGrantsMonitoring from "../../../../components/grantsMonitoring/grantMoni/ListGrants";
+import BackOfficeLayout from "../../../../layouts/backOffice";
 
 const GrantsMonitoring = () => {
   return (
     <BackOfficeLayout>
       <Container maxWidth="xl">
-        <GrantsList />
+        <ListGrantsMonitoring />
       </Container>
     </BackOfficeLayout>
   );
