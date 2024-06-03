@@ -133,7 +133,12 @@ const GrantsList = () => {
                     >
                       Titre du projet
                     </TableCell>
-                    <TableCell>Start</TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{ minWidth: 200, maxWidth: 200 }}
+                    >
+                      Start
+                    </TableCell>
                     <TableCell
                       align="center"
                       sx={{ minWidth: 200, maxWidth: 200 }}
@@ -212,10 +217,17 @@ const GrantsList = () => {
                             id={labelId}
                             scope="row"
                             padding="none"
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
                           >
                             {row.code}
                           </TableCell>
-                          <TableCell>{row.bailleur}</TableCell>
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                          >
+                            {row.bailleur}
+                          </TableCell>
                           <TableCell
                             align="center"
                             sx={{ minWidth: 200, maxWidth: 200 }}
