@@ -77,7 +77,7 @@ const menu = [
   },
   {
     id: 3,
-    name: "Plan Travail Global",
+    name: "PTA",
     link: "/plan_travail",
     icon: "display_settings",
     items: [],
