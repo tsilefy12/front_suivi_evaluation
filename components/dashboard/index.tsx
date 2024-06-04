@@ -34,6 +34,7 @@ import useFetchCaisee from "../reliquetGrant/hooks/useFetchCaisse";
 import formatMontant from "../../hooks/format";
 import { SectionNavigation } from "../GrantsEnCours/ListGrants";
 import Add from "@mui/icons-material/Add";
+import useFetchPeriode from "../periode/hooks/useFetchPeriode";
 
 const Dashboard: NextPage = () => {
   const basePath = useBasePath();
@@ -53,6 +54,8 @@ const Dashboard: NextPage = () => {
 
   const { caisselist } = useAppSelector((state: any) => state.reliquatGrant);
   const fetchCaisse = useFetchCaisee();
+  const fetchPeriode = useFetchPeriode();
+  const { periodelist } = useAppSelector((state) => state.periode);
 
   React.useEffect(() => {
     fetchBudgetEngagedList();
@@ -61,6 +64,7 @@ const Dashboard: NextPage = () => {
     fetchBudgetInitial();
     fetchBudgetLine();
     fetchCaisse();
+    fetchPeriode();
   }, [router.query]);
 
   const handleClick = (id: any) => {
@@ -73,11 +77,8 @@ const Dashboard: NextPage = () => {
   const [soldeBankByGrant, setSoldeBankByGrant] = React.useState<{
     [key: string]: number;
   }>({});
-
+  const soldeByGrant: { [key: string]: { debit: number; credit: number } } = {};
   React.useEffect(() => {
-    const soldeByGrant: { [key: string]: { debit: number; credit: number } } =
-      {};
-
     // Accumulate debits and credits from journalBanks by grant
     grantEncoursList.forEach((grant) => {
       if (Array.isArray(grant.journalBanks)) {
@@ -95,24 +96,25 @@ const Dashboard: NextPage = () => {
         });
       }
     });
+  }, [grantEncoursList]);
 
-    const finalSoldeByGrant: { [grantId: string]: number } = {};
+  const finalSoldeByGrant: { [grantId: string]: number } = {};
 
+  React.useEffect(() => {
     Object.keys(soldeByGrant).forEach((grantId) => {
       const bankSolde =
         soldeByGrant[grantId].debit - soldeByGrant[grantId].credit;
 
+      console.log("ciasse :", caisselist);
       const caisseSolde = caisselist
         .filter((f: any) => f.grantId == grantId)
         .reduce((sum: any, m: any) => sum + (m.debit - m.credit), 0);
-      // console.log(caisseSolde);
+
       finalSoldeByGrant[grantId] = bankSolde + caisseSolde;
     });
 
     setSoldeBankByGrant(finalSoldeByGrant);
-  }, [grantEncoursList, caisselist]);
-
-  // console.log("soldeBankByGrant :", soldeBankByGrant);
+  }, [caisselist]);
 
   return (
     <Container maxWidth="xl">
@@ -131,10 +133,11 @@ const Dashboard: NextPage = () => {
           <TableHead>
             <TableRow>
               <TableCell>GRANT</TableCell>
-              <TableCell>LIGNE BUDGETAIRE</TableCell>
-              <TableCell align="center">BUDGET INITIAL</TableCell>
+              <TableCell align="center">BUDGET TOTAL</TableCell>
+              <TableCell align="center">PERIODES</TableCell>
               <TableCell align="center">BUDGET ENGAGE</TableCell>
               <TableCell align="center">SOLDE</TableCell>
+              <TableCell>LIGNE BUDGETAIRE</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -143,28 +146,14 @@ const Dashboard: NextPage = () => {
                 (g) =>
                   budgetLineList.some((bl) => bl.grantId === g.id) &&
                   budgetInitialList.some((bi) => bi.grant === g.id) &&
-                  budgetEngagedList.some((be) => be.grantsId === g.id)
+                  budgetEngagedList.some((be) => be.grantsId === g.id) &&
+                  periodelist.some((p) => p.grant === g.id)
               )
               .map((row) => (
                 <TableRow key={row.id!}>
                   <TableCell>{row.code}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="outlined"
-                      color="accent"
-                      startIcon={<Add />}
-                      onClick={() => handleClick(row.id!)}
-                    >
-                      Voir détails
-                    </Button>
-                    {/* <Stack direction={"column"} spacing={2} sx={{ height: (row.budgetLines!).length <= 2 ? "auto" : 70, overflow: "auot" }}>
-                      {row.budgetLines!.map(bl => (
-                        <span key={bl.id}>{bl.code}</span>
-                      ))}
-                    </Stack> */}
-                  </TableCell>
                   <TableCell align="center">
-                    {formatMontant(
+                    {/* {formatMontant(
                       budgetInitialList
                         .filter((bi: any) => bi.grant === row.id)
                         .reduce((acc, curr) => {
@@ -180,6 +169,16 @@ const Dashboard: NextPage = () => {
                           }, 0);
                           return acc + totalLigneBudgetaire;
                         }, 0)
+                    )} */}
+                    {formatMontant(Number(row.amountMGA!))}
+                  </TableCell>
+                  <TableCell align="center">
+                    {formatMontant(
+                      Number(
+                        periodelist
+                          .filter((f: any) => f.grant == row.id)
+                          .reduce((acc, curr) => acc + curr.montant!, 0)
+                      )
                     )}
                   </TableCell>
                   <TableCell align="center">
@@ -192,25 +191,22 @@ const Dashboard: NextPage = () => {
 
                   <TableCell align="center">
                     {formatMontant(
-                      budgetInitialList
-                        .filter((bi) => bi.grant === row.id)
-                        .reduce((acc, curr) => {
-                          const totalLigneBudgetaire = (
-                            curr.ligneBudgetaire ?? []
-                          ).reduce((ligneAcc, ligneId) => {
-                            const budgetLine = budgetLineList.find(
-                              (bl: any) => bl.id == ligneId
-                            );
-                            return (
-                              ligneAcc + (budgetLine ? budgetLine.amount! : 0)
-                            );
-                          }, 0);
-                          return acc + totalLigneBudgetaire;
-                        }, 0) -
-                        (soldeBankByGrant[row.id!] !== undefined
-                          ? soldeBankByGrant[row.id!]
-                          : 0)
+                      row.amountMGA ??
+                        0 -
+                          (soldeBankByGrant[row.id!] !== undefined
+                            ? soldeBankByGrant[row.id!]
+                            : 0)
                     )}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="accent"
+                      startIcon={<Add />}
+                      onClick={() => handleClick(row.id!)}
+                    >
+                      Voir détails
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

@@ -6,7 +6,7 @@ export const getCaisse = createAsyncThunk(
   async (data: { args?: any }, thunkAPI) => {
     try {
       const params = JSON.stringify(data.args);
-      const response = await axios.get("/caisse/solde", { params });
+      const response = await axios.get("/caisse/operation", { params });
       return response.data;
     } catch (error: any) {
       if (error.response) {

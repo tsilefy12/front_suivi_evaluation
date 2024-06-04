@@ -27,6 +27,8 @@ import useFetchReliquatGrant from "../../reliquetGrant/hooks/useFetchEliquatGran
 import useFetchBudgetInitial from "../../budgetInitial/hooks/useFetchBudgetInitial";
 import { Add, Close } from "@mui/icons-material";
 import formatMontant from "../../../hooks/format";
+import useFetchPeriode from "../../periode/hooks/useFetchPeriode";
+import useFetchCaisee from "../../reliquetGrant/hooks/useFetchCaisse";
 
 const DetailsDashboard = ({ handleClose, getId }: any) => {
   const basePath = useBasePath();
@@ -36,19 +38,19 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state) => state.budgetLine);
-  const fetchBudgetEngagedList = useFetchBudgetEngaged();
-  const { budgetEngagedList } = useAppSelector((state) => state.budgetsEngaged);
-  const fetchReliquatGrant = useFetchReliquatGrant();
-  const { reliquatGrantList } = useAppSelector((state) => state.reliquatGrant);
   const fetchBudgetInitial = useFetchBudgetInitial();
   const { budgetInitialList } = useAppSelector((state) => state.budgetInitial);
+  const fetchPeriode = useFetchPeriode();
+  const { periodelist } = useAppSelector((state) => state.periode);
+  const { caisselist } = useAppSelector((state: any) => state.reliquatGrant);
+  const fetchCaisse = useFetchCaisee();
 
   useEffect(() => {
-    fetchBudgetEngagedList();
     fetchGrants();
-    fetchReliquatGrant();
     fetchBudgetInitial();
     fetchBudgetLine();
+    fetchPeriode();
+    fetchCaisse();
   }, [router.query]);
 
   const [grantBI, setGrantBI] = useState("");
@@ -83,19 +85,22 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ minWidth: 120, maxWidth: 120 }}>
+                <TableCell sx={{ minWidth: 120, maxWidth: 120 }} align="center">
                   GRANT
                 </TableCell>
-                <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="center">
                   LIGNE BUDGETAIRE
                 </TableCell>
-                <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
-                  BUDGET INITIAL
+                <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="center">
+                  BUDGET TOTAL
                 </TableCell>
-                <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="center">
+                  PERIODES
+                </TableCell>
+                <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="center">
                   BUDGET ENGAGE
                 </TableCell>
-                <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="center">
                   SOLDE
                 </TableCell>
               </TableRow>
@@ -109,54 +114,40 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
                       <TableCell
                         rowSpan={budgetLineList.length}
                         sx={{ minWidth: 120, maxWidth: 120 }}
+                        align="center"
                       >
                         {grantBI}
                       </TableCell>
                     )}
-                    <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
+                    <TableCell
+                      sx={{ minWidth: 160, maxWidth: 160 }}
+                      align="center"
+                    >
                       {row.code}
                     </TableCell>
-                    <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
-                      {formatMontant(
-                        budgetInitialList
-                          .filter((bi) =>
-                            bi.ligneBudgetaire!.includes(Number(row.id))
-                          )
-                          .reduce((total, bi) => {
-                            const budgetLine = budgetLineList.find(
-                              (bl) => bl.id === row.id
-                            );
-                            return (
-                              total + (budgetLine ? budgetLine.amount! : 0)
-                            );
-                          }, 0)
-                      )}
+                    <TableCell
+                      sx={{ minWidth: 160, maxWidth: 160 }}
+                      align="center"
+                    >
+                      {formatMontant(Number(row.amount))}
                     </TableCell>
-                    <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
-                      {formatMontant(
-                        budgetEngagedList.find(
-                          (be) => be.budgetLineId === row.id
-                        )?.amount ?? 0
-                      )}
+                    <TableCell
+                      sx={{ minWidth: 160, maxWidth: 160 }}
+                      align="center"
+                    >
+                      {formatMontant(Number(0))}
                     </TableCell>
-                    <TableCell sx={{ minWidth: 160, maxWidth: 160 }}>
-                      {formatMontant(
-                        budgetInitialList
-                          .filter((bi) =>
-                            bi.ligneBudgetaire!.includes(Number(row.id))
-                          )
-                          .reduce((total, bi) => {
-                            const budgetLine = budgetLineList.find(
-                              (bl) => bl.id === row.id
-                            );
-                            return (
-                              total + (budgetLine ? budgetLine.amount! : 0)
-                            );
-                          }, 0) -
-                          (budgetEngagedList.find(
-                            (be) => be.budgetLineId === row.id
-                          )?.amount ?? 0)
-                      )}
+                    <TableCell
+                      sx={{ minWidth: 160, maxWidth: 160 }}
+                      align="center"
+                    >
+                      {formatMontant(0)}
+                    </TableCell>
+                    <TableCell
+                      sx={{ minWidth: 160, maxWidth: 160 }}
+                      align="center"
+                    >
+                      {formatMontant(row.amount ?? 0 - 0)}
                     </TableCell>
                   </TableRow>
                 ))}

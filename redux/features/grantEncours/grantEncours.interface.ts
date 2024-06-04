@@ -15,14 +15,14 @@ export interface GrantEncoursItem {
   responsable?: string;
   startDate?: string;
   endDate?: string;
-  deadline?: string;
-  techDate?: string;
-  financeDate?: string;
+  // deadline?: string;
+  // techDate?: string;
+  // financeDate?: string;
   status?: string;
   techValidator?: string;
   financeValidator?: string;
   financeVerificator?: string;
-  note?: string;
+  // note?: string;
   budgetLines?: BudgetLineItem[];
   journalBanks?: { grantId: number; debit: number; credit: number }[];
 }

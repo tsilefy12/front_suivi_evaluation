@@ -93,6 +93,8 @@ const AddNewGrantsEnCours = () => {
   ];
 
   const handleSubmit = async (values: any) => {
+    values.postAnalyticid = null;
+    values.bankId = null;
     const date1 = new Date(values.startDate);
     const DateNumber1 = date1.getTime();
     const date2 = new Date(values.endDate);
@@ -127,9 +129,9 @@ const AddNewGrantsEnCours = () => {
             ? grantEncour
             : {
                 code: isEditing ? grantEncour?.code : "",
-                postAnalyticId: isEditing ? grantEncour?.postAnalyticId : 0,
+                // postAnalyticId: isEditing ? grantEncour?.postAnalyticId : null,
                 projectId: isEditing ? grantEncour?.projectId : 0,
-                bankId: isEditing ? grantEncour?.bankId : 0,
+                // bankId: isEditing ? grantEncour?.bankId : null,
                 // titleFr: isEditing ? grantEncour?.titleFr : "",
                 // titleEn: isEditing ? grantEncour?.titleEn : "",
                 bailleur: isEditing ? grantEncour?.bailleur : "",
@@ -142,12 +144,12 @@ const AddNewGrantsEnCours = () => {
                 endDate: isEditing
                   ? grantEncour?.endDate
                   : new Date().toISOString(),
-                techDate: isEditing
-                  ? grantEncour?.techDate
-                  : new Date().toISOString(),
-                financeDate: isEditing
-                  ? grantEncour?.financeDate
-                  : new Date().toISOString(),
+                // techDate: isEditing
+                //   ? grantEncour?.techDate
+                //   : new Date().toISOString(),
+                // financeDate: isEditing
+                //   ? grantEncour?.financeDate
+                //   : new Date().toISOString(),
                 status: isEditing ? grantEncour?.status : "",
                 financeValidator: isEditing
                   ? grantEncour?.financeValidator
@@ -157,10 +159,10 @@ const AddNewGrantsEnCours = () => {
                   : "",
                 techValidator: isEditing ? grantEncour?.techValidator : "",
                 currencyId: isEditing ? grantEncour?.currencyId : "",
-                deadline: isEditing
-                  ? grantEncour?.deadline
-                  : new Date().toISOString(),
-                note: isEditing ? grantEncour?.note : "",
+                // deadline: isEditing
+                //   ? grantEncour?.deadline
+                //   : new Date().toISOString(),
+                // note: isEditing ? grantEncour?.note : "",
               }
         }
         validationSchema={Yup.object({
@@ -168,7 +170,7 @@ const AddNewGrantsEnCours = () => {
           bailleur: Yup.string().required("Champ obligatoire"),
           amount: Yup.string().required("Champ obligatoire"),
           amountMGA: Yup.string().required("Champ obligatoire"),
-          note: Yup.string().required("Champ obligatoire"),
+          // note: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -333,36 +335,6 @@ const AddNewGrantsEnCours = () => {
                       formikProps.setFieldValue("endDate", value)
                     }
                   />
-                  <OSDatePicker
-                    fullWidth
-                    id="outlined-basic"
-                    label="Date tech"
-                    variant="outlined"
-                    name="techDate"
-                    value={
-                      !isEditing
-                        ? formikProps.values.techDate
-                        : grantEncour?.techDate
-                    }
-                    onChange={(value: any) =>
-                      formikProps.setFieldValue("techDate", value)
-                    }
-                  />
-                  <OSDatePicker
-                    fullWidth
-                    id="outlined-basic"
-                    label="Deadline"
-                    variant="outlined"
-                    name="deadline"
-                    value={
-                      !isEditing
-                        ? formikProps.values.deadline
-                        : grantEncour?.deadline
-                    }
-                    onChange={(value: any) =>
-                      formikProps.setFieldValue("deadline", value)
-                    }
-                  />
                 </CustomStack>
                 <FormControl fullWidth>
                   <OSSelectField
@@ -419,15 +391,6 @@ const AddNewGrantsEnCours = () => {
                     type="number"
                   />
                 </CustomStack>
-                <OSTextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Notes"
-                  variant="outlined"
-                  name="note"
-                  multiline
-                  rows={3}
-                />
               </FormContainer>
             </Container>
           );

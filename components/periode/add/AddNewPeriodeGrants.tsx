@@ -40,40 +40,42 @@ const AddNewPeriodeGrants = () => {
   const fetchGrant = useFetchGrants();
   const fetchPeriode = useFetchPeriode();
   const [open, setOpen]: any = React.useState(false);
-  const { grantEncoursList } = useAppSelector((state: any) => state.grantEncours)
-  const { isEditing, periode } = useAppSelector((state: any) => state.periode)
+  const { grantEncoursList } = useAppSelector(
+    (state: any) => state.grantEncours
+  );
+  const { isEditing, periode } = useAppSelector((state: any) => state.periode);
 
   React.useEffect(() => {
     fetchGrant();
     fetchPeriode();
-  }, [router.query])
+  }, [router.query]);
 
   const handleSubmit = async (values: any) => {
     const date1 = new Date(values.debut);
     const DateNumber1 = date1.getTime();
-    const date2 = new Date(values.fin)
+    const date2 = new Date(values.fin);
     const DateNumber2 = date2.getTime();
-    
-  if (DateNumber1 >= DateNumber2) {
-     setOpen(true)
-  }else{
-    try {
-      if (isEditing) {
-        await dispatch(
-          updatePeriode({
-            id: periode.id!,
-            periode: values,
-          })
-        );
-      } else {
-        await dispatch(createPeriode(values));
-        fetchPeriode();
+
+    if (DateNumber1 >= DateNumber2) {
+      setOpen(true);
+    } else {
+      try {
+        if (isEditing) {
+          await dispatch(
+            updatePeriode({
+              id: periode.id!,
+              periode: values,
+            })
+          );
+        } else {
+          await dispatch(createPeriode(values));
+          fetchPeriode();
+        }
+        router.push("/grants/periode");
+      } catch (error) {
+        console.log("error", error);
       }
-      router.push("/grants/periode");
-    } catch (error) {
-      console.log("error", error);
     }
-  }
   };
 
   return (
@@ -84,17 +86,22 @@ const AddNewPeriodeGrants = () => {
           isEditing
             ? periode
             : {
-              periode: isEditing ? periode?.periode : "",
-              montant: isEditing ? periode?.montant : "",
-              grant: isEditing ? periode?.grant : "",
-              debut: isEditing ? periode?.debut : new Date(),
-              fin: isEditing ? periode?.fin : new Date(),
-            }
+                periode: isEditing ? periode?.periode : "",
+                montant: isEditing ? periode?.montant : "",
+                grant: isEditing ? periode?.grant : "",
+                debut: isEditing ? periode?.debut : new Date(),
+                fin: isEditing ? periode?.fin : new Date(),
+                dateFinance: isEditing ? periode?.dateFinance : new Date(),
+                dateTechnic: isEditing ? periode?.dateTechnic : new Date(),
+                deadline: isEditing ? periode?.deadline : new Date(),
+                notes: isEditing ? periode?.notes : "",
+              }
         }
         validationSchema={Yup.object({
           periode: Yup.string().required("Champ obligatoire"),
           montant: Yup.number().required("Champ obligatoire"),
           grant: Yup.number().required("Champ obligatoire"),
+          notes: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -106,14 +113,18 @@ const AddNewPeriodeGrants = () => {
             <Form>
               <NavigationContainer>
                 <SectionNavigation
-                  direction={{ xs: 'column', sm: 'row' }}
+                  direction={{ xs: "column", sm: "row" }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                   justifyContent="space-between"
                   sx={{ mb: 2 }}
                 >
                   <Stack flexDirection={"row"}>
                     <Link href="/grants/periode">
-                      <Button color="info" variant="text" startIcon={<ArrowBack />}>
+                      <Button
+                        color="info"
+                        variant="text"
+                        startIcon={<ArrowBack />}
+                      >
                         Retour
                       </Button>
                     </Link>
@@ -150,7 +161,8 @@ const AddNewPeriodeGrants = () => {
               <FormContainer sx={{ backgroundColor: "#fff" }} spacing={2}>
                 <CustomStack
                   direction={{ xs: "column", sm: "column", md: "row" }}
-                  spacing={{ xs: 2, sm: 2, md: 1 }}>
+                  spacing={{ xs: 2, sm: 2, md: 1 }}
+                >
                   <FormControl fullWidth>
                     <OSTextField
                       fullWidth
@@ -192,7 +204,9 @@ const AddNewPeriodeGrants = () => {
                     variant="outlined"
                     name="debut"
                     value={formikProps.values.debut}
-                    onChange={(value: any) =>formikProps.setFieldValue("debut", value)}
+                    onChange={(value: any) =>
+                      formikProps.setFieldValue("debut", value)
+                    }
                   />
                   <OSDatePicker
                     fullWidth
@@ -201,27 +215,81 @@ const AddNewPeriodeGrants = () => {
                     variant="outlined"
                     name="fin"
                     value={formikProps.values.fin}
-                    onChange={(value: any) =>formikProps.setFieldValue("fin", value)}
+                    onChange={(value: any) =>
+                      formikProps.setFieldValue("fin", value)
+                    }
                   />
                 </CustomStack>
+                <Stack direction={"row"} gap={2}>
+                  <OSDatePicker
+                    fullWidth
+                    id="outlined-basic"
+                    label="Date finance"
+                    variant="outlined"
+                    name="dateFinance"
+                    value={
+                      !isEditing
+                        ? formikProps.values.dateFinance
+                        : periode?.dateFinance
+                    }
+                    onChange={(value: any) =>
+                      formikProps.setFieldValue("dateFinance", value)
+                    }
+                  />
+                  <OSDatePicker
+                    fullWidth
+                    id="outlined-basic"
+                    label="Date tech"
+                    variant="outlined"
+                    name="dateTechnic"
+                    value={
+                      !isEditing
+                        ? formikProps.values.dateTechnic
+                        : periode?.dateTechnic
+                    }
+                    onChange={(value: any) =>
+                      formikProps.setFieldValue("dateTechnic", value)
+                    }
+                  />
+                  <OSDatePicker
+                    fullWidth
+                    id="outlined-basic"
+                    label="Deadline"
+                    variant="outlined"
+                    name="deadline"
+                    value={
+                      !isEditing
+                        ? formikProps.values.deadline
+                        : periode?.deadline
+                    }
+                    onChange={(value: any) =>
+                      formikProps.setFieldValue("deadline", value)
+                    }
+                  />
+                </Stack>
+                <OSTextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Notes"
+                  variant="outlined"
+                  name="notes"
+                  multiline
+                  rows={3}
+                />
               </FormContainer>
             </Form>
-          )
+          );
         }}
       </Formik>
-      <Dialog
-      open={open}
-      disablePortal={false}
-      sx={styleDialog}
-      >
+      <Dialog open={open} disablePortal={false} sx={styleDialog}>
         <DialogTitle color="red">Attention!!</DialogTitle>
         <DialogContent>
           <DialogContentText>
-          La date début doit être inferieure de la date fin
+            La date début doit être inferieure de la date fin
           </DialogContentText>
           <DialogActions>
-            <Button onClick={() =>setOpen(false)}>
-              <Check color="primary"/>
+            <Button onClick={() => setOpen(false)}>
+              <Check color="primary" />
             </Button>
           </DialogActions>
         </DialogContent>
@@ -255,5 +323,5 @@ const styleDialog = {
   //left: 150,
   top: 20,
   width: "auto",
-  alignItem: "center"
-}
+  alignItem: "center",
+};
