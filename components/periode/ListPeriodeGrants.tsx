@@ -145,17 +145,14 @@ const ListBudgetsInitial = () => {
   };
   const groupedBudgets: { [key: string]: typeof periodelist } = {};
 
-  // Grouping the budgetInitialList by grant
-  React.useEffect(() => {
-    periodelist.forEach((budget) => {
-      const grantCode =
-        grantEncoursList.find((grant) => grant.id === budget.grant)?.code || "";
-      if (!groupedBudgets[grantCode]) {
-        groupedBudgets[grantCode] = [];
-      }
-      groupedBudgets[grantCode].push(budget);
-    });
-  }, [periodelist]);
+  periodelist.forEach((budget) => {
+    const grantCode =
+      grantEncoursList.find((grant) => grant.id == budget.grant)?.code || "";
+    if (!groupedBudgets[grantCode]) {
+      groupedBudgets[grantCode] = [];
+    }
+    groupedBudgets[grantCode].push(budget);
+  });
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
