@@ -4,6 +4,7 @@ import {
   IconButton,
   Stack,
   styled,
+  TableHead,
   Typography,
 } from "@mui/material";
 import Link from "next/link";
@@ -38,6 +39,7 @@ import { deletePeriode } from "../../redux/features/periode";
 import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 import { PeriodeItem } from "../../redux/features/periode/periode.interface";
 import formatMontant from "../../hooks/format";
+import { Edit } from "@mui/icons-material";
 
 const ListBudgetsInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -141,6 +143,19 @@ const ListBudgetsInitial = () => {
   const handleClickEdit = async (id: any) => {
     router.push(`/grants/periode/${id}/edit`);
   };
+  const groupedBudgets: { [key: string]: typeof periodelist } = {};
+
+  // Grouping the budgetInitialList by grant
+  React.useEffect(() => {
+    periodelist.forEach((budget) => {
+      const grantCode =
+        grantEncoursList.find((grant) => grant.id === budget.grant)?.code || "";
+      if (!groupedBudgets[grantCode]) {
+        groupedBudgets[grantCode] = [];
+      }
+      groupedBudgets[grantCode].push(budget);
+    });
+  }, [periodelist]);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -163,110 +178,75 @@ const ListBudgetsInitial = () => {
                 aria-labelledby="tableTitle"
                 size={dense ? "small" : "medium"}
               >
-                <EnhancedTableHead
-                  numSelected={selected.length}
-                  order={order}
-                  orderBy={orderBy}
-                  onSelectAllClick={handleSelectAllClick}
-                  onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
-                />
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Grants</TableCell>
+                    <TableCell>Périodes</TableCell>
+                    <TableCell>Début</TableCell>
+                    <TableCell>Fin</TableCell>
+                    <TableCell>Montant</TableCell>
+                  </TableRow>
+                </TableHead>
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
-                  {periodelist
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: PeriodeItem, index: any) => {
-                      // const isItemSelected = isSelected(row.grants);
-                      const labelId = `enhanced-table-checkbox-${index}`;
-
-                      return (
-                        <TableRow
-                          hover
-                          //   onClick={(event) => handleClick(event, row.reference)}
-                          role="checkbox"
-                          // aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={row.id}
-                          // selected={isItemSelected}
-                        >
-                          <TableCell
-                            padding="checkbox"
-                            // onClick={(event) => handleClick(event, row.id)}
-                          ></TableCell>
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                          >
-                            {
-                              grantEncoursList.find(
-                                (e: any) => e.id === row?.grant
-                              )?.code
-                            }
+                  {Object.keys(groupedBudgets).map((grantCode) => {
+                    const budgets = groupedBudgets[grantCode];
+                    return budgets.map((budget, index) => (
+                      <TableRow
+                        key={`${grantCode}-${index}`}
+                        sx={{ borderBottomColor: "black" }}
+                      >
+                        {index === 0 && (
+                          <TableCell rowSpan={budgets.length}>
+                            {grantCode}
                           </TableCell>
-                          <TableCell align="right">{row.periode}</TableCell>
-                          <TableCell align="right">
-                            <Moment format="DD/MM/yyyy">{row.debut}</Moment>
-                          </TableCell>
-                          <TableCell align="right">
-                            <Moment format="DD/MM/yyyy">{row.fin}</Moment>
-                          </TableCell>
-                          <TableCell align="right">
-                            {formatMontant(Number(row.montant))}
-                          </TableCell>
-                          <TableCell align="right">
-                            <BtnActionContainer
-                              direction="row"
-                              justifyContent="right"
+                        )}
+                        <TableCell>{budget.periode}</TableCell>
+                        <TableCell>
+                          <Moment format="DD/MM/yyyy">{budget.debut}</Moment>
+                        </TableCell>
+                        <TableCell>
+                          <Moment format="DD/MM/yyyy">{budget.fin}</Moment>
+                        </TableCell>
+                        <TableCell>
+                          {formatMontant(Number(budget.montant))}
+                        </TableCell>
+                        <TableCell>
+                          <BtnActionContainer direction="row" gap={1}>
+                            {/* <Link
+                              href={`/grants/grantsEnCours/${row.id}/detail`}
                             >
-                              <Link
-                                href={`/grants/budgetInitial/${row.id}/add`}
-                              >
-                                <Button
-                                  variant="outlined"
-                                  color="accent"
-                                  startIcon={<Add />}
-                                >
-                                  Budget initial
-                                </Button>
-                              </Link>
                               <IconButton
-                                color="primary"
-                                aria-label="Modifier"
+                                color="accent"
+                                aria-label="Details"
                                 component="span"
-                                size="small"
-                                onClick={() => {
-                                  handleClickEdit(row.id);
-                                }}
                               >
-                                <EditIcon />
+                                <VisibilityIcon />
                               </IconButton>
-                              <IconButton
-                                color="warning"
-                                aria-label="Supprimer"
-                                component="span"
-                                onClick={() => {
-                                  handleClickDelete(row.id);
-                                }}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            </BtnActionContainer>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow
-                      style={{
-                        height: (dense ? 33 : 53) * emptyRows,
-                      }}
-                    >
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
+                            </Link> */}
+                            <IconButton
+                              color="primary"
+                              aria-label="Modifier"
+                              component="span"
+                              size="small"
+                              onClick={() => {
+                                handleClickEdit(budget.id);
+                              }}
+                            >
+                              <Edit />
+                            </IconButton>
+                            <IconButton
+                              color="warning"
+                              aria-label="Supprimer"
+                              component="span"
+                              onClick={() => handleClickDelete(budget.id)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </BtnActionContainer>
+                        </TableCell>
+                      </TableRow>
+                    ));
+                  })}
                 </TableBody>
               </Table>
             </TableContainer>
