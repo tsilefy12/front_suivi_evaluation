@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import Link from "next/link";
-import React from "react";
+import React, { Fragment } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -40,6 +40,7 @@ import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 import { PeriodeItem } from "../../redux/features/periode/periode.interface";
 import formatMontant from "../../hooks/format";
 import { Edit } from "@mui/icons-material";
+import AddNewBudgetInitial from "../budgetInitial/add/AddNewBudgetInitial";
 
 const ListBudgetsInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -209,6 +210,17 @@ const ListBudgetsInitial = () => {
                         </TableCell>
                         <TableCell>
                           <BtnActionContainer direction="row" gap={1}>
+                            <Link
+                              href={`/grants/budgetInitial/${budget.id}/add`}
+                            >
+                              <Button
+                                variant="outlined"
+                                color="accent"
+                                startIcon={<Add />}
+                              >
+                                Budget initial
+                              </Button>
+                            </Link>
                             {/* <Link
                               href={`/grants/grantsEnCours/${row.id}/detail`}
                             >

@@ -17,7 +17,7 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { Check, Close } from "@mui/icons-material";
-import { SectionNavigation } from "../ListBudgetsInitial";
+import { SectionNavigation } from "../[id]/list/ListBudgetsInitial";
 import { Form, Formik } from "formik";
 import useFetchBudgetInitial from "../hooks/useFetchBudgetInitial";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
@@ -57,7 +57,7 @@ const AddNewBudgetInitial = () => {
     fetchligneBudgetaire();
     fetchPeriode();
   }, [router.query]);
-  //  console.log("value key :", grantValue)
+
   //get grant dans periode
   let periodeGrantList: { id: any; name: any; amount: number }[] = [];
 
@@ -176,7 +176,7 @@ const AddNewBudgetInitial = () => {
                   sx={{ mb: 2 }}
                 >
                   <Stack flexDirection={"row"}>
-                    <Link href="/grants/budgetInitial">
+                    <Link href={`/grants/budgetInitial/${grantValue}/list`}>
                       <Button
                         color="info"
                         variant="text"

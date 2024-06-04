@@ -6,6 +6,7 @@ import {
   MenuItem,
   Stack,
   styled,
+  TableHead,
   TextField,
   Typography,
 } from "@mui/material";
@@ -19,30 +20,31 @@ import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Data, { Order } from "./table/type-variable";
-import { rows } from "./table/constante";
-import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
-import EnhancedTableHead from "./table/EnhancedTableHead";
-import { getComparator, stableSort } from "./table/function";
+import Data, { Order } from "../../table/type-variable";
+import { rows } from "../../table/constante";
+import EnhancedTableToolbar from "../../table/EnhancedTableToolbar";
+import EnhancedTableHead from "../../table/EnhancedTableHead";
+import { getComparator, stableSort } from "../../table/function";
 import Add from "@mui/icons-material/Add";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
-} from "../../config/table.config";
+} from "../../../../config/table.config";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Visibility from "@mui/icons-material/Visibility";
-import useFetchBudgetInitial from "./hooks/useFetchBudgetInitial";
-import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import useFetchBudgetInitial from "../../hooks/useFetchBudgetInitial";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
-import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
-import useFetchBudgetLine from "../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
-import { BudgetInitialItem } from "../../redux/features/budgetInitial/budgetInitial.interface";
+import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
+import useFetchBudgetLine from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
+import { BudgetInitialItem } from "../../../../redux/features/budgetInitial/budgetInitial.interface";
 import { useConfirm } from "material-ui-confirm";
-import { deleteBudgetInitial } from "../../redux/features/budgetInitial";
-import useFetchPeriode from "../periode/hooks/useFetchPeriode";
-import formatMontant from "../../hooks/format";
+import { deleteBudgetInitial } from "../../../../redux/features/budgetInitial";
+import useFetchPeriode from "../../../periode/hooks/useFetchPeriode";
+import formatMontant from "../../../../hooks/format";
+import AddNewBudgetInitial from "../../add/AddNewBudgetInitial";
 
 const ListBudgetInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -54,6 +56,7 @@ const ListBudgetInitial = () => {
   const fetchBudgetInitial = useFetchBudgetInitial();
   const { budgetInitialList } = useAppSelector((state) => state.budgetInitial);
   const router = useRouter();
+  const { id } = router.query;
   const dispatch = useAppDispatch();
   const fetchGrant = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
@@ -166,7 +169,18 @@ const ListBudgetInitial = () => {
   const handleClickEdit = async (id: any) => {
     router.push(`/grants/budgetInitial/${id}/edit`);
   };
-  // console.log("ligne :", budgetInitialList)
+  const groupedBudgets: { [key: string]: typeof budgetInitialList } = {};
+
+  budgetInitialList
+    .filter((f: any) => f.grant == id)
+    .forEach((budget) => {
+      const grantCode =
+        grantEncoursList.find((grant) => grant.id == budget.grant)?.code || "";
+      if (!groupedBudgets[grantCode]) {
+        groupedBudgets[grantCode] = [];
+      }
+      groupedBudgets[grantCode].push(budget);
+    });
   return (
     <Container maxWidth="xl">
       <SectionNavigation
@@ -196,135 +210,107 @@ const ListBudgetInitial = () => {
                 aria-labelledby="tableTitle"
                 size={dense ? "small" : "medium"}
               >
-                <EnhancedTableHead
-                  numSelected={selected.length}
-                  order={order}
-                  orderBy={orderBy}
-                  onSelectAllClick={handleSelectAllClick}
-                  onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
-                />
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Grants</TableCell>
+                    <TableCell>Périodes</TableCell>
+                    <TableCell>Ligne budgetaire</TableCell>
+                    <TableCell>Montant</TableCell>
+                  </TableRow>
+                </TableHead>
                 <TableBody>
-                  {budgetInitialList
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: BudgetInitialItem, index: any) => {
-                      // const isItemSelected = isSelected(row.id);
-                      const labelId = `enhanced-table-checkbox-${row.id}`;
+                  {Object.keys(groupedBudgets).map((grantCode) => {
+                    const budgets = groupedBudgets[grantCode];
+                    return budgets.map((budget, index) => (
+                      <TableRow
+                        key={`${grantCode}-${index}`}
+                        sx={{ borderBottomColor: "black" }}
+                      >
+                        {index === 0 && (
+                          <TableCell rowSpan={budgets.length}>
+                            {grantCode}
+                          </TableCell>
+                        )}
 
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={row.id!}
+                        <TableCell sx={{ width: "300px" }} align="left">
+                          {
+                            periodelist.find((p) => p.id == budget?.periodeId)
+                              ?.periode
+                          }
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            height: "10vh",
+                            overflow: "auto",
+                            // width: "300px",
+                          }}
+                          align="left"
                         >
-                          <TableCell padding="checkbox"></TableCell>
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                          >
-                            {
-                              grantEncoursList.find(
-                                (e: any) => e.id === row?.grant
-                              )?.code
-                            }
-                          </TableCell>
-                          <TableCell sx={{ width: "300px" }} align="center">
-                            {
-                              periodelist.find((p) => p.id == row?.periodeId)
-                                ?.periode
-                            }
-                          </TableCell>
-                          <TableCell
+                          <FormControl
                             sx={{
-                              height: "10vh",
+                              height:
+                                budget.ligneBudgetaire!.length <= 2
+                                  ? "auto"
+                                  : 70,
                               overflow: "auto",
-                              // width: "300px",
                             }}
-                            align="center"
                           >
-                            <FormControl
-                              sx={{
-                                height:
-                                  row.ligneBudgetaire!.length <= 2
-                                    ? "auto"
-                                    : 70,
-                                overflow: "auto",
-                              }}
-                            >
-                              {row.ligneBudgetaire?.map((lb) => {
-                                return (
-                                  <Stack
-                                    direction="column"
-                                    spacing={2}
-                                    key={index}
-                                  >
-                                    {
-                                      budgetLineList.find(
-                                        (b: any) => b.id == lb
-                                      )?.code
-                                    }
-                                  </Stack>
-                                );
-                              })}
-                            </FormControl>
-                          </TableCell>
-                          <TableCell align="center">
-                            {row.ligneBudgetaire?.map((lb) => {
+                            {budget.ligneBudgetaire?.map((lb) => {
                               return (
                                 <Stack
                                   direction="column"
                                   spacing={2}
                                   key={index}
                                 >
-                                  {formatMontant(
-                                    Number(
-                                      budgetLineList.find(
-                                        (b: any) => b.id == lb
-                                      )?.amount
-                                    )
-                                  )}
+                                  {
+                                    budgetLineList.find((b: any) => b.id == lb)
+                                      ?.code
+                                  }
                                 </Stack>
                               );
                             })}
-                          </TableCell>
-                          <TableCell align="center">
-                            <BtnActionContainer
-                              direction="row"
-                              justifyContent="left"
+                          </FormControl>
+                        </TableCell>
+                        <TableCell align="left">
+                          {budget.ligneBudgetaire?.map((lb) => {
+                            return (
+                              <Stack direction="column" spacing={2} key={index}>
+                                {formatMontant(
+                                  Number(
+                                    budgetLineList.find((b: any) => b.id == lb)
+                                      ?.amount
+                                  )
+                                )}
+                              </Stack>
+                            );
+                          })}
+                        </TableCell>
+                        <TableCell align="left">
+                          <BtnActionContainer
+                            direction="row"
+                            justifyContent="left"
+                          >
+                            <IconButton
+                              color="primary"
+                              aria-label="Modifier"
+                              component="span"
+                              onClick={() => handleClickEdit(budget.id!)}
                             >
-                              <IconButton
-                                color="primary"
-                                aria-label="Modifier"
-                                component="span"
-                                onClick={() => handleClickEdit(row.id!)}
-                              >
-                                <EditIcon />
-                              </IconButton>
-                              <IconButton
-                                color="warning"
-                                aria-label="Supprimer"
-                                component="span"
-                                onClick={() => handleClickDelete(row.id!)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            </BtnActionContainer>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow
-                      style={{
-                        height: (dense ? 33 : 53) * emptyRows,
-                      }}
-                    >
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              color="warning"
+                              aria-label="Supprimer"
+                              component="span"
+                              onClick={() => handleClickDelete(budget.id!)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </BtnActionContainer>
+                        </TableCell>
+                      </TableRow>
+                    ));
+                  })}
                 </TableBody>
               </Table>
             </TableContainer>
