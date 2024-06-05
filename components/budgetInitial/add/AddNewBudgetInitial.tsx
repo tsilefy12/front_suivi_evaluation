@@ -55,10 +55,6 @@ const AddNewBudgetInitial = () => {
     fetchPeriode();
   }, [router.query]);
 
-  React.useEffect(() => {
-    console.log("grantEncoursList: ", grantEncoursList);
-  }, [grantEncoursList]);
-
   let periodeGrantList: { id: any; name: any; amount: number }[] = [];
 
   if (grantEncoursList.length > 0) {
@@ -84,16 +80,6 @@ const AddNewBudgetInitial = () => {
   }
 
   const [BudgetLineGrantList, setBudgetLineGrantList] = React.useState<any>([]);
-
-  let [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any>(
-    isEditing
-      ? budgetLineList.filter(
-          (pg) =>
-            Array.isArray(budgetInitial?.ligneBudgetaire) &&
-            budgetInitial?.ligneBudgetaire.includes(Number(pg.id))
-        )
-      : BudgetLineGrantList
-  );
 
   React.useEffect(() => {
     if (grantEncoursList.length > 0) {
@@ -121,7 +107,7 @@ const AddNewBudgetInitial = () => {
         ligneBudgetaire: ligneBudgetMontants,
         grant: getIdGrant,
       };
-
+      // console.log(values.ligneBudgetaire);
       if (isEditing) {
         await dispatch(
           updateBudgetInitial({
@@ -277,7 +263,6 @@ const AddNewBudgetInitial = () => {
                     type="number"
                     value={formikProps.values.montant || ""}
                     onChange={formikProps.handleChange}
-                    sx={{ display: isEditing }}
                   >
                     <MenuItem>Select</MenuItem>
                   </OSTextField>
