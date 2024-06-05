@@ -3,7 +3,7 @@ import { PeriodeItem } from "../periode/periode.interface";
 export interface BudgetInitialItem {
   id?: string;
   grant?: number;
-  ligneBudgetaire?: {}[];
+  ligneBudgetaire?: { lignebudgetaire: number; montant: number }[];
   periodeId?: string;
   montant?: any | null;
   periodes?: PeriodeItem[];

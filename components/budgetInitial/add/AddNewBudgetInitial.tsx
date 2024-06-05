@@ -119,7 +119,7 @@ const AddNewBudgetInitial = () => {
       const updatedValues = {
         ...values,
         ligneBudgetaire: ligneBudgetMontants,
-        grant: grantValue,
+        grant: getIdGrant,
       };
 
       if (isEditing) {
@@ -143,7 +143,7 @@ const AddNewBudgetInitial = () => {
   const handleAddLigneBudgetMontant = (ligneBudgetaire: any, montant: any) => {
     setLigneBudgetMontants((prev) => [...prev, { ligneBudgetaire, montant }]);
   };
-  console.log(ligneBudgetMontants);
+
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -269,13 +269,18 @@ const AddNewBudgetInitial = () => {
                   </OSTextField>
                   <OSTextField
                     fullWidth
+                    select={budgetInitial.id === id}
                     id="outlined-basic"
                     label="Montant"
                     variant="outlined"
                     name="montant"
+                    type="number"
                     value={formikProps.values.montant || ""}
                     onChange={formikProps.handleChange}
-                  />
+                    sx={{ display: isEditing }}
+                  >
+                    <MenuItem>Select</MenuItem>
+                  </OSTextField>
                   <Button
                     onClick={() =>
                       handleAddLigneBudgetMontant(

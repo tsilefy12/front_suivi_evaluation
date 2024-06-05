@@ -1,7 +1,10 @@
 import { Button, Stack, Typography, styled } from "@mui/material";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { createLineBudget, updateLineBudget } from "../../../redux/features/lineBudget";
+import {
+  createLineBudget,
+  updateLineBudget,
+} from "../../../redux/features/lineBudget";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -11,9 +14,9 @@ import OSTextField from "../../shared/input/OSTextField";
 
 const LineBudgetForm = () => {
   const dispatch = useAppDispatch();
-  const router = useRouter()
-  const { isEditing, lineBudget } = useAppSelector((state) => state.lineBudget)
-  console.log(isEditing,lineBudget )
+  const router = useRouter();
+  const { isEditing, lineBudget } = useAppSelector((state) => state.lineBudget);
+  // console.log(isEditing,lineBudget )
   const handleSubmit = async (values: any) => {
     try {
       if (isEditing) {
@@ -24,7 +27,6 @@ const LineBudgetForm = () => {
           })
         );
       } else {
-
         await dispatch(createLineBudget(values));
       }
       router.push("/configurations/lineBudget");
@@ -40,8 +42,8 @@ const LineBudgetForm = () => {
         initialValues={
           isEditing
             ? lineBudget
-              : {
-                name: isEditing ? lineBudget?.name : ""
+            : {
+                name: isEditing ? lineBudget?.name : "",
               }
         }
         validationSchema={Yup.object({
@@ -64,32 +66,36 @@ const LineBudgetForm = () => {
                 variant="outlined"
                 name="name"
               />
-              <BtnContainer direction="row" spacing={2} justifyContent="flex-end">
-                  <Button
-                    color="info"
-                    variant="text"
-                    startIcon={<Close />}
-                    onClick={() => {
-                      formikProps.resetForm();
-                      dispatch(cancelEdit());
-                    }}
-                  >
-                    Annuler
-                  </Button>
+              <BtnContainer
+                direction="row"
+                spacing={2}
+                justifyContent="flex-end"
+              >
+                <Button
+                  color="info"
+                  variant="text"
+                  startIcon={<Close />}
+                  onClick={() => {
+                    formikProps.resetForm();
+                    dispatch(cancelEdit());
+                  }}
+                >
+                  Annuler
+                </Button>
                 <Button
                   variant="contained"
                   color="primary"
                   size="small"
                   startIcon={<Check />}
                   sx={{ marginInline: 3 }}
-                  type="button" 
+                  type="button"
                   onClick={formikProps.submitForm}
                 >
                   Enregistrer
                 </Button>
               </BtnContainer>
             </Stack>
-          )
+          );
         }}
       </Formik>
     </FormContainer>
