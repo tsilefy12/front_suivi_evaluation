@@ -34,6 +34,7 @@ import useFetchBudgetLine from "../../previsionMissions/organism/Finances/tableP
 import useFetchPeriode from "../../periode/hooks/useFetchPeriode";
 import { PeriodeItem } from "../../../redux/features/periode/periode.interface";
 import { getValueAndUnit } from "polished";
+import { GrantEncoursItem } from "../../../redux/features/grantEncours/grantEncours.interface";
 
 const AddNewBudgetInitial = () => {
   const fetchBudgetInitial = useFetchBudgetInitial();
@@ -101,21 +102,15 @@ const AddNewBudgetInitial = () => {
     }
     return [];
   });
-
+  const [getIdGrant, setGetIdGrant] = React.useState(0);
+  React.useEffect(() => {
+    if (id) {
+      const idGrant = periodelist.find((p: PeriodeItem) => p.id === id)?.grant;
+      return setGetIdGrant(idGrant!);
+    }
+  }, [periodelist]);
   // console.log(id);
   const handleSubmit = async (values: any) => {
-    // const totalMontantBudget = selectedBudgetLine.reduce(
-    //   (total: number, currentItem: any) => total + currentItem.amount,
-    //   0
-    // );
-
-    // const somme =
-    //   totalMontantBudget +
-    //   periodeGrantList
-    //     .filter((p) => p.id === values.periodeId)
-    //     .reduce((acc, curr) => acc + curr.amount, 0);
-
-    // console.log("montant :", somme);
     try {
       const updatedValues = {
         ...values,
@@ -135,7 +130,7 @@ const AddNewBudgetInitial = () => {
       }
 
       fetchBudgetInitial();
-      router.push("/grants/budgetInitial");
+      router.push(`/grants/budgetInitial/${getIdGrant}/list`);
     } catch (error) {
       console.log("error", error);
     }
@@ -176,7 +171,7 @@ const AddNewBudgetInitial = () => {
                   sx={{ mb: 2 }}
                 >
                   <Stack flexDirection={"row"}>
-                    <Link href={`/grants/budgetInitial/${grantValue}/list`}>
+                    <Link href={`/grants/budgetInitial/${getIdGrant}/list`}>
                       <Button
                         color="info"
                         variant="text"
@@ -196,19 +191,21 @@ const AddNewBudgetInitial = () => {
                     >
                       Enregistrer
                     </Button>
-                    <Button
-                      variant="text"
-                      color="warning"
-                      size="small"
-                      startIcon={<Close />}
-                      sx={{ marginInline: 3 }}
-                      onClick={() => {
-                        formikProps.resetForm();
-                        dispatch(cancelEdit());
-                      }}
-                    >
-                      Annuler
-                    </Button>
+                    <Link href={`/grants/budgetInitial/${getIdGrant}/list`}>
+                      <Button
+                        variant="text"
+                        color="warning"
+                        size="small"
+                        startIcon={<Close />}
+                        sx={{ marginInline: 3 }}
+                        onClick={() => {
+                          formikProps.resetForm();
+                          dispatch(cancelEdit());
+                        }}
+                      >
+                        Annuler
+                      </Button>
+                    </Link>
                   </Stack>
                   <Typography variant="h5">
                     {isEditing
@@ -236,21 +233,22 @@ const AddNewBudgetInitial = () => {
                   id="outlined-basic"
                   label="Grant"
                   variant="outlined"
-                  value={grantValue}
+                  value={
+                    getIdGrant
+                      ? grantEncoursList.find(
+                          (g: GrantEncoursItem) =>
+                            Number(g.id) === Number(getIdGrant)
+                        )!.code
+                      : ""
+                  }
                   onChange={(e: any) => setGrantValue(e.target.value)}
                   name="grant"
-                >
-                  <MenuItem value="vide">Select grant</MenuItem>
-                  {grantEncoursList.map((g) => (
-                    <MenuItem key={g.id!} value={g.id!}>
-                      {g.code}
-                    </MenuItem>
-                  ))}
-                </OSTextField>
+                />
+
                 <Autocomplete
                   multiple
                   id="tags-standard"
-                  options={grantValue != "vide" ? BudgetLineGrantList : []}
+                  options={getIdGrant != 0 ? BudgetLineGrantList : []}
                   getOptionLabel={(option) => option.code}
                   value={selectedBudgetLine}
                   onChange={(event: any, newValue) => {
