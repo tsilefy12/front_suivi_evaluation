@@ -19,15 +19,15 @@ import Paper from "@mui/material/Paper";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
-} from "../../../config/table.config";
-import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
+} from "../../../../config/table.config";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
-import useFetchGrants from "../../GrantsEnCours/hooks/getGrants";
-import { GrantEncoursItem } from "../../../redux/features/grantEncours/grantEncours.interface";
-import useFetchProject from "../../GrantsEnCours/hooks/getProject";
+import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
+import { GrantEncoursItem } from "../../../../redux/features/grantEncours/grantEncours.interface";
+import useFetchProject from "../../../GrantsEnCours/hooks/getProject";
 import Moment from "react-moment";
-import TransportEquipmentTableHeader from "../organisme/table/TransportEquipmentTableHeader";
-import useFetchEmploys from "../../GrantsEnCours/hooks/getResponsable";
+import TransportEquipmentTableHeader from "../../organisme/table/TransportEquipmentTableHeader";
+import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
 import { ArrowBack, Backpack } from "@mui/icons-material";
 
 const ListGrantsMonitoring = () => {
@@ -148,12 +148,6 @@ const ListGrantsMonitoring = () => {
                             align="center"
                             sx={{ minWidth: 200, maxWidth: 200 }}
                           >
-                            <Moment format="DD/MM/yyyy">{row.deadline}</Moment>
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
                             <Moment format="DD/MM/yyyy">{row.startDate}</Moment>
                           </TableCell>
                           <TableCell
@@ -166,40 +160,6 @@ const ListGrantsMonitoring = () => {
                             align="center"
                             sx={{ minWidth: 200, maxWidth: 200 }}
                           >
-                            <Moment format="DD/MM/yyyy">{row.techDate}</Moment>
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
-                            <Moment format="DD/MM/yyyy">
-                              {row.financeDate}
-                            </Moment>
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
-                            {Math.ceil(
-                              (new Date(row.techDate!).getTime() -
-                                new Date(row.deadline!).getTime()) /
-                                (1000 * 60 * 60 * 24)
-                            )}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
-                            {Math.ceil(
-                              (new Date(row.financeDate!).getTime() -
-                                new Date(row.deadline!).getTime()) /
-                                (1000 * 60 * 60 * 24)
-                            )}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
                             {employees &&
                               employees
                                 .filter((e: any) =>
@@ -207,26 +167,6 @@ const ListGrantsMonitoring = () => {
                                 )
                                 .map((e: any) => e.name + " " + e.surname)
                                 .join(", ")}
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 400, maxWidth: 400 }}
-                          >
-                            {row.note}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
-                            {Math.ceil(
-                              (new Date().getTime() -
-                                new Date(row.deadline!).getTime()) /
-                                (1000 * 60 * 60 * 24)
-                            )}
-                          </TableCell>
-                          <TableCell align="center">
-                            {new Date(row.deadline!).getFullYear()}
                           </TableCell>
                         </TableRow>
                       );

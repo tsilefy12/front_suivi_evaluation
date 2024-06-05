@@ -14,12 +14,6 @@ export const transportEquipmentHeadCells: readonly HeadCell[] = [
     label: "Projet title",
   },
   {
-    id: "deadline",
-    numeric: true,
-    disablePadding: false,
-    label: "Deadline",
-  },
-  {
     id: "dateDebut",
     numeric: true,
     disablePadding: false,
@@ -31,47 +25,12 @@ export const transportEquipmentHeadCells: readonly HeadCell[] = [
     disablePadding: false,
     label: "Periode end",
   },
-  {
-    id: "dateTech",
-    numeric: true,
-    disablePadding: false,
-    label: "Technical submitted",
-  },
-  {
-    id: "dateFinance",
-    numeric: true,
-    disablePadding: false,
-    label: "Financial submitted",
-  },
-  {
-    id: "delayTech",
-    numeric: true,
-    disablePadding: false,
-    label: "Technical delay",
-  },
-  {
-    id: "delayFinance",
-    numeric: true,
-    disablePadding: false,
-    label: "Financial delay",
-  },
+
   {
     id: "responsable",
     numeric: true,
     disablePadding: false,
     label: "Responsable",
-  },
-  {
-    id: "note",
-    numeric: true,
-    disablePadding: false,
-    label: "Notes",
-  },
-  {
-    id: "dayleft",
-    numeric: true,
-    disablePadding: false,
-    label: "Days left",
   },
   {
     id: "annee",

@@ -1,7 +1,7 @@
 import { Container } from "@mui/material";
 import React from "react";
-import ListGrantsMonitoring from "../../../../components/grantsMonitoring/[id]/grantMoni/ListGrants";
-import BackOfficeLayout from "../../../../layouts/backOffice";
+import ListGrantsMonitoring from "../../../../../components/grantsMonitoring/[id]/grantMoni/ListGrants";
+import BackOfficeLayout from "../../../../../layouts/backOffice";
 
 const GrantsMonitoring = () => {
   return (

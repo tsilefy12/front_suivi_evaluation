@@ -94,9 +94,6 @@ const GrantsList = () => {
         <Typography variant="h4" color="GrayText">
           GRANTS LIST
         </Typography>
-        <Link href="/grants/grantMonitoring/grantMoni">
-          <Button variant="contained">Deadline</Button>
-        </Link>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
@@ -109,6 +106,12 @@ const GrantsList = () => {
               >
                 <TableHead>
                   <TableRow>
+                    <TableCell
+                      align="center"
+                      sx={{ minWidth: 200, maxWidth: 200 }}
+                    >
+                      Deadline
+                    </TableCell>
                     <TableCell
                       align="center"
                       sx={{ minWidth: 200, maxWidth: 200 }}
@@ -187,12 +190,12 @@ const GrantsList = () => {
                     >
                       VALIDATION FINANCIERE
                     </TableCell>
-                    <TableCell
+                    {/* <TableCell
                       align="center"
                       sx={{ minWidth: 200, maxWidth: 200 }}
                     >
                       NOTES
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -212,6 +215,16 @@ const GrantsList = () => {
                           key={row.id}
                           // selected={isItemSelected}
                         >
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                          >
+                            <Link
+                              href={`/grants/grantMonitoring/${row.id}/grantMoni`}
+                            >
+                              <Button variant="contained">Deadline</Button>
+                            </Link>
+                          </TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
@@ -329,12 +342,12 @@ const GrantsList = () => {
                             }`}
                           </TableCell>
 
-                          <TableCell
+                          {/* <TableCell
                             align="center"
                             sx={{ minWidth: 400, maxWidth: 400 }}
                           >
                             {row.note}
-                          </TableCell>
+                          </TableCell> */}
                         </TableRow>
                       );
                     })}
