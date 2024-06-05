@@ -3,9 +3,9 @@ import { PeriodeItem } from "../periode/periode.interface";
 export interface BudgetInitialItem {
   id?: string;
   grant?: number;
-  ligneBudgetaire?: any[];
+  ligneBudgetaire?: {}[];
   periodeId?: string;
-  montant?: any;
+  montant?: any | null;
   periodes?: PeriodeItem[];
 }
 export interface BugdgetInitialInitialState {
