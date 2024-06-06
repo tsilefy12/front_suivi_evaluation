@@ -58,9 +58,8 @@ const ListPlanFinancement = () => {
   Object.keys(groupedBudgets).forEach((grantCode) => {
     const budgets = groupedBudgets[grantCode];
     const total = budgets.reduce((acc, budget) => {
-      const totalBudget = budget.ligneBudgetaire!.reduce((acc, ligneId) => {
-        const budgetLine = budgetLineList.find((bl: any) => bl.id === ligneId);
-        return acc + (budgetLine ? budgetLine.amount! : 0);
+      const totalBudget = budget.grantsMonitorings!.reduce((acc, ligneId) => {
+        return acc + ligneId.montant!;
       }, 0);
       return acc + totalBudget;
     }, 0);
@@ -120,10 +119,10 @@ const ListPlanFinancement = () => {
                   <TableCell>
                     {budgetInitialList
                       .filter((bi) => bi.periodeId === budget.periodeId)
-                      .flatMap((bi) => bi.ligneBudgetaire ?? [])
+                      .flatMap((bi) => bi.grantsMonitorings ?? [])
                       .map((ligneId, index) => {
                         const budgetLine = budgetLineList.find(
-                          (bl: any) => bl.id === ligneId
+                          (bl: any) => bl.id === ligneId.ligneBudgetaire
                         );
                         return (
                           <Stack key={index} direction={"column"} gap={8}>
@@ -136,15 +135,15 @@ const ListPlanFinancement = () => {
                   <TableCell>
                     {budgetInitialList
                       .filter((bi) => bi.periodeId === budget.periodeId)
-                      .flatMap((bi) => bi.ligneBudgetaire ?? [])
+                      .flatMap((bi) => bi.grantsMonitorings ?? [])
                       .map((ligneId, index) => {
                         const budgetLine = budgetLineList.find(
-                          (bl: any) => bl.id === ligneId
+                          (bl: any) => bl.id === ligneId.ligneBudgetaire
                         );
                         return (
                           <Stack key={index} direction={"column"} gap={10}>
                             {budgetLine
-                              ? formatMontant(Number(budgetLine.amount))
+                              ? formatMontant(Number(ligneId.montant))
                               : ""}
                           </Stack>
                         );
@@ -155,12 +154,12 @@ const ListPlanFinancement = () => {
                       Number(
                         budgetInitialList
                           .filter((bi) => bi.periodeId === budget.periodeId)
-                          .flatMap((bi) => bi.ligneBudgetaire ?? [])
+                          .flatMap((bi) => bi.grantsMonitorings ?? [])
                           .map((ligneId) => {
                             const budgetLine = budgetLineList.find(
-                              (bl: any) => bl.id === ligneId
+                              (bl: any) => bl.id === ligneId.ligneBudgetaire
                             );
-                            return budgetLine ? budgetLine.amount : 0;
+                            return budgetLine ? ligneId.montant : 0;
                           })
                           .reduce((acc: any, curr: any) => acc + curr, 0)
                       )
