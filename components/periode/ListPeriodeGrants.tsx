@@ -138,7 +138,9 @@ const ListBudgetsInitial = () => {
         await dispatch(deletePeriode({ id }));
         fetchPeriode();
       })
-      .catch(() => {});
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleClickEdit = async (id: any) => {
@@ -221,17 +223,17 @@ const ListBudgetsInitial = () => {
                                 Budget initial
                               </Button>
                             </Link>
-                            {/* <Link
-                              href={`/grants/grantsEnCours/${row.id}/detail`}
+                            <Link
+                              href={`/grants/budgetInitial/${budget.grant}/list`}
                             >
-                              <IconButton
+                              <Button
+                                variant="outlined"
                                 color="accent"
-                                aria-label="Details"
-                                component="span"
+                                startIcon={<VisibilityIcon />}
                               >
-                                <VisibilityIcon />
-                              </IconButton>
-                            </Link> */}
+                                Budget initial list
+                              </Button>
+                            </Link>
                             <IconButton
                               color="primary"
                               aria-label="Modifier"

@@ -1,12 +1,12 @@
+import { GrantMonitoringItem } from "../grantMonitoring/grantMonitoring.interface";
 import { PeriodeItem } from "../periode/periode.interface";
 
 export interface BudgetInitialItem {
   id?: string;
   grant?: number;
-  ligneBudgetaire?: { lignebudgetaire: number; montant: number }[];
   periodeId?: string;
-  montant?: any | null;
   periodes?: PeriodeItem[];
+  grantsMonitorings?: GrantMonitoringItem[];
 }
 export interface BugdgetInitialInitialState {
   budgetInitialList: BudgetInitialItem[];

@@ -7,10 +7,10 @@ import {
   Stack,
 } from "@mui/material";
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import ArrowBack from "@mui/icons-material/ArrowBack";
-import { Check, Close } from "@mui/icons-material";
+import { Add, Check, Close, Delete } from "@mui/icons-material";
 import { Form, Formik } from "formik";
 import useFetchBudgetInitial from "../hooks/useFetchBudgetInitial";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
@@ -18,6 +18,7 @@ import {
   createBudgetInitial,
   updateBudgetInitial,
 } from "../../../redux/features/budgetInitial";
+import { createGrantMonitoring } from "../../../redux/features/grantMonitoring"; // Importer la fonction de création de monitoring
 import { useRouter } from "next/router";
 import { cancelEdit } from "../../../redux/features/budgetInitial/budgetInitialSlice";
 import OSTextField from "../../shared/input/OSTextField";
@@ -25,6 +26,90 @@ import useFetchGrants from "../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
 import useFetchPeriode from "../../periode/hooks/useFetchPeriode";
 import { PeriodeItem } from "../../../redux/features/periode/periode.interface";
+
+const BudgetForm = ({
+  formikProps,
+  BudgetLineGrantList,
+  ligneBudgetMontants,
+  setLigneBudgetMontants,
+}: any) => {
+  const [budgetForms, setBudgetForms] = useState([
+    { ligneBudgetaire: "", montant: "" },
+  ]);
+
+  const handleAddLigneBudgetMontant = (ligneBudgetaire: any, montant: any) => {
+    const newLigneBudgetMontants = [
+      ...ligneBudgetMontants,
+      { ligneBudgetaire, montant },
+    ];
+    setLigneBudgetMontants(newLigneBudgetMontants);
+    setBudgetForms([...budgetForms, { ligneBudgetaire, montant }]);
+    // formikProps.setFieldValue("ligneBudgetaire", ligneBudgetaire);
+    // formikProps.setFieldValue("montant", "");
+  };
+  const handleDeleteLigneBudgetMontant = (indexToDelete: number) => {
+    setBudgetForms((prevForms) =>
+      prevForms.filter((form, index) => index !== indexToDelete)
+    );
+  };
+  return (
+    <>
+      {budgetForms.map((form, index) => (
+        <Stack direction={"row"} gap={2} key={index}>
+          <OSTextField
+            fullWidth
+            select
+            id={`outlined-basic-ligneBudgetaire-${index}`}
+            label="ligne budgetaire"
+            variant="outlined"
+            name={`ligneBudgetaire-${index}`}
+            value={formikProps.values[`ligneBudgetaire-${index}`] || "vide"}
+            onChange={formikProps.handleChange}
+          >
+            <MenuItem value="vide">Select budget line</MenuItem>
+            {BudgetLineGrantList.map((m: any) => (
+              <MenuItem key={m.id} value={m.id}>
+                {m.code}
+              </MenuItem>
+            ))}
+          </OSTextField>
+          <OSTextField
+            fullWidth
+            id={`outlined-basic-montant-${index}`}
+            label="Montant"
+            variant="outlined"
+            name={`montant-${index}`}
+            type="number"
+            value={formikProps.values[`montant-${index}`] || ""}
+            onChange={formikProps.handleChange}
+            disable={formikProps.values.montant != ""}
+          />
+          <Stack direction={"row"} gap={1}>
+            <Button
+              onClick={() =>
+                handleAddLigneBudgetMontant(
+                  formikProps.values[`ligneBudgetaire-${index}`],
+                  formikProps.values[`montant-${index}`]
+                )
+              }
+              startIcon={<Add color="primary" />}
+            >
+              Add
+            </Button>
+            <Button
+              onClick={() => handleDeleteLigneBudgetMontant(index)}
+              startIcon={<Delete color="warning" />}
+              color="warning"
+              disabled={budgetForms.length == 1 && index == 0}
+            >
+              Delete
+            </Button>
+          </Stack>
+        </Stack>
+      ))}
+    </>
+  );
+};
 
 const AddNewBudgetInitial = () => {
   const fetchBudgetInitial = useFetchBudgetInitial();
@@ -41,15 +126,13 @@ const AddNewBudgetInitial = () => {
   const { budgetLineList = [] } = useAppSelector((state) => state.budgetLine);
   const fetchPeriode = useFetchPeriode();
   const { periodelist = [] } = useAppSelector((state) => state.periode);
-  const [grantValue, setGrantValue] = React.useState<string>("vide");
+  const [grantValue, setGrantValue] = useState<string>("vide");
   const { id } = router.query;
   const uniqueValues = new Set();
-  const [getIdGrant, setGetIdGrant] = React.useState(0);
-  const [ligneBudgetMontants, setLigneBudgetMontants] = React.useState<any[]>(
-    []
-  );
+  const [getIdGrant, setGetIdGrant] = useState(0);
+  const [ligneBudgetMontants, setLigneBudgetMontants] = useState<any[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchGrant();
     fetchligneBudgetaire();
     fetchPeriode();
@@ -79,9 +162,9 @@ const AddNewBudgetInitial = () => {
     });
   }
 
-  const [BudgetLineGrantList, setBudgetLineGrantList] = React.useState<any>([]);
+  const [BudgetLineGrantList, setBudgetLineGrantList] = useState<any>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (grantEncoursList.length > 0) {
       grantEncoursList.forEach((g) => {
         if (getIdGrant !== 0 && Number(getIdGrant) === Number(g.id)) {
@@ -91,7 +174,7 @@ const AddNewBudgetInitial = () => {
     }
   }, [getIdGrant, grantEncoursList]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (id) {
       const idGrant = periodelist.find((p: PeriodeItem) => p.id === id)?.grant;
       if (idGrant !== undefined) {
@@ -102,32 +185,38 @@ const AddNewBudgetInitial = () => {
 
   const handleSubmit = async (values: any) => {
     try {
-      const updatedValues = {
-        ...values,
-        ligneBudgetaire: ligneBudgetMontants,
-        grant: getIdGrant,
-      };
-      // console.log(values.ligneBudgetaire);
+      let createdBudgetInitialId = null;
+      let promises: Promise<any>[] = [];
       if (isEditing) {
+        values.grant = getIdGrant;
         await dispatch(
           updateBudgetInitial({
             id: budgetInitial.id!,
-            budgetInitial: updatedValues,
+            budgetInitial: values,
           })
         );
+        createdBudgetInitialId = budgetInitial.id;
       } else {
-        await dispatch(createBudgetInitial(updatedValues));
+        values.grant = getIdGrant;
+        const resultAction = await dispatch(createBudgetInitial(values));
+        createdBudgetInitialId = resultAction.payload.id;
       }
 
+      for (const item of ligneBudgetMontants) {
+        await dispatch(
+          createGrantMonitoring({
+            budgetInitialId: createdBudgetInitialId,
+            ligneBudgetaire: item.ligneBudgetaire,
+            montant: item.montant,
+          })
+        );
+      }
+      await Promise.all(promises);
       fetchBudgetInitial();
       router.push(`/grants/budgetInitial/${getIdGrant}/list`);
     } catch (error) {
       console.log("error", error);
     }
-  };
-
-  const handleAddLigneBudgetMontant = (ligneBudgetaire: any, montant: any) => {
-    setLigneBudgetMontants((prev) => [...prev, { ligneBudgetaire, montant }]);
   };
 
   return (
@@ -138,16 +227,12 @@ const AddNewBudgetInitial = () => {
           isEditing
             ? budgetInitial
             : {
-                grant: isEditing ? budgetInitial?.grant : "",
-                ligneBudgetaire: isEditing
-                  ? budgetInitial?.ligneBudgetaire
-                  : "",
+                grant: isEditing ? budgetInitial?.grant : getIdGrant,
                 periodeId: isEditing ? budgetInitial?.periodeId : id!,
-                montant: isEditing ? budgetInitial?.montant : "",
               }
         }
         validationSchema={Yup.object({
-          periodeId: Yup.string().required("Cham obligatoire"),
+          periodeId: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value, action) => {
           handleSubmit(value);
@@ -219,6 +304,9 @@ const AddNewBudgetInitial = () => {
                   value={
                     id ? periodelist.find((p) => p.id === id)?.periode : ""
                   }
+                  onChange={(value: any) =>
+                    formikProps.setFieldValue("periodeId", value)
+                  }
                 />
                 <OSTextField
                   fullWidth
@@ -230,66 +318,18 @@ const AddNewBudgetInitial = () => {
                       ? grantEncoursList.find(
                           (g) => Number(g.id) === Number(getIdGrant)
                         )?.code
-                      : ""
+                      : "vide"
                   }
                   onChange={(e: any) => setGrantValue(e.target.value)}
                   name="grant"
                 />
-                <Stack direction={"row"} gap={2}>
-                  <OSTextField
-                    fullWidth
-                    select
-                    id="outlined-basic"
-                    label="ligne budgetaire"
-                    variant="outlined"
-                    name="ligneBudgetaire"
-                    value={formikProps.values.ligneBudgetaire || "vide"}
-                    onChange={formikProps.handleChange}
-                  >
-                    <MenuItem value="vide">Select budget line</MenuItem>
-                    {BudgetLineGrantList.map((m: any) => (
-                      <MenuItem key={m.id} value={m.id}>
-                        {m.code}
-                      </MenuItem>
-                    ))}
-                  </OSTextField>
-                  <OSTextField
-                    fullWidth
-                    select={budgetInitial.id === id}
-                    id="outlined-basic"
-                    label="Montant"
-                    variant="outlined"
-                    name="montant"
-                    type="number"
-                    value={formikProps.values.montant || ""}
-                    onChange={formikProps.handleChange}
-                  >
-                    <MenuItem>Select</MenuItem>
-                  </OSTextField>
-                  <Button
-                    onClick={() =>
-                      handleAddLigneBudgetMontant(
-                        formikProps.values.ligneBudgetaire,
-                        formikProps.values.montant
-                      )
-                    }
-                  >
-                    <Check color="primary" />
-                  </Button>
-                </Stack>
-
-                {/* <div>
-                  <Typography variant="h6">
-                    Lignes Budgetaires et Montants
-                  </Typography>
-                  <ul>
-                    {ligneBudgetMontants.map((item, index) => (
-                      <li key={index}>
-                        {`Ligne Budgetaire: ${item.ligneBudgetaire}, Montant: ${item.montant}`}
-                      </li>
-                    ))}
-                  </ul>
-                </div> */}
+                <BudgetForm
+                  formikProps={formikProps}
+                  BudgetLineGrantList={BudgetLineGrantList}
+                  handleSubmit={handleSubmit}
+                  ligneBudgetMontants={ligneBudgetMontants} // Passer la liste à BudgetForm
+                  setLigneBudgetMontants={setLigneBudgetMontants} // Passer la fonction de mise à jour
+                />
               </FormContainer>
             </Form>
           );

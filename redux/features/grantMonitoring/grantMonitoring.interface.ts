@@ -1,7 +1,11 @@
+import { BudgetInitialItem } from "../budgetInitial/budgetInitial.interface";
+
 export interface GrantMonitoringItem {
   id?: string;
-  grantId?: number;
-  dayLeft?: number;
+  ligneBudgetaire?: number;
+  montant?: number;
+  budgetInitialId?: string;
+  budgetInitials?: BudgetInitialItem[];
 }
 export interface GrantMonitoringInitialState {
   grantMonitoringlist: GrantMonitoringItem[];

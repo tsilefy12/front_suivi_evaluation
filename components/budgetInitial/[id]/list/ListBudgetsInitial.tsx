@@ -45,6 +45,8 @@ import { deleteBudgetInitial } from "../../../../redux/features/budgetInitial";
 import useFetchPeriode from "../../../periode/hooks/useFetchPeriode";
 import formatMontant from "../../../../hooks/format";
 import AddNewBudgetInitial from "../../add/AddNewBudgetInitial";
+import { GrantMonitoringItem } from "../../../../redux/features/grantMonitoring/grantMonitoring.interface";
+import { ArrowBack } from "@mui/icons-material";
 
 const ListBudgetInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -81,18 +83,6 @@ const ListBudgetInitial = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
-
-  const listBL: { id: string }[] = [];
-  const budgetLineSet = new Set<string>();
-  budgetInitialList.forEach((e: any) => {
-    e.ligneBudgetaire.forEach((ep: any) => {
-      budgetLineSet.add(ep);
-    });
-  });
-
-  budgetLineSet.forEach((id) => {
-    listBL.push({ id });
-  });
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -190,11 +180,11 @@ const ListBudgetInitial = () => {
         sx={{ mb: 2 }}
       >
         <Stack flexDirection={"row"}>
-          {/* <Link href="/grants/budgetInitial/add">
-            <Button variant="contained" startIcon={<Add />}>
-              Créer
+          <Link href="/grants/periode">
+            <Button variant="contained" startIcon={<ArrowBack />}>
+              Retour à la liste des périodes
             </Button>
-          </Link> */}
+          </Link>
         </Stack>
         <Typography variant="h4" color="GrayText">
           Budget initial
@@ -248,23 +238,21 @@ const ListBudgetInitial = () => {
                         >
                           <FormControl
                             sx={{
-                              height:
-                                budget.ligneBudgetaire!.length <= 2
-                                  ? "auto"
-                                  : 70,
+                              height: budgets.length <= 2 ? "auto" : 70,
                               overflow: "auto",
                             }}
                           >
-                            {budget.ligneBudgetaire?.map((lb) => {
+                            {budget.grantsMonitorings?.map((lb) => {
                               return (
                                 <Stack
                                   direction="column"
                                   spacing={2}
-                                  key={index}
+                                  key={lb.id!}
                                 >
                                   {
-                                    budgetLineList.find((b: any) => b.id == lb)
-                                      ?.code
+                                    budgetLineList.find(
+                                      (b: any) => b.id == lb.ligneBudgetaire
+                                    )?.code
                                   }
                                 </Stack>
                               );
@@ -272,15 +260,14 @@ const ListBudgetInitial = () => {
                           </FormControl>
                         </TableCell>
                         <TableCell align="left">
-                          {budget.ligneBudgetaire?.map((lb) => {
+                          {budget.grantsMonitorings?.map((lb) => {
                             return (
-                              <Stack direction="column" spacing={2} key={index}>
-                                {formatMontant(
-                                  Number(
-                                    budgetLineList.find((b: any) => b.id == lb)
-                                      ?.amount
-                                  )
-                                )}
+                              <Stack
+                                direction="column"
+                                spacing={2}
+                                key={lb.id!}
+                              >
+                                {formatMontant(Number(lb.montant!))}
                               </Stack>
                             );
                           })}

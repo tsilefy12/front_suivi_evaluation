@@ -10,6 +10,7 @@ const useFetchBudgetInitial = () => {
     let args: any = {
       include: {
         periodes: true,
+        grantsMonitorings: true,
       },
     };
     if (router.query.search) {
