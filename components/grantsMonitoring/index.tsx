@@ -26,7 +26,11 @@ import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 import useFetchProject from "../GrantsEnCours/hooks/getProject";
 import useFetchEmploys from "../GrantsEnCours/hooks/getResponsable";
 import { GrantEncoursItem } from "../../redux/features/grantEncours/grantEncours.interface";
-import { Add } from "@mui/icons-material";
+import { Add, Download } from "@mui/icons-material";
+import { EmployeFormItem } from "../../redux/features/employe/employeSlice.interface";
+import { CurrencyItem } from "../../redux/features/currency/currencyinterface";
+import { PeriodeItem } from "../../redux/features/periode/periode.interface";
+import * as XLSX from "xlsx";
 
 const GrantsList = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -87,17 +91,57 @@ const GrantsList = () => {
   };
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
+  const handleExportExcel = () => {
+    const data = grantEncoursList.map((row: GrantEncoursItem) => ({
+      "Grant code": row.code,
+      Bailleur: row.bailleur,
+      "Project title": projectList.find(
+        (p: PeriodeItem) => p.id === row.projectId
+      )?.descriptionEn,
+      "Titre du projet": projectList.find(
+        (p: PeriodeItem) => p.id === row.projectId
+      )?.descriptionFr,
+      Start: row.startDate,
+      End: row.endDate,
+      Amount: row.amount,
+      Currency: currencylist.find((f: CurrencyItem) => f.id === row.currencyId)
+        ?.name,
+      Statut: row.status,
+      "VALIDATION TECHNIQUE": `${
+        employees.find((f: any) => f.id === row.techValidator)?.name
+      } ${employees.find((f) => f.id === row.techValidator)?.surname}`,
+      "VERIFICATION FINANCIERE": `${
+        employees.find((f: any) => f.id === row.financeVerificator)?.name
+      } ${employees.find((f) => f.id === row.financeVerificator)?.surname}`,
+      "VALIDATION FINANCIERE": `${
+        employees.find((f: any) => f.id === row.financeValidator)?.name
+      } ${employees.find((f) => f.id === row.financeValidator)?.surname}`,
+    }));
 
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "GrantsList");
+
+    XLSX.writeFile(wb, "GrantsList.xlsx");
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
+        <Button
+          variant="outlined"
+          color="accent"
+          startIcon={<Download />}
+          onClick={handleExportExcel}
+        >
+          Excel
+        </Button>
         <Typography variant="h4" color="GrayText">
           GRANTS LIST
         </Typography>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2, ml: 2 }}>
+          <Paper sx={{ width: "100%", mb: 2, position: "flex", left: 0 }}>
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -222,7 +266,9 @@ const GrantsList = () => {
                             <Link
                               href={`/grants/grantMonitoring/${row.id}/grantMoni`}
                             >
-                              <Button variant="contained">Deadline</Button>
+                              <Button variant="outlined" color="accent">
+                                Deadline
+                              </Button>
                             </Link>
                           </TableCell>
                           <TableCell
