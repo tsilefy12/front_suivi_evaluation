@@ -121,6 +121,34 @@ const GrantsList = () => {
     }));
 
     const ws = XLSX.utils.json_to_sheet(data);
+    const wscols = [
+      { wpx: 80 }, // deadline
+      { wpx: 80 }, // Grant code
+      { wpx: 80 }, // Bailleur
+      { wpx: 80 }, // Project title
+      { wpx: 80 }, // Titre du projet
+      { wpx: 80 }, // Start
+      { wpx: 80 }, // End
+      { wpx: 80 }, // Amount
+      { wpx: 80 }, // Currency
+      { wpx: 80 }, // Statut
+      { wpx: 150 }, // VALIDATION TECHNIQUE
+      { wpx: 150 }, // VERIFICATION FINANCIERE
+      { wpx: 150 }, // VALIDATION FINANCIERE
+    ];
+    ws["!cols"] = wscols;
+
+    // Centrer le texte pour chaque cellule
+    Object.keys(ws).forEach((key) => {
+      if (key[0] !== "!") {
+        ws[key].s = {
+          alignment: {
+            vertical: "center",
+            horizontal: "center",
+          },
+        };
+      }
+    });
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "GrantsList");
 
