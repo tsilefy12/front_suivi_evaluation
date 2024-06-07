@@ -5,6 +5,7 @@ import {
   Typography,
   MenuItem,
   Stack,
+  Icon,
 } from "@mui/material";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
@@ -55,7 +56,7 @@ const BudgetForm = ({
   return (
     <>
       {budgetForms.map((form, index) => (
-        <Stack direction={"row"} gap={2} key={index}>
+        <Stack direction={"row"} gap={1} key={index}>
           <OSTextField
             fullWidth
             select
@@ -82,9 +83,9 @@ const BudgetForm = ({
             type="number"
             value={formikProps.values[`montant-${index}`] || ""}
             onChange={formikProps.handleChange}
-            disable={formikProps.values.montant != ""}
+            disable={formikProps.values.montant != "" ? true : false}
           />
-          <Stack direction={"row"} gap={1}>
+          <Stack direction={"row"} gap={2}>
             <Button
               onClick={() =>
                 handleAddLigneBudgetMontant(
@@ -92,17 +93,25 @@ const BudgetForm = ({
                   formikProps.values[`montant-${index}`]
                 )
               }
-              startIcon={<Add color="primary" />}
-            >
-              Add
-            </Button>
+              startIcon={<Add color="primary" style={{ fontSize: 25 }} />}
+              style={{
+                borderRadius: "50%",
+                maxWidth: "10px",
+                minWidth: "10px",
+                marginLeft: 8,
+              }}
+            ></Button>
             <Button
               onClick={() => handleDeleteLigneBudgetMontant(index)}
-              startIcon={<Delete color="warning" />}
-              color="warning"
-              disabled={budgetForms.length == 1 && index == 0}
+              style={{
+                color: index === 0 ? "GrayText" : "#ff8c00",
+                borderRadius: "50%",
+                maxWidth: "10px",
+                minWidth: "10px",
+              }}
+              disabled={index === 0}
             >
-              Delete
+              <Delete style={{ fontSize: 25 }} />
             </Button>
           </Stack>
         </Stack>
