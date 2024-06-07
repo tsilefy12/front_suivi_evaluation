@@ -28,9 +28,11 @@ import useFetchProject from "../../../GrantsEnCours/hooks/getProject";
 import Moment from "react-moment";
 import TransportEquipmentTableHeader from "../../organisme/table/TransportEquipmentTableHeader";
 import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
-import { ArrowBack, Backpack } from "@mui/icons-material";
+import { ArrowBack, Backpack, Download } from "@mui/icons-material";
 import useFetchPeriode from "../../../periode/hooks/useFetchPeriode";
 import { PeriodeItem } from "../../../../redux/features/periode/periode.interface";
+import * as XLSX from "xlsx";
+import { format } from "date-fns";
 
 const ListGrantsMonitoring = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -104,17 +106,109 @@ const ListGrantsMonitoring = () => {
       }
       groupedBudgets[grantCode].push(budget);
     });
+  const exportToExcel = () => {
+    const dataToExport = Object.keys(groupedBudgets).flatMap((grantCode) => {
+      return groupedBudgets[grantCode].map((row: PeriodeItem) => {
+        const projectId = grantEncoursList.find(
+          (f: GrantEncoursItem) => f.id == id
+        )?.projectId;
+        const projectTitle = projectList.find(
+          (p: any) => p.id == projectId
+        )?.title;
+        const employeeId = grantEncoursList.find(
+          (f: GrantEncoursItem) => f.id == id
+        )?.responsable;
+        const employee = employees.find((e: any) => e.id == employeeId);
+        const employeeName = `${employee?.name ?? ""} ${
+          employee?.surname ?? ""
+        }`;
+
+        return {
+          "Grant code": grantCode,
+          "Project Title": projectTitle,
+          Deadline: format(new Date(row.deadline as Date), "dd/MM/yyyy"),
+          "Période start": format(new Date(row.debut as Date), "dd/MM/yyyy"),
+          "Période end": format(new Date(row.fin as Date), "dd/MM/yyyy"),
+          "Technical submitted": format(
+            new Date(row.dateTechnic as Date),
+            "dd/MM/yyyy"
+          ),
+          "Financial submitted": format(
+            new Date(row.dateFinance as Date),
+            "dd/MM/yyyy"
+          ),
+          "Technical delay":
+            (new Date(row.dateTechnic as Date).getTime() -
+              new Date(row.deadline as Date).getTime()) /
+            (24 * 60 * 60 * 1000),
+          "Finance delay":
+            (new Date(row.dateFinance as Date).getTime() -
+              new Date(row.deadline as Date).getTime()) /
+            (24 * 60 * 60 * 1000),
+          Responsable: employeeName,
+          Notes: row.notes,
+          "Days left": Math.ceil(
+            (new Date().getTime() - new Date(row.deadline as Date).getTime()) /
+              (24 * 60 * 60 * 1000)
+          ),
+          Year: new Date(row.deadline as Date).getFullYear(),
+        };
+      });
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wscols = [
+      { wpx: 100 }, // code
+      { wpx: 200 }, // project title
+      { wpx: 100 }, // deadline
+      { wpx: 100 }, // debut
+      { wpx: 100 }, // fin
+      { wpx: 100 }, // date tech
+      { wpx: 100 }, // date finance
+      { wpx: 60 }, // tech delay
+      { wpx: 30 }, // finance delay
+      { wpx: 150 }, // responsable
+      { wpx: 200 }, // notes
+      { wpx: 100 }, // days lest
+      { wpx: 30 }, // year
+    ];
+    worksheet["!cols"] = wscols;
+    // Centrer le texte pour chaque cellule
+    Object.keys(worksheet).forEach((key) => {
+      if (key[0] !== "!") {
+        worksheet[key].s = {
+          alignment: {
+            vertical: "center",
+            horizontal: "center",
+          },
+        };
+      }
+    });
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Deadine");
+    XLSX.writeFile(workbook, "Grants_Monitoring.xlsx");
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Link href="/grants/grantMonitoring">
-          <Button color="info" startIcon={<ArrowBack />}>
-            Retour
-          </Button>
-        </Link>
-        <Typography variant="h4" color="GrayText">
-          DEADLINE LIST
-        </Typography>
+        <Stack direction={"row"} gap={2}>
+          <Link href="/grants/grantMonitoring">
+            <Button color="info" startIcon={<ArrowBack />}>
+              Retour
+            </Button>
+          </Link>
+          <Typography variant="h4" color="GrayText">
+            DEADLINE LIST
+          </Typography>
+        </Stack>
+        <Button
+          onClick={exportToExcel}
+          color="primary"
+          variant="contained"
+          startIcon={<Download />}
+        >
+          Excel
+        </Button>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
