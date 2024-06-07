@@ -31,6 +31,7 @@ import { EmployeFormItem } from "../../redux/features/employe/employeSlice.inter
 import { CurrencyItem } from "../../redux/features/currency/currencyinterface";
 import { PeriodeItem } from "../../redux/features/periode/periode.interface";
 import * as XLSX from "xlsx";
+import { format } from "date-fns";
 
 const GrantsList = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -101,12 +102,13 @@ const GrantsList = () => {
       "Titre du projet": projectList.find(
         (p: PeriodeItem) => p.id === row.projectId
       )?.descriptionFr,
-      Start: row.startDate,
-      End: row.endDate,
+      Start: format(new Date(row.startDate as string), "dd/MM/yyyy"),
+      End: format(new Date(row.endDate as string), "dd/MM/yyyy"),
       Amount: row.amount,
       Currency: currencylist.find((f: CurrencyItem) => f.id === row.currencyId)
         ?.name,
       Statut: row.status,
+      "MV Lead": "",
       "VALIDATION TECHNIQUE": `${
         employees.find((f: any) => f.id === row.techValidator)?.name
       } ${employees.find((f) => f.id === row.techValidator)?.surname}`,
@@ -127,17 +129,17 @@ const GrantsList = () => {
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
+        <Typography variant="h4" color="GrayText">
+          GRANTS LIST
+        </Typography>
         <Button
-          variant="outlined"
-          color="accent"
+          variant="contained"
+          color="primary"
           startIcon={<Download />}
           onClick={handleExportExcel}
         >
           Excel
         </Button>
-        <Typography variant="h4" color="GrayText">
-          GRANTS LIST
-        </Typography>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
