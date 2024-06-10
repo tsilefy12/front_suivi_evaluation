@@ -111,19 +111,22 @@ const ListMissions = () => {
             })
           )
         );
-      } else if (
+      }
+      if (
         m.status === "Encours" &&
         endDay === currentDay &&
         endMonth === currentMonth &&
         endYear === currentYear
       ) {
-        dispatch(
-          updateMission({
-            id: m.id!,
-            mission: {
-              status: "Terminé",
-            },
-          })
+        promises.push(
+          dispatch(
+            updateMission({
+              id: m.id!,
+              mission: {
+                status: "Terminé",
+              },
+            })
+          )
         );
       }
     });
@@ -185,8 +188,8 @@ const ListMissions = () => {
 
         <Grid container spacing={2} mt={2}>
           {missionListe.map((mission: MissionItem, index: any) => (
-            <Grid key={mission?.id} item xs={12} md={6} lg={4}>
-              <LinkContainer key={mission.id}>
+            <Grid key={mission.id!} item xs={12} md={6} lg={4}>
+              <LinkContainer key={mission.id!}>
                 <CardHeader
                   direction="row"
                   justifyContent="space-between"
@@ -237,7 +240,7 @@ const ListMissions = () => {
                 </CardHeader>
 
                 <CardBody>
-                  <Stack spacing={1}>
+                  <Stack spacing={1} key={mission.id!}>
                     <FormLabel>
                       Référence : {"MISSION_" + mission?.reference}
                     </FormLabel>
@@ -251,7 +254,12 @@ const ListMissions = () => {
                       {mission?.budgetManager?.name}{" "}
                       {mission?.budgetManager?.surname}
                     </FormLabel>
-                    <Stack direction={"row"} gap={2} flexWrap={"wrap"}>
+                    <Stack
+                      direction={"row"}
+                      gap={2}
+                      flexWrap={"wrap"}
+                      key={mission.id!}
+                    >
                       <FormLabel>
                         Début :{" "}
                         <Moment format="DD/MM/yyyy">
@@ -267,7 +275,10 @@ const ListMissions = () => {
                 </CardBody>
 
                 <CardFooter>
-                  <Stack direction={{ xs: "column", sm: "row" }}>
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    key={mission.id!}
+                  >
                     <Link href={`/missions/${mission.id}/previsionDeMission`}>
                       <Button variant="text" color="info">
                         Prévision

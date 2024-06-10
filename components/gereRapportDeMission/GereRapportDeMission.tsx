@@ -214,6 +214,7 @@ const GereRapportDeMission = () => {
   const [getValidationT, setGetValidationT]: any = React.useState<string[]>([]);
   const valueGetTechnic =
     getValidationT.length > 0 ? getValidationT[0] : "Array is empty";
+
   const handleValidationTechnique = async (
     responsableId: string,
     missionId: string,
@@ -246,7 +247,7 @@ const GereRapportDeMission = () => {
   const handleValidationPaye = async (
     responsableId: string,
     missionId: string,
-    index: number
+    validation: number
   ) => {
     try {
       const newValidationState =
@@ -349,14 +350,14 @@ const GereRapportDeMission = () => {
                   {missionListe
                     .filter((f: any) => f.id === id)
                     .map((row: MissionItem) => (
-                      <span>
+                      <span key={row.id}>
                         {row.missionManager.name} {row.missionManager.surname}
                       </span>
                     ))}
                 </div>
                 <Divider />
                 <Typography>
-                  Vérifié financièrement par :
+                  <span> Vérifié financièrement par : </span>
                   {getVF.map((row: any, index: number) => (
                     <Stack
                       direction={"column"}
@@ -398,7 +399,7 @@ const GereRapportDeMission = () => {
 
                 <Divider />
                 <Typography>
-                  Vérifié techniquement par :
+                  <span> Vérifié techniquement par :</span>
                   {getVT.map((row: any) => (
                     <Stack
                       direction={"column"}
@@ -443,7 +444,8 @@ const GereRapportDeMission = () => {
                 <Typography>
                   {getFV.map((row: any) => (
                     <Fragment key={row.id}>
-                      Payé par :<br></br>
+                      <span>Payé par :</span>
+                      <br></br>
                       {row.nom}
                       <Stack direction={"row"} gap={4}>
                         <Button

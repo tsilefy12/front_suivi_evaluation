@@ -223,17 +223,6 @@ const ListBudgetsInitial = () => {
                                 Budget initial
                               </Button>
                             </Link>
-                            <Link
-                              href={`/grants/budgetInitial/${budget.grant}/list`}
-                            >
-                              <Button
-                                variant="outlined"
-                                color="accent"
-                                startIcon={<VisibilityIcon />}
-                              >
-                                Budget initial list
-                              </Button>
-                            </Link>
                             <IconButton
                               color="primary"
                               aria-label="Modifier"
@@ -255,6 +244,25 @@ const ListBudgetsInitial = () => {
                             </IconButton>
                           </BtnActionContainer>
                         </TableCell>
+                        {index === 0 && (
+                          <TableCell
+                            align="left"
+                            rowSpan={budgets.length}
+                            width={"auto"}
+                          >
+                            <Link
+                              href={`/grants/budgetInitial/${budget.grant}/list`}
+                            >
+                              <Button
+                                variant="outlined"
+                                color="accent"
+                                startIcon={<VisibilityIcon />}
+                              >
+                                Budget initial list
+                              </Button>
+                            </Link>
+                          </TableCell>
+                        )}
                       </TableRow>
                     ));
                   })}

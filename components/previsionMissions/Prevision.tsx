@@ -31,6 +31,7 @@ import useFetchEmploys from "../GrantsEnCours/hooks/getResponsable";
 import { MissionItem } from "../../redux/features/mission/mission.interface";
 import Moment from "react-moment";
 import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
+import { boolean } from "yup";
 
 const PrevisionDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -179,7 +180,7 @@ const PrevisionDeMission = () => {
   const handleValidationFinance = async (
     responsableId: string,
     missionId: string,
-    validation: number
+    validation: boolean
   ) => {
     try {
       const newValidationState =
@@ -212,7 +213,7 @@ const PrevisionDeMission = () => {
   const handleValidationTechnique = async (
     responsableId: string,
     missionId: string,
-    validation: number
+    validation: boolean
   ) => {
     try {
       const newValidationState =
@@ -241,7 +242,7 @@ const PrevisionDeMission = () => {
   const handleValidationPaye = async (
     responsableId: string,
     missionId: string,
-    index: number
+    validation: boolean
   ) => {
     try {
       const newValidationState =
@@ -249,7 +250,7 @@ const PrevisionDeMission = () => {
       await axios.post("/suivi-evaluation/validation-prevision", {
         responsableId,
         missionId,
-        validation: newValidationState,
+        validation: boolean,
       });
       setGetValidationPay(newValidationState ? true : false);
       dispatch(
@@ -343,14 +344,14 @@ const PrevisionDeMission = () => {
                   {missionListe
                     .filter((f: any) => f.id === id)
                     .map((row: MissionItem) => (
-                      <span>
+                      <span key={row.id!}>
                         {row.missionManager.name} {row.missionManager.surname}
                       </span>
                     ))}
                 </div>
                 <Divider />
                 <Typography>
-                  Vérifié financièrement par :
+                  <span> Vérifié financièrement par : </span>
                   {getVF.map((row: any, index: number) => (
                     <Stack
                       direction={"column"}
@@ -366,7 +367,11 @@ const PrevisionDeMission = () => {
                           size="small"
                           startIcon={<DoneIcon />}
                           onClick={() =>
-                            handleValidationFinance(row.id, id, index)
+                            handleValidationFinance(
+                              row.id,
+                              id,
+                              valueGetFV ? false : true
+                            )
                           }
                         >
                           Vérifier financièrement
@@ -392,8 +397,8 @@ const PrevisionDeMission = () => {
 
                 <Divider />
                 <Typography>
-                  Vérifié techniquement par :
-                  {getVT.map((row: any) => (
+                  <span>Vérifié techniquement par : </span>
+                  {getVT.map((row: any, index: number) => (
                     <Stack
                       direction={"column"}
                       gap={2}
@@ -408,7 +413,11 @@ const PrevisionDeMission = () => {
                           size="small"
                           startIcon={<DoneIcon />}
                           onClick={() =>
-                            handleValidationTechnique(row.id, id, 0)
+                            handleValidationTechnique(
+                              row.id,
+                              id,
+                              valueGetTechnic ? false : true
+                            )
                           }
                           disabled={valueGetFV == false}
                         >
@@ -435,16 +444,23 @@ const PrevisionDeMission = () => {
                 </Typography>
                 <Divider />
                 <Typography>
-                  {getFV.map((row: any) => (
+                  {getFV.map((row: any, index: number) => (
                     <Fragment key={row.id}>
-                      Payé par :<br></br>
+                      <span>Payé par :</span>
+                      <br></br>
                       {row.nom}
                       <Stack direction={"row"} gap={4}>
                         <Button
                           variant="contained"
                           size="small"
                           startIcon={<DoneIcon />}
-                          onClick={() => handleValidationPaye(row.id, id, 0)}
+                          onClick={() =>
+                            handleValidationPaye(
+                              row.id,
+                              id,
+                              valueGetPaye ? false : true
+                            )
+                          }
                           disabled={valueGetTechnic == false}
                         >
                           Vérsé
