@@ -15,9 +15,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Autocomplete,
 } from "@mui/material";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SectionNavigation } from "../../../plan_travail/objectifStrategique";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { Check, Close } from "@mui/icons-material";
@@ -37,6 +38,7 @@ import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
 import { MissionItem } from "../../../../redux/features/mission/mission.interface";
 import useFetchMissionListe from "../hooks/useFetchMissionListe";
 import OSDatePicker from "../../../shared/date/OSDatePicker";
+import { EmployeItem } from "../../../../redux/features/employe/employeSlice.interface";
 
 const AddNewMission = () => {
   const router = useRouter();
@@ -66,8 +68,16 @@ const AddNewMission = () => {
     }
     return setReference(Math.max(...refer) + 1);
   }, [missionListe]);
-
+  const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
+    isEditing
+      ? employees.filter((employee: any) =>
+          mission?.budgetManagerId?.includes(employee.id!)
+        )
+      : []
+  );
   const handleSubmit = async (values: any) => {
+    values.budgetManagerId = [...selectedEmployes.map((item) => item.id)];
+    console.log("Gestionnaires :", values.budgetManagerId);
     const now = new Date().getTime();
     const startDaty = new Date(values.dateDebut).getTime();
     const endDaty = new Date(values.dateFin).getTime();
@@ -123,7 +133,10 @@ const AddNewMission = () => {
                 descriptionMission: isEditing
                   ? mission?.descriptionMission
                   : "",
-                grantId: isEditing ? mission?.grantId : "",
+                verifyFinancial: isEditing ? mission?.verifyFinancial : "",
+                verifyTechnic: isEditing ? mission?.verifyTechnic : "",
+                validateFinancial: isEditing ? mission?.validateFinancial : "",
+                RefBudget: isEditing ? mission?.RefBudget : "",
                 dateDebut: isEditing ? mission?.dateDebut : new Date(),
                 dateFin: isEditing ? mission?.dateFin : new Date(),
                 status: isEditing ? mission?.status : "",
@@ -132,9 +145,12 @@ const AddNewMission = () => {
         validationSchema={Yup.object({
           // reference: Yup.string().required("Champ obligatoire"),
           missionManagerId: Yup.string().required("Champ obligatoire"),
-          budgetManagerId: Yup.string().required("Champ obligatoire"),
+          // budgetManagerId: Yup.string().required("Champ obligatoire"),
           descriptionMission: Yup.string().required("Champ obligatoire"),
-          grantId: Yup.string().required("Champ obligatoire"),
+          // verifyFinancial: Yup.string().required("Champ obligatoire"),
+          // verifyTechnic: Yup.string().required("Champ obligatoire"),
+          // validateFinancial: Yup.string().required("Champ obligatoire"),
+          RefBudget: Yup.string().required("Champ obligatoire"),
           dateDebut: Yup.string().required("Champ obligatoire"),
           dateFin: Yup.string().required("Champ obligatoire"),
           // status: Yup.string().required("Champ obligatoire"),
@@ -174,6 +190,7 @@ const AddNewMission = () => {
                       startIcon={<Check />}
                       sx={{ marginInline: 3 }}
                       type="submit"
+                      onClick={formikProps.submitForm}
                     >
                       Enregistrer
                     </Button>
@@ -211,32 +228,34 @@ const AddNewMission = () => {
                     valueKey="id"
                     dataKey={["name", "surname"]}
                   />
-                  <OSSelectField
-                    id="outlined-basic"
-                    label="Gestionnaire du budget"
-                    name="budgetManagerId"
-                    options={employees}
-                    dataKey={["name", "surname"]}
-                    valueKey="id"
-                  />
-                </Stack>
-                <Stack direction={"row"} gap={2}>
-                  <OSSelectField
-                    id="outlined-basic"
-                    label="Grant"
-                    name="grantId"
-                    options={grantEncoursList}
-                    dataKey={"code"}
-                    valueKey="id"
-                  />
                   <OSTextField
                     id="outlined-basic"
-                    label="Description de la mission"
-                    name="descriptionMission"
-                    rows={5}
-                    type="textarea"
+                    label="Référence budget"
+                    name="RefBudget"
                     inputProps={{ autoComplete: "off" }}
                   />
+                </Stack>
+                <Autocomplete
+                  multiple
+                  id="tags-standard"
+                  options={employees}
+                  getOptionLabel={(employee: any) =>
+                    `${employee.name} ${employee.surname}` as string
+                  }
+                  value={selectedEmployes}
+                  onChange={(event, newValue) => {
+                    setSelectedEmployes(newValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      id="outlined-basic"
+                      label="Gestionnaires"
+                      variant="outlined"
+                    />
+                  )}
+                />
+                <Stack direction={"row"} gap={2}>
                   <OSDatePicker
                     fullWidth
                     id="outlined-basic"
@@ -277,6 +296,41 @@ const AddNewMission = () => {
                     ))}
                   </OSTextField>
                 </Stack>
+                <Stack direction={"row"} gap={2}>
+                  <OSSelectField
+                    id="outlined-basic"
+                    label="Vérificateur finance"
+                    name="verifyFinancial"
+                    options={employees}
+                    dataKey={["name", "surname"]}
+                    valueKey="id"
+                  />
+                  <OSSelectField
+                    id="outlined-basic"
+                    label="Validateur finance"
+                    name="validateFinancial"
+                    options={employees}
+                    dataKey={["name", "surname"]}
+                    valueKey="id"
+                  />
+                  <OSSelectField
+                    id="outlined-basic"
+                    label="Vérificateur technique"
+                    name="verifyTechnic"
+                    options={employees}
+                    dataKey={["name", "surname"]}
+                    valueKey="id"
+                  />
+                </Stack>
+                <OSTextField
+                  id="outlined-basic"
+                  label="Description de la mission"
+                  name="descriptionMission"
+                  type="textarea"
+                  inputProps={{ autoComplete: "off" }}
+                  multiline
+                  rows={3}
+                />
               </FormContainer>
             </Form>
           );

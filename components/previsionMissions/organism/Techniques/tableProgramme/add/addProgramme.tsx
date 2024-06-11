@@ -17,8 +17,14 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { Form, Formik } from "formik";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
-import { createProgrammePrevision, updateProgrammePrevision } from "../../../../../../redux/features/programmePrevision";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
+import {
+  createProgrammePrevision,
+  updateProgrammePrevision,
+} from "../../../../../../redux/features/programmePrevision";
 import useFetchProgrammePrevisionList from "../hooks/useFetchProgrammePrevision";
 import * as Yup from "yup";
 import OSDatePicker from "../../../../../shared/date/OSDatePicker";
@@ -33,31 +39,35 @@ import { EmployeItem } from "../../../../../../redux/features/employe/employeSli
 import useFetchPlannedActivityList from "../../tableActivitésPrévues/hooks/useFetchPlannedActivityList";
 
 const AddProgrammes = ({ handleClose }: any) => {
-  const dispatch = useAppDispatch()
-  const router = useRouter()
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const { id }: any = router.query;
-  const [open, setOpen] = React.useState(false)
-  const { isEditing, programmePrevision } = useAppSelector((state) => state.programmePrevision)
+  const [open, setOpen] = React.useState(false);
+  const { isEditing, programmePrevision } = useAppSelector(
+    (state) => state.programmePrevision
+  );
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
   const fetchDeliverableListe = useFetchDeliverableList();
   const { deliverableList } = useAppSelector((state) => state.deliverable);
   const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) =>state.employe);
+  const { employees } = useAppSelector((state: any) => state.employe);
   const fetchActivitePrevue = useFetchPlannedActivityList();
-  const { plannedActivityList } = useAppSelector((state: any) =>state.plannedActivity) 
+  const { plannedActivityList } = useAppSelector(
+    (state: any) => state.plannedActivity
+  );
 
   React.useEffect(() => {
     fetchProgrammePrevision();
     fetchDeliverableListe();
     fetchEmployes();
     fetchActivitePrevue();
-  }, [router.query])
+  }, [router.query]);
 
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
     isEditing
       ? employees.filter((employee: any) =>
-        programmePrevision?.responsable?.includes(employee.id!)
-      )
+          programmePrevision?.responsable?.includes(employee.id!)
+        )
       : []
   );
   const handleSubmit = async (values: any) => {
@@ -65,11 +75,11 @@ const AddProgrammes = ({ handleClose }: any) => {
     values.missionId = id!;
     const date1 = new Date(values.dateDebut);
     const DateNumber1 = date1.getTime();
-    const date2 = new Date(values.dateFin)
+    const date2 = new Date(values.dateFin);
     const DateNumber2 = date2.getTime();
     // console.log("test")
     if (DateNumber1 >= DateNumber2) {
-      setOpen(true)
+      setOpen(true);
     } else {
       try {
         if (isEditing) {
@@ -88,9 +98,8 @@ const AddProgrammes = ({ handleClose }: any) => {
         console.log("error", error);
       }
     }
-
   };
- 
+
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -99,13 +108,17 @@ const AddProgrammes = ({ handleClose }: any) => {
           isEditing
             ? programmePrevision
             : {
-              dateDebut: isEditing ? programmePrevision?.dateDebut : new Date(),
-              dateFin: isEditing ? programmePrevision?.dateFin : new Date(),
-              activitePrevue: isEditing ? programmePrevision?.activitePrevue : "",
-              livrable: isEditing ? programmePrevision?.livrable : "",
-              responsable: isEditing ? programmePrevision?.responsable : "",
-              missionId: isEditing ? programmePrevision?.missionId : id,
-            }
+                dateDebut: isEditing
+                  ? programmePrevision?.dateDebut
+                  : new Date(),
+                dateFin: isEditing ? programmePrevision?.dateFin : new Date(),
+                activitePrevue: isEditing
+                  ? programmePrevision?.activitePrevue
+                  : "",
+                livrable: isEditing ? programmePrevision?.livrable : "",
+                responsable: isEditing ? programmePrevision?.responsable : "",
+                missionId: isEditing ? programmePrevision?.missionId : id,
+              }
         }
         validationSchema={Yup.object({
           // activitePrevue: Yup.string().required("Champ obligatoire"),
@@ -121,7 +134,9 @@ const AddProgrammes = ({ handleClose }: any) => {
           return (
             <Form>
               <SectionNavigation>
-                <DialogTitle>Créer/modifier contact pendant la mission</DialogTitle>
+                <DialogTitle>
+                  Créer/modifier contact pendant la mission
+                </DialogTitle>
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
                     <OSDatePicker
@@ -131,7 +146,9 @@ const AddProgrammes = ({ handleClose }: any) => {
                       variant="outlined"
                       name="dateDebut"
                       value={formikProps.values.dateDebut}
-                      onChange={(value: any) => formikProps.setFieldValue("dateDebut", value)}
+                      onChange={(value: any) =>
+                        formikProps.setFieldValue("dateDebut", value)
+                      }
                     />
                     <OSDatePicker
                       fullWidth
@@ -140,7 +157,9 @@ const AddProgrammes = ({ handleClose }: any) => {
                       variant="outlined"
                       name="dateFin"
                       value={formikProps.values.dateFin}
-                      onChange={(value: any) => formikProps.setFieldValue("dateFin", value)}
+                      onChange={(value: any) =>
+                        formikProps.setFieldValue("dateFin", value)
+                      }
                     />
                     <OSSelectField
                       fullWidth
@@ -163,26 +182,26 @@ const AddProgrammes = ({ handleClose }: any) => {
                       valueKey="id"
                     />
                     <FormControl fullWidth>
-                    <Autocomplete
-                    multiple
-                    id="tags-standard"
-                    options={employees}
-                    getOptionLabel={(employee: any) =>
-                      `${employee.name} ${employee.surname}` as string
-                    }
-                    value={selectedEmployes}
-                    onChange={(event, newValue) => {
-                      setSelectedEmployes(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        id="outlined-basic"
-                        label="Sélectionnez participant"
-                        variant="outlined"
+                      <Autocomplete
+                        multiple
+                        id="tags-standard"
+                        options={employees}
+                        getOptionLabel={(employee: any) =>
+                          `${employee.name} ${employee.surname}` as string
+                        }
+                        value={selectedEmployes}
+                        onChange={(event, newValue) => {
+                          setSelectedEmployes(newValue);
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            id="outlined-basic"
+                            label="Sélectionnez participant"
+                            variant="outlined"
+                          />
+                        )}
                       />
-                    )}
-                  />
                     </FormControl>
                   </FormContainer>
                 </DialogContent>
@@ -197,19 +216,15 @@ const AddProgrammes = ({ handleClose }: any) => {
                   >
                     Annuler
                   </Button>
-                  <Button 
-                  variant="contained" 
-                  type="button"
-                  onClick={formikProps.submitForm}
+                  <Button
+                    variant="contained"
+                    type="button"
+                    onClick={formikProps.submitForm}
                   >
                     Enregistrer
                   </Button>
                 </DialogActions>
-                <Dialog
-                  open={open}
-                  disablePortal={false}
-                  sx={styleDialog}
-                >
+                <Dialog open={open} disablePortal={false} sx={styleDialog}>
                   <DialogTitle color="red">Attention!!</DialogTitle>
                   <DialogContent>
                     <DialogContentText>
@@ -224,7 +239,7 @@ const AddProgrammes = ({ handleClose }: any) => {
                 </Dialog>
               </SectionNavigation>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>
@@ -251,5 +266,5 @@ const styleDialog = {
   //left: 150,
   top: 20,
   width: "auto",
-  alignItem: "center"
-}
+  alignItem: "center",
+};

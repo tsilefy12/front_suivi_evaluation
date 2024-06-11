@@ -12,44 +12,7 @@ export const getMissionListe = createAsyncThunk(
         args: JSON.stringify(data.args),
       };
       const response = await axios.get("/mission", { params });
-      let newData: any = [];
-      if (response.data.length > 0) {
-        await Promise.all(
-          response.data.map(async (cons: MissionItem) => {
-            const employeeMMId = cons.missionManagerId;
-            const employeeBMId = cons.budgetManagerId;
-            const detailEmployeeMM = await thunkAPI
-              .dispatch(getEmployeeMM({ employeeMMId }))
-              .unwrap();
-            const detailEmployeeBM = await thunkAPI
-              .dispatch(getEmployeeBM({ employeeBMId }))
-              .unwrap();
-            const oneCons = {
-              id: cons.id,
-              descriptionMission: cons.descriptionMission,
-              missionManagerId: cons.missionManagerId,
-              budgetManagerId: cons.missionManagerId,
-              missionManager: detailEmployeeMM,
-              budgetManager: detailEmployeeBM,
-              reference: cons.reference,
-              validationPrevision: cons.validationPrevision,
-              validationRapport: cons.validationRapport,
-              grantId: cons.grantId,
-              activites: cons.activites,
-              livrables: cons.livrables,
-              status: cons.status,
-              dateDebut: cons.dateDebut,
-              dateFin: cons.dateFin,
-              previsionDepense: cons.previsionDepense,
-              rapportDepense: cons.rapportDepense,
-            };
-            newData.push(oneCons);
-          })
-        );
-        return newData;
-      } else {
-        return response.data;
-      }
+      return response.data;
     } catch (error: any) {
       if (error.response) {
         return thunkAPI.rejectWithValue(error);

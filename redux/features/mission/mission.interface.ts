@@ -1,17 +1,21 @@
 import { LivrableRapportItem } from "../LivrableRapport/livrableRapport.interface";
 import { PrevisionDepenseItem } from "../PrevisionDepense/previsionDepense.interface";
 import { ActiviteRapportItem } from "../activitesRapport/activiteRapport.interface";
+import { EmployeItem } from "../employe/employeSlice.interface";
 import { RapportDepenseItem } from "../rapportDepense/rapportDepense.interface";
 
 export interface MissionItem {
   id?: string;
-  budgetManager?: any;
-  missionManager?: any;
-  budgetManagerId?: string;
+  budgetManager?: EmployeItem[];
+  missionManager?: EmployeItem[];
+  budgetManagerId?: string[];
   missionManagerId?: string;
   descriptionMission?: string;
   reference?: string;
-  grantId?: number;
+  verifyFinancial?: string;
+  verifyTechnic?: string;
+  validateFinancial?: string;
+  RefBudget?: string;
   dateDebut?: Date;
   dateFin?: Date;
   status?: string;

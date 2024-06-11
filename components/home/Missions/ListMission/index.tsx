@@ -32,6 +32,8 @@ import {
 } from "../../../../redux/features/mission";
 import { MissionItem } from "../../../../redux/features/mission/mission.interface";
 import Recherche from "../../recherch";
+import useFetchEmployes from "../hooks/useFetchEmployees";
+import { EmployeItem } from "../../../../redux/features/employe/employeSlice.interface";
 
 const ListMissions = () => {
   const router = useRouter();
@@ -39,11 +41,14 @@ const ListMissions = () => {
   const dispatch = useAppDispatch();
   const { missionListe } = useAppSelector((state) => state.mission);
   const fetchMissionListe = useFetchMissionListe();
+  const fetchEmployes = useFetchEmployes();
+  const { employees } = useAppSelector((state) => state.employe);
 
   useEffect(() => {
     fetchMissionListe();
-  }, []); // fetchMissionListe will be called once when component mounts
-
+    fetchEmployes();
+  }, []);
+  console.log(missionListe);
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer la Mission",
@@ -186,7 +191,7 @@ const ListMissions = () => {
           <Recherche />
         </Stack>
 
-        <Grid container spacing={2} mt={2}>
+        <Grid container spacing={2} mt={-2}>
           {missionListe.map((mission: MissionItem, index: any) => (
             <Grid key={mission.id!} item xs={12} md={6} lg={4}>
               <LinkContainer key={mission.id!}>
@@ -246,14 +251,38 @@ const ListMissions = () => {
                     </FormLabel>
                     <FormLabel>
                       Responsable : <span></span>
-                      {mission?.missionManager?.name}{" "}
-                      {mission?.missionManager?.surname!}
+                      {
+                        employees.find(
+                          (f: EmployeItem) => f.id === mission.missionManagerId
+                        )?.name
+                      }{" "}
+                      {
+                        employees.find(
+                          (f: EmployeItem) => f.id === mission.missionManagerId
+                        )?.surname
+                      }
                     </FormLabel>
                     <FormLabel>
-                      Gestionnaire : <span></span>
-                      {mission?.budgetManager?.name}{" "}
-                      {mission?.budgetManager?.surname}
+                      {mission.budgetManagerId!.length > 1
+                        ? "Gestionnaires"
+                        : "Gestionnaire"}{" "}
+                      : <span></span>
+                      {employees
+                        .filter((e: EmployeItem) =>
+                          mission.budgetManagerId?.includes(e.id as string)
+                        )
+                        .map((m: EmployeItem) => (
+                          <Stack key={m.id} direction={"column"}>
+                            <Stack direction={"row"} gap={1}>
+                              <span>Nom et prénoms : </span>{" "}
+                              <span>
+                                {m.name} {m.surname}
+                              </span>
+                            </Stack>
+                          </Stack>
+                        ))}
                     </FormLabel>
+
                     <Stack
                       direction={"row"}
                       gap={2}
@@ -273,7 +302,6 @@ const ListMissions = () => {
                     </Stack>
                   </Stack>
                 </CardBody>
-
                 <CardFooter>
                   <Stack
                     direction={{ xs: "column", sm: "row" }}
@@ -335,6 +363,7 @@ export const CardFooter = styled("div")(({ theme }) => ({
   paddingBlock: theme.spacing(1),
   borderBottomLeftRadius: theme.spacing(2),
   borderBottomRightRadius: theme.spacing(2),
+  paddingTop: -2,
 }));
 
 const CardHeader = styled(Stack)(({ theme }) => ({
