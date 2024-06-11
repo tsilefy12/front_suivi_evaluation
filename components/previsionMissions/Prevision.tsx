@@ -32,6 +32,7 @@ import { MissionItem } from "../../redux/features/mission/mission.interface";
 import Moment from "react-moment";
 import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 import { boolean } from "yup";
+import { EmployeItem } from "../../redux/features/employe/employeSlice.interface";
 
 const PrevisionDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -43,139 +44,26 @@ const PrevisionDeMission = () => {
   const fetchMission = useFetchMissionListe();
   const { missionListe } = useAppSelector((state) => state.mission);
   const dispatch = useAppDispatch();
-  const [validate, setValidate]: any = React.useState(false);
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
-  const [getVF, setGetVerificateurFinance] = React.useState<
-    { id: string; nom: string }[]
-  >([]);
-  const [getVT, setGetVerificateurTechnique] = React.useState<
-    { id: string; nom: string }[]
-  >([]);
-  const [getFV, setGetFinanceValidator] = React.useState<
-    { id: string; nom: string }[]
-  >([]);
+  const [getVerificateurFinance, setGetVerificateurFinance] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
     fetchEmployes();
     fetchMission();
     fetchGrants();
-  }, []);
-
-  React.useEffect(() => {
-    const getGrantId = missionListe
-      .filter((m) => m.id === id)
-      .map((m) => m.grantId);
-
-    //get finance verificator
-    const tableauFinanceVerificateur: { id: string; nom: string }[] = [];
-    const validateurFinance = grantEncoursList
-      .filter((g) => g.id == getGrantId[0])
-      .map((g) => g.financeVerificator);
-
-    const idFinanceVerificator = employees.find(
-      (e) => e.id === validateurFinance[0]
-    );
-    const financeVerify: string = idFinanceVerificator
-      ? `${idFinanceVerificator.name} ${idFinanceVerificator.surname}`
-      : "Employee not found";
-
-    tableauFinanceVerificateur.push({
-      id: idFinanceVerificator?.id!,
-      nom: financeVerify!,
-    });
-
-    setGetVerificateurFinance(tableauFinanceVerificateur);
-
-    //get validator technique
-    const tableauTechniqueVerificateur: { id: any; nom: string }[] = [];
-    const validateurTechnique = grantEncoursList
-      .filter((g) => g.id == getGrantId[0])
-      .map((g) => g.techValidator);
-
-    const idValidatorTechnique = employees.find(
-      (e) => e.id === validateurTechnique[0]
-    );
-    const verifyTechnic: string = idValidatorTechnique
-      ? `${idValidatorTechnique.name} ${idValidatorTechnique.surname}`
-      : "Employee not found";
-    tableauTechniqueVerificateur.push({
-      id: idValidatorTechnique?.id!,
-      nom: verifyTechnic!,
-    });
-
-    setGetVerificateurTechnique(tableauTechniqueVerificateur);
-    //get finance validator
-    const tableauFinanceValidateur: { id: any; nom: string }[] = [];
-    const financeValidateur = grantEncoursList
-      .filter((g) => g.id == getGrantId[0])
-      .map((g) => g.financeValidator);
-
-    const idFinanceValidator = employees.find(
-      (e) => e.id === financeValidateur[0]
-    );
-    const financeValidator: string = idFinanceValidator
-      ? `${idFinanceValidator.name} ${idFinanceValidator.surname}`
-      : "Employee not found";
-
-    tableauFinanceValidateur.push({
-      id: idFinanceValidator?.id,
-      nom: financeValidator,
-    });
-
-    setGetFinanceValidator(tableauFinanceValidateur);
   }, [missionListe]);
 
-  const [getValidationVF, setGetValidationVF]: any = React.useState<string[]>(
-    []
-  );
-  const [getValidationPaye, setGetValidationPay]: any = React.useState<
-    string[]
-  >([]);
-
   React.useEffect(() => {
-    if (missionListe.length > 0 && getVF.length > 0) {
-      const VF = getVF.map((vf) => vf.id);
-      const VFF = missionListe.flatMap((m) =>
-        m.validationPrevision!.filter(
-          (v) => v.missionId === m.id && v.responsableId == VF[0]
-        )
-      );
-      const valeurBool: any = VFF.map((v) => v.validation!);
-      setGetValidationVF(valeurBool);
-    }
-  }, [missionListe, getVF]);
-
-  React.useEffect(() => {
-    if (missionListe.length > 0 && getVT.length > 0) {
-      const VT = getVT.map((vf) => vf.id);
-      const VTT = missionListe.flatMap((m) =>
-        m.validationPrevision!.filter(
-          (v) => v.missionId === m.id && v.responsableId == VT[0]
-        )
-      );
-      const valeurBoolTech: any = VTT.map((v) => v.validation!);
-      setGetValidationT(valeurBoolTech);
-    }
-  }, [missionListe, getVT]);
-
-  React.useEffect(() => {
-    const VP = getFV.map((vf) => vf.id);
-    // console.log(test[0]);
-    const VPP = missionListe.flatMap((m) =>
-      m.validationPrevision!.filter(
-        (v) => v.missionId === m.id && v.responsableId == VP[0]
-      )
-    );
-    const valeurBoolPaye: any = VPP.map((v) => v.validation!);
-
-    setGetValidationPay(valeurBoolPaye);
-  }, [missionListe, getFV]);
-
-  const valueGetFV =
-    getValidationVF.length > 0 ? getValidationVF[0] : "Array is empty";
+    const verifyFinance = missionListe
+      .filter((m: MissionItem) => m.id === id)
+      .map((m: MissionItem) => {
+        m.validationPrevision;
+      });
+    console.log(verifyFinance);
+  }, []);
 
   const handleValidationFinance = async (
     responsableId: string,
@@ -183,17 +71,12 @@ const PrevisionDeMission = () => {
     validation: boolean
   ) => {
     try {
-      const newValidationState =
-        !getValidationVF[0] || getValidationVF[0] === "false";
-
       // Send the updated validation state to the server
       await axios.post("/suivi-evaluation/validation-prevision", {
         responsableId,
         missionId,
-        validation: newValidationState,
+        validation,
       });
-
-      setGetValidationVF([newValidationState ? true : false]);
 
       dispatch(
         enqueueSnackbar({
@@ -206,25 +89,18 @@ const PrevisionDeMission = () => {
     }
   };
 
-  //validation technique
-  const [getValidationT, setGetValidationT]: any = React.useState<string[]>([]);
-  const valueGetTechnic =
-    getValidationT.length > 0 ? getValidationT[0] : "Array is empty";
+  // //validation technique
   const handleValidationTechnique = async (
     responsableId: string,
     missionId: string,
     validation: boolean
   ) => {
     try {
-      const newValidationState =
-        !getValidationT[0] || getValidationT[0] === false;
       await axios.post("/suivi-evaluation/validation-prevision", {
         responsableId,
         missionId,
-        validation: newValidationState,
+        validation,
       });
-      setGetValidationT([newValidationState ? true : false]);
-
       dispatch(
         enqueueSnackbar({
           message: " Prévision validé avec succès",
@@ -236,23 +112,17 @@ const PrevisionDeMission = () => {
     }
   };
 
-  //validation paye
-  const valueGetPaye =
-    getValidationPaye.length > 0 ? getValidationPaye[0] : "Array is empty";
   const handleValidationPaye = async (
     responsableId: string,
     missionId: string,
     validation: boolean
   ) => {
     try {
-      const newValidationState =
-        !getValidationPaye[0] || getValidationPaye[0] === false;
       await axios.post("/suivi-evaluation/validation-prevision", {
         responsableId,
         missionId,
-        validation: boolean,
+        validation,
       });
-      setGetValidationPay(newValidationState ? true : false);
       dispatch(
         enqueueSnackbar({
           message: " Prévision validé avec succès",
@@ -345,14 +215,23 @@ const PrevisionDeMission = () => {
                     .filter((f: any) => f.id === id)
                     .map((row: MissionItem) => (
                       <span key={row.id!}>
-                        {row.missionManager.name} {row.missionManager.surname}
+                        {
+                          employees.find(
+                            (e: EmployeItem) => e.id === row.missionManagerId
+                          )?.name as string
+                        }{" "}
+                        {
+                          employees.find(
+                            (e: EmployeItem) => e.id === row.missionManagerId
+                          )?.surname as string
+                        }
                       </span>
                     ))}
                 </div>
                 <Divider />
                 <Typography>
                   <span> Vérifié financièrement par : </span>
-                  {getVF.map((row: any, index: number) => (
+                  {missionListe.map((row: MissionItem) => (
                     <Stack
                       direction={"column"}
                       gap={2}
@@ -360,23 +239,35 @@ const PrevisionDeMission = () => {
                       alignItems={"start"}
                       key={row.id!}
                     >
-                      <FormLabel>{row.nom}</FormLabel>
+                      <FormLabel>
+                        {" "}
+                        {
+                          employees.find(
+                            (e: EmployeItem) => e.id === row.verifyFinancial
+                          )?.name as string
+                        }{" "}
+                        {
+                          employees.find(
+                            (e: EmployeItem) => e.id === row.verifyFinancial
+                          )?.surname as string
+                        }
+                      </FormLabel>
                       <Stack direction={"row"} gap={4}>
                         <Button
                           variant="contained"
                           size="small"
                           startIcon={<DoneIcon />}
-                          onClick={() =>
-                            handleValidationFinance(
-                              row.id,
-                              id,
-                              valueGetFV ? false : true
-                            )
-                          }
+                          // onClick={() =>
+                          //   handleValidationFinance(
+                          //     row.id,
+                          //     id,
+                          //      ? false : true
+                          //   )
+                          // }
                         >
                           Vérifier financièrement
                         </Button>
-                        <FormLabel
+                        {/* <FormLabel
                           sx={{
                             display: valueGetFV == true ? "none" : "block",
                           }}
@@ -389,16 +280,15 @@ const PrevisionDeMission = () => {
                           }}
                         >
                           <Check color="primary" />
-                        </FormLabel>
+                        </FormLabel> */}
                       </Stack>
                     </Stack>
                   ))}
                 </Typography>
-
                 <Divider />
                 <Typography>
                   <span>Vérifié techniquement par : </span>
-                  {getVT.map((row: any, index: number) => (
+                  {missionListe.map((row: MissionItem) => (
                     <Stack
                       direction={"column"}
                       gap={2}
@@ -406,24 +296,35 @@ const PrevisionDeMission = () => {
                       alignItems={"start"}
                       key={row.id!}
                     >
-                      <FormLabel>{row.nom}</FormLabel>
+                      <FormLabel>
+                        {
+                          employees.find(
+                            (e: EmployeItem) => e.id === row.verifyTechnic
+                          )?.name as string
+                        }{" "}
+                        {
+                          employees.find(
+                            (e: EmployeItem) => e.id === row.verifyTechnic
+                          )?.surname as string
+                        }
+                      </FormLabel>
                       <Stack direction={"row"} gap={4}>
                         <Button
                           variant="contained"
                           size="small"
                           startIcon={<DoneIcon />}
-                          onClick={() =>
-                            handleValidationTechnique(
-                              row.id,
-                              id,
-                              valueGetTechnic ? false : true
-                            )
-                          }
-                          disabled={valueGetFV == false}
+                          // onClick={() =>
+                          //   handleValidationTechnique(
+                          //     row.id,
+                          //     id,
+                          //     valueGetTechnic ? false : true
+                          //   )
+                          // }
+                          // disabled={valueGetFV == false}
                         >
                           Vérifier Techniquement
                         </Button>
-                        <FormLabel
+                        {/* <FormLabel
                           sx={{
                             display: valueGetTechnic == true ? "none" : "block",
                           }}
@@ -437,35 +338,44 @@ const PrevisionDeMission = () => {
                           }}
                         >
                           <Check color="primary" />
-                        </FormLabel>
+                        </FormLabel> */}
                       </Stack>
                     </Stack>
                   ))}
                 </Typography>
                 <Divider />
                 <Typography>
-                  {getFV.map((row: any, index: number) => (
+                  {missionListe.map((row: MissionItem) => (
                     <Fragment key={row.id}>
                       <span>Payé par :</span>
                       <br></br>
-                      {row.nom}
+                      {
+                        employees.find(
+                          (e: EmployeItem) => e.id === row.validateFinancial
+                        )?.name as string
+                      }{" "}
+                      {
+                        employees.find(
+                          (e: EmployeItem) => e.id === row.validateFinancial
+                        )?.surname as string
+                      }
                       <Stack direction={"row"} gap={4}>
                         <Button
                           variant="contained"
                           size="small"
                           startIcon={<DoneIcon />}
-                          onClick={() =>
-                            handleValidationPaye(
-                              row.id,
-                              id,
-                              valueGetPaye ? false : true
-                            )
-                          }
-                          disabled={valueGetTechnic == false}
+                          // onClick={() =>
+                          //   handleValidationPaye(
+                          //     row.id,
+                          //     id,
+                          //     valueGetPaye ? false : true
+                          //   )
+                          // }
+                          // disabled={valueGetTechnic == false}
                         >
                           Vérsé
                         </Button>
-                        <FormLabel
+                        {/* <FormLabel
                           sx={{
                             display: valueGetPaye == true ? "none" : "block",
                           }}
@@ -478,7 +388,7 @@ const PrevisionDeMission = () => {
                           }}
                         >
                           <Check color="primary" />
-                        </FormLabel>
+                        </FormLabel> */}
                       </Stack>
                     </Fragment>
                   ))}
