@@ -55,6 +55,7 @@ import { siteSlice } from "./features/site/siteSlice";
 import { besoinVehiculeRapportSlice } from "./features/besoinVehiculeRapport/besoinVehiculeRapportSlice";
 import { missionairesSlice } from "./features/missionaires/missionairesSlice";
 import { grantMonitoringSlice } from "./features/grantMonitoring/grantMonitoringSlice";
+import { uncompleteTbbSlice } from "./features/unCompleteTbb/uncompleteTbbSlice";
 
 export const store = configureStore({
   reducer: {
@@ -114,6 +115,7 @@ export const store = configureStore({
     besoinVehiculeRapport: besoinVehiculeRapportSlice.reducer,
     missionaires: missionairesSlice.reducer,
     grantMonitoring: grantMonitoringSlice.reducer,
+    uncompleteTbb: uncompleteTbbSlice.reducer,
   },
 });
 

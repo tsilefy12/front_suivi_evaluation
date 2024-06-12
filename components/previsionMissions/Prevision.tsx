@@ -57,14 +57,28 @@ const PrevisionDeMission = () => {
   }, [missionListe]);
 
   React.useEffect(() => {
-    const verifyFinance = missionListe
+    const verifyFinanceId = missionListe
       .filter((m: MissionItem) => m.id === id)
       .map((m: MissionItem) => {
-        m.validationPrevision;
+        m.verifyFinancial;
       });
-    console.log(verifyFinance);
-  }, []);
-
+    const verifyMissionId = missionListe
+      .filter((m: MissionItem) => m.id === id)
+      .map((m: MissionItem) => {
+        m.id;
+      });
+    const validatePrevue = missionListe
+      .filter((m: MissionItem) => m.id == id)
+      .map((m: MissionItem) => {
+        m.validationPrevision!;
+      });
+    // console.log(" validation :", validatePrevue);
+    // if (verifyFinanceId == validePrevue.map((m: any) =>m.responsableId) && verifyMissionId == validePrevue.map((m: any) =>m.missionId )) {
+    //   const verifyed = validePrevue.map(v =>v.validation as boolean);
+    //   return setGetVerificateurFinance(verifyed);
+    // }
+  }, [missionListe]);
+  //  console.log("verify finance :", getVerificateurFinance);
   const handleValidationFinance = async (
     responsableId: string,
     missionId: string,
@@ -257,13 +271,13 @@ const PrevisionDeMission = () => {
                           variant="contained"
                           size="small"
                           startIcon={<DoneIcon />}
-                          // onClick={() =>
-                          //   handleValidationFinance(
-                          //     row.id,
-                          //     id,
-                          //      ? false : true
-                          //   )
-                          // }
+                          onClick={() =>
+                            handleValidationFinance(
+                              row.verifyFinancial!,
+                              id,
+                              true
+                            )
+                          }
                         >
                           Vérifier financièrement
                         </Button>
@@ -313,14 +327,13 @@ const PrevisionDeMission = () => {
                           variant="contained"
                           size="small"
                           startIcon={<DoneIcon />}
-                          // onClick={() =>
-                          //   handleValidationTechnique(
-                          //     row.id,
-                          //     id,
-                          //     valueGetTechnic ? false : true
-                          //   )
-                          // }
-                          // disabled={valueGetFV == false}
+                          onClick={() =>
+                            handleValidationTechnique(
+                              id,
+                              row.verifyTechnic!,
+                              true
+                            )
+                          }
                         >
                           Vérifier Techniquement
                         </Button>
@@ -364,14 +377,13 @@ const PrevisionDeMission = () => {
                           variant="contained"
                           size="small"
                           startIcon={<DoneIcon />}
-                          // onClick={() =>
-                          //   handleValidationPaye(
-                          //     row.id,
-                          //     id,
-                          //     valueGetPaye ? false : true
-                          //   )
-                          // }
-                          // disabled={valueGetTechnic == false}
+                          onClick={() =>
+                            handleValidationPaye(
+                              id,
+                              row.validateFinancial!,
+                              true
+                            )
+                          }
                         >
                           Vérsé
                         </Button>

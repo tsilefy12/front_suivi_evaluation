@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   Container,
+  Dialog,
   Divider,
   FormLabel,
   Grid,
@@ -34,6 +35,7 @@ import { MissionItem } from "../../../../redux/features/mission/mission.interfac
 import Recherche from "../../recherch";
 import useFetchEmployes from "../hooks/useFetchEmployees";
 import { EmployeItem } from "../../../../redux/features/employe/employeSlice.interface";
+import AddNewCompleted from "../addCompleted/AddNewCompleted";
 
 const ListMissions = () => {
   const router = useRouter();
@@ -43,12 +45,14 @@ const ListMissions = () => {
   const fetchMissionListe = useFetchMissionListe();
   const fetchEmployes = useFetchEmployes();
   const { employees } = useAppSelector((state) => state.employe);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [getMissionId, setGetMissionId] = React.useState<string>("");
 
   useEffect(() => {
     fetchMissionListe();
     fetchEmployes();
   }, []);
-  console.log(missionListe);
+  // console.log(missionListe);
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer la Mission",
@@ -162,6 +166,13 @@ const ListMissions = () => {
     return () => clearTimeout(timeout);
   }, [missionListe]); // Depend on missionListe to ensure the latest data is used
 
+  const addComplete = (idMission: string) => {
+    setGetMissionId(idMission);
+    setOpen(true);
+  };
+  const fermerDialog = () => {
+    setOpen(false);
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
@@ -307,18 +318,27 @@ const ListMissions = () => {
                     direction={{ xs: "column", sm: "row" }}
                     key={mission.id!}
                   >
-                    <Link href={`/missions/${mission.id}/previsionDeMission`}>
-                      <Button variant="text" color="info">
-                        Prévision
+                    <Stack direction={"row"} gap={2}>
+                      <Link href={`/missions/${mission.id}/previsionDeMission`}>
+                        <Button variant="text" color="info">
+                          Prévision
+                        </Button>
+                      </Link>
+                      <Button
+                        variant="text"
+                        color="info"
+                        onClick={() => addComplete(mission.id!)}
+                      >
+                        Admin
                       </Button>
-                    </Link>
+                    </Stack>
+                  </Stack>
+                  <Stack direction={"row"} gap={2}>
                     <Link href={`/missions/${mission.id!}/gereRapport`}>
                       <Button variant="text" color="info">
                         Rapport
                       </Button>
                     </Link>
-                  </Stack>
-                  <Stack direction={{ xs: "column", sm: "row" }}>
                     <Link href={`/missions/${mission.id!}/bilan`}>
                       <Button variant="text" color="info">
                         Bilan
@@ -331,6 +351,12 @@ const ListMissions = () => {
           ))}
         </Grid>
       </SectionDetails>
+      <Dialog open={open} sx={styleDialog}>
+        <AddNewCompleted
+          fermerDialog={fermerDialog}
+          getMissionId={getMissionId}
+        />
+      </Dialog>
     </Container>
   );
 };
@@ -364,6 +390,7 @@ export const CardFooter = styled("div")(({ theme }) => ({
   borderBottomLeftRadius: theme.spacing(2),
   borderBottomRightRadius: theme.spacing(2),
   paddingTop: -2,
+  textAlign: "center",
 }));
 
 const CardHeader = styled(Stack)(({ theme }) => ({
@@ -376,3 +403,12 @@ const CardBody = styled(Stack)(({ theme }) => ({
   paddingBottom: theme.spacing(1),
 }));
 const SectionDetailsTitle = styled(Box)(({ theme }) => ({}));
+const styleDialog = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  "& .MuiDialog-paper": {
+    width: "200%",
+    maxWidth: "none",
+  },
+};
