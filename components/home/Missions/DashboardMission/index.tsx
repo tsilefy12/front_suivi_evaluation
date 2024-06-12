@@ -33,6 +33,11 @@ import formatMontant from "../../../../hooks/format";
 import useFetchPrevisionDepenseList from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchPrevisionDepense";
 import { Visibility } from "@mui/icons-material";
 import { EmployeItem } from "../../../../redux/features/employe/employeSlice.interface";
+import { UnCompleteTbbItem } from "../../../../redux/features/unCompleteTbb/unCompleteTbb.interface";
+import { LieuxRapportItem } from "../../../../redux/features/lieuxRapport/lieuxRapport.interface";
+import { ResumeDepenseItem } from "../../../../redux/features/resumeDepense/reumeDepense.interface";
+import { GrantEncoursItem } from "../../../../redux/features/grantEncours/grantEncours.interface";
+import { PrevisionDepenseItem } from "../../../../redux/features/PrevisionDepense/previsionDepense.interface";
 const DashboardMission = () => {
   const router = useRouter();
   // const id: any = router.query;
@@ -50,7 +55,6 @@ const DashboardMission = () => {
     fetchEmployes();
     fetchPrevisionDepense();
   }, []);
-
   return (
     <Container maxWidth="xl">
       <SectionDetails>
@@ -67,7 +71,7 @@ const DashboardMission = () => {
             variant="h4"
             id="tableTitle"
             component="div"
-            sx={{ paddingLeft: 2 }}
+            sx={{ paddingcenter: 2 }}
           >
             Dashboard mission
           </Typography>
@@ -88,25 +92,25 @@ const DashboardMission = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   RéfBudget
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Type
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Responsable
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Gestionnaires
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Lieu
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   VérifTechnique
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   VérifFinancier
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
@@ -118,79 +122,79 @@ const DashboardMission = () => {
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Imprevu
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   TotalBudget
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   $RetenuAdmin
                 </TableCell>
-                <TableCell sx={{ minWidth: 150, maxWidth: 150 }} align="left">
+                <TableCell sx={{ minWidth: 150, maxWidth: 150 }} align="center">
                   $RemisResponsable total
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   MoyenRemise1
                 </TableCell>
-                <TableCell sx={{ minWidth: 150, maxWidth: 150 }} align="left">
+                <TableCell sx={{ minWidth: 150, maxWidth: 150 }} align="center">
                   $RemisResponsable1
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   $RemisGrant1
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   MoyenRemise2
                 </TableCell>
-                <TableCell sx={{ minWidth: 150, maxWidth: 150 }} align="left">
+                <TableCell sx={{ minWidth: 150, maxWidth: 150 }} align="center">
                   $RemisResponsable2
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   $RemisGrant2
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   MoyenRemise3
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   DépensesAdmin
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   DépensesResp
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   ReliquatAdmin
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   ReliquatResp
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   CoûtMission
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   RapTechnique
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   RapFinancier
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   OrdreDeMission
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   PiècesClassées
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Status
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Remarque_Attente
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   UtilisationImprevu
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   ExplicationImprevu
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Date RF
                 </TableCell>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Alarme
                 </TableCell>
               </TableRow>
@@ -198,20 +202,32 @@ const DashboardMission = () => {
             <TableBody>
               {missionListe.map((row: MissionItem, index: any) => (
                 <TableRow key={row.id}>
-                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 200, maxWidth: 200 }}
+                  >
                     {row.RefBudget}
                   </TableCell>
-                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
-                    {grantEncoursList.find((g) => g.id == row.grantId)?.code}
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 200, maxWidth: 200 }}
+                  >
+                    {row.uncompleteTbbs!.map((m: UnCompleteTbbItem) => m.type)}
                   </TableCell>
-                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 200, maxWidth: 200 }}
+                  >
                     {
                       employees.find(
                         (e: EmployeItem) => e.id === row.missionManagerId
                       )?.name as string
                     }
                   </TableCell>
-                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 200, maxWidth: 200 }}
+                  >
                     {employees
                       .filter((e: EmployeItem) =>
                         row.budgetManagerId?.includes(e.id as string)
@@ -219,53 +235,89 @@ const DashboardMission = () => {
                       .map((m: EmployeItem) => m.name)
                       .join(", ")}
                   </TableCell>
-                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
-                    <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 200, maxWidth: 200 }}
+                  >
+                    {row.lieux!.map((l: LieuxRapportItem) => l.district!)}
                   </TableCell>
-                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
-                    <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 200, maxWidth: 200 }}
+                  >
+                    {employees
+                      .filter((e: EmployeItem) =>
+                        row.verifyTechnic?.includes(e.id as string)
+                      )
+                      .map((m: EmployeItem) => m.name)
+                      .join(", ")}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 120, maxWidth: 120 }}
+                  >
+                    {employees
+                      .filter((e: EmployeItem) =>
+                        row.verifyFinancial?.includes(e.id as string)
+                      )
+                      .map((m: EmployeItem) => m.name)
+                      .join(", ")}
                   </TableCell>
                   <TableCell
                     align="center"
                     sx={{ minWidth: 120, maxWidth: 120 }}
                   >
                     {formatMontant(
-                      Number(
-                        row.previsionDepense?.reduce(
-                          (acc, curr) => acc + curr.montant!,
-                          0
-                        )
-                      )
+                      row.resumeDepense
+                        ?.filter((f: ResumeDepenseItem) => f.grant)
+                        .reduce((acc, cur) => {
+                          const budget = Number(cur.budgetDepense);
+                          return acc + (isNaN(budget) ? 0 : budget);
+                        }, 0) || 0
                     )}
                   </TableCell>
                   <TableCell
                     align="center"
                     sx={{ minWidth: 120, maxWidth: 120 }}
                   >
+                    {
+                      grantEncoursList.find(
+                        (g: GrantEncoursItem) =>
+                          g.id === row.resumeDepense?.map((m) => m.grant)
+                      )?.code
+                    }
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 200, maxWidth: 200 }}
+                  >
                     {formatMontant(
-                      Number(
-                        row.previsionDepense?.reduce(
-                          (acc, cur) => acc + cur.imprevue!,
-                          0
-                        )
-                      )
+                      row.previsionDepense
+                        ?.filter((f: PrevisionDepenseItem) => f.grant)
+                        .reduce((acc, cur) => {
+                          const imprevu = Number(cur.imprevue);
+                          return acc + (isNaN(imprevu) ? 0 : imprevu);
+                        }, 0) || 0
                     )}
                   </TableCell>
                   <TableCell
                     align="center"
-                    sx={{ minWidth: 120, maxWidth: 120 }}
+                    sx={{ minWidth: 200, maxWidth: 200 }}
                   >
                     {formatMontant(
-                      Number(
-                        row.rapportDepense?.reduce(
-                          (acc, curr) => acc + curr.montant!,
-                          0
-                        )
-                      )
+                      (row.resumeDepense
+                        ?.filter((f: ResumeDepenseItem) => f.grant)
+                        .reduce((acc, cur) => {
+                          const budget = Number(cur.budgetDepense);
+                          return acc + (isNaN(budget) ? 0 : budget);
+                        }, 0) || 0) +
+                        (row.previsionDepense
+                          ?.filter((f: PrevisionDepenseItem) => f.grant)
+                          .reduce((acc, cur) => {
+                            const imprevu = Number(cur.imprevue);
+                            return acc + (isNaN(imprevu) ? 0 : imprevu);
+                          }, 0) || 0)
                     )}
-                  </TableCell>
-                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
-                    {row.status}
                   </TableCell>
                   <TableCell>
                     <Link href={`/missions/${row.id}/bilan`}>
@@ -308,6 +360,6 @@ export const CardFooter = styled("div")(({ theme }) => ({
   background: theme.palette.grey[100],
   paddingInline: theme.spacing(2),
   paddingBlock: theme.spacing(1),
-  borderBottomLeftRadius: theme.spacing(2),
+  borderBottomcenterRadius: theme.spacing(2),
   borderBottomRightRadius: theme.spacing(2),
 }));

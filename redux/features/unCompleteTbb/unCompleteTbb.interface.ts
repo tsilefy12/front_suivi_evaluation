@@ -9,7 +9,6 @@ export interface UnCompleteTbbItem {
   piecesClassees?: string;
   remarqueAttente?: string;
   dateRF?: Date;
-  alarme?: string;
   explicationImprevu?: string;
   type?: string;
 }

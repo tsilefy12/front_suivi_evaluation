@@ -167,6 +167,7 @@ const ListMissions = () => {
   }, [missionListe]); // Depend on missionListe to ensure the latest data is used
 
   const addComplete = (idMission: string) => {
+    console.log(" id ftsn :", idMission);
     setGetMissionId(idMission);
     setOpen(true);
   };

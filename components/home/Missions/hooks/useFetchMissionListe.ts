@@ -17,6 +17,8 @@ const useFetchMissionListe = () => {
         livrables: true,
         previsionDepense: true,
         rapportDepense: true,
+        uncompleteTbbs: true,
+        lieux: true,
       },
     };
     if (router.query.search) {

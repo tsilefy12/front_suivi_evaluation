@@ -2,7 +2,10 @@ import { LivrableRapportItem } from "../LivrableRapport/livrableRapport.interfac
 import { PrevisionDepenseItem } from "../PrevisionDepense/previsionDepense.interface";
 import { ActiviteRapportItem } from "../activitesRapport/activiteRapport.interface";
 import { EmployeItem } from "../employe/employeSlice.interface";
+import { LieuxRapportItem } from "../lieuxRapport/lieuxRapport.interface";
 import { RapportDepenseItem } from "../rapportDepense/rapportDepense.interface";
+import { ResumeDepenseItem } from "../resumeDepense/reumeDepense.interface";
+import { UnCompleteTbbItem } from "../unCompleteTbb/unCompleteTbb.interface";
 
 export interface MissionItem {
   id?: string;
@@ -34,6 +37,9 @@ export interface MissionItem {
     validation: boolean;
   }[];
   [x: string]: any;
+  uncompleteTbbs?: UnCompleteTbbItem[];
+  lieux?: LieuxRapportItem[];
+  resumeDepense?: ResumeDepenseItem[];
 }
 
 export interface MissionInitialState {

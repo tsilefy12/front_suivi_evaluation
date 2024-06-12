@@ -25,14 +25,14 @@ import {
 } from "../../../../redux/features/unCompleteTbb";
 import OSSelectField from "../../../shared/select/OSSelectField";
 
-const AddNewCompleted = ({ fermerDialog, getuncompleteTbbId }: any) => {
+const AddNewCompleted = ({ fermerDialog, getMissionId }: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { isEditing, uncompleteTbb } = useAppSelector(
     (state) => state.uncompleteTbb
   );
-
   const handleSubmit = async (values: any) => {
+    values.missionId = getMissionId;
     try {
       if (isEditing) {
         await dispatch(
@@ -71,7 +71,6 @@ const AddNewCompleted = ({ fermerDialog, getuncompleteTbbId }: any) => {
                   ? uncompleteTbb?.remarqueAttente
                   : "",
                 dateRF: isEditing ? uncompleteTbb?.dateRF : new Date(),
-                alarme: isEditing ? uncompleteTbb?.alarme : "",
                 explicationImprevu: isEditing
                   ? uncompleteTbb?.explicationImprevu
                   : "",
@@ -79,14 +78,13 @@ const AddNewCompleted = ({ fermerDialog, getuncompleteTbbId }: any) => {
               }
         }
         validationSchema={Yup.object({
-          retenuAdmin: Yup.number().required("Champ obligatoire"),
+          retenuAdmin: Yup.string().required("Champ obligatoire"),
           moyenRemise: Yup.string().required("Champ obligatoire"),
           depenseAdmin: Yup.number().required("Champ obligatoire"),
           depensesResp: Yup.number().required("Champ obligatoire"),
           ordreDeMission: Yup.string().required("Champ obligatoire"),
           piecesClassees: Yup.string().required("Champ obligatoire"),
           remarqueAttente: Yup.string().required("Champ obligatoire"),
-          alarme: Yup.string().required("Champ obligatoire"),
           explicationImprevu: Yup.string().required("Champ obligatoire"),
           type: Yup.string().required("Champ obligatoire"),
         })}
@@ -142,7 +140,8 @@ const AddNewCompleted = ({ fermerDialog, getuncompleteTbbId }: any) => {
                       id="outlined-basic"
                       label="Retenu Admin"
                       name="retenuAdmin"
-                      inputProps={{ autoComplete: "off" }}
+                      type="number"
+                      inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <OSTextField
                       id="outlined-basic"
@@ -154,13 +153,15 @@ const AddNewCompleted = ({ fermerDialog, getuncompleteTbbId }: any) => {
                       id="outlined-basic"
                       label="Dépenses Admin"
                       name="depenseAdmin"
-                      inputProps={{ autoComplete: "off" }}
+                      type="number"
+                      inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <OSTextField
                       id="outlined-basic"
                       label="Dépenses Responsable"
                       name="depensesResp"
-                      inputProps={{ autoComplete: "off" }}
+                      type="number"
+                      inputProps={{ autoComplete: "off", min: 0 }}
                     />
                   </Stack>
                   <Stack direction={"row"} gap={2} paddingBottom={2}>
@@ -200,12 +201,6 @@ const AddNewCompleted = ({ fermerDialog, getuncompleteTbbId }: any) => {
                       onChange={(value: any) =>
                         formikProps.setFieldValue("dateRF", value)
                       }
-                    />
-                    <OSTextField
-                      id="outlined-basic"
-                      label="Alarme"
-                      name="alarme"
-                      inputProps={{ autoComplete: "off" }}
                     />
                   </Stack>
                   <OSTextField
