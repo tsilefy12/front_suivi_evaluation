@@ -49,7 +49,9 @@ const PrevisionDeMission = () => {
   const fetchGrants = useFetchGrants();
   const [getVerificateurFinance, setGetVerificateurFinance] =
     React.useState<boolean>(false);
-
+  const [getVerificateurTechnic, setGetVerificateurTechnic] =
+    React.useState<boolean>(false);
+  const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
   React.useEffect(() => {
     fetchEmployes();
     fetchMission();
@@ -59,29 +61,27 @@ const PrevisionDeMission = () => {
   React.useEffect(() => {
     const verifyFinanceId = missionListe
       .filter((m: MissionItem) => m.id === id)
-      .map((m: MissionItem) => {
-        m.verifyFinancial;
-      });
+      .map((m: MissionItem) => m.verifyFinancial);
+
     const verifyMissionId = missionListe
       .filter((m: MissionItem) => m.id === id)
-      .map((m: MissionItem) => {
-        m.id;
-      });
+      .map((m: MissionItem) => m.id);
+
     const validatePrevue = missionListe
-      .filter((m: MissionItem) => m.id == id)
-      .map((m: MissionItem) => {
-        m.validationPrevision;
-      });
-    console.log(" validation :", validatePrevue!);
-    // if (
-    //   verifyFinanceId == validatePrevue!.map((m: any) => m.responsableId) &&
-    //   verifyMissionId == validatePrevue!.map((m: any) => m.missionId)
-    // ) {
-    //   const verifyed = validatePrevue!.map((v) => v.validation as boolean);
-    //   return setGetVerificateurFinance(verifyed as boolean);
-    // }
-  }, [missionListe]);
-  // console.log("verify finance :", getVerificateurFinance);
+      .filter((m: MissionItem) => m.id === id)
+      .map((m: MissionItem) => m.validationPrevision);
+
+    if (
+      verifyFinanceId.toString() ===
+        validatePrevue.map((m: any) => m.responsableId).toString() &&
+      verifyMissionId.toString() ===
+        validatePrevue.map((m: any) => m.missionId).toString()
+    ) {
+      const verifyed = validatePrevue.map((v: any) => v.validation as boolean);
+      const allVerified = verifyed.every((v: boolean) => v);
+      setGetVerificateurFinance(allVerified);
+    }
+  }, [missionListe, id]);
 
   const handleValidationFinance = async (
     responsableId: string,
@@ -89,7 +89,7 @@ const PrevisionDeMission = () => {
     validation: boolean
   ) => {
     try {
-      // Send the updated validation state to the server
+      console.log("Ok");
       await axios.post("/suivi-evaluation/validation-prevision", {
         responsableId,
         missionId,
@@ -107,6 +107,30 @@ const PrevisionDeMission = () => {
     }
   };
 
+  React.useEffect(() => {
+    const verifyTechnicId = missionListe
+      .filter((m: MissionItem) => m.id === id)
+      .map((m: MissionItem) => m.verifyTechnic);
+
+    const verifyMissionId = missionListe
+      .filter((m: MissionItem) => m.id === id)
+      .map((m: MissionItem) => m.id);
+
+    const validatePrevue = missionListe
+      .filter((m: MissionItem) => m.id === id)
+      .map((m: MissionItem) => m.validationPrevision);
+
+    if (
+      verifyTechnicId.toString() ===
+        validatePrevue.map((m: any) => m.responsableId).toString() &&
+      verifyMissionId.toString() ===
+        validatePrevue.map((m: any) => m.missionId).toString()
+    ) {
+      const verifyed = validatePrevue.map((v: any) => v.validation as boolean);
+      const allVerified = verifyed.every((v: boolean) => v);
+      setGetVerificateurTechnic(allVerified);
+    }
+  }, [missionListe, id]);
   // //validation technique
   const handleValidationTechnique = async (
     responsableId: string,
@@ -130,6 +154,31 @@ const PrevisionDeMission = () => {
     }
   };
 
+  //validation paiement
+  React.useEffect(() => {
+    const validateFinancialId = missionListe
+      .filter((m: MissionItem) => m.id === id)
+      .map((m: MissionItem) => m.validateFinancial);
+
+    const verifyMissionId = missionListe
+      .filter((m: MissionItem) => m.id === id)
+      .map((m: MissionItem) => m.id);
+
+    const validatePrevue = missionListe
+      .filter((m: MissionItem) => m.id === id)
+      .map((m: MissionItem) => m.validationPrevision);
+
+    if (
+      validateFinancialId.toString() ===
+        validatePrevue.map((m: any) => m.responsableId).toString() &&
+      verifyMissionId.toString() ===
+        validatePrevue.map((m: any) => m.missionId).toString()
+    ) {
+      const verifyed = validatePrevue.map((v: any) => v.validation as boolean);
+      const allVerified = verifyed.every((v: boolean) => v);
+      setGetValidatePay(allVerified);
+    }
+  }, [missionListe, id]);
   const handleValidationPaye = async (
     responsableId: string,
     missionId: string,
@@ -281,26 +330,32 @@ const PrevisionDeMission = () => {
                               handleValidationFinance(
                                 row.verifyFinancial!,
                                 id,
-                                false
+                                getVerificateurFinance == false ? true : false
                               )
                             }
                           >
                             Vérifier financièrement
                           </Button>
-                          {/* <FormLabel
-                          sx={{
-                            display: valueGetFV == true ? "none" : "block",
-                          }}
-                        >
-                          <Close color="error" />
-                        </FormLabel>
-                        <FormLabel
-                          sx={{
-                            display: valueGetFV == true ? "block" : "none",
-                          }}
-                        >
-                          <Check color="primary" />
-                        </FormLabel> */}
+                          <FormLabel
+                            sx={{
+                              display:
+                                getVerificateurFinance == true
+                                  ? "none"
+                                  : "block",
+                            }}
+                          >
+                            <Close color="error" />
+                          </FormLabel>
+                          <FormLabel
+                            sx={{
+                              display:
+                                getVerificateurFinance == true
+                                  ? "block"
+                                  : "none",
+                            }}
+                          >
+                            <Check color="primary" />
+                          </FormLabel>
                         </Stack>
                       </Stack>
                     ))}
@@ -339,27 +394,33 @@ const PrevisionDeMission = () => {
                               handleValidationTechnique(
                                 id,
                                 row.verifyTechnic!,
-                                true
+                                getVerificateurTechnic == true ? false : true
                               )
                             }
                           >
                             Vérifier Techniquement
                           </Button>
-                          {/* <FormLabel
-                          sx={{
-                            display: valueGetTechnic == true ? "none" : "block",
-                          }}
-                          disabled={valueGetFV == false}
-                        >
-                          <Close color="error" />
-                        </FormLabel>
-                        <FormLabel
-                          sx={{
-                            display: valueGetTechnic == true ? "block" : "none",
-                          }}
-                        >
-                          <Check color="primary" />
-                        </FormLabel> */}
+                          <FormLabel
+                            sx={{
+                              display:
+                                getVerificateurTechnic == true
+                                  ? "none"
+                                  : "block",
+                            }}
+                            disabled={getVerificateurFinance == false}
+                          >
+                            <Close color="error" />
+                          </FormLabel>
+                          <FormLabel
+                            sx={{
+                              display:
+                                getVerificateurTechnic == true
+                                  ? "block"
+                                  : "none",
+                            }}
+                          >
+                            <Check color="primary" />
+                          </FormLabel>
                         </Stack>
                       </Stack>
                     ))}
@@ -391,26 +452,29 @@ const PrevisionDeMission = () => {
                               handleValidationPaye(
                                 id,
                                 row.validateFinancial!,
-                                true
+                                getValidatePaye === true ? false : true
                               )
                             }
+                            disabled={getVerificateurTechnic === false}
                           >
                             Vérsé
                           </Button>
-                          {/* <FormLabel
-                          sx={{
-                            display: valueGetPaye == true ? "none" : "block",
-                          }}
-                        >
-                          <Close color="error" />
-                        </FormLabel>
-                        <FormLabel
-                          sx={{
-                            display: valueGetPaye == true ? "block" : "none",
-                          }}
-                        >
-                          <Check color="primary" />
-                        </FormLabel> */}
+                          <FormLabel
+                            sx={{
+                              display:
+                                getValidatePaye === true ? "none" : "block",
+                            }}
+                          >
+                            <Close color="error" />
+                          </FormLabel>
+                          <FormLabel
+                            sx={{
+                              display:
+                                getValidatePaye === true ? "block" : "none",
+                            }}
+                          >
+                            <Check color="primary" />
+                          </FormLabel>
                         </Stack>
                       </Fragment>
                     ))}
