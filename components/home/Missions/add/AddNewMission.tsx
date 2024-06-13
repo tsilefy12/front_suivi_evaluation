@@ -53,6 +53,8 @@ const AddNewMission = () => {
   const fetchMission = useFetchMissionListe();
   const [open, setOpen] = React.useState(false);
   const [statut, setStatut] = React.useState("vide");
+  const [getVerify, setGetVerify] = React.useState<string>("");
+  const [getMission, setGetMission] = React.useState<string>("");
   useEffect(() => {
     fetchEmployeesListe();
     fetchGrants();
@@ -77,13 +79,28 @@ const AddNewMission = () => {
   );
   const handleSubmit = async (values: any) => {
     values.budgetManagerId = [...selectedEmployes.map((item) => item.id)];
-    console.log("Gestionnaires :", values.budgetManagerId);
+
     const now = new Date().getTime();
     const startDaty = new Date(values.dateDebut).getTime();
     const endDaty = new Date(values.dateFin).getTime();
     if (startDaty >= endDaty) {
+      const daty = "daty";
+      setGetVerify(daty);
       return setOpen(true);
     }
+    const verifierRefBudget = missionListe
+      .filter((f: MissionItem) => f.id)
+      .map((e: MissionItem) => {
+        setGetMission(e.reference as string);
+        return e.RefBudget;
+      });
+
+    if (verifierRefBudget.includes(values.RefBudget)) {
+      const budgets = "budgets";
+      setGetVerify(budgets);
+      return setOpen(true);
+    }
+
     if (!values.reference) {
       values.reference = ref.toString().padStart(3, "0");
     }
@@ -340,7 +357,11 @@ const AddNewMission = () => {
         <DialogTitle sx={{ color: "red" }}>Information</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            La date début doit être inférieure que la date fin
+            {`${
+              getVerify == "daty"
+                ? " La date début doit être inférieure que la date fin"
+                : `Référence budget existe déjà avec la mission de "MISSION_${getMission}"`
+            }`}
           </DialogContentText>
           <DialogActions>
             <Button onClick={() => setOpen(false)}>

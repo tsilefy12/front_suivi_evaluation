@@ -159,7 +159,6 @@ const ListMissions = () => {
   }, [missionListe]);
 
   const addComplete = (idMission: string) => {
-    console.log(" id ftsn :", idMission);
     setGetMissionId(idMission);
     setOpen(true);
   };
@@ -348,6 +347,7 @@ const ListMissions = () => {
         <AddNewCompleted
           fermerDialog={fermerDialog}
           getMissionId={getMissionId}
+          missionListe={missionListe}
         />
       </Dialog>
     </Container>

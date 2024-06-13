@@ -24,13 +24,21 @@ import {
   updateUncompleteTbb,
 } from "../../../../redux/features/unCompleteTbb";
 import OSSelectField from "../../../shared/select/OSSelectField";
+import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
+import useFetchUncompleteTbbListe from "../hooks/useFetchUncompleteTbb";
 
-const AddNewCompleted = ({ fermerDialog, getMissionId }: any) => {
+const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isEditing, uncompleteTbb } = useAppSelector(
+  const { isEditing, uncompleteTbb, unCompleteTbbList } = useAppSelector(
     (state) => state.uncompleteTbb
   );
+  const fetchUncompleteTbb = useFetchUncompleteTbbListe();
+
+  React.useEffect(() => {
+    fetchUncompleteTbb();
+  }, [router.query]);
+
   const handleSubmit = async (values: any) => {
     values.missionId = getMissionId;
     try {
