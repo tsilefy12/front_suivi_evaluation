@@ -46,6 +46,8 @@ import useFetchContactMissionRapport from "../../../gereRapportDeMission/organis
 import useFetchProgrammePrevisionList from "../../../previsionMissions/organism/Techniques/tableProgramme/hooks/useFetchProgrammePrevision";
 import useFetchProgrammeRapport from "../../../gereRapportDeMission/organism/Techniques/tableProgramme/hooks/useFetchProgrammeRapport";
 import formatMontant from "../../../../hooks/format";
+import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
+import { EmployeItem } from "../../../../redux/features/employe/employeSlice.interface";
 
 const BilanMission = () => {
   const [value, setValue] = React.useState(0);
@@ -61,6 +63,8 @@ const BilanMission = () => {
   //objectif
   const fetchMissionGoalList = useFetchMissionGoalListe();
   const fetchObjectifRapport = useFetchObjectifRapport();
+  const fetchEmployes = useFetchEmploys();
+  const { employees } = useAppSelector((state) => state.employe);
 
   //resultat
   const fetchExceptedResultListe = useFetchExceptedResultList();
@@ -116,6 +120,7 @@ const BilanMission = () => {
     fetchContactMissionRapport();
     fetchProgrammePrevision();
     fetchProgrammeRapport();
+    fetchEmployes();
   }, [router.query]);
 
   const handleChangeSelect = (event: SelectChangeEvent) => {
@@ -165,17 +170,48 @@ const BilanMission = () => {
               <Grid item xs={12} md={4}>
                 Responsable :
                 <FormLabel>
-                  {[item.missionManager].map(
-                    (mm: any) => mm.name + " " + mm.surname
-                  )}
+                  {missionListe
+                    .filter((f: MissionItem) => f.id === id)
+                    .map((row: MissionItem) => {
+                      const manager = employees.find(
+                        (e: EmployeItem) => e.id === row.missionManagerId
+                      );
+
+                      return (
+                        <span key={row.id}>
+                          {manager
+                            ? `${manager.name} ${manager.surname}`
+                            : "Manager not found"}
+                        </span>
+                      );
+                    })}
                 </FormLabel>
               </Grid>
               <Grid item xs={12} md={4}>
-                Gestionnaire de budget :
                 <FormLabel>
-                  {[item.budgetManager!].map(
-                    (bm: any) => bm.name + " " + bm.surname
-                  )}
+                  {missionListe
+                    .filter((mission: MissionItem) => mission.id === id)
+                    .map((mission: MissionItem) => (
+                      <div key={mission.id}>
+                        <span>Gestionnaire de budget :</span>
+                        <FormLabel>
+                          {employees
+                            .filter((e: EmployeItem) =>
+                              mission.budgetManagerId?.includes(e.id as string)
+                            )
+                            .map((m: EmployeItem) => (
+                              <Stack key={m.id} direction={"column"}>
+                                <Stack direction={"row"} gap={1}>
+                                  <span>Nom et prénoms :</span>
+                                  <span>
+                                    {m.name} {m.surname}
+                                  </span>
+                                </Stack>
+                              </Stack>
+                            ))}
+                        </FormLabel>
+                      </div>
+                    ))}
                 </FormLabel>
               </Grid>
             </Grid>

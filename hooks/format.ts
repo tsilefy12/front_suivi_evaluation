@@ -1,6 +1,4 @@
 export default function formatMontant(nb: number) {
-  // if (!comptaFile.currency) return nb.toLocaleString();
-  //   let n: number | string = nb > 0 ? nb : nb * -1;
   let n: number | string = nb;
   n = n
     .toLocaleString("en-EN", {
