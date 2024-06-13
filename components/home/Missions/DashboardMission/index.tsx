@@ -419,7 +419,10 @@ const DashboardMission = () => {
                         Number(row.uncompleteTbbs!.map((m) => m.depensesResp))
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 200, maxWidth: 200 }}
+                  >
                     {(() => {
                       const validateTechnic = row.verifyTechnic;
                       if (row.validationRapport) {
@@ -437,8 +440,27 @@ const DashboardMission = () => {
                       return "En attente";
                     })()}
                   </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: 200, maxWidth: 200 }}
+                  >
+                    {(() => {
+                      const validateFinancial = row.verifyFinancial;
+                      if (row.validationRapport) {
+                        const isOk = row.validationRapport.some(
+                          (rapport) =>
+                            rapport.responsableId === validateFinancial &&
+                            rapport.validation === true
+                        );
 
-                  <TableCell></TableCell>
+                        if (isOk) {
+                          return "Ok";
+                        }
+                      }
+
+                      return "En attente";
+                    })()}
+                  </TableCell>
                   <TableCell
                     align="center"
                     sx={{ minWidth: 200, maxWidth: 200 }}

@@ -123,9 +123,9 @@ const ListMissions = () => {
       }
       if (
         m.status === "Encours" &&
-        endDay === currentDay &&
-        endMonth === currentMonth &&
-        endYear === currentYear
+        endDay <= currentDay &&
+        endMonth <= currentMonth &&
+        endYear <= currentYear
       ) {
         promises.push(
           dispatch(
@@ -144,27 +144,19 @@ const ListMissions = () => {
   };
 
   useEffect(() => {
-    const now = new Date();
-    const nextRun = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate() + 1,
-      0,
-      0,
-      0
-    ); // Next midnight
-    const timeUntilNextRun = nextRun.getTime() - now.getTime();
+    // const now = new Date();
+    // const nextRun = new Date(
+    //   now.getFullYear(),
+    //   now.getMonth(),
+    //   now.getDate() + 1,
+    //   0,
+    //   0,
+    //   0
+    // ); // Next midnight
+    // const timeUntilNextRun = nextRun.getTime() - now.getTime();
 
-    const timeout = setTimeout(() => {
-      updateMissions();
-
-      // Set an interval to run updateMissions every 24 hours after the first execution
-      setInterval(updateMissions, 24 * 60 * 60 * 1000);
-    }, timeUntilNextRun);
-
-    // Cleanup timeout on unmount
-    return () => clearTimeout(timeout);
-  }, [missionListe]); // Depend on missionListe to ensure the latest data is used
+    updateMissions();
+  }, [missionListe]);
 
   const addComplete = (idMission: string) => {
     console.log(" id ftsn :", idMission);
