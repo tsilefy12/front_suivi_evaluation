@@ -233,43 +233,45 @@ const GereRapportDeMission = () => {
                 <Divider />
                 <Typography>
                   <span> Vérifié financièrement par : </span>
-                  {missionListe.map((row: MissionItem) => (
-                    <Stack
-                      direction={"column"}
-                      gap={2}
-                      justifyContent={"space-between"}
-                      alignItems={"start"}
-                      key={row.id!}
-                    >
-                      <FormLabel>
-                        {" "}
-                        {
-                          employees.find(
-                            (e: EmployeItem) => e.id === row.verifyFinancial
-                          )?.name as string
-                        }{" "}
-                        {
-                          employees.find(
-                            (e: EmployeItem) => e.id === row.verifyFinancial
-                          )?.surname as string
-                        }
-                      </FormLabel>
-                      <Stack direction={"row"} gap={4}>
-                        <Button
-                          variant="contained"
-                          size="small"
-                          startIcon={<DoneIcon />}
-                          // onClick={() =>
-                          //   handleValidationFinance(
-                          //     row.id,
-                          //     id,
-                          //      ? false : true
-                          //   )
-                          // }
-                        >
-                          Vérifier financièrement
-                        </Button>
-                        {/* <FormLabel
+                  {missionListe
+                    .filter((f: MissionItem) => f.id === id)
+                    .map((row: MissionItem) => (
+                      <Stack
+                        direction={"column"}
+                        gap={2}
+                        justifyContent={"space-between"}
+                        alignItems={"start"}
+                        key={row.id!}
+                      >
+                        <FormLabel>
+                          {" "}
+                          {
+                            employees.find(
+                              (e: EmployeItem) => e.id === row.verifyFinancial
+                            )?.name as string
+                          }{" "}
+                          {
+                            employees.find(
+                              (e: EmployeItem) => e.id === row.verifyFinancial
+                            )?.surname as string
+                          }
+                        </FormLabel>
+                        <Stack direction={"row"} gap={4}>
+                          <Button
+                            variant="contained"
+                            size="small"
+                            startIcon={<DoneIcon />}
+                            // onClick={() =>
+                            //   handleValidationFinance(
+                            //     row.id,
+                            //     id,
+                            //      ? false : true
+                            //   )
+                            // }
+                          >
+                            Vérifier financièrement
+                          </Button>
+                          {/* <FormLabel
                           sx={{
                             display: valueGetFV == true ? "none" : "block",
                           }}
@@ -283,50 +285,52 @@ const GereRapportDeMission = () => {
                         >
                           <Check color="primary" />
                         </FormLabel> */}
+                        </Stack>
                       </Stack>
-                    </Stack>
-                  ))}
+                    ))}
                 </Typography>
                 <Divider />
                 <Typography>
                   <span>Vérifié techniquement par : </span>
-                  {missionListe.map((row: MissionItem) => (
-                    <Stack
-                      direction={"column"}
-                      gap={2}
-                      justifyContent={"space-between"}
-                      alignItems={"start"}
-                      key={row.id!}
-                    >
-                      <FormLabel>
-                        {
-                          employees.find(
-                            (e: EmployeItem) => e.id === row.verifyTechnic
-                          )?.name as string
-                        }{" "}
-                        {
-                          employees.find(
-                            (e: EmployeItem) => e.id === row.verifyTechnic
-                          )?.surname as string
-                        }
-                      </FormLabel>
-                      <Stack direction={"row"} gap={4}>
-                        <Button
-                          variant="contained"
-                          size="small"
-                          startIcon={<DoneIcon />}
-                          // onClick={() =>
-                          //   handleValidationTechnique(
-                          //     row.id,
-                          //     id,
-                          //     valueGetTechnic ? false : true
-                          //   )
-                          // }
-                          // disabled={valueGetFV == false}
-                        >
-                          Vérifier Techniquement
-                        </Button>
-                        {/* <FormLabel
+                  {missionListe
+                    .filter((f: MissionItem) => f.id === id)
+                    .map((row: MissionItem) => (
+                      <Stack
+                        direction={"column"}
+                        gap={2}
+                        justifyContent={"space-between"}
+                        alignItems={"start"}
+                        key={row.id!}
+                      >
+                        <FormLabel>
+                          {
+                            employees.find(
+                              (e: EmployeItem) => e.id === row.verifyTechnic
+                            )?.name as string
+                          }{" "}
+                          {
+                            employees.find(
+                              (e: EmployeItem) => e.id === row.verifyTechnic
+                            )?.surname as string
+                          }
+                        </FormLabel>
+                        <Stack direction={"row"} gap={4}>
+                          <Button
+                            variant="contained"
+                            size="small"
+                            startIcon={<DoneIcon />}
+                            // onClick={() =>
+                            //   handleValidationTechnique(
+                            //     row.id,
+                            //     id,
+                            //     valueGetTechnic ? false : true
+                            //   )
+                            // }
+                            // disabled={valueGetFV == false}
+                          >
+                            Vérifier Techniquement
+                          </Button>
+                          {/* <FormLabel
                           sx={{
                             display: valueGetTechnic == true ? "none" : "block",
                           }}
@@ -341,43 +345,45 @@ const GereRapportDeMission = () => {
                         >
                           <Check color="primary" />
                         </FormLabel> */}
+                        </Stack>
                       </Stack>
-                    </Stack>
-                  ))}
+                    ))}
                 </Typography>
                 <Divider />
                 <Typography>
-                  {missionListe.map((row: MissionItem) => (
-                    <Fragment key={row.id}>
-                      <span>Payé par :</span>
-                      <br></br>
-                      {
-                        employees.find(
-                          (e: EmployeItem) => e.id === row.validateFinancial
-                        )?.name as string
-                      }{" "}
-                      {
-                        employees.find(
-                          (e: EmployeItem) => e.id === row.validateFinancial
-                        )?.surname as string
-                      }
-                      <Stack direction={"row"} gap={4}>
-                        <Button
-                          variant="contained"
-                          size="small"
-                          startIcon={<DoneIcon />}
-                          // onClick={() =>
-                          //   handleValidationPaye(
-                          //     row.id,
-                          //     id,
-                          //     valueGetPaye ? false : true
-                          //   )
-                          // }
-                          // disabled={valueGetTechnic == false}
-                        >
-                          Vérsé
-                        </Button>
-                        {/* <FormLabel
+                  {missionListe
+                    .filter((f: MissionItem) => f.id === id)
+                    .map((row: MissionItem) => (
+                      <Fragment key={row.id}>
+                        <span>Payé par :</span>
+                        <br></br>
+                        {
+                          employees.find(
+                            (e: EmployeItem) => e.id === row.validateFinancial
+                          )?.name as string
+                        }{" "}
+                        {
+                          employees.find(
+                            (e: EmployeItem) => e.id === row.validateFinancial
+                          )?.surname as string
+                        }
+                        <Stack direction={"row"} gap={4}>
+                          <Button
+                            variant="contained"
+                            size="small"
+                            startIcon={<DoneIcon />}
+                            // onClick={() =>
+                            //   handleValidationPaye(
+                            //     row.id,
+                            //     id,
+                            //     valueGetPaye ? false : true
+                            //   )
+                            // }
+                            // disabled={valueGetTechnic == false}
+                          >
+                            Vérsé
+                          </Button>
+                          {/* <FormLabel
                           sx={{
                             display: valueGetPaye == true ? "none" : "block",
                           }}
@@ -391,9 +397,9 @@ const GereRapportDeMission = () => {
                         >
                           <Check color="primary" />
                         </FormLabel> */}
-                      </Stack>
-                    </Fragment>
-                  ))}
+                        </Stack>
+                      </Fragment>
+                    ))}
                 </Typography>
               </Stack>
             </CardBody>
