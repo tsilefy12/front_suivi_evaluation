@@ -31,8 +31,6 @@ import useFetchEmploys from "../GrantsEnCours/hooks/getResponsable";
 import { MissionItem } from "../../redux/features/mission/mission.interface";
 import Moment from "react-moment";
 import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
-import { boolean } from "yup";
-import { EmployeItem } from "../../redux/features/employe/employeSlice.interface";
 
 const PrevisionDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -53,10 +51,12 @@ const PrevisionDeMission = () => {
     React.useState<boolean>(false);
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
   React.useEffect(() => {
-    fetchEmployes();
-    fetchMission();
-    fetchGrants();
-  }, [router.query]);
+    if (id) {
+      fetchEmployes();
+      fetchMission();
+      fetchGrants();
+    }
+  }, [id]);
 
   React.useEffect(() => {
     const mission = missionListe.find((m: MissionItem) => m.id === id);
@@ -266,12 +266,12 @@ const PrevisionDeMission = () => {
                       <span key={row.id!}>
                         {
                           employees.find(
-                            (e: EmployeItem) => e.id === row.missionManagerId
+                            (e: any) => e.id === row.missionManagerId
                           )?.name as string
                         }{" "}
                         {
                           employees.find(
-                            (e: EmployeItem) => e.id === row.missionManagerId
+                            (e: any) => e.id === row.missionManagerId
                           )?.surname as string
                         }
                       </span>
@@ -294,12 +294,12 @@ const PrevisionDeMission = () => {
                           {" "}
                           {
                             employees.find(
-                              (e: EmployeItem) => e.id === row.verifyFinancial
+                              (e: any) => e.id === row.verifyFinancial
                             )?.name as string
                           }{" "}
                           {
                             employees.find(
-                              (e: EmployeItem) => e.id === row.verifyFinancial
+                              (e: any) => e.id === row.verifyFinancial
                             )?.surname as string
                           }
                         </FormLabel>
@@ -358,12 +358,12 @@ const PrevisionDeMission = () => {
                         <FormLabel>
                           {
                             employees.find(
-                              (e: EmployeItem) => e.id === row.verifyTechnic
+                              (e: any) => e.id === row.verifyTechnic
                             )?.name as string
                           }{" "}
                           {
                             employees.find(
-                              (e: EmployeItem) => e.id === row.verifyTechnic
+                              (e: any) => e.id === row.verifyTechnic
                             )?.surname as string
                           }
                         </FormLabel>
@@ -416,12 +416,12 @@ const PrevisionDeMission = () => {
                         <br></br>
                         {
                           employees.find(
-                            (e: EmployeItem) => e.id === row.validateFinancial
+                            (e: any) => e.id === row.validateFinancial
                           )?.name as string
                         }{" "}
                         {
                           employees.find(
-                            (e: EmployeItem) => e.id === row.validateFinancial
+                            (e: any) => e.id === row.validateFinancial
                           )?.surname as string
                         }
                         <Stack direction={"row"} gap={4}>

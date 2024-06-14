@@ -12,7 +12,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import Container from "@mui/material/Container";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import KeyValue from "../shared/keyValue";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -34,7 +34,6 @@ import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 import useFetchEmploys from "../GrantsEnCours/hooks/getResponsable";
 import { MissionItem } from "../../redux/features/mission/mission.interface";
 import Moment from "react-moment";
-import { EmployeItem } from "../../redux/features/employe/employeSlice.interface";
 
 const GereRapportDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -59,13 +58,36 @@ const GereRapportDeMission = () => {
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
+  const [getVerificateurFinance, setGetVerificateurFinance] =
+    React.useState<boolean>(false);
+  const [getVerificateurTechnic, setGetVerificateurTechnic] =
+    React.useState<boolean>(false);
+  const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
+
+  useEffect(() => {
+    if (id) {
+      fetchEmployes();
+      fetchMission();
+      fetchGrants();
+    }
+  }, [id]);
 
   React.useEffect(() => {
-    fetchMission();
-    fetchGrants();
-    fetchEmployes();
-  }, [router.query]);
+    const mission = missionListe.find((m: MissionItem) => m.id === id);
 
+    if (mission) {
+      const { verifyFinancial, validationRapport } = mission;
+
+      const isFinanceVerified = validationRapport!.some(
+        (v: any) =>
+          v.responsableId === verifyFinancial &&
+          v.missionId === id &&
+          v.validation === true
+      );
+
+      setGetVerificateurFinance(isFinanceVerified);
+    }
+  }, [missionListe, id]);
   const handleValidationFinance = async (
     responsableId: string,
     missionId: string,
@@ -90,10 +112,27 @@ const GereRapportDeMission = () => {
     }
   };
 
+  //verifier technic
+  React.useEffect(() => {
+    const mission = missionListe.find((m: MissionItem) => m.id === id);
+
+    if (mission) {
+      const { verifyTechnic, validationRapport } = mission;
+
+      const isFinanceVerified = validationRapport!.some(
+        (v: any) =>
+          v.responsableId === verifyTechnic &&
+          v.missionId === id &&
+          v.validation === true
+      );
+
+      setGetVerificateurTechnic(isFinanceVerified);
+    }
+  }, [missionListe, id]);
   const handleValidationTechnique = async (
     responsableId: string,
     missionId: string,
-    validation: number
+    validation: boolean
   ) => {
     try {
       await axios.post("/suivi-evaluation/validation-rapport", {
@@ -113,6 +152,24 @@ const GereRapportDeMission = () => {
     }
   };
 
+  //paye
+
+  React.useEffect(() => {
+    const mission = missionListe.find((m: MissionItem) => m.id === id);
+
+    if (mission) {
+      const { validateFinancial, validationRapport } = mission;
+
+      const isFinanceVerified = validationRapport!.some(
+        (v: any) =>
+          v.responsableId === validateFinancial &&
+          v.missionId === id &&
+          v.validation === true
+      );
+
+      setGetValidatePay(isFinanceVerified);
+    }
+  }, [missionListe, id]);
   const handleValidationPaye = async (
     responsableId: string,
     missionId: string,
@@ -219,12 +276,12 @@ const GereRapportDeMission = () => {
                       <span key={row.id!}>
                         {
                           employees.find(
-                            (e: EmployeItem) => e.id === row.missionManagerId
+                            (e: any) => e.id === row.missionManagerId
                           )?.name as string
                         }{" "}
                         {
                           employees.find(
-                            (e: EmployeItem) => e.id === row.missionManagerId
+                            (e: any) => e.id === row.missionManagerId
                           )?.surname as string
                         }
                       </span>
@@ -247,12 +304,12 @@ const GereRapportDeMission = () => {
                           {" "}
                           {
                             employees.find(
-                              (e: EmployeItem) => e.id === row.verifyFinancial
+                              (e: any) => e.id === row.verifyFinancial
                             )?.name as string
                           }{" "}
                           {
                             employees.find(
-                              (e: EmployeItem) => e.id === row.verifyFinancial
+                              (e: any) => e.id === row.verifyFinancial
                             )?.surname as string
                           }
                         </FormLabel>
@@ -261,30 +318,36 @@ const GereRapportDeMission = () => {
                             variant="contained"
                             size="small"
                             startIcon={<DoneIcon />}
-                            // onClick={() =>
-                            //   handleValidationFinance(
-                            //     row.id,
-                            //     id,
-                            //      ? false : true
-                            //   )
-                            // }
+                            onClick={() =>
+                              handleValidationFinance(
+                                row.verifyFinancial!,
+                                id,
+                                !getVerificateurFinance
+                              )
+                            }
                           >
                             Vérifier financièrement
                           </Button>
-                          {/* <FormLabel
-                          sx={{
-                            display: valueGetFV == true ? "none" : "block",
-                          }}
-                        >
-                          <Close color="error" />
-                        </FormLabel>
-                        <FormLabel
-                          sx={{
-                            display: valueGetFV == true ? "block" : "none",
-                          }}
-                        >
-                          <Check color="primary" />
-                        </FormLabel> */}
+                          <FormLabel
+                            sx={{
+                              display:
+                                getVerificateurFinance == true
+                                  ? "none"
+                                  : "block",
+                            }}
+                          >
+                            <Close color="error" />
+                          </FormLabel>
+                          <FormLabel
+                            sx={{
+                              display:
+                                getVerificateurFinance == true
+                                  ? "block"
+                                  : "none",
+                            }}
+                          >
+                            <Check color="primary" />
+                          </FormLabel>
                         </Stack>
                       </Stack>
                     ))}
@@ -305,12 +368,12 @@ const GereRapportDeMission = () => {
                         <FormLabel>
                           {
                             employees.find(
-                              (e: EmployeItem) => e.id === row.verifyTechnic
+                              (e: any) => e.id === row.verifyTechnic
                             )?.name as string
                           }{" "}
                           {
                             employees.find(
-                              (e: EmployeItem) => e.id === row.verifyTechnic
+                              (e: any) => e.id === row.verifyTechnic
                             )?.surname as string
                           }
                         </FormLabel>
@@ -319,32 +382,38 @@ const GereRapportDeMission = () => {
                             variant="contained"
                             size="small"
                             startIcon={<DoneIcon />}
-                            // onClick={() =>
-                            //   handleValidationTechnique(
-                            //     row.id,
-                            //     id,
-                            //     valueGetTechnic ? false : true
-                            //   )
-                            // }
-                            // disabled={valueGetFV == false}
+                            onClick={() =>
+                              handleValidationTechnique(
+                                row.verifyTechnic!,
+                                id,
+                                !getVerificateurTechnic
+                              )
+                            }
+                            disabled={getVerificateurFinance === false}
                           >
                             Vérifier Techniquement
                           </Button>
-                          {/* <FormLabel
-                          sx={{
-                            display: valueGetTechnic == true ? "none" : "block",
-                          }}
-                          disabled={valueGetFV == false}
-                        >
-                          <Close color="error" />
-                        </FormLabel>
-                        <FormLabel
-                          sx={{
-                            display: valueGetTechnic == true ? "block" : "none",
-                          }}
-                        >
-                          <Check color="primary" />
-                        </FormLabel> */}
+                          <FormLabel
+                            sx={{
+                              display:
+                                getVerificateurTechnic == true
+                                  ? "none"
+                                  : "block",
+                            }}
+                            disabled={getVerificateurTechnic == false}
+                          >
+                            <Close color="error" />
+                          </FormLabel>
+                          <FormLabel
+                            sx={{
+                              display:
+                                getVerificateurTechnic == true
+                                  ? "block"
+                                  : "none",
+                            }}
+                          >
+                            <Check color="primary" />
+                          </FormLabel>
                         </Stack>
                       </Stack>
                     ))}
@@ -359,12 +428,12 @@ const GereRapportDeMission = () => {
                         <br></br>
                         {
                           employees.find(
-                            (e: EmployeItem) => e.id === row.validateFinancial
+                            (e: any) => e.id === row.validateFinancial
                           )?.name as string
                         }{" "}
                         {
                           employees.find(
-                            (e: EmployeItem) => e.id === row.validateFinancial
+                            (e: any) => e.id === row.validateFinancial
                           )?.surname as string
                         }
                         <Stack direction={"row"} gap={4}>
@@ -372,31 +441,33 @@ const GereRapportDeMission = () => {
                             variant="contained"
                             size="small"
                             startIcon={<DoneIcon />}
-                            // onClick={() =>
-                            //   handleValidationPaye(
-                            //     row.id,
-                            //     id,
-                            //     valueGetPaye ? false : true
-                            //   )
-                            // }
-                            // disabled={valueGetTechnic == false}
+                            onClick={() =>
+                              handleValidationPaye(
+                                row.validateFinancial!,
+                                id,
+                                getValidatePaye ? false : true
+                              )
+                            }
+                            disabled={getVerificateurTechnic == false}
                           >
                             Vérsé
                           </Button>
-                          {/* <FormLabel
-                          sx={{
-                            display: valueGetPaye == true ? "none" : "block",
-                          }}
-                        >
-                          <Close color="error" />
-                        </FormLabel>
-                        <FormLabel
-                          sx={{
-                            display: valueGetPaye == true ? "block" : "none",
-                          }}
-                        >
-                          <Check color="primary" />
-                        </FormLabel> */}
+                          <FormLabel
+                            sx={{
+                              display:
+                                getValidatePaye == true ? "none" : "block",
+                            }}
+                          >
+                            <Close color="error" />
+                          </FormLabel>
+                          <FormLabel
+                            sx={{
+                              display:
+                                getValidatePaye == true ? "block" : "none",
+                            }}
+                          >
+                            <Check color="primary" />
+                          </FormLabel>
                         </Stack>
                       </Fragment>
                     ))}
