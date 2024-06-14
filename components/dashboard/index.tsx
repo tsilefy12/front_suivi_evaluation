@@ -198,7 +198,7 @@ const Dashboard: NextPage = () => {
           },
         }}
         sx={{
-          marginTop: -10,
+          marginTop: -12,
         }}
       >
         <DetailsDashboard handleClose={handleClose} getId={getId} />
