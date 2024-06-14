@@ -29,6 +29,8 @@ import { Add, Close } from "@mui/icons-material";
 import formatMontant from "../../../hooks/format";
 import useFetchPeriode from "../../periode/hooks/useFetchPeriode";
 import useFetchCaisee from "../../reliquetGrant/hooks/useFetchCaisse";
+import useFetchGrantMonitoring from "../hooks/useFetchGrantMonitorings";
+import { GrantMonitoringItem } from "../../../redux/features/grantMonitoring/grantMonitoring.interface";
 
 const DetailsDashboard = ({ handleClose, getId }: any) => {
   const basePath = useBasePath();
@@ -44,13 +46,17 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
   const { periodelist } = useAppSelector((state) => state.periode);
   const { caisselist } = useAppSelector((state: any) => state.reliquatGrant);
   const fetchCaisse = useFetchCaisee();
-
+  const fetchGrantMonitorings = useFetchGrantMonitoring();
+  const { grantMonitoringlist } = useAppSelector(
+    (state) => state.grantMonitoring
+  );
   useEffect(() => {
     fetchGrants();
     fetchBudgetInitial();
     fetchBudgetLine();
     fetchPeriode();
     fetchCaisse();
+    fetchGrantMonitorings();
   }, [router.query]);
 
   const [grantBI, setGrantBI] = useState("");
@@ -135,19 +141,49 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
                       sx={{ minWidth: 160, maxWidth: 160 }}
                       align="center"
                     >
-                      {formatMontant(Number(0))}
+                      {formatMontant(
+                        Number(
+                          grantMonitoringlist
+                            .filter(
+                              (gm: GrantMonitoringItem) =>
+                                gm.ligneBudgetaire == row.id
+                            )
+                            .reduce((acc, curr) => acc + curr.montant!, 0)
+                        )
+                      )}
                     </TableCell>
                     <TableCell
                       sx={{ minWidth: 160, maxWidth: 160 }}
                       align="center"
                     >
-                      {formatMontant(0)}
+                      {formatMontant(
+                        Number(
+                          caisselist
+                            .filter((c: any) => c.budgetLineId == row.id)
+                            .reduce(
+                              (acc: any, curr: any) =>
+                                acc + (curr.debit! - curr.credit!),
+                              0
+                            )
+                        )
+                      )}
                     </TableCell>
                     <TableCell
                       sx={{ minWidth: 160, maxWidth: 160 }}
                       align="center"
                     >
-                      {formatMontant(row.amount ?? 0 - 0)}
+                      {formatMontant(
+                        Number(
+                          row.amount! -
+                            caisselist
+                              .filter((c: any) => c.budgetLineId == row.id)
+                              .reduce(
+                                (acc: any, curr: any) =>
+                                  acc + (curr.debit! - curr.credit!),
+                                0
+                              )
+                        )
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
