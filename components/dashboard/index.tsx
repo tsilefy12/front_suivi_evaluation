@@ -217,12 +217,14 @@ const Dashboard: NextPage = () => {
         open={open}
         onClose={handleClose}
         disablePortal={false}
-        maxWidth="lg"
+        maxWidth="xl"
         fullWidth
         PaperProps={{
           style: {
             maxHeight: "80vh",
-            width: "60vw",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
           },
         }}
       >

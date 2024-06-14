@@ -95,7 +95,7 @@ const DashboardMission = () => {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  RéfBudget
+                  Réf. budget
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Type
@@ -110,10 +110,10 @@ const DashboardMission = () => {
                   Lieu
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  VérifTechnique
+                  Vérif. technique
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  VérifFinancier
+                  Vérif. financier
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Budgets
@@ -125,58 +125,58 @@ const DashboardMission = () => {
                   Imprevu
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  TotalBudget
+                  Total budget
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  $RetenuAdmin
+                  Retenu admin
                 </TableCell>
                 <TableCell sx={{ minWidth: 150, maxWidth: 150 }} align="center">
-                  $RemisResponsable total
+                  Remis responsable total
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  MoyenRemise1
+                  Moyen remise
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  $RemisGrant1
+                  Remise Grants
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   DépensesAdmin
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  DépensesResp
+                  Dépenses responsable
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  ReliquatAdmin
+                  Reliquat admin
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  ReliquatResp
+                  Reliquat responsable
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  CoûtMission
+                  Coût mission
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  RapTechnique
+                  Rapport technique
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  RapFinancier
+                  Rapport financier
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  OrdreDeMission
+                  Ordre de mission
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  PiècesClassées
+                  Pièces classées
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Status
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  Remarque_Attente
+                  Remarque attente
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  UtilisationImprevu
+                  Utilisation imprevue
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  ExplicationImprevu
+                  Explication imprevue
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Date RF
@@ -205,11 +205,16 @@ const DashboardMission = () => {
                     align="center"
                     sx={{ minWidth: 200, maxWidth: 200 }}
                   >
-                    {
+                    {`${
                       employees.find(
                         (e: EmployeItem) => e.id === row.missionManagerId
                       )?.name as string
-                    }
+                    } ${" "}
+                      ${
+                        employees.find(
+                          (e: EmployeItem) => e.id === row.missionManagerId
+                        )?.surname as string
+                      } `}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -219,7 +224,7 @@ const DashboardMission = () => {
                       .filter((e: EmployeItem) =>
                         row.budgetManagerId?.includes(e.id as string)
                       )
-                      .map((m: EmployeItem) => m.name)
+                      .map((m: EmployeItem) => (m.name, m.surname))
                       .join(", ")}
                   </TableCell>
                   <TableCell
@@ -238,7 +243,7 @@ const DashboardMission = () => {
                       .filter((e: EmployeItem) =>
                         row.verifyTechnic?.includes(e.id as string)
                       )
-                      .map((m: EmployeItem) => m.name)
+                      .map((m: EmployeItem) => (m.name, m.surname))
                       .join(", ")}
                   </TableCell>
                   <TableCell
