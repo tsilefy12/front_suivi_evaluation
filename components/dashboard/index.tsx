@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import {
   Button,
   Container,
@@ -32,6 +32,10 @@ import formatMontant from "../../hooks/format";
 import { SectionNavigation } from "../GrantsEnCours/ListGrants";
 import useFetchPeriode from "../periode/hooks/useFetchPeriode";
 
+interface SoldeByGrant {
+  [key: string]: { debit: number; credit: number };
+}
+
 const Dashboard: NextPage = () => {
   const basePath = useBasePath();
   const dispatch = useDispatch();
@@ -42,21 +46,21 @@ const Dashboard: NextPage = () => {
   const { budgetLineList } = useAppSelector((state) => state.budgetLine);
   const fetchBudgetEngagedList = useFetchBudgetEngaged();
   const { budgetEngagedList } = useAppSelector((state) => state.budgetsEngaged);
-  const fetchtReliquatGrant = useFetchReliquatGrant();
+  const fetchReliquatGrant = useFetchReliquatGrant();
   const fetchBudgetInitial = useFetchBudgetInitial();
   const { budgetInitialList } = useAppSelector((state) => state.budgetInitial);
-  const [open, setOpen] = React.useState(false);
-  const [getId, setGetId] = React.useState("");
-
-  const { caisselist } = useAppSelector((state) => state.reliquatGrant);
   const fetchCaisse = useFetchCaisee();
+  const { caisselist } = useAppSelector((state) => state.reliquatGrant);
   const fetchPeriode = useFetchPeriode();
   const { periodelist } = useAppSelector((state) => state.periode);
 
-  React.useEffect(() => {
+  const [open, setOpen] = useState(false);
+  const [getId, setGetId] = useState("");
+
+  useEffect(() => {
     fetchBudgetEngagedList();
     fetchGrants();
-    fetchtReliquatGrant();
+    fetchReliquatGrant();
     fetchBudgetInitial();
     fetchBudgetLine();
     fetchCaisse();
@@ -72,43 +76,40 @@ const Dashboard: NextPage = () => {
     setOpen(false);
   };
 
-  const [soldeBankByGrant, setSoldeBankByGrant] = React.useState<{
-    [key: string]: number;
-  }>({});
-  const soldeByGrant: { [key: string]: { debit: number; credit: number } } = {};
-
-  React.useEffect(() => {
+  const soldeByGrant: SoldeByGrant = useMemo(() => {
+    const result: SoldeByGrant = {};
     grantEncoursList.forEach((grant) => {
       if (Array.isArray(grant.journalBanks)) {
         grant.journalBanks.forEach((jb) => {
           const grantId = grant.id;
-          if (!soldeByGrant[grantId!]) {
-            soldeByGrant[grantId!] = { debit: 0, credit: 0 };
+          if (!result[grantId!]) {
+            result[grantId!] = { debit: 0, credit: 0 };
           }
           if (jb.debit !== undefined) {
-            soldeByGrant[grantId!].debit += jb.debit;
+            result[grantId!].debit += jb.debit;
           }
           if (jb.credit !== undefined) {
-            soldeByGrant[grantId!].credit += jb.credit;
+            result[grantId!].credit += jb.credit;
           }
         });
       }
     });
+    return result;
   }, [grantEncoursList]);
 
-  React.useEffect(() => {
+  const soldeBankByGrant = useMemo(() => {
     const finalSoldeByGrant: { [grantId: string]: number } = {};
 
     Object.keys(soldeByGrant).forEach((grantId) => {
       const bankSolde =
         soldeByGrant[grantId].debit - soldeByGrant[grantId].credit;
       const caisseSolde = caisselist
-        .filter((f: any) => f.grantId == grantId)
+        .filter((f: any) => f.grantId === grantId)
         .reduce((sum: any, m: any) => sum + (m.debit! - m.credit!), 0);
       finalSoldeByGrant[grantId] = bankSolde + caisseSolde;
     });
 
-    setSoldeBankByGrant(finalSoldeByGrant);
+    return finalSoldeByGrant;
   }, [caisselist, soldeByGrant]);
 
   return (
