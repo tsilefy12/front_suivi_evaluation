@@ -203,7 +203,7 @@ const DashboardMission = () => {
                   </TableCell>
                   <TableCell
                     align="center"
-                    sx={{ minWidth: 200, maxWidth: 200 }}
+                    sx={{ minWidth: 200, maxWidth: 200, alignItems: "start" }}
                   >
                     {`${
                       employees.find(
@@ -224,8 +224,17 @@ const DashboardMission = () => {
                       .filter((e: EmployeItem) =>
                         row.budgetManagerId?.includes(e.id as string)
                       )
-                      .map((m: EmployeItem) => (m.name, m.surname))
-                      .join(", ")}
+                      .map((m: EmployeItem) => (
+                        <Stack
+                          direction={"column"}
+                          key={m.id!}
+                          alignItems={"start"}
+                          justifyContent={"left"}
+                          paddingLeft={2}
+                        >
+                          {m.name} {m.surname}
+                        </Stack>
+                      ))}
                   </TableCell>
                   <TableCell
                     align="center"

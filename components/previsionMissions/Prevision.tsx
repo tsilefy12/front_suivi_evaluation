@@ -95,6 +95,7 @@ const PrevisionDeMission = () => {
         missionId,
         validation,
       });
+      setGetVerificateurFinance(validation);
 
       dispatch(
         enqueueSnackbar({
@@ -143,6 +144,7 @@ const PrevisionDeMission = () => {
         missionId,
         validation,
       });
+      setGetVerificateurTechnic(validation);
       dispatch(
         enqueueSnackbar({
           message: " Prévision validé avec succès",
@@ -190,6 +192,7 @@ const PrevisionDeMission = () => {
         missionId,
         validation,
       });
+      setGetValidatePay(validation);
       dispatch(
         enqueueSnackbar({
           message: " Prévision validé avec succès",
@@ -330,7 +333,7 @@ const PrevisionDeMission = () => {
                               handleValidationFinance(
                                 row.verifyFinancial!,
                                 id,
-                                getVerificateurFinance == false ? true : false
+                                !getVerificateurFinance
                               )
                             }
                           >
@@ -338,20 +341,18 @@ const PrevisionDeMission = () => {
                           </Button>
                           <FormLabel
                             sx={{
-                              display:
-                                getVerificateurFinance == true
-                                  ? "none"
-                                  : "block",
+                              display: getVerificateurFinance
+                                ? "none"
+                                : "block",
                             }}
                           >
                             <Close color="error" />
                           </FormLabel>
                           <FormLabel
                             sx={{
-                              display:
-                                getVerificateurFinance == true
-                                  ? "block"
-                                  : "none",
+                              display: getVerificateurFinance
+                                ? "block"
+                                : "none",
                             }}
                           >
                             <Check color="primary" />
@@ -394,7 +395,7 @@ const PrevisionDeMission = () => {
                               handleValidationTechnique(
                                 id,
                                 row.verifyTechnic!,
-                                getVerificateurTechnic == true ? false : true
+                                !getVerificateurTechnic
                               )
                             }
                           >
@@ -402,21 +403,19 @@ const PrevisionDeMission = () => {
                           </Button>
                           <FormLabel
                             sx={{
-                              display:
-                                getVerificateurTechnic == true
-                                  ? "none"
-                                  : "block",
+                              display: getVerificateurTechnic
+                                ? "none"
+                                : "block",
                             }}
-                            disabled={getVerificateurFinance == false}
+                            disabled={getVerificateurFinance === false}
                           >
                             <Close color="error" />
                           </FormLabel>
                           <FormLabel
                             sx={{
-                              display:
-                                getVerificateurTechnic == true
-                                  ? "block"
-                                  : "none",
+                              display: getVerificateurTechnic
+                                ? "block"
+                                : "none",
                             }}
                           >
                             <Check color="primary" />
@@ -452,7 +451,7 @@ const PrevisionDeMission = () => {
                               handleValidationPaye(
                                 id,
                                 row.validateFinancial!,
-                                getValidatePaye === true ? false : true
+                                !getValidatePaye
                               )
                             }
                             disabled={getVerificateurTechnic === false}
@@ -461,16 +460,14 @@ const PrevisionDeMission = () => {
                           </Button>
                           <FormLabel
                             sx={{
-                              display:
-                                getValidatePaye === true ? "none" : "block",
+                              display: getValidatePaye ? "none" : "block",
                             }}
                           >
                             <Close color="error" />
                           </FormLabel>
                           <FormLabel
                             sx={{
-                              display:
-                                getValidatePaye === true ? "block" : "none",
+                              display: getValidatePaye ? "block" : "none",
                             }}
                           >
                             <Check color="primary" />
