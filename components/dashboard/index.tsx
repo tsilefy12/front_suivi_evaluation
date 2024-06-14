@@ -192,11 +192,13 @@ const Dashboard: NextPage = () => {
         PaperProps={{
           style: {
             maxHeight: "80vh",
-            width: "100%",
             display: "flex",
             justifyContent: "center",
-            top: -10,
+            width: "100%",
           },
+        }}
+        sx={{
+          marginTop: -10,
         }}
       >
         <DetailsDashboard handleClose={handleClose} getId={getId} />
