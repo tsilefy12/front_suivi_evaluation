@@ -59,25 +59,23 @@ const PrevisionDeMission = () => {
   }, [router.query]);
 
   React.useEffect(() => {
-    const verifyFinanceId = missionListe
-      .filter((m: MissionItem) => m.id == id)
-      .map((m: MissionItem) => m.verifyFinancial);
+    const mission = missionListe.find((m: MissionItem) => m.id === id);
 
-    const validatePrevue = missionListe
-      .filter((m: MissionItem) => m.id == id)
-      .map((m: MissionItem) => m.validationPrevision);
+    if (mission) {
+      const { verifyFinancial, validationPrevision } = mission;
 
-    if (
-      verifyFinanceId! == validatePrevue.map((m: any) => m.responsableId!) &&
-      id == validatePrevue.map((m: any) => m.missionId!)
-    ) {
-      const verifyed = validatePrevue.map((v: any) => v.validation as boolean);
-      const allVerified = verifyed.every((v: boolean) => v);
+      const isFinanceVerified = validationPrevision!.some(
+        (v: any) =>
+          v.responsableId === verifyFinancial &&
+          v.missionId === id &&
+          v.validation === true
+      );
 
-      setGetVerificateurFinance(allVerified);
+      setGetVerificateurFinance(isFinanceVerified);
     }
-  }, [missionListe]);
-  // console.log(getVerificateurFinance);
+  }, [missionListe, id]);
+
+  // console.log("verify financial:", getVerificateurFinance);
 
   const handleValidationFinance = async (
     responsableId: string,
@@ -105,23 +103,21 @@ const PrevisionDeMission = () => {
   };
 
   React.useEffect(() => {
-    const verifyTechnicId = missionListe
-      .filter((m: MissionItem) => m.id === id)
-      .map((m: MissionItem) => m.verifyTechnic);
+    const mission = missionListe.find((m: MissionItem) => m.id === id);
 
-    const validatePrevue = missionListe
-      .filter((m: MissionItem) => m.id == id)
-      .map((m: MissionItem) => m.validationPrevision);
+    if (mission) {
+      const { verifyTechnic, validationPrevision } = mission;
 
-    if (
-      verifyTechnicId == validatePrevue.map((m: any) => m.responsableId!) &&
-      id == validatePrevue.map((m: any) => m.missionId!)
-    ) {
-      const verifyed = validatePrevue.map((v: any) => v.validation as boolean);
-      const allVerified = verifyed.every((v: boolean) => v);
-      setGetVerificateurTechnic(allVerified);
+      const isFinanceVerified = validationPrevision!.some(
+        (v: any) =>
+          v.responsableId === verifyTechnic &&
+          v.missionId === id &&
+          v.validation === true
+      );
+
+      setGetVerificateurTechnic(isFinanceVerified);
     }
-  }, [missionListe]);
+  }, [missionListe, id]);
   // //validation technique
   const handleValidationTechnique = async (
     responsableId: string,
@@ -147,28 +143,21 @@ const PrevisionDeMission = () => {
   };
 
   //validation paiement
+
   React.useEffect(() => {
-    const validateFinancialId = missionListe
-      .filter((m: MissionItem) => m.id === id)
-      .map((m: MissionItem) => m.validateFinancial);
+    const mission = missionListe.find((m: MissionItem) => m.id === id);
 
-    const verifyMissionId = missionListe
-      .filter((m: MissionItem) => m.id === id)
-      .map((m: MissionItem) => m.id);
+    if (mission) {
+      const { validateFinancial, validationPrevision } = mission;
 
-    const validatePrevue = missionListe
-      .filter((m: MissionItem) => m.id === id)
-      .map((m: MissionItem) => m.validationPrevision);
+      const isFinanceVerified = validationPrevision!.some(
+        (v: any) =>
+          v.responsableId === validateFinancial &&
+          v.missionId === id &&
+          v.validation === true
+      );
 
-    if (
-      validateFinancialId.toString() ===
-        validatePrevue.map((m: any) => m.responsableId).toString() &&
-      verifyMissionId.toString() ===
-        validatePrevue.map((m: any) => m.missionId).toString()
-    ) {
-      const verifyed = validatePrevue.map((v: any) => v.validation as boolean);
-      const allVerified = verifyed.every((v: boolean) => v);
-      setGetValidatePay(allVerified);
+      setGetValidatePay(isFinanceVerified);
     }
   }, [missionListe, id]);
   const handleValidationPaye = async (
@@ -269,23 +258,25 @@ const PrevisionDeMission = () => {
                 Etat des rapports
               </Typography>
               <Stack spacing={2}>
-                <FormLabel>Elaboré par : </FormLabel>
-                {missionListe
-                  .filter((f: any) => f.id === id)
-                  .map((row: MissionItem) => (
-                    <span key={row.id!}>
-                      {
-                        employees.find(
-                          (e: EmployeItem) => e.id === row.missionManagerId
-                        )?.name as string
-                      }{" "}
-                      {
-                        employees.find(
-                          (e: EmployeItem) => e.id === row.missionManagerId
-                        )?.surname as string
-                      }
-                    </span>
-                  ))}
+                <div>
+                  <FormLabel>Elaboré par : </FormLabel>
+                  {missionListe
+                    .filter((f: any) => f.id === id)
+                    .map((row: MissionItem) => (
+                      <span key={row.id!}>
+                        {
+                          employees.find(
+                            (e: EmployeItem) => e.id === row.missionManagerId
+                          )?.name as string
+                        }{" "}
+                        {
+                          employees.find(
+                            (e: EmployeItem) => e.id === row.missionManagerId
+                          )?.surname as string
+                        }
+                      </span>
+                    ))}
+                </div>
                 <Divider />
                 <Typography>
                   <span> Vérifié financièrement par : </span>
@@ -329,18 +320,20 @@ const PrevisionDeMission = () => {
                           </Button>
                           <FormLabel
                             sx={{
-                              display: getVerificateurFinance
-                                ? "none"
-                                : "block",
+                              display:
+                                getVerificateurFinance === true
+                                  ? "none"
+                                  : "block",
                             }}
                           >
                             <Close color="error" />
                           </FormLabel>
                           <FormLabel
                             sx={{
-                              display: getVerificateurFinance
-                                ? "block"
-                                : "none",
+                              display:
+                                getVerificateurFinance === true
+                                  ? "block"
+                                  : "none",
                             }}
                           >
                             <Check color="primary" />
@@ -438,8 +431,8 @@ const PrevisionDeMission = () => {
                             startIcon={<DoneIcon />}
                             onClick={() =>
                               handleValidationPaye(
-                                id,
                                 row.validateFinancial!,
+                                id,
                                 !getValidatePaye
                               )
                             }
