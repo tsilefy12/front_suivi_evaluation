@@ -2,7 +2,7 @@
 
 git add .
 echo "commit de la correction SE"
-git commit -m "correction"
+git commit -m "correction suivi evaluation"
 echo "push de la correction"
 git push origin develop
 echo "changer branche dans marohavana"

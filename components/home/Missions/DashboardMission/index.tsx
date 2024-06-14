@@ -140,7 +140,7 @@ const DashboardMission = () => {
                   Remise Grants
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
-                  DépensesAdmin
+                  Dépenses admin
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
                   Dépenses responsable
@@ -232,7 +232,7 @@ const DashboardMission = () => {
                           justifyContent={"left"}
                           paddingLeft={2}
                         >
-                          {m.name} {m.surname}
+                          -{m.name} {m.surname}
                         </Stack>
                       ))}
                   </TableCell>
@@ -252,8 +252,7 @@ const DashboardMission = () => {
                       .filter((e: EmployeItem) =>
                         row.verifyTechnic?.includes(e.id as string)
                       )
-                      .map((m: EmployeItem) => (m.name, m.surname))
-                      .join(", ")}
+                      .map((m: EmployeItem) => `${m.name} ${" "} ${m.surname}`)}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -263,8 +262,7 @@ const DashboardMission = () => {
                       .filter((e: EmployeItem) =>
                         row.verifyFinancial?.includes(e.id as string)
                       )
-                      .map((m: EmployeItem) => m.name)
-                      .join(", ")}
+                      .map((m: EmployeItem) => `${m.name} ${" "} ${m.surname}`)}
                   </TableCell>
                   <TableCell
                     align="center"

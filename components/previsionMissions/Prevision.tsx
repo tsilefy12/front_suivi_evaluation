@@ -48,7 +48,7 @@ const PrevisionDeMission = () => {
   const { employees } = useAppSelector((state) => state.employe);
   const fetchGrants = useFetchGrants();
   const [getVerificateurFinance, setGetVerificateurFinance] =
-    React.useState<boolean>(false);
+    React.useState(false);
   const [getVerificateurTechnic, setGetVerificateurTechnic] =
     React.useState<boolean>(false);
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
@@ -56,32 +56,27 @@ const PrevisionDeMission = () => {
     fetchEmployes();
     fetchMission();
     fetchGrants();
-  }, [missionListe]);
+  }, [router.query]);
 
   React.useEffect(() => {
     const verifyFinanceId = missionListe
-      .filter((m: MissionItem) => m.id === id)
+      .filter((m: MissionItem) => m.id == id)
       .map((m: MissionItem) => m.verifyFinancial);
 
-    const verifyMissionId = missionListe
-      .filter((m: MissionItem) => m.id === id)
-      .map((m: MissionItem) => m.id);
-
     const validatePrevue = missionListe
-      .filter((m: MissionItem) => m.id === id)
+      .filter((m: MissionItem) => m.id == id)
       .map((m: MissionItem) => m.validationPrevision);
 
     if (
-      verifyFinanceId.toString() ===
-        validatePrevue.map((m: any) => m.responsableId).toString() &&
-      verifyMissionId.toString() ===
-        validatePrevue.map((m: any) => m.missionId).toString()
+      verifyFinanceId! == validatePrevue.map((m: any) => m.responsableId!) &&
+      id == validatePrevue.map((m: any) => m.missionId!)
     ) {
       const verifyed = validatePrevue.map((v: any) => v.validation as boolean);
-      const allVerified = verifyed.every((v: boolean) => v);
-      setGetVerificateurFinance(allVerified);
+      const allVerified = verifyed.map((v: boolean) => v);
+      console.log(allVerified);
+      setGetVerificateurFinance(allVerified[0]);
     }
-  }, [missionListe, id]);
+  }, [missionListe]);
 
   const handleValidationFinance = async (
     responsableId: string,
@@ -89,7 +84,6 @@ const PrevisionDeMission = () => {
     validation: boolean
   ) => {
     try {
-      console.log("Ok");
       await axios.post("/suivi-evaluation/validation-prevision", {
         responsableId,
         missionId,
@@ -103,6 +97,7 @@ const PrevisionDeMission = () => {
           options: { variant: "success" },
         })
       );
+      console.log("Ok");
     } catch (error) {
       console.log(error);
     }
@@ -113,25 +108,19 @@ const PrevisionDeMission = () => {
       .filter((m: MissionItem) => m.id === id)
       .map((m: MissionItem) => m.verifyTechnic);
 
-    const verifyMissionId = missionListe
-      .filter((m: MissionItem) => m.id === id)
-      .map((m: MissionItem) => m.id);
-
     const validatePrevue = missionListe
-      .filter((m: MissionItem) => m.id === id)
+      .filter((m: MissionItem) => m.id == id)
       .map((m: MissionItem) => m.validationPrevision);
 
     if (
-      verifyTechnicId.toString() ===
-        validatePrevue.map((m: any) => m.responsableId).toString() &&
-      verifyMissionId.toString() ===
-        validatePrevue.map((m: any) => m.missionId).toString()
+      verifyTechnicId == validatePrevue.map((m: any) => m.responsableId!) &&
+      id == validatePrevue.map((m: any) => m.missionId!)
     ) {
       const verifyed = validatePrevue.map((v: any) => v.validation as boolean);
       const allVerified = verifyed.every((v: boolean) => v);
       setGetVerificateurTechnic(allVerified);
     }
-  }, [missionListe, id]);
+  }, [missionListe]);
   // //validation technique
   const handleValidationTechnique = async (
     responsableId: string,
@@ -279,25 +268,23 @@ const PrevisionDeMission = () => {
                 Etat des rapports
               </Typography>
               <Stack spacing={2}>
-                <div>
-                  <FormLabel>Elaboré par : </FormLabel>
-                  {missionListe
-                    .filter((f: any) => f.id === id)
-                    .map((row: MissionItem) => (
-                      <span key={row.id!}>
-                        {
-                          employees.find(
-                            (e: EmployeItem) => e.id === row.missionManagerId
-                          )?.name as string
-                        }{" "}
-                        {
-                          employees.find(
-                            (e: EmployeItem) => e.id === row.missionManagerId
-                          )?.surname as string
-                        }
-                      </span>
-                    ))}
-                </div>
+                <FormLabel>Elaboré par : </FormLabel>
+                {missionListe
+                  .filter((f: any) => f.id === id)
+                  .map((row: MissionItem) => (
+                    <span key={row.id!}>
+                      {
+                        employees.find(
+                          (e: EmployeItem) => e.id === row.missionManagerId
+                        )?.name as string
+                      }{" "}
+                      {
+                        employees.find(
+                          (e: EmployeItem) => e.id === row.missionManagerId
+                        )?.surname as string
+                      }
+                    </span>
+                  ))}
                 <Divider />
                 <Typography>
                   <span> Vérifié financièrement par : </span>
@@ -393,11 +380,12 @@ const PrevisionDeMission = () => {
                             startIcon={<DoneIcon />}
                             onClick={() =>
                               handleValidationTechnique(
-                                id,
                                 row.verifyTechnic!,
+                                id,
                                 !getVerificateurTechnic
                               )
                             }
+                            disabled={getVerificateurFinance === false}
                           >
                             Vérifier Techniquement
                           </Button>
