@@ -72,12 +72,12 @@ const PrevisionDeMission = () => {
       id == validatePrevue.map((m: any) => m.missionId!)
     ) {
       const verifyed = validatePrevue.map((v: any) => v.validation as boolean);
-      const allVerified = verifyed.map((v: boolean) => v);
+      const allVerified = verifyed.every((v: boolean) => v);
 
-      setGetVerificateurFinance(allVerified[0]);
+      setGetVerificateurFinance(allVerified);
     }
   }, [missionListe]);
-  console.log(getVerificateurFinance);
+  // console.log(getVerificateurFinance);
 
   const handleValidationFinance = async (
     responsableId: string,
