@@ -48,7 +48,7 @@ const PrevisionDeMission = () => {
   const { employees } = useAppSelector((state) => state.employe);
   const fetchGrants = useFetchGrants();
   const [getVerificateurFinance, setGetVerificateurFinance] =
-    React.useState(false);
+    React.useState<boolean>(false);
   const [getVerificateurTechnic, setGetVerificateurTechnic] =
     React.useState<boolean>(false);
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
@@ -73,10 +73,11 @@ const PrevisionDeMission = () => {
     ) {
       const verifyed = validatePrevue.map((v: any) => v.validation as boolean);
       const allVerified = verifyed.map((v: boolean) => v);
-      console.log(allVerified);
+
       setGetVerificateurFinance(allVerified[0]);
     }
   }, [missionListe]);
+  console.log(getVerificateurFinance);
 
   const handleValidationFinance = async (
     responsableId: string,
