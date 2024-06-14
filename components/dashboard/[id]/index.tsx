@@ -78,7 +78,7 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
             marginLeft={4}
             marginTop={2}
           >
-            Budget engagé
+            Liste détaillée du budget engagé
           </Typography>
           <IconButton onClick={handleClose}>
             <Close />

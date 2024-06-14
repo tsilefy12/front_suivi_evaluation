@@ -1,6 +1,6 @@
 const menu = [
   {
-    name: "Dashboard",
+    name: " Budget engagé",
     link: "/",
     icon: "dashboardIcon",
     items: [],

@@ -3,10 +3,6 @@ import {
   Button,
   Container,
   Dialog,
-  FormControl,
-  Link,
-  Modal,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -15,16 +11,17 @@ import {
   Typography,
 } from "@mui/material";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 import Head from "next/head";
+import Add from "@mui/icons-material/Add";
 import BackOfficeLayout from "../../layouts/backOffice";
 import useBasePath from "../../hooks/useBasePath";
 import { BodySection } from "../gereRapportDeMission/GereRapportDeMission";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import useFetchBudgetEngaged from "../budgetEngage/hooks/useFetchBudgetEngaged";
-import { useDispatch } from "react-redux";
 import { getGrantEncoursList } from "../../redux/features/grantEncours";
 import { getBudgetLineList } from "../../redux/features/budgetLine";
-import { useRouter } from "next/router";
 import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 import useFetchReliquatGrant from "../reliquetGrant/hooks/useFetchEliquatGrant";
 import useFetchBudgetInitial from "../budgetInitial/hooks/useFetchBudgetInitial";
@@ -33,7 +30,6 @@ import DetailsDashboard from "./[id]";
 import useFetchCaisee from "../reliquetGrant/hooks/useFetchCaisse";
 import formatMontant from "../../hooks/format";
 import { SectionNavigation } from "../GrantsEnCours/ListGrants";
-import Add from "@mui/icons-material/Add";
 import useFetchPeriode from "../periode/hooks/useFetchPeriode";
 
 const Dashboard: NextPage = () => {
@@ -52,7 +48,7 @@ const Dashboard: NextPage = () => {
   const [open, setOpen] = React.useState(false);
   const [getId, setGetId] = React.useState("");
 
-  const { caisselist } = useAppSelector((state: any) => state.reliquatGrant);
+  const { caisselist } = useAppSelector((state) => state.reliquatGrant);
   const fetchCaisse = useFetchCaisee();
   const fetchPeriode = useFetchPeriode();
   const { periodelist } = useAppSelector((state) => state.periode);
@@ -67,19 +63,21 @@ const Dashboard: NextPage = () => {
     fetchPeriode();
   }, [router.query]);
 
-  const handleClick = (id: any) => {
+  const handleClick = (id: string) => {
     setOpen(true);
     setGetId(id);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
+
   const [soldeBankByGrant, setSoldeBankByGrant] = React.useState<{
     [key: string]: number;
   }>({});
   const soldeByGrant: { [key: string]: { debit: number; credit: number } } = {};
+
   React.useEffect(() => {
-    // Accumulate debits and credits from journalBanks by grant
     grantEncoursList.forEach((grant) => {
       if (Array.isArray(grant.journalBanks)) {
         grant.journalBanks.forEach((jb) => {
@@ -98,34 +96,26 @@ const Dashboard: NextPage = () => {
     });
   }, [grantEncoursList]);
 
-  const finalSoldeByGrant: { [grantId: string]: number } = {};
-
   React.useEffect(() => {
+    const finalSoldeByGrant: { [grantId: string]: number } = {};
+
     Object.keys(soldeByGrant).forEach((grantId) => {
       const bankSolde =
         soldeByGrant[grantId].debit - soldeByGrant[grantId].credit;
-
-      console.log("ciasse :", caisselist);
       const caisseSolde = caisselist
         .filter((f: any) => f.grantId == grantId)
-        .reduce((sum: any, m: any) => sum + (m.debit - m.credit), 0);
-
+        .reduce((sum: any, m: any) => sum + (m.debit! - m.credit!), 0);
       finalSoldeByGrant[grantId] = bankSolde + caisseSolde;
     });
 
     setSoldeBankByGrant(finalSoldeByGrant);
-  }, [caisselist]);
+  }, [caisselist, soldeByGrant]);
 
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
-        {/* <Link href="/missions/add">
-                    <Button color="primary" variant="contained" startIcon={<Add />}>
-                        Créer
-                    </Button>
-                </Link> */}
         <Typography variant="h4" color="GrayText">
-          Dashboard
+          Budget engagé
         </Typography>
       </SectionNavigation>
       <BodySection>
@@ -150,35 +140,16 @@ const Dashboard: NextPage = () => {
                   periodelist.some((p) => p.grant === g.id)
               )
               .map((row) => (
-                <TableRow key={row.id!}>
+                <TableRow key={row.id}>
                   <TableCell>{row.code}</TableCell>
                   <TableCell align="center">
-                    {/* {formatMontant(
-                      budgetInitialList
-                        .filter((bi: any) => bi.grant === row.id)
-                        .reduce((acc, curr) => {
-                          const totalLigneBudgetaire = (
-                            curr.ligneBudgetaire ?? []
-                          ).reduce((ligneAcc, ligneId) => {
-                            const budgetLine = budgetLineList.find(
-                              (bl: any) => bl.id === ligneId
-                            );
-                            return (
-                              ligneAcc + (budgetLine ? budgetLine.amount! : 0)
-                            );
-                          }, 0);
-                          return acc + totalLigneBudgetaire;
-                        }, 0)
-                    )} */}
-                    {formatMontant(Number(row.amountMGA!))}
+                    {formatMontant(Number(row.amountMGA))}
                   </TableCell>
                   <TableCell align="center">
                     {formatMontant(
-                      Number(
-                        periodelist
-                          .filter((f: any) => f.grant == row.id)
-                          .reduce((acc, curr) => acc + curr.montant!, 0)
-                      )
+                      periodelist
+                        .filter((f) => f.grant === row.id)
+                        .reduce((acc, curr) => acc + curr.montant!, 0)
                     )}
                   </TableCell>
                   <TableCell align="center">
@@ -188,20 +159,18 @@ const Dashboard: NextPage = () => {
                         : 0
                     )}
                   </TableCell>
-
                   <TableCell align="center">
                     {formatMontant(
-                      row.amountMGA ??
-                        0 -
-                          (soldeBankByGrant[row.id!] !== undefined
-                            ? soldeBankByGrant[row.id!]
-                            : 0)
+                      Number(row.amountMGA ?? 0) -
+                        (soldeBankByGrant[row.id!] !== undefined
+                          ? soldeBankByGrant[row.id!]
+                          : 0)
                     )}
                   </TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"
-                      color="accent"
+                      color="primary"
                       startIcon={<Add />}
                       onClick={() => handleClick(row.id!)}
                     >
@@ -225,6 +194,7 @@ const Dashboard: NextPage = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
+            top: -10,
           },
         }}
       >
