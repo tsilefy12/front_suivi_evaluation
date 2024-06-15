@@ -31,10 +31,7 @@ import useFetchCaisee from "../reliquetGrant/hooks/useFetchCaisse";
 import formatMontant from "../../hooks/format";
 import { SectionNavigation } from "../GrantsEnCours/ListGrants";
 import useFetchPeriode from "../periode/hooks/useFetchPeriode";
-
-interface SoldeByGrant {
-  [key: string]: { debit: number; credit: number };
-}
+import { GrantEncoursItem } from "../../redux/features/grantEncours/grantEncours.interface";
 
 const Dashboard: NextPage = () => {
   const basePath = useBasePath();
@@ -76,40 +73,25 @@ const Dashboard: NextPage = () => {
     setOpen(false);
   };
 
-  const soldeByGrant: SoldeByGrant = useMemo(() => {
-    const result: SoldeByGrant = {};
-    grantEncoursList.forEach((grant) => {
-      if (Array.isArray(grant.journalBanks)) {
-        grant.journalBanks.forEach((jb) => {
-          const grantId = grant.id;
-          if (!result[grantId!]) {
-            result[grantId!] = { debit: 0, credit: 0 };
-          }
-          if (jb.debit !== undefined) {
-            result[grantId!].debit += jb.debit;
-          }
-          if (jb.credit !== undefined) {
-            result[grantId!].credit += jb.credit;
-          }
-        });
-      }
-    });
-    return result;
+  const soldeByGrant = useMemo(() => {
+    if (!grantEncoursList) return 0;
+
+    return grantEncoursList
+      .filter((g) => g.id)
+      .flatMap((m) => m.journalBanks)
+      .reduce(
+        (acc, curr) => acc + ((curr?.debit || 0) - (curr?.credit || 0)),
+        0
+      );
   }, [grantEncoursList]);
 
-  const soldeBankByGrant = useMemo(() => {
-    const finalSoldeByGrant: { [grantId: string]: number } = {};
+  const budgetEngaged = useMemo(() => {
+    if (!caisselist) return soldeByGrant;
 
-    Object.keys(soldeByGrant).forEach((grantId) => {
-      const bankSolde =
-        soldeByGrant[grantId].debit - soldeByGrant[grantId].credit;
-      const caisseSolde = caisselist
-        .filter((f: any) => f.grantId === grantId)
-        .reduce((sum: any, m: any) => sum + (m.debit! - m.credit!), 0);
-      finalSoldeByGrant[grantId] = bankSolde + caisseSolde;
-    });
-
-    return finalSoldeByGrant;
+    const caisseSolde = caisselist
+      .filter((f: any) => f.grantId)
+      .reduce((sum: any, m: any) => sum + (m.debit! - m.credit!), 0);
+    return soldeByGrant + caisseSolde;
   }, [caisselist, soldeByGrant]);
 
   return (
@@ -154,19 +136,10 @@ const Dashboard: NextPage = () => {
                     )}
                   </TableCell>
                   <TableCell align="center">
-                    {formatMontant(
-                      soldeBankByGrant[row.id!] !== undefined
-                        ? soldeBankByGrant[row.id!]
-                        : 0
-                    )}
+                    {formatMontant(Number(budgetEngaged))}
                   </TableCell>
                   <TableCell align="center">
-                    {formatMontant(
-                      Number(row.amountMGA ?? 0) -
-                        (soldeBankByGrant[row.id!] !== undefined
-                          ? soldeBankByGrant[row.id!]
-                          : 0)
-                    )}
+                    {formatMontant(Number(row.amountMGA! - budgetEngaged))}
                   </TableCell>
                   <TableCell>
                     <Button
