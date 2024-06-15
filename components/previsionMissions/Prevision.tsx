@@ -10,7 +10,7 @@ import {
   Grid,
 } from "@mui/material";
 import Container from "@mui/material/Container";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import KeyValue from "../shared/keyValue";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -51,18 +51,21 @@ const PrevisionDeMission = () => {
     React.useState<boolean>(false);
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
   React.useEffect(() => {
-    if (id) {
-      fetchEmployes();
-      fetchMission();
-      fetchGrants();
-    }
-  }, [id]);
+    fetchGrants();
+    fetchEmployes();
+  }, []);
 
   React.useEffect(() => {
+    fetchMission();
     const mission = missionListe.find((m: MissionItem) => m.id === id);
 
     if (mission) {
-      const { verifyFinancial, validationPrevision } = mission;
+      const {
+        verifyFinancial,
+        verifyTechnic,
+        validateFinancial,
+        validationPrevision,
+      } = mission;
 
       const isFinanceVerified = validationPrevision!.some(
         (v: any) =>
@@ -72,10 +75,30 @@ const PrevisionDeMission = () => {
       );
 
       setGetVerificateurFinance(isFinanceVerified);
+
+      //technic
+
+      const isTechnicVerified = validationPrevision!.some(
+        (v: any) =>
+          v.responsableId === verifyTechnic &&
+          v.missionId === id &&
+          v.validation === true
+      );
+
+      setGetVerificateurTechnic(isTechnicVerified);
+
+      //paye
+
+      const isFinanceValidated = validationPrevision!.some(
+        (v: any) =>
+          v.responsableId === validateFinancial &&
+          v.missionId === id &&
+          v.validation === true
+      );
+
+      setGetValidatePay(isFinanceValidated);
     }
   }, [missionListe, id]);
-
-  // console.log("verify financial:", getVerificateurFinance);
 
   const handleValidationFinance = async (
     responsableId: string,
@@ -102,22 +125,6 @@ const PrevisionDeMission = () => {
     }
   };
 
-  React.useEffect(() => {
-    const mission = missionListe.find((m: MissionItem) => m.id === id);
-
-    if (mission) {
-      const { verifyTechnic, validationPrevision } = mission;
-
-      const isFinanceVerified = validationPrevision!.some(
-        (v: any) =>
-          v.responsableId === verifyTechnic &&
-          v.missionId === id &&
-          v.validation === true
-      );
-
-      setGetVerificateurTechnic(isFinanceVerified);
-    }
-  }, [missionListe, id]);
   // //validation technique
   const handleValidationTechnique = async (
     responsableId: string,
@@ -143,23 +150,6 @@ const PrevisionDeMission = () => {
   };
 
   //validation paiement
-
-  React.useEffect(() => {
-    const mission = missionListe.find((m: MissionItem) => m.id === id);
-
-    if (mission) {
-      const { validateFinancial, validationPrevision } = mission;
-
-      const isFinanceVerified = validationPrevision!.some(
-        (v: any) =>
-          v.responsableId === validateFinancial &&
-          v.missionId === id &&
-          v.validation === true
-      );
-
-      setGetValidatePay(isFinanceVerified);
-    }
-  }, [missionListe, id]);
   const handleValidationPaye = async (
     responsableId: string,
     missionId: string,
