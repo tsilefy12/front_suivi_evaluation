@@ -65,27 +65,47 @@ const GereRapportDeMission = () => {
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
 
   useEffect(() => {
-    if (id) {
-      fetchEmployes();
-      fetchMission();
-      fetchGrants();
-    }
-  }, [id]);
+    fetchEmployes();
+    fetchGrants();
+  }, []);
 
   React.useEffect(() => {
-    const mission = missionListe.find((m: MissionItem) => m.id === id);
+    fetchMission();
+    const mission = missionListe.find((m: MissionItem) => m.id == id);
 
     if (mission) {
-      const { verifyFinancial, validationRapport } = mission;
+      const {
+        verifyFinancial,
+        validationRapport,
+        verifyTechnic,
+        validateFinancial,
+      } = mission;
 
       const isFinanceVerified = validationRapport!.some(
         (v: any) =>
-          v.responsableId === verifyFinancial &&
-          v.missionId === id &&
-          v.validation === true
+          v.responsableId == verifyFinancial &&
+          v.missionId == id &&
+          v.validation == true
       );
 
       setGetVerificateurFinance(isFinanceVerified);
+      const isTechnicVerified = validationRapport!.some(
+        (v: any) =>
+          v.responsableId == verifyTechnic &&
+          v.missionId == id &&
+          v.validation == true
+      );
+
+      setGetVerificateurTechnic(isTechnicVerified);
+
+      const isFinanceValidated = validationRapport!.some(
+        (v: any) =>
+          v.responsableId === validateFinancial &&
+          v.missionId == id &&
+          v.validation == true
+      );
+
+      setGetValidatePay(isFinanceValidated);
     }
   }, [missionListe, id]);
   const handleValidationFinance = async (
@@ -112,23 +132,6 @@ const GereRapportDeMission = () => {
     }
   };
 
-  //verifier technic
-  React.useEffect(() => {
-    const mission = missionListe.find((m: MissionItem) => m.id === id);
-
-    if (mission) {
-      const { verifyTechnic, validationRapport } = mission;
-
-      const isFinanceVerified = validationRapport!.some(
-        (v: any) =>
-          v.responsableId === verifyTechnic &&
-          v.missionId === id &&
-          v.validation === true
-      );
-
-      setGetVerificateurTechnic(isFinanceVerified);
-    }
-  }, [missionListe, id]);
   const handleValidationTechnique = async (
     responsableId: string,
     missionId: string,
@@ -153,23 +156,6 @@ const GereRapportDeMission = () => {
   };
 
   //paye
-
-  React.useEffect(() => {
-    const mission = missionListe.find((m: MissionItem) => m.id === id);
-
-    if (mission) {
-      const { validateFinancial, validationRapport } = mission;
-
-      const isFinanceVerified = validationRapport!.some(
-        (v: any) =>
-          v.responsableId === validateFinancial &&
-          v.missionId === id &&
-          v.validation === true
-      );
-
-      setGetValidatePay(isFinanceVerified);
-    }
-  }, [missionListe, id]);
   const handleValidationPaye = async (
     responsableId: string,
     missionId: string,
@@ -322,7 +308,7 @@ const GereRapportDeMission = () => {
                               handleValidationFinance(
                                 row.verifyFinancial!,
                                 id,
-                                !getVerificateurFinance
+                                getVerificateurFinance == true ? false : true
                               )
                             }
                           >
@@ -386,10 +372,10 @@ const GereRapportDeMission = () => {
                               handleValidationTechnique(
                                 row.verifyTechnic!,
                                 id,
-                                !getVerificateurTechnic
+                                getVerificateurTechnic == true ? false : true
                               )
                             }
-                            disabled={getVerificateurFinance === false}
+                            disabled={getVerificateurFinance == false}
                           >
                             Vérifier Techniquement
                           </Button>
@@ -445,7 +431,7 @@ const GereRapportDeMission = () => {
                               handleValidationPaye(
                                 row.validateFinancial!,
                                 id,
-                                getValidatePaye ? false : true
+                                getValidatePaye == true ? false : true
                               )
                             }
                             disabled={getVerificateurTechnic == false}
