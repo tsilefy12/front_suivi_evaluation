@@ -57,7 +57,7 @@ const PrevisionDeMission = () => {
 
   React.useEffect(() => {
     fetchMission();
-    const mission = missionListe.find((m: MissionItem) => m.id === id);
+    const mission = missionListe.find((m: MissionItem) => m.id == id);
 
     if (mission) {
       const {
@@ -69,9 +69,9 @@ const PrevisionDeMission = () => {
 
       const isFinanceVerified = validationPrevision!.some(
         (v: any) =>
-          v.responsableId === verifyFinancial &&
-          v.missionId === id &&
-          v.validation === true
+          v.responsableId == verifyFinancial &&
+          v.missionId == id &&
+          v.validation == true
       );
 
       setGetVerificateurFinance(isFinanceVerified);
@@ -80,9 +80,9 @@ const PrevisionDeMission = () => {
 
       const isTechnicVerified = validationPrevision!.some(
         (v: any) =>
-          v.responsableId === verifyTechnic &&
-          v.missionId === id &&
-          v.validation === true
+          v.responsableId == verifyTechnic &&
+          v.missionId == id &&
+          v.validation == true
       );
 
       setGetVerificateurTechnic(isTechnicVerified);
@@ -91,9 +91,9 @@ const PrevisionDeMission = () => {
 
       const isFinanceValidated = validationPrevision!.some(
         (v: any) =>
-          v.responsableId === validateFinancial &&
-          v.missionId === id &&
-          v.validation === true
+          v.responsableId == validateFinancial &&
+          v.missionId == id &&
+          v.validation == true
       );
 
       setGetValidatePay(isFinanceValidated);
@@ -302,7 +302,7 @@ const PrevisionDeMission = () => {
                               handleValidationFinance(
                                 row.verifyFinancial!,
                                 id,
-                                !getVerificateurFinance
+                                getVerificateurFinance == true ? false : true
                               )
                             }
                           >
@@ -311,7 +311,7 @@ const PrevisionDeMission = () => {
                           <FormLabel
                             sx={{
                               display:
-                                getVerificateurFinance === true
+                                getVerificateurFinance == true
                                   ? "none"
                                   : "block",
                             }}
@@ -321,7 +321,7 @@ const PrevisionDeMission = () => {
                           <FormLabel
                             sx={{
                               display:
-                                getVerificateurFinance === true
+                                getVerificateurFinance == true
                                   ? "block"
                                   : "none",
                             }}
@@ -336,7 +336,7 @@ const PrevisionDeMission = () => {
                 <Typography>
                   <span>Vérifié techniquement par : </span>
                   {missionListe
-                    .filter((f: MissionItem) => f.id === id)
+                    .filter((f: MissionItem) => f.id == id)
                     .map((row: MissionItem) => (
                       <Stack
                         direction={"column"}
@@ -366,28 +366,30 @@ const PrevisionDeMission = () => {
                               handleValidationTechnique(
                                 row.verifyTechnic!,
                                 id,
-                                !getVerificateurTechnic
+                                getVerificateurTechnic == true ? false : true
                               )
                             }
-                            disabled={getVerificateurFinance === false}
+                            disabled={getVerificateurFinance == false}
                           >
                             Vérifier Techniquement
                           </Button>
                           <FormLabel
                             sx={{
-                              display: getVerificateurTechnic
-                                ? "none"
-                                : "block",
+                              display:
+                                getVerificateurTechnic == true
+                                  ? "none"
+                                  : "block",
                             }}
-                            disabled={getVerificateurFinance === false}
+                            disabled={getVerificateurFinance == false}
                           >
                             <Close color="error" />
                           </FormLabel>
                           <FormLabel
                             sx={{
-                              display: getVerificateurTechnic
-                                ? "block"
-                                : "none",
+                              display:
+                                getVerificateurTechnic == true
+                                  ? "block"
+                                  : "none",
                             }}
                           >
                             <Check color="primary" />
@@ -423,23 +425,25 @@ const PrevisionDeMission = () => {
                               handleValidationPaye(
                                 row.validateFinancial!,
                                 id,
-                                !getValidatePaye
+                                getValidatePaye == true ? false : true
                               )
                             }
-                            disabled={getVerificateurTechnic === false}
+                            disabled={getVerificateurTechnic == false}
                           >
                             Vérsé
                           </Button>
                           <FormLabel
                             sx={{
-                              display: getValidatePaye ? "none" : "block",
+                              display:
+                                getValidatePaye == true ? "none" : "block",
                             }}
                           >
                             <Close color="error" />
                           </FormLabel>
                           <FormLabel
                             sx={{
-                              display: getValidatePaye ? "block" : "none",
+                              display:
+                                getValidatePaye == true ? "block" : "none",
                             }}
                           >
                             <Check color="primary" />
