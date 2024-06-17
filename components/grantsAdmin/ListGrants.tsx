@@ -1,34 +1,40 @@
-import { Button, Container, IconButton, Stack, styled, Typography } from "@mui/material";
-import Link from "next/link";
-import React from "react";
+import Add from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import {
+  Button,
+  Container,
+  IconButton,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Data, { Order } from "./table/type-variable";
-import { rows } from "./table/constante";
-import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
-import EnhancedTableHead from "./table/EnhancedTableHead";
-import { getComparator, stableSort } from "./table/function";
-import Add from "@mui/icons-material/Add";
+import { useConfirm } from "material-ui-confirm";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import { usePermitted } from "../../config/middleware";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../config/table.config";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import useFetchGrantAdmin from "./hooks/useFetchGrantAdmin";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { useRouter } from "next/router";
-import { useConfirm } from "material-ui-confirm";
-import { GrantAdminItem } from "../../redux/features/grantAdmin/grantAdmin.interface";
 import { deleteGrantAdmin } from "../../redux/features/grantAdmin";
+import { GrantAdminItem } from "../../redux/features/grantAdmin/grantAdmin.interface";
 import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
+import useFetchGrantAdmin from "./hooks/useFetchGrantAdmin";
+import { rows } from "./table/constante";
+import EnhancedTableHead from "./table/EnhancedTableHead";
+import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
+import Data, { Order } from "./table/type-variable";
 
 const ListGrantsAdmin = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -43,12 +49,13 @@ const ListGrantsAdmin = () => {
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) =>state.grantEncours)
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const validate = usePermitted();
 
   React.useEffect(() => {
     fetchGrantAdmin();
     fetchGrants();
-  }, [router.query])
+  }, [router.query]);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -109,7 +116,6 @@ const ListGrantsAdmin = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer grant admin",
@@ -127,7 +133,7 @@ const ListGrantsAdmin = () => {
         await dispatch(deleteGrantAdmin({ id }));
         fetchGrantAdmin();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const handleClickEdit = async (id: any) => {
@@ -136,16 +142,18 @@ const ListGrantsAdmin = () => {
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Link href="/grants/grantsAdmin/add">
-          <Button variant="contained" startIcon={<Add />}>
-            Créer
-          </Button>
-        </Link>
+        {validate("Suivi grant admin", "C") && (
+          <Link href="/grants/grantsAdmin/add">
+            <Button variant="contained" startIcon={<Add />}>
+              Créer
+            </Button>
+          </Link>
+        )}
         <Typography variant="h4" color="GrayText">
           GRANT Admin
         </Typography>
       </SectionNavigation>
-      <SectionTable sx={{ backgroundColor: '#fff' }}>
+      <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
             <EnhancedTableToolbar numSelected={selected.length} />
@@ -180,19 +188,20 @@ const ListGrantsAdmin = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                        // selected={isItemSelected}
+                          // selected={isItemSelected}
                         >
-                          <TableCell
-                            padding="checkbox"
-                          >
-                          </TableCell>
+                          <TableCell padding="checkbox"></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             padding="none"
                           >
-                            {grantEncoursList.find((e:any)=> e.id === row?.grant)?.code}
+                            {
+                              grantEncoursList.find(
+                                (e: any) => e.id === row?.grant
+                              )?.code
+                            }
                           </TableCell>
                           <TableCell align="right">{row.bailleur}</TableCell>
                           <TableCell align="right">
@@ -207,27 +216,31 @@ const ListGrantsAdmin = () => {
                                 >
                                   <VisibilityIcon />
                                 </IconButton> */}
-                              <IconButton
-                                color="primary"
-                                aria-label="Modifier"
-                                component="span"
-                                size="small"
-                                onClick={() => {
-                                  handleClickEdit(row.id);
-                                }}
-                              >
-                                <EditIcon />
-                              </IconButton>
-                              <IconButton
-                                color="warning"
-                                aria-label="Supprimer"
-                                component="span"
-                                onClick={() => {
-                                  handleClickDelete(row.id);
-                                }}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
+                              {validate("Suivi grant admin", "U") && (
+                                <IconButton
+                                  color="primary"
+                                  aria-label="Modifier"
+                                  component="span"
+                                  size="small"
+                                  onClick={() => {
+                                    handleClickEdit(row.id);
+                                  }}
+                                >
+                                  <EditIcon />
+                                </IconButton>
+                              )}
+                              {validate("Suivi grant admin", "D") && (
+                                <IconButton
+                                  color="warning"
+                                  aria-label="Supprimer"
+                                  component="span"
+                                  onClick={() => {
+                                    handleClickDelete(row.id);
+                                  }}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              )}
                             </BtnActionContainer>
                           </TableCell>
                         </TableRow>

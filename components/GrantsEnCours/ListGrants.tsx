@@ -6,42 +6,39 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import Link from "next/link";
-import React from "react";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import Link from "next/link";
+import React from "react";
 import Data, { Order } from "./table/type-variable";
 // import { rows } from "./table/constante";
 import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
-import EnhancedTableHead from "./table/EnhancedTableHead";
 // import { getComparator, stableSort } from "./table/function";
+import { Edit } from "@mui/icons-material";
 import Add from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useConfirm } from "material-ui-confirm";
+import { useRouter } from "next/router";
+import { usePermitted } from "../../config/middleware";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../config/table.config";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { GrantEncoursItem } from "../../redux/features/grantEncours/grantEncours.interface";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import useFetchGrants from "./hooks/getGrants";
-import { useRouter } from "next/router";
-import TransportEquipmentTableHeader from "./organisme/table/TransportEquipmentTableHeader";
-import useFetchProject from "./hooks/getProject";
-import useFetchEmploys from "./hooks/getResponsable";
-import { Edit } from "@mui/icons-material";
-import { useConfirm } from "material-ui-confirm";
-import { deletePostAnalytic } from "../../redux/features/postAnalytique";
 import { deleteGrantEncours } from "../../redux/features/grantEncours";
-import useFetchReliquatGrant from "../reliquetGrant/hooks/useFetchEliquatGrant";
+import { GrantEncoursItem } from "../../redux/features/grantEncours/grantEncours.interface";
 import useFetchEmployes from "../home/Missions/hooks/useFetchEmployees";
+import useFetchReliquatGrant from "../reliquetGrant/hooks/useFetchEliquatGrant";
+import useFetchGrants from "./hooks/getGrants";
+import useFetchProject from "./hooks/getProject";
+import TransportEquipmentTableHeader from "./organisme/table/TransportEquipmentTableHeader";
 
 const ListGrantsEnCours = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -71,6 +68,7 @@ const ListGrantsEnCours = () => {
     fetchtReliquatGrant();
     fetchEpmloyes();
   }, [router.query]);
+  const validate = usePermitted();
 
   const handleClickEdit = async (id: any) => {
     router.push(`/grants/grantsEnCours/${id}/edit`);
@@ -113,11 +111,13 @@ const ListGrantsEnCours = () => {
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Link href="/grants/grantsEnCours/add">
-          <Button variant="contained" startIcon={<Add />}>
-            Créer
-          </Button>
-        </Link>
+        {validate("Suivi grant en cours", "C") && (
+          <Link href="/grants/grantsEnCours/add">
+            <Button variant="contained" startIcon={<Add />}>
+              Créer
+            </Button>
+          </Link>
+        )}
         <Typography variant="h5" color="GrayText">
           GRANTS en Cours
         </Typography>
@@ -210,17 +210,19 @@ const ListGrantsEnCours = () => {
                                   L. Budg
                                 </Button>
                               </Link>
-                              <Link
-                                href={`/grants/reliquatGrants/${row.id}/add`}
-                              >
-                                <Button
-                                  variant="outlined"
-                                  color="accent"
-                                  startIcon={<Add />}
+                              {validate("Suivi reliquat grant", "C") && (
+                                <Link
+                                  href={`/grants/reliquatGrants/${row.id}/add`}
                                 >
-                                  Reliquat
-                                </Button>
-                              </Link>
+                                  <Button
+                                    variant="outlined"
+                                    color="accent"
+                                    startIcon={<Add />}
+                                  >
+                                    Reliquat
+                                  </Button>
+                                </Link>
+                              )}
                               <Link
                                 href={`/grants/grantsEnCours/${row.id}/detail`}
                               >
@@ -232,25 +234,29 @@ const ListGrantsEnCours = () => {
                                   <VisibilityIcon />
                                 </IconButton>
                               </Link>
-                              <IconButton
-                                color="primary"
-                                aria-label="Modifier"
-                                component="span"
-                                size="small"
-                                onClick={() => {
-                                  handleClickEdit(row.id);
-                                }}
-                              >
-                                <Edit />
-                              </IconButton>
-                              <IconButton
-                                color="warning"
-                                aria-label="Supprimer"
-                                component="span"
-                                onClick={() => handleClickDelete(row.id)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
+                              {validate("Suivi grant en cours", "U") && (
+                                <IconButton
+                                  color="primary"
+                                  aria-label="Modifier"
+                                  component="span"
+                                  size="small"
+                                  onClick={() => {
+                                    handleClickEdit(row.id);
+                                  }}
+                                >
+                                  <Edit />
+                                </IconButton>
+                              )}
+                              {validate("Suivi grant en cours", "D") && (
+                                <IconButton
+                                  color="warning"
+                                  aria-label="Supprimer"
+                                  component="span"
+                                  onClick={() => handleClickDelete(row.id)}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              )}
                             </BtnActionContainer>
                           </TableCell>
                         </TableRow>

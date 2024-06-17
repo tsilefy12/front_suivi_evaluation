@@ -1,52 +1,43 @@
+import { ArrowBack } from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
   Container,
   FormControl,
   IconButton,
-  MenuItem,
   Stack,
   styled,
   TableHead,
-  TextField,
   Typography,
 } from "@mui/material";
-import Link from "next/link";
-import React from "react";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Data, { Order } from "../../table/type-variable";
-import { rows } from "../../table/constante";
-import EnhancedTableToolbar from "../../table/EnhancedTableToolbar";
-import EnhancedTableHead from "../../table/EnhancedTableHead";
-import { getComparator, stableSort } from "../../table/function";
-import Add from "@mui/icons-material/Add";
+import { useConfirm } from "material-ui-confirm";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import { usePermitted } from "../../../../config/middleware";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../../../config/table.config";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Visibility from "@mui/icons-material/Visibility";
-import useFetchBudgetInitial from "../../hooks/useFetchBudgetInitial";
-import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
-import { useRouter } from "next/router";
-import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
-import useFetchBudgetLine from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
-import { BudgetInitialItem } from "../../../../redux/features/budgetInitial/budgetInitial.interface";
-import { useConfirm } from "material-ui-confirm";
-import { deleteBudgetInitial } from "../../../../redux/features/budgetInitial";
-import useFetchPeriode from "../../../periode/hooks/useFetchPeriode";
 import formatMontant from "../../../../hooks/format";
-import AddNewBudgetInitial from "../../add/AddNewBudgetInitial";
-import { GrantMonitoringItem } from "../../../../redux/features/grantMonitoring/grantMonitoring.interface";
-import { ArrowBack } from "@mui/icons-material";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
+import { deleteBudgetInitial } from "../../../../redux/features/budgetInitial";
+import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
+import useFetchPeriode from "../../../periode/hooks/useFetchPeriode";
+import useFetchBudgetLine from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
+import useFetchBudgetInitial from "../../hooks/useFetchBudgetInitial";
+import { rows } from "../../table/constante";
+import EnhancedTableToolbar from "../../table/EnhancedTableToolbar";
+import Data, { Order } from "../../table/type-variable";
 
 const ListBudgetInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -67,6 +58,7 @@ const ListBudgetInitial = () => {
   const confirm = useConfirm();
   const fetchPeriode = useFetchPeriode();
   const { periodelist } = useAppSelector((state) => state.periode);
+  const validate = usePermitted();
 
   React.useEffect(() => {
     fetchBudgetInitial();
@@ -277,22 +269,26 @@ const ListBudgetInitial = () => {
                             direction="row"
                             justifyContent="left"
                           >
-                            <IconButton
-                              color="primary"
-                              aria-label="Modifier"
-                              component="span"
-                              onClick={() => handleClickEdit(budget.id!)}
-                            >
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton
-                              color="warning"
-                              aria-label="Supprimer"
-                              component="span"
-                              onClick={() => handleClickDelete(budget.id!)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
+                            {validate("Suivi période", "U") && (
+                              <IconButton
+                                color="primary"
+                                aria-label="Modifier"
+                                component="span"
+                                onClick={() => handleClickEdit(budget.id!)}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                            )}
+                            {validate("Suivi période", "D") && (
+                              <IconButton
+                                color="warning"
+                                aria-label="Supprimer"
+                                component="span"
+                                onClick={() => handleClickDelete(budget.id!)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            )}
                           </BtnActionContainer>
                         </TableCell>
                       </TableRow>

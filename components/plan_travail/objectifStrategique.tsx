@@ -1,8 +1,11 @@
+import Add from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import SettingsIcon from "@mui/icons-material/Settings";
 import {
   Box,
   Button,
-  Card,
-  CardHeader,
   Container,
   Dialog,
   Divider,
@@ -16,38 +19,42 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useConfirm } from "material-ui-confirm";
 import Link from "next/link";
-import React, { Fragment } from "react";
-import Add from "@mui/icons-material/Add";
-import SettingsIcon from "@mui/icons-material/Settings";
+import { useRouter } from "next/router";
+import React from "react";
+import { usePermitted } from "../../config/middleware";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import {
+  deletePlanTravail,
+  editPlanTravail,
+} from "../../redux/features/planTravail";
+import { PlanTravailItem } from "../../redux/features/planTravail/planTravail.interface";
 import ObjectifStrategiqueForm from "./add/addPlanTravail";
 import useFetchPlanTravaile from "./hooks/useFetchPlanTravail";
-import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { useConfirm } from "material-ui-confirm";
-import { useRouter } from "next/router";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { deletePlanTravail, editPlanTravail } from "../../redux/features/planTravail";
-import { PlanTravailItem } from "../../redux/features/planTravail/planTravail.interface";
-import { idID } from "@mui/material/locale";
 
-const ListObjectifStrategique = ({ row, handleClickEdit, handleClickDelete }: any) => {
+const ListObjectifStrategique = ({
+  row,
+  handleClickEdit,
+  handleClickDelete,
+}: any) => {
   const [open, setOpen] = React.useState(false);
   const fetchPlanTravail = useFetchPlanTravaile();
-  const { planTravaillist, isEditing } = useAppSelector(state => state.planTravail)
-  const confirm = useConfirm()
-  const dispatch = useAppDispatch()
-  const router = useRouter()
+  const { planTravaillist, isEditing } = useAppSelector(
+    (state) => state.planTravail
+  );
+  const confirm = useConfirm();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const [getId, setGetId] = React.useState("");
 
   React.useEffect(() => {
     fetchPlanTravail();
-  }, [router.query])
+  }, [router.query]);
   //  console.log("liste :", planTravaillist)
   const handleClickOpen = () => {
     setOpen(true);
-    setGetId("")
+    setGetId("");
   };
 
   const handleClose = () => {
@@ -71,13 +78,14 @@ const ListObjectifStrategique = ({ row, handleClickEdit, handleClickDelete }: an
         await dispatch(deletePlanTravail({ id }));
         fetchPlanTravail();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
-  const [getSelectId, setGetSelectedId]: any = React.useState(null)
+  const validate = usePermitted();
+  const [getSelectId, setGetSelectedId]: any = React.useState(null);
   handleClickEdit = async (id: any) => {
-    dispatch(editPlanTravail({ id }))
-    handleClickOpen()
-    setAnchorEl(id)
+    dispatch(editPlanTravail({ id }));
+    handleClickOpen();
+    setAnchorEl(id);
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -94,14 +102,16 @@ const ListObjectifStrategique = ({ row, handleClickEdit, handleClickDelete }: an
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
-        <Button
-          onClick={handleClickOpen}
-          color="primary"
-          variant="contained"
-          startIcon={<Add />}
-        >
-          Créer
-        </Button>
+        {validate("Suivi pta", "C") && (
+          <Button
+            onClick={handleClickOpen}
+            color="primary"
+            variant="contained"
+            startIcon={<Add />}
+          >
+            Créer
+          </Button>
+        )}
         <Typography variant="h4" color="GrayText">
           plan de travail
         </Typography>
@@ -109,7 +119,7 @@ const ListObjectifStrategique = ({ row, handleClickEdit, handleClickDelete }: an
       <Divider />
       <SectionDetails>
         <Stack
-          direction={{ xs: 'column', sm: 'row' }}
+          direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 1, sm: 2, md: 4 }}
           sx={{
             flex: "1 1 100%",
@@ -147,7 +157,11 @@ const ListObjectifStrategique = ({ row, handleClickEdit, handleClickDelete }: an
                     {row.title} : {row.description}
                   </Typography>
                   <Typography>
-                    <IconButton onClick={(event: any) =>handleMenuClick(event.currentTarget, row.id!)}>
+                    <IconButton
+                      onClick={(event: any) =>
+                        handleMenuClick(event.currentTarget, row.id!)
+                      }
+                    >
                       <MoreVertIcon />
                     </IconButton>
                     <Menu
@@ -155,24 +169,28 @@ const ListObjectifStrategique = ({ row, handleClickEdit, handleClickDelete }: an
                       open={Boolean(anchorEl)}
                       onClose={handleMenuClose}
                     >
-                      <MenuItem
-                        onClick={() => {
-                          handleClickEdit(getSelectId);
-                          handleMenuClose();
-                        }}
-                      >
-                        <EditIcon color="primary" />
-                        Modifier
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          handleClickDelete(getSelectId);
-                          handleMenuClose();
-                        }}
-                      >
-                        <DeleteIcon color="warning" />
-                        Supprimer
-                      </MenuItem>
+                      {validate("Suivi pta", "U") && (
+                        <MenuItem
+                          onClick={() => {
+                            handleClickEdit(getSelectId);
+                            handleMenuClose();
+                          }}
+                        >
+                          <EditIcon color="primary" />
+                          Modifier
+                        </MenuItem>
+                      )}
+                      {validate("Suivi pta", "D") && (
+                        <MenuItem
+                          onClick={() => {
+                            handleClickDelete(getSelectId);
+                            handleMenuClose();
+                          }}
+                        >
+                          <DeleteIcon color="warning" />
+                          Supprimer
+                        </MenuItem>
+                      )}
                     </Menu>
                   </Typography>
                 </Stack>
@@ -206,7 +224,7 @@ const ListObjectifStrategique = ({ row, handleClickEdit, handleClickDelete }: an
 
 export default ListObjectifStrategique;
 
-export const SectionNavigation = styled(Stack)(({ }) => ({}));
+export const SectionNavigation = styled(Stack)(({}) => ({}));
 const SectionDetails = styled(Box)(({ theme }) => ({
   padding: "16px 32px",
   marginBlock: 15,

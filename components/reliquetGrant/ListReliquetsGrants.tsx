@@ -1,3 +1,6 @@
+import Add from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
   Container,
@@ -6,40 +9,33 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import Link from "next/link";
-import React from "react";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Data, { Order } from "./table/type-variable";
-import { rows } from "./table/constante";
-import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
-import EnhancedTableHead from "./table/EnhancedTableHead";
-import { getComparator, stableSort } from "./table/function";
-import Add from "@mui/icons-material/Add";
+import { useConfirm } from "material-ui-confirm";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import { usePermitted } from "../../config/middleware";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../config/table.config";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import useFetchReliquatGrant from "./hooks/useFetchEliquatGrant";
-import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
-import { useRouter } from "next/router";
-import { useConfirm } from "material-ui-confirm";
-import { ReliquatGrantsItem } from "../../redux/features/reliquatGrants/reliquatGrants.interface";
-import {
-  deleteReliquatGrant,
-  editReliquatGrant,
-} from "../../redux/features/reliquatGrants";
 import formatMontant from "../../hooks/format";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { deleteReliquatGrant } from "../../redux/features/reliquatGrants";
+import { ReliquatGrantsItem } from "../../redux/features/reliquatGrants/reliquatGrants.interface";
+import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
+import useFetchReliquatGrant from "./hooks/useFetchEliquatGrant";
+import { rows } from "./table/constante";
+import EnhancedTableHead from "./table/EnhancedTableHead";
+import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
+import Data, { Order } from "./table/type-variable";
 
 const ListReliquetsGrants = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -103,7 +99,7 @@ const ListReliquetsGrants = () => {
 
     setSelected(newSelected);
   };
-
+  const validate = usePermitted();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -151,11 +147,13 @@ const ListReliquetsGrants = () => {
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Link href={`/grants/reliquatGrants/${id != "" ? id : ""}/add`}>
-          <Button variant="contained" startIcon={<Add />}>
-            Créer
-          </Button>
-        </Link>
+        {validate("Suivi reliquat grant", "C") && (
+          <Link href={`/grants/reliquatGrants/${id != "" ? id : ""}/add`}>
+            <Button variant="contained" startIcon={<Add />}>
+              Créer
+            </Button>
+          </Link>
+        )}
         <Typography variant="h4" color="GrayText">
           Réliquats GRANTS
         </Typography>
@@ -234,22 +232,26 @@ const ListReliquetsGrants = () => {
                                 >
                                   <VisibilityIcon />
                                 </IconButton> */}
-                              <IconButton
-                                color="primary"
-                                aria-label="Modifier"
-                                component="span"
-                                onClick={() => handleClickEdit(row.id)}
-                              >
-                                <EditIcon />
-                              </IconButton>
-                              <IconButton
-                                color="warning"
-                                aria-label="Supprimer"
-                                component="span"
-                                onClick={() => handleClickDelete(row.id)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
+                              {validate("Suivi reliquat grant", "U") && (
+                                <IconButton
+                                  color="primary"
+                                  aria-label="Modifier"
+                                  component="span"
+                                  onClick={() => handleClickEdit(row.id)}
+                                >
+                                  <EditIcon />
+                                </IconButton>
+                              )}
+                              {validate("Suivi reliquat grant", "D") && (
+                                <IconButton
+                                  color="warning"
+                                  aria-label="Supprimer"
+                                  component="span"
+                                  onClick={() => handleClickDelete(row.id)}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              )}
                             </BtnActionContainer>
                           </TableCell>
                         </TableRow>
