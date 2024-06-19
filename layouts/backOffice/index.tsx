@@ -23,7 +23,7 @@ const BackOfficeLayout = ({ children }: any) => {
 
   useEffect(() => {
     if (user) {
-      if (user.groups?.some((g) => g.service.name === "Suivi")) {
+      if (!user.groups?.some((g) => g.service.name === "Suivi")) {
         window.location.href = "/";
       }
       verifyPermission("/", "Suivi dashboard");
