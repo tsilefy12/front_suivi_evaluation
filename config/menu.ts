@@ -113,9 +113,7 @@ function allMenu() {
       if (
         user?.groups?.some((g) => g.service.name === "Suivi configurations")
       ) {
-        temp
-          .find((t) => t.id === 3)
-          .items.push({
+        temp.push({
             id: 4,
             name: "Configurations",
             link: "/configurations",
