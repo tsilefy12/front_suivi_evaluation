@@ -72,7 +72,7 @@ const ListResumeDepense = () => {
     fetchResumeDepensePrevue();
     fetchGrantList();
     fetchligneBudgetaire();
-  }, [router.query]);
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);

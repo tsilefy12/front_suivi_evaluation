@@ -144,19 +144,8 @@ const ListMissions = () => {
   };
 
   useEffect(() => {
-    // const now = new Date();
-    // const nextRun = new Date(
-    //   now.getFullYear(),
-    //   now.getMonth(),
-    //   now.getDate() + 1,
-    //   0,
-    //   0,
-    //   0
-    // ); // Next midnight
-    // const timeUntilNextRun = nextRun.getTime() - now.getTime();
-
     updateMissions();
-  }, [missionListe]);
+  }, []);
 
   const addComplete = (idMission: string) => {
     setGetMissionId(idMission);

@@ -69,7 +69,7 @@ const ListProgrammes = () => {
     fetchPlannedActivityListe();
     fetchLivrable();
     fetchActivityRapport();
-  }, [router.query]);
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);

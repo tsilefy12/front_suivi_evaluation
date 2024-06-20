@@ -57,7 +57,7 @@ const ListProgrammes = () => {
     fetchActivitePrevue();
     fetchLivrable();
     fetchEmployes();
-  }, [router.query]);
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);

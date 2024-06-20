@@ -64,7 +64,7 @@ const ListcalculCarburantRapport = () => {
   React.useEffect(() => {
     fetchcalculCarburantRapport();
     fetchVehicleList();
-  }, [router.query]);
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);

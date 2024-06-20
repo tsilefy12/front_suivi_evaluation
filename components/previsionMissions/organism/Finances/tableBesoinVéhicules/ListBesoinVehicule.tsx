@@ -69,7 +69,7 @@ const ListBesoinVehicule = () => {
     fetchBesoinEnVehicule();
     fetchVehicule();
     fetchEmployes();
-  }, [router.query]);
+  }, []);
   const handleClickOpen = () => {
     setOpen(true);
   };

@@ -12,16 +12,9 @@ import useFetchEmploys from "../GrantsEnCours/hooks/getResponsable";
 
 const Detail = () => {
   const router = useRouter();
-  const fetchMission = useFetchMissionListe();
   const { missionListe } = useAppSelector((state: any) => state.mission);
   const { id }: any = router.query;
-  const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
-
-  React.useEffect(() => {
-    fetchMission();
-    fetchEmployes();
-  }, [router.query]);
 
   // console.log("list mission :", missionListe)
   return (

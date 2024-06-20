@@ -68,7 +68,7 @@ const ListbesoinVehiculeRapportRapport = () => {
   React.useEffect(() => {
     fetchBesoinEnVehiculeRapportList();
     fetchEmployes();
-  }, [router.query]);
+  }, []);
   const handleClickOpen = () => {
     setOpen(true);
   };

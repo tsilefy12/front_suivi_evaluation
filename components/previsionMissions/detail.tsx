@@ -12,16 +12,11 @@ import { EmployeItem } from "../../redux/features/employe/employeSlice.interface
 
 const Detail = () => {
   const router = useRouter();
-  const fetchMission = useFetchMissionListe();
+  // const fetchMission = useFetchMissionListe();
   const { missionListe } = useAppSelector((state: any) => state.mission);
   const { id }: any = router.query;
-  const fetchEmployes = useFetchEmploys();
+  // const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
-
-  React.useEffect(() => {
-    fetchMission();
-    fetchEmployes();
-  }, [router.query]);
 
   // console.log("list mission :", missionListe)
   return (

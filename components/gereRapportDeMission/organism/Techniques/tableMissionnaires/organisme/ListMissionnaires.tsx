@@ -56,7 +56,7 @@ const ListMissionnairesRapport = () => {
   React.useEffect(() => {
     fetchMissionaryRapportList();
     fetchEmployes();
-  }, [router.query]);
+  }, []);
   //  console.log("missionaire :", missionaireslist)
   const handleClickDelete = async (id: any) => {
     confirm({

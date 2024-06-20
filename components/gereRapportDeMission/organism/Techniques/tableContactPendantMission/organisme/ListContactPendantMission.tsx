@@ -43,7 +43,7 @@ const ListContactPendantMission = () => {
 
   React.useEffect(() => {
     fetchContactMissionRapport();
-  }, [router.query]);
+  }, []);
   //  console.log("lis :", [missionRapportlist])
   const handleClickOpen = () => {
     setOpen(true);

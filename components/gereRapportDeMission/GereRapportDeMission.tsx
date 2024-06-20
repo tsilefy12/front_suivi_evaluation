@@ -64,12 +64,9 @@ const GereRapportDeMission = () => {
     React.useState<boolean>(false);
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     fetchEmployes();
     fetchGrants();
-  }, []);
-
-  React.useEffect(() => {
     fetchMission();
     const mission = missionListe.find((m: MissionItem) => m.id == id);
 
@@ -107,7 +104,7 @@ const GereRapportDeMission = () => {
 
       setGetValidatePay(isFinanceValidated);
     }
-  }, [missionListe, id]);
+  }, []);
   const handleValidationFinance = async (
     responsableId: string,
     missionId: string,
@@ -120,7 +117,7 @@ const GereRapportDeMission = () => {
         missionId,
         validation,
       });
-
+      setGetVerificateurFinance(validation);
       dispatch(
         enqueueSnackbar({
           message: "Rapport validé avec succès",
@@ -143,7 +140,7 @@ const GereRapportDeMission = () => {
         missionId,
         validation,
       });
-
+      setGetVerificateurTechnic(validation);
       dispatch(
         enqueueSnackbar({
           message: " Rapport validé avec succès",
@@ -167,6 +164,7 @@ const GereRapportDeMission = () => {
         missionId,
         validation,
       });
+      setGetValidatePay(validation);
       dispatch(
         enqueueSnackbar({
           message: " Rapport validé avec succès",

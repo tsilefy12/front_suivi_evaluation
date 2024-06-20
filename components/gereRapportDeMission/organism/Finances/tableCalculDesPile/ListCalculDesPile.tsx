@@ -58,7 +58,7 @@ const ListCalculDesPilesRapport = () => {
 
   React.useEffect(() => {
     fetchCalculPileRapport();
-  }, [router.query]);
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);

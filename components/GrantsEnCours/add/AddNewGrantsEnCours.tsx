@@ -130,7 +130,7 @@ const AddNewGrantsEnCours = () => {
             : {
                 code: isEditing ? grantEncour?.code : "",
                 // postAnalyticId: isEditing ? grantEncour?.postAnalyticId : null,
-                projectId: isEditing ? grantEncour?.projectId : 0,
+                projectId: isEditing ? grantEncour?.projectId : "",
                 // bankId: isEditing ? grantEncour?.bankId : null,
                 // titleFr: isEditing ? grantEncour?.titleFr : "",
                 // titleEn: isEditing ? grantEncour?.titleEn : "",
@@ -241,16 +241,27 @@ const AddNewGrantsEnCours = () => {
                     variant="outlined"
                     name="code"
                   />
-                  <OSSelectField
+                  {/* <OSSelectField
                     fullWidth
                     id="outlined-basic"
                     label="Projet"
                     variant="outlined"
                     name="projectId"
                     options={projectList}
+                    type="string"
                     dataKey="title"
                     valueKey="id"
-                    type="number"
+                  /> */}
+                  <OSSelectField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Projet"
+                    variant="outlined"
+                    name="projectId"
+                    type="string"
+                    options={projectList}
+                    dataKey="title"
+                    valueKey="id"
                   />
                   <OSTextField
                     fullWidth

@@ -50,12 +50,10 @@ const PrevisionDeMission = () => {
   const [getVerificateurTechnic, setGetVerificateurTechnic] =
     React.useState<boolean>(false);
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
-  React.useEffect(() => {
+
+  useEffect(() => {
     fetchGrants();
     fetchEmployes();
-  }, []);
-
-  React.useEffect(() => {
     fetchMission();
     const mission = missionListe.find((m: MissionItem) => m.id == id);
 
@@ -98,7 +96,7 @@ const PrevisionDeMission = () => {
 
       setGetValidatePay(isFinanceValidated);
     }
-  }, [missionListe, id]);
+  }, []);
 
   const handleValidationFinance = async (
     responsableId: string,

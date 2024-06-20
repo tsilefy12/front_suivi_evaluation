@@ -41,9 +41,6 @@ const ListMissionnaires = () => {
   const [open, setOpen] = React.useState(false);
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
-  React.useEffect(() => {
-    fetchEmployes();
-  });
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -59,7 +56,8 @@ const ListMissionnaires = () => {
 
   React.useEffect(() => {
     fetchMissionaryList();
-  }, [router.query]);
+    fetchEmployes();
+  }, []);
 
   const handleClickDelete = async (id: any) => {
     confirm({
