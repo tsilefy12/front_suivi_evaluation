@@ -17,7 +17,7 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { axios } from "../../axios";
 import { usePermitted } from "../../config/middleware";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
