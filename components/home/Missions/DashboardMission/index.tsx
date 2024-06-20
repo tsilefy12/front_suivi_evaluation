@@ -1,14 +1,8 @@
+import { Visibility } from "@mui/icons-material";
 import {
   Box,
   Button,
-  Card,
   Container,
-  Divider,
-  FormLabel,
-  Grid,
-  IconButton,
-  Menu,
-  MenuItem,
   Stack,
   styled,
   Table,
@@ -16,30 +10,27 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import Link from "next/link";
-import React, { useEffect } from "react";
-import Moment from "react-moment";
 import { useRouter } from "next/router";
+import React from "react";
+import Moment from "react-moment";
+import { usePermitted } from "../../../../config/middleware";
+import formatMontant from "../../../../hooks/format";
 import { useAppSelector } from "../../../../hooks/reduxHooks";
-import useFetchMissionListe from "../hooks/useFetchMissionListe";
-import { updateMission } from "../../../../redux/features/mission";
+import { EmployeItem } from "../../../../redux/features/employe/employeSlice.interface";
+import { GrantEncoursItem } from "../../../../redux/features/grantEncours/grantEncours.interface";
 import { MissionItem } from "../../../../redux/features/mission/mission.interface";
+import { MissionLocationItem } from "../../../../redux/features/missionLocation/missionLocationSlice.interface";
+import { PrevisionDepenseItem } from "../../../../redux/features/PrevisionDepense/previsionDepense.interface";
+import { RapportDepenseItem } from "../../../../redux/features/rapportDepense/rapportDepense.interface";
+import { ResumeDepensePrevueItem } from "../../../../redux/features/resumeDepensePrevue/reumeDepensePrevue.interface";
+import { UnCompleteTbbItem } from "../../../../redux/features/unCompleteTbb/unCompleteTbb.interface";
 import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
 import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
-import formatMontant from "../../../../hooks/format";
 import useFetchPrevisionDepenseList from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchPrevisionDepense";
-import { Visibility } from "@mui/icons-material";
-import { EmployeItem } from "../../../../redux/features/employe/employeSlice.interface";
-import { UnCompleteTbbItem } from "../../../../redux/features/unCompleteTbb/unCompleteTbb.interface";
-import { LieuxRapportItem } from "../../../../redux/features/lieuxRapport/lieuxRapport.interface";
-import { GrantEncoursItem } from "../../../../redux/features/grantEncours/grantEncours.interface";
-import { PrevisionDepenseItem } from "../../../../redux/features/PrevisionDepense/previsionDepense.interface";
-import { MissionLocationItem } from "../../../../redux/features/missionLocation/missionLocationSlice.interface";
-import { ResumeDepensePrevueItem } from "../../../../redux/features/resumeDepensePrevue/reumeDepensePrevue.interface";
-import { RapportDepenseItem } from "../../../../redux/features/rapportDepense/rapportDepense.interface";
+import useFetchMissionListe from "../hooks/useFetchMissionListe";
 const DashboardMission = () => {
   const router = useRouter();
   // const id: any = router.query;
@@ -50,6 +41,7 @@ const DashboardMission = () => {
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
   const fetchPrevisionDepense = useFetchPrevisionDepenseList();
+  const validate = usePermitted();
 
   React.useEffect(() => {
     fetchMissionListe();
@@ -83,11 +75,13 @@ const DashboardMission = () => {
             flexWrap={"wrap"}
             sx={{ paddingRight: 2 }}
           >
-            <Link href={"/missions/ListMission"}>
-              <Button color="primary" variant="contained">
-                Liste des missions
-              </Button>
-            </Link>
+            {validate("Suivi dashboard mission", "RA") && (
+              <Link href={"/missions/ListMission"}>
+                <Button color="primary" variant="contained">
+                  Liste des missions
+                </Button>
+              </Link>
+            )}
           </Stack>
         </Stack>
         <div style={{ overflow: "auto" }}>
@@ -582,15 +576,17 @@ const DashboardMission = () => {
                   </TableCell>
 
                   <TableCell>
-                    <Link href={`/missions/${row.id}/bilan`}>
-                      <Button
-                        color="accent"
-                        aria-label="Details"
-                        component="span"
-                      >
-                        <Visibility />
-                      </Button>
-                    </Link>
+                    {validate("Suivi liste mission", "RA") && (
+                      <Link href={`/missions/${row.id}/bilan`}>
+                        <Button
+                          color="accent"
+                          aria-label="Details"
+                          component="span"
+                        >
+                          <Visibility />
+                        </Button>
+                      </Link>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

@@ -1,22 +1,22 @@
-import React, { useEffect } from "react";
+import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
+import HomeWorkIcon from "@mui/icons-material/HomeWork";
+import { Badge, Link, Stack, styled, useTheme } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
-import { Badge, Link, Stack, styled, useTheme } from "@mui/material";
-import HomeWorkIcon from "@mui/icons-material/HomeWork";
-import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
-import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
+import Typography from "@mui/material/Typography";
+import { useRouter } from "next/router";
+import allMenu from "../../../config/menu";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
+import { logout } from "../../../redux/features/auth/authSlice";
 import {
+  ButtonProfile,
   OneButtonLink,
   OneButtonLinkWithItems,
-  ButtonProfile,
 } from "./ButtonNav";
-import { useRouter } from "next/router";
-import { logout } from "../../../redux/features/auth/authSlice";
 // import Link from "next/link";
 
 const NavbarBackOffice = ({ matches }: any) => {
@@ -24,7 +24,7 @@ const NavbarBackOffice = ({ matches }: any) => {
   /**
    * Take all menu lists in the redux store
    */
-  const navMenu = useAppSelector((state) => state.menu.value);
+  const navMenu = allMenu();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const handleClickLogout = () => {

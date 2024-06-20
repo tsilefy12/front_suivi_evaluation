@@ -1,7 +1,10 @@
+import Add from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   Box,
   Button,
-  Card,
   Container,
   Dialog,
   Divider,
@@ -12,20 +15,16 @@ import {
   MenuItem,
   Stack,
   styled,
-  TextField,
   Typography,
 } from "@mui/material";
-import Link from "next/link";
-import React, { useEffect } from "react";
-import Add from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Moment from "react-moment";
-import { useRouter } from "next/router";
 import { useConfirm } from "material-ui-confirm";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
+import Moment from "react-moment";
+import { usePermitted } from "../../../../config/middleware";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
-import useFetchMissionListe from "../hooks/useFetchMissionListe";
+import { EmployeItem } from "../../../../redux/features/employe/employeSlice.interface";
 import {
   deleteMission,
   editMission,
@@ -33,9 +32,9 @@ import {
 } from "../../../../redux/features/mission";
 import { MissionItem } from "../../../../redux/features/mission/mission.interface";
 import Recherche from "../../recherch";
-import useFetchEmployes from "../hooks/useFetchEmployees";
-import { EmployeItem } from "../../../../redux/features/employe/employeSlice.interface";
 import AddNewCompleted from "../addCompleted/AddNewCompleted";
+import useFetchEmployes from "../hooks/useFetchEmployees";
+import useFetchMissionListe from "../hooks/useFetchMissionListe";
 
 const ListMissions = () => {
   const router = useRouter();
@@ -47,6 +46,7 @@ const ListMissions = () => {
   const { employees } = useAppSelector((state) => state.employe);
   const [open, setOpen] = React.useState<boolean>(false);
   const [getMissionId, setGetMissionId] = React.useState<string>("");
+  const validate = usePermitted();
 
   useEffect(() => {
     fetchMissionListe();
@@ -157,11 +157,13 @@ const ListMissions = () => {
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
-        <Link href="/missions/add">
-          <Button color="primary" variant="contained" startIcon={<Add />}>
-            Créer
-          </Button>
-        </Link>
+        {validate("Suivi dashboard mission", "C") && (
+          <Link href="/missions/add">
+            <Button color="primary" variant="contained" startIcon={<Add />}>
+              Créer
+            </Button>
+          </Link>
+        )}
         <Typography variant="h4" color="GrayText">
           Missions
         </Typography>
@@ -214,24 +216,28 @@ const ListMissions = () => {
                       open={Boolean(anchorEl)}
                       onClose={handleClose}
                     >
-                      <MenuItem
-                        onClick={() => {
-                          handleClickEdit(getSelectId);
-                          handleClose();
-                        }}
-                      >
-                        <EditIcon color="primary" />
-                        Modifier
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          handleClickDelete(getSelectId);
-                          handleClose();
-                        }}
-                      >
-                        <DeleteIcon color="warning" />
-                        Supprimer
-                      </MenuItem>
+                      {validate("Suivi liste mission", "U") && (
+                        <MenuItem
+                          onClick={() => {
+                            handleClickEdit(getSelectId);
+                            handleClose();
+                          }}
+                        >
+                          <EditIcon color="primary" />
+                          Modifier
+                        </MenuItem>
+                      )}
+                      {validate("Suivi liste mission", "D") && (
+                        <MenuItem
+                          onClick={() => {
+                            handleClickDelete(getSelectId);
+                            handleClose();
+                          }}
+                        >
+                          <DeleteIcon color="warning" />
+                          Supprimer
+                        </MenuItem>
+                      )}
                     </Menu>
                   </div>
                 </CardHeader>
@@ -300,11 +306,15 @@ const ListMissions = () => {
                     key={mission.id!}
                   >
                     <Stack direction={"row"} gap={2}>
-                      <Link href={`/missions/${mission.id}/previsionDeMission`}>
-                        <Button variant="text" color="info">
-                          Prévision
-                        </Button>
-                      </Link>
+                      {validate("Suivi liste mission", "RA") && (
+                        <Link
+                          href={`/missions/${mission.id}/previsionDeMission`}
+                        >
+                          <Button variant="text" color="info">
+                            Prévision
+                          </Button>
+                        </Link>
+                      )}
                       <Button
                         variant="text"
                         color="info"
@@ -315,16 +325,20 @@ const ListMissions = () => {
                     </Stack>
                   </Stack>
                   <Stack direction={"row"} gap={2}>
-                    <Link href={`/missions/${mission.id!}/gereRapport`}>
-                      <Button variant="text" color="info">
-                        Rapport
-                      </Button>
-                    </Link>
-                    <Link href={`/missions/${mission.id!}/bilan`}>
-                      <Button variant="text" color="info">
-                        Bilan
-                      </Button>
-                    </Link>
+                    {validate("Suivi liste mission", "RA") && (
+                      <Link href={`/missions/${mission.id!}/gereRapport`}>
+                        <Button variant="text" color="info">
+                          Rapport
+                        </Button>
+                      </Link>
+                    )}
+                    {validate("Suivi liste mission", "RA") && (
+                      <Link href={`/missions/${mission.id!}/bilan`}>
+                        <Button variant="text" color="info">
+                          Bilan
+                        </Button>
+                      </Link>
+                    )}
                   </Stack>
                 </CardFooter>
               </LinkContainer>

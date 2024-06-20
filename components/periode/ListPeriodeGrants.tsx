@@ -1,3 +1,7 @@
+import { Edit } from "@mui/icons-material";
+import Add from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
   Button,
   Container,
@@ -7,40 +11,32 @@ import {
   TableHead,
   Typography,
 } from "@mui/material";
-import Link from "next/link";
-import React, { Fragment } from "react";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Data, { Order } from "./table/type-variable";
-import { rows } from "./table/constante";
-import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
-import EnhancedTableHead from "./table/EnhancedTableHead";
-import { getComparator, stableSort } from "./table/function";
-import Add from "@mui/icons-material/Add";
+import { useConfirm } from "material-ui-confirm";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import Moment from "react-moment";
+import { usePermitted } from "../../config/middleware";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../config/table.config";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useRouter } from "next/router";
-import useFetchPeriode from "./hooks/useFetchPeriode";
+import formatMontant from "../../hooks/format";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import Moment from "react-moment";
-import { useConfirm } from "material-ui-confirm";
 import { deletePeriode } from "../../redux/features/periode";
 import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
-import { PeriodeItem } from "../../redux/features/periode/periode.interface";
-import formatMontant from "../../hooks/format";
-import { Edit } from "@mui/icons-material";
-import AddNewBudgetInitial from "../budgetInitial/add/AddNewBudgetInitial";
+import useFetchPeriode from "./hooks/useFetchPeriode";
+import { rows } from "./table/constante";
+import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
+import Data, { Order } from "./table/type-variable";
 
 const ListBudgetsInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -56,6 +52,7 @@ const ListBudgetsInitial = () => {
   const confirm = useConfirm();
   const fetchGrants = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const validate = usePermitted();
 
   React.useEffect(() => {
     fetchPeriode();
@@ -159,11 +156,13 @@ const ListBudgetsInitial = () => {
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Link href="/grants/periode/add">
-          <Button variant="contained" startIcon={<Add />}>
-            Créer
-          </Button>
-        </Link>
+        {validate("Suivi période", "C") && (
+          <Link href="/grants/periode/add">
+            <Button variant="contained" startIcon={<Add />}>
+              Créer
+            </Button>
+          </Link>
+        )}
         <Typography variant="h4" color="GrayText">
           Periode GRANTS
         </Typography>
@@ -212,36 +211,42 @@ const ListBudgetsInitial = () => {
                         </TableCell>
                         <TableCell>
                           <BtnActionContainer direction="row" gap={1}>
-                            <Link
-                              href={`/grants/budgetInitial/${budget.id}/add`}
-                            >
-                              <Button
-                                variant="outlined"
-                                color="accent"
-                                startIcon={<Add />}
+                            {validate("Suivi période", "C") && (
+                              <Link
+                                href={`/grants/budgetInitial/${budget.id}/add`}
                               >
-                                Budget initial
-                              </Button>
-                            </Link>
-                            <IconButton
-                              color="primary"
-                              aria-label="Modifier"
-                              component="span"
-                              size="small"
-                              onClick={() => {
-                                handleClickEdit(budget.id);
-                              }}
-                            >
-                              <Edit />
-                            </IconButton>
-                            <IconButton
-                              color="warning"
-                              aria-label="Supprimer"
-                              component="span"
-                              onClick={() => handleClickDelete(budget.id)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
+                                <Button
+                                  variant="outlined"
+                                  color="accent"
+                                  startIcon={<Add />}
+                                >
+                                  Budget initial
+                                </Button>
+                              </Link>
+                            )}
+                            {validate("Suivi période", "U") && (
+                              <IconButton
+                                color="primary"
+                                aria-label="Modifier"
+                                component="span"
+                                size="small"
+                                onClick={() => {
+                                  handleClickEdit(budget.id);
+                                }}
+                              >
+                                <Edit />
+                              </IconButton>
+                            )}
+                            {validate("Suivi période", "D") && (
+                              <IconButton
+                                color="warning"
+                                aria-label="Supprimer"
+                                component="span"
+                                onClick={() => handleClickDelete(budget.id)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            )}
                           </BtnActionContainer>
                         </TableCell>
                         {index === 0 && (
