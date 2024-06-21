@@ -6,27 +6,30 @@ import { editTacheEtObjectifs } from "../../../../../../redux/features/tachesEtO
 import AddNewTacheEtObjectifs from "../../add/AddNewTacheEtObjectifs";
 
 const EditTacheCle = () => {
-    const router = useRouter();
-    const id = router.query.idT
-    
-    const dispatch = useAppDispatch();
- 
-    useEffect(() => {
-        if (id) {
-            getTacheCle(id as string);
-        }
-    }, [router.query]);
+  const router = useRouter();
+  const { id } = router.query;
 
-    const getTacheCle = async (id: string) => {
-        await dispatch(editTacheEtObjectifs({ id , args:{
-            include : {
-                objectifAnnuel : true
-            }
-        }}));
-    };
-    return (
-        <AddNewTacheEtObjectifs></AddNewTacheEtObjectifs>
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (id) {
+      getTacheCle(id as string);
+    }
+  }, [router.query]);
+
+  const getTacheCle = async (id: string) => {
+    await dispatch(
+      editTacheEtObjectifs({
+        id,
+        args: {
+          include: {
+            objectifAnnuel: true,
+          },
+        },
+      })
     );
-}
+  };
+  return <AddNewTacheEtObjectifs></AddNewTacheEtObjectifs>;
+};
 
 export default EditTacheCle;

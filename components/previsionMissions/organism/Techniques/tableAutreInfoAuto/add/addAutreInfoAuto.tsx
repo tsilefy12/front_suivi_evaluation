@@ -11,7 +11,7 @@ import {
   RadioGroup,
   styled,
   TextField,
-  Button
+  Button,
 } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -57,8 +57,8 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
       } else {
         await dispatch(createVehicle(values));
       }
-      fetchVehicleList()
-      handleClose()
+      fetchVehicleList();
+      handleClose();
     } catch (error) {
       console.log("error", error);
     }
@@ -71,12 +71,16 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
           isEditing
             ? vehicle
             : {
-              insuranceVehicle: isEditing ? vehicle?.insuranceVehicle : "",
-              technicalVisitVehicle: isEditing ? vehicle?.technicalVisitVehicle : "OUI",
-              vehicleType: isEditing ? vehicle?.vehicleType : "OTHER",
-              safetyBeltVehicle: isEditing ? vehicle?.safetyBeltVehicle: true,
-              // missionId: isEditing ? vehicle?.missionId: id,
-            }
+                insuranceVehicle: isEditing ? vehicle?.insuranceVehicle : "",
+                technicalVisitVehicle: isEditing
+                  ? vehicle?.technicalVisitVehicle
+                  : "OUI",
+                vehicleType: isEditing ? vehicle?.vehicleType : "OTHER",
+                safetyBeltVehicle: isEditing
+                  ? vehicle?.safetyBeltVehicle
+                  : true,
+                // missionId: isEditing ? vehicle?.missionId: id,
+              }
         }
         validationSchema={Yup.object({
           vehicleType: Yup.string()
@@ -97,11 +101,10 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
               <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
                 <SectionNavigation>
                   <DialogTitle>
-                    {isEditing ? "Modifier" : "Formulaire"} Information
-                    importante ( vehicule )
+                    {isEditing ? "Modifier" : "Formulaire"} d'information
+                    importante ( véhicule )
                   </DialogTitle>
                   <DialogContent>
-
                     <FormContainer spacing={2} mt={2}>
                       <OSTextField
                         fullWidth
@@ -111,10 +114,21 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
                         inputProps={{ autoComplete: "off" }}
                       />
                       <FormControlLabel
-                        control={<Switch defaultChecked={formikProps.values.technicalVisitVehicle=="OUI"} />}
+                        control={
+                          <Switch
+                            defaultChecked={
+                              formikProps.values.technicalVisitVehicle == "OUI"
+                            }
+                          />
+                        }
                         label="Visite technique"
                         name="technicalVisitVehicle"
-                        onChange={(e,c) =>formikProps.setFieldValue("technicalVisitVehicle", c ? "OUI": "NON")}
+                        onChange={(e, c) =>
+                          formikProps.setFieldValue(
+                            "technicalVisitVehicle",
+                            c ? "OUI" : "NON"
+                          )
+                        }
                       />
                       <FormControl>
                         <Field as={RadioGroup} row name="OperationType">
@@ -133,7 +147,7 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
                           <FormControlLabel
                             value="PRIVATE"
                             control={<Radio />}
-                            label="Voiture privé"
+                            label="Voiture privée"
                             name="vehicleType"
                           />
                         </Field>
@@ -142,7 +156,9 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
                         control={<Switch defaultChecked />}
                         label="Ceinture de sécurité"
                         name="safetyBeltVehicle"
-                        onChange={(e,c) =>formikProps.setFieldValue("safetyBeltVehicle", c)}
+                        onChange={(e, c) =>
+                          formikProps.setFieldValue("safetyBeltVehicle", c)
+                        }
                       />
                     </FormContainer>
                   </DialogContent>
@@ -167,7 +183,6 @@ const AddAutreInfoAuto = ({ handleClose }: any) => {
                     >
                       Enregistrer
                     </Button>
-
                   </DialogActions>
                 </SectionNavigation>
               </Container>

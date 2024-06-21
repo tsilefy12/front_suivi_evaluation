@@ -105,18 +105,22 @@ const AddNewReliquatsGrants = () => {
           isEditing
             ? reliquatGrant
             : {
-                grant: isEditing ? reliquatGrant?.grant : "",
-                soldeCaisse: isEditing ? reliquatGrant?.soldeCaisse : "",
-                soldeBank: isEditing ? reliquatGrant?.soldeBank : "",
+                grant: isEditing ? reliquatGrant?.grant : id,
+                soldeCaisse: isEditing
+                  ? reliquatGrant?.soldeCaisse
+                  : soldeCaisses,
+                soldeBank: isEditing
+                  ? reliquatGrant?.soldeBank
+                  : soldeBankByGrant,
                 // montantTotal: isEditing ? reliquatGrant?.montantTotal : "",
               }
         }
-        validationSchema={Yup.object({
-          grant: Yup.number().required("Champ obligatoire"),
-          soldeCaisse: Yup.number().required("Champ obligatoire"),
-          soldeBank: Yup.number().required("Champ obligatoire"),
-          montantTotal: Yup.number().required("Champ obligatoire"),
-        })}
+        // validationSchema={Yup.object({
+        //   grant: Yup.number().required("Champ obligatoire"),
+        //   soldeCaisse: Yup.number().required("Champ obligatoire"),
+        //   soldeBank: Yup.number().required("Champ obligatoire"),
+        //   montantTotal: Yup.number().required("Champ obligatoire"),
+        // })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
           action.resetForm();
@@ -167,7 +171,7 @@ const AddNewReliquatsGrants = () => {
                       Annuler
                     </Button>
                   </Stack>
-                  <Typography variant="h5">Créer Réliquats Grants</Typography>
+                  <Typography variant="h5">Créer reliquats grants</Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}
               </NavigationContainer>
@@ -217,7 +221,7 @@ const AddNewReliquatsGrants = () => {
                 <OSTextField
                   fullWidth
                   id="outlined-basic"
-                  label="Solde Banque"
+                  label="Solde banque"
                   variant="outlined"
                   name="soldeBank"
                   type="number"

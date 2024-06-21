@@ -5,8 +5,10 @@ import {
   Button,
   Container,
   IconButton,
+  InputAdornment,
   Stack,
   styled,
+  TextField,
   Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -20,7 +22,7 @@ import TableRow from "@mui/material/TableRow";
 import { useConfirm } from "material-ui-confirm";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { usePermitted } from "../../config/middleware";
 import {
   defaultLabelDisplayedRows,
@@ -35,6 +37,7 @@ import { rows } from "./table/constante";
 import EnhancedTableHead from "./table/EnhancedTableHead";
 import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
 import Data, { Order } from "./table/type-variable";
+import { Search } from "@mui/icons-material";
 
 const ListGrantsAdmin = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -55,8 +58,19 @@ const ListGrantsAdmin = () => {
   React.useEffect(() => {
     fetchGrantAdmin();
     fetchGrants();
-  }, [router.query]);
-
+  }, []);
+  const [dataFiltered, setDataFiltered] = React.useState<any[]>([]);
+  const [searchGrantAdmin, setSearchGrantAdmin] = React.useState<string>("");
+  useEffect(() => {
+    if (searchGrantAdmin === "") {
+      setDataFiltered(grantAdminlist);
+    } else {
+      const data = grantAdminlist.filter((e: any) =>
+        e.bailleur.toLowerCase().includes(searchGrantAdmin.toLowerCase())
+      );
+      setDataFiltered(data);
+    }
+  }, [searchGrantAdmin]);
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -150,13 +164,33 @@ const ListGrantsAdmin = () => {
           </Link>
         )}
         <Typography variant="h4" color="GrayText">
-          GRANT Admin
+          Grant admin
         </Typography>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
-            <EnhancedTableToolbar numSelected={selected.length} />
+            <Stack
+              direction={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
+              <EnhancedTableToolbar numSelected={selected.length} />
+              <TextField
+                sx={{ width: 150 }}
+                size="small"
+                label="Rechercher"
+                value={searchGrantAdmin}
+                onChange={(e) => setSearchGrantAdmin(e.target.value)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Search />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Stack>
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -174,7 +208,7 @@ const ListGrantsAdmin = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {grantAdminlist
+                  {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: GrantAdminItem, index) => {
                       // const isItemSelected = isSelected(row.id);

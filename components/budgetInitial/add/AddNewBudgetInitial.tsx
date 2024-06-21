@@ -297,8 +297,8 @@ const AddNewBudgetInitial = () => {
                   </Stack>
                   <Typography variant="h5">
                     {isEditing
-                      ? "Modifier Budget initial"
-                      : "Créer Budget initial"}
+                      ? "Modifier budget initial"
+                      : "Créer budget initial"}
                   </Typography>
                 </SectionNavigation>
               </NavigationContainer>

@@ -27,7 +27,7 @@ const Detail = () => {
           <Grid container key={index}>
             <Grid item xs={12} md={4}>
               <KeyValue
-                keyName="Ref mission"
+                keyName="Référence mission"
                 value={"MISSION_" + item.reference!}
               />
               <KeyValue
@@ -60,7 +60,13 @@ const Detail = () => {
                 .filter((mission: MissionItem) => mission.id === id)
                 .map((mission: MissionItem) => (
                   <div key={mission.id}>
-                    <span>Gestionnaire de budget :</span>
+                    <span>
+                      {mission.budgetManagerId &&
+                      mission.budgetManagerId.length > 1
+                        ? "Gestionnaires"
+                        : "Gestionnaire"}{" "}
+                      de budget :
+                    </span>
                     <FormLabel>
                       {employees
                         .filter((e: EmployeItem) =>

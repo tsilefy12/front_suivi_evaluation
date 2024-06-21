@@ -69,10 +69,10 @@ const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
           isEditing
             ? uncompleteTbb
             : {
-                retenuAdmin: isEditing ? uncompleteTbb?.retenuAdmin : "",
+                retenuAdmin: isEditing ? uncompleteTbb?.retenuAdmin : 0,
                 moyenRemise: isEditing ? uncompleteTbb?.moyenRemise : "",
-                depenseAdmin: isEditing ? uncompleteTbb?.depenseAdmin : "",
-                depensesResp: isEditing ? uncompleteTbb?.depensesResp : "",
+                depenseAdmin: isEditing ? uncompleteTbb?.depenseAdmin : 0,
+                depensesResp: isEditing ? uncompleteTbb?.depensesResp : 0,
                 ordreDeMission: isEditing ? uncompleteTbb?.ordreDeMission : "",
                 piecesClassees: isEditing ? uncompleteTbb?.piecesClassees : "",
                 remarqueAttente: isEditing
@@ -86,10 +86,10 @@ const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
               }
         }
         validationSchema={Yup.object({
-          retenuAdmin: Yup.string().required("Champ obligatoire"),
+          // retenuAdmin: Yup.string().required("Champ obligatoire"),
           moyenRemise: Yup.string().required("Champ obligatoire"),
-          depenseAdmin: Yup.number().required("Champ obligatoire"),
-          depensesResp: Yup.number().required("Champ obligatoire"),
+          // depenseAdmin: Yup.number().required("Champ obligatoire"),
+          // depensesResp: Yup.number().required("Champ obligatoire"),
           ordreDeMission: Yup.string().required("Champ obligatoire"),
           piecesClassees: Yup.string().required("Champ obligatoire"),
           remarqueAttente: Yup.string().required("Champ obligatoire"),
@@ -146,7 +146,7 @@ const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
                   <Stack direction={"row"} gap={2} paddingBottom={2}>
                     <OSTextField
                       id="outlined-basic"
-                      label="Retenu Admin"
+                      label="Retenu admin"
                       name="retenuAdmin"
                       type="number"
                       inputProps={{ autoComplete: "off", min: 0 }}
@@ -159,14 +159,14 @@ const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
                     />
                     <OSTextField
                       id="outlined-basic"
-                      label="Dépenses Admin"
+                      label="Dépense admin"
                       name="depenseAdmin"
                       type="number"
                       inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <OSTextField
                       id="outlined-basic"
-                      label="Dépenses Responsable"
+                      label="Dépense responsable"
                       name="depensesResp"
                       type="number"
                       inputProps={{ autoComplete: "off", min: 0 }}

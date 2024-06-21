@@ -15,6 +15,7 @@ import {
   MenuItem,
   Stack,
   styled,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
@@ -80,6 +81,7 @@ const ListMissions = () => {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [getSelectId, setGetSelectedId]: any = React.useState(null);
+  const [searchMission, setSearchMission] = React.useState("");
 
   const handleClick = (event: any, id: string) => {
     setAnchorEl(event);
@@ -89,7 +91,24 @@ const ListMissions = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const [dataMission, setDataMission] = React.useState<MissionItem[]>([]);
+  useEffect(() => {
+    if (searchMission) {
+      setDataMission(
+        missionListe.filter(
+          (m: MissionItem) =>
+            m.status!.toLowerCase().includes(searchMission.toLowerCase()) ||
+            m.reference!.toLowerCase().includes(searchMission.toLowerCase()) ||
+            m
+              .descriptionMission!.toLowerCase()
+              .includes(searchMission.toLowerCase()) ||
+            m.RefBudget!.toLowerCase().includes(searchMission.toLowerCase())
+        )
+      );
+    } else {
+      setDataMission(missionListe);
+    }
+  }, [searchMission]);
   const updateMissions = async () => {
     const currentMonth = new Date().getMonth() + 1;
     const currentDay = new Date().getDate();
@@ -180,13 +199,21 @@ const ListMissions = () => {
           }}
         >
           <Typography variant="h4" id="tableTitle" component="div">
-            Liste des Missions
+            Liste des missions
           </Typography>
-          <Recherche />
+          <TextField
+            variant="outlined"
+            id="search"
+            name="Search"
+            placeholder="Recherche"
+            size="small"
+            value={searchMission}
+            onChange={(e: any) => setSearchMission(e.target.value)}
+          />
         </Stack>
 
         <Grid container spacing={2} mt={-2}>
-          {missionListe.map((mission: MissionItem, index: any) => (
+          {dataMission.map((mission: MissionItem, index: any) => (
             <Grid key={mission.id!} item xs={12} md={6} lg={4}>
               <LinkContainer key={mission.id!}>
                 <CardHeader
@@ -244,9 +271,15 @@ const ListMissions = () => {
 
                 <CardBody>
                   <Stack spacing={1} key={mission.id!}>
-                    <FormLabel>
-                      Référence : {"MISSION_" + mission?.reference}
-                    </FormLabel>
+                    <Stack direction={"row"} gap={1}>
+                      <FormLabel>
+                        Référence : {"MISSION_" + mission?.reference}
+                      </FormLabel>
+                      <FormLabel>
+                        Référence budget : <span></span>
+                        {mission.RefBudget}
+                      </FormLabel>
+                    </Stack>
                     <FormLabel>
                       Responsable : <span></span>
                       {

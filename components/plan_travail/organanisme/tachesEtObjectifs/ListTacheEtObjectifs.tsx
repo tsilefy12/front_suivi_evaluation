@@ -41,7 +41,10 @@ import { useConfirm } from "material-ui-confirm";
 import useFetchProject from "../../../GrantsEnCours/hooks/getProject";
 import { useRouter } from "next/router";
 import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
-import { deleteTacheEtObjectifs, editTacheEtObjectifs } from "../../../../redux/features/tachesEtObjectifs";
+import {
+  deleteTacheEtObjectifs,
+  editTacheEtObjectifs,
+} from "../../../../redux/features/tachesEtObjectifs";
 import useFetchPlanTravaile from "../../hooks/useFetchPlanTravail";
 import { getPlanTravail } from "../../../../redux/features/planTravail";
 import Moment from "react-moment";
@@ -51,25 +54,31 @@ import { array } from "prop-types";
 
 const ListTacheEtObjectifs = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [selectYear, setSelectYear] = useState<number>(new Date().getFullYear())
+  const [selectYear, setSelectYear] = useState<number>(
+    new Date().getFullYear()
+  );
   const [orderBy, setOrderBy] = React.useState<keyof Data>("startDate");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const fetchTacheCle: any = useFetchTacheCle()
-  const { tacheEtObjectifList } = useAppSelector((state) => state.tacheEtObjectifs)
-  const dispatch = useAppDispatch()
-  const confirm = useConfirm()
-  const fetchProject = useFetchProject()
-  const router = useRouter()
-  const fetchEmployes = useFetchEmploys()
-  const { employees } = useAppSelector((state) => state.employe)
+  const fetchTacheCle: any = useFetchTacheCle();
+  const { tacheEtObjectifList } = useAppSelector(
+    (state) => state.tacheEtObjectifs
+  );
+  const dispatch = useAppDispatch();
+  const confirm = useConfirm();
+  const fetchProject = useFetchProject();
+  const router = useRouter();
+  const fetchEmployes = useFetchEmploys();
+  const { employees } = useAppSelector((state) => state.employe);
   const { id }: any = router.query;
   const [open, setOpen] = React.useState(false);
-  const fetchPlanTravail = useFetchPlanTravaile()
-  const { planTravaillist, planTravail } = useAppSelector((state) => state.planTravail)
-  const { statuslist } = useAppSelector((state: any) => state.status)
+  const fetchPlanTravail = useFetchPlanTravaile();
+  const { planTravaillist, planTravail } = useAppSelector(
+    (state) => state.planTravail
+  );
+  const { statuslist } = useAppSelector((state: any) => state.status);
 
   React.useEffect(() => {
     fetchProject();
@@ -79,16 +88,16 @@ const ListTacheEtObjectifs = () => {
     getPlanTravaile();
     getTache();
     dispatch(getStatuslist({}));
-  }, [router.query])
+  }, [router.query]);
 
   const getPlanTravaile = () => {
     const args: any = {};
-    dispatch(getPlanTravail({ id, args }))
-  }
+    dispatch(getPlanTravail({ id, args }));
+  };
   const getTache = () => {
     const args: any = {};
-    dispatch(getPlanTravail({ id, args }))
-  }
+    dispatch(getPlanTravail({ id, args }));
+  };
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -99,7 +108,7 @@ const ListTacheEtObjectifs = () => {
   };
 
   const handleClickOpen = () => {
-    router.push(`/plan_travail/${id}/tachesEtObjectifs/add`)
+    router.push(`/plan_travail/${id}/tachesEtObjectifs/add`);
   };
 
   const handleClose = () => {
@@ -136,8 +145,12 @@ const ListTacheEtObjectifs = () => {
   };
 
   useEffect(() => {
-    console.log(new Set(tacheEtObjectifList.flatMap(e => e.objectifAnnuel?.map(i => i.year))))
-  }, [tacheEtObjectifList])
+    console.log(
+      new Set(
+        tacheEtObjectifList.flatMap((e) => e.objectifAnnuel?.map((i) => i.year))
+      )
+    );
+  }, [tacheEtObjectifList]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -162,7 +175,7 @@ const ListTacheEtObjectifs = () => {
 
   const handleClickDelete = async (id: any) => {
     confirm({
-      title: "Supprimer tache clé",
+      title: "Supprimer tâche clé",
       description: "Voulez-vous vraiment supprimer ?",
       cancellationText: "Annuler",
       confirmationText: "Supprimer",
@@ -177,21 +190,22 @@ const ListTacheEtObjectifs = () => {
         await dispatch(deleteTacheEtObjectifs({ id }));
         fetchTacheCle();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
-  const handleClickEdit = async (id: any) => {
-    await dispatch(editTacheEtObjectifs({ id }))
-    // handleClickOpen()
+  const handleClickEdit = async (id: string) => {
+    await dispatch(editTacheEtObjectifs({ id }));
   };
 
   return (
     <Container maxWidth="xl">
       {/* <NavigationContainer> */}
-      <SectionNavigation direction={{ xs: 'column', sm: 'row' }}
+      <SectionNavigation
+        direction={{ xs: "column", sm: "row" }}
         spacing={{ xs: 1, sm: 2, md: 4 }}
         justifyContent="space-between"
-        sx={{ mb: 2 }}>
+        sx={{ mb: 2 }}
+      >
         <Stack flexDirection={"row"}>
           <Link href={`/plan_travail`}>
             <Button color="info" variant="text" startIcon={<ArrowBack />}>
@@ -204,13 +218,15 @@ const ListTacheEtObjectifs = () => {
             size="small"
             startIcon={<Add />}
             sx={{ marginInline: 3 }}
-            onClick={handleClickOpen}
+            onClick={(e) =>
+              router.push(`/plan_travail/${id}/tachesEtObjectifs/add`)
+            }
           >
             Créer
           </Button>
         </Stack>
         <Typography variant="h4" color="GrayText">
-          Tâches et Objectifs
+          Tâches et objectifs
         </Typography>
       </SectionNavigation>
       {/* </NavigationContainer> */}
@@ -218,13 +234,20 @@ const ListTacheEtObjectifs = () => {
       <FormContainer>
         <KeyValue
           keyName="Objectif Stratégique"
-          value={tacheEtObjectifList.length != 0 ? planTravail.description! : ""}
+          value={
+            tacheEtObjectifList.length != 0 ? planTravail.description! : ""
+          }
         />
       </FormContainer>
       <BodySection>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2, pt: 2 }}>
-            <EnhancedTableToolbar tacheEtObjectifList={tacheEtObjectifList} numSelected={selected.length} selectYear={selectYear} setSelectYear={setSelectYear} />
+            <EnhancedTableToolbar
+              tacheEtObjectifList={tacheEtObjectifList}
+              numSelected={selected.length}
+              selectYear={selectYear}
+              setSelectYear={setSelectYear}
+            />
             <TableContainer>
               <Table sx={{ width: "100%", padding: 2, overflow: "auto" }}>
                 <EnhancedTableHead
@@ -237,7 +260,8 @@ const ListTacheEtObjectifs = () => {
                   year={selectYear}
                 />
                 <TableBody>
-                  {tacheEtObjectifList.filter((e: any) => e.planTravaileId === id!)
+                  {tacheEtObjectifList
+                    .filter((e: any) => e.planTravaileId === id!)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: TacheEtObjectifItem, index: any) => {
                       // const isItemSelected = isSelected(row.id);
@@ -250,11 +274,11 @@ const ListTacheEtObjectifs = () => {
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                        // selected={isItemSelected}
+                          // selected={isItemSelected}
                         >
                           <TableCell
                             padding="checkbox"
-                          // onClick={(event) => handleClick(event, row.tache)}
+                            // onClick={(event) => handleClick(event, row.tache)}
                           ></TableCell>
                           <TableCell
                             component="th"
@@ -264,41 +288,56 @@ const ListTacheEtObjectifs = () => {
                           >
                             {row.sn}
                           </TableCell>
+                          <TableCell>{row.keyTasks}</TableCell>
                           <TableCell>
-                            {row.keyTasks}
+                            {
+                              statuslist.find((e: any) => e.id === row.statusId)
+                                ?.status
+                            }
                           </TableCell>
                           <TableCell>
-                            {statuslist.find((e: any) => e.id === row.statusId)?.status}
+                            {
+                              employees.find(
+                                (e: any) => e.id == row?.responsableId
+                              )?.name
+                            }
                           </TableCell>
                           <TableCell>
-                            {employees.find((e: any) => e.id == row?.responsableId)?.name}
+                            <Moment format="DD/MM/YYYY">{row.startDate}</Moment>
                           </TableCell>
                           <TableCell>
-                            <Moment format="DD/MM/YYYY">
-                              {row.startDate}
-                            </Moment>
+                            <Moment format="DD/MM/YYYY">{row.endDate}</Moment>
                           </TableCell>
                           <TableCell>
-                            <Moment format="DD/MM/YYYY">
-                              {row.endDate}
-                            </Moment>
+                            {row.objectifAnnuel
+                              ?.filter((e) => e.year === selectYear - 1)
+                              .map((item) =>
+                                item.objectiveTitle ? (
+                                  <p key={item.id}>{item.objectiveTitle}</p>
+                                ) : (
+                                  "-"
+                                )
+                              )}
                           </TableCell>
                           <TableCell>
-                            {row.objectifAnnuel?.filter((e) => e.year === (selectYear - 1)).map((item) => (
-                              item.objectiveTitle ? (<p key={item.id}>{item.objectiveTitle}</p>) : "-"
-                            ))}
-                          </TableCell>
-                          <TableCell>
-                            {row.objectifAnnuel?.filter((e) => e.year === selectYear).map((item) => (
-                              item.objectiveTitle ? (<p key={item.id}>{item.objectiveTitle}</p>) : "-"
-                            ))}
+                            {row.objectifAnnuel
+                              ?.filter((e) => e.year === selectYear)
+                              .map((item) =>
+                                item.objectiveTitle ? (
+                                  <p key={item.id}>{item.objectiveTitle}</p>
+                                ) : (
+                                  "-"
+                                )
+                              )}
                           </TableCell>
                           <TableCell align="right">
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
                             >
-                              <Link href={`/plan_travail/${id}/tachesEtObjectifs/${row.id}/details`}>
+                              <Link
+                                href={`/plan_travail/${id}/tachesEtObjectifs/${row.id}/details`}
+                              >
                                 <IconButton
                                   color="accent"
                                   aria-label="Details"
@@ -307,7 +346,9 @@ const ListTacheEtObjectifs = () => {
                                   <VisibilityIcon />
                                 </IconButton>
                               </Link>
-                              <Link href={`/plan_travail/${id!}/tachesEtObjectifs/${row.id!}/edit`}>
+                              <Link
+                                href={`/plan_travail/${id!}/tachesEtObjectifs/${row.id!}/edit`}
+                              >
                                 <IconButton
                                   color="primary"
                                   aria-label="Modifier"
@@ -369,7 +410,7 @@ export default ListTacheEtObjectifs;
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
 
-export const BodySection = styled(Box)(({ }) => ({
+export const BodySection = styled(Box)(({}) => ({
   borderRadius: 20,
   backgroundColor: "white",
   marginBlock: 16,

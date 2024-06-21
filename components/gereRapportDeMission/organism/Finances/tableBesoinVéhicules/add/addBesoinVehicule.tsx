@@ -18,8 +18,14 @@ import {
 } from "@mui/material";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
-import { createBesoinVehicule, updateBesoinVehicule } from "../../../../../../redux/features/besoinVehicule";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
+import {
+  createBesoinVehicule,
+  updateBesoinVehicule,
+} from "../../../../../../redux/features/besoinVehicule";
 import OSDatePicker from "../../../../../shared/date/OSDatePicker";
 import OSSelectField from "../../../../../shared/select/OSSelectField";
 import { cancelEdit } from "../../../../../../redux/features/besoinVehicule/besoinVehiculeSlice";
@@ -28,38 +34,48 @@ import { useRouter } from "next/router";
 import { Check } from "@mui/icons-material";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import { EmployeItem } from "../../../../../../redux/features/employe/employeSlice.interface";
-import { createBesoinVehiculeRapport, getBesoinVehiculeRapportList, updateBesoinVehiculeRapport } from "../../../../../../redux/features/besoinVehiculeRapport";
+import {
+  createBesoinVehiculeRapport,
+  getBesoinVehiculeRapportList,
+  updateBesoinVehiculeRapport,
+} from "../../../../../../redux/features/besoinVehiculeRapport";
 import useFetchBesoinEnVehiculeRapportList from "../hooks/useFetchBesoinEnVehicule";
 import useFetchVehicleList from "../../../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
 
 const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
-  const { isEditing, besoinVehiculeRapport } = useAppSelector((state) => state.besoinVehiculeRapport);
+  const { isEditing, besoinVehiculeRapport } = useAppSelector(
+    (state) => state.besoinVehiculeRapport
+  );
   const router = useRouter();
   const { id }: any = router.query;
   const [open, setOpen] = React.useState(false);
   const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) => state.employe)
-  const { vehicleList } = useAppSelector((state: any) =>state.vehicle)
+  const { employees } = useAppSelector((state: any) => state.employe);
+  const { vehicleList } = useAppSelector((state: any) => state.vehicle);
   const fetchVehicleListe = useFetchVehicleList();
-  const fetchBesoinEnVehiculeRapportList = useFetchBesoinEnVehiculeRapportList();
+  const fetchBesoinEnVehiculeRapportList =
+    useFetchBesoinEnVehiculeRapportList();
 
   React.useEffect(() => {
     fetchBesoinEnVehiculeRapportList();
     fetchEmployes();
     fetchVehicleListe();
-  }, [router.query])
+  }, [router.query]);
 
   const handleSubmit = async (values: any) => {
     values.responsable = [...selectedEmployes.map((item) => item.id)];
     const date1 = new Date(values.dateDebut);
     const DateNumber1 = date1.getTime();
-    const date2 = new Date(values.dateFin)
+    const date2 = new Date(values.dateFin);
     const DateNumber2 = date2.getTime();
-    let calculDuree = ((DateNumber2 - DateNumber1)/(24*60*60*1000)).toFixed(0);
+    let calculDuree = (
+      (DateNumber2 - DateNumber1) /
+      (24 * 60 * 60 * 1000)
+    ).toFixed(0);
     values.nombreJour = parseInt(calculDuree);
     if (DateNumber1 >= DateNumber2) {
-      setOpen(true)
+      setOpen(true);
     } else {
       try {
         if (isEditing) {
@@ -70,7 +86,6 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
             })
           );
         } else {
-
           await dispatch(createBesoinVehiculeRapport(values));
         }
         fetchBesoinEnVehiculeRapportList();
@@ -83,11 +98,10 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
   const [selectedEmployes, setSelectedEmployes] = React.useState<EmployeItem[]>(
     isEditing
       ? employees.filter((employee: any) =>
-        besoinVehiculeRapport?.responsable?.includes(employee.id!)
-      )
+          besoinVehiculeRapport?.responsable?.includes(employee.id!)
+        )
       : []
   );
-
 
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
@@ -97,14 +111,20 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
           isEditing
             ? besoinVehiculeRapport
             : {
-              dateDebut: isEditing ? besoinVehiculeRapport?.dateDebut : new Date(),
-              dateFin: isEditing ? besoinVehiculeRapport?.dateFin : new Date(),
-              vehicule: isEditing ? besoinVehiculeRapport?.vehicule : "",
-              trajet: isEditing ? besoinVehiculeRapport?.trajet : "",
-              responsable: isEditing ? besoinVehiculeRapport?.responsable : "",
-              // nombreJour: isEditing ? besoinVehiculeRapport?.nombreJour : "",
-              missionId: isEditing ? besoinVehiculeRapport?.missionId : id,
-            }
+                dateDebut: isEditing
+                  ? besoinVehiculeRapport?.dateDebut
+                  : new Date(),
+                dateFin: isEditing
+                  ? besoinVehiculeRapport?.dateFin
+                  : new Date(),
+                vehicule: isEditing ? besoinVehiculeRapport?.vehicule : "",
+                trajet: isEditing ? besoinVehiculeRapport?.trajet : "",
+                responsable: isEditing
+                  ? besoinVehiculeRapport?.responsable
+                  : "",
+                // nombreJour: isEditing ? besoinVehiculeRapport?.nombreJour : "",
+                missionId: isEditing ? besoinVehiculeRapport?.missionId : id,
+              }
         }
         validationSchema={Yup.object({
           vehicule: Yup.string().required("Champ obligatoire"),
@@ -120,7 +140,6 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
         {(formikProps) => {
           return (
             <Form>
-
               <SectionNavigation>
                 <DialogTitle>Créer/modifier besoin en véhicule</DialogTitle>
                 <DialogContent>
@@ -136,7 +155,9 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
                         variant="outlined"
                         name="dateDebut"
                         value={formikProps.values.dateDebut}
-                        onChange={(value: any) => formikProps.setFieldValue("dateDebut", value)}
+                        onChange={(value: any) =>
+                          formikProps.setFieldValue("dateDebut", value)
+                        }
                       />
                       <OSDatePicker
                         fullWidth
@@ -145,7 +166,9 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
                         variant="outlined"
                         name="dateFin"
                         value={formikProps.values.dateFin}
-                        onChange={(value: any) => formikProps.setFieldValue("dateFin", value)}
+                        onChange={(value: any) =>
+                          formikProps.setFieldValue("dateFin", value)
+                        }
                       />
                     </CustomStack>
                     <FormControl fullWidth>
@@ -184,20 +207,12 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
                           <TextField
                             {...params}
                             id="outlined-basic"
-                            label="Sélectionnez participant"
+                            label="Sélectionnez responsable"
                             variant="outlined"
                           />
                         )}
                       />
                     </FormControl>
-                    {/* <OSTextField
-                      fullWidth
-                      id="outlined-basic"
-                      label="Nombre de jour"
-                      variant="outlined"
-                      name="nombreJour"
-                      type="number"
-                    /> */}
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
@@ -220,11 +235,7 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
                   </Button>
                 </DialogActions>
               </SectionNavigation>
-              <Dialog
-                open={open}
-                disablePortal={false}
-                sx={styleDialog}
-              >
+              <Dialog open={open} disablePortal={false} sx={styleDialog}>
                 <DialogTitle color="red">Attention!!</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
@@ -238,7 +249,7 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
                 </DialogContent>
               </Dialog>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>
@@ -264,5 +275,5 @@ const styleDialog = {
   //left: 150,
   top: 20,
   width: "auto",
-  alignItem: "center"
-}
+  alignItem: "center",
+};

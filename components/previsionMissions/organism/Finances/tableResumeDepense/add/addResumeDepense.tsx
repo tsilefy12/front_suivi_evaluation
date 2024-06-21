@@ -16,9 +16,15 @@ import {
 } from "@mui/material";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
-import { createResumeDepense, updateResumeDepense } from "../../../../../../redux/features/resumeDepense";
+import {
+  createResumeDepense,
+  updateResumeDepense,
+} from "../../../../../../redux/features/resumeDepense";
 import useFetchResumeDepenseList from "../hooks/useFetchResumeDepense";
 import OSSelectField from "../../../../../shared/select/OSSelectField";
 import useFetchGrants from "../../../../../GrantsEnCours/hooks/getGrants";
@@ -27,13 +33,15 @@ import OSTextField from "../../../../../shared/input/OSTextField";
 import { cancelEdit } from "../../../../../../redux/features/resumeDepense/resumeDepenseSlice";
 
 const AddResumeDepense = ({ handleClose }: any) => {
-  const dispatch = useAppDispatch()
-  const router = useRouter()
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const { id }: any = router.query;
-  const { isEditing, resumeDepense } = useAppSelector((state: any) => state.resumeDepense)
+  const { isEditing, resumeDepense } = useAppSelector(
+    (state: any) => state.resumeDepense
+  );
   const fetchResumeDepense = useFetchResumeDepenseList();
   const fetchGrant = useFetchGrants();
-  const { grantEncoursList } = useAppSelector(state => state.grantEncours);
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const [grantValue, setGrantValue]: any = React.useState(0);
@@ -42,7 +50,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
     fetchResumeDepense();
     fetchBudgetLine();
     fetchGrant();
-  }, [router.query])
+  }, [router.query]);
 
   const handleGrantChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setGrantValue(event.target.value as number);
@@ -53,15 +61,15 @@ const AddResumeDepense = ({ handleClose }: any) => {
   //select budget line depends grant
   const uniqueValues = new Set();
 
-  grantEncoursList.forEach(g => {
+  grantEncoursList.forEach((g) => {
     // console.log("grant value :", grantValue)
     if (grantValue !== 0) {
-       if (!uniqueValues.has(g.id)) {
-         uniqueValues.add(g.id);
-         return BudgetLineGrantList = g.budgetLines;
-       }
-    }else{
-      uniqueValues.add(g.id)
+      if (!uniqueValues.has(g.id)) {
+        uniqueValues.add(g.id);
+        return (BudgetLineGrantList = g.budgetLines);
+      }
+    } else {
+      uniqueValues.add(g.id);
       return [];
     }
   });
@@ -75,11 +83,11 @@ const AddResumeDepense = ({ handleClose }: any) => {
         await dispatch(
           updateResumeDepense({
             id: resumeDepense.id!,
-            resumeDepense: values
+            resumeDepense: values,
           })
         );
       } else {
-          await dispatch(createResumeDepense(values)), fetchResumeDepense();
+        await dispatch(createResumeDepense(values)), fetchResumeDepense();
       }
       handleClose();
       fetchResumeDepense();
@@ -87,7 +95,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-//  console.log("lb :", isEditing ? resumeDepense?.grant : "")
+  //  console.log("lb :", isEditing ? resumeDepense?.grant : "")
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -96,13 +104,15 @@ const AddResumeDepense = ({ handleClose }: any) => {
           isEditing
             ? resumeDepense
             : {
-              grant: isEditing ? resumeDepense?.grant : 0,
-              depensePrevue: isEditing ? resumeDepense?.depensePrevue : "",
-              ligneBudgetaire: isEditing ? resumeDepense?.ligneBudgetaire : "",
-              remarque: isEditing ? resumeDepense?.remarque : "",
-              budgetDepense: isEditing ? resumeDepense?.budgetDepense : "",
-              missionId: isEditing ? resumeDepense?.missionId : id,
-            }
+                grant: isEditing ? resumeDepense?.grant : 0,
+                depensePrevue: isEditing ? resumeDepense?.depensePrevue : "",
+                ligneBudgetaire: isEditing
+                  ? resumeDepense?.ligneBudgetaire
+                  : "",
+                remarque: isEditing ? resumeDepense?.remarque : "",
+                budgetDepense: isEditing ? resumeDepense?.budgetDepense : "",
+                missionId: isEditing ? resumeDepense?.missionId : id,
+              }
         }
         validationSchema={Yup.object({
           // grant: Yup.number().required("Champ obligatoire"),
@@ -131,30 +141,27 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         label="Grant"
                         variant="outlined"
                         name="grant"
-                        value={grantValue!=0 ? grantValue : ""}
-                        onChange = {handleGrantChange}
+                        value={grantValue != 0 ? grantValue : ""}
+                        onChange={handleGrantChange}
                       >
                         <MenuItem value={0}>Select grant</MenuItem>
-                        {
-                          grantEncoursList.map((item: any) => (
-                            <MenuItem value={item.id!}>{item.code!}</MenuItem>
-                          ))
-                        }
+                        {grantEncoursList.map((item: any) => (
+                          <MenuItem value={item.id!}>{item.code!}</MenuItem>
+                        ))}
                       </OSTextField>
                     </FormControl>
                     <FormControl fullWidth>
-                    <OSSelectField
+                      <OSSelectField
                         fullWidth
                         select
                         id="outlined-basic"
-                        label="Budget Line"
+                        label="Budget line"
                         variant="outlined"
                         name="ligneBudgetaire"
                         options={BudgetLineGrantList}
                         dataKey={["code"]}
                         valueKey="id"
-                      >
-                      </OSSelectField>
+                      ></OSSelectField>
                     </FormControl>
                     <OSTextField
                       fullWidth
@@ -193,16 +200,13 @@ const AddResumeDepense = ({ handleClose }: any) => {
                   >
                     Annuler
                   </Button>
-                  <Button
-                    variant="contained"
-                    type="submit"
-                  >
+                  <Button variant="contained" type="submit">
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>

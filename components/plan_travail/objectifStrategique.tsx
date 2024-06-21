@@ -113,7 +113,7 @@ const ListObjectifStrategique = ({
           </Button>
         )}
         <Typography variant="h4" color="GrayText">
-          plan de travail
+          Plan de travail
         </Typography>
       </SectionNavigation>
       <Divider />
@@ -128,7 +128,7 @@ const ListObjectifStrategique = ({
           }}
         >
           <Typography variant="h6" id="tableTitle" component="div">
-            Liste de plan de travail
+            Liste des plans de travail
           </Typography>
           <Stack direction={"row"} spacing={2}>
             <Link href={`/plan_travail/resume`}>

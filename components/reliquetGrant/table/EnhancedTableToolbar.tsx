@@ -35,23 +35,16 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         </Typography>
       ) : (
         <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        spacing={{ xs: 1, sm: 2, md: 4 }}
+          direction={{ xs: "column", sm: "row" }}
+          spacing={{ xs: 1, sm: 2, md: 4 }}
           sx={{
             flex: "1 1 100%",
             justifyContent: "space-between",
           }}
         >
           <Typography variant="h6" id="tableTitle" component="div">
-            Liste des Réliquats Grants
+            Liste des reliquets grants
           </Typography>
-          <TextField
-            variant="outlined"
-            id="search"
-            name="search"
-            placeholder="Recherche"
-            size="small"
-          />
         </Stack>
       )}
       {numSelected > 0 && (

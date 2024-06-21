@@ -18,7 +18,7 @@ export const headCells: readonly HeadCell[] = [
     id: "type",
     numeric: true,
     disablePadding: false,
-    label: "Type de carburant",
+    label: "Type du carburant",
   },
   {
     id: "distance",
@@ -30,7 +30,7 @@ export const headCells: readonly HeadCell[] = [
     id: "nb",
     numeric: true,
     disablePadding: false,
-    label: "Nb trajet",
+    label: "Nombre de trajets",
   },
   {
     id: "distanceTotal",
@@ -48,7 +48,7 @@ export const headCells: readonly HeadCell[] = [
     id: "totalCarburant",
     numeric: true,
     disablePadding: false,
-    label: "Total carburant"
+    label: "Total carburant",
   },
 ];
 

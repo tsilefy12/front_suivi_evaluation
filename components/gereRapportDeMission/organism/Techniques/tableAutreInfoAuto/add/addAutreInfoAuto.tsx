@@ -266,7 +266,7 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                               defaultChecked={getTypeVehicule === "PRIVATE"}
                             />
                           }
-                          label="Voiture privé"
+                          label="Voiture privée"
                           name="voiture"
                           disabled={
                             !!vehicleList.find(
@@ -292,10 +292,10 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
                           <TableCell>Assurance</TableCell>
                           <TableCell align="left">Visite technique</TableCell>
                           <TableCell align="left">
-                            Voiture de location ou privé?
+                            Voiture de location ou privée
                           </TableCell>
                           <TableCell align="left">
-                            Ceinture de securite
+                            Ceinture de securité
                           </TableCell>
                         </TableRow>
                       </TableHead>

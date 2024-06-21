@@ -15,28 +15,35 @@ import {
 } from "@mui/material";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import useFetchCalculCarburantRapportList from "../hooks/useFetchCarbuant";
-import { createCalculCarburantRapport, updateCalculCarburantRapport } from "../../../../../../redux/features/calculCarburantRapport";
+import {
+  createCalculCarburantRapport,
+  updateCalculCarburantRapport,
+} from "../../../../../../redux/features/calculCarburantRapport";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import OSSelectField from "../../../../../shared/select/OSSelectField";
 import { cancelEdit } from "../../../../../../redux/features/calculCarburantRapport/calculCarburantRapportSlice";
 import { useRouter } from "next/router";
 import useFetchBesoinEnVehiculeList from "../../../../../previsionMissions/organism/Finances/tableBesoinVéhicules/hooks/useFetchBesoinEnVehicule";
 
-
 const AddcalculCarburantRapport = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
-  const { isEditing, calculCarburantRapport } = useAppSelector((state) => state.calculCarburantRapport)
+  const { isEditing, calculCarburantRapport } = useAppSelector(
+    (state) => state.calculCarburantRapport
+  );
   const fetchcalculCarburantRapport = useFetchCalculCarburantRapportList();
-  const router = useRouter()
+  const router = useRouter();
   const { id }: any = router.query;
   const fetchVehicule = useFetchBesoinEnVehiculeList();
-  const { vehicleList } = useAppSelector((state: any) =>state.vehicle)
+  const { vehicleList } = useAppSelector((state: any) => state.vehicle);
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     fetchVehicule();
-  },  [id])
+  }, [id]);
 
   const handleSubmit = async (values: any) => {
     try {
@@ -48,7 +55,6 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
           })
         );
       } else {
-
         await dispatch(createCalculCarburantRapport(values));
       }
       fetchcalculCarburantRapport();
@@ -57,12 +63,11 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-  const listeCarburant =[
-    {id: "Essence", name: "Essence"},
-    {id: "Gasoil", name: "Gasoil"}
-  ]
- 
-  
+  const listeCarburant = [
+    { id: "Essence", name: "Essence" },
+    { id: "Gasoil", name: "Gasoil" },
+  ];
+
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -71,16 +76,24 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
           isEditing
             ? calculCarburantRapport
             : {
-              trajet: isEditing ? calculCarburantRapport?.trajet : "",
-              distance: isEditing ? calculCarburantRapport?.distance : "",
-              typeCarburant: isEditing ? calculCarburantRapport?.typeCarburant : "",
-              vehicule: isEditing ? calculCarburantRapport?.vehicule : "",
-              nombreTrajet: isEditing ? calculCarburantRapport?.nombreTrajet : "",
-              distanceTotal: isEditing ? calculCarburantRapport?.distanceTotal : 0,
-              consommationKilo: isEditing ? calculCarburantRapport?.consommationKilo : 0,
-              // totalCarburant: isEditing ? calculCarburantRapport?.totalCarburant : "",
-              missionId: isEditing ? calculCarburantRapport?.missionId: id,
-            }
+                trajet: isEditing ? calculCarburantRapport?.trajet : "",
+                distance: isEditing ? calculCarburantRapport?.distance : "",
+                typeCarburant: isEditing
+                  ? calculCarburantRapport?.typeCarburant
+                  : "",
+                vehicule: isEditing ? calculCarburantRapport?.vehicule : "",
+                nombreTrajet: isEditing
+                  ? calculCarburantRapport?.nombreTrajet
+                  : "",
+                distanceTotal: isEditing
+                  ? calculCarburantRapport?.distanceTotal
+                  : 0,
+                consommationKilo: isEditing
+                  ? calculCarburantRapport?.consommationKilo
+                  : 0,
+                // totalCarburant: isEditing ? calculCarburantRapport?.totalCarburant : "",
+                missionId: isEditing ? calculCarburantRapport?.missionId : id,
+              }
         }
         validationSchema={Yup.object({
           trajet: Yup.string().required("Champ obligatoire"),
@@ -131,34 +144,34 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
                       spacing={{ xs: 2, sm: 2, md: 1 }}
                     >
                       <FormControl fullWidth>
-                       <OSSelectField 
-                           fullWidth
-                           id="outlined-basic"
-                           label="Type carburant"
-                           variant="outlined"
-                           name="typeCarburant"
-                           options={listeCarburant}
-                           dataKey="name"
-                           valueKey="id"
-                       />
+                        <OSSelectField
+                          fullWidth
+                          id="outlined-basic"
+                          label="Type du carburant"
+                          variant="outlined"
+                          name="typeCarburant"
+                          options={listeCarburant}
+                          dataKey="name"
+                          valueKey="id"
+                        />
                       </FormControl>
                       <FormControl fullWidth>
-                      <OSSelectField 
-                           fullWidth
-                           id="outlined-basic"
-                           label="Véhicule"
-                           variant="outlined"
-                           name="vehicule"
-                           options={vehicleList}
-                           dataKey={["vehicleType"]}
-                           valueKey="id"
-                       />
+                        <OSSelectField
+                          fullWidth
+                          id="outlined-basic"
+                          label="Véhicule"
+                          variant="outlined"
+                          name="vehicule"
+                          options={vehicleList}
+                          dataKey={["vehicleType"]}
+                          valueKey="id"
+                        />
                       </FormControl>
                     </CustomStack>
                     <OSTextField
                       fullWidth
                       id="outlined-basic"
-                      label="Nombre de trajet"
+                      label="Nombre de trajets"
                       variant="outlined"
                       name="nombreTrajet"
                       type="number"
@@ -170,13 +183,17 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
                       label="Distance total"
                       variant="outlined"
                       name="distanceTotal"
-                      type="text"
+                      type="number"
                       value={formikProps.values.distanceTotal}
-                      onChange={(event: any) =>{
-                        const newValue = parseFloat(event.target.value)
-                        formikProps.setFieldValue("distanceTotal", newValue)
-                        const TotalCarburant = newValue * formikProps.values.consommationKilo
-                        formikProps.setFieldValue("totalCarburant", TotalCarburant)
+                      onChange={(event: any) => {
+                        const newValue = parseFloat(event.target.value);
+                        formikProps.setFieldValue("distanceTotal", newValue);
+                        const TotalCarburant =
+                          newValue * formikProps.values.consommationKilo;
+                        formikProps.setFieldValue(
+                          "totalCarburant",
+                          TotalCarburant
+                        );
                       }}
                       inputProps={{ autoComplete: "off", min: 0 }}
                     />
@@ -188,22 +205,29 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
                       name="consommationKilo"
                       type="number"
                       value={formikProps.values.consommationKilo}
-                      onChange={(event: any) =>{
-                        const newValue = parseFloat(event.target.value)
-                        formikProps.setFieldValue("consommationKilo", newValue)
-                        const TotalCarburant = newValue * formikProps.values.distanceTotal
-                        formikProps.setFieldValue("totalCarburant", TotalCarburant)
+                      onChange={(event: any) => {
+                        const newValue = parseFloat(event.target.value);
+                        formikProps.setFieldValue("consommationKilo", newValue);
+                        const TotalCarburant =
+                          newValue * formikProps.values.distanceTotal;
+                        formikProps.setFieldValue(
+                          "totalCarburant",
+                          TotalCarburant
+                        );
                       }}
                       inputProps={{ autoComplete: "off", min: 0 }}
                     />
                     <OSTextField
                       fullWidth
                       id="outlined-basic"
-                      label="Total carburant"
+                      label="Total du carburant"
                       variant="outlined"
                       name="totalCarburant"
                       type="number"
-                      value={formikProps.values.distanceTotal * formikProps.values.consommationKilo}
+                      value={
+                        formikProps.values.distanceTotal *
+                        formikProps.values.consommationKilo
+                      }
                       inputProps={{ autoComplete: "off", min: 0 }}
                     />
                   </FormContainer>
@@ -219,16 +243,13 @@ const AddcalculCarburantRapport = ({ handleClose }: any) => {
                   >
                     Annuler
                   </Button>
-                  <Button
-                    variant="contained"
-                    type="submit"
-                  >
+                  <Button variant="contained" type="submit">
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>

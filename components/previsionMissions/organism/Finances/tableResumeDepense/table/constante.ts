@@ -12,7 +12,7 @@ export const headCells: readonly HeadCell[] = [
     id: "ligne",
     numeric: true,
     disablePadding: false,
-    label: "Ligne Budgétaire",
+    label: "Ligne budgetaire",
   },
   {
     id: "depenses",
@@ -24,7 +24,7 @@ export const headCells: readonly HeadCell[] = [
     id: "budget",
     numeric: true,
     disablePadding: false,
-    label: "Budget - Dépenses",
+    label: "Budget de dépense",
   },
   {
     id: "remarques",

@@ -42,18 +42,10 @@ export const headCells: readonly HeadCell[] = [
     id: "ligne",
     numeric: true,
     disablePadding: false,
-    label: "Ligne Budgétaire",
+    label: "Ligne budgetaire",
   },
 ];
 
 export const rows = [
-  createData(
-    "08/10/2021",
-    "Sac",
-    "10",
-    "10000",
-    "10000",
-    "ADM-MOT-001",
-    "LB1"
-  ),
+  createData("08/10/2021", "Sac", "10", "10000", "10000", "ADM-MOT-001", "LB1"),
 ];

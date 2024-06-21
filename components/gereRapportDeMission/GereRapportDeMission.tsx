@@ -202,7 +202,7 @@ const GereRapportDeMission = () => {
               startIcon={<DoneIcon />}
               sx={{ marginInline: 3 }}
             >
-              Soumettre la prévision
+              Soumettre le rapport
             </Button>
             <Button
               variant="text"
@@ -464,7 +464,7 @@ const GereRapportDeMission = () => {
                   variant="h6"
                   sx={{ textTransform: "uppercase", marginTop: "3px" }}
                 >
-                  Info sur les dépositions de Rapport
+                  Info sur les dépositions de rapport
                 </Typography>
                 <Dialog open={open} onClose={handleClose}>
                   <AddDepositionDesRapports />

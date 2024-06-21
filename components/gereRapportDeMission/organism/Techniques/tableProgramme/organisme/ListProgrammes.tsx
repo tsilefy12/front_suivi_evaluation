@@ -113,7 +113,7 @@ const ListProgrammes = () => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Date de début</TableCell>
-                    <TableCell align="left">Date fin</TableCell>
+                    <TableCell align="left">Date de fin</TableCell>
                     <TableCell align="left">Activités prévues</TableCell>
                     <TableCell align="left">Activités réalisées</TableCell>
                     <TableCell align="left">Livrables</TableCell>

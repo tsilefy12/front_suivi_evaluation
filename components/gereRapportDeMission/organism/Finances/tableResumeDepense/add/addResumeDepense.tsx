@@ -220,7 +220,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         fullWidth
                         select
                         id="outlined-basic"
-                        label="Budget Line"
+                        label="Budget line"
                         variant="outlined"
                         name="ligneBudgetaire"
                         options={BudgetLineGrantList}
@@ -255,7 +255,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                     <OSTextField
                       fullWidth
                       id="outlined-basic"
-                      label="Rémarque"
+                      label="Remarque"
                       variant="outlined"
                       name="remarque"
                       inputProps={{ autoComplete: "off" }}
@@ -268,7 +268,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                           {" "}
                           Voici la liste des{" "}
                         </FormLabel>
-                        <Lien> resumé de depense pendant la prévision</Lien>,
+                        <Lien> resumé de dépense pendant la prévision</Lien>,
                         vous pouvez les réutiliser pour les rapports
                       </Typography>
                     </Stack>
@@ -276,9 +276,9 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       <TableHead>
                         <TableRow>
                           <TableCell align="left">Grant</TableCell>
-                          <TableCell>Ligne Budgétaire</TableCell>
+                          <TableCell>Ligne budgetaire</TableCell>
                           <TableCell align="left">Dépenses prévues</TableCell>
-                          <TableCell align="left">Budget de depense</TableCell>
+                          <TableCell align="left">Budget de dépense</TableCell>
                           <TableCell align="left">Remarques</TableCell>
                         </TableRow>
                       </TableHead>
@@ -375,6 +375,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       formikProps.resetForm();
                       setGrts(0);
                       dispatch(cancelEdit());
+                      handleClose();
                     }}
                   >
                     Annuler

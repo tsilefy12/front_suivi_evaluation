@@ -11,20 +11,28 @@ import {
 } from "@mui/material";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { cancelEdit } from "../../../../../../redux/features/calculPileRapport/calculPileRapportSlice";
 import { useRouter } from "next/router";
-import { createCalculePileRapport, updateCalculPileRapport } from "../../../../../../redux/features/calculPileRapport";
+import {
+  createCalculePileRapport,
+  updateCalculPileRapport,
+} from "../../../../../../redux/features/calculPileRapport";
 import useFetchCalculPileRapportList from "../hooks/useFetchCalculPile";
 
-const AddCalculDesPileRapport = ({ handleClose}: any) => {
-const dispatch = useAppDispatch();
-const fetchCalculPileRapport = useFetchCalculPileRapportList();
-const { isEditing, calculPileRapport } = useAppSelector((state) =>state.calculPileRapport)
-const router = useRouter()
-const { id }: any = router.query;
+const AddCalculDesPileRapport = ({ handleClose }: any) => {
+  const dispatch = useAppDispatch();
+  const fetchCalculPileRapport = useFetchCalculPileRapportList();
+  const { isEditing, calculPileRapport } = useAppSelector(
+    (state) => state.calculPileRapport
+  );
+  const router = useRouter();
+  const { id }: any = router.query;
 
   const handleSubmit = async (values: any) => {
     try {
@@ -36,7 +44,6 @@ const { id }: any = router.query;
           })
         );
       } else {
-
         await dispatch(createCalculePileRapport(values));
       }
       fetchCalculPileRapport();
@@ -53,14 +60,16 @@ const { id }: any = router.query;
           isEditing
             ? calculPileRapport
             : {
-              appareil: isEditing ? calculPileRapport?.appareil : "",
-              nombreAppareil: isEditing ? calculPileRapport?.nombreAppareil : "",
-              nombrePack: isEditing ? calculPileRapport?.nombrePack : "",
-              nombrePile: isEditing ? calculPileRapport?.nombrePile : "",
-              type: isEditing ? calculPileRapport?.type : "",
-              change: isEditing ? calculPileRapport?.change: "",
-              missionId: isEditing ? calculPileRapport?.missionId: id,
-            }
+                appareil: isEditing ? calculPileRapport?.appareil : "",
+                nombreAppareil: isEditing
+                  ? calculPileRapport?.nombreAppareil
+                  : "",
+                nombrePack: isEditing ? calculPileRapport?.nombrePack : "",
+                nombrePile: isEditing ? calculPileRapport?.nombrePile : "",
+                type: isEditing ? calculPileRapport?.type : "",
+                change: isEditing ? calculPileRapport?.change : "",
+                missionId: isEditing ? calculPileRapport?.missionId : id,
+              }
         }
         validationSchema={Yup.object({
           appareil: Yup.string().required("Champ obligatoire"),
@@ -107,7 +116,7 @@ const { id }: any = router.query;
                       <OSTextField
                         fullWidth
                         id="outlined-basic"
-                        label="Nombre Appareil"
+                        label="Nombre d'appareils"
                         variant="outlined"
                         name="nombreAppareil"
                         type="number"
@@ -126,7 +135,7 @@ const { id }: any = router.query;
                     <OSTextField
                       fullWidth
                       id="outlined-basic"
-                      label="Change"
+                      label="Changements"
                       variant="outlined"
                       name="change"
                       type="text"
@@ -144,7 +153,7 @@ const { id }: any = router.query;
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
-                <Button
+                  <Button
                     color="warning"
                     onClick={() => {
                       formikProps.resetForm();
@@ -154,16 +163,13 @@ const { id }: any = router.query;
                   >
                     Annuler
                   </Button>
-                  <Button
-                    variant="contained"
-                    type="submit"
-                  >
+                  <Button variant="contained" type="submit">
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>

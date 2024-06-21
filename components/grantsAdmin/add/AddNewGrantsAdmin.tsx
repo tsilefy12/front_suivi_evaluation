@@ -23,7 +23,10 @@ import useFetchGrants from "../../GrantsEnCours/hooks/getGrants";
 import { Form, Formik } from "formik";
 import OSSelectField from "../../shared/select/OSSelectField";
 import OSTextField from "../../shared/input/OSTextField";
-import { createGrantAdmin, updateGrantAdmin } from "../../../redux/features/grantAdmin";
+import {
+  createGrantAdmin,
+  updateGrantAdmin,
+} from "../../../redux/features/grantAdmin";
 import useFetchGrantAdmin from "../hooks/useFetchGrantAdmin";
 import { cancelEdit } from "../../../redux/features/grantAdmin/periodeSlice";
 
@@ -31,14 +34,14 @@ const AddNewGrantsAdmin = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const fetchGrant = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) => state.grantEncours)
-  const { isEditing, grantAdmin } = useAppSelector((state) =>state.grantAdmin)
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const { isEditing, grantAdmin } = useAppSelector((state) => state.grantAdmin);
   const fetchGrantAdmin = useFetchGrantAdmin();
 
   React.useEffect(() => {
     fetchGrant();
     fetchGrantAdmin();
-  }, [router.query])
+  }, [router.query]);
   const handleSubmit = async (values: any) => {
     try {
       if (isEditing) {
@@ -57,9 +60,7 @@ const AddNewGrantsAdmin = () => {
       console.log("error", error);
     }
   };
-  const listVide = [
-    {id: "Vide", name: "Vide"}
-  ]
+  const listVide = [{ id: "Vide", name: "Vide" }];
   return (
     <Container maxWidth="xl" sx={{ pb: 5 }}>
       <Formik
@@ -68,9 +69,9 @@ const AddNewGrantsAdmin = () => {
           isEditing
             ? grantAdmin
             : {
-              grant: isEditing ? grantAdmin?.grant : "",
-              bailleur: isEditing ? grantAdmin?.bailleur : "",
-            }
+                grant: isEditing ? grantAdmin?.grant : "",
+                bailleur: isEditing ? grantAdmin?.bailleur : "",
+              }
         }
         validationSchema={Yup.object({
           grant: Yup.number().required("Champ obligatoire"),
@@ -86,14 +87,18 @@ const AddNewGrantsAdmin = () => {
             <Form>
               <NavigationContainer>
                 <SectionNavigation
-                  direction={{ xs: 'column', sm: 'row' }}
+                  direction={{ xs: "column", sm: "row" }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                   justifyContent="space-between"
                   sx={{ mb: 2 }}
                 >
                   <Stack flexDirection={"row"}>
                     <Link href="/grants/grantsAdmin">
-                      <Button color="info" variant="text" startIcon={<ArrowBack />}>
+                      <Button
+                        color="info"
+                        variant="text"
+                        startIcon={<ArrowBack />}
+                      >
                         Retour
                       </Button>
                     </Link>
@@ -122,7 +127,9 @@ const AddNewGrantsAdmin = () => {
                       Annuler
                     </Button>
                   </Stack>
-                  <Typography variant="h5">Créer GRANT ADMIN</Typography>
+                  <Typography variant="h5">
+                    {isEditing ? "Modifier" : "Créer"} grant admin
+                  </Typography>
                 </SectionNavigation>
                 <Divider />
               </NavigationContainer>
@@ -134,8 +141,8 @@ const AddNewGrantsAdmin = () => {
                     id="outlined-basic"
                     label="Grant"
                     variant="outlined"
-                    options={grantEncoursList ? grantEncoursList: listVide}
-                    dataKey={grantEncoursList ? ["code"]: "name"}
+                    options={grantEncoursList ? grantEncoursList : listVide}
+                    dataKey={grantEncoursList ? ["code"] : "name"}
                     valueKey="id"
                     name="grant"
                   />
@@ -149,7 +156,7 @@ const AddNewGrantsAdmin = () => {
                 />
               </FormContainer>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>

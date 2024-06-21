@@ -34,7 +34,7 @@ const Finances = () => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Résumé de dépense prévus</Typography>
+          <Typography>Résumé de dépenses prévues</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <ListResumeDepense />
@@ -46,7 +46,7 @@ const Finances = () => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Calcul des Piles</Typography>
+          <Typography>Calcul des piles</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <ListCalculDesPiles />
@@ -58,7 +58,7 @@ const Finances = () => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Besoin en Véhicules</Typography>
+          <Typography>Besoin en véhicules</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <ListBesoinVehicule />
@@ -70,7 +70,7 @@ const Finances = () => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Calcul des Carburants</Typography>
+          <Typography>Calcul des carburants</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <ListCalculCarburant />

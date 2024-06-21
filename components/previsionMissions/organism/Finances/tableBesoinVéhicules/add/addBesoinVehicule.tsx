@@ -18,10 +18,16 @@ import {
 } from "@mui/material";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
 import useFetchEmployes from "../../../../../home/Missions/hooks/useFetchEmployees";
 import useFetchBesoinEnVehiculeList from "../hooks/useFetchBesoinEnVehicule";
-import { createBesoinVehicule, updateBesoinVehicule } from "../../../../../../redux/features/besoinVehicule";
+import {
+  createBesoinVehicule,
+  updateBesoinVehicule,
+} from "../../../../../../redux/features/besoinVehicule";
 import OSDatePicker from "../../../../../shared/date/OSDatePicker";
 import OSSelectField from "../../../../../shared/select/OSSelectField";
 import { cancelEdit } from "../../../../../../redux/features/besoinVehicule/besoinVehiculeSlice";
@@ -35,30 +41,35 @@ import useFetchVehicleList from "../../../Techniques/tableAutreInfoAuto/hooks/us
 const AddBesoinVehicule = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
   const fetchBesoinEnVehicule = useFetchBesoinEnVehiculeList();
-  const { isEditing, besoinVehicule } = useAppSelector((state) => state.besoinVehicule);
+  const { isEditing, besoinVehicule } = useAppSelector(
+    (state) => state.besoinVehicule
+  );
   const router = useRouter();
   const { id }: any = router.query;
   const [open, setOpen] = React.useState(false);
   const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) => state.employe)
+  const { employees } = useAppSelector((state: any) => state.employe);
   const fetchVehicule = useFetchVehicleList();
-  const { vehicleList } = useAppSelector((state: any) =>state.vehicle)
+  const { vehicleList } = useAppSelector((state: any) => state.vehicle);
 
   React.useEffect(() => {
     fetchVehicule();
     fetchEmployes();
-  }, [router.query])
+  }, [router.query]);
 
   const handleSubmit = async (values: any) => {
     values.responsable = [...selectedEmployes.map((item) => item.id)];
     const date1 = new Date(values.dateDebut);
     const DateNumber1 = date1.getTime();
-    const date2 = new Date(values.dateFin)
+    const date2 = new Date(values.dateFin);
     const DateNumber2 = date2.getTime();
-    let calculDuree = ((DateNumber2 - DateNumber1)/(24*60*60*1000)).toFixed(0);
+    let calculDuree = (
+      (DateNumber2 - DateNumber1) /
+      (24 * 60 * 60 * 1000)
+    ).toFixed(0);
     values.nombreJour = parseInt(calculDuree);
     if (DateNumber1 >= DateNumber2) {
-      setOpen(true)
+      setOpen(true);
     } else {
       try {
         if (isEditing) {
@@ -69,7 +80,6 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
             })
           );
         } else {
-
           await dispatch(createBesoinVehicule(values));
         }
         fetchBesoinEnVehicule();
@@ -82,11 +92,10 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
   const [selectedEmployes, setSelectedEmployes] = React.useState<EmployeItem[]>(
     isEditing
       ? employees.filter((employee: any) =>
-        besoinVehicule?.responsable?.includes(employee.id!)
-      )
+          besoinVehicule?.responsable?.includes(employee.id!)
+        )
       : []
   );
-
 
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
@@ -96,14 +105,14 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
           isEditing
             ? besoinVehicule
             : {
-              dateDebut: isEditing ? besoinVehicule?.dateDebut : new Date(),
-              dateFin: isEditing ? besoinVehicule?.dateFin : new Date(),
-              vehicule: isEditing ? besoinVehicule?.vehicule : "",
-              trajet: isEditing ? besoinVehicule?.trajet : "",
-              responsable: isEditing ? besoinVehicule?.responsable : "",
-              // nombreJour: isEditing ? besoinVehicule?.nombreJour : "",
-              missionId: isEditing ? besoinVehicule?.missionId : id,
-            }
+                dateDebut: isEditing ? besoinVehicule?.dateDebut : new Date(),
+                dateFin: isEditing ? besoinVehicule?.dateFin : new Date(),
+                vehicule: isEditing ? besoinVehicule?.vehicule : "",
+                trajet: isEditing ? besoinVehicule?.trajet : "",
+                responsable: isEditing ? besoinVehicule?.responsable : "",
+                // nombreJour: isEditing ? besoinVehicule?.nombreJour : "",
+                missionId: isEditing ? besoinVehicule?.missionId : id,
+              }
         }
         validationSchema={Yup.object({
           vehicule: Yup.string().required("Champ obligatoire"),
@@ -119,7 +128,6 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
         {(formikProps) => {
           return (
             <Form>
-
               <SectionNavigation>
                 <DialogTitle>Créer/modifier besoin en véhicule</DialogTitle>
                 <DialogContent>
@@ -135,7 +143,9 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                         variant="outlined"
                         name="dateDebut"
                         value={formikProps.values.dateDebut}
-                        onChange={(value: any) => formikProps.setFieldValue("dateDebut", value)}
+                        onChange={(value: any) =>
+                          formikProps.setFieldValue("dateDebut", value)
+                        }
                       />
                       <OSDatePicker
                         fullWidth
@@ -144,14 +154,16 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                         variant="outlined"
                         name="dateFin"
                         value={formikProps.values.dateFin}
-                        onChange={(value: any) => formikProps.setFieldValue("dateFin", value)}
+                        onChange={(value: any) =>
+                          formikProps.setFieldValue("dateFin", value)
+                        }
                       />
                     </CustomStack>
                     <FormControl fullWidth>
                       <OSSelectField
                         fullWidth
                         id="outlined-basic"
-                        label="Vehicule"
+                        label="Véhicule"
                         variant="outlined"
                         options={vehicleList}
                         dataKey={["vehicleType"]}
@@ -184,20 +196,12 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                           <TextField
                             {...params}
                             id="outlined-basic"
-                            label="Sélectionnez participant"
+                            label="Sélectionnez responsable"
                             variant="outlined"
                           />
                         )}
                       />
                     </FormControl>
-                    {/* <OSTextField
-                      fullWidth
-                      id="outlined-basic"
-                      label="Nombre de jour"
-                      variant="outlined"
-                      name="nombreJour"
-                      type="number"
-                    /> */}
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>
@@ -220,11 +224,7 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                   </Button>
                 </DialogActions>
               </SectionNavigation>
-              <Dialog
-                open={open}
-                disablePortal={false}
-                sx={styleDialog}
-              >
+              <Dialog open={open} disablePortal={false} sx={styleDialog}>
                 <DialogTitle color="red">Attention!!</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
@@ -238,7 +238,7 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                 </DialogContent>
               </Dialog>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>
@@ -264,5 +264,5 @@ const styleDialog = {
   //left: 150,
   top: 20,
   width: "auto",
-  alignItem: "center"
-}
+  alignItem: "center",
+};

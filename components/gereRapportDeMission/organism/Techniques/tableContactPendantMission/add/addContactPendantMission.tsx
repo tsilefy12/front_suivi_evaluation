@@ -284,6 +284,7 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                     onClick={() => {
                       formikProps.resetForm();
                       dispatch(cancelEdit());
+                      handleClose();
                     }}
                   >
                     Annuler

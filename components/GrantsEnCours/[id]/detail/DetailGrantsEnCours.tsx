@@ -105,7 +105,7 @@ const DetailGrantsEnCours = () => {
           </Button>
         </Link>
         <Typography variant="h4" color="GrayText">
-          Details GRANT
+          Détails grants
         </Typography>
       </SectionNavigation>
       <DetailsContainer sx={{ backgroundColor: "#fff", pb: 5 }}>

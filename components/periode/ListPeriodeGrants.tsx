@@ -1,4 +1,4 @@
-import { Edit } from "@mui/icons-material";
+import { Edit, Search } from "@mui/icons-material";
 import Add from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -6,9 +6,11 @@ import {
   Button,
   Container,
   IconButton,
+  InputAdornment,
   Stack,
   styled,
   TableHead,
+  TextField,
   Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -22,7 +24,7 @@ import TableRow from "@mui/material/TableRow";
 import { useConfirm } from "material-ui-confirm";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import Moment from "react-moment";
 import { usePermitted } from "../../config/middleware";
 import {
@@ -37,6 +39,8 @@ import useFetchPeriode from "./hooks/useFetchPeriode";
 import { rows } from "./table/constante";
 import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
 import Data, { Order } from "./table/type-variable";
+import { set } from "date-fns";
+import { PeriodeItem } from "../../redux/features/periode/periode.interface";
 
 const ListBudgetsInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -57,7 +61,28 @@ const ListBudgetsInitial = () => {
   React.useEffect(() => {
     fetchPeriode();
     fetchGrants();
-  }, [router.query]);
+  }, []);
+
+  const [searPeriodeGrants, setSearchPeriodeGrants] = React.useState("");
+  const [dataFiltered, setDataFiltered] = React.useState<any[]>([]);
+
+  useEffect(() => {
+    if (searPeriodeGrants === "") {
+      setDataFiltered(periodelist);
+    } else {
+      const data = periodelist.filter((p: any) => {
+        return (
+          p.periode!.toLowerCase().includes(searPeriodeGrants.toLowerCase()) ||
+          p.notes?.toLowerCase().includes(searPeriodeGrants.toLowerCase()) ||
+          p.montant
+            ?.toString()
+            .toLowerCase()
+            .includes(searPeriodeGrants.toLowerCase())
+        );
+      });
+      setDataFiltered(data);
+    }
+  }, [searPeriodeGrants]);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -145,7 +170,7 @@ const ListBudgetsInitial = () => {
   };
   const groupedBudgets: { [key: string]: typeof periodelist } = {};
 
-  periodelist.forEach((budget) => {
+  dataFiltered.forEach((budget) => {
     const grantCode =
       grantEncoursList.find((grant) => grant.id == budget.grant)?.code || "";
     if (!groupedBudgets[grantCode]) {
@@ -164,13 +189,34 @@ const ListBudgetsInitial = () => {
           </Link>
         )}
         <Typography variant="h4" color="GrayText">
-          Periode GRANTS
+          Période grants
         </Typography>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
-            <EnhancedTableToolbar numSelected={selected.length} />
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems={"center"}
+              paddingRight={2}
+            >
+              <EnhancedTableToolbar numSelected={selected.length} />
+              <TextField
+                sx={{ width: 200 }}
+                size="small"
+                label="Recherche"
+                value={searPeriodeGrants}
+                onChange={(e) => setSearchPeriodeGrants(e.target.value)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Search />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Stack>
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}

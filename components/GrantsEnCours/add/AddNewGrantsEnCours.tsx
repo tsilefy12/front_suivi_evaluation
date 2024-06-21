@@ -4,10 +4,7 @@ import {
   styled,
   Typography,
   FormControl,
-  MenuItem,
   Stack,
-  Autocomplete,
-  TextField,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -33,15 +30,13 @@ import { cancelEdit } from "../../../redux/features/grantEncours/grantEncoursSli
 import useFetchBank from "../hooks";
 import OSSelectField from "../../shared/select/OSSelectField";
 import useFetchEmploys from "../hooks/getResponsable";
-import { EmployeItem } from "../../../redux/features/employe/employeSlice.interface";
-//import { GrantEncoursItem } from "../../../redux/features/grantEncours/grantEncours.interface";
 import useFetchPostAnalytique from "../hooks/getPostAnalytique";
 import useFetchProject from "../hooks/getProject";
 import useFetchCurrency from "../hooks/getCurrency";
 
 const AddNewGrantsEnCours = () => {
   const router = useRouter();
-  const { isEditing, grantEncour, grantEncoursList }: any = useAppSelector(
+  const { isEditing, grantEncour }: any = useAppSelector(
     (state: any) => state.grantEncours
   );
   const dispatch: any = useAppDispatch();
@@ -50,9 +45,7 @@ const AddNewGrantsEnCours = () => {
   const { bankList } = useAppSelector((state: any) => state.bank);
   const { employees } = useAppSelector((state: any) => state.employe);
   const fetchPostAnalytique = useFetchPostAnalytique();
-  const { postAnalytiqueList } = useAppSelector(
-    (state: any) => state.postAnalytique
-  );
+
   const fetcProject = useFetchProject();
   const fetchCurreny = useFetchCurrency();
   const { currencylist } = useAppSelector((state: any) => state.currency);
@@ -60,21 +53,13 @@ const AddNewGrantsEnCours = () => {
 
   const [open, setOpen] = React.useState(false);
 
-  // const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
-  //   isEditing
-  //     ? employees.filter((employee: any) =>
-  //         grantEncour?.responsable?.includes(employee.id!)
-  //       )
-  //     : []
-  // );
-
   React.useEffect(() => {
     fetchBank();
     fetchEmploys();
     fetchPostAnalytique();
     fetcProject();
     fetchCurreny();
-  }, [router.query]);
+  }, []);
 
   const listBank: { id: string; name: string }[] = [];
   //get list bank
@@ -144,12 +129,6 @@ const AddNewGrantsEnCours = () => {
                 endDate: isEditing
                   ? grantEncour?.endDate
                   : new Date().toISOString(),
-                // techDate: isEditing
-                //   ? grantEncour?.techDate
-                //   : new Date().toISOString(),
-                // financeDate: isEditing
-                //   ? grantEncour?.financeDate
-                //   : new Date().toISOString(),
                 status: isEditing ? grantEncour?.status : "",
                 financeValidator: isEditing
                   ? grantEncour?.financeValidator
@@ -159,10 +138,6 @@ const AddNewGrantsEnCours = () => {
                   : "",
                 techValidator: isEditing ? grantEncour?.techValidator : "",
                 currencyId: isEditing ? grantEncour?.currencyId : "",
-                // deadline: isEditing
-                //   ? grantEncour?.deadline
-                //   : new Date().toISOString(),
-                // note: isEditing ? grantEncour?.note : "",
               }
         }
         validationSchema={Yup.object({
@@ -170,7 +145,6 @@ const AddNewGrantsEnCours = () => {
           bailleur: Yup.string().required("Champ obligatoire"),
           amount: Yup.string().required("Champ obligatoire"),
           amountMGA: Yup.string().required("Champ obligatoire"),
-          // note: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -218,12 +192,16 @@ const AddNewGrantsEnCours = () => {
                       size="small"
                       startIcon={<Close />}
                       sx={{ marginInline: 3 }}
+                      onClick={() => {
+                        formikProps.resetForm();
+                        dispatch(cancelEdit());
+                      }}
                     >
                       Annuler
                     </Button>
                   </Stack>
                   <Typography variant="h5">
-                    {isEditing ? "Modif GRANT" : "Créer GRANT"}
+                    {isEditing ? "Modif grant" : "Créer grant"}
                   </Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}
@@ -241,17 +219,6 @@ const AddNewGrantsEnCours = () => {
                     variant="outlined"
                     name="code"
                   />
-                  {/* <OSSelectField
-                    fullWidth
-                    id="outlined-basic"
-                    label="Projet"
-                    variant="outlined"
-                    name="projectId"
-                    options={projectList}
-                    type="string"
-                    dataKey="title"
-                    valueKey="id"
-                  /> */}
                   <OSSelectField
                     fullWidth
                     id="outlined-basic"
@@ -411,7 +378,7 @@ const AddNewGrantsEnCours = () => {
         <DialogTitle color="red">Attention!!</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            La date début doit être inferieure de la date fin
+            La date début doit être inférieure de la date fin
           </DialogContentText>
           <DialogActions>
             <Button onClick={() => setOpen(false)}>

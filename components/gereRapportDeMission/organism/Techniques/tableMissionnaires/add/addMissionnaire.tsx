@@ -23,17 +23,20 @@ import { cancelEdit } from "../../../../../../redux/features/missionary/missiona
 import useFetchMissionaryList from "../hooks/useFetchMissionaryList";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import { EmployeItem } from "../../../../../../redux/features/employe/employeSlice.interface";
-import { createMissionaryRapport, updateMissionaryRapport } from "../../../../../../redux/features/missionaires";
+import {
+  createMissionaryRapport,
+  updateMissionaryRapport,
+} from "../../../../../../redux/features/missionaires";
 import OSDatePicker from "../../../../../shared/date/OSDatePicker";
-
 
 const AddMissionnaireRapport = ({ handleClose }: any) => {
   const router = useRouter();
-  const { id }= router.query;
+  const { id } = router.query;
   const dispatch = useAppDispatch();
 
   const { missionaires, isEditing } = useAppSelector(
-    (state: any) => state.missionaires);
+    (state: any) => state.missionaires
+  );
   const fetchMissionaryList = useFetchMissionaryList();
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state: any) => state.employe);
@@ -46,12 +49,14 @@ const AddMissionnaireRapport = ({ handleClose }: any) => {
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
     isEditing
       ? employees.filter((employee: any) =>
-        missionaires?.missionResponsabilityMissionary?.includes(employee.id!)
-      )
+          missionaires?.missionResponsabilityMissionary?.includes(employee.id!)
+        )
       : []
   );
   const handleSubmit = async (values: any) => {
-    values.missionResponsabilityMissionary = [...selectedEmployes.map(e => e.id)];
+    values.missionResponsabilityMissionary = [
+      ...selectedEmployes.map((e) => e.id),
+    ];
     try {
       if (isEditing) {
         await dispatch(
@@ -77,12 +82,22 @@ const AddMissionnaireRapport = ({ handleClose }: any) => {
           isEditing
             ? missionaires
             : {
-                lastNameMissionary: isEditing ? missionaires?.lastNameMissionary : "",
-                firstNameMissionary: isEditing ? missionaires?.firstNameMissionary : "",
-                startDateMissionary: isEditing ? missionaires?.startDateMissionary : "",
-                returnDateMissionary: isEditing ? missionaires?.returnDateMissionary : "",
-                missionResponsabilityMissionary: isEditing ? missionaires?.missionResponsabilityMissionary : "",
-                missionId: isEditing ? missionaires?.missionId: id,
+                lastNameMissionary: isEditing
+                  ? missionaires?.lastNameMissionary
+                  : "",
+                firstNameMissionary: isEditing
+                  ? missionaires?.firstNameMissionary
+                  : "",
+                startDateMissionary: isEditing
+                  ? missionaires?.startDateMissionary
+                  : "",
+                returnDateMissionary: isEditing
+                  ? missionaires?.returnDateMissionary
+                  : "",
+                missionResponsabilityMissionary: isEditing
+                  ? missionaires?.missionResponsabilityMissionary
+                  : "",
+                missionId: isEditing ? missionaires?.missionId : id,
               }
         }
         validationSchema={Yup.object({
@@ -117,10 +132,13 @@ const AddMissionnaireRapport = ({ handleClose }: any) => {
                       />
                       <OSDatePicker
                         fullWidth
-                        label="Date de debut"
+                        label="Date de début"
                         value={formikProps.values.startDateMissionary}
                         onChange={(value: any) =>
-                          formikProps.setFieldValue("startDateMissionary", value)
+                          formikProps.setFieldValue(
+                            "startDateMissionary",
+                            value
+                          )
                         }
                       />
                       <OSDatePicker
@@ -128,10 +146,13 @@ const AddMissionnaireRapport = ({ handleClose }: any) => {
                         label="Date de retour"
                         value={formikProps.values.returnDateMissionary}
                         onChange={(value: any) =>
-                          formikProps.setFieldValue("returnDateMissionary", value)
+                          formikProps.setFieldValue(
+                            "returnDateMissionary",
+                            value
+                          )
                         }
                       />
-                       <Autocomplete
+                      <Autocomplete
                         multiple
                         id="tags-standard"
                         options={employees}

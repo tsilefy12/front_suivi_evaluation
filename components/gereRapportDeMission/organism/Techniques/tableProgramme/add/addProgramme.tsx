@@ -384,6 +384,7 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                     onClick={() => {
                       formikProps.resetForm();
                       dispatch(cancelEdit());
+                      handleClose();
                     }}
                     disabled={isEditing}
                   >

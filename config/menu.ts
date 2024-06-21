@@ -40,7 +40,7 @@ function allMenu() {
           .find((t) => t.id === 2)
           .items.push({
             id: 21,
-            name: "Grants en Cours",
+            name: "Grants en cours",
             link: "/grants/grantsEnCours",
             icon: "",
           });
@@ -50,7 +50,7 @@ function allMenu() {
           .find((t) => t.id === 2)
           .items.push({
             id: 22,
-            name: "Grants Admin",
+            name: "Grants admin",
             link: "/grants/grantsAdmin",
             icon: "",
           });
@@ -62,7 +62,7 @@ function allMenu() {
           .find((t) => t.id === 2)
           .items.push({
             id: 23,
-            name: "Reliquat GRANTS",
+            name: "Reliquat grants",
             link: "/grants/reliquatGrants",
             icon: "",
           });
@@ -96,7 +96,7 @@ function allMenu() {
           .find((t) => t.id === 2)
           .items.push({
             id: 26,
-            name: "Grant Monitoring",
+            name: "Grant monitoring",
             link: "/grants/grantMonitoring",
             icon: "",
           });
@@ -114,49 +114,49 @@ function allMenu() {
         user?.groups?.some((g) => g.service.name === "Suivi configurations")
       ) {
         temp.push({
-            id: 4,
-            name: "Configurations",
-            link: "/configurations",
-            icon: "settingsIcon",
-            items: [
-              {
-                id: 42,
-                name: "Type",
-                link: "/configurations/type",
-                icon: "",
-              },
-              {
-                id: 43,
-                name: "Organisation",
-                link: "/configurations/organisation",
-                icon: "",
-              },
-              {
-                id: 44,
-                name: "Ligne de Budget",
-                link: "/configurations/lineBudget",
-                icon: "",
-              },
-              {
-                id: 45,
-                name: "Status",
-                link: "/configurations/status",
-                icon: "",
-              },
-              {
-                id: 46,
-                name: "Projet",
-                link: "/configurations/project",
-                icon: "",
-              },
-              {
-                id: 47,
-                name: "Site",
-                link: "/configurations/site",
-                icon: "",
-              },
-            ],
-          });
+          id: 4,
+          name: "Configurations",
+          link: "/configurations",
+          icon: "settingsIcon",
+          items: [
+            {
+              id: 42,
+              name: "Type",
+              link: "/configurations/type",
+              icon: "",
+            },
+            {
+              id: 43,
+              name: "Organisation",
+              link: "/configurations/organisation",
+              icon: "",
+            },
+            {
+              id: 44,
+              name: "Ligne de budget",
+              link: "/configurations/lineBudget",
+              icon: "",
+            },
+            {
+              id: 45,
+              name: "Status",
+              link: "/configurations/status",
+              icon: "",
+            },
+            {
+              id: 46,
+              name: "Projet",
+              link: "/configurations/project",
+              icon: "",
+            },
+            {
+              id: 47,
+              name: "Site",
+              link: "/configurations/site",
+              icon: "",
+            },
+          ],
+        });
       }
     }
     return temp;

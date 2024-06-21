@@ -68,7 +68,7 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                 locationContact: isEditing ? contact?.locationContact : "",
                 numberContact: isEditing ? contact?.numberContact : "",
                 noteContact: isEditing ? contact?.noteContact : "",
-                missionId: isEditing ? contact?.missionId: id,
+                missionId: isEditing ? contact?.missionId : id,
               }
         }
         validationSchema={Yup.object({})}
@@ -100,7 +100,7 @@ const AddContactPendantMission = ({ handleClose }: any) => {
                         />
                         <OSTextField
                           id="outlined-basic"
-                          label="Prenom"
+                          label="Prénom"
                           name="firstNameContact"
                           inputProps={{ autoComplete: "off" }}
                         />

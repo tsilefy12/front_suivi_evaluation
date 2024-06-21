@@ -49,17 +49,7 @@ const Recherche = () => {
             justifyContent: "space-between",
             alignItems: "center",
           }}
-        >
-          <TextField
-            variant="outlined"
-            id="search"
-            name="search"
-            placeholder="Recherche"
-            size="small"
-            value={key}
-            onChange={handleChange}
-          />
-        </Stack>
+        ></Stack>
       </Toolbar>
     </>
   );

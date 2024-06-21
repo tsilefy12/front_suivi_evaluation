@@ -269,7 +269,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                           fullWidth
                           select
                           id="outlined-basic"
-                          label="Budget Line"
+                          label="Budget line"
                           variant="outlined"
                           name="ligneBudgetaire"
                           options={BudgetLineGrantList}

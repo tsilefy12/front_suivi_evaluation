@@ -153,7 +153,9 @@ const AddNewPeriodeGrants = () => {
                       Annuler
                     </Button>
                   </Stack>
-                  <Typography variant="h5">Créer Réliquats Grants</Typography>
+                  <Typography variant="h5">
+                    {isEditing ? "Modifier" : "Créer"} période grants
+                  </Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}
               </NavigationContainer>

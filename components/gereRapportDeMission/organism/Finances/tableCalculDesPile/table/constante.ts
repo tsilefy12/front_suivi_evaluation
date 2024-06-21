@@ -18,19 +18,19 @@ export const headCells: readonly HeadCell[] = [
     id: "nbapp",
     numeric: true,
     disablePadding: false,
-    label: "Nb app",
+    label: "Nombre d'appareils",
   },
   {
     id: "nbpile",
     numeric: true,
     disablePadding: false,
-    label: "Nb Piles",
+    label: "Nombre de piles",
   },
   {
     id: "changes",
     numeric: true,
     disablePadding: false,
-    label: "Changes",
+    label: "Changements",
   },
   {
     id: "total",
@@ -42,7 +42,7 @@ export const headCells: readonly HeadCell[] = [
     id: "nbpacks",
     numeric: true,
     disablePadding: false,
-    label: "Nb Packs",
+    label: "Nombre de packs",
   },
 ];
 

@@ -2,8 +2,10 @@ import {
   Button,
   Container,
   IconButton,
+  InputAdornment,
   Stack,
   styled,
+  TextField,
   Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -15,12 +17,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import Data, { Order } from "./table/type-variable";
 // import { rows } from "./table/constante";
 import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
 // import { getComparator, stableSort } from "./table/function";
-import { Edit } from "@mui/icons-material";
+import { Edit, Search } from "@mui/icons-material";
 import Add from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -39,6 +41,7 @@ import useFetchReliquatGrant from "../reliquetGrant/hooks/useFetchEliquatGrant";
 import useFetchGrants from "./hooks/getGrants";
 import useFetchProject from "./hooks/getProject";
 import TransportEquipmentTableHeader from "./organisme/table/TransportEquipmentTableHeader";
+import { fi } from "date-fns/locale";
 
 const ListGrantsEnCours = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -67,7 +70,7 @@ const ListGrantsEnCours = () => {
     fetchProject();
     fetchtReliquatGrant();
     fetchEpmloyes();
-  }, [router.query]);
+  }, []);
   const validate = usePermitted();
 
   const handleClickEdit = async (id: any) => {
@@ -83,7 +86,27 @@ const ListGrantsEnCours = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const [dataGrant, setDataGrant] = React.useState<any[]>([]);
+  const [searchGrant, setSearchGrant] = React.useState<string>("");
+  useEffect(() => {
+    if (searchGrant !== "") {
+      const filteredData = grantEncoursList.filter((item: any) => {
+        return (
+          (item.code.toLowerCase().includes(searchGrant.toLowerCase()) ||
+            item.bailleur.toLowerCase().includes(searchGrant.toLowerCase()) ||
+            item.amountMGA
+              .toString()
+              .toLowerCase()
+              .includes(searchGrant.toLowerCase())) &&
+          item.id != reliquatGrantList.map((rg: any) => rg.grant)
+        );
+      });
+      setDataGrant(filteredData);
+      return filteredData;
+    } else {
+      setDataGrant(grantEncoursList);
+    }
+  }, [searchGrant]);
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0
@@ -119,13 +142,33 @@ const ListGrantsEnCours = () => {
           </Link>
         )}
         <Typography variant="h5" color="GrayText">
-          GRANTS en Cours
+          Grants en cours
         </Typography>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2, ml: 4 }}>
-            <EnhancedTableToolbar numSelected={selected.length} />
+            <Stack
+              direction={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
+              <EnhancedTableToolbar numSelected={selected.length} />
+              <TextField
+                sx={{ width: 150 }}
+                size="small"
+                placeholder="Rechercher"
+                value={searchGrant}
+                onChange={(e) => setSearchGrant(e.target.value)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Search />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Stack>
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -136,11 +179,7 @@ const ListGrantsEnCours = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {grantEncoursList
-                    .filter(
-                      (g: any) =>
-                        g.id != reliquatGrantList.map((rg: any) => rg.grant)
-                    )
+                  {dataGrant
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: GrantEncoursItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;

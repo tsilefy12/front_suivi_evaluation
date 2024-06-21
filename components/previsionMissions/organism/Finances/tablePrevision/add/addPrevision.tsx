@@ -16,8 +16,14 @@ import {
   TextField,
 } from "@mui/material";
 import { Form, Formik } from "formik";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
-import { createPrevisionDepense, updatePrevisionDepense } from "../../../../../../redux/features/PrevisionDepense";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../../../hooks/reduxHooks";
+import {
+  createPrevisionDepense,
+  updatePrevisionDepense,
+} from "../../../../../../redux/features/PrevisionDepense";
 import useFetchPrevisionDepenseList from "../hooks/useFetchPrevisionDepense";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
@@ -29,14 +35,16 @@ import { cancelEdit } from "../../../../../../redux/features/programmePrevision/
 import useFetchBudgetLine from "../hooks/useFetchbudgetLine";
 
 const AddPrevisionMission = ({ handleClose }: any) => {
-  const dispatch: any = useAppDispatch()
-  const { isEditing, previsionDepense } = useAppSelector((state) => state.previsonDepense)
+  const dispatch: any = useAppDispatch();
+  const { isEditing, previsionDepense } = useAppSelector(
+    (state) => state.previsonDepense
+  );
   const fetchPrevisionDepense = useFetchPrevisionDepenseList();
   const fetchGrant = useFetchGrants();
-  const { grantEncoursList } = useAppSelector(state => state.grantEncours);
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state) => state.budgetLine);
-  const router = useRouter()
+  const router = useRouter();
   const { id }: any = router.query;
   const [grantValue, setGrantValue]: any = React.useState("vide");
 
@@ -44,21 +52,21 @@ const AddPrevisionMission = ({ handleClose }: any) => {
     fetchPrevisionDepense();
     fetchGrant();
     fetchBudgetLine();
-  }, [router.query])
+  }, [router.query]);
 
-  let BudgetLineGrantList: any= useState<{}>([])
+  let BudgetLineGrantList: any = useState<{}>([]);
 
   //select budget line depends grant
   const uniqueValues = new Set();
 
-  grantEncoursList.forEach(g => {
+  grantEncoursList.forEach((g) => {
     if (grantValue !== "vide") {
       if (!uniqueValues.has(g.id)) {
-        uniqueValues.add(g.id)
-         return BudgetLineGrantList = g.budgetLines
+        uniqueValues.add(g.id);
+        return (BudgetLineGrantList = g.budgetLines);
       }
     }
-    uniqueValues.add(g.id)
+    uniqueValues.add(g.id);
     return [];
   });
   // console.log(BudgetLineGrantList)
@@ -89,16 +97,18 @@ const AddPrevisionMission = ({ handleClose }: any) => {
           isEditing
             ? previsionDepense
             : {
-              date: isEditing ? previsionDepense?.date : new Date(),
-              libelle: isEditing ? previsionDepense?.libelle : "",
-              nombre: isEditing ? previsionDepense?.nombre : 0,
-              pu: isEditing ? previsionDepense?.pu : 0,
-              grant: isEditing ? previsionDepense?.grant : "",
-              ligneBudgetaire: isEditing ? previsionDepense?.ligneBudgetaire : "",
-              regleme: isEditing ? previsionDepense?.regleme : "",
-              missionId: isEditing ? previsionDepense?.missionId : id,
-              // montant: nombre * publicDecrypt,
-            }
+                date: isEditing ? previsionDepense?.date : new Date(),
+                libelle: isEditing ? previsionDepense?.libelle : "",
+                nombre: isEditing ? previsionDepense?.nombre : 0,
+                pu: isEditing ? previsionDepense?.pu : 0,
+                grant: isEditing ? previsionDepense?.grant : "",
+                ligneBudgetaire: isEditing
+                  ? previsionDepense?.ligneBudgetaire
+                  : "",
+                regleme: isEditing ? previsionDepense?.regleme : "",
+                missionId: isEditing ? previsionDepense?.missionId : id,
+                // montant: nombre * publicDecrypt,
+              }
         }
         validationSchema={Yup.object({
           libelle: Yup.string().required("Champ obligatoire"),
@@ -119,14 +129,16 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                 <DialogTitle> Créer/modifier prévision de dépense </DialogTitle>
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
-                  <OSDatePicker
+                    <OSDatePicker
                       fullWidth
                       id="outlined-basic"
                       label="Date"
                       variant="outlined"
                       name="date"
                       value={formikProps.values.date}
-                      onChange={(value: any) => formikProps.setFieldValue("date", value)}
+                      onChange={(value: any) =>
+                        formikProps.setFieldValue("date", value)
+                      }
                     />
                     <OSTextField
                       fullWidth
@@ -152,7 +164,8 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                         onChange={(event: any) => {
                           const newValue = parseInt(event.target.value);
                           formikProps.setFieldValue("nombre", newValue);
-                          const newMontant = newValue * (formikProps.values.pu ?? 0);
+                          const newMontant =
+                            newValue * (formikProps.values.pu ?? 0);
                           formikProps.setFieldValue("montant", newMontant);
                         }}
                       />
@@ -168,7 +181,8 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                         onChange={(event: any) => {
                           const newValue = parseInt(event.target.value);
                           formikProps.setFieldValue("pu", newValue);
-                          const newMontant = newValue * (formikProps.values.nombre ?? 0);
+                          const newMontant =
+                            newValue * (formikProps.values.nombre ?? 0);
                           formikProps.setFieldValue("montant", newMontant);
                         }}
                       />
@@ -181,31 +195,33 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                         label="Grant"
                         variant="outlined"
                         name="grant"
-                        value={(id) ?
-                          budgetLineList.find((e: any) => e.id === previsionDepense?.grant)?.code : grantValue}
+                        value={
+                          id
+                            ? budgetLineList.find(
+                                (e: any) => e.id === previsionDepense?.grant
+                              )?.code
+                            : grantValue
+                        }
                         onChange={(e: any) => setGrantValue(e.target.value)}
                       >
                         <MenuItem value="vide">Select grant</MenuItem>
-                        {
-                          grantEncoursList.map(item => (
-                            <MenuItem value={item.id!}>{item.code!}</MenuItem>
-                          ))
-                        }
+                        {grantEncoursList.map((item) => (
+                          <MenuItem value={item.id!}>{item.code!}</MenuItem>
+                        ))}
                       </OSTextField>
                     </FormControl>
                     <FormControl fullWidth>
-                    <OSSelectField
+                      <OSSelectField
                         fullWidth
                         select
                         id="outlined-basic"
-                        label="Budget Line"
+                        label="Budget line"
                         variant="outlined"
                         name="ligneBudgetaire"
                         options={BudgetLineGrantList}
                         dataKey={["code"]}
                         valueKey="id"
-                      >
-                      </OSSelectField>
+                      ></OSSelectField>
                     </FormControl>
                     <OSTextField
                       fullWidth
@@ -228,16 +244,13 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                   >
                     Annuler
                   </Button>
-                  <Button
-                    variant="contained"
-                    type="submit"
-                  >
+                  <Button variant="contained" type="submit">
                     Enregistrer
                   </Button>
                 </DialogActions>
               </SectionNavigation>
             </Form>
-          )
+          );
         }}
       </Formik>
     </Container>

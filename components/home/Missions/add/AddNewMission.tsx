@@ -229,7 +229,7 @@ const AddNewMission = () => {
                   </Stack>
                   <Typography variant="h5">
                     {" "}
-                    {isEditing ? "Modifier" : "Ajouter"} Mission
+                    {isEditing ? "Modifier" : "Ajouter"} mission
                   </Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}

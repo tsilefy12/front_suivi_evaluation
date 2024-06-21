@@ -35,16 +35,15 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         </Typography>
       ) : (
         <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        spacing={{ xs: 1, sm: 2, md: 4 }}
+          direction={{ xs: "column", sm: "row" }}
+          spacing={{ xs: 1, sm: 2, md: 4 }}
           sx={{
             flex: "1 1 100%",
             justifyContent: "space-between",
           }}
-        
         >
           <Typography variant="h6" id="tableTitle" component="div">
-            Liste des Budgets Initial
+            Listes des budget initial
           </Typography>
           <TextField
             variant="outlined"
