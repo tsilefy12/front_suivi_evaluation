@@ -99,9 +99,10 @@ const AddNewReliquatsGrants = () => {
           isEditing
             ? reliquatGrant
             : {
-                grant: id || "",
+                grant: parseInt(id),
                 soldeCaisse: soldeCaisses,
                 soldeBank: soldeBankByGrant,
+                montantTotal: soldeCaisses + soldeBankByGrant,
               }
         }
         onSubmit={(value: any, action: any) => {
@@ -235,7 +236,10 @@ const AddNewReliquatsGrants = () => {
                   variant="outlined"
                   name="montantTotal"
                   type="number"
-                  value={formikProps.values.montantTotal}
+                  value={
+                    formikProps.values.soldeCaisse +
+                    formikProps.values.soldeBank
+                  }
                   onChange={(event: any) => {
                     const newValue = parseFloat(event.target.value);
                     if (!isNaN(newValue)) {
@@ -247,7 +251,6 @@ const AddNewReliquatsGrants = () => {
                       );
                     }
                   }}
-                  readOnly
                 />
               </FormContainer>
             </Form>

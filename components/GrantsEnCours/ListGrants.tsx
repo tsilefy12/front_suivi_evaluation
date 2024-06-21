@@ -104,7 +104,12 @@ const ListGrantsEnCours = () => {
       setDataGrant(filteredData);
       return filteredData;
     } else {
-      setDataGrant(grantEncoursList);
+      setDataGrant(
+        grantEncoursList.filter(
+          (f: GrantEncoursItem) =>
+            f.id != reliquatGrantList.map((rg: any) => rg.grant)
+        )
+      );
     }
   }, [searchGrant]);
   // Avoid a layout jump when reaching the last page with empty rows.
