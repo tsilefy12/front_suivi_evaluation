@@ -3,19 +3,13 @@ import {
   Container,
   styled,
   Typography,
-  TextField,
   FormControl,
-  InputLabel,
-  Select,
   MenuItem,
   Stack,
-  Divider,
 } from "@mui/material";
 import Link from "next/link";
 import React from "react";
-import * as Yup from "yup";
-import ArrowBack from "@mui/icons-material/ArrowBack";
-import { Check, Close } from "@mui/icons-material";
+import { ArrowBack, Check, Close } from "@mui/icons-material";
 import { SectionNavigation } from "../../ListReliquetsGrants";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
@@ -27,7 +21,6 @@ import {
 } from "../../../../redux/features/reliquatGrants";
 import { cancelEdit } from "../../../../redux/features/reliquatGrants/reliquatGrantSlice";
 import OSTextField from "../../../shared/input/OSTextField";
-import OSSelectField from "../../../shared/select/OSSelectField";
 import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
 import useFetchCaisee from "../../hooks/useFetchCaisse";
 
@@ -50,7 +43,7 @@ const AddNewReliquatsGrants = () => {
     fetchGrant();
     fetchCaisse();
   }, [router.query]);
-  // console.log(caisselist);
+
   const handleSubmit = async (values: any) => {
     try {
       if (isEditing) {
@@ -60,6 +53,7 @@ const AddNewReliquatsGrants = () => {
             reliquatGrant: values,
           })
         );
+        fetchEliquatGrant();
       } else {
         await dispatch(createReliquatGrant(values));
         fetchEliquatGrant();
@@ -85,42 +79,31 @@ const AddNewReliquatsGrants = () => {
     });
     setSoldeBankByGrant(totalSolde);
   }, [grantEncoursList, id]);
-  // console.log(soldeBankByGrant);
+
   const [soldeCaisses, setSoldeCaisse] = React.useState(0);
   React.useEffect(() => {
     let CalculSoldeCaisses = 0;
     caisselist
       .filter((c: any) => c.grantId == id)
-      .map((solde: any) => {
+      .forEach((solde: any) => {
         CalculSoldeCaisses = solde.debit - solde.credit;
         setSoldeCaisse(CalculSoldeCaisses);
       });
-  });
-  // console.log(soldeCaisses);
+  }, [caisselist, id]);
+
   return (
     <Container maxWidth="xl" sx={{ pb: 5 }}>
       <Formik
-        enableReinitialize={isEditing ? true : false}
+        enableReinitialize={true}
         initialValues={
           isEditing
             ? reliquatGrant
             : {
-                grant: isEditing ? reliquatGrant?.grant : id,
-                soldeCaisse: isEditing
-                  ? reliquatGrant?.soldeCaisse
-                  : soldeCaisses,
-                soldeBank: isEditing
-                  ? reliquatGrant?.soldeBank
-                  : soldeBankByGrant,
-                // montantTotal: isEditing ? reliquatGrant?.montantTotal : "",
+                grant: id || "",
+                soldeCaisse: soldeCaisses,
+                soldeBank: soldeBankByGrant,
               }
         }
-        // validationSchema={Yup.object({
-        //   grant: Yup.number().required("Champ obligatoire"),
-        //   soldeCaisse: Yup.number().required("Champ obligatoire"),
-        //   soldeBank: Yup.number().required("Champ obligatoire"),
-        //   montantTotal: Yup.number().required("Champ obligatoire"),
-        // })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
           action.resetForm();
@@ -152,7 +135,7 @@ const AddNewReliquatsGrants = () => {
                       size="small"
                       startIcon={<Check />}
                       sx={{ marginInline: 3 }}
-                      type="button" // Modifier le type à "button"
+                      type="button"
                       onClick={formikProps.submitForm}
                     >
                       Enregistrer
@@ -173,7 +156,6 @@ const AddNewReliquatsGrants = () => {
                   </Stack>
                   <Typography variant="h5">Créer reliquats grants</Typography>
                 </SectionNavigation>
-                {/* <Divider /> */}
               </NavigationContainer>
 
               <FormContainer spacing={2} sx={{ backgroundColor: "#fff" }}>
@@ -185,12 +167,12 @@ const AddNewReliquatsGrants = () => {
                     label="Grant"
                     variant="outlined"
                     name="grant"
-                    value={id !== "undefined" ? id : formikProps.values.grant}
+                    value={formikProps.values.grant}
                     onChange={(event: any) =>
                       formikProps.setFieldValue("grant", event.target.value)
                     }
                   >
-                    <MenuItem value="undefined">Select grant</MenuItem>
+                    <MenuItem value="">Select grant</MenuItem>
                     {grantEncoursList.map((g: any) => (
                       <MenuItem key={g.id} value={g.id}>
                         {g.code}
@@ -205,19 +187,23 @@ const AddNewReliquatsGrants = () => {
                   variant="outlined"
                   name="soldeCaisse"
                   type="number"
-                  value={
-                    id != "undefined"
-                      ? soldeCaisses
-                      : formikProps.values.soldeCaisse
-                  }
+                  value={formikProps.values.soldeCaisse}
                   onChange={(event: any) => {
                     const newValue = parseFloat(event.target.value);
-                    formikProps.setFieldValue("soldeCaisse", newValue);
-                    const newMontant =
-                      parseFloat(formikProps.values.soldeBank!) + newValue;
-                    formikProps.setFieldValue("montantTotal", newMontant);
+                    if (!isNaN(newValue)) {
+                      formikProps.setFieldValue("soldeCaisse", newValue);
+                      const newMontant =
+                        parseFloat(formikProps.values.soldeBank) + newValue;
+                      formikProps.setFieldValue("montantTotal", newMontant);
+                    } else {
+                      console.error(
+                        "Invalid number input:",
+                        event.target.value
+                      );
+                    }
                   }}
                 />
+
                 <OSTextField
                   fullWidth
                   id="outlined-basic"
@@ -225,19 +211,23 @@ const AddNewReliquatsGrants = () => {
                   variant="outlined"
                   name="soldeBank"
                   type="number"
-                  value={
-                    id != "undefined"
-                      ? soldeBankByGrant
-                      : formikProps.values.soldeBank
-                  }
+                  value={formikProps.values.soldeBank}
                   onChange={(event: any) => {
                     const newValue = parseFloat(event.target.value);
-                    formikProps.setFieldValue("soldeBank", newValue);
-                    const newMontant =
-                      parseFloat(formikProps.values.soldeCaisse!) + newValue;
-                    formikProps.setFieldValue("montantTotal", newMontant);
+                    if (!isNaN(newValue)) {
+                      formikProps.setFieldValue("soldeBank", newValue);
+                      const newMontant =
+                        parseFloat(formikProps.values.soldeCaisse) + newValue;
+                      formikProps.setFieldValue("montantTotal", newMontant);
+                    } else {
+                      console.error(
+                        "Invalid number input:",
+                        event.target.value
+                      );
+                    }
                   }}
                 />
+
                 <OSTextField
                   fullWidth
                   id="outlined-basic"
@@ -245,14 +235,19 @@ const AddNewReliquatsGrants = () => {
                   variant="outlined"
                   name="montantTotal"
                   type="number"
-                  value={
-                    id != "undefined"
-                      ? soldeBankByGrant + soldeCaisses
-                      : parseFloat(
-                          formikProps.values.soldeCaisse! +
-                            formikProps.values.soldeBank!
-                        )
-                  }
+                  value={formikProps.values.montantTotal}
+                  onChange={(event: any) => {
+                    const newValue = parseFloat(event.target.value);
+                    if (!isNaN(newValue)) {
+                      formikProps.setFieldValue("montantTotal", newValue);
+                    } else {
+                      console.error(
+                        "Invalid number input:",
+                        event.target.value
+                      );
+                    }
+                  }}
+                  readOnly
                 />
               </FormContainer>
             </Form>
