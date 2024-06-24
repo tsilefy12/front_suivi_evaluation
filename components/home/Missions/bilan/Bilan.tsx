@@ -148,7 +148,7 @@ const BilanMission = () => {
               Retour
             </Button>
           </Link>
-          <Typography variant="h4"> Rapport de Mission</Typography>
+          <Typography variant="h4">Rapport de mission</Typography>
         </SectionNavigation>
         <Divider />
       </NavigationContainer>

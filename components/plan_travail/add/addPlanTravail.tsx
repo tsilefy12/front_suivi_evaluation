@@ -98,7 +98,7 @@ const ObjectifStrategiqueForm = ({ handleClose, getId }: any) => {
               <SectionNavigation width={{ xs: "100%", sm: "560px" }}>
                 <DialogTitle>
                   {" "}
-                  {isEditing ? "Modifier" : "Créer"} Plan de travail{" "}
+                  {isEditing ? "Modifier" : "Créer"} plan de travail {isEditing ? planTravail?.projectId :""}
                 </DialogTitle>
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>

@@ -8,7 +8,7 @@ import { EnhancedTableToolbarProps } from "./type-variable";
 import { TextField, Stack, Typography } from "@mui/material";
 import { selectedItemsLabel } from "../../../config/table.config";
 
-const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
+const EnhancedTableToolbar = (props: EnhancedTableToolbarProps,{filtre, setFiltre}:any) => {
   const { numSelected } = props;
   return (
     <Toolbar
@@ -43,7 +43,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           }}
         >
           <Typography variant="h6" id="tableTitle" component="div">
-            Listes des budget initial
+            Liste de budget initial
           </Typography>
           <TextField
             variant="outlined"

@@ -8,7 +8,7 @@ import { EnhancedTableToolbarProps } from "./type-variable";
 import { TextField, Stack, Typography } from "@mui/material";
 import { selectedItemsLabel } from "../../../config/table.config";
 
-const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
+const EnhancedTableToolbar = (props: EnhancedTableToolbarProps ,{filtre, setFiltre}:any) => {
   const { numSelected } = props;
   return (
     <Toolbar

@@ -133,7 +133,7 @@ const NewTacheEtObjectifs = ({
             <OSTextField
               fullWidth
               id="outlined-basic"
-              label=" Tâche clés"
+              label=" Tâche clé"
               variant="outlined"
               name="keyTasks"
             />
@@ -142,7 +142,7 @@ const NewTacheEtObjectifs = ({
             <OSTextField
               fullWidth
               id="outlined-basic"
-              label="Time Frame "
+              label="Time frame "
               variant="outlined"
               name="timeFrame"
             />
@@ -349,7 +349,6 @@ const NewTacheEtObjectifs = ({
                         label="Année"
                         name="year"
                         type="number"
-                        min="0"
                       />
                     </FormControl>
                   </TableCell>

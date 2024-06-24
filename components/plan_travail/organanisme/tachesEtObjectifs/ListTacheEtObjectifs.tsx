@@ -233,7 +233,7 @@ const ListTacheEtObjectifs = () => {
       <Divider />
       <FormContainer>
         <KeyValue
-          keyName="Objectif Stratégique"
+          keyName="Objectif stratégique"
           value={
             tacheEtObjectifList.length != 0 ? planTravail.description! : ""
           }

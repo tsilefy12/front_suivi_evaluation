@@ -80,6 +80,20 @@ const AddNewTacheEtObjectifs = () => {
     }
     try {
       if (isEditing) {
+        const tacheEtObjectif = {
+          sn: values.sn,
+          keyTasks: values.keyTasks,
+          statusId: values.statusId,
+          timeFrame: values.timeFrame,
+          responsableId: values.responsableId,
+          expectedResult: values.expectedResult,
+          resources:values.resources,
+          participantsId: values.participantsId,
+          notes: values.notes,
+          startDate : values.startDate,
+          endDate : values.endDate,
+          planTravaileId: values.planTravaileId
+        }
         const res = await dispatch(
           updateTacheEtObjectifs({ idT, tacheEtObjectif })
         );
@@ -108,6 +122,7 @@ const AddNewTacheEtObjectifs = () => {
           const id = element.id;
           dispatch(deleteObjectifAnnuel({ id }));
         });
+        router.push(`/plan_travail/${id}/tachesEtObjectifs/`);
       } else {
         const res = await dispatch(createTacheEtObjectifs(values));
         if (valuesArticle.length > 0) {
@@ -120,9 +135,8 @@ const AddNewTacheEtObjectifs = () => {
             dispatch(createObejectifAnnuel(newData));
           });
         }
+        router.push(`/plan_travail/${id}/tachesEtObjectifs/`);
       }
-      dispatch(getTacheEtObjectifsList({}));
-      router.push(`/plan_travail/${id}/tachesEtObjectifs`);
     } catch (error) {
       console.log("error", error);
     }

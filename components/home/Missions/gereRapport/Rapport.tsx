@@ -63,7 +63,7 @@ import { useAppSelector } from "../../../../hooks/reduxHooks";
               Annuler la soumission
             </Button>
             </Link>
-            <Typography variant="h4"> Rapport de Mission</Typography>
+            <Typography variant="h4">Rapport de mission</Typography>
           </SectionNavigation>
           <Divider />
         </Stack>
