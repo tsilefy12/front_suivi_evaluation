@@ -34,6 +34,7 @@ const ListCalculCarburant = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [filtre, setFiltre] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);

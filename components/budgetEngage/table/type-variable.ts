@@ -5,7 +5,7 @@ export default interface Data {
   lb: string;
   libelle: string;
   montant: string;
-  }
+}
   
 
 export type Order = 'asc' | 'desc';
@@ -20,6 +20,8 @@ export interface HeadCell {
 
 export interface EnhancedTableToolbarProps {
   numSelected: number;
+  filtre: any;
+  setFiltre: any
 }
 
 export interface EnhancedTableProps {

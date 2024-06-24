@@ -28,6 +28,7 @@ const ListDevise = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [filtre, setFiltre] = React.useState("");
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -92,7 +93,7 @@ const ListDevise = () => {
     <TableSection>
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
-          <TableToolbarEtatMateriel numSelected={selected.length} />
+          <TableToolbarEtatMateriel numSelected={selected.length} filtre={filtre} setFiltre={setFiltre} />
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
@@ -112,6 +113,7 @@ const ListDevise = () => {
             rows.slice().sort(getComparator(order, orderBy)) */}
                 {stableSort(rowssmie, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .filter((item) => (`${item.devise} ${item.abreviation}`).toLowerCase().includes(filtre.toLowerCase()))
                   .map((row, index) => {
                     const isItemSelected = isSelected(row.devise);
                     const labelId = `enhanced-table-checkbox-${index}`;

@@ -8,8 +8,8 @@ import { EnhancedTableToolbarProps } from "./type-variable";
 import { TextField, Stack, Typography } from "@mui/material";
 import { selectedItemsLabel } from "../../../config/table.config";
 
-const EnhancedTableToolbar = (props: EnhancedTableToolbarProps ,{filtre, setFiltre}:any) => {
-  const { numSelected } = props;
+const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
+  const { numSelected , filtre, setFiltre } = props;
   return (
     <Toolbar
       sx={{
@@ -46,12 +46,14 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps ,{filtre, setFilt
             Liste des Budgets Engagés
           </Typography>
           <TextField
-            variant="outlined"
-            id="search"
-            name="search"
-            placeholder="Recherche"
-            size="small"
-          />
+						variant="outlined"
+						id="search"
+						name="search"
+						placeholder="Recherche"
+						size="small"
+						value={filtre}
+						onChange={(e)=> setFiltre(e.target.value)}
+					/>
         </Stack>
       )}
       {numSelected > 0 && (

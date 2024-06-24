@@ -21,4 +21,6 @@ export interface TimesheetEnhancedTableProps {
 
 export interface EnhancedTableToolbarProps {
   numSelected: number;
+  filtre: any;
+  setFiltre : any;
 }

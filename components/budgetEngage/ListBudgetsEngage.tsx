@@ -51,6 +51,8 @@ const ListBudgetEngage = () => {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [filtre, setFiltre] = React.useState("");
+
     const { budgetEngagedList } = useAppSelector((state) => state.budgetsEngaged);
     const dispatch = useAppDispatch();
 
@@ -110,10 +112,6 @@ const ListBudgetEngage = () => {
     ) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
-    };
-
-    const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDense(event.target.checked);
     };
 
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
@@ -177,7 +175,7 @@ const ListBudgetEngage = () => {
             <SectionTable sx={{ backgroundColor: '#fff' }} >
                 <Box sx={{ width: "100%" }}>
                     <Paper sx={{ width: "100%", mb: 2 }}>
-                        <EnhancedTableToolbar numSelected={selected.length} />
+                        <EnhancedTableToolbar numSelected={selected.length} filtre={filtre} setFiltre={setFiltre}/>
                         <TableContainer>
                             <Table
                                 sx={{ minWidth: 750 }}
@@ -195,6 +193,7 @@ const ListBudgetEngage = () => {
                                 <TableBody>
                                     {budgetEngagedList
                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        .filter((item) => (`${grantEncoursList.find((e: any) => e.id === item.grantsId)?.code} ${item.libelle} ${item.amount}`).toLowerCase().includes(filtre.toLowerCase()))
                                         .map((row: any) => {
                                             const isItemSelected = isSelected(row.id!);
                                             const labelId = `enhanced-table-checkbox-${row.id!}`;

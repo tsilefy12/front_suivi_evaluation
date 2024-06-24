@@ -46,6 +46,7 @@ const ListGrantsAdmin = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [filtre , setFiltre] = React.useState("")
   const fetchGrantAdmin = useFetchGrantAdmin();
   const { grantAdminlist } = useAppSelector((state) => state.grantAdmin);
   const router = useRouter();
@@ -170,27 +171,7 @@ const ListGrantsAdmin = () => {
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
-            <Stack
-              direction={"row"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-            >
-              <EnhancedTableToolbar numSelected={selected.length} />
-              <TextField
-                sx={{ width: 150 }}
-                size="small"
-                label="Rechercher"
-                value={searchGrantAdmin}
-                onChange={(e) => setSearchGrantAdmin(e.target.value)}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Search />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Stack>
+            <EnhancedTableToolbar numSelected={selected.length} filtre={filtre} setFiltre={setFiltre}/>
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -210,6 +191,9 @@ const ListGrantsAdmin = () => {
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .filter( item => (`
+                        ${grantEncoursList.find((e: any) => e.id === item?.grant)?.code} ${item.bailleur}
+                      `).toLowerCase().includes(filtre.toLowerCase()))
                     .map((row: GrantAdminItem, index) => {
                       // const isItemSelected = isSelected(row.id);
                       const labelId = `enhanced-table-checkbox-${index}`;

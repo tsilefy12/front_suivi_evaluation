@@ -10,7 +10,7 @@ import { TextField, Stack, Typography, MenuItem } from "@mui/material";
 import { selectedItemsLabel } from "../../../../../config/table.config";
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected } = props;
+  const { numSelected , filtre ,setFiltre } = props;
   return (
     <Toolbar
       sx={{
@@ -66,6 +66,8 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                 name="search"
                 placeholder="Recherche"
                 size="small"
+                value={filtre}
+                onChange={(e)=> setFiltre(e.target.value)}
               />
           </Stack>
         </Stack>

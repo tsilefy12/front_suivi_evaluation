@@ -39,6 +39,7 @@ const ListObjectifStrategique = ({
   handleClickDelete,
 }: any) => {
   const [open, setOpen] = React.useState(false);
+  const [filtre, setFiltre] = React.useState("")
   const fetchPlanTravail = useFetchPlanTravaile();
   const { planTravaillist, isEditing } = useAppSelector(
     (state) => state.planTravail
@@ -142,6 +143,8 @@ const ListObjectifStrategique = ({
               name="search"
               placeholder="Recherche"
               size="small"
+              value={filtre}
+              onChange={(e)=> setFiltre(e.target.value)}
             />
           </Stack>
         </Stack>
@@ -149,7 +152,10 @@ const ListObjectifStrategique = ({
           <FormLabel>Année : {new Date().getFullYear()}</FormLabel>
         </ValueDetail>
         <Grid container spacing={2} mt={2}>
-          {planTravaillist.slice().map((row: PlanTravailItem, index: any) => (
+          {planTravaillist
+            .slice()
+            .filter(item =>(` ${item.title} ${item.description}`).toLowerCase().includes(filtre.toLowerCase()))
+            .map((row: PlanTravailItem, index: any) => (
             <Grid key={row.id!} item xs={12} md={6} lg={4}>
               <LinkContainer>
                 <Stack direction={"row"} spacing={4}>

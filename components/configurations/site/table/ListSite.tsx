@@ -18,9 +18,6 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
 import PosteAnalytiqueTableHeader from "../organisme/table/StatusTableHeader";
 import { useConfirm } from "material-ui-confirm";
 import { useRouter } from "next/router";
-import useFetchStatus from "../hooks/useFetchSite";
-import { deleteStatus } from "../../../../redux/features/status";
-import { StatusItem } from "../../../../redux/features/status/status.interface";
 import useFetchSite from "../hooks/useFetchSite";
 import { deleteSite } from "../../../../redux/features/site";
 import { SiteItem } from "../../../../redux/features/site/site.interface";
@@ -31,6 +28,7 @@ const ListeSites = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [filtre , setFiltre] = React.useState("")
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -94,6 +92,7 @@ const ListeSites = () => {
               <TableBody>
                 { sitelist
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .filter((item) => (`${item.lieu}`).toLowerCase().includes(filtre.toLowerCase()))
                   .map((row: SiteItem, index: any) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (

@@ -52,6 +52,8 @@ const ListGrantsEnCours = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [filtre, setFiltre] = React.useState("")
+
   const router = useRouter();
   const fetchGrants = useFetchGrants();
   const { grantEncoursList } = useAppSelector(
@@ -153,27 +155,7 @@ const ListGrantsEnCours = () => {
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2, ml: 4 }}>
-            <Stack
-              direction={"row"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-            >
-              <EnhancedTableToolbar numSelected={selected.length} />
-              <TextField
-                sx={{ width: 150 }}
-                size="small"
-                placeholder="Rechercher"
-                value={searchGrant}
-                onChange={(e) => setSearchGrant(e.target.value)}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Search />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Stack>
+            <EnhancedTableToolbar numSelected={selected.length} filtre={filtre} setFiltre={setFiltre}/>
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -186,6 +168,14 @@ const ListGrantsEnCours = () => {
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {dataGrant
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .filter(item => (`
+                        ${item.code} ${item.bailleur}
+                        ${employees.find((e: any) => e.id === item.techValidator)?.name} 
+                        ${employees.find((e: any) => e.id === item.techValidator)?.surname}
+                        ${employees.find((e: any) => e.id === item.financeVerificator)?.name}
+                        ${employees.find((e: any) => e.id === item.financeValidator)?.surname}
+                        ${employees.find((e: any) => e.id === item.financeVerificator)?.name}
+                        ${employees.find((e: any) => e.id === item.financeVerificator)?.surname}`).toLowerCase().includes(filtre.toLowerCase()))
                     .map((row: GrantEncoursItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
                       return (

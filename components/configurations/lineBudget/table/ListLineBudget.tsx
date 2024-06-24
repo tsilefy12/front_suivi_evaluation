@@ -25,6 +25,7 @@ const ListLineBudget = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [filtre , setFilttre] = React.useState("")
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -89,6 +90,7 @@ const ListLineBudget = () => {
               <TableBody>
                 { lineBudgetList
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .filter((item) => (`${item.name}`).toLowerCase().includes(filtre.toLowerCase()))
                   .map((row: LineBudgetItem, index: any) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (

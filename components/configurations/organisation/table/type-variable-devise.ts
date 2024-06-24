@@ -16,6 +16,8 @@ export interface HeadCellDevise {
 
 export interface EnhancedTableToolbarProps {
   numSelected: number;
+  filtre: any;
+  setFiltre : any;
 }
 
 

@@ -20,6 +20,8 @@ export interface HeadCell {
 
 export interface EnhancedTableToolbarProps {
   numSelected: number;
+  filtre: any;
+  setFiltre : any;
 }
 
 export interface EnhancedTableProps {

@@ -29,6 +29,7 @@ const ListRapports = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [filtre, setFiltre] = React.useState("");
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,

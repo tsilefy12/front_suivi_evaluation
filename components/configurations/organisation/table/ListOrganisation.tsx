@@ -27,6 +27,7 @@ const ListOrganisation = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [filtre , setFiltre] = React.useState("")
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -91,6 +92,7 @@ const ListOrganisation = () => {
               <TableBody>
                 { organisationList
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .filter((item) => (`${item.name}`).toLowerCase().includes(filtre.toLowerCase()))
                   .map((row: OrganisationItem, index: any) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (

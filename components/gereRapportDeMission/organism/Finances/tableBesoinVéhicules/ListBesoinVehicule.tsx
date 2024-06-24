@@ -51,6 +51,7 @@ const ListbesoinVehiculeRapportRapport = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [filtre , setFiltre] = React.useState("")
   const [open, setOpen] = React.useState(false);
   const { besoinVehiculeRapportList } = useAppSelector(
     (state) => state.besoinVehiculeRapport
@@ -192,14 +193,13 @@ const ListbesoinVehiculeRapportRapport = () => {
                   {besoinVehiculeRapportList
                     .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: BesoinvehiculeRapportItem, index) => {
+                    .map((row: BesoinvehiculeRapportItem, index: any) => {
                       // const isItemSelected = isSelected(row.dateDébut);
                       const labelId = `enhanced-table-checkbox-${index}`;
-
                       return (
                         <TableRow
                           hover
-                          //   onClick={(event) => handleClick(event, row.reference)}
+                          // onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
                           // aria-checked={isItemSelected}
                           tabIndex={-1}

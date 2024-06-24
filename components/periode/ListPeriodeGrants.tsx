@@ -49,9 +49,11 @@ const ListBudgetsInitial = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [filtre ,setFiltre] = React.useState("")
   const router = useRouter();
   const fetchPeriode = useFetchPeriode();
   const { periodelist } = useAppSelector((state) => state.periode);
+
   const dispatch = useAppDispatch();
   const confirm = useConfirm();
   const fetchGrants = useFetchGrants();
@@ -195,28 +197,7 @@ const ListBudgetsInitial = () => {
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems={"center"}
-              paddingRight={2}
-            >
-              <EnhancedTableToolbar numSelected={selected.length} />
-              <TextField
-                sx={{ width: 200 }}
-                size="small"
-                label="Recherche"
-                value={searPeriodeGrants}
-                onChange={(e) => setSearchPeriodeGrants(e.target.value)}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Search />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Stack>
+            <EnhancedTableToolbar numSelected={selected.length} filtre={filtre} setFiltre={setFiltre}/>
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -235,7 +216,9 @@ const ListBudgetsInitial = () => {
                 <TableBody>
                   {Object.keys(groupedBudgets).map((grantCode) => {
                     const budgets = groupedBudgets[grantCode];
-                    return budgets.map((budget, index) => (
+                    return budgets
+                      .filter(item=>(`${item.periode} ${item.montant}`).toLowerCase().includes(filtre.toLowerCase()))
+                      .map((budget, index) => (
                       <TableRow
                         key={`${grantCode}-${index}`}
                         sx={{ borderBottomColor: "black" }}

@@ -8,7 +8,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { TextField, Stack, Typography } from "@mui/material";
 
 const TableToolbarDevise = (props: EnhancedTableToolbarProps) => {
-  const { numSelected } = props;
+  const { numSelected , filtre ,setFiltre } = props;
   return (
     <Toolbar
       sx={{
@@ -45,12 +45,14 @@ const TableToolbarDevise = (props: EnhancedTableToolbarProps) => {
             Liste des types de compte
           </Typography>
           <TextField
-            variant="outlined"
-            id="search"
-            name="search"
-            placeholder="Recherche"
-            size="small"
-          />
+						variant="outlined"
+						id="search"
+						name="search"
+						placeholder="Recherche"
+						size="small"
+						value={filtre}
+						onChange={(e)=> setFiltre(e.target.value)}
+					/>
         </Stack>
       )}
       {numSelected > 0 ? (

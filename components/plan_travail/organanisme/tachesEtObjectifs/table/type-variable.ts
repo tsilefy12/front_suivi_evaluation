@@ -25,6 +25,8 @@ export interface EnhancedTableToolbarProps {
   setSelectYear : any;
   numSelected: number;
   tacheEtObjectifList : TacheEtObjectifItem[];
+  filtre: string;
+  setFiltre: any;
 }
 
 export interface EnhancedTableProps {

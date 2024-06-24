@@ -50,7 +50,6 @@ import { getPlanTravail } from "../../../../redux/features/planTravail";
 import Moment from "react-moment";
 import { getStatuslist } from "../../../../redux/features/status";
 import { TacheEtObjectifItem } from "../../../../redux/features/tachesEtObjectifs/tacheETObjectifs.interface";
-import { array } from "prop-types";
 
 const ListTacheEtObjectifs = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -62,6 +61,7 @@ const ListTacheEtObjectifs = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [filtre ,setFiltre] = React.useState("")
   const fetchTacheCle: any = useFetchTacheCle();
   const { tacheEtObjectifList } = useAppSelector(
     (state) => state.tacheEtObjectifs
@@ -247,6 +247,8 @@ const ListTacheEtObjectifs = () => {
               numSelected={selected.length}
               selectYear={selectYear}
               setSelectYear={setSelectYear}
+              filtre={filtre}
+              setFiltre={setFiltre}
             />
             <TableContainer>
               <Table sx={{ width: "100%", padding: 2, overflow: "auto" }}>
@@ -262,6 +264,8 @@ const ListTacheEtObjectifs = () => {
                 <TableBody>
                   {tacheEtObjectifList
                     .filter((e: any) => e.planTravaileId === id!)
+                    .filter(item => (`${item.keyTasks} ${statuslist.find((e: any) => e.id === item.statusId)?.status}
+                      ${employees.find((e: any) => e.id == item?.responsableId)?.name}`).toLowerCase().includes(filtre.toLowerCase()))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: TacheEtObjectifItem, index: any) => {
                       // const isItemSelected = isSelected(row.id);
