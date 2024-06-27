@@ -18,7 +18,7 @@ function allMenu() {
       if (user?.groups?.some((g) => g.service.name === "Suivi dashboard")) {
         temp.push({
           name: " Budget engagé",
-          link: "/",
+          link: "/budegetEngage",
           color:"warning",
           icon: "dashboardIcon",
           items: [],
