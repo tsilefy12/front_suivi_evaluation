@@ -10,6 +10,7 @@ function allMenu() {
         name: "GRANTS",
         link: "/grants",
         icon: "run_circle",
+        color:"accent",
         items: [],
       },
     ];
@@ -18,6 +19,7 @@ function allMenu() {
         temp.push({
           name: " Budget engagé",
           link: "/",
+          color:"warning",
           icon: "dashboardIcon",
           items: [],
         });
@@ -29,6 +31,7 @@ function allMenu() {
           id: 1,
           name: "Missions",
           link: "/missions",
+          color:"error",
           icon: "descriptionIcon",
           items: [],
         });
@@ -107,6 +110,7 @@ function allMenu() {
           name: "PTA",
           link: "/plan_travail",
           icon: "display_settings",
+          color:"info",
           items: [],
         });
       }
@@ -117,6 +121,7 @@ function allMenu() {
           id: 4,
           name: "Configurations",
           link: "/configurations",
+          color:"success",
           icon: "settingsIcon",
           items: [
             {

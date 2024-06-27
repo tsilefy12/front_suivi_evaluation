@@ -5,8 +5,9 @@ export const getCaisse = createAsyncThunk(
   "reliquatGrant/getCaisse",
   async (data: { args?: any }, thunkAPI) => {
     try {
-      const params = JSON.stringify(data.args);
+      const params = data.args ? { args: JSON.stringify(data.args) } : {};
       const response = await axios.get("/caisse/operation", { params });
+      console.log(params);
       return response.data;
     } catch (error: any) {
       if (error.response) {
