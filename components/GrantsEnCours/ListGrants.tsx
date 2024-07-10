@@ -115,7 +115,7 @@ const ListGrantsEnCours = () => {
           .reverse()
       );
     }
-  }, [searchGrant]);
+  }, [searchGrant, grantEncoursList, reliquatGrantList]);
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0
