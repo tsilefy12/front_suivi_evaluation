@@ -3,6 +3,12 @@ import { HeadCell } from "./type-variable";
 
 export const headCells: readonly HeadCell[] = [
   {
+    id: "dd",
+    numeric: false,
+    disablePadding: true,
+    label: "",
+  },
+  {
     id: "grants",
     numeric: false,
     disablePadding: true,

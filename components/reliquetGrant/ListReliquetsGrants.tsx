@@ -8,6 +8,7 @@ import {
   InputAdornment,
   Stack,
   styled,
+  TableHead,
   TextField,
   Typography,
 } from "@mui/material";
@@ -38,7 +39,8 @@ import { rows } from "./table/constante";
 import EnhancedTableHead from "./table/EnhancedTableHead";
 import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
 import Data, { Order } from "./table/type-variable";
-import { Search } from "@mui/icons-material";
+import { ArrowBack, Search } from "@mui/icons-material";
+import { da } from "date-fns/locale";
 
 const ListReliquetsGrants = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -47,7 +49,6 @@ const ListReliquetsGrants = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [filtre , setFiltre] = React.useState("");
   const fetchReliquatGrant = useFetchReliquatGrant();
   const { reliquatGrantList } = useAppSelector(
     (state: any) => state.reliquatGrant
@@ -64,32 +65,28 @@ const ListReliquetsGrants = () => {
   React.useEffect(() => {
     fetchReliquatGrant();
     fetchGrant();
-  }, []);
+  }, [router.query]);
 
-  const [searchReliquatGrant, setSearchReliquatGrant] =
-    React.useState<string>("");
+  const [filtre, setFiltre] = React.useState<string>("");
+  React.useState<string>("");
   const [dataFiltered, setDataFiltered] = React.useState<any[]>([]);
   useEffect(() => {
-    if (searchReliquatGrant === "") {
-      setDataFiltered(reliquatGrantList);
+    if (filtre === "") {
+      return setDataFiltered(reliquatGrantList);
     } else {
       const filteredData = reliquatGrantList.filter((item: any) => {
         return (
           item.soldeCaisse
             .toString()
             .toLowerCase()
-            .includes(searchReliquatGrant.toLowerCase()) ||
-          item.soldeBank
-            .toString()
-            .includes(searchReliquatGrant.toLowerCase()) ||
-          item.montantTotal
-            .toString()
-            .includes(searchReliquatGrant.toLowerCase())
+            .includes(filtre.toLowerCase()) ||
+          item.soldeBank.toString().includes(filtre.toLowerCase()) ||
+          item.montantTotal.toString().includes(filtre.toLowerCase())
         );
       });
-      setDataFiltered(filteredData);
+      return setDataFiltered(filteredData);
     }
-  }, [searchReliquatGrant]);
+  }, [filtre]);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -173,120 +170,133 @@ const ListReliquetsGrants = () => {
   const handleClickEdit = async (id: any) => {
     router.push(`/grants/reliquatGrants/${id}/edit`);
   };
+  const [grantBI, setGrantBI] = React.useState<string>("");
+  useEffect(() => {
+    const grant = grantEncoursList.find(
+      (e) => e.id == dataFiltered.map((m) => m.grant)
+    );
+    if (grant) {
+      setGrantBI(grant.code!);
+    }
+  }, [grantEncoursList]);
+
+  // Group data by grant
+  const groupedData = dataFiltered.reduce((acc: any, item: any) => {
+    const { grant } = item;
+    if (!acc[grant]) {
+      acc[grant] = [];
+    }
+    acc[grant].push(item);
+    return acc;
+  }, {});
+  console.log(grantBI);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
         {validate("Suivi reliquat grant", "C") && (
-          <Link href={`/grants/reliquatGrants/${id != "" ? id : ""}/add`}>
-            <Button variant="contained" startIcon={<Add />}>
-              Créer
-            </Button>
-          </Link>
+          <Stack direction="row" alignItems="left" gap={2}>
+            <Link href={"/grants/grantEncours/"}>
+              <Button variant="text" startIcon={<ArrowBack />} color="info">
+                Retour
+              </Button>
+            </Link>
+            <Link href={`/grants/reliquatGrants/${id != "" ? id : ""}/add`}>
+              <Button variant="contained" startIcon={<Add />}>
+                Créer
+              </Button>
+            </Link>
+          </Stack>
         )}
         <Typography variant="h4" color="GrayText">
-          Reliquats grants
+          Reliquats Grants
         </Typography>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
-            <EnhancedTableToolbar numSelected={selected.length} filtre={filtre} setFiltre={setFiltre}/>
+            <EnhancedTableToolbar
+              numSelected={selected.length}
+              filtre={filtre}
+              setFiltre={setFiltre}
+            />
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
                 aria-labelledby="tableTitle"
                 size={dense ? "small" : "medium"}
               >
-                <EnhancedTableHead
-                  numSelected={selected.length}
-                  order={order}
-                  orderBy={orderBy}
-                  onSelectAllClick={handleSelectAllClick}
-                  onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
-                />
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left">Grants</TableCell>
+                    <TableCell align="left">Solde caisse</TableCell>
+                    <TableCell align="left">Solde banque</TableCell>
+                    <TableCell align="left">Montant total</TableCell>
+                  </TableRow>
+                </TableHead>
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
-                  {dataFiltered
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .filter(item=>(` ${grantEncoursList.find((e: any) => e.id === item.grant)?.code}`).toLowerCase().includes(filtre.toLowerCase()))
-                    .map((row: ReliquatGrantsItem, index: any) => {
-                      // const isItemSelected = isSelected(row.id);
-                      const labelId = `enhanced-table-checkbox-${index}`;
-
-                      return (
-                        <TableRow
-                          hover
-                          //   onClick={(event) => handleClick(event, row.reference)}
-                          role="checkbox"
-                          // aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={row.id!}
-                          // selected={isItemSelected}
-                        >
-                          <TableCell
-                            padding="checkbox"
-                            // onClick={(event) => handleClick(event, row.id)}
-                          ></TableCell>
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                          >
-                            {
-                              grantEncoursList.find(
-                                (e: any) => e.id === row.grant
-                              )?.code
-                            }
-                          </TableCell>
-                          <TableCell align="right">
-                            {formatMontant(Number(row.soldeCaisse))}
-                          </TableCell>
-                          <TableCell align="right">
-                            {formatMontant(Number(row.soldeBank))}
-                          </TableCell>
-                          <TableCell align="right">
-                            {formatMontant(Number(row.montantTotal))}
-                          </TableCell>
-                          <TableCell align="right">
-                            <BtnActionContainer
-                              direction="row"
-                              justifyContent="right"
-                            >
-                              {/* <IconButton
-                                  color="accent"
-                                  aria-label="Details"
-                                  component="span"
-                                >
-                                  <VisibilityIcon />
-                                </IconButton> */}
-                              {validate("Suivi reliquat grant", "U") && (
-                                <IconButton
-                                  color="primary"
-                                  aria-label="Modifier"
-                                  component="span"
-                                  onClick={() => handleClickEdit(row.id)}
-                                >
-                                  <EditIcon />
-                                </IconButton>
-                              )}
-                              {validate("Suivi reliquat grant", "D") && (
-                                <IconButton
-                                  color="warning"
-                                  aria-label="Supprimer"
-                                  component="span"
-                                  onClick={() => handleClickDelete(row.id)}
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
-                              )}
-                            </BtnActionContainer>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                  {Object.keys(groupedData).map((grant, grantIndex) =>
+                    groupedData[grant]
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((row: ReliquatGrantsItem, rowIndex: any) => {
+                        const labelId = `enhanced-table-checkbox-${grantIndex}-${rowIndex}`;
+                        return (
+                          <TableRow hover tabIndex={-1} key={row.id}>
+                            {rowIndex === 0 && (
+                              <TableCell
+                                rowSpan={groupedData[grant].length}
+                                sx={{ minWidth: 120, maxWidth: 120 }}
+                                align="left"
+                              >
+                                {
+                                  grantEncoursList.find(
+                                    (e) => e.id == row.grant
+                                  )?.code
+                                }
+                              </TableCell>
+                            )}
+                            <TableCell align="left">
+                              {formatMontant(Number(row.soldeCaisse))}
+                            </TableCell>
+                            <TableCell align="left">
+                              {formatMontant(Number(row.soldeBank))}
+                            </TableCell>
+                            <TableCell align="left">
+                              {formatMontant(Number(row.montantTotal))}
+                            </TableCell>
+                            <TableCell align="left">
+                              <BtnActionContainer
+                                direction="row"
+                                justifyContent="left"
+                              >
+                                {validate("Suivi reliquat grant", "U") && (
+                                  <IconButton
+                                    color="primary"
+                                    aria-label="Modifier"
+                                    component="span"
+                                    onClick={() => handleClickEdit(row.id)}
+                                  >
+                                    <EditIcon />
+                                  </IconButton>
+                                )}
+                                {validate("Suivi reliquat grant", "D") && (
+                                  <IconButton
+                                    color="warning"
+                                    aria-label="Supprimer"
+                                    component="span"
+                                    onClick={() => handleClickDelete(row.id)}
+                                  >
+                                    <DeleteIcon />
+                                  </IconButton>
+                                )}
+                              </BtnActionContainer>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                  )}
                   {emptyRows > 0 && (
                     <TableRow
                       style={{

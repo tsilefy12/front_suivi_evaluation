@@ -1,14 +1,12 @@
-
 export default interface Data {
+  dd: string;
   grants: string;
   caisse: string;
   banque: string;
   montant: string;
-  }
-  
+}
 
-export type Order = 'asc' | 'desc';
-
+export type Order = "asc" | "desc";
 
 export interface HeadCell {
   disablePadding: boolean;
@@ -20,7 +18,7 @@ export interface HeadCell {
 export interface EnhancedTableToolbarProps {
   numSelected: number;
   filtre: any;
-  setFiltre : any;
+  setFiltre: any;
 }
 
 export interface EnhancedTableProps {
