@@ -2,39 +2,39 @@ import { HeadCell } from "./HeadCell.interface";
 
 export const transportEquipmentHeadCells: readonly HeadCell[] = [
   {
-    id: 'code',
+    id: "code",
     numeric: false,
     disablePadding: true,
-    label: 'CODE',
+    label: "CODE",
   },
   {
-    id: 'grant',
+    id: "grant",
     numeric: true,
     disablePadding: false,
-    label: 'GRANT',
+    label: "GRANT",
   },
   {
-    id: 'organisation',
+    id: "lineBudget",
     numeric: true,
     disablePadding: false,
-    label: 'ORGANISATION',
+    label: "LIGNE BUDGET",
   },
   {
-    id: 'type',
+    id: "type",
     numeric: true,
     disablePadding: false,
-    label: 'TYPE',
+    label: "TYPE",
   },
   {
-    id: 'lineBudget',
+    id: "organisation",
     numeric: true,
     disablePadding: false,
-    label: 'LIGNE BUDGET',
+    label: "ORGANISATION",
   },
   {
-    id: 'montant',
+    id: "montant",
     numeric: true,
     disablePadding: false,
-    label: 'MONTANT',
+    label: "MONTANT",
   },
 ];

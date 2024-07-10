@@ -30,7 +30,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import TransportEquipmentTableHeader from "../../organisme/table/TransportEquipmentTableHeader";
-import { Edit } from "@mui/icons-material";
+import { ArrowBack, Edit } from "@mui/icons-material";
 import { useConfirm } from "material-ui-confirm";
 import useFetchBudgetLine from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
 import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
@@ -110,23 +110,46 @@ const ListBudgetLine = () => {
       })
       .catch(() => {});
   };
+
+  const [filtre, setFiltre] = React.useState("");
+  const [dataFilter, setDataFilter] = React.useState<any[]>([]);
+  React.useEffect(() => {
+    if (filtre !== "") {
+      const filteredData = budgetLineList.filter(
+        (f: BudgetLineItem) =>
+          f.grantId == id &&
+          (f.code!.toString().toLowerCase().includes(filtre.toLowerCase()) ||
+            f.amount!.toString().toLowerCase().includes(filtre.toLowerCase()))
+      );
+      setDataFilter([...filteredData].reverse());
+    } else {
+      setDataFilter([...budgetLineList].reverse());
+    }
+  }, [filtre, budgetLineList]);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        {/* <Link href={`/grants/ligneBudgetaire/${id}}/add`}>
-          <Button variant="contained" startIcon={<Add />}>
-            Créer
-          </Button>
-        </Link> */}
-        {/* <Typography variant="h5" color="GrayText">
-        Ligne budgetaire
-
-        </Typography> */}
+        <Stack direction="row" alignItems="left" gap={1}>
+          <Link href={`/grants/grantsEnCours`}>
+            <Button variant="text" startIcon={<ArrowBack />} color="info">
+              Retour
+            </Button>
+          </Link>
+          <Link href={`/grants/ligneBudgetaire/${id}/add`}>
+            <Button variant="contained" startIcon={<Add />}>
+              Créer
+            </Button>
+          </Link>
+        </Stack>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2, ml: 4 }}>
-            <EnhancedTableToolbar numSelected={selected.length} />
+            <EnhancedTableToolbar
+              numSelected={selected.length}
+              filtre={filtre}
+              setFiltre={setFiltre}
+            />
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -137,8 +160,7 @@ const ListBudgetLine = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {budgetLineList
-                    .filter((f: any) => f.grantId == id)
+                  {dataFilter
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: BudgetLineItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
@@ -150,42 +172,45 @@ const ListBudgetLine = () => {
                           tabIndex={-1}
                           key={row.id}
                         >
-                          <TableCell padding="checkbox">{row.code}</TableCell>
-                          <TableCell align="center">
+                          <TableCell padding="checkbox" sx={{ width: "auto" }}>
+                            {row.code}
+                          </TableCell>
+                          <TableCell align="left">
                             {
                               grantEncoursList.find(
                                 (e: any) => e.id === row.grantId
                               )?.code
                             }
                           </TableCell>
-                          <TableCell align="center">
-                            {
-                              typeList.find(
-                                (e: any) => e.id === row.budgetTypeId
-                              )?.name
-                            }
-                          </TableCell>
-                          <TableCell align="center">
+
+                          <TableCell align="left">
                             {
                               lineBudgetList.find(
                                 (e: any) => e.id === row.configBudgetLineId
                               )?.name
                             }
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
+                            {
+                              typeList.find(
+                                (e: any) => e.id === row.budgetTypeId
+                              )?.name
+                            }
+                          </TableCell>
+                          <TableCell align="left">
                             {
                               organisationList.find(
                                 (e: any) => e.id === row.configOrganisationId
                               )?.name
                             }
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
                             {formatMontant(Number(row.amount))}
                           </TableCell>
-                          {/* <TableCell align="center">
+                          {/* <TableCell align="left">
                             <BtnActionContainer
                               direction="row"
-                              justifyContent="center"
+                              justifyContent="left"
                             >
                               <IconButton
                                   color="primary"

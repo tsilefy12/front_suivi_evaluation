@@ -140,7 +140,7 @@ const ListGrantsEnCours = () => {
       })
       .catch(() => {});
   };
-  console.log("list :", dataGrant);
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
