@@ -128,7 +128,7 @@ const AddNewGrantsAdmin = () => {
                     </Button>
                   </Stack>
                   <Typography variant="h5">
-                    {isEditing ? "Modifier" : "Créer"} grant admin
+                    {isEditing ? "Modifier" : "Créer"} Grant admin
                   </Typography>
                 </SectionNavigation>
                 <Divider />

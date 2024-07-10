@@ -65,7 +65,7 @@ const ListReliquetsGrants = () => {
   React.useEffect(() => {
     fetchReliquatGrant();
     fetchGrant();
-  }, [router.query]);
+  }, []);
 
   const [filtre, setFiltre] = React.useState<string>("");
   React.useState<string>("");
@@ -86,7 +86,7 @@ const ListReliquetsGrants = () => {
       });
       return setDataFiltered(filteredData);
     }
-  }, [filtre]);
+  }, [filtre, reliquatGrantList]);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -170,26 +170,20 @@ const ListReliquetsGrants = () => {
   const handleClickEdit = async (id: any) => {
     router.push(`/grants/reliquatGrants/${id}/edit`);
   };
-  const [grantBI, setGrantBI] = React.useState<string>("");
-  useEffect(() => {
-    const grant = grantEncoursList.find(
-      (e: any) => e.id == dataFiltered.map((m: any) => m.grant)
-    );
-    if (grant) {
-      setGrantBI(grant.code!);
-    }
-  }, [grantEncoursList]);
-
   // Group data by grant
-  const groupedData = dataFiltered.reduce((acc: any, item: any) => {
-    const { grant } = item;
-    if (!acc[grant]) {
-      acc[grant] = [];
-    }
-    acc[grant].push(item);
-    return acc;
-  }, {});
-  console.log(grantBI);
+  const [dataGrouped, setDataGrouped] = React.useState<any>({});
+  useEffect(() => {
+    const groupedData = dataFiltered.reduce((acc: any, item: any) => {
+      const { grant } = item;
+      if (!acc[grant]) {
+        acc[grant] = [];
+      }
+      acc[grant].push(item);
+      return acc;
+    }, {});
+    setDataGrouped(groupedData);
+  }, [dataFiltered]);
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -234,8 +228,8 @@ const ListReliquetsGrants = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {Object.keys(groupedData).map((grant, grantIndex) =>
-                    groupedData[grant]
+                  {Object.keys(dataGrouped).map((grant, grantIndex) =>
+                    dataGrouped[grant]
                       .slice(
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
@@ -246,7 +240,7 @@ const ListReliquetsGrants = () => {
                           <TableRow hover tabIndex={-1} key={row.id}>
                             {rowIndex === 0 && (
                               <TableCell
-                                rowSpan={groupedData[grant].length}
+                                rowSpan={dataGrouped[grant].length}
                                 sx={{ minWidth: 120, maxWidth: 120 }}
                                 align="left"
                               >
