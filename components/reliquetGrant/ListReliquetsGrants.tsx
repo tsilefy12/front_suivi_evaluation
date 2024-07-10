@@ -173,7 +173,7 @@ const ListReliquetsGrants = () => {
   const [grantBI, setGrantBI] = React.useState<string>("");
   useEffect(() => {
     const grant = grantEncoursList.find(
-      (e) => e.id == dataFiltered.map((m) => m.grant)
+      (e: any) => e.id == dataFiltered.map((m: any) => m.grant)
     );
     if (grant) {
       setGrantBI(grant.code!);
@@ -252,7 +252,7 @@ const ListReliquetsGrants = () => {
                               >
                                 {
                                   grantEncoursList.find(
-                                    (e) => e.id == row.grant
+                                    (e: any) => e.id == row.grant
                                   )?.code
                                 }
                               </TableCell>
