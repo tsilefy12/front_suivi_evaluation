@@ -268,8 +268,7 @@ const ListMissions = () => {
                     </Menu>
                   </div>
                 </CardHeader>
-
-                <CardBody>
+                <CardBody key={mission.id!}>
                   <Stack spacing={1} key={mission.id!}>
                     <Stack direction={"row"} gap={1}>
                       <FormLabel>
@@ -333,7 +332,10 @@ const ListMissions = () => {
                     </Stack>
                   </Stack>
                 </CardBody>
-                <CardFooter>
+                <CardFooter
+                  key={mission.id!}
+                  sx={{ display: "flex", paddingBottom: 4 }}
+                >
                   <Stack
                     direction={{ xs: "column", sm: "row" }}
                     key={mission.id!}
@@ -402,6 +404,8 @@ const SectionDetails = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
+  maxHeight: "calc(100vh - 200px)",
+  overflow: "auto",
 }));
 
 const LinkContainer = styled("div")(({ theme }) => ({

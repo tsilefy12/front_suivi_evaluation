@@ -8,10 +8,10 @@ import Header from "../components/dashboards/Header";
 const Home: NextPage = () => {
   const basePath = useBasePath();
   return (
-    <Container maxWidth="xl">
+    <>
       <Header />
       <Dashboard />
-    </Container>
+    </>
   );
 };
 

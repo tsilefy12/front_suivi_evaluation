@@ -80,29 +80,20 @@ const AddNewGrantsEnCours = () => {
   const handleSubmit = async (values: any) => {
     values.postAnalyticid = null;
     values.bankId = null;
-    const date1 = new Date(values.startDate);
-    const DateNumber1 = date1.getTime();
-    const date2 = new Date(values.endDate);
-    const DateNumber2 = date2.getTime();
-
-    if (DateNumber1 >= DateNumber2) {
-      setOpen(true);
-    } else {
-      try {
-        if (isEditing) {
-          await dispatch(
-            updateGrantEncours({
-              id: grantEncour.id!,
-              grantEncour: values,
-            })
-          );
-        } else {
-          await dispatch(createGrantEncours(values));
-        }
-        router.push("/grants/grantsEnCours");
-      } catch (error) {
-        console.log("error", error);
+    try {
+      if (isEditing) {
+        await dispatch(
+          updateGrantEncours({
+            id: grantEncour.id!,
+            grantEncour: values,
+          })
+        );
+      } else {
+        await dispatch(createGrantEncours(values));
       }
+      router.push("/grants/grantsEnCours");
+    } catch (error) {
+      console.log("error", error);
     }
   };
   return (
@@ -201,7 +192,7 @@ const AddNewGrantsEnCours = () => {
                     </Button>
                   </Stack>
                   <Typography variant="h5">
-                    {isEditing ? "Modif grant" : "Créer grant"}
+                    {isEditing ? "Modif Grant" : "Nouveau Grant"}
                   </Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}
@@ -240,7 +231,7 @@ const AddNewGrantsEnCours = () => {
                   <OSSelectField
                     fullWidth
                     id="outlined-basic"
-                    label="Status"
+                    label="Statut"
                     variant="outlined"
                     name="status"
                     type="string"
@@ -295,9 +286,17 @@ const AddNewGrantsEnCours = () => {
                         ? formikProps.values.startDate
                         : grantEncour?.startDate
                     }
-                    onChange={(value: any) =>
-                      formikProps.setFieldValue("startDate", value)
-                    }
+                    onChange={(value: any) => {
+                      formikProps.setFieldValue("startDate", value);
+                      const date1 = new Date(value);
+                      const DateNumber1 = date1.getTime();
+                      const date2 = new Date(formikProps.values.endDate);
+                      const DateNumber2 = date2.getTime();
+
+                      if (DateNumber1 >= DateNumber2) {
+                        return setOpen(true);
+                      }
+                    }}
                   />
                   <OSDatePicker
                     fullWidth
@@ -309,9 +308,17 @@ const AddNewGrantsEnCours = () => {
                         ? formikProps.values.endDate
                         : grantEncour?.endDate
                     }
-                    onChange={(value: any) =>
-                      formikProps.setFieldValue("endDate", value)
-                    }
+                    onChange={(value: any) => {
+                      formikProps.setFieldValue("endDate", value);
+                      const date1 = new Date(formikProps.values.startDate);
+                      const DateNumber1 = date1.getTime();
+                      const date2 = new Date(value);
+                      const DateNumber2 = date2.getTime();
+
+                      if (DateNumber1 >= DateNumber2) {
+                        return setOpen(true);
+                      }
+                    }}
                   />
                 </CustomStack>
                 <FormControl fullWidth>

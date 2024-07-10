@@ -2,6 +2,7 @@ import { CircleNotifications } from "@mui/icons-material";
 import {
   Badge,
   IconButton,
+  Link,
   Stack,
   styled,
   Tooltip,
@@ -25,16 +26,15 @@ export default function Header() {
       direction={"row"}
       justifyContent={"space-between"}
       alignItems={"center"}
-      paddingX={1}
-      sx={{ background: (theme) => theme.palette.grey[300] }}
+      sx={{ background: (theme) => theme.palette.grey[300], padding: 1 }}
     >
       <Stack direction={"row"} alignItems={"center"} gap={1}>
-        <img
-          src="/images/logo/logo.png"
-          width={"50px"}
-          onClick={() => router.push("/")}
-          style={{ cursor: "pointer" }}
-        />
+        <Link href="/">
+          <img
+            src="/images/logo/logo.png"
+            style={{ cursor: "pointer", width: "50px", height: "50px" }}
+          />
+        </Link>
         <Typography variant="body2" color={"GrayText"}>
           Tableau de bord
         </Typography>

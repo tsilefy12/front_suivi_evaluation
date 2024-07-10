@@ -40,25 +40,23 @@ export default function Mission() {
       <Stack direction={"column"} gap={2} padding={2}>
         <Table>
           <TableHead>
-            <TableCell padding="none">
-              Réf budget
-            </TableCell>
+            <TableCell padding="none">Réf budget</TableCell>
             <TableCell padding="none">Responsable</TableCell>
             <TableCell padding="none">Lieu</TableCell>
             <TableCell padding="none">Fin</TableCell>
           </TableHead>
           <TableBody>
             {missionListe.map((row: MissionItem, index: any) => (
-              <TableRow >
+              <TableRow key={row.id}>
                 <TableCell padding="none" sx={{ paddingY: 1 }}>
                   {row.RefBudget}
                 </TableCell>
                 <TableCell padding="none">
                   {`${
-                      employees.find(
-                        (e: EmployeItem) => e.id === row.missionManagerId
-                      )?.name as string
-                    } ${" "}
+                    employees.find(
+                      (e: EmployeItem) => e.id === row.missionManagerId
+                    )?.name as string
+                  } ${" "}
                       ${
                         employees.find(
                           (e: EmployeItem) => e.id === row.missionManagerId
@@ -66,12 +64,11 @@ export default function Mission() {
                       } `}
                 </TableCell>
                 <TableCell padding="none">
-                   {row.missionLocation!.map(
-                      (l: MissionLocationItem) => l.district!
-                    )}
-                  </TableCell>
-                <TableCell padding="none">
+                  {row.missionLocation!.map(
+                    (l: MissionLocationItem) => l.district!
+                  )}
                 </TableCell>
+                <TableCell padding="none"></TableCell>
               </TableRow>
             ))}
           </TableBody>

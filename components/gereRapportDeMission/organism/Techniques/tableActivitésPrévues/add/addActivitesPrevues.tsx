@@ -100,7 +100,7 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
           return (
             <Form>
               <SectionNavigation>
-                <DialogTitle>Créer/modifier activité prévus</DialogTitle>
+                <DialogTitle>Créer/modifier activité réalisée</DialogTitle>
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
                     <OSTextField

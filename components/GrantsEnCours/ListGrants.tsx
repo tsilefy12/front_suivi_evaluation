@@ -52,7 +52,7 @@ const ListGrantsEnCours = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [filtre, setFiltre] = React.useState("")
+  const [filtre, setFiltre] = React.useState("");
 
   const router = useRouter();
   const fetchGrants = useFetchGrants();
@@ -149,13 +149,17 @@ const ListGrantsEnCours = () => {
           </Link>
         )}
         <Typography variant="h5" color="GrayText">
-          Grants en cours
+          Liste de Grant en cours
         </Typography>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2, ml: 4 }}>
-            <EnhancedTableToolbar numSelected={selected.length} filtre={filtre} setFiltre={setFiltre}/>
+            <EnhancedTableToolbar
+              numSelected={selected.length}
+              filtre={filtre}
+              setFiltre={setFiltre}
+            />
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -168,14 +172,42 @@ const ListGrantsEnCours = () => {
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {dataGrant
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .filter(item => (`
+                    .filter((item) =>
+                      `
                         ${item.code} ${item.bailleur}
-                        ${employees.find((e: any) => e.id === item.techValidator)?.name} 
-                        ${employees.find((e: any) => e.id === item.techValidator)?.surname}
-                        ${employees.find((e: any) => e.id === item.financeVerificator)?.name}
-                        ${employees.find((e: any) => e.id === item.financeValidator)?.surname}
-                        ${employees.find((e: any) => e.id === item.financeVerificator)?.name}
-                        ${employees.find((e: any) => e.id === item.financeVerificator)?.surname}`).toLowerCase().includes(filtre.toLowerCase()))
+                        ${
+                          employees.find(
+                            (e: any) => e.id === item.techValidator
+                          )?.name
+                        } 
+                        ${
+                          employees.find(
+                            (e: any) => e.id === item.techValidator
+                          )?.surname
+                        }
+                        ${
+                          employees.find(
+                            (e: any) => e.id === item.financeVerificator
+                          )?.name
+                        }
+                        ${
+                          employees.find(
+                            (e: any) => e.id === item.financeValidator
+                          )?.surname
+                        }
+                        ${
+                          employees.find(
+                            (e: any) => e.id === item.financeVerificator
+                          )?.name
+                        }
+                        ${
+                          employees.find(
+                            (e: any) => e.id === item.financeVerificator
+                          )?.surname
+                        }`
+                        .toLowerCase()
+                        .includes(filtre.toLowerCase())
+                    )
                     .map((row: GrantEncoursItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
                       return (

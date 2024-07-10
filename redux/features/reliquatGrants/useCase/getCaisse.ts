@@ -7,7 +7,6 @@ export const getCaisse = createAsyncThunk(
     try {
       const params = data.args ? { args: JSON.stringify(data.args) } : {};
       const response = await axios.get("/caisse/operation", { params });
-      console.log(params);
       return response.data;
     } catch (error: any) {
       if (error.response) {

@@ -10,7 +10,7 @@ export const createGrantEncours = createAsyncThunk(
       const response = await axios.post("/compta/grant", grantEncours);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Grant en cours created successfully",
+          message: "Grant en cours créé avec succès",
           options: { variant: "success" },
         })
       );

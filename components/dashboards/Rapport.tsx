@@ -9,14 +9,13 @@ import {
 } from "@mui/material";
 import { format, isWithinInterval } from "date-fns";
 import React, { useEffect } from "react";
-import {useAppSelector } from "../../hooks/reduxHooks";
+import { useAppSelector } from "../../hooks/reduxHooks";
 import useFetchEmploys from "../GrantsEnCours/hooks/getResponsable";
 import useFetchMissionListe from "../home/Missions/hooks/useFetchMissionListe";
 import { EmployeItem } from "../../redux/features/employe/employeSlice.interface";
 import { MissionLocationItem } from "../../redux/features/missionLocation/missionLocationSlice.interface";
 import { MissionItem } from "../../redux/features/mission/mission.interface";
 import Moment from "react-moment";
-
 
 export default function Rapport() {
   const { missionListe } = useAppSelector((state) => state.mission);
@@ -42,32 +41,26 @@ export default function Rapport() {
       <Stack direction={"column"} gap={2} padding={2}>
         <Table>
           <TableHead>
-            <TableCell padding="none">
-              Titre
-            </TableCell>
+            <TableCell padding="none">Titre</TableCell>
             <TableCell padding="none">Ref budget</TableCell>
             <TableCell padding="none">Date RF</TableCell>
             <TableCell padding="none">Status</TableCell>
           </TableHead>
           <TableBody>
-          {missionListe.map((row: MissionItem, index: any) => (
-              <TableRow >
+            {missionListe.map((row: MissionItem, index: any) => (
+              <TableRow key={row.id}>
                 <TableCell padding="none" sx={{ paddingY: 1 }}>
                   {"MISSION_" + row?.reference}
                 </TableCell>
+                <TableCell padding="none">{row.RefBudget}</TableCell>
                 <TableCell padding="none">
-                  {row.RefBudget}
+                  {row.uncompleteTbbs!.map((m) => (
+                    <Moment format="DD/MM/yyyy" key={m.id}>
+                      {m.dateRF}
+                    </Moment>
+                  ))}
                 </TableCell>
-                <TableCell padding="none">
-                    {row.uncompleteTbbs!.map((m) => (
-                      <Moment format="DD/MM/yyyy" key={m.id}>
-                        {m.dateRF}
-                      </Moment>
-                    ))}
-                  </TableCell>
-                <TableCell padding="none">
-                  {row.status}
-                </TableCell>
+                <TableCell padding="none">{row.status}</TableCell>
               </TableRow>
             ))}
           </TableBody>
