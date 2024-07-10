@@ -17,13 +17,13 @@ export const transportEquipmentHeadCells: readonly HeadCell[] = [
     id: "validateurFinance",
     numeric: true,
     disablePadding: false,
-    label: "VALIDATEUR FINANCE",
+    label: "VALIDATEUR FINANCIER",
   },
   {
     id: "verificateurFinance",
     numeric: true,
     disablePadding: false,
-    label: "VERIFICATEUR FINANCE",
+    label: "VÉRIFICATEUR FINANCIER",
   },
   {
     id: "bailleur",

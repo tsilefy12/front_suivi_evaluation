@@ -79,7 +79,9 @@ const AddNewGrantsEnCours = () => {
 
   const handleSubmit = async (values: any) => {
     values.postAnalyticid = null;
-    values.bankId = null;
+    if (values.bankId === "") {
+      values.bankId = null;
+    }
     try {
       if (isEditing) {
         await dispatch(
@@ -107,7 +109,7 @@ const AddNewGrantsEnCours = () => {
                 code: isEditing ? grantEncour?.code : "",
                 // postAnalyticId: isEditing ? grantEncour?.postAnalyticId : null,
                 projectId: isEditing ? grantEncour?.projectId : "",
-                // bankId: isEditing ? grantEncour?.bankId : null,
+                bankId: isEditing ? grantEncour?.bankId : "",
                 // titleFr: isEditing ? grantEncour?.titleFr : "",
                 // titleEn: isEditing ? grantEncour?.titleEn : "",
                 bailleur: isEditing ? grantEncour?.bailleur : "",

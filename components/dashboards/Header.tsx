@@ -32,7 +32,7 @@ export default function Header() {
         <Link href="/">
           <img
             src="/images/logo/logo.png"
-            style={{ cursor: "pointer", width: "50px", height: "50px" }}
+            style={{ cursor: "pointer", width: "60px", height: "50px" }}
           />
         </Link>
         <Typography variant="body2" color={"GrayText"}>

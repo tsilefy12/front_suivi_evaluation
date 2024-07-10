@@ -103,14 +103,16 @@ const ListGrantsEnCours = () => {
           item.id != reliquatGrantList.map((rg: any) => rg.grant)
         );
       });
-      setDataGrant(filteredData);
+      setDataGrant(filteredData.reverse());
       return filteredData;
     } else {
       setDataGrant(
-        grantEncoursList.filter(
-          (f: GrantEncoursItem) =>
-            f.id != reliquatGrantList.map((rg: any) => rg.grant)
-        )
+        grantEncoursList
+          .filter(
+            (f: GrantEncoursItem) =>
+              f.id != reliquatGrantList.map((rg: any) => rg.grant)
+          )
+          .reverse()
       );
     }
   }, [searchGrant]);
@@ -138,6 +140,7 @@ const ListGrantsEnCours = () => {
       })
       .catch(() => {});
   };
+  console.log("list :", dataGrant);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -218,7 +221,9 @@ const ListGrantsEnCours = () => {
                           tabIndex={-1}
                           key={row.id}
                         >
-                          <TableCell padding="checkbox">{row.code}</TableCell>
+                          <TableCell padding="checkbox" sx={{ width: "100px" }}>
+                            {row.code}
+                          </TableCell>
                           <TableCell align="left">
                             {
                               employees.find(
