@@ -66,7 +66,7 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
             ? plannedActivity
             : {
                 description: isEditing ? plannedActivity?.description : "",
-                missionId: isEditing ? plannedActivity?.missionId: id,
+                missionId: isEditing ? plannedActivity?.missionId : id,
               }
         }
         validationSchema={Yup.object({
@@ -83,7 +83,7 @@ const AddActivitesPrevues = ({ handleClose }: any) => {
               <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
                 <SectionNavigation>
                   <DialogTitle>
-                    {isEditing ? "Modifier" : "Formulaire"} activité prévus
+                    {isEditing ? "Modifier" : "Formulaire"} activité prévue
                   </DialogTitle>
                   <DialogContent>
                     <FormContainer spacing={2} mt={2}>

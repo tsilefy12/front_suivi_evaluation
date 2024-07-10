@@ -84,11 +84,16 @@ const DashboardMission = () => {
             )}
           </Stack>
         </Stack>
-        <div style={{ overflow: "auto" }}>
+        <div
+          style={{
+            overflow: "auto",
+            height: "calc(100vh - 260px)",
+          }}
+        >
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
+                <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="left">
                   Réf. budget
                 </TableCell>
                 <TableCell sx={{ minWidth: 200, maxWidth: 200 }} align="center">
@@ -183,10 +188,7 @@ const DashboardMission = () => {
             <TableBody>
               {missionListe.map((row: MissionItem, index: any) => (
                 <TableRow key={row.id}>
-                  <TableCell
-                    align="center"
-                    sx={{ minWidth: 200, maxWidth: 200 }}
-                  >
+                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {row.RefBudget}
                   </TableCell>
                   <TableCell
