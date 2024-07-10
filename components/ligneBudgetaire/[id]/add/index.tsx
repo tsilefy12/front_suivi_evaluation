@@ -171,7 +171,7 @@ const AddNewBudgetLine = () => {
                     </Link>
                   </Stack>
                   <Typography variant="h5">
-                    {isEditing ? "Modif GRANT" : "Créer GRANT"}
+                    {isEditing ? "Modif GRANT" : "Créer ligne budgetaire"}
                   </Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}

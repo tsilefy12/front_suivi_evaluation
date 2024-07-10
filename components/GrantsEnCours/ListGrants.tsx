@@ -42,6 +42,7 @@ import useFetchGrants from "./hooks/getGrants";
 import useFetchProject from "./hooks/getProject";
 import TransportEquipmentTableHeader from "./organisme/table/TransportEquipmentTableHeader";
 import { fi } from "date-fns/locale";
+import { ReliquatGrantsItem } from "../../redux/features/reliquatGrants/reliquatGrants.interface";
 
 const ListGrantsEnCours = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -89,33 +90,21 @@ const ListGrantsEnCours = () => {
     setPage(0);
   };
   const [dataGrant, setDataGrant] = React.useState<any[]>([]);
-  const [searchGrant, setSearchGrant] = React.useState<string>("");
   useEffect(() => {
-    if (searchGrant !== "") {
+    if (filtre === "") {
+      return setDataGrant([...grantEncoursList].reverse());
+    } else {
       const filteredData = grantEncoursList.filter((item: any) => {
         return (
-          (item.code.toLowerCase().includes(searchGrant.toLowerCase()) ||
-            item.bailleur.toLowerCase().includes(searchGrant.toLowerCase()) ||
-            item.amountMGA
-              .toString()
-              .toLowerCase()
-              .includes(searchGrant.toLowerCase())) &&
-          item.id != reliquatGrantList.map((rg: any) => rg.grant)
+          item.code.toLowerCase().includes(filtre.toLowerCase()) ||
+          item.bailleur.toLowerCase().includes(filtre.toLowerCase()) ||
+          item.amountMGA.toString().toLowerCase().includes(filtre.toLowerCase())
         );
       });
-      setDataGrant(filteredData.reverse());
-      return filteredData;
-    } else {
-      setDataGrant(
-        grantEncoursList
-          .filter(
-            (f: GrantEncoursItem) =>
-              f.id != reliquatGrantList.map((rg: any) => rg.grant)
-          )
-          .reverse()
-      );
+      return setDataGrant([...filteredData].reverse());
     }
-  }, [searchGrant, grantEncoursList, reliquatGrantList]);
+  }, [filtre, grantEncoursList, reliquatGrantList]);
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0
@@ -171,46 +160,14 @@ const ListGrantsEnCours = () => {
               >
                 <TransportEquipmentTableHeader />
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
                   {dataGrant
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .filter((item) =>
-                      `
-                        ${item.code} ${item.bailleur}
-                        ${
-                          employees.find(
-                            (e: any) => e.id === item.techValidator
-                          )?.name
-                        } 
-                        ${
-                          employees.find(
-                            (e: any) => e.id === item.techValidator
-                          )?.surname
-                        }
-                        ${
-                          employees.find(
-                            (e: any) => e.id === item.financeVerificator
-                          )?.name
-                        }
-                        ${
-                          employees.find(
-                            (e: any) => e.id === item.financeValidator
-                          )?.surname
-                        }
-                        ${
-                          employees.find(
-                            (e: any) => e.id === item.financeVerificator
-                          )?.name
-                        }
-                        ${
-                          employees.find(
-                            (e: any) => e.id === item.financeVerificator
-                          )?.surname
-                        }`
-                        .toLowerCase()
-                        .includes(filtre.toLowerCase())
+                    .filter(
+                      (item) =>
+                        !reliquatGrantList.some((rg: any) =>
+                          item.id.toString().includes(rg.grant.toString())
+                        )
                     )
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: GrantEncoursItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
                       return (

@@ -158,8 +158,6 @@ const ListBudgetLine = () => {
               >
                 <TransportEquipmentTableHeader />
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
                   {dataFilter
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: BudgetLineItem, index: any) => {
