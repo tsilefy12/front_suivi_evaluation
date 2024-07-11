@@ -82,7 +82,9 @@ const DashboardMission = () => {
           Retour
         </Button>
       </Link>
-      <SectionDetails>
+      <SectionDetails
+        sx={{ height: search === "" ? "calc(100vh - 240px)" : "100%" }}
+      >
         <Stack
           direction={{ xs: "column", sm: "row" }}
           // spacing={{ xs: 1, sm: 2, md: 4 }}
@@ -563,7 +565,6 @@ const SectionDetails = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
-  height: "calc(100vh - 240px)",
   overflow: "auto",
 }));
 
