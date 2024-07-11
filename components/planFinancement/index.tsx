@@ -44,12 +44,28 @@ const ListPlanFinancement = () => {
     fetchBudgetLine();
   }, [router.query]);
 
-  const [selectedGrant, setSelectedGrant] = useState<any | null>(null); // State pour stocker le grant sélectionné
+  const [filter, setFilter] = useState<string>(""); // Utilisation de `string` plutôt que `string | null`
+
+  const [dataFilter, setDataFilter] = useState<BudgetInitialItem[]>([]); // Utilisation de `BudgetInitialItem[]` pour `dataFilter`
+
+  useEffect(() => {
+    if (filter === "") {
+      setDataFilter(budgetInitialList);
+    } else {
+      const filteredBudgets = budgetInitialList.filter((budget) => {
+        return (
+          grantEncoursList.find((grant) => grant.code === filter)?.id ===
+          budget.grant
+        );
+      });
+      setDataFilter(filteredBudgets);
+    }
+  }, [filter, budgetInitialList, grantEncoursList]);
 
   const groupedBudgets: { [key: string]: BudgetInitialItem[] } = {};
 
   // Groupement de budgetInitialList par grant
-  budgetInitialList.forEach((budget) => {
+  dataFilter.forEach((budget) => {
     const grantCode =
       grantEncoursList.find((grant) => grant.id === budget.grant)?.code || "";
     if (!groupedBudgets[grantCode]) {
@@ -69,21 +85,6 @@ const ListPlanFinancement = () => {
     }, 0);
     grantTotals[grantCode] = total;
   });
-
-  const [dataFilter, setDataFilter] = useState<BudgetInitialItem[]>([]);
-
-  useEffect(() => {
-    if (selectedGrant != null) {
-      const filteredBudgets = groupedBudgets[selectedGrant.code] || [];
-      setDataFilter(filteredBudgets);
-    } else {
-      // Afficher tous les budgets si aucun grant n'est sélectionné
-      const allBudgets = Object.keys(groupedBudgets).flatMap(
-        (key) => groupedBudgets[key]
-      );
-      setDataFilter(allBudgets);
-    }
-  }, [selectedGrant, groupedBudgets]);
 
   return (
     <Container maxWidth="xl">
@@ -111,9 +112,14 @@ const ListPlanFinancement = () => {
             renderInput={(params) => (
               <TextField {...params} label="Grant" variant="outlined" />
             )}
-            value={selectedGrant}
+            isOptionEqualToValue={(option: any, value: any) =>
+              option.id === value.id
+            }
+            value={
+              grantEncoursList.find((grant) => grant.code === filter) || null
+            }
             onChange={(event: any, value: any) => {
-              setSelectedGrant(value);
+              setFilter(value ? value.code : "");
             }}
           />
         </Stack>
@@ -140,72 +146,80 @@ const ListPlanFinancement = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {dataFilter.map((budget, index) => (
-              <TableRow key={index}>
-                <TableCell>
-                  {grantEncoursList.find((grant) => grant.id === budget.grant)
-                    ?.code || ""}
-                </TableCell>
-                <TableCell>
-                  {periodelist.find((p) => p.id === budget.periodeId)?.periode}
-                </TableCell>
-                <TableCell>
-                  <Moment format="DD/MM/yyyy">
-                    {periodelist.find((p) => p.id === budget.periodeId)?.debut}
-                  </Moment>
-                </TableCell>
-                <TableCell>
-                  <Moment format="DD/MM/yyyy">
-                    {periodelist.find((p) => p.id === budget.periodeId)?.fin}
-                  </Moment>
-                </TableCell>
-                <TableCell>
-                  {budget.grantsMonitorings?.map((ligneId, index) => {
-                    const budgetLine = budgetLineList.find(
-                      (bl) => bl.id === ligneId.ligneBudgetaire
-                    );
-                    return (
-                      <Stack key={index} direction={"column"} gap={8}>
-                        {budgetLine ? budgetLine.code : ""}
-                      </Stack>
-                    );
-                  })}
-                </TableCell>
-                <TableCell>
-                  {budget.grantsMonitorings?.map((ligneId, index) => {
-                    const budgetLine = budgetLineList.find(
-                      (bl) => bl.id === ligneId.ligneBudgetaire
-                    );
-                    return (
-                      <Stack key={index} direction={"column"} gap={10}>
-                        {budgetLine
-                          ? formatMontant(Number(ligneId.montant))
-                          : ""}
-                      </Stack>
-                    );
-                  })}
-                </TableCell>
-                <TableCell>
-                  {formatMontant(
-                    Number(
-                      budget.grantsMonitorings
-                        ?.map((ligneId) => {
-                          const budgetLine = budgetLineList.find(
-                            (bl) => bl.id === ligneId.ligneBudgetaire
-                          );
-                          return budgetLine ? ligneId.montant : 0;
-                        })
-                        .reduce((acc: any, curr: any) => acc + curr, 0) || 0
-                    )
+            {Object.keys(groupedBudgets).map((grantCode) => {
+              const budgets = groupedBudgets[grantCode];
+              return budgets.map((budget, index) => (
+                <TableRow key={`${grantCode}-${index}`}>
+                  {index === 0 && (
+                    <TableCell rowSpan={budgets.length}>{grantCode}</TableCell>
                   )}
-                </TableCell>
-                <TableCell>
-                  {index === 0
-                    ? formatMontant(Number(grantTotals[budget.grant!]) || 0)
-                    : ""}
-                </TableCell>
-              </TableRow>
-            ))}
+                  <TableCell>
+                    {
+                      periodelist.find((p) => p.id === budget.periodeId)
+                        ?.periode
+                    }
+                  </TableCell>
+                  <TableCell>
+                    <Moment format="DD/MM/yyyy">
+                      {
+                        periodelist.find((p) => p.id === budget.periodeId)
+                          ?.debut
+                      }
+                    </Moment>
+                  </TableCell>
+                  <TableCell>
+                    <Moment format="DD/MM/yyyy">
+                      {periodelist.find((p) => p.id === budget.periodeId)?.fin}
+                    </Moment>
+                  </TableCell>
+                  <TableCell>
+                    {budget.grantsMonitorings?.map((ligneId, index) => {
+                      const budgetLine = budgetLineList.find(
+                        (bl) => bl.id === ligneId.ligneBudgetaire
+                      );
+                      return (
+                        <Stack key={index} direction={"column"} gap={8}>
+                          {budgetLine ? budgetLine.code : ""}
+                        </Stack>
+                      );
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    {budget.grantsMonitorings?.map((ligneId, index) => {
+                      const budgetLine = budgetLineList.find(
+                        (bl) => bl.id === ligneId.ligneBudgetaire
+                      );
+                      return (
+                        <Stack key={index} direction={"column"} gap={10}>
+                          {budgetLine
+                            ? formatMontant(Number(ligneId.montant))
+                            : ""}
+                        </Stack>
+                      );
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    {formatMontant(
+                      Number(
+                        budget.grantsMonitorings
+                          ?.map((ligneId) => {
+                            const budgetLine = budgetLineList.find(
+                              (bl) => bl.id === ligneId.ligneBudgetaire
+                            );
+                            return budgetLine ? ligneId.montant : 0;
+                          })
+                          .reduce((acc: any, curr: any) => acc + curr, 0) || 0
+                      )
+                    )}
+                  </TableCell>
+                  {index === 0 && (
+                    <TableCell rowSpan={budgets.length}>
+                      {formatMontant(Number(grantTotals[grantCode]))}
+                    </TableCell>
+                  )}
+                </TableRow>
+              ));
+            })}
           </TableBody>
         </Table>
       </TableContainer>

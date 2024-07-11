@@ -195,7 +195,9 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
           return (
             <Form>
               <SectionNavigation>
-                <DialogTitle>Créer/modifier Programmes</DialogTitle>
+                <DialogTitle>
+                  {isEditing ? "Modifier" : "Créer"} programme
+                </DialogTitle>
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
                     <OSDatePicker

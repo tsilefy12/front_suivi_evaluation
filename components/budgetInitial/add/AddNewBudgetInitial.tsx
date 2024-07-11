@@ -136,7 +136,6 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
   const fetchPeriode = useFetchPeriode();
   const { periodelist = [] } = useAppSelector((state) => state.periode);
   const [grantValue, setGrantValue] = useState<string>("vide");
-  const { id } = router.query;
   const { idEdit } = router.query;
   const uniqueValues = new Set();
   const [getIdGrant, setGetIdGrant] = useState(0);
@@ -185,13 +184,15 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
   }, [getIdGrant, grantEncoursList]);
 
   useEffect(() => {
-    if (id) {
-      const idGrant = periodelist.find((p: PeriodeItem) => p.id === id)?.grant;
+    if (idEdit) {
+      const idGrant = periodelist.find(
+        (p: PeriodeItem) => p.id === idEdit
+      )?.grant;
       if (idGrant !== undefined) {
         setGetIdGrant(idGrant!);
       }
     }
-  }, [periodelist, id]);
+  }, [periodelist, idEdit]);
   console.log(budgetId);
   const handleSubmit = async (values: any) => {
     try {
@@ -238,7 +239,7 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
             ? budgetInitial
             : {
                 grant: isEditing ? budgetInitial?.grant : getIdGrant,
-                periodeId: isEditing ? budgetInitial?.periodeId : id!,
+                periodeId: isEditing ? budgetInitial?.periodeId : idEdit!,
               }
         }
         validationSchema={Yup.object({
@@ -260,7 +261,7 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
                   sx={{ mb: 2 }}
                 >
                   <Stack flexDirection={"row"}>
-                    <Link href={`/grants/budgetInitial/${idEdit}/list`}>
+                    <Link href={`/grants/budgetInitial/${getIdGrant}/list`}>
                       <Button
                         color="info"
                         variant="text"
@@ -312,7 +313,9 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
                   variant="outlined"
                   name="periodeId"
                   value={
-                    id ? periodelist.find((p) => p.id === id)?.periode : ""
+                    idEdit
+                      ? periodelist.find((p) => p.id === idEdit)?.periode
+                      : ""
                   }
                   onChange={(value: any) =>
                     formikProps.setFieldValue("periodeId", value)
@@ -324,7 +327,7 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
                   label="Grant"
                   variant="outlined"
                   value={
-                    id && getIdGrant
+                    idEdit && getIdGrant
                       ? grantEncoursList.find(
                           (g) => Number(g.id) === Number(getIdGrant)
                         )?.code

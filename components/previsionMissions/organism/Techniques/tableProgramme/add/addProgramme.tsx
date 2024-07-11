@@ -135,7 +135,7 @@ const AddProgrammes = ({ handleClose }: any) => {
             <Form>
               <SectionNavigation>
                 <DialogTitle>
-                  Créer/modifier contact pendant la mission
+                  {isEditing ? "Modifier" : "Créer"} programme
                 </DialogTitle>
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
