@@ -158,7 +158,7 @@ const GrantsList = () => {
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
         <Typography variant="h4" color="GrayText">
-          GRANTS LIST
+          Grant monitoring
         </Typography>
         <Button
           variant="contained"
@@ -172,7 +172,15 @@ const GrantsList = () => {
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2, position: "flex", left: 0 }}>
-            <TableContainer>
+            <TableContainer
+              sx={{
+                width: "100%",
+                minHeight: "100%",
+                maxHeight: "100%",
+                paddingBottom: 4,
+                overflow: "auto",
+              }}
+            >
               <Table
                 sx={{ minWidth: 750 }}
                 aria-labelledby="tableTitle"
@@ -180,93 +188,51 @@ const GrantsList = () => {
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
+                    <TableCell align="center" sx={{ width: "100%" }}>
                       Deadline
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
-                      Grant code
+                    <TableCell align="center" sx={{ width: "100%" }}>
+                      Grant
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
+                    <TableCell align="center" sx={{ width: "100%" }}>
                       Bailleur
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
+                    <TableCell align="center" sx={{ width: "100%" }}>
                       Project title
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
+                    <TableCell align="center" sx={{ width: "100%" }}>
                       Titre du projet
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
-                      Start
+                    <TableCell align="center" sx={{ width: "100%" }}>
+                      Début
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
-                      End
+                    <TableCell align="center" sx={{ width: "100%" }}>
+                      Fin
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
-                      Amount
+                    <TableCell align="center" sx={{ width: "100%" }}>
+                      Montant
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
-                      Currency
+                    <TableCell align="center" sx={{ width: "100%" }}>
+                      Devise
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
+                    <TableCell align="center" sx={{ width: "100%" }}>
                       Statut
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
+                    <TableCell align="center" sx={{ width: "100%" }}>
                       MV Lead
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
+                    <TableCell align="center" sx={{ width: "100%" }}>
                       VALIDATION TECHNIQUE
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
+                    <TableCell align="center" sx={{ width: "100%" }}>
                       VERIFICATION FINANCIERE
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
-                    >
+                    <TableCell align="center" sx={{ width: "100%" }}>
                       VALIDATION FINANCIERE
                     </TableCell>
                     {/* <TableCell
                       align="center"
-                      sx={{ minWidth: 200, maxWidth: 200 }}
+                 sx={{ width:  "100%" }}
                     >
                       NOTES
                     </TableCell> */}
@@ -289,14 +255,20 @@ const GrantsList = () => {
                           key={row.id}
                           // selected={isItemSelected}
                         >
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
+                          <TableCell align="center" sx={{ width: "100%" }}>
                             <Link
                               href={`/grants/grantMonitoring/${row.id}/grantMoni`}
                             >
-                              <Button variant="outlined" color="accent">
+                              <Button
+                                variant="outlined"
+                                color="accent"
+                                sx={{
+                                  "&:hover": {
+                                    backgroundColor: "info.main",
+                                    color: "white",
+                                  },
+                                }}
+                              >
                                 Deadline
                               </Button>
                             </Link>
@@ -307,78 +279,54 @@ const GrantsList = () => {
                             scope="row"
                             padding="none"
                             align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
+                            sx={{ width: "100%" }}
                           >
                             {row.code}
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
+                          <TableCell align="center" sx={{ width: "100%" }}>
                             {row.bailleur}
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
+                          <TableCell align="center" sx={{ width: "100%" }}>
                             {
                               projectList.find(
                                 (p: any) => p.id === row.projectId
                               )?.descriptionEn
                             }
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
+                          <TableCell align="center" sx={{ width: "100%" }}>
                             {
                               projectList.find(
                                 (p: any) => p.id === row.projectId
                               )?.descriptionFr
                             }
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
+                          <TableCell align="center" sx={{ width: "100%" }}>
                             <Moment format="DD/MM/yyyy">{row.startDate}</Moment>
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
+                          <TableCell align="center" sx={{ width: "100%" }}>
                             <Moment format="DD/MM/yyyy">{row.endDate}</Moment>
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
+                          <TableCell align="center" sx={{ width: "100%" }}>
                             {formatMontant(Number(row.amount))}
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
+                          <TableCell align="center" sx={{ width: "100%" }}>
                             {
                               currencylist.find(
                                 (f: any) => f.id === row.currencyId
                               )?.name
                             }
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
-                            {row.status}
+                          <TableCell align="center" sx={{ width: "100%" }}>
+                            {(row.status === "IN_PROGRESS" && "En cours") ||
+                              (row.status === "COMPLETED" && "Terminé") ||
+                              (row.status === "" && "Annulé") ||
+                              (row.status === "PENDING" && "En attente")}
                           </TableCell>
                           <TableCell
                             align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
+                            sx={{ width: "100%" }}
                           ></TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
+                          <TableCell align="center" sx={{ width: "100%" }}>
                             {`${
                               employees.find(
                                 (f: any) => f.id === row.techValidator
@@ -389,10 +337,7 @@ const GrantsList = () => {
                               )?.surname
                             }`}
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
+                          <TableCell align="center" sx={{ width: "100%" }}>
                             {`${
                               employees.find(
                                 (f: any) => f.id === row.financeVerificator
@@ -403,10 +348,7 @@ const GrantsList = () => {
                               )?.surname
                             }`}
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                          >
+                          <TableCell align="center" sx={{ width: "100%" }}>
                             {`${
                               employees.find(
                                 (f: any) => f.id === row.financeValidator
