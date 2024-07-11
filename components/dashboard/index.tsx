@@ -162,45 +162,37 @@ const Dashboard: NextPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {dataFilter
-              .filter(
-                (g) =>
-                  budgetLineList.some((bl) => bl.grantId === g.id) &&
-                  budgetInitialList.some((bi) => bi.grant === g.id) &&
-                  budgetEngagedList.some((be) => be.grantsId === g.id) &&
-                  periodelist.some((p) => p.grant === g.id)
-              )
-              .map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell>{row.code}</TableCell>
-                  <TableCell align="center">
-                    {formatMontant(Number(row.amountMGA))}
-                  </TableCell>
-                  <TableCell align="center">
-                    {formatMontant(
-                      periodelist
-                        .filter((f) => f.grant === row.id)
-                        .reduce((acc, curr) => acc + curr.montant!, 0)
-                    )}
-                  </TableCell>
-                  <TableCell align="center">
-                    {formatMontant(Number(budgetEngaged))}
-                  </TableCell>
-                  <TableCell align="center">
-                    {formatMontant(Number(row.amountMGA! - budgetEngaged))}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      startIcon={<Add />}
-                      onClick={() => handleClick(row.id!)}
-                    >
-                      Voir détails
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+            {dataFilter.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell>{row.code}</TableCell>
+                <TableCell align="center">
+                  {formatMontant(Number(row.amountMGA))}
+                </TableCell>
+                <TableCell align="center">
+                  {formatMontant(
+                    periodelist
+                      .filter((f) => f.grant === row.id)
+                      .reduce((acc, curr) => acc + curr.montant!, 0)
+                  )}
+                </TableCell>
+                <TableCell align="center">
+                  {formatMontant(Number(budgetEngaged))}
+                </TableCell>
+                <TableCell align="center">
+                  {formatMontant(Number(row.amountMGA! - budgetEngaged))}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<Add />}
+                    onClick={() => handleClick(row.id!)}
+                  >
+                    Voir détails
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </BodySection>

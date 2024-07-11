@@ -89,7 +89,8 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
           sx={{
             width: "auto",
             overflowX: "auto",
-            height: "calc(100vh - 200px)",
+            minHeight: "auto",
+            maxHeight: "calc(100vh - 250px)",
           }}
         >
           <Table>
