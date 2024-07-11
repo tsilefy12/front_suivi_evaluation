@@ -124,13 +124,13 @@ const ListPlanFinancement = () => {
           />
         </Stack>
       </Stack>
-      <TableContainer component={Paper} sx={{ width: "100%", mb: 2 }}>
+      <TableContainer
+        component={Paper}
+        sx={{ width: "100%", mb: 2, height: "calc(100vh - 300px)" }}
+      >
         <Table
           sx={{
             minWidth: 750,
-            minHeight: "45%",
-            maxHeight: "45%",
-            overflow: "auto",
           }}
         >
           <TableHead>

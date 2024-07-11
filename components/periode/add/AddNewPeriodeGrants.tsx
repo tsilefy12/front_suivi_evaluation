@@ -53,33 +53,27 @@ const AddNewPeriodeGrants = () => {
   }, [router.query]);
 
   const handleSubmit = async (values: any) => {
-    const date1 = new Date(values.debut);
-    const DateNumber1 = date1.getTime();
-    const date2 = new Date(values.fin);
-    const DateNumber2 = date2.getTime();
-
-    if (DateNumber1 >= DateNumber2) {
-      setOpen(true);
-    } else {
-      try {
-        if (isEditing) {
-          await dispatch(
-            updatePeriode({
-              id: periode.id!,
-              periode: values,
-            })
-          );
-        } else {
-          await dispatch(createPeriode(values));
-          fetchPeriode();
-        }
-        router.push("/grants/periode");
-      } catch (error) {
-        console.log("error", error);
+    try {
+      if (isEditing) {
+        await dispatch(
+          updatePeriode({
+            id: periode.id!,
+            periode: values,
+          })
+        );
+      } else {
+        await dispatch(createPeriode(values));
+        fetchPeriode();
       }
+      router.push("/grants/periode");
+    } catch (error) {
+      console.log("error", error);
     }
   };
-
+  const getGrantOption = (id: any, options: any) => {
+    if (!id) return null;
+    return options.find((option: any) => option.id === id) || null;
+  };
   return (
     <Container maxWidth="xl" sx={{ pb: 5 }}>
       <Formik
@@ -89,30 +83,20 @@ const AddNewPeriodeGrants = () => {
             ? periode
             : {
                 periode: isEditing ? periode?.periode : "",
-                montant: isEditing ? periode?.montant : "",
+                montant: isEditing ? periode?.montant : 0,
                 grant: isEditing ? periode?.grant : "",
-                debut: isEditing
-                  ? periode?.debut
-                  : format(new Date(), "dd/MM/yyyy"),
-                fin: isEditing
-                  ? periode?.fin
-                  : format(new Date(), "dd/MM/yyyy"),
-                dateFinance: isEditing
-                  ? periode?.dateFinance
-                  : format(new Date(), "dd/MM/yyyy"),
-                dateTechnic: isEditing
-                  ? periode?.dateTechnic
-                  : format(new Date(), "dd/MM/yyyy"),
-                deadline: isEditing
-                  ? periode?.deadline
-                  : format(new Date(), "dd/MM/yyyy"),
+                debut: isEditing ? periode?.debut : new Date(),
+                fin: isEditing ? periode?.fin : new Date(),
+                dateFinance: isEditing ? periode?.dateFinance : new Date(),
+                dateTechnic: isEditing ? periode?.dateTechnic : new Date(),
+                deadline: isEditing ? periode?.deadline : new Date(),
                 notes: isEditing ? periode?.notes : "",
               }
         }
         validationSchema={Yup.object({
           periode: Yup.string().required("Champ obligatoire"),
           montant: Yup.number().required("Champ obligatoire"),
-          grant: Yup.number().required("Champ obligatoire"),
+          // grant: Yup.number().required("Champ obligatoire"),
           notes: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
@@ -128,7 +112,6 @@ const AddNewPeriodeGrants = () => {
                   direction={{ xs: "column", sm: "row" }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                   justifyContent="space-between"
-                  sx={{ mb: 2 }}
                 >
                   <Stack flexDirection={"row"}>
                     <Link href="/grants/periode">
@@ -172,7 +155,13 @@ const AddNewPeriodeGrants = () => {
                 {/* <Divider /> */}
               </NavigationContainer>
 
-              <FormContainer sx={{ backgroundColor: "#fff" }} spacing={2}>
+              <FormContainer
+                sx={{
+                  backgroundColor: "#fff",
+                  height: "calc(100vh - 240px)",
+                }}
+                spacing={2}
+              >
                 <CustomStack
                   direction={{ xs: "column", sm: "column", md: "row" }}
                   spacing={{ xs: 2, sm: 2, md: 1 }}
@@ -202,13 +191,35 @@ const AddNewPeriodeGrants = () => {
                   id="outlined-basic"
                   options={grantEncoursList}
                   getOptionLabel={(option: any) => option.code}
+                  value={getGrantOption(
+                    formikProps.values.grant,
+                    grantEncoursList
+                  )} // Utiliser l'option actuelle
+                  onChange={(event, value) =>
+                    formikProps.setFieldValue("grant", value ? value.id : "")
+                  } // Gestion du changement
                   renderInput={(params) => (
-                    <TextField {...params} label="Grant" variant="outlined" />
+                    <TextField
+                      {...params}
+                      label="Grant"
+                      variant="outlined"
+                      error={
+                        formikProps.touched.grant &&
+                        Boolean(formikProps.errors.grant)
+                      }
+                      helperText={
+                        formikProps.touched.grant &&
+                        typeof formikProps.errors.grant === "string"
+                          ? formikProps.errors.grant
+                          : ""
+                      }
+                    />
                   )}
                   isOptionEqualToValue={(option: any, value: any) =>
                     option.id === value.id
                   }
                 />
+
                 <CustomStack
                   direction={{ xs: "column", sm: "column", md: "row" }}
                   spacing={{ xs: 2, sm: 2, md: 1 }}
@@ -220,9 +231,16 @@ const AddNewPeriodeGrants = () => {
                     variant="outlined"
                     name="debut"
                     value={formikProps.values.debut}
-                    onChange={(value: any) =>
-                      formikProps.setFieldValue("debut", value)
-                    }
+                    onChange={(value: any) => {
+                      formikProps.setFieldValue("debut", value);
+                      const DateNumber1 = new Date(value).getTime();
+                      const date2 = new Date(formikProps.values.fin);
+                      const DateNumber2 = date2.getTime();
+
+                      if (DateNumber1 >= DateNumber2) {
+                        return setOpen(true);
+                      }
+                    }}
                   />
                   <OSDatePicker
                     fullWidth
@@ -231,9 +249,17 @@ const AddNewPeriodeGrants = () => {
                     variant="outlined"
                     name="fin"
                     value={formikProps.values.fin}
-                    onChange={(value: any) =>
-                      formikProps.setFieldValue("fin", value)
-                    }
+                    onChange={(value: any) => {
+                      formikProps.setFieldValue("fin", value);
+                      const date1 = new Date(value).getTime();
+                      const date2 = new Date(
+                        formikProps.values.debut
+                      ).getTime();
+
+                      if (date1 <= date2) {
+                        return setOpen(true);
+                      }
+                    }}
                   />
                 </CustomStack>
                 <Stack direction={"row"} gap={2}>
@@ -291,6 +317,7 @@ const AddNewPeriodeGrants = () => {
                   name="notes"
                   multiline
                   rows={3}
+                  size="small"
                 />
               </FormContainer>
             </Form>

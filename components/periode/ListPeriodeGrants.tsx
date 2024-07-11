@@ -209,9 +209,16 @@ const ListBudgetsInitial = () => {
               filtre={filtre}
               setFiltre={setFiltre}
             />
-            <TableContainer>
+            <TableContainer
+              sx={{
+                height: "calc(100vh - 300px)",
+                overflow: "auto",
+              }}
+            >
               <Table
-                sx={{ minWidth: 750 }}
+                sx={{
+                  minWidth: 750,
+                }}
                 aria-labelledby="tableTitle"
                 size={dense ? "small" : "medium"}
               >

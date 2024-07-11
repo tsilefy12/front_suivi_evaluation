@@ -198,11 +198,10 @@ const ListBudgetInitial = () => {
         direction={{ xs: "column", sm: "row" }}
         spacing={{ xs: 1, sm: 2, md: 4 }}
         justifyContent="space-between"
-        sx={{ mb: 2 }}
       >
         <Stack flexDirection={"row"}>
           <Link href="/grants/periode">
-            <Button variant="contained" startIcon={<ArrowBack />}>
+            <Button variant="text" color="info" startIcon={<ArrowBack />}>
               Retour
             </Button>
           </Link>
@@ -211,9 +210,15 @@ const ListBudgetInitial = () => {
           Budget initial
         </Typography>
       </SectionNavigation>
-      <SectionTable sx={{ backgroundColor: "#fff" }}>
+      <SectionTable
+        sx={{
+          backgroundColor: "#fff",
+          height: "calc(100vh - 230px)",
+          overflow: "auto",
+        }}
+      >
         <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2 }}>
+          <Paper sx={{ width: "100%" }}>
             <EnhancedTableToolbar
               numSelected={selected.length}
               filtre={filtre}
@@ -224,8 +229,6 @@ const ListBudgetInitial = () => {
                 sx={{
                   minWidth: "100%",
                   maxWidth: "100%",
-                  height: "calc(100vh - 400px)",
-                  overflow: "auto",
                 }}
                 aria-labelledby="tableTitle"
                 size={dense ? "small" : "medium"}
