@@ -1,13 +1,17 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import {
+  Autocomplete,
   Button,
   Container,
   Dialog,
+  InputAdornment,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 import type { NextPage } from "next";
@@ -32,6 +36,7 @@ import formatMontant from "../../hooks/format";
 import { SectionNavigation } from "../GrantsEnCours/ListGrants";
 import useFetchPeriode from "../periode/hooks/useFetchPeriode";
 import { GrantEncoursItem } from "../../redux/features/grantEncours/grantEncours.interface";
+import { Search } from "@mui/icons-material";
 
 const Dashboard: NextPage = () => {
   const basePath = useBasePath();
@@ -72,18 +77,31 @@ const Dashboard: NextPage = () => {
   const handleClose = () => {
     setOpen(false);
   };
+  const [filter, setFilter] = useState<string>("");
+  const [dataFilter, setDataFilter] = useState<GrantEncoursItem[]>([]);
+
+  useEffect(() => {
+    if (filter === "") {
+      setDataFilter(grantEncoursList);
+    } else {
+      const filteredGrantEncours = grantEncoursList.filter((grant) => {
+        return grant.code === filter;
+      });
+      setDataFilter(filteredGrantEncours);
+    }
+  }, [filter, grantEncoursList]);
 
   const soldeByGrant = useMemo(() => {
-    if (!grantEncoursList) return 0;
+    if (!dataFilter) return 0;
 
-    return grantEncoursList
+    return dataFilter
       .filter((g) => g.id)
       .flatMap((m) => m.journalBanks)
       .reduce(
         (acc, curr) => acc + ((curr?.debit || 0) - (curr?.credit || 0)),
         0
       );
-  }, [grantEncoursList]);
+  }, [dataFilter]);
 
   const budgetEngaged = useMemo(() => {
     if (!caisselist) return soldeByGrant;
@@ -97,9 +115,39 @@ const Dashboard: NextPage = () => {
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
-        <Typography variant="h4" color="GrayText">
-          Budget engagé
-        </Typography>
+        <Stack
+          direction={"row"}
+          alignItems={"center"}
+          justifyContent={"space-between"}
+          sx={{ mb: 2, width: "100%" }}
+        >
+          <Typography variant="h4" color="GrayText">
+            Budget engagé
+          </Typography>
+          <Autocomplete
+            sx={{ width: 300 }}
+            size="small"
+            id="outlined-basic"
+            options={grantEncoursList}
+            getOptionLabel={(option: any) => option.code}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="rechercher un grant"
+                variant="outlined"
+              />
+            )}
+            isOptionEqualToValue={(option: any, value: any) =>
+              option.id === value.id
+            }
+            value={
+              grantEncoursList.find((grant) => grant.code === filter) || null
+            }
+            onChange={(event: any, value: any) => {
+              setFilter(value ? value.code : "");
+            }}
+          />
+        </Stack>
       </SectionNavigation>
       <BodySection>
         <Table>
@@ -114,7 +162,7 @@ const Dashboard: NextPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {grantEncoursList
+            {dataFilter
               .filter(
                 (g) =>
                   budgetLineList.some((bl) => bl.grantId === g.id) &&
