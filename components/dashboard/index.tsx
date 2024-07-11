@@ -149,7 +149,7 @@ const Dashboard: NextPage = () => {
           />
         </Stack>
       </SectionNavigation>
-      <BodySection>
+      <BodySection sx={{ height: "calc(100vh - 255px)", overflow: "auto" }}>
         <Table>
           <TableHead>
             <TableRow>

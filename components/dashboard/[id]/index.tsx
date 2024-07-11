@@ -86,7 +86,11 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
         </Stack>
         <TableContainer
           component={Paper}
-          sx={{ width: "auto", overflowX: "auto" }}
+          sx={{
+            width: "auto",
+            overflowX: "auto",
+            height: "calc(100vh - 200px)",
+          }}
         >
           <Table>
             <TableHead>
