@@ -1,4 +1,4 @@
-import { Edit, Search } from "@mui/icons-material";
+import { ArrowBack, Edit, Search } from "@mui/icons-material";
 import Add from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -49,7 +49,7 @@ const ListBudgetsInitial = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [filtre ,setFiltre] = React.useState("")
+  const [filtre, setFiltre] = React.useState("");
   const router = useRouter();
   const fetchPeriode = useFetchPeriode();
   const { periodelist } = useAppSelector((state) => state.periode);
@@ -84,7 +84,7 @@ const ListBudgetsInitial = () => {
       });
       setDataFiltered(data);
     }
-  }, [searPeriodeGrants]);
+  }, [searPeriodeGrants, periodelist]);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -184,20 +184,31 @@ const ListBudgetsInitial = () => {
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
         {validate("Suivi période", "C") && (
-          <Link href="/grants/periode/add">
-            <Button variant="contained" startIcon={<Add />}>
-              Créer
-            </Button>
-          </Link>
+          <Stack direction="row" gap={2}>
+            <Link href="/">
+              <Button variant="text" color="info" startIcon={<ArrowBack />}>
+                Retour
+              </Button>
+            </Link>
+            <Link href="/grants/periode/add">
+              <Button variant="contained" startIcon={<Add />}>
+                Créer
+              </Button>
+            </Link>
+          </Stack>
         )}
         <Typography variant="h4" color="GrayText">
-          Période grants
+          Période Grant
         </Typography>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
-            <EnhancedTableToolbar numSelected={selected.length} filtre={filtre} setFiltre={setFiltre}/>
+            <EnhancedTableToolbar
+              numSelected={selected.length}
+              filtre={filtre}
+              setFiltre={setFiltre}
+            />
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -217,88 +228,92 @@ const ListBudgetsInitial = () => {
                   {Object.keys(groupedBudgets).map((grantCode) => {
                     const budgets = groupedBudgets[grantCode];
                     return budgets
-                      .filter(item=>(`${item.periode} ${item.montant}`).toLowerCase().includes(filtre.toLowerCase()))
+                      .filter((item) =>
+                        `${item.periode} ${item.montant}`
+                          .toLowerCase()
+                          .includes(filtre.toLowerCase())
+                      )
                       .map((budget, index) => (
-                      <TableRow
-                        key={`${grantCode}-${index}`}
-                        sx={{ borderBottomColor: "black" }}
-                      >
-                        {index === 0 && (
-                          <TableCell rowSpan={budgets.length}>
-                            {grantCode}
+                        <TableRow
+                          key={`${grantCode}-${index}`}
+                          sx={{ borderBottomColor: "black" }}
+                        >
+                          {index === 0 && (
+                            <TableCell rowSpan={budgets.length}>
+                              {grantCode}
+                            </TableCell>
+                          )}
+                          <TableCell>{budget.periode}</TableCell>
+                          <TableCell>
+                            <Moment format="DD/MM/yyyy">{budget.debut}</Moment>
                           </TableCell>
-                        )}
-                        <TableCell>{budget.periode}</TableCell>
-                        <TableCell>
-                          <Moment format="DD/MM/yyyy">{budget.debut}</Moment>
-                        </TableCell>
-                        <TableCell>
-                          <Moment format="DD/MM/yyyy">{budget.fin}</Moment>
-                        </TableCell>
-                        <TableCell>
-                          {formatMontant(Number(budget.montant))}
-                        </TableCell>
-                        <TableCell>
-                          <BtnActionContainer direction="row" gap={1}>
-                            {validate("Suivi période", "C") && (
+                          <TableCell>
+                            <Moment format="DD/MM/yyyy">{budget.fin}</Moment>
+                          </TableCell>
+                          <TableCell>
+                            {formatMontant(Number(budget.montant))}
+                          </TableCell>
+                          <TableCell>
+                            <BtnActionContainer direction="row" gap={1}>
+                              {validate("Suivi période", "C") && (
+                                <Link
+                                  href={`/grants/budgetInitial/${budget.id}/add`}
+                                >
+                                  <Button
+                                    variant="outlined"
+                                    color="accent"
+                                    startIcon={<Add />}
+                                  >
+                                    Budget initial
+                                  </Button>
+                                </Link>
+                              )}
+                              {validate("Suivi période", "U") && (
+                                <IconButton
+                                  color="primary"
+                                  aria-label="Modifier"
+                                  component="span"
+                                  size="small"
+                                  onClick={() => {
+                                    handleClickEdit(budget.id);
+                                  }}
+                                >
+                                  <Edit />
+                                </IconButton>
+                              )}
+                              {validate("Suivi période", "D") && (
+                                <IconButton
+                                  color="warning"
+                                  aria-label="Supprimer"
+                                  component="span"
+                                  onClick={() => handleClickDelete(budget.id)}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              )}
+                            </BtnActionContainer>
+                          </TableCell>
+                          {index === 0 && (
+                            <TableCell
+                              align="left"
+                              rowSpan={budgets.length}
+                              width={"auto"}
+                            >
                               <Link
-                                href={`/grants/budgetInitial/${budget.id}/add`}
+                                href={`/grants/budgetInitial/${budget.grant}/list`}
                               >
                                 <Button
                                   variant="outlined"
                                   color="accent"
-                                  startIcon={<Add />}
+                                  startIcon={<VisibilityIcon />}
                                 >
-                                  Budget initial
+                                  Budget initial list
                                 </Button>
                               </Link>
-                            )}
-                            {validate("Suivi période", "U") && (
-                              <IconButton
-                                color="primary"
-                                aria-label="Modifier"
-                                component="span"
-                                size="small"
-                                onClick={() => {
-                                  handleClickEdit(budget.id);
-                                }}
-                              >
-                                <Edit />
-                              </IconButton>
-                            )}
-                            {validate("Suivi période", "D") && (
-                              <IconButton
-                                color="warning"
-                                aria-label="Supprimer"
-                                component="span"
-                                onClick={() => handleClickDelete(budget.id)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            )}
-                          </BtnActionContainer>
-                        </TableCell>
-                        {index === 0 && (
-                          <TableCell
-                            align="left"
-                            rowSpan={budgets.length}
-                            width={"auto"}
-                          >
-                            <Link
-                              href={`/grants/budgetInitial/${budget.grant}/list`}
-                            >
-                              <Button
-                                variant="outlined"
-                                color="accent"
-                                startIcon={<VisibilityIcon />}
-                              >
-                                Budget initial list
-                              </Button>
-                            </Link>
-                          </TableCell>
-                        )}
-                      </TableRow>
-                    ));
+                            </TableCell>
+                          )}
+                        </TableRow>
+                      ));
                   })}
                 </TableBody>
               </Table>

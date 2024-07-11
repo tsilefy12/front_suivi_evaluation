@@ -10,7 +10,7 @@ export const createPeriode = createAsyncThunk(
       const response = await axios.post("/suivi-evaluation/periode", periode);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Periode created successfully",
+          message: "Période créée avec succès",
           options: { variant: "success" },
         })
       );

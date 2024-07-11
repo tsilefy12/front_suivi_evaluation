@@ -16,6 +16,7 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 import Link from "next/link";
 import React from "react";
 import * as Yup from "yup";
@@ -33,6 +34,7 @@ import { createPeriode, updatePeriode } from "../../../redux/features/periode";
 import useFetchPeriode from "../hooks/useFetchPeriode";
 import OSDatePicker from "../../shared/date/OSDatePicker";
 import { useConfirm } from "material-ui-confirm";
+import { format } from "date-fns";
 
 const AddNewPeriodeGrants = () => {
   const router = useRouter();
@@ -89,11 +91,21 @@ const AddNewPeriodeGrants = () => {
                 periode: isEditing ? periode?.periode : "",
                 montant: isEditing ? periode?.montant : "",
                 grant: isEditing ? periode?.grant : "",
-                debut: isEditing ? periode?.debut : new Date(),
-                fin: isEditing ? periode?.fin : new Date(),
-                dateFinance: isEditing ? periode?.dateFinance : new Date(),
-                dateTechnic: isEditing ? periode?.dateTechnic : new Date(),
-                deadline: isEditing ? periode?.deadline : new Date(),
+                debut: isEditing
+                  ? periode?.debut
+                  : format(new Date(), "dd/MM/yyyy"),
+                fin: isEditing
+                  ? periode?.fin
+                  : format(new Date(), "dd/MM/yyyy"),
+                dateFinance: isEditing
+                  ? periode?.dateFinance
+                  : format(new Date(), "dd/MM/yyyy"),
+                dateTechnic: isEditing
+                  ? periode?.dateTechnic
+                  : format(new Date(), "dd/MM/yyyy"),
+                deadline: isEditing
+                  ? periode?.deadline
+                  : format(new Date(), "dd/MM/yyyy"),
                 notes: isEditing ? periode?.notes : "",
               }
         }
@@ -154,7 +166,7 @@ const AddNewPeriodeGrants = () => {
                     </Button>
                   </Stack>
                   <Typography variant="h5">
-                    {isEditing ? "Modifier" : "Créer"} période grants
+                    {isEditing ? "Modifier" : "Créer"} période Grant
                   </Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}
@@ -169,7 +181,7 @@ const AddNewPeriodeGrants = () => {
                     <OSTextField
                       fullWidth
                       id="outlined-basic"
-                      label="Periode"
+                      label="Période"
                       variant="outlined"
                       name="periode"
                     />
@@ -185,15 +197,17 @@ const AddNewPeriodeGrants = () => {
                     />
                   </FormControl>
                 </CustomStack>
-                <OSSelectField
+                <Autocomplete
                   fullWidth
                   id="outlined-basic"
-                  label="Grant"
-                  variant="outlined"
                   options={grantEncoursList}
-                  dataKey={["code"]}
-                  valueKey="id"
-                  name="grant"
+                  getOptionLabel={(option: any) => option.code}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Grant" variant="outlined" />
+                  )}
+                  isOptionEqualToValue={(option: any, value: any) =>
+                    option.id === value.id
+                  }
                 />
                 <CustomStack
                   direction={{ xs: "column", sm: "column", md: "row" }}
