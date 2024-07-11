@@ -120,7 +120,7 @@ const BudgetForm = ({
   );
 };
 
-const AddNewBudgetInitial = () => {
+const AddNewBudgetInitial = ({ budgetId }: any) => {
   const fetchBudgetInitial = useFetchBudgetInitial();
   const { isEditing, budgetInitial } = useAppSelector(
     (state) => state.budgetInitial
@@ -137,6 +137,7 @@ const AddNewBudgetInitial = () => {
   const { periodelist = [] } = useAppSelector((state) => state.periode);
   const [grantValue, setGrantValue] = useState<string>("vide");
   const { id } = router.query;
+  const { idEdit } = router.query;
   const uniqueValues = new Set();
   const [getIdGrant, setGetIdGrant] = useState(0);
   const [ligneBudgetMontants, setLigneBudgetMontants] = useState<any[]>([]);
@@ -191,7 +192,7 @@ const AddNewBudgetInitial = () => {
       }
     }
   }, [periodelist, id]);
-
+  console.log(budgetId);
   const handleSubmit = async (values: any) => {
     try {
       let createdBudgetInitialId = null;
@@ -259,7 +260,7 @@ const AddNewBudgetInitial = () => {
                   sx={{ mb: 2 }}
                 >
                   <Stack flexDirection={"row"}>
-                    <Link href={`/grants/budgetInitial/${getIdGrant}/list`}>
+                    <Link href={`/grants/budgetInitial/${idEdit}/list`}>
                       <Button
                         color="info"
                         variant="text"

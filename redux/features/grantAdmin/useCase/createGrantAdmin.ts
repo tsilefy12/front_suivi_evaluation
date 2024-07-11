@@ -7,10 +7,13 @@ export const createGrantAdmin = createAsyncThunk(
   "grantAdmin/createGrantAdmin",
   async (grantAdmin: GrantAdminItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/grant-admin", grantAdmin);
+      const response = await axios.post(
+        "/suivi-evaluation/grant-admin",
+        grantAdmin
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Grant admin created successfully",
+          message: "Grant admin créé avec succès",
           options: { variant: "success" },
         })
       );

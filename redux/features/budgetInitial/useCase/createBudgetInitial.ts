@@ -7,10 +7,13 @@ export const createBudgetInitial = createAsyncThunk(
   "budgetInitial/createBudgetInitial",
   async (budgetInitial: BudgetInitialItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/budget-initial", budgetInitial);
+      const response = await axios.post(
+        "/suivi-evaluation/budget-initial",
+        budgetInitial
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Budget initial created successfully",
+          message: "Budget initial créé avec succès",
           options: { variant: "success" },
         })
       );

@@ -10,7 +10,7 @@ export const createSite = createAsyncThunk(
       const response = await axios.post("/suivi-evaluation/site", site);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Site created successfully",
+          message: "Site créé avec succès",
           options: { variant: "success" },
         })
       );

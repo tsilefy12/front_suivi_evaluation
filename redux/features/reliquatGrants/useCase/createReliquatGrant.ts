@@ -7,10 +7,13 @@ export const createReliquatGrant = createAsyncThunk(
   "reliquatGrant/createReliquatGrant",
   async (reliquatGrant: ReliquatGrantsItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/reliquat-grant", reliquatGrant);
+      const response = await axios.post(
+        "/suivi-evaluation/reliquat-grant",
+        reliquatGrant
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Reliquate grants created successfully",
+          message: "Reliquate grants créé avec succès",
           options: { variant: "success" },
         })
       );

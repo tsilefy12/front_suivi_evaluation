@@ -7,14 +7,17 @@ export const createObjectifRapport = createAsyncThunk(
   "objectifRapport/createObjectifRapport",
   async (objectifRapport: ObjectifRapportItem, thunkAPI) => {
     try {
-        const response = await axios.post("/suivi-evaluation/objectifs", objectifRapport);
-        thunkAPI.dispatch(
-          enqueueSnackbar({
-            message: "Objectif created successfully",
-            options: { variant: "success" },
-          })
-        );
-        return response.data;
+      const response = await axios.post(
+        "/suivi-evaluation/objectifs",
+        objectifRapport
+      );
+      thunkAPI.dispatch(
+        enqueueSnackbar({
+          message: "Objectif créé avec succès",
+          options: { variant: "success" },
+        })
+      );
+      return response.data;
     } catch (error: any) {
       if (error.response) {
         return thunkAPI.rejectWithValue(error);

@@ -7,10 +7,13 @@ export const createCalculePile = createAsyncThunk(
   "calculPile/createCalculePile",
   async (calculPile: CalculPileItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/calcul-pile", calculPile);
+      const response = await axios.post(
+        "/suivi-evaluation/calcul-pile",
+        calculPile
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Calcul de pile created successfully",
+          message: "Calcul de pile créé avec succès",
           options: { variant: "success" },
         })
       );

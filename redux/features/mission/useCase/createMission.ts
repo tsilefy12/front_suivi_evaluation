@@ -10,7 +10,7 @@ export const createMission = createAsyncThunk(
       const response = await axios.post("/mission", mission);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Mission created successfully",
+          message: "Mission créé avec succès",
           options: { variant: "success" },
         })
       );

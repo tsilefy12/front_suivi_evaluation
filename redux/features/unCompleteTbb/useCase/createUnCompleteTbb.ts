@@ -13,7 +13,7 @@ export const createUnCompleteTbb = createAsyncThunk(
       );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Uncomplete dashboard mission created successfully",
+          message: "Uncomplete dashboard mission créé avec succès",
           options: { variant: "success" },
         })
       );

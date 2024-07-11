@@ -1,4 +1,4 @@
-import { ArrowBack } from "@mui/icons-material";
+import { Add, ArrowBack } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import {
@@ -22,7 +22,7 @@ import TableRow from "@mui/material/TableRow";
 import { useConfirm } from "material-ui-confirm";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { usePermitted } from "../../../../config/middleware";
 import {
   defaultLabelDisplayedRows,
@@ -38,6 +38,8 @@ import useFetchBudgetInitial from "../../hooks/useFetchBudgetInitial";
 import { rows } from "../../table/constante";
 import EnhancedTableToolbar from "../../table/EnhancedTableToolbar";
 import Data, { Order } from "../../table/type-variable";
+import { BudgetInitialItem } from "../../../../redux/features/budgetInitial/budgetInitial.interface";
+import AddNewBudgetInitial from "../../add/AddNewBudgetInitial";
 
 const ListBudgetInitial = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -49,7 +51,7 @@ const ListBudgetInitial = () => {
   const fetchBudgetInitial = useFetchBudgetInitial();
   const { budgetInitialList } = useAppSelector((state) => state.budgetInitial);
   const router = useRouter();
-  const { id } = router.query;
+  const { idEdit } = router.query;
   const dispatch = useAppDispatch();
   const fetchGrant = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
@@ -65,7 +67,7 @@ const ListBudgetInitial = () => {
     fetchGrant();
     fetchligneBudgetaire();
     fetchPeriode();
-  }, [router.query]);
+  }, []);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -147,14 +149,41 @@ const ListBudgetInitial = () => {
       })
       .catch(() => {});
   };
-
-  const handleClickEdit = async (id: any) => {
-    router.push(`/grants/budgetInitial/${id}/edit`);
+  const handleClickEdit = async (id: any, budgetId: any) => {
+    router.push(`/grants/budgetInitial/${budgetId}/${id}/edit`);
   };
+  const [filtre, setFiltre] = React.useState("");
+  const [dataFiltered, setDataFiltered] = React.useState<any[]>([]);
+
+  useEffect(() => {
+    if (filtre === "") {
+      return setDataFiltered(budgetInitialList);
+    } else {
+      const data = budgetInitialList.filter((p: any) => {
+        return (
+          p.periodes?.periode!.toLowerCase().includes(filtre.toLowerCase()) ||
+          p
+            .grantsMonitorings!.map((g: any) => g.montant)
+            .toString()
+            .toLowerCase()
+            .includes(filtre.toLowerCase()) ||
+          p
+            .grantsMonitorings!.map((g: any) => {
+              budgetLineList.find((b: any) => b.id == g.ligneBudgetaire)?.code;
+            })
+            .toString()
+            .toLowerCase()
+            .includes(filtre.toLowerCase())
+        );
+      });
+      return setDataFiltered(data);
+    }
+  }, [filtre, budgetInitialList]);
+
   const groupedBudgets: { [key: string]: typeof budgetInitialList } = {};
 
-  budgetInitialList
-    .filter((f: any) => f.grant == id)
+  dataFiltered
+    .filter((f: any) => f.grant == idEdit)
     .forEach((budget) => {
       const grantCode =
         grantEncoursList.find((grant) => grant.id == budget.grant)?.code || "";
@@ -174,7 +203,7 @@ const ListBudgetInitial = () => {
         <Stack flexDirection={"row"}>
           <Link href="/grants/periode">
             <Button variant="contained" startIcon={<ArrowBack />}>
-              Retour à la liste des périodes
+              Retour
             </Button>
           </Link>
         </Stack>
@@ -185,10 +214,19 @@ const ListBudgetInitial = () => {
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
-            <EnhancedTableToolbar numSelected={selected.length} />
+            <EnhancedTableToolbar
+              numSelected={selected.length}
+              filtre={filtre}
+              setFiltre={setFiltre}
+            />
             <TableContainer>
               <Table
-                sx={{ minWidth: 700 }}
+                sx={{
+                  minWidth: "100%",
+                  maxWidth: "100%",
+                  height: "calc(100vh - 400px)",
+                  overflow: "auto",
+                }}
                 aria-labelledby="tableTitle"
                 size={dense ? "small" : "medium"}
               >
@@ -220,76 +258,66 @@ const ListBudgetInitial = () => {
                               ?.periode
                           }
                         </TableCell>
-                        <TableCell
-                          sx={{
-                            height: "10vh",
-                            overflow: "auto",
-                            // width: "300px",
-                          }}
-                          align="left"
-                        >
-                          <FormControl
-                            sx={{
-                              height: budgets.length <= 2 ? "auto" : 70,
-                              overflow: "auto",
-                            }}
-                          >
-                            {budget.grantsMonitorings?.map((lb) => {
-                              return (
-                                <Stack
-                                  direction="column"
-                                  spacing={2}
-                                  key={lb.id!}
-                                >
+                        <TableCell align="left">
+                          <FormControl>
+                            <Stack direction="column" spacing={2}>
+                              {budget.grantsMonitorings?.map((lb) => (
+                                <Box key={lb.id}>
                                   {
                                     budgetLineList.find(
-                                      (b: any) => b.id == lb.ligneBudgetaire
+                                      (b) => b.id == lb.ligneBudgetaire
                                     )?.code
                                   }
-                                </Stack>
-                              );
-                            })}
+                                </Box>
+                              ))}
+                            </Stack>
                           </FormControl>
                         </TableCell>
-                        <TableCell align="left">
-                          {budget.grantsMonitorings?.map((lb) => {
-                            return (
-                              <Stack
-                                direction="column"
-                                spacing={2}
-                                key={lb.id!}
-                              >
-                                {formatMontant(Number(lb.montant!))}
-                              </Stack>
-                            );
-                          })}
+                        <TableCell
+                          align="left"
+                          sx={{ height: "2vh", overflow: "auto" }}
+                        >
+                          <Stack direction="column" spacing={2}>
+                            {budget.grantsMonitorings?.map((lb) => (
+                              <Box key={lb.id}>
+                                {formatMontant(Number(lb.montant))}
+                              </Box>
+                            ))}
+                          </Stack>
                         </TableCell>
                         <TableCell align="left">
-                          <BtnActionContainer
-                            direction="row"
-                            justifyContent="left"
-                          >
-                            {validate("Suivi période", "U") && (
-                              <IconButton
-                                color="primary"
-                                aria-label="Modifier"
-                                component="span"
-                                onClick={() => handleClickEdit(budget.id!)}
+                          <Stack direction="column" spacing={2}>
+                            {budget.grantsMonitorings?.map((lb) => (
+                              <BtnActionContainer
+                                direction="row"
+                                justifyContent="left"
+                                key={lb.id}
                               >
-                                <EditIcon />
-                              </IconButton>
-                            )}
-                            {validate("Suivi période", "D") && (
-                              <IconButton
-                                color="warning"
-                                aria-label="Supprimer"
-                                component="span"
-                                onClick={() => handleClickDelete(budget.id!)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            )}
-                          </BtnActionContainer>
+                                {validate("Suivi période", "U") && (
+                                  <IconButton
+                                    color="primary"
+                                    aria-label="Modifier"
+                                    component="span"
+                                    onClick={() =>
+                                      handleClickEdit(budget.id, budget.grant)
+                                    }
+                                  >
+                                    <EditIcon />
+                                  </IconButton>
+                                )}
+                                {validate("Suivi période", "D") && (
+                                  <IconButton
+                                    color="warning"
+                                    aria-label="Supprimer"
+                                    component="span"
+                                    onClick={() => handleClickDelete(budget.id)}
+                                  >
+                                    <DeleteIcon />
+                                  </IconButton>
+                                )}
+                              </BtnActionContainer>
+                            ))}
+                          </Stack>
                         </TableCell>
                       </TableRow>
                     ));

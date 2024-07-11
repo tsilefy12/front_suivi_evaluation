@@ -21,7 +21,7 @@ export const budgetInitialSlice = createSlice({
   reducers: {
     cancelEdit: (state) => {
       state.isEditing = false;
-      state.calculPile = {};
+      state.budgetInitial = {};
     },
   },
   extraReducers: {
@@ -64,7 +64,7 @@ export const budgetInitialSlice = createSlice({
       state.error = action.error;
     },
 
-    // edit budget initial 
+    // edit budget initial
     [editBudgetInitial.pending.type]: (state) => {
       state.loading = true;
     },
@@ -78,7 +78,7 @@ export const budgetInitialSlice = createSlice({
       state.error = action.error;
     },
 
-    // update budget initial 
+    // update budget initial
     [updateBudgetInitial.pending.type]: (state) => {
       state.loading = true;
     },
@@ -103,7 +103,7 @@ export const budgetInitialSlice = createSlice({
       state.loading = false;
       state.error = action.error;
     },
-}
+  },
 });
 
 export const { cancelEdit } = budgetInitialSlice.actions;

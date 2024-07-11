@@ -44,7 +44,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           }}
         >
           <Typography variant="h6" id="tableTitle" component="div">
-            Liste des périodes grants
+            Liste des périodes Grants
           </Typography>
           <TextField
             variant="outlined"

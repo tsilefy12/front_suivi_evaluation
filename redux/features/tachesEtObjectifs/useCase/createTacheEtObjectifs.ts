@@ -7,10 +7,13 @@ export const createTacheEtObjectifs = createAsyncThunk(
   "tacheEtObjectifs/createTacheEtObjectifs",
   async (tacheEtObjectifs: TacheEtObjectifItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/tache-cle", tacheEtObjectifs);
+      const response = await axios.post(
+        "/suivi-evaluation/tache-cle",
+        tacheEtObjectifs
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "created successfully",
+          message: "créé avec succès",
           options: { variant: "success" },
         })
       );

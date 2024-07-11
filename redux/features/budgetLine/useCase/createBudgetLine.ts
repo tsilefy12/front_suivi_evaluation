@@ -10,7 +10,7 @@ export const createBudgetLine = createAsyncThunk(
       const response = await axios.post("/compta/budget-line", budgetLine);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Ligne budgetaire created successfully",
+          message: "Ligne budgetaire créé avec succès",
           options: { variant: "success" },
         })
       );

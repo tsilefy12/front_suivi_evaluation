@@ -10,7 +10,7 @@ export const createPostAnalytic = createAsyncThunk(
       const response = await axios.post("/compta/post-analytic", postAnalytic);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Poste analytique created successfully",
+          message: "Poste analytique créé avec succès",
           options: { variant: "success" },
         })
       );

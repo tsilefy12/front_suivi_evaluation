@@ -3,15 +3,17 @@ import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
 import { CalculCarburantItem } from "../calculCarburant.interface";
 
-
 export const createCalculCarburant = createAsyncThunk(
   "calculCarburant/createCalculCarburantt",
   async (calculCarburant: CalculCarburantItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/calcul-carburant", calculCarburant);
+      const response = await axios.post(
+        "/suivi-evaluation/calcul-carburant",
+        calculCarburant
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Calcul carburant created successfully",
+          message: "Calcul carburant créé avec succès",
           options: { variant: "success" },
         })
       );

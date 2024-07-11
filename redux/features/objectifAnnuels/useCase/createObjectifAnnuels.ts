@@ -7,10 +7,13 @@ export const createObejectifAnnuel = createAsyncThunk(
   "objectifAnnuel/createObejectifAnnuel",
   async (objectifGeneral: ObjectifAnnuelItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/objectif-general", objectifGeneral);
+      const response = await axios.post(
+        "/suivi-evaluation/objectif-general",
+        objectifGeneral
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Objectif annuel created successfully",
+          message: "Objectif annuel créé avec succès",
           options: { variant: "success" },
         })
       );

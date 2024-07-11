@@ -7,14 +7,17 @@ export const createResultatAttendu = createAsyncThunk(
   "resultatAttandu/createResultatAttendu",
   async (resultatAttendu: ResultatRapportItem, thunkAPI) => {
     try {
-        const response = await axios.post("/suivi-evaluation/resultat", resultatAttendu);
-        thunkAPI.dispatch(
-          enqueueSnackbar({
-            message: "Résultat attendu created successfully",
-            options: { variant: "success" },
-          })
-        );
-        return response.data;
+      const response = await axios.post(
+        "/suivi-evaluation/resultat",
+        resultatAttendu
+      );
+      thunkAPI.dispatch(
+        enqueueSnackbar({
+          message: "Résultat attendu créé avec succès",
+          options: { variant: "success" },
+        })
+      );
+      return response.data;
     } catch (error: any) {
       if (error.response) {
         return thunkAPI.rejectWithValue(error);

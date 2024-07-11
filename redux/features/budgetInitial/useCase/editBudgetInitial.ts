@@ -5,12 +5,20 @@ export const editBudgetInitial = createAsyncThunk(
   "budgetInitial/editBudgetInitial",
   async (data: { id: string }, thunkAPI) => {
     try {
-      const response = await axios.get(`/suivi-evaluation/budget-initial/${data.id}`);
-      // console.log(response.data)
+      const response = await axios.get(
+        `/suivi-evaluation/budget-initial/${data.id}`
+      );
+      console.log("edit data :", response.data);
       return response.data;
     } catch (error: any) {
       if (error.response) {
-        return thunkAPI.rejectWithValue(error);
+        // Extraire les informations pertinentes de l'objet d'erreur
+        const serializedError = {
+          message: error.message,
+          status: error.response.status,
+          data: error.response.data,
+        };
+        return thunkAPI.rejectWithValue(serializedError);
       }
       throw error;
     }

@@ -7,10 +7,13 @@ export const createResumeDepense = createAsyncThunk(
   "resumeDepense/createResumeDepense",
   async (resumeDepense: ResumeDepenseItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/resume-depense", resumeDepense);
+      const response = await axios.post(
+        "/suivi-evaluation/resume-depense",
+        resumeDepense
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Resumé de depense created successfully",
+          message: "Resumé de depense créé avec succès",
           options: { variant: "success" },
         })
       );

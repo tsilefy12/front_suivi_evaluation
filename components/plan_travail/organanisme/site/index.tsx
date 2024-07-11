@@ -62,7 +62,7 @@ const ListSite = () => {
       });
       dispatch(
         enqueueSnackbar({
-          message: "Note created successfully",
+          message: "Note créé avec succès",
           options: { variant: "success" },
         })
       );

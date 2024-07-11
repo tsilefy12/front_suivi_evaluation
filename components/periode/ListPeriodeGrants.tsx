@@ -307,7 +307,7 @@ const ListBudgetsInitial = () => {
                                   color="accent"
                                   startIcon={<VisibilityIcon />}
                                 >
-                                  Budget initial list
+                                  Liste de budget initial
                                 </Button>
                               </Link>
                             </TableCell>

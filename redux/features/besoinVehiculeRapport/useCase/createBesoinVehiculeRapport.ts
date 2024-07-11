@@ -3,15 +3,17 @@ import { enqueueSnackbar } from "../../notification/notificationSlice";
 import { axios } from "../../../../axios";
 import { BesoinvehiculeRapportItem } from "../besoinVehiculeRapport.interface";
 
-
 export const createBesoinVehiculeRapport = createAsyncThunk(
   "besoinVehicule/createBesoinVehiculeRapport",
   async (besoinVehiculeRapport: BesoinvehiculeRapportItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/besoin-vehicule-rapport", besoinVehiculeRapport);
+      const response = await axios.post(
+        "/suivi-evaluation/besoin-vehicule-rapport",
+        besoinVehiculeRapport
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Besoin vehicule created successfully",
+          message: "Besoin vehicule créé avec succès",
           options: { variant: "success" },
         })
       );

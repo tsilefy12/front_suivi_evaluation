@@ -7,10 +7,13 @@ export const createAutreInfoPrevision = createAsyncThunk(
   "autreInfoPrevision/createAutreInfoPrevision",
   async (autreInfoPrevision: AutreInfoPrevisionItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/autre-info-importante", autreInfoPrevision);
+      const response = await axios.post(
+        "/suivi-evaluation/autre-info-importante",
+        autreInfoPrevision
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Autre information de prévision created successfully",
+          message: "Autre information de prévision créé avec succès",
           options: { variant: "success" },
         })
       );

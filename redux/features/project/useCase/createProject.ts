@@ -10,7 +10,7 @@ export const createProject = createAsyncThunk(
       const response = await axios.post("/compta/project", project);
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Project created successfully",
+          message: "Project créé avec succès",
           options: { variant: "success" },
         })
       );

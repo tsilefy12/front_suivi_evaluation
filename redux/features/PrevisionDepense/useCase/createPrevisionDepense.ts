@@ -7,10 +7,13 @@ export const createPrevisionDepense = createAsyncThunk(
   "previsionDepense/createPrevisionDepense",
   async (previsionDepense: PrevisionDepenseItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/prevision-depense", previsionDepense);
+      const response = await axios.post(
+        "/suivi-evaluation/prevision-depense",
+        previsionDepense
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Prévision de depense created successfully",
+          message: "Prévision de depense créé avec succès",
           options: { variant: "success" },
         })
       );

@@ -7,10 +7,13 @@ export const createStatus = createAsyncThunk(
   "status/createStatus",
   async (statut: StatusItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/status-suivi", statut);
+      const response = await axios.post(
+        "/suivi-evaluation/status-suivi",
+        statut
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Status created successfully",
+          message: "Status créé avec succès",
           options: { variant: "success" },
         })
       );

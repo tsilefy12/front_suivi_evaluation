@@ -13,7 +13,7 @@ export const createGrantMonitoring = createAsyncThunk(
       );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Grant monitoring created successfully",
+          message: "Ligne budgetaire créé avec succès dans le budget initial",
           options: { variant: "success" },
         })
       );

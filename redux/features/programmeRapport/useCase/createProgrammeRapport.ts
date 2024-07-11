@@ -7,10 +7,13 @@ export const createProgrammeRapport = createAsyncThunk(
   "programmeRapport/createProgrammeRapport",
   async (programmeRapport: ProgrammeRapportItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/programme-rapport", programmeRapport);
+      const response = await axios.post(
+        "/suivi-evaluation/programme-rapport",
+        programmeRapport
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "Programme de rapport created successfully",
+          message: "Programme de rapport créé avec succès",
           options: { variant: "success" },
         })
       );
