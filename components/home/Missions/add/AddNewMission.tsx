@@ -39,6 +39,7 @@ import { MissionItem } from "../../../../redux/features/mission/mission.interfac
 import useFetchMissionListe from "../hooks/useFetchMissionListe";
 import OSDatePicker from "../../../shared/date/OSDatePicker";
 import { EmployeItem } from "../../../../redux/features/employe/employeSlice.interface";
+import { get } from "http";
 
 const AddNewMission = () => {
   const router = useRouter();
@@ -78,16 +79,10 @@ const AddNewMission = () => {
       : []
   );
   const handleSubmit = async (values: any) => {
-    values.budgetManagerId = [...selectedEmployes.map((item) => item.id)];
-
     const now = new Date().getTime();
     const startDaty = new Date(values.dateDebut).getTime();
     const endDaty = new Date(values.dateFin).getTime();
-    if (startDaty >= endDaty) {
-      const daty = "daty";
-      setGetVerify(daty);
-      return setOpen(true);
-    }
+
     const verifierRefBudget = missionListe
       .filter((f: MissionItem) => f.id)
       .map((e: MissionItem) => {
@@ -95,26 +90,38 @@ const AddNewMission = () => {
         return e.RefBudget;
       });
 
-    if (verifierRefBudget.includes(values.RefBudget)) {
+    if (verifierRefBudget.includes(values.RefBudget) && !isEditing) {
       const budgets = "budgets";
       setGetVerify(budgets);
       return setOpen(true);
     }
-
+    if (
+      values.missionManagerId == "" ||
+      values.verifyFinancial == "" ||
+      values.validateFinancial == "" ||
+      values.verifyTechnic == "" ||
+      values.budgetManagerId.length == 0 ||
+      values.RefBudget == "" ||
+      values.descriptionMission == ""
+    ) {
+      return values;
+    }
     if (!values.reference) {
       values.reference = ref.toString().padStart(3, "0");
     }
-    if (startDaty > now && statut == "vide") {
-      values.status = "En attente";
-    } else if (startDaty <= now && endDaty >= now && statut == "vide") {
-      values.status = "Encours";
-    } else if (endDaty <= now && statut == "vide") {
-      values.status = "Terminé";
-    } else {
-      values.status = statut;
-    }
+
     try {
       if (isEditing) {
+        if (startDaty > now && statut == "vide") {
+          values.status = "En attente";
+        } else if (startDaty <= now && endDaty >= now && statut == "vide") {
+          values.status = "Encours";
+        } else if (endDaty <= now && statut == "vide") {
+          values.status = "Terminé";
+        } else {
+          values.status = statut;
+        }
+        values.budgetManagerId = [...selectedEmployes.map((item) => item.id)];
         await dispatch(
           updateMission({
             id: mission.id!,
@@ -122,6 +129,16 @@ const AddNewMission = () => {
           })
         );
       } else {
+        if (startDaty > now && statut == "vide") {
+          values.status = "En attente";
+        } else if (startDaty <= now && endDaty >= now && statut == "vide") {
+          values.status = "Encours";
+        } else if (endDaty <= now && statut == "vide") {
+          values.status = "Terminé";
+        } else {
+          values.status = statut;
+        }
+        values.budgetManagerId = [...selectedEmployes.map((item) => item.id)];
         await dispatch(createMission(values));
       }
       router.push("/missions/ListMission");
@@ -135,6 +152,10 @@ const AddNewMission = () => {
     { id: "Terminé", name: "Terminé" },
     { id: "Annuler", name: "Annuler" },
   ];
+  const getResponsableOption = (id: any, options: any) => {
+    if (!id) return null;
+    return options.find((option: any) => option.id === id) || null;
+  };
 
   return (
     <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>
@@ -146,7 +167,7 @@ const AddNewMission = () => {
             : {
                 reference: isEditing ? mission?.reference : "",
                 missionManagerId: isEditing ? mission?.missionManagerId : "",
-                budgetManagerId: isEditing ? mission?.budgetManagerId : "",
+                budgetManagerId: isEditing ? mission?.budgetManagerId : [],
                 descriptionMission: isEditing
                   ? mission?.descriptionMission
                   : "",
@@ -159,18 +180,9 @@ const AddNewMission = () => {
                 status: isEditing ? mission?.status : "",
               }
         }
-        validationSchema={Yup.object({
-          // reference: Yup.string().required("Champ obligatoire"),
-          missionManagerId: Yup.string().required("Champ obligatoire"),
-          // budgetManagerId: Yup.string().required("Champ obligatoire"),
+        validationSchema={Yup.object().shape({
           descriptionMission: Yup.string().required("Champ obligatoire"),
-          // verifyFinancial: Yup.string().required("Champ obligatoire"),
-          // verifyTechnic: Yup.string().required("Champ obligatoire"),
-          // validateFinancial: Yup.string().required("Champ obligatoire"),
           RefBudget: Yup.string().required("Champ obligatoire"),
-          dateDebut: Yup.string().required("Champ obligatoire"),
-          dateFin: Yup.string().required("Champ obligatoire"),
-          // status: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -229,7 +241,7 @@ const AddNewMission = () => {
                   </Stack>
                   <Typography variant="h5">
                     {" "}
-                    {isEditing ? "Modifier" : "Ajouter"} mission
+                    {isEditing ? "Modification de mission" : "Nouveau mission"}
                   </Typography>
                 </SectionNavigation>
                 {/* <Divider /> */}
@@ -237,19 +249,48 @@ const AddNewMission = () => {
 
               <FormContainer sx={{ backgroundColor: "#fff" }} gap={2}>
                 <Stack direction={"row"} gap={2}>
-                  <OSSelectField
+                  <Autocomplete
+                    fullWidth
                     id="outlined-basic"
-                    label="Responsable"
-                    name="missionManagerId"
                     options={employees}
-                    valueKey="id"
-                    dataKey={["name", "surname"]}
+                    getOptionLabel={(option: any) =>
+                      option.name + " " + option.surname
+                    }
+                    value={getResponsableOption(
+                      formikProps.values.missionManagerId,
+                      employees
+                    )}
+                    onChange={(event, value) =>
+                      formikProps.setFieldValue(
+                        "missionManagerId",
+                        value ? value.id : ""
+                      )
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Responsable"
+                        variant="outlined"
+                        error={
+                          formikProps.touched.missionManagerId &&
+                          Boolean(formikProps.errors.missionManagerId)
+                        }
+                        required
+                      />
+                    )}
+                    isOptionEqualToValue={(option: any, value: any) =>
+                      option.id === value.id
+                    }
                   />
                   <OSTextField
                     id="outlined-basic"
                     label="Référence budget"
                     name="RefBudget"
                     inputProps={{ autoComplete: "off" }}
+                    value={formikProps.values.RefBudget}
+                    onChange={(e: any) =>
+                      formikProps.setFieldValue("RefBudget", e.target.value)
+                    }
                   />
                 </Stack>
                 <Autocomplete
@@ -279,9 +320,16 @@ const AddNewMission = () => {
                     label="Date début"
                     name="dateDebut"
                     value={formikProps.values.dateDebut}
-                    onChange={(value: any) =>
-                      formikProps.setFieldValue("dateDebut", value)
-                    }
+                    onChange={(value: any) => {
+                      formikProps.setFieldValue("dateDebut", value);
+                      const date1 = new Date(value).getTime();
+                      const date2 = new Date(
+                        formikProps.values.dateFin as Date
+                      ).getTime();
+                      if (date1 > date2) {
+                        return setOpen(true);
+                      }
+                    }}
                   />
                   <OSDatePicker
                     fullWidth
@@ -289,9 +337,16 @@ const AddNewMission = () => {
                     label="Date fin"
                     name="dateFin"
                     value={formikProps.values.dateFin}
-                    onChange={(value: any) =>
-                      formikProps.setFieldValue("dateFin", value)
-                    }
+                    onChange={(value: any) => {
+                      formikProps.setFieldValue("dateFin", value);
+                      const date1 = new Date(
+                        formikProps.values.dateDebut as Date
+                      ).getTime();
+                      const date2 = new Date(value).getTime();
+                      if (date1 > date2) {
+                        return setOpen(true);
+                      }
+                    }}
                   />
 
                   <OSTextField
@@ -305,7 +360,6 @@ const AddNewMission = () => {
                     }
                     onChange={(e: any) => setStatut(e.target.value)}
                   >
-                    <MenuItem value="vide">Select status</MenuItem>
                     {statusList.map((s) => (
                       <MenuItem key={s.id} value={s.id}>
                         {s.name}
@@ -314,29 +368,104 @@ const AddNewMission = () => {
                   </OSTextField>
                 </Stack>
                 <Stack direction={"row"} gap={2}>
-                  <OSSelectField
+                  <Autocomplete
+                    fullWidth
                     id="outlined-basic"
-                    label="Vérificateur finance"
-                    name="verifyFinancial"
                     options={employees}
-                    dataKey={["name", "surname"]}
-                    valueKey="id"
+                    getOptionLabel={(option: any) =>
+                      option.name + " " + option.surname
+                    }
+                    value={getResponsableOption(
+                      formikProps.values.verifyFinancial,
+                      employees
+                    )}
+                    onChange={(event, value) =>
+                      formikProps.setFieldValue(
+                        "verifyFinancial",
+                        value ? value.id : ""
+                      )
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Vérificateur financier"
+                        variant="outlined"
+                        error={
+                          formikProps.touched.verifyFinancial &&
+                          Boolean(formikProps.errors.verifyFinancial)
+                        }
+                        required
+                      />
+                    )}
+                    isOptionEqualToValue={(option: any, value: any) =>
+                      option.id === value.id
+                    }
                   />
-                  <OSSelectField
+                  <Autocomplete
+                    fullWidth
                     id="outlined-basic"
-                    label="Validateur finance"
-                    name="validateFinancial"
                     options={employees}
-                    dataKey={["name", "surname"]}
-                    valueKey="id"
+                    getOptionLabel={(option: any) =>
+                      option.name + " " + option.surname
+                    }
+                    value={getResponsableOption(
+                      formikProps.values.validateFinancial,
+                      employees
+                    )}
+                    onChange={(event, value) =>
+                      formikProps.setFieldValue(
+                        "validateFinancial",
+                        value ? value.id : ""
+                      )
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Validateur financier"
+                        variant="outlined"
+                        error={
+                          formikProps.touched.validateFinancial &&
+                          Boolean(formikProps.errors.validateFinancial)
+                        }
+                        required
+                      />
+                    )}
+                    isOptionEqualToValue={(option: any, value: any) =>
+                      option.id === value.id
+                    }
                   />
-                  <OSSelectField
+                  <Autocomplete
+                    fullWidth
                     id="outlined-basic"
-                    label="Vérificateur technique"
-                    name="verifyTechnic"
                     options={employees}
-                    dataKey={["name", "surname"]}
-                    valueKey="id"
+                    getOptionLabel={(option: any) =>
+                      option.name + " " + option.surname
+                    }
+                    value={getResponsableOption(
+                      formikProps.values.verifyTechnic,
+                      employees
+                    )}
+                    onChange={(event, value) =>
+                      formikProps.setFieldValue(
+                        "verifyTechnic",
+                        value ? value.id : ""
+                      )
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Vérificateur technique"
+                        variant="outlined"
+                        error={
+                          formikProps.touched.verifyTechnic &&
+                          Boolean(formikProps.errors.verifyTechnic)
+                        }
+                        required
+                      />
+                    )}
+                    isOptionEqualToValue={(option: any, value: any) =>
+                      option.id === value.id
+                    }
                   />
                 </Stack>
                 <OSTextField
@@ -358,9 +487,9 @@ const AddNewMission = () => {
         <DialogContent>
           <DialogContentText>
             {`${
-              getVerify == "daty"
-                ? " La date début doit être inférieure que la date fin"
-                : `Référence budget existe déjà avec la mission de "MISSION_${getMission}"`
+              getVerify == "budgets"
+                ? `Référence budget existe déjà avec la mission de "MISSION_${getMission}"`
+                : " La date début doit être inférieure que la date fin"
             }`}
           </DialogContentText>
           <DialogActions>

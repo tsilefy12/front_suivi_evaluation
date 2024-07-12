@@ -194,10 +194,10 @@ const AddNewPeriodeGrants = () => {
                   value={getGrantOption(
                     formikProps.values.grant,
                     grantEncoursList
-                  )} // Utiliser l'option actuelle
+                  )}
                   onChange={(event, value) =>
                     formikProps.setFieldValue("grant", value ? value.id : "")
-                  } // Gestion du changement
+                  }
                   renderInput={(params) => (
                     <TextField
                       {...params}
