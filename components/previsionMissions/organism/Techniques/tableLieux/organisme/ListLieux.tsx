@@ -141,7 +141,17 @@ const ListLieux = () => {
         <Button variant="text" color="info" onClick={handleClickOpen}>
           Ajouter
         </Button>
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            style: {
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+            },
+          }}
+        >
           <AddLieux handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>

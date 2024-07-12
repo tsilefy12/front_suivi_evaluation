@@ -219,7 +219,6 @@ const AddNewPeriodeGrants = () => {
                     option.id === value.id
                   }
                 />
-
                 <CustomStack
                   direction={{ xs: "column", sm: "column", md: "row" }}
                   spacing={{ xs: 2, sm: 2, md: 1 }}

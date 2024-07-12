@@ -71,32 +71,25 @@ const AddProgrammes = ({ handleClose }: any) => {
       : []
   );
   const handleSubmit = async (values: any) => {
-    values.responsable = [...selectedEmployes.map((item) => item.id)];
-    values.missionId = id!;
-    const date1 = new Date(values.dateDebut);
-    const DateNumber1 = date1.getTime();
-    const date2 = new Date(values.dateFin);
-    const DateNumber2 = date2.getTime();
-    // console.log("test")
-    if (DateNumber1 >= DateNumber2) {
-      setOpen(true);
-    } else {
-      try {
-        if (isEditing) {
-          await dispatch(
-            updateProgrammePrevision({
-              id: programmePrevision.id!,
-              programmePrevision: values,
-            })
-          );
-        } else {
-          await dispatch(createProgrammePrevision(values));
-        }
-        fetchProgrammePrevision();
-        handleClose();
-      } catch (error) {
-        console.log("error", error);
+    try {
+      if (isEditing) {
+        values.responsable = [...selectedEmployes.map((item) => item.id)];
+        values.missionId = id!;
+        await dispatch(
+          updateProgrammePrevision({
+            id: programmePrevision.id!,
+            programmePrevision: values,
+          })
+        );
+      } else {
+        values.responsable = [...selectedEmployes.map((item) => item.id)];
+        values.missionId = id!;
+        await dispatch(createProgrammePrevision(values));
       }
+      fetchProgrammePrevision();
+      handleClose();
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
@@ -146,20 +139,44 @@ const AddProgrammes = ({ handleClose }: any) => {
                       variant="outlined"
                       name="dateDebut"
                       value={formikProps.values.dateDebut}
-                      onChange={(value: any) =>
-                        formikProps.setFieldValue("dateDebut", value)
-                      }
+                      onChange={(value: any) => {
+                        const dateDebut = new Date(value!).getTime();
+                        formikProps.setFieldValue("dateDebut", dateDebut);
+                        const dateFin = new Date(
+                          formikProps.values.dateFin!
+                        ).getTime();
+
+                        if (
+                          !isNaN(dateDebut) &&
+                          !isNaN(dateFin) &&
+                          dateDebut >= dateFin
+                        ) {
+                          setOpen(true);
+                        }
+                      }}
                     />
                     <OSDatePicker
                       fullWidth
                       id="outlined-basic"
-                      label="Date de fin "
+                      label="Date de fin"
                       variant="outlined"
                       name="dateFin"
                       value={formikProps.values.dateFin}
-                      onChange={(value: any) =>
-                        formikProps.setFieldValue("dateFin", value)
-                      }
+                      onChange={(value: any) => {
+                        const dateFin = new Date(value!).getTime();
+                        formikProps.setFieldValue("dateFin", dateFin);
+                        const dateDebut = new Date(
+                          formikProps.values.dateDebut!
+                        ).getTime();
+
+                        if (
+                          !isNaN(dateDebut) &&
+                          !isNaN(dateFin) &&
+                          dateFin <= dateDebut
+                        ) {
+                          setOpen(true);
+                        }
+                      }}
                     />
                     <OSSelectField
                       fullWidth
@@ -167,7 +184,9 @@ const AddProgrammes = ({ handleClose }: any) => {
                       label="Activités prévues "
                       variant="outlined"
                       name="activitePrevue"
-                      options={plannedActivityList}
+                      options={plannedActivityList.filter(
+                        (f: any) => f.missionId === id
+                      )}
                       dataKey={["description"]}
                       valueKey="id"
                     />
@@ -177,7 +196,9 @@ const AddProgrammes = ({ handleClose }: any) => {
                       label="Livrable"
                       variant="outlined"
                       name="livrable"
-                      options={deliverableList}
+                      options={deliverableList.filter(
+                        (f: any) => f.missionId === id
+                      )}
                       dataKey={["description"]}
                       valueKey="id"
                     />

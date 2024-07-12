@@ -144,37 +144,42 @@ const ListPrevision = () => {
 
   previsionDepenselist.forEach((b: any) => {
     if (getGrantId !== null && getGrantId === b.grant) {
-      return listLigne.push({
+      const budgetLineNames = budgetLineList
+        .filter((f) => f.grantId === getGrantId)
+        .map((e: any) => e.code);
+
+      listLigne.push({
         id: b.ligneBudgetaire,
-        name: budgetLineList.find((e: any) => e.id === b.ligneBudgetaire)?.code,
+        name: budgetLineNames,
       });
     } else {
       listLigne.push({ id: "", name: "" });
     }
   });
 
-  let [selectedBudgetLine, setSelectedBudgetLine]: any = React.useState<any[]>(
+  const [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
     () => {
       if (isEditing) {
-        return budgetLineList.filter(
-          (pg: any) =>
-            Array.isArray(previsionDepense?.ligneBudgetaire) &&
-            previsionDepense?.ligneBudgetaire?.includes(pg.id)
+        const uniqueBudgetLines = new Set(
+          budgetLineList.filter(
+            (pg: any) =>
+              Array.isArray(previsionDepense?.ligneBudgetaire) &&
+              previsionDepense?.ligneBudgetaire?.includes(pg.id)
+          )
         );
+        return Array.from(uniqueBudgetLines);
       } else {
         return listLigne.length > 0 ? listLigne : [];
       }
     }
   );
-  // console.log(" id :", selectedBudgetLine)
-  //get imprevue
 
   let [regle, setRegle]: any = React.useState(0);
   const [selectId, setSelecteId] = React.useState("");
   let [lib, setLibelle]: any = React.useState("");
   let [prix, setPU]: any = React.useState("");
 
-  if (getGrantId != "" && selectedBudgetLine != "") {
+  if (getGrantId != "") {
     previsionDepenselist.forEach((element: any) => {
       const budgetlineId = element.ligneBudgetaire;
       if (budgetlineId === selectId) {
@@ -205,6 +210,7 @@ const ListPrevision = () => {
       console.log("error", error);
     }
   };
+  const data = [...previsionDepenselist].reverse();
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -229,7 +235,7 @@ const ListPrevision = () => {
                   rowCount={rows.length}
                 />
                 <TableBody>
-                  {previsionDepenselist
+                  {data
                     .filter(
                       (e: any) => e.imprevue === null && e.missionId === id
                     )
@@ -246,15 +252,26 @@ const ListPrevision = () => {
                           <TableCell component="th" scope="row" padding="none">
                             <Moment format="DD/MM/yyyy">{row.date}</Moment>
                           </TableCell>
-                          <TableCell align="right">{row.libelle}</TableCell>
-                          <TableCell align="right">{row.nombre}</TableCell>
-                          <TableCell align="right">
+                          <TableCell align="left">{row.libelle}</TableCell>
+                          <TableCell
+                            align="left"
+                            sx={{ minWidth: 10, maxWidth: 10 }}
+                          >
+                            {row.nombre}
+                          </TableCell>
+                          <TableCell align="left">
                             {formatMontant(Number(row.pu))}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell
+                            align="left"
+                            sx={{ minWidth: 150, maxWidth: 150 }}
+                          >
                             {formatMontant(Number(row.montant))}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell
+                            align="left"
+                            sx={{ maxWidth: 150, minWidth: 150 }}
+                          >
                             {
                               grantEncoursList.find(
                                 (e: any) => e.id === row?.grant
@@ -268,10 +285,10 @@ const ListPrevision = () => {
                               )?.code
                             }
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="left">
                             <BtnActionContainer
                               direction="row"
-                              justifyContent="right"
+                              justifyContent="left"
                             >
                               <IconButton
                                 color="primary"
@@ -342,7 +359,7 @@ const ListPrevision = () => {
                             .slice()
                             .map((row: PrevisionDepenseItem, index: any) => {
                               return (
-                                <TableRow key={row.id!}>
+                                <TableRow key={index}>
                                   <TableCell
                                     align="left"
                                     scope="row"
@@ -386,13 +403,13 @@ const ListPrevision = () => {
                       </Table>
                       <Typography
                         variant="body2"
-                        align="right"
+                        align="left"
                         sx={{ width: "100%", marginTop: 4 }}
                       >
                         <Stack direction="column" spacing={2}>
                           <Stack
                             direction="row"
-                            sx={{ textAlign: "right" }}
+                            sx={{ textAlign: "left" }}
                             gap={1}
                             top={4}
                           >
@@ -500,7 +517,7 @@ const ListPrevision = () => {
                               </Button>
                             </FormControl>
                           </Stack>
-                          <Typography variant="body2" align="right">
+                          <Typography variant="body2" align="left">
                             TOTAL BUDGET : {formatMontant(Number(total))}
                           </Typography>
                           <FormLabel>
@@ -510,7 +527,7 @@ const ListPrevision = () => {
                         </Stack>
                       </Typography>
 
-                      <Typography variant="body2" align="right">
+                      <Typography variant="body2" align="left">
                         TOTAL GENERAL BUDGET :{" "}
                         {formatMontant(Number(total + total / 10))}
                       </Typography>
@@ -537,6 +554,6 @@ export const Footer = styled(Stack)(({ theme }) => ({
   fontStyle: "normal",
   fontWeight: "400px",
   fontSize: "14px",
-  marginRight: "10px",
+  marginleft: "10px",
   letterSpacing: "0.25px",
 }));

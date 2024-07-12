@@ -37,6 +37,7 @@ import { Check } from "@mui/icons-material";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import { EmployeItem } from "../../../../../../redux/features/employe/employeSlice.interface";
 import useFetchVehicleList from "../../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
+import useFetchVoiture from "../hooks/useFetchVoiture";
 
 const AddBesoinVehicule = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
@@ -51,14 +52,18 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
   const { employees } = useAppSelector((state: any) => state.employe);
   const fetchVehicule = useFetchVehicleList();
   const { vehicleList } = useAppSelector((state: any) => state.vehicle);
+  const fetchVoiture = useFetchVoiture();
+  const { transportationEquipments } = useAppSelector(
+    (state: any) => state.transportation
+  );
 
   React.useEffect(() => {
     fetchVehicule();
     fetchEmployes();
+    fetchVoiture();
   }, [router.query]);
 
   const handleSubmit = async (values: any) => {
-    values.responsable = [...selectedEmployes.map((item) => item.id)];
     const date1 = new Date(values.dateDebut);
     const DateNumber1 = date1.getTime();
     const date2 = new Date(values.dateFin);
@@ -68,25 +73,24 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
       (24 * 60 * 60 * 1000)
     ).toFixed(0);
     values.nombreJour = parseInt(calculDuree);
-    if (DateNumber1 >= DateNumber2) {
-      setOpen(true);
-    } else {
-      try {
-        if (isEditing) {
-          await dispatch(
-            updateBesoinVehicule({
-              id: besoinVehicule.id!,
-              besoinVehicule: values,
-            })
-          );
-        } else {
-          await dispatch(createBesoinVehicule(values));
-        }
-        fetchBesoinEnVehicule();
-        handleClose();
-      } catch (error) {
-        console.log("error", error);
+
+    try {
+      if (isEditing) {
+        values.responsable = [...selectedEmployes.map((item) => item.id)];
+        await dispatch(
+          updateBesoinVehicule({
+            id: besoinVehicule.id!,
+            besoinVehicule: values,
+          })
+        );
+      } else {
+        values.responsable = [...selectedEmployes.map((item) => item.id)];
+        await dispatch(createBesoinVehicule(values));
       }
+      fetchBesoinEnVehicule();
+      handleClose();
+    } catch (error) {
+      console.log("error", error);
     }
   };
   const [selectedEmployes, setSelectedEmployes] = React.useState<EmployeItem[]>(
@@ -143,9 +147,16 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                         variant="outlined"
                         name="dateDebut"
                         value={formikProps.values.dateDebut}
-                        onChange={(value: any) =>
-                          formikProps.setFieldValue("dateDebut", value)
-                        }
+                        onChange={(value: any) => {
+                          formikProps.setFieldValue("dateDebut", value);
+                          const DateNumber1 = new Date(value).getTime();
+                          const date2 = new Date(formikProps.values.dateFin!);
+                          const DateNumber2 = date2.getTime();
+
+                          if (DateNumber1 >= DateNumber2) {
+                            setOpen(true);
+                          }
+                        }}
                       />
                       <OSDatePicker
                         fullWidth
@@ -154,9 +165,17 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                         variant="outlined"
                         name="dateFin"
                         value={formikProps.values.dateFin}
-                        onChange={(value: any) =>
-                          formikProps.setFieldValue("dateFin", value)
-                        }
+                        onChange={(value: any) => {
+                          formikProps.setFieldValue("dateFin", value);
+                          const date1 = new Date(value).getTime();
+                          const date2 = new Date(
+                            formikProps.values.dateDebut!
+                          ).getTime();
+
+                          if (date1 <= date2) {
+                            setOpen(true);
+                          }
+                        }}
                       />
                     </CustomStack>
                     <FormControl fullWidth>
@@ -165,8 +184,8 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                         id="outlined-basic"
                         label="Véhicule"
                         variant="outlined"
-                        options={vehicleList}
-                        dataKey={["vehicleType"]}
+                        options={transportationEquipments}
+                        dataKey={"registration"}
                         valueKey="id"
                         name="vehicule"
                         inputProps={{ autoComplete: "off" }}

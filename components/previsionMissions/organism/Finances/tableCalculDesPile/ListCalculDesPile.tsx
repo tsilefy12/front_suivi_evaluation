@@ -204,15 +204,25 @@ const ListCalculDesPiles = () => {
                           >
                             {row.appareil}
                           </TableCell>
-                          <TableCell align="right">{row.type}</TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ minWidth: 100, maxWidth: 100 }}>
+                            {row.type}
+                          </TableCell>
+                          <TableCell sx={{ minWidth: 100, maxWidth: 100 }}>
                             {row.nombreAppareil}
                           </TableCell>
-                          <TableCell align="right">{row.nombrePile}</TableCell>
-                          <TableCell align="right">{row.change}</TableCell>
-                          <TableCell align="right">20</TableCell>
-                          <TableCell align="right">{row.nombrePack}</TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ minWidth: 100, maxWidth: 100 }}>
+                            {row.nombrePile}
+                          </TableCell>
+                          <TableCell sx={{ minWidth: 100, maxWidth: 100 }}>
+                            {row.change}
+                          </TableCell>
+                          <TableCell sx={{ minWidth: 100, maxWidth: 100 }}>
+                            20
+                          </TableCell>
+                          <TableCell sx={{ minWidth: 100, maxWidth: 100 }}>
+                            {row.nombrePack}
+                          </TableCell>
+                          <TableCell sx={{ minWidth: 100, maxWidth: 100 }}>
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
@@ -250,9 +260,6 @@ const ListCalculDesPiles = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Footer>
-              <KeyValue keyName="Total budget" value={"300000"} />
-            </Footer>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"

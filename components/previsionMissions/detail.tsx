@@ -75,13 +75,14 @@ const Detail = () => {
                         .map((m: EmployeItem) => (
                           <Stack key={m.id} direction={"column"}>
                             <Stack direction={"row"} gap={1}>
-                              <span>Nom et prénoms :</span>
+                              {" "}
                               <span>
                                 {m.name} {m.surname}
                               </span>
                             </Stack>
                           </Stack>
-                        ))}
+                        ))
+                        .join(", ")}
                     </FormLabel>
                   </div>
                 ))}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
@@ -56,24 +56,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
     setGrantValue(event.target.value as number);
   };
 
-  let BudgetLineGrantList: any = useState<{}>([]);
-
-  //select budget line depends grant
-  const uniqueValues = new Set();
-
-  grantEncoursList.forEach((g) => {
-    // console.log("grant value :", grantValue)
-    if (grantValue !== 0) {
-      if (!uniqueValues.has(g.id)) {
-        uniqueValues.add(g.id);
-        return (BudgetLineGrantList = g.budgetLines);
-      }
-    } else {
-      uniqueValues.add(g.id);
-      return [];
-    }
-  });
-
   const handleSubmit = async (values: any) => {
     // values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) => bl.id)];
     values.grant = grantValue;
@@ -95,7 +77,29 @@ const AddResumeDepense = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-  //  console.log("lb :", isEditing ? resumeDepense?.grant : "")
+  const getGrantOption = (id: any, options: any) => {
+    setGrantValue(id);
+    if (!id) return null;
+    return options.find((option: any) => option.id === id) || null;
+  };
+  let BudgetLineGrantList: any = useState<{}>([]);
+
+  //select budget line depends grant
+  const uniqueValues = new Set();
+  useEffect(() => {
+    grantEncoursList.filter((g) => {
+      if (grantValue == g.id && grantValue !== "vide") {
+        if (!uniqueValues.has(g.id)) {
+          uniqueValues.add(g.id);
+          return (BudgetLineGrantList = g.budgetLines!.filter(
+            (e) => e.grantId == grantValue
+          ));
+        }
+      }
+      uniqueValues.add(g.id);
+      return [];
+    });
+  }, [grantEncoursList, grantValue]);
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -105,12 +109,12 @@ const AddResumeDepense = ({ handleClose }: any) => {
             ? resumeDepense
             : {
                 grant: isEditing ? resumeDepense?.grant : 0,
-                depensePrevue: isEditing ? resumeDepense?.depensePrevue : "",
+                depensePrevue: isEditing ? resumeDepense?.depensePrevue : 0,
                 ligneBudgetaire: isEditing
                   ? resumeDepense?.ligneBudgetaire
                   : "",
                 remarque: isEditing ? resumeDepense?.remarque : "",
-                budgetDepense: isEditing ? resumeDepense?.budgetDepense : "",
+                budgetDepense: isEditing ? resumeDepense?.budgetDepense : 0,
                 missionId: isEditing ? resumeDepense?.missionId : id,
               }
         }
@@ -134,21 +138,42 @@ const AddResumeDepense = ({ handleClose }: any) => {
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
                     <FormControl fullWidth>
-                      <OSTextField
+                      <Autocomplete
                         fullWidth
-                        select
                         id="outlined-basic"
-                        label="Grant"
-                        variant="outlined"
-                        name="grant"
-                        value={grantValue != 0 ? grantValue : ""}
-                        onChange={handleGrantChange}
-                      >
-                        <MenuItem value={0}>Select grant</MenuItem>
-                        {grantEncoursList.map((item: any) => (
-                          <MenuItem value={item.id!}>{item.code!}</MenuItem>
-                        ))}
-                      </OSTextField>
+                        options={grantEncoursList}
+                        getOptionLabel={(option: any) => option.code}
+                        value={getGrantOption(
+                          formikProps.values.grant,
+                          grantEncoursList
+                        )}
+                        onChange={(event, value) =>
+                          formikProps.setFieldValue(
+                            "grant",
+                            value ? value.id : ""
+                          )
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Grant"
+                            variant="outlined"
+                            error={
+                              formikProps.touched.grant &&
+                              Boolean(formikProps.errors.grant)
+                            }
+                            helperText={
+                              formikProps.touched.grant &&
+                              typeof formikProps.errors.grant === "string"
+                                ? formikProps.errors.grant
+                                : ""
+                            }
+                          />
+                        )}
+                        isOptionEqualToValue={(option: any, value: any) =>
+                          option.id === value.id
+                        }
+                      />
                     </FormControl>
                     <FormControl fullWidth>
                       <OSSelectField
@@ -170,6 +195,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       variant="outlined"
                       name="depensePrevue"
                       inputProps={{ autoComplete: "off", min: 0 }}
+                      type="text"
                     />
                     <OSTextField
                       fullWidth
@@ -178,6 +204,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       variant="outlined"
                       name="budgetDepense"
                       inputProps={{ autoComplete: "off", min: 0 }}
+                      type="text"
                     />
                     <OSTextField
                       fullWidth

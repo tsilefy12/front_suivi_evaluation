@@ -66,7 +66,7 @@ const AddObjectif = ({ handleClose }: any) => {
             ? missionGoal
             : {
                 description: isEditing ? missionGoal?.description : "",
-                missionId: isEditing ? missionGoal?.missionId: id,
+                missionId: isEditing ? missionGoal?.missionId : id,
               }
         }
         validationSchema={Yup.object({
@@ -85,7 +85,7 @@ const AddObjectif = ({ handleClose }: any) => {
                   <DialogTitle>
                     {isEditing ? "Modifier" : "Formulaire"} objectif
                   </DialogTitle>
-                  <DialogContent>
+                  <DialogContent sx={{ width: "100%" }}>
                     <FormContainer spacing={2} mt={2}>
                       <OSTextField
                         id="outlined-basic"

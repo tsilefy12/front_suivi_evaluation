@@ -122,14 +122,22 @@ const ListProgrammes = () => {
                         <TableCell component="th" scope="row">
                           <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                         </TableCell>
-                        <TableCell component="th" scope="row">
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{ minWidth: 400, maxWidth: 400 }}
+                        >
                           {
                             plannedActivityList.find(
                               (e: any) => e.id === row.activitePrevue
                             )?.description
                           }
                         </TableCell>
-                        <TableCell component="th" scope="row">
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{ minWidth: 400, maxWidth: 400 }}
+                        >
                           {
                             deliverableList.find(
                               (e: any) => e.id === row.livrable
@@ -208,7 +216,17 @@ const ListProgrammes = () => {
           <Button variant="text" color="info" onClick={handleClickOpen}>
             Ajouter
           </Button>
-          <Dialog open={open} onClose={handleClose}>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            PaperProps={{
+              style: {
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+              },
+            }}
+          >
             <AddProgrammes handleClose={handleClose} />
           </Dialog>
         </SectionNavigation>

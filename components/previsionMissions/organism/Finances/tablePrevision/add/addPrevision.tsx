@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
@@ -54,24 +54,8 @@ const AddPrevisionMission = ({ handleClose }: any) => {
     fetchBudgetLine();
   }, [router.query]);
 
-  let BudgetLineGrantList: any = useState<{}>([]);
-
-  //select budget line depends grant
-  const uniqueValues = new Set();
-
-  grantEncoursList.forEach((g) => {
-    if (grantValue !== "vide") {
-      if (!uniqueValues.has(g.id)) {
-        uniqueValues.add(g.id);
-        return (BudgetLineGrantList = g.budgetLines);
-      }
-    }
-    uniqueValues.add(g.id);
-    return [];
-  });
   // console.log(BudgetLineGrantList)
   const handleSubmit = async (values: any) => {
-    values.grant = grantValue;
     try {
       if (isEditing) {
         await dispatch(
@@ -89,6 +73,30 @@ const AddPrevisionMission = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
+  const getGrantOption = (id: any, options: any) => {
+    setGrantValue(id);
+    if (!id) return null;
+    return options.find((option: any) => option.id === id) || null;
+  };
+  let BudgetLineGrantList: any = useState<{}>([]);
+
+  //select budget line depends grant
+  const uniqueValues = new Set();
+  useEffect(() => {
+    grantEncoursList.filter((g) => {
+      if (grantValue == g.id && grantValue !== "vide") {
+        if (!uniqueValues.has(g.id)) {
+          uniqueValues.add(g.id);
+          return (BudgetLineGrantList = g.budgetLines!.filter(
+            (e) => e.grantId == grantValue
+          ));
+        }
+      }
+      uniqueValues.add(g.id);
+      return [];
+    });
+  }, [grantEncoursList, grantValue]);
+
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -115,7 +123,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
           nombre: Yup.number().required("Champ obligatoire"),
           pu: Yup.number().required("Champ obligatoire"),
           regleme: Yup.string().required("Champ obligatoire"),
-          // ligneBudgetaire: Yup.string().required("Champ obligatoire"),
+          ligneBudgetaire: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -188,27 +196,42 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                       />
                     </CustomStack>
                     <FormControl fullWidth>
-                      <OSTextField
+                      <Autocomplete
                         fullWidth
-                        select
                         id="outlined-basic"
-                        label="Grant"
-                        variant="outlined"
-                        name="grant"
-                        value={
-                          id
-                            ? budgetLineList.find(
-                                (e: any) => e.id === previsionDepense?.grant
-                              )?.code
-                            : grantValue
+                        options={grantEncoursList}
+                        getOptionLabel={(option: any) => option.code}
+                        value={getGrantOption(
+                          formikProps.values.grant,
+                          grantEncoursList
+                        )}
+                        onChange={(event, value) =>
+                          formikProps.setFieldValue(
+                            "grant",
+                            value ? value.id : ""
+                          )
                         }
-                        onChange={(e: any) => setGrantValue(e.target.value)}
-                      >
-                        <MenuItem value="vide">Select grant</MenuItem>
-                        {grantEncoursList.map((item) => (
-                          <MenuItem value={item.id!}>{item.code!}</MenuItem>
-                        ))}
-                      </OSTextField>
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Grant"
+                            variant="outlined"
+                            error={
+                              formikProps.touched.grant &&
+                              Boolean(formikProps.errors.grant)
+                            }
+                            helperText={
+                              formikProps.touched.grant &&
+                              typeof formikProps.errors.grant === "string"
+                                ? formikProps.errors.grant
+                                : ""
+                            }
+                          />
+                        )}
+                        isOptionEqualToValue={(option: any, value: any) =>
+                          option.id === value.id
+                        }
+                      />
                     </FormControl>
                     <FormControl fullWidth>
                       <OSSelectField

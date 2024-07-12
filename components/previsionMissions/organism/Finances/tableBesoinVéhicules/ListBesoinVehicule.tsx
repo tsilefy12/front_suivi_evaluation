@@ -43,6 +43,7 @@ import {
 } from "../../../../../redux/features/besoinVehicule";
 import useFetchVehicleList from "../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
 import useFetchEmploys from "../../../../GrantsEnCours/hooks/getResponsable";
+import useFetchVoiture from "./hooks/useFetchVoiture";
 
 const ListBesoinVehicule = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -64,11 +65,16 @@ const ListBesoinVehicule = () => {
   const { id } = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
+  const fetchVoiture = useFetchVoiture();
+  const { transportationEquipments } = useAppSelector(
+    (state: any) => state.transportation
+  );
 
   React.useEffect(() => {
     fetchBesoinEnVehicule();
     fetchVehicule();
     fetchEmployes();
+    fetchVoiture();
   }, []);
   const handleClickOpen = () => {
     setOpen(true);
@@ -221,18 +227,21 @@ const ListBesoinVehicule = () => {
                           >
                             <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell>
                             <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell>
                             {
-                              vehicleList.find(
+                              transportationEquipments.find(
                                 (e: any) => e.id === row.vehicule
-                              )?.vehicleType
+                              )?.registration
                             }
                           </TableCell>
-                          <TableCell align="right">{row.trajet}</TableCell>
-                          <TableCell align="right" key={index}>
+                          <TableCell>{row.trajet}</TableCell>
+                          <TableCell
+                            sx={{ minWidth: 200, maxWidth: 200 }}
+                            key={index}
+                          >
                             <FormControl
                               key={row.id!}
                               sx={{
@@ -245,17 +254,17 @@ const ListBesoinVehicule = () => {
                                 return (
                                   <Stack
                                     direction="column"
-                                    spacing={2}
+                                    gap={2}
                                     height={25}
                                     overflow="auto"
                                     key={lp.id!}
                                   >
                                     {
-                                      employees.find((e: any) => e.id === lp)
+                                      employees.find((e: any) => e.id == lp)
                                         ?.name
                                     }{" "}
                                     {
-                                      employees.find((e: any) => e.id === lp)
+                                      employees.find((e: any) => e.id == lp)
                                         ?.surname
                                     }
                                   </Stack>
@@ -263,8 +272,8 @@ const ListBesoinVehicule = () => {
                               })}
                             </FormControl>
                           </TableCell>
-                          <TableCell align="right">{row.nombreJour}</TableCell>
-                          <TableCell align="right">
+                          <TableCell>{row.nombreJour}</TableCell>
+                          <TableCell>
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"

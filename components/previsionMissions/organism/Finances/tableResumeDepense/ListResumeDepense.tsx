@@ -168,7 +168,7 @@ const ListResumeDepense = () => {
     await dispatch(editResumeDepense({ id }));
     handleClickOpen();
   };
-
+  const data = [...resumeDepenseList].reverse();
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -199,7 +199,7 @@ const ListResumeDepense = () => {
                 <TableBody>
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-                  {resumeDepenseList
+                  {data
                     .filter((f: any) => f.missionId === id)
                     .map((row: ResumeDepenseItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
@@ -218,6 +218,7 @@ const ListResumeDepense = () => {
                             id={labelId}
                             scope="row"
                             padding="none"
+                            sx={{ minWidth: 150, maxWidth: 150 }}
                           >
                             {
                               grantEncoursList.find(
@@ -225,21 +226,23 @@ const ListResumeDepense = () => {
                               )?.code
                             }
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
                             {
                               budgetLineList.find(
                                 (e: any) => e.id === row.ligneBudgetaire
                               )?.code
                             }
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
                             {formatMontant(Number(row.depensePrevue))}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
                             {formatMontant(Number(row.budgetDepense))}
                           </TableCell>
-                          <TableCell align="right">{row.remarque}</TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ width: "100%" }}>
+                            {row.remarque}
+                          </TableCell>
+                          <TableCell sx={{ width: "100%" }}>
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
@@ -277,8 +280,9 @@ const ListResumeDepense = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Footer>TOTAL BUDGET : {formatMontant(Number(total))}</Footer>
-
+            <Footer sx={{ paddingTop: 4 }}>
+              TOTAL BUDGET : {formatMontant(Number(total))}
+            </Footer>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
