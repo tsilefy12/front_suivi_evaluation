@@ -93,27 +93,15 @@ const AddRapportdepense = ({ handleClose }: any) => {
       ? Math.max(0, (1 + page) * rowsPerPage - [1, 2, 3, 4, 5].length)
       : 0;
 
-  //select budget line depends grant
-  let BudgetLineGrantList: any = useState<{}>([]);
-  const uniqueValues = new Set();
-
-  grantEncoursList.forEach((g) => {
-    if (grantValue !== "vide") {
-      if (!uniqueValues.has(g.id)) {
-        uniqueValues.add(g.id);
-        return (BudgetLineGrantList = g.budgetLines);
-      }
-    }
-    return (BudgetLineGrantList = []);
-  });
-
   let total: any = useMemo(() => {
     let totalBudget: any = 0;
-    previsionDepenselist.map((p: any) => {
-      if (p.imprevue === null) {
-        totalBudget += p.montant;
-      }
-    });
+    previsionDepenselist
+      .filter((f: any) => f.missionId === id)
+      .map((p: any) => {
+        if (p.imprevue === null) {
+          totalBudget += p.montant;
+        }
+      });
     return totalBudget;
   }, [previsionDepenselist]);
 
@@ -173,6 +161,28 @@ const AddRapportdepense = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
+  const getGrantOption = (id: any, options: any) => {
+    setGrantValue(id);
+    if (!id) return null;
+    return options.find((option: any) => option.id === id) || null;
+  };
+  let BudgetLineGrantList: any = useState<{}>([]);
+  const uniqueValues = new Set();
+
+  React.useEffect(() => {
+    grantEncoursList.filter((g) => {
+      if (grantValue == g.id && grantValue !== "vide") {
+        if (!uniqueValues.has(g.id)) {
+          uniqueValues.add(g.id);
+          return (BudgetLineGrantList = g.budgetLines!.filter(
+            (e) => e.grantId == grantValue
+          ));
+        }
+      }
+      uniqueValues.add(g.id);
+      return [];
+    });
+  }, [grantEncoursList, grantValue]);
   return (
     <Container
       maxWidth="xl"
@@ -186,7 +196,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
             : {
                 date: isEditing ? rapportDepense?.date : new Date(),
                 libelle: isEditing ? rapportDepense?.libelle : "",
-                montant: isEditing ? rapportDepense?.montant : "",
+                montant: isEditing ? rapportDepense?.montant : 0,
                 grant: isEditing ? rapportDepense?.grant : grantValue,
                 ligneBudgetaire: isEditing
                   ? rapportDepense?.ligneBudgetaire
@@ -249,22 +259,42 @@ const AddRapportdepense = ({ handleClose }: any) => {
                     />
                     <FormControl fullWidth>
                       <Stack spacing={2} direction="column">
-                        <OSTextField
+                        <Autocomplete
                           fullWidth
-                          select
                           id="outlined-basic"
-                          label="Grant"
-                          variant="outlined"
-                          name="grant"
-                          value={grantValue}
-                          onChange={(e: any) => setGrantValue(e.target.value)}
-                          hyperText={grantValue == "vide" ? false : true}
-                        >
-                          <MenuItem value="vide">Select grant</MenuItem>
-                          {grantEncoursList.map((item: any) => (
-                            <MenuItem value={item.id}>{item.code!}</MenuItem>
-                          ))}
-                        </OSTextField>
+                          options={grantEncoursList}
+                          getOptionLabel={(option: any) => option.code}
+                          value={getGrantOption(
+                            formikProps.values.grant,
+                            grantEncoursList
+                          )}
+                          onChange={(event, value) =>
+                            formikProps.setFieldValue(
+                              "grant",
+                              value ? value.id : ""
+                            )
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Grant"
+                              variant="outlined"
+                              error={
+                                formikProps.touched.grant &&
+                                Boolean(formikProps.errors.grant)
+                              }
+                              helperText={
+                                formikProps.touched.grant &&
+                                typeof formikProps.errors.grant === "string"
+                                  ? formikProps.errors.grant
+                                  : ""
+                              }
+                            />
+                          )}
+                          isOptionEqualToValue={(option: any, value: any) =>
+                            option.id === value.id
+                          }
+                        />
                         <OSSelectField
                           fullWidth
                           select
@@ -281,7 +311,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                         ></OSSelectField>
                       </Stack>
                     </FormControl>
-                    <Stack flexDirection="row">
+                    {/* <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
                         <FormLabel> Voici la liste des </FormLabel>
@@ -362,8 +392,8 @@ const AddRapportdepense = ({ handleClose }: any) => {
                           <TableCell colSpan={6} />
                         </TableRow>
                       )}
-                    </Table>
-                    <Footer>
+                    </Table> */}
+                    {/* <Footer>
                       <Typography variant="body2" align="right">
                         TOTAL BUDGET : {total} Ar
                       </Typography>
@@ -374,7 +404,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                       <Typography variant="body2" align="right">
                         TOTAL GENERAL BUDGET : {total + total / 10} Ar
                       </Typography>
-                    </Footer>
+                    </Footer> */}
                     <TablePagination
                       rowsPerPageOptions={[5, 10, 25]}
                       component="div"

@@ -49,6 +49,10 @@ import useFetchProgrammePrevisionList from "../../../../../previsionMissions/org
 import { ProgrammePrevisionItem } from "../../../../../../redux/features/programmePrevision/programmePrevision.interface";
 import useFetchPlannedActivityList from "../../../../../previsionMissions/organism/Techniques/tableActivitésPrévues/hooks/useFetchPlannedActivityList";
 import useFetchDeliverableList from "../../../../../previsionMissions/organism/Techniques/tableLivrables/hooks/useFetchDeliverableList";
+import useFetchMissionaryList from "../../../../../previsionMissions/organism/Techniques/tableMissionnaires/hooks/useFetchMissionaryList";
+import { MissionaryItem } from "../../../../../../redux/features/missionary/missionarySlice.interface";
+import useFetchMissionaryRapportList from "../../tableMissionnaires/hooks/useFetchMissionaryList";
+import { MissionairesItem } from "../../../../../../redux/features/missionaires/missionaires.interface";
 
 const AddProgrammesRapport = ({ handleClose }: any) => {
   const router = useRouter();
@@ -88,7 +92,10 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
   const fetchPlannedActivityListe = useFetchPlannedActivityList();
   const fetchtDeliverable = useFetchDeliverableList();
   const { deliverableList } = useAppSelector((state: any) => state.deliverable);
-
+  const fetchMissionaire = useFetchMissionaryRapportList();
+  const { missionaireslist } = useAppSelector(
+    (state: any) => state.missionaires
+  );
   React.useEffect(() => {
     fetchProgrammeRapport();
     fetchEmployes();
@@ -97,13 +104,14 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
     fetchProgrammePrevision();
     fetchPlannedActivityListe();
     fetchtDeliverable();
+    fetchMissionaire();
   }, [router.query]);
 
   // console.log("liste programme prev :", programmePrevisionList)
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
     isEditing
-      ? employees.filter((employee: any) =>
-          programmeRapport?.responsableR?.includes(employee.id!)
+      ? missionaireslist.filter((missionaire: any) =>
+          programmeRapport?.responsableR?.includes(missionaire.id!)
         )
       : []
   );
@@ -178,9 +186,9 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                 activitePrevueR: isEditing
                   ? programmeRapport?.activitePrevueR
                   : "",
-                activtiteRealise: isEditing
-                  ? programmeRapport?.activtiteRealise
-                  : "",
+                // activiteRealise: isEditing
+                // ? programmeRapport?.activiteRealise
+                // : "",
                 livrableR: isEditing ? programmeRapport?.livrableR : "",
                 responsableR: isEditing ? programmeRapport?.responsableR : "",
                 // missiomId: id!
@@ -230,7 +238,7 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                         formikProps.setFieldValue("dateFin", value)
                       }
                     />
-                    <OSSelectField
+                    {/* <OSSelectField
                       fullWidth
                       id="outlined-basic"
                       label="Activités prévues "
@@ -239,25 +247,29 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                       dataKey={activity !== "" ? activity : ["description"]}
                       valueKey="id"
                       name="activitePrevueR"
-                    />
+                    /> */}
                     <OSSelectField
                       fullWidth
                       id="outlined-basic"
                       label="Activité réalisées "
                       variant="outlined"
-                      options={activiteRapportlist}
+                      options={activiteRapportlist.filter(
+                        (f: any) => f.missionId === id
+                      )}
                       dataKey={
                         activityRealise !== "" ? activityRealise : ["activite"]
                       }
                       valueKey="id"
-                      name="activiteRealise"
+                      name="activitePrevueR"
                     />
                     <OSSelectField
                       fullWidth
                       id="outlined-basic"
                       label="Livrable"
                       variant="outlined"
-                      options={livrableRapportlist}
+                      options={livrableRapportlist.filter(
+                        (f: any) => f.missionId === id
+                      )}
                       dataKey={liverable !== "" ? liverable : ["livrablee"]}
                       valueKey="id"
                       name="livrableR"
@@ -266,9 +278,11 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                       <Autocomplete
                         multiple
                         id="tags-standard"
-                        options={employees}
-                        getOptionLabel={(employee: any) =>
-                          `${employee.name} ${employee.surname}` as string
+                        options={missionaireslist.filter(
+                          (f: any) => f.missionId === id
+                        )}
+                        getOptionLabel={(missionaire: MissionairesItem) =>
+                          `${missionaire.firstNameMissionary} ${missionaire.lastNameMissionary}` as string
                         }
                         value={respo.length !== 0 ? respo : selectedEmployes}
                         onChange={(event, newValue) => {
@@ -284,7 +298,7 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                         )}
                       />
                     </FormControl>
-                    <Stack flexDirection="row">
+                    {/* <Stack flexDirection="row">
                       <InfoIcon />
                       <Typography variant="subtitle2">
                         Voici la liste des{" "}
@@ -293,8 +307,8 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                         </Lien>
                         , vous pouvez les réutiliser pour les rapports
                       </Typography>
-                    </Stack>
-                    <Table sx={{ minWidth: 500 }} aria-label="simple table">
+                    </Stack> */}
+                    {/* <Table sx={{ minWidth: 500 }} aria-label="simple table">
                       <TableHead>
                         <TableRow>
                           <TableCell align="left">Date de début</TableCell>
@@ -377,7 +391,7 @@ const AddProgrammesRapport = ({ handleClose }: any) => {
                             </TableCell>
                           </TableRow>
                         ))}
-                    </Table>
+                    </Table> */}
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>

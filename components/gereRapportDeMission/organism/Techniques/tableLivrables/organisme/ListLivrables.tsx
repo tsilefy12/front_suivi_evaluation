@@ -126,7 +126,11 @@ const ListLivrables = () => {
         <Button variant="text" color="info" onClick={handleClickOpen}>
           Ajouter
         </Button>
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperProps={{ sx: { width: "100%" } }}
+        >
           <AddLivrable handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>

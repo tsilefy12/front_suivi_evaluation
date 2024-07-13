@@ -27,7 +27,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddDepositionDesRapports from "./add/addDepositionDesRapports";
 import useFetchMissionListe from "../home/Missions/hooks/useFetchMissionListe";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { Check, Close } from "@mui/icons-material";
+import { Check, Close, Print } from "@mui/icons-material";
 import { axios } from "../../axios";
 import { enqueueSnackbar } from "../../redux/features/notification/notificationSlice";
 import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
@@ -459,7 +459,7 @@ const GereRapportDeMission = () => {
               </Stack>
             </CardBody>
             <CardFooter>
-              <Stack flexDirection={{ xs: "column", sm: "row" }}>
+              {/* <Stack flexDirection={{ xs: "column", sm: "row" }}>
                 <Typography
                   variant="h6"
                   sx={{ textTransform: "uppercase", marginTop: "3px" }}
@@ -524,7 +524,10 @@ const GereRapportDeMission = () => {
                     </CardMain>
                     <Divider />
                   </Grid>
-                ))}
+                ))} */}
+              <Button variant="contained" color="primary" startIcon={<Print />}>
+                Imprimer
+              </Button>
             </CardFooter>
           </Stack>
         </Stack>

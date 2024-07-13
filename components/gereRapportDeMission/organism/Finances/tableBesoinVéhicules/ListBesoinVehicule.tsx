@@ -43,6 +43,7 @@ import {
 import AddbesoinVehiculeRapport from "./add/addBesoinVehicule";
 import { BesoinvehiculeRapportItem } from "../../../../../redux/features/besoinVehiculeRapport/besoinVehiculeRapport.interface";
 import useFetchBesoinEnVehiculeRapportList from "./hooks/useFetchBesoinEnVehicule";
+import useFetchVoiture from "../../../../previsionMissions/organism/Finances/tableBesoinVéhicules/hooks/useFetchVoiture";
 
 const ListbesoinVehiculeRapportRapport = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -51,7 +52,7 @@ const ListbesoinVehiculeRapportRapport = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [filtre , setFiltre] = React.useState("")
+  const [filtre, setFiltre] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const { besoinVehiculeRapportList } = useAppSelector(
     (state) => state.besoinVehiculeRapport
@@ -65,10 +66,14 @@ const ListbesoinVehiculeRapportRapport = () => {
   const dispatch = useAppDispatch();
   const fetchBesoinEnVehiculeRapportList =
     useFetchBesoinEnVehiculeRapportList();
-
+  const fetchVoiture = useFetchVoiture();
+  const { transportationEquipments } = useAppSelector(
+    (state: any) => state.transportation
+  );
   React.useEffect(() => {
     fetchBesoinEnVehiculeRapportList();
     fetchEmployes();
+    fetchVoiture();
   }, []);
   const handleClickOpen = () => {
     setOpen(true);
@@ -220,18 +225,22 @@ const ListbesoinVehiculeRapportRapport = () => {
                           >
                             <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="left">
                             <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                           </TableCell>
-                          <TableCell align="right">
-                            {
-                              vehicleList.find(
+                          <TableCell align="left">
+                            {`${
+                              transportationEquipments.find(
                                 (e: any) => e.id === row.vehicule
-                              )?.vehicleType
-                            }
+                              )?.brand
+                            } ${"-"}${
+                              transportationEquipments.find(
+                                (e: any) => e.id === row.vehicule
+                              )?.registration
+                            }`}
                           </TableCell>
-                          <TableCell align="right">{row.trajet}</TableCell>
-                          <TableCell align="right">
+                          <TableCell align="left">{row.trajet}</TableCell>
+                          <TableCell align="left">
                             <FormControl
                               sx={{
                                 height:
@@ -260,11 +269,11 @@ const ListbesoinVehiculeRapportRapport = () => {
                               })}
                             </FormControl>
                           </TableCell>
-                          <TableCell align="right">{row.nombreJour}</TableCell>
-                          <TableCell align="right">
+                          <TableCell align="center">{row.nombreJour}</TableCell>
+                          <TableCell align="left">
                             <BtnActionContainer
                               direction="row"
-                              justifyContent="right"
+                              justifyContent="left"
                             >
                               <IconButton
                                 color="primary"

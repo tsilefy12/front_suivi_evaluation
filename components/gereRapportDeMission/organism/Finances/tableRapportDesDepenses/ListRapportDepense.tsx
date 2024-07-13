@@ -6,6 +6,7 @@ import {
   IconButton,
   Stack,
   styled,
+  TableHead,
   Typography,
 } from "@mui/material";
 import React, { useMemo } from "react";
@@ -47,7 +48,7 @@ import formatMontant from "../../../../../hooks/format";
 
 const ListRapportDepenses = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("dpj");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("date");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -92,7 +93,7 @@ const ListRapportDepenses = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.dpj);
+      const newSelecteds = rows.map((n) => n.date);
       setSelected(newSelecteds);
       return;
     }
@@ -193,17 +194,24 @@ const ListRapportDepenses = () => {
                 aria-labelledby="tableTitle"
                 size={dense ? "small" : "medium"}
               >
-                <EnhancedTableHead
+                {/* <EnhancedTableHead
                   numSelected={selected.length}
                   order={order}
                   orderBy={orderBy}
                   onSelectAllClick={handleSelectAllClick}
                   onRequestSort={handleRequestSort}
                   rowCount={rapportDepenseList.length}
-                />
+                /> */}
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left">Date</TableCell>
+                    <TableCell align="left">Libellés</TableCell>
+                    <TableCell align="left">Grant</TableCell>
+                    <TableCell align="left">Montant</TableCell>
+                    <TableCell align="left">Budget line</TableCell>
+                  </TableRow>
+                </TableHead>
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
                   {rapportDepenseList
                     .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -214,61 +222,35 @@ const ListRapportDepenses = () => {
                       return (
                         <TableRow
                           hover
-                          //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                          // selected={isItemSelected}
                         >
-                          <TableCell
-                            padding="checkbox"
-                            // onClick={(event) => handleClick(event, row.dpj)}
-                          ></TableCell>
-                          {/* <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                          >
-                           <Moment format="DD/MM/yyyy"> {row.date}</Moment>
-                          </TableCell> */}
                           <TableCell align="left">
                             <Moment format="DD/MM/yyyy">{row.date}</Moment>
                           </TableCell>
-                          <TableCell align="right">{row.libelle}</TableCell>
-                          <TableCell align="right">
-                            {formatMontant(Number(row.montant))}
-                          </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="left">{row.libelle}</TableCell>
+                          <TableCell align="left" sx={{ minWidth: 100 }}>
                             {
                               grantEncoursList.find(
                                 (e: any) => e.id === row.grant
                               )?.code
                             }
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="left">
+                            {formatMontant(Number(row.montant))}
+                          </TableCell>
+                          <TableCell align="left">
                             {
                               budgetLineList.find(
                                 (e: any) => e.id === row.ligneBudgetaire
                               )?.code
                             }
-                            {/* <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auot" : 70, overflow: "auto" }}>
-                              {
-                                (row.ligneBudgetaire!).map((lb: any) => {
-                                  return (
-                                    <Stack direction="column" spacing={2}>
-                                      {budgetLineList.find((b: any) => b.id === lb)?.code}
-                                    </Stack>
-                                  )
-                                })
-                              }
-                            </FormControl> */}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="left">
                             <BtnActionContainer
                               direction="row"
-                              justifyContent="right"
+                              justifyContent="left"
                             >
                               <IconButton
                                 color="primary"
@@ -303,20 +285,20 @@ const ListRapportDepenses = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Footer>
-              <Typography variant="body2" align="right">
+            <Footer sx={{ paddingTop: 2 }}>
+              <Typography variant="body2" align="left">
                 TOTAL BUDGET : {formatMontant(Number(total))}
               </Typography>
-              <Typography variant="body2" align="right">
+              <Typography variant="body2" align="left">
                 Imprévu de mission(total budget-location et perdiem MV(10% )) :
                 {formatMontant(Number(total / 10))}
               </Typography>
-              <Typography variant="body2" align="right">
+              <Typography variant="body2" align="left">
                 TOTAL GENERAL BUDGET :{" "}
                 {formatMontant(Number(total + total / 10))}
               </Typography>
             </Footer>
-            <TablePagination
+            {/* <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
               count={rows.length}
@@ -326,7 +308,7 @@ const ListRapportDepenses = () => {
               onRowsPerPageChange={handleChangeRowsPerPage}
               labelRowsPerPage={labelRowsPerPage}
               labelDisplayedRows={defaultLabelDisplayedRows}
-            />
+            /> */}
           </Paper>
           {/* <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}

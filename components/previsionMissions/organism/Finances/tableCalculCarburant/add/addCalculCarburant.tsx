@@ -48,12 +48,12 @@ const AddCalculCarburant = ({ handleClose }) => {
     fetchVoiture();
   }, []);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values: any) => {
     try {
       if (isEditing) {
         await dispatch(
           updateCalculCarburant({
-            id: calculCarburant.id,
+            id: calculCarburant.id!,
             calculCarburant: values,
           })
         );

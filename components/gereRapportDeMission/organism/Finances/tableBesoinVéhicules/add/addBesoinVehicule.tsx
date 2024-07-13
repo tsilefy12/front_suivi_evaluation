@@ -41,6 +41,7 @@ import {
 } from "../../../../../../redux/features/besoinVehiculeRapport";
 import useFetchBesoinEnVehiculeRapportList from "../hooks/useFetchBesoinEnVehicule";
 import useFetchVehicleList from "../../../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
+import useFetchVoiture from "../../../../../previsionMissions/organism/Finances/tableBesoinVéhicules/hooks/useFetchVoiture";
 
 const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
@@ -56,11 +57,15 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
   const fetchVehicleListe = useFetchVehicleList();
   const fetchBesoinEnVehiculeRapportList =
     useFetchBesoinEnVehiculeRapportList();
-
+  const fetchVoiture = useFetchVoiture();
+  const { transportationEquipments } = useAppSelector(
+    (state: any) => state.transportation
+  );
   React.useEffect(() => {
     fetchBesoinEnVehiculeRapportList();
     fetchEmployes();
     fetchVehicleListe();
+    fetchVoiture();
   }, [router.query]);
 
   const handleSubmit = async (values: any) => {
@@ -102,7 +107,10 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
         )
       : []
   );
-
+  const getVehicleOption = (id: any, options: any) => {
+    if (!id) return null;
+    return options.find((option: any) => option.id === id) || null;
+  };
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -172,15 +180,43 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
                       />
                     </CustomStack>
                     <FormControl fullWidth>
-                      <OSSelectField
+                      <Autocomplete
                         fullWidth
                         id="outlined-basic"
-                        label="Vehicule"
-                        variant="outlined"
-                        options={vehicleList}
-                        dataKey={["vehicleType"]}
-                        valueKey="id"
-                        name="vehicule"
+                        options={transportationEquipments}
+                        getOptionLabel={(option: any) =>
+                          ` ${option.brand}${"-"}${option.registration}`
+                        }
+                        value={getVehicleOption(
+                          formikProps.values.vehicule,
+                          transportationEquipments
+                        )}
+                        onChange={(event, value) =>
+                          formikProps.setFieldValue(
+                            "vehicule",
+                            value ? value.id : ""
+                          )
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Véhicule"
+                            variant="outlined"
+                            error={
+                              formikProps.touched.vehicule &&
+                              Boolean(formikProps.errors.vehicule)
+                            }
+                            helperText={
+                              formikProps.touched.vehicule &&
+                              typeof formikProps.errors.vehicule === "string"
+                                ? formikProps.errors.vehicule
+                                : ""
+                            }
+                          />
+                        )}
+                        isOptionEqualToValue={(option: any, value: any) =>
+                          option.id === value.id
+                        }
                       />
                     </FormControl>
                     <OSTextField

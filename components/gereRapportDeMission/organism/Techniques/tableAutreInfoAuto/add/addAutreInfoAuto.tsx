@@ -98,6 +98,7 @@ const AddAutreInfoAutoRapport = ({ handleClose }: any) => {
     } catch (error) {
       console.log("error", error);
     }
+    handleClose();
   };
 
   const ClickHandler = (

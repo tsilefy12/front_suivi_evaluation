@@ -55,9 +55,9 @@ const AddLieux = ({ handleClose }: any) => {
   }, [router.query]);
 
   const handleSubmit = async (values: any) => {
-    values.missionId = id!;
     try {
       if (isEditing) {
+        values.missionId = id!;
         await dispatch(
           updateLieuxRapport({
             id: lieuxRapport.id!,
@@ -69,12 +69,14 @@ const AddLieux = ({ handleClose }: any) => {
           values.fokontany = getFokontany;
           values.commune = getCommune;
           values.district = getDisctrict;
+          values.missionId = id!;
           return dispatch(createLieuxRapport(values)), handleClose();
         } else if (
           values.fokontany != "" &&
           values.commune !== "" &&
           values.district !== ""
         ) {
+          values.missionId = id!;
           return await dispatch(createLieuxRapport(values)), handleClose();
         }
       }

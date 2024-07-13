@@ -238,7 +238,7 @@ const ListResumeDepense = () => {
                               )?.code
                             }
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="left">
                             {
                               budgetLineList.find(
                                 (e: any) => e.id === row.ligneBudgetaire
@@ -256,17 +256,17 @@ const ListResumeDepense = () => {
                               }
                             </FormControl> */}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="left">
                             {formatMontant(Number(row.depensePrevue))}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="left">
                             {formatMontant(Number(row.budgetDepense))}
                           </TableCell>
-                          <TableCell align="right">{row.remarque}</TableCell>
-                          <TableCell align="right">
+                          <TableCell align="left">{row.remarque}</TableCell>
+                          <TableCell align="left" width="20px">
                             <BtnActionContainer
                               direction="row"
-                              justifyContent="right"
+                              justifyContent="left"
                             >
                               <IconButton
                                 color="primary"
@@ -301,12 +301,12 @@ const ListResumeDepense = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Footer>
-              <Typography variant="body2" align="right">
+            <Footer sx={{ paddingTop: 2 }}>
+              <Typography variant="body2" align="left">
                 Total Budget : {formatMontant(Number(total))}
               </Typography>
             </Footer>
-            <TablePagination
+            {/* <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
               count={rows.length}
@@ -316,7 +316,7 @@ const ListResumeDepense = () => {
               onRowsPerPageChange={handleChangeRowsPerPage}
               labelRowsPerPage={labelRowsPerPage}
               labelDisplayedRows={defaultLabelDisplayedRows}
-            />
+            /> */}
           </Paper>
           {/* <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}

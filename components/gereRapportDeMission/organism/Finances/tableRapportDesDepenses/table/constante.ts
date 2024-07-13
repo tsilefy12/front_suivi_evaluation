@@ -3,17 +3,11 @@ import { HeadCell } from "./type-variable";
 
 export const headCells: readonly HeadCell[] = [
   {
-    id: "dpj",
-    numeric: false,
-    disablePadding: true,
-    label: "DPJ#",
+    id: "date",
+    numeric: true,
+    disablePadding: false,
+    label: "Date",
   },
-  // {
-  //   id: "date",
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: "Date",
-  // },
   {
     id: "libelles",
     numeric: true,
@@ -40,6 +34,4 @@ export const headCells: readonly HeadCell[] = [
   },
 ];
 
-export const rows = [
-  createData("10", "08/10/2021", "Sac", "10000","Sac", "10000"),
-];
+export const rows = [createData("10", "08/10/2021", "Sac", "10000", "Sac")];

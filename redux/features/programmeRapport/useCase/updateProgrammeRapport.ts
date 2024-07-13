@@ -13,9 +13,15 @@ import { ProgrammeRapportItem } from "../programmeRapport.interface";
  */
 export const updateProgrammeRapport = createAsyncThunk(
   "programmeRapport/updateProgrammeRapport",
-  async (data: { id: string; programmeRapport: ProgrammeRapportItem }, thunkAPI) => {
+  async (
+    data: { id: string; programmeRapport: ProgrammeRapportItem },
+    thunkAPI
+  ) => {
     try {
-      const response = await axios.patch(`${data.id}`, data.programmeRapport);
+      const response = await axios.patch(
+        `suivi-evaluation/programme-rapport/${data.id}`,
+        data.programmeRapport
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Programme de rapport mise à jour avec succès",

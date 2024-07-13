@@ -37,6 +37,7 @@ import {
 import AddProgrammesRapport from "../add/addProgramme";
 import { editAcitiviteRapport } from "../../../../../../redux/features/activitesRapport";
 import useFetchPlannedActivityList from "../../../../../previsionMissions/organism/Techniques/tableActivitésPrévues/hooks/useFetchPlannedActivityList";
+import useFetchMissionaryRapportList from "../../tableMissionnaires/hooks/useFetchMissionaryList";
 
 const ListProgrammes = () => {
   const [open, setOpen] = React.useState(false);
@@ -61,6 +62,10 @@ const ListProgrammes = () => {
   const { activiteRapportlist } = useAppSelector(
     (state) => state.activiteRapport
   );
+  const fetchMissionaire = useFetchMissionaryRapportList();
+  const { missionaireslist } = useAppSelector(
+    (state: any) => state.missionaires
+  );
   const confirm = useConfirm();
 
   React.useEffect(() => {
@@ -69,6 +74,7 @@ const ListProgrammes = () => {
     fetchPlannedActivityListe();
     fetchLivrable();
     fetchActivityRapport();
+    fetchMissionaire();
   }, []);
 
   const handleClickOpen = () => {
@@ -114,7 +120,7 @@ const ListProgrammes = () => {
                   <TableRow>
                     <TableCell>Date de début</TableCell>
                     <TableCell align="left">Date de fin</TableCell>
-                    <TableCell align="left">Activités prévues</TableCell>
+                    {/* <TableCell align="left">Activités prévues</TableCell> */}
                     <TableCell align="left">Activités réalisées</TableCell>
                     <TableCell align="left">Livrables</TableCell>
                     <TableCell align="left">Responsable</TableCell>
@@ -136,23 +142,35 @@ const ListProgrammes = () => {
                         <TableCell component="th" scope="row">
                           <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                         </TableCell>
-                        <TableCell component="th" scope="row">
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{ minWidth: 250, maxWidth: 250 }}
+                        >
                           {
-                            plannedActivityList.find(
+                            activiteRapportlist.find(
                               (e: any) => e.id === row.activitePrevueR
-                            )?.description
+                            )?.activite
                           }
                         </TableCell>
-                        <TableCell component="th" scope="row">
+                        {/* <TableCell component="th" scope="row">
                           {row.activiteRealise}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
+                        </TableCell> */}
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{ minWidth: 250, maxWidth: 250 }}
+                        >
                           {Array.isArray(livrableRapportlist) &&
                             livrableRapportlist.find(
                               (e) => e.id === row.livrableR
                             )?.livrablee}
                         </TableCell>
-                        <TableCell component="th" scope="row">
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{ minWidth: 250, maxWidth: 250 }}
+                        >
                           <FormControl
                             sx={{
                               height:
@@ -164,12 +182,14 @@ const ListProgrammes = () => {
                               return (
                                 <Stack direction="column" spacing={2}>
                                   {
-                                    employees.find((e: any) => e.id === lp)
-                                      ?.name
+                                    missionaireslist.find(
+                                      (e: any) => e.id === lp
+                                    )?.firstNameMissionary
                                   }{" "}
                                   {
-                                    employees.find((e: any) => e.id === lp)
-                                      ?.surname
+                                    missionaireslist.find(
+                                      (e: any) => e.id === lp
+                                    )?.lastNameMissionary
                                   }
                                 </Stack>
                               );
@@ -214,7 +234,11 @@ const ListProgrammes = () => {
           <Button variant="text" color="info" onClick={handleClickOpen}>
             Ajouter
           </Button>
-          <Dialog open={open} onClose={handleClose}>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            PaperProps={{ sx: { width: "100%" } }}
+          >
             <AddProgrammesRapport handleClose={handleClose} />
           </Dialog>
         </SectionNavigation>

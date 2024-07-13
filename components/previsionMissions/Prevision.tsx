@@ -242,7 +242,7 @@ const PrevisionDeMission = () => {
           <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>
             <CardPrevision key={0}>
               <Typography variant="h6" sx={{ textTransform: "uppercase" }}>
-                Etat des rapports
+                Etat des prévisions
               </Typography>
               <Stack spacing={2}>
                 <div>

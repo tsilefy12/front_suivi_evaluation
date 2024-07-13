@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
@@ -86,19 +86,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [1, 2].length) : 0;
 
   //select budget line depends grant
-  let BudgetLineGrantList: any = useState<{}>([]);
-  const uniqueValues = new Set();
 
-  grantEncoursList.forEach((g) => {
-    if (grantValue !== "vide") {
-      if (!uniqueValues.has(g.id)) {
-        uniqueValues.add(g.id);
-        return (BudgetLineGrantList = g.budgetLines);
-      }
-    } else {
-      return (BudgetLineGrantList = []);
-    }
-  });
   const [grts, setGrts]: any = React.useState(0);
   const [bdgLine, setBdgLine]: any = React.useState(0);
   const [dpns, setDpns]: any = React.useState("");
@@ -156,6 +144,28 @@ const AddResumeDepense = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
+  const getGrantOption = (id: any, options: any) => {
+    setGrantValue(id);
+    if (!id) return null;
+    return options.find((option: any) => option.id === id) || null;
+  };
+  let BudgetLineGrantList: any = useState<{}>([]);
+  const uniqueValues = new Set();
+
+  useEffect(() => {
+    grantEncoursList.filter((g) => {
+      if (grantValue == g.id && grantValue !== "vide") {
+        if (!uniqueValues.has(g.id)) {
+          uniqueValues.add(g.id);
+          return (BudgetLineGrantList = g.budgetLines!.filter(
+            (e) => e.grantId == grantValue
+          ));
+        }
+      }
+      uniqueValues.add(g.id);
+      return [];
+    });
+  }, [grantEncoursList, grantValue]);
   return (
     <Container
       maxWidth="xl"
@@ -169,10 +179,10 @@ const AddResumeDepense = ({ handleClose }: any) => {
             : {
                 depensePrevue: isEditing
                   ? resumeDepensePrevue?.depensePrevue
-                  : "",
+                  : 0,
                 budgetDepense: isEditing
                   ? resumeDepensePrevue?.budgetDepense
-                  : "",
+                  : 0,
                 remarque: isEditing ? resumeDepensePrevue?.remarque : "",
                 grant: isEditing ? resumeDepensePrevue?.grant : grantValue,
                 ligneBudgetaire: isEditing
@@ -198,22 +208,42 @@ const AddResumeDepense = ({ handleClose }: any) => {
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
                     <FormControl fullWidth>
-                      <OSTextField
+                      <Autocomplete
                         fullWidth
-                        select
                         id="outlined-basic"
-                        label="Grant"
-                        variant="outlined"
-                        name="grant"
-                        value={grts != 0 ? grts : grantValue}
-                        onChange={(e: any) => setGrantValue(e.target.value)}
-                        disabled={!!grts}
-                      >
-                        <MenuItem value="vide">Select grant</MenuItem>
-                        {grantEncoursList.map((item: any) => (
-                          <MenuItem value={item.id!}>{item.code!}</MenuItem>
-                        ))}
-                      </OSTextField>
+                        options={grantEncoursList}
+                        getOptionLabel={(option: any) => option.code}
+                        value={getGrantOption(
+                          formikProps.values.grant,
+                          grantEncoursList
+                        )}
+                        onChange={(event, value) =>
+                          formikProps.setFieldValue(
+                            "grant",
+                            value ? value.id : ""
+                          )
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Grant"
+                            variant="outlined"
+                            error={
+                              formikProps.touched.grant &&
+                              Boolean(formikProps.errors.grant)
+                            }
+                            helperText={
+                              formikProps.touched.grant &&
+                              typeof formikProps.errors.grant === "string"
+                                ? formikProps.errors.grant
+                                : ""
+                            }
+                          />
+                        )}
+                        isOptionEqualToValue={(option: any, value: any) =>
+                          option.id === value.id
+                        }
+                      />
                     </FormControl>
                     <FormControl fullWidth>
                       <OSSelectField
@@ -261,18 +291,18 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       inputProps={{ autoComplete: "off" }}
                       disabled={!!grts}
                     />
-                    <Stack flexDirection="row">
-                      <InfoIcon />
-                      <Typography variant="subtitle2">
+                    {/* <Stack flexDirection="row">
+                      {/* <InfoIcon /> */}
+                    {/* <Typography variant="subtitle2">
                         <FormLabel sx={{ color: "black" }}>
                           {" "}
                           Voici la liste des{" "}
                         </FormLabel>
                         <Lien> resumé de dépense pendant la prévision</Lien>,
                         vous pouvez les réutiliser pour les rapports
-                      </Typography>
-                    </Stack>
-                    <Table sx={{ width: "300px" }} aria-label="simple table">
+                      </Typography> 
+                    </Stack> */}
+                    {/* <Table sx={{ width: "300px" }} aria-label="simple table">
                       <TableHead>
                         <TableRow>
                           <TableCell align="left">Grant</TableCell>
@@ -342,8 +372,8 @@ const AddResumeDepense = ({ handleClose }: any) => {
                           <TableCell colSpan={6} />
                         </TableRow>
                       )}
-                    </Table>
-                    <Footer>
+                    </Table> */}
+                    {/* <Footer>
                       <Typography variant="body2" align="right">
                         TOTAL BUDGET : 30000
                       </Typography>
@@ -353,8 +383,8 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       </Typography>
                       <Typography variant="body2" align="right">
                         TOTAL GENERAL BUDGET : 40000
-                      </Typography> */}
-                    </Footer>
+                      </Typography> 
+                    </Footer> */}
                     <TablePagination
                       rowsPerPageOptions={[5, 10, 25]}
                       component="div"

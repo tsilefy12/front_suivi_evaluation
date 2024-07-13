@@ -39,6 +39,7 @@ const ListLieux = () => {
   const { lieuxRapportlist } = useAppSelector(
     (state: any) => state.lieuxRapport
   );
+
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const { missionLocationList } = useAppSelector(
@@ -81,6 +82,7 @@ const ListLieux = () => {
     await dispatch(editLieuxRapport({ id }));
     handleClickOpen();
   };
+
   return (
     <Container>
       <Box sx={{ overflow: "auto" }}>
@@ -96,7 +98,7 @@ const ListLieux = () => {
               </TableHead>
               <TableBody>
                 {lieuxRapportlist
-                  .filter((f: any) => f.missiomId === id)
+                  .filter((f: any) => f.missionId === id)
                   .map((row: LieuxRapportItem, index: any) => (
                     <TableRow
                       key={index}
@@ -107,7 +109,11 @@ const ListLieux = () => {
                           (ml: any) => ml.id === row.fokontany
                         )?.village || row.fokontany}
                       </TableCell>
-                      <TableCell component="th" scope="row">
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{ minWidth: 100, maxWidth: 100 }}
+                      >
                         {missionLocationList.find(
                           (ml: any) => ml.id === row.commune
                         )?.commune || row.commune}
@@ -117,7 +123,10 @@ const ListLieux = () => {
                           (ml: any) => ml.id === row.district
                         )?.district || row.district}
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell
+                        align="right"
+                        sx={{ minWidth: 20, maxWidth: 20 }}
+                      >
                         <BtnActionContainer
                           direction="row"
                           justifyContent="right"

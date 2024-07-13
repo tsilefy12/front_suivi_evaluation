@@ -1,5 +1,4 @@
 export default interface Data {
-  dpj: string;
   date: string;
   libelles: string;
   montant: string;
@@ -19,7 +18,7 @@ export interface HeadCell {
 export interface EnhancedTableToolbarProps {
   numSelected: number;
   filtre: any;
-  setFiltre : any;
+  setFiltre: any;
 }
 
 export interface EnhancedTableProps {
