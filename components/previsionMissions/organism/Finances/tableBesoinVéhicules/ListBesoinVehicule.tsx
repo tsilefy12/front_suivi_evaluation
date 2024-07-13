@@ -210,7 +210,7 @@ const ListBesoinVehicule = () => {
                           role="checkbox"
                           // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.id!}
+                          key={index}
                           // selected={isItemSelected}
                         >
                           <TableCell
@@ -230,35 +230,33 @@ const ListBesoinVehicule = () => {
                           <TableCell>
                             <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
                           </TableCell>
-                          <TableCell>
-                            {
+                          <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
+                            {`${
+                              transportationEquipments.find(
+                                (e: any) => e.id === row.vehicule
+                              )?.brand
+                            } ${"-"}${
                               transportationEquipments.find(
                                 (e: any) => e.id === row.vehicule
                               )?.registration
-                            }
+                            } `}
                           </TableCell>
-                          <TableCell>{row.trajet}</TableCell>
-                          <TableCell
-                            sx={{ minWidth: 200, maxWidth: 200 }}
-                            key={index}
-                          >
-                            <FormControl
-                              key={row.id!}
-                              sx={{
-                                height:
-                                  row.responsable!.length <= 2 ? "auto" : 70,
-                                overflow: "auto",
-                              }}
-                            >
-                              {row.responsable!.map((lp: any) => {
+                          <TableCell sx={{ minWidth: 50, maxWidth: 50 }}>
+                            {row.trajet}
+                          </TableCell>
+                          <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
+                            <FormControl>
+                              {row.responsable!.map((lp: any, index: any) => {
                                 return (
                                   <Stack
                                     direction="column"
                                     gap={2}
                                     height={25}
                                     overflow="auto"
-                                    key={lp.id!}
+                                    key={index}
+                                    sx={{ minWidth: 250, maxWidth: 250 }}
                                   >
+                                    -
                                     {
                                       employees.find((e: any) => e.id == lp)
                                         ?.name
@@ -272,7 +270,7 @@ const ListBesoinVehicule = () => {
                               })}
                             </FormControl>
                           </TableCell>
-                          <TableCell>{row.nombreJour}</TableCell>
+                          <TableCell align="center">{row.nombreJour}</TableCell>
                           <TableCell>
                             <BtnActionContainer
                               direction="row"

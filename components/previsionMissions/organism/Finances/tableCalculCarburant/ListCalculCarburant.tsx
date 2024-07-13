@@ -39,6 +39,8 @@ import {
 } from "../../../../../redux/features/calculCarburant";
 import { CalculCarburantItem } from "../../../../../redux/features/calculCarburant/calculCarburant.interface";
 import useFetchVehicleList from "../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
+import useFetchVoiture from "../tableBesoinVéhicules/hooks/useFetchVoiture";
+import formatMontant from "../../../../../hooks/format";
 
 const ListCalculCarburant = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -58,10 +60,14 @@ const ListCalculCarburant = () => {
   const dispatch = useAppDispatch();
   const fetchVehicule = useFetchVehicleList();
   const { vehicleList } = useAppSelector((state: any) => state.vehicle);
+  const fetchVoiture = useFetchVoiture();
+  const { transportationEquipments } = useAppSelector(
+    (state: any) => state.transportation
+  );
 
   React.useEffect(() => {
     fetchCalculCarburant();
-    fetchVehicule();
+    fetchVoiture();
   }, [router.query]);
 
   const handleClickOpen = () => {
@@ -153,7 +159,7 @@ const ListCalculCarburant = () => {
     await dispatch(editCalculCarburant({ id }));
     handleClickOpen();
   };
-
+ 
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -210,33 +216,30 @@ const ListCalculCarburant = () => {
                             id={labelId}
                             scope="row"
                             padding="none"
+                            sx={{ minWidth: 100, maxWidth: 100 }}
                           >
                             {row.trajet}
                           </TableCell>
-                          <TableCell align="right">
-                            {
-                              vehicleList.find(
+                          <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
+                            {`${
+                              transportationEquipments.find(
                                 (e: any) => e.id === row.vehicule
-                              )?.vehicleType
-                            }
+                              )?.brand
+                            } ${"-"}${
+                              transportationEquipments.find(
+                                (e: any) => e.id === row.vehicule
+                              )?.registration
+                            } `}
                           </TableCell>
-                          <TableCell align="right">
-                            {row.typeCarburant}
+                          <TableCell>{row.typeCarburant}</TableCell>
+                          <TableCell sx={{ minWidth: 20, maxWidth: 20 }}>
+                            {row.distance}
                           </TableCell>
-                          <TableCell align="right">
-                            {row.nombreTrajet}
-                          </TableCell>
-                          <TableCell align="right">{row.distance}</TableCell>
-                          <TableCell align="right">
-                            {row.consommationKilo}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.distanceTotal}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.totalCarburant} Ar
-                          </TableCell>
-                          <TableCell align="right">
+                          <TableCell>{row.nombreTrajet}</TableCell>
+                          <TableCell>{row.distanceTotal}</TableCell>
+                          <TableCell>{row.consommationKilo}</TableCell>
+                          <TableCell>{row.totalCarburant} L</TableCell>
+                          <TableCell>
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"

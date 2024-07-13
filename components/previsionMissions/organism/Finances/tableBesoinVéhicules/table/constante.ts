@@ -6,13 +6,13 @@ export const headCells: readonly HeadCell[] = [
     id: "dateDébut",
     numeric: false,
     disablePadding: true,
-    label: "Date de début",
+    label: "Début",
   },
   {
     id: "dateFin",
     numeric: true,
     disablePadding: false,
-    label: "Date de fin",
+    label: "Fin",
   },
   {
     id: "véhicule",
@@ -36,7 +36,7 @@ export const headCells: readonly HeadCell[] = [
     id: "nb",
     numeric: true,
     disablePadding: false,
-    label: "Nombre de jours",
+    label: "Nb jours",
   },
 ];
 

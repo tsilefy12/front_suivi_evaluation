@@ -73,9 +73,11 @@ const ListResumeDepense = () => {
 
   let total: any = useMemo(() => {
     let totalBudget: any = 0;
-    resumeDepenseList.forEach((item: any) => {
-      totalBudget += parseInt(item.budgetDepense);
-    });
+    resumeDepenseList
+      .filter((f: any) => f.missionId == id)
+      .map((item) => {
+        totalBudget += parseInt(item.budgetDepense);
+      });
     return totalBudget;
   }, [resumeDepenseList]);
 
@@ -168,7 +170,10 @@ const ListResumeDepense = () => {
     await dispatch(editResumeDepense({ id }));
     handleClickOpen();
   };
-  const data = [...resumeDepenseList].reverse();
+  const [data, setData] = React.useState<any[]>([]);
+  React.useEffect(() => {
+    setData([...resumeDepenseList].reverse());
+  }, [resumeDepenseList]);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -200,7 +205,7 @@ const ListResumeDepense = () => {
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {data
-                    .filter((f: any) => f.missionId === id)
+                    .filter((f: any) => f.missionId == id)
                     .map((row: ResumeDepenseItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
 

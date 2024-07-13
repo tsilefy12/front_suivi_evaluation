@@ -14,7 +14,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -145,7 +145,7 @@ const ListPrevision = () => {
   previsionDepenselist.forEach((b: any) => {
     if (getGrantId !== null && getGrantId === b.grant) {
       const budgetLineNames = budgetLineList
-        .filter((f) => f.grantId === getGrantId)
+        .filter((f: any) => f.grantId === getGrantId)
         .map((e: any) => e.code);
 
       listLigne.push({
@@ -210,7 +210,11 @@ const ListPrevision = () => {
       console.log("error", error);
     }
   };
-  const data = [...previsionDepenselist].reverse();
+  const [data, setData] = React.useState<any[]>([]);
+  useEffect(() => {
+    setData([...previsionDepenselist].reverse());
+  }, [previsionDepenselist]);
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -235,88 +239,81 @@ const ListPrevision = () => {
                   rowCount={rows.length}
                 />
                 <TableBody>
-                  {data
-                    .filter(
-                      (e: any) => e.imprevue === null && e.missionId === id
-                    )
-                    .slice()
-                    .map((row: PrevisionDepenseItem, index: any) => {
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={index}
+                  {data.slice().map((row: PrevisionDepenseItem, index: any) => {
+                    return (
+                      <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                        <TableCell padding="checkbox"></TableCell>
+                        <TableCell component="th" scope="row" padding="none">
+                          <Moment format="DD/MM/yyyy">{row.date}</Moment>
+                        </TableCell>
+                        <TableCell align="left">{row.libelle}</TableCell>
+                        <TableCell
+                          align="left"
+                          sx={{ minWidth: 10, maxWidth: 10 }}
                         >
-                          <TableCell padding="checkbox"></TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Moment format="DD/MM/yyyy">{row.date}</Moment>
-                          </TableCell>
-                          <TableCell align="left">{row.libelle}</TableCell>
-                          <TableCell
-                            align="left"
-                            sx={{ minWidth: 10, maxWidth: 10 }}
+                          {row.nombre}
+                        </TableCell>
+                        <TableCell align="left">
+                          {formatMontant(Number(row.pu))}
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          sx={{ minWidth: 150, maxWidth: 150 }}
+                        >
+                          {formatMontant(Number(row.montant))}
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          sx={{ maxWidth: 150, minWidth: 150 }}
+                        >
+                          {
+                            grantEncoursList.find(
+                              (e: any) => e.id === row?.grant
+                            )?.code
+                          }
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          sx={{ minWidth: 150, maxWidth: 150 }}
+                        >
+                          {
+                            budgetLineList.find(
+                              (e: any) => e.id === row.ligneBudgetaire
+                            )?.code
+                          }
+                        </TableCell>
+                        <TableCell align="left">
+                          <BtnActionContainer
+                            direction="row"
+                            justifyContent="left"
                           >
-                            {row.nombre}
-                          </TableCell>
-                          <TableCell align="left">
-                            {formatMontant(Number(row.pu))}
-                          </TableCell>
-                          <TableCell
-                            align="left"
-                            sx={{ minWidth: 150, maxWidth: 150 }}
-                          >
-                            {formatMontant(Number(row.montant))}
-                          </TableCell>
-                          <TableCell
-                            align="left"
-                            sx={{ maxWidth: 150, minWidth: 150 }}
-                          >
-                            {
-                              grantEncoursList.find(
-                                (e: any) => e.id === row?.grant
-                              )?.code
-                            }
-                          </TableCell>
-                          <TableCell align="center">
-                            {
-                              budgetLineList.find(
-                                (e: any) => e.id === row.ligneBudgetaire
-                              )?.code
-                            }
-                          </TableCell>
-                          <TableCell align="left">
-                            <BtnActionContainer
-                              direction="row"
-                              justifyContent="left"
+                            <IconButton
+                              color="primary"
+                              aria-label="Modifier"
+                              component="span"
+                              onClick={() => handleClickEdit(row.id)}
                             >
-                              <IconButton
-                                color="primary"
-                                aria-label="Modifier"
-                                component="span"
-                                onClick={() => handleClickEdit(row.id)}
-                              >
-                                <EditIcon />
-                              </IconButton>
-                              <IconButton
-                                color="warning"
-                                aria-label="Supprimer"
-                                component="span"
-                                onClick={() => {
-                                  handleClickDelete(row.id);
-                                }}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            </BtnActionContainer>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              color="warning"
+                              aria-label="Supprimer"
+                              component="span"
+                              onClick={() => {
+                                handleClickDelete(row.id);
+                              }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </BtnActionContainer>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </TableContainer>
-            <Formik
+            {/* <Formik
               enableReinitialize={isEditing ? true : false}
               initialValues={{
                 date: new Date(),
@@ -396,6 +393,31 @@ const ListPrevision = () => {
                                   <TableCell align="left">
                                     {formatMontant(Number(row.montant))}
                                   </TableCell>
+                                  <TableCell align="left">
+                                    <BtnActionContainer
+                                      direction="row"
+                                      justifyContent="left"
+                                    >
+                                      <IconButton
+                                        color="primary"
+                                        aria-label="Modifier"
+                                        component="span"
+                                        onClick={() => handleClickEdit(row.id)}
+                                      >
+                                        <EditIcon />
+                                      </IconButton>
+                                      <IconButton
+                                        color="warning"
+                                        aria-label="Supprimer"
+                                        component="span"
+                                        onClick={() => {
+                                          handleClickDelete(row.id);
+                                        }}
+                                      >
+                                        <DeleteIcon />
+                                      </IconButton>
+                                    </BtnActionContainer>
+                                  </TableCell>
                                 </TableRow>
                               );
                             })}
@@ -412,8 +434,8 @@ const ListPrevision = () => {
                             sx={{ textAlign: "left" }}
                             gap={1}
                             top={4}
-                          >
-                            {/* <FormLabel>Budget line selected amount : {getAmountBudget} Ar</FormLabel> */}
+                        
+                            {/* <FormLabel>Budget line selected amount : {getAmountBudget} Ar</FormLabel> 
                             <FormControl sx={{ maxWidth: 150 }}>
                               <OSTextField
                                 fullWidth
@@ -511,31 +533,36 @@ const ListPrevision = () => {
                         color="warning"
                       >
                         Annuler
-                      </Button> */}
+                      </Button> 
                               <Button variant="contained" type="submit">
                                 Enregistrer
                               </Button>
                             </FormControl>
                           </Stack>
-                          <Typography variant="body2" align="left">
-                            TOTAL BUDGET : {formatMontant(Number(total))}
-                          </Typography>
-                          <FormLabel>
-                            Imprévu de mission(total budget-location et perdiem
-                            MV(10% )) : {formatMontant(Number(total / 10))}
-                          </FormLabel>
+                     
                         </Stack>
                       </Typography>
 
-                      <Typography variant="body2" align="left">
-                        TOTAL GENERAL BUDGET :{" "}
-                        {formatMontant(Number(total + total / 10))}
-                      </Typography>
+                  
                     </Footer>
                   </Form>
                 );
               }}
-            </Formik>
+            </Formik> */}
+            <Typography
+              variant="body2"
+              align="left"
+              sx={{ width: "100%", marginTop: 4 }}
+            >
+              TOTAL BUDGET : {formatMontant(Number(total))}
+            </Typography>
+            <FormLabel sx={{ width: "100%", align: "right" }}>
+              Imprévu de mission(total budget-location et perdiem MV(10% )) :{" "}
+              {formatMontant(Number(total / 10))}
+            </FormLabel>
+            <Typography variant="body2" align="left" sx={{ width: "100%" }}>
+              TOTAL GENERAL BUDGET : {formatMontant(Number(total + total / 10))}
+            </Typography>
           </Paper>
         </Box>
       </SectionTable>

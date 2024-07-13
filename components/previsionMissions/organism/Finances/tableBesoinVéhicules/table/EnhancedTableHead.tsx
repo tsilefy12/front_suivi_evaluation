@@ -29,7 +29,6 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            sx={{ minWidth: 150, maxWidth: 150 }}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
