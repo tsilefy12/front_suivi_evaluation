@@ -2,7 +2,6 @@ import {
   Button,
   Container,
   Dialog,
-  FormControl,
   IconButton,
   Stack,
   styled,
@@ -39,8 +38,7 @@ import {
 import AddcalculCarburantRapport from "./add/addCalculCarburant";
 import { CalculCarburantRapportItem } from "../../../../../redux/features/calculCarburantRapport/calculCarburantRapport.interface";
 import useFetchVehicleList from "../../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
-import Typography from "../../../../../themes/overrides/Typography";
-import { Label } from "@mui/icons-material";
+import useFetchVoiture from "../../../../previsionMissions/organism/Finances/tableBesoinVéhicules/hooks/useFetchVoiture";
 
 const ListcalculCarburantRapport = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -60,10 +58,15 @@ const ListcalculCarburantRapport = () => {
   const dispatch = useAppDispatch();
   const fetchVehicleList = useFetchVehicleList();
   const { vehicleList } = useAppSelector((state: any) => state.vehicle);
+  const fetchVoiture = useFetchVoiture();
+  const { transportationEquipments } = useAppSelector(
+    (state: any) => state.transportation
+  );
 
   React.useEffect(() => {
     fetchcalculCarburantRapport();
     fetchVehicleList();
+    fetchVoiture();
   }, []);
 
   const handleClickOpen = () => {
@@ -190,61 +193,55 @@ const ListcalculCarburantRapport = () => {
                   rowCount={rows.length}
                 />
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
                   {calculCarburantRapportList
                     .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: CalculCarburantRapportItem, index) => {
-                      // const isItemSelected = isSelected(row.trajet);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
                         <TableRow
                           hover
-                          //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.trajet}
-                          // selected={isItemSelected}
                         >
-                          <TableCell
-                            padding="checkbox"
-                            // onClick={(event) => handleClick(event, row.trajet)}
-                          ></TableCell>
+                          <TableCell padding="checkbox"></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             padding="none"
+                            sx={{ minWidth: 200, maxwidth: 200 }}
                           >
                             {row.trajet}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ minWidth: 100, maxwidth: 100 }}>
                             {
-                              vehicleList.find(
+                              transportationEquipments.find(
                                 (e: any) => e.id === row.vehicule
-                              )?.vehicleType
+                              )?.registration
                             }
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ minWidth: 30, maxwidth: 30 }}>
                             {row.typeCarburant}
                           </TableCell>
-                          <TableCell align="right">{row.distance}</TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ minWidth: 25, maxwidth: 25 }}>
+                            {row.distance}
+                          </TableCell>
+                          <TableCell sx={{ minWidth: 10, maxwidth: 10 }}>
                             {row.nombreTrajet}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ minWidth: 30, maxwidth: 30 }}>
                             {row.distanceTotal}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ minWidth: 10, maxwidth: 10 }}>
                             {row.consommationKilo}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ minWidth: 20, maxwidth: 20 }}>
                             {row.totalCarburant}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell>
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"

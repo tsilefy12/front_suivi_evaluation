@@ -42,7 +42,7 @@ export const headCells: readonly HeadCell[] = [
     id: "consommation",
     numeric: true,
     disablePadding: false,
-    label: "Consommation/km",
+    label: "Consommation/100km",
   },
   {
     id: "totalCarburant",

@@ -4,7 +4,6 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Stack from "@mui/material/Stack";
-import { rows } from "./constante";
 import {
   Box,
   Button,
@@ -57,7 +56,8 @@ const ListMissionnairesRapport = () => {
     fetchMissionaryRapportList();
     fetchEmployes();
   }, []);
-  //  console.log("missionaire :", missionaireslist)
+
+  //suppression
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer le missionnaire",
@@ -77,6 +77,8 @@ const ListMissionnairesRapport = () => {
       })
       .catch(() => {});
   };
+
+  //modification
   const handleClickEdit = async (id: any) => {
     await dispatch(editMissionaryRapport({ id }));
     handleClickOpen();
@@ -138,7 +140,11 @@ const ListMissionnairesRapport = () => {
                             row.missionResponsabilityMissionary.map(
                               (lp: any) => {
                                 return (
-                                  <Stack direction="column" spacing={2}>
+                                  <Stack
+                                    direction="column"
+                                    spacing={2}
+                                    key={lp}
+                                  >
                                     {
                                       employees.find((e: any) => e.id === lp)
                                         ?.name

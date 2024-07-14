@@ -79,25 +79,21 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
       (24 * 60 * 60 * 1000)
     ).toFixed(0);
     values.nombreJour = parseInt(calculDuree);
-    if (DateNumber1 >= DateNumber2) {
-      setOpen(true);
-    } else {
-      try {
-        if (isEditing) {
-          await dispatch(
-            updateBesoinVehiculeRapport({
-              id: besoinVehiculeRapport.id!,
-              besoinVehiculeRapport: values,
-            })
-          );
-        } else {
-          await dispatch(createBesoinVehiculeRapport(values));
-        }
-        fetchBesoinEnVehiculeRapportList();
-        handleClose();
-      } catch (error) {
-        console.log("error", error);
+    try {
+      if (isEditing) {
+        await dispatch(
+          updateBesoinVehiculeRapport({
+            id: besoinVehiculeRapport.id!,
+            besoinVehiculeRapport: values,
+          })
+        );
+      } else {
+        await dispatch(createBesoinVehiculeRapport(values));
       }
+      fetchBesoinEnVehiculeRapportList();
+      handleClose();
+    } catch (error) {
+      console.log("error", error);
     }
   };
   const [selectedEmployes, setSelectedEmployes] = React.useState<EmployeItem[]>(
@@ -163,9 +159,18 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
                         variant="outlined"
                         name="dateDebut"
                         value={formikProps.values.dateDebut}
-                        onChange={(value: any) =>
-                          formikProps.setFieldValue("dateDebut", value)
-                        }
+                        onChange={(value: any) => {
+                          formikProps.setFieldValue("dateDebut", value);
+                          const date1 = new Date(value);
+                          const DateNumber1 = date1.getTime();
+                          const date2 = new Date(
+                            formikProps.values.dateFin as Date
+                          );
+                          const DateNumber2 = date2.getTime();
+                          if (DateNumber1 >= DateNumber2) {
+                            return setOpen(true);
+                          }
+                        }}
                       />
                       <OSDatePicker
                         fullWidth
@@ -174,9 +179,18 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
                         variant="outlined"
                         name="dateFin"
                         value={formikProps.values.dateFin}
-                        onChange={(value: any) =>
-                          formikProps.setFieldValue("dateFin", value)
-                        }
+                        onChange={(value: any) => {
+                          formikProps.setFieldValue("dateFin", value);
+                          const date1 = new Date(
+                            formikProps.values.dateDebut as Date
+                          );
+                          const DateNumber1 = date1.getTime();
+                          const date2 = new Date(value);
+                          const DateNumber2 = date2.getTime();
+                          if (DateNumber1 >= DateNumber2) {
+                            return setOpen(true);
+                          }
+                        }}
                       />
                     </CustomStack>
                     <FormControl fullWidth>

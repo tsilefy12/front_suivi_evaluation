@@ -44,9 +44,8 @@ const ListPlanFinancement = () => {
     fetchBudgetLine();
   }, [router.query]);
 
-  const [filter, setFilter] = useState<string>(""); // Utilisation de `string` plutôt que `string | null`
-
-  const [dataFilter, setDataFilter] = useState<BudgetInitialItem[]>([]); // Utilisation de `BudgetInitialItem[]` pour `dataFilter`
+  const [filter, setFilter] = useState<string>("");
+  const [dataFilter, setDataFilter] = useState<BudgetInitialItem[]>([]);
 
   useEffect(() => {
     if (filter === "") {

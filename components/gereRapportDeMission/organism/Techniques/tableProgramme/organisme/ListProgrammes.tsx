@@ -4,7 +4,6 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Stack from "@mui/material/Stack";
-import { rows } from "./constante";
 import {
   Box,
   Button,
@@ -12,7 +11,6 @@ import {
   Dialog,
   FormControl,
   IconButton,
-  Paper,
   styled,
   TableHead,
 } from "@mui/material";
@@ -27,7 +25,6 @@ import useFetchProgrammeRapport from "../hooks/useFetchProgrammeRapport";
 import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import useFetchLivrableRapport from "../../tableLivrables/hooks/useFetchLivrableRapport";
 import useFetchActiviteRapport from "../../tableActivitésPrévues/hooks/useFetchActivityRapport";
-import { ProgrammeRapportItem } from "../../../../../../redux/features/programmeRapport/programmeRapport.interface";
 import Moment from "react-moment";
 import { useConfirm } from "material-ui-confirm";
 import {
@@ -35,7 +32,6 @@ import {
   editProgrammeRapport,
 } from "../../../../../../redux/features/programmeRapport";
 import AddProgrammesRapport from "../add/addProgramme";
-import { editAcitiviteRapport } from "../../../../../../redux/features/activitesRapport";
 import useFetchPlannedActivityList from "../../../../../previsionMissions/organism/Techniques/tableActivitésPrévues/hooks/useFetchPlannedActivityList";
 import useFetchMissionaryRapportList from "../../tableMissionnaires/hooks/useFetchMissionaryList";
 
@@ -49,14 +45,9 @@ const ListProgrammes = () => {
   const fetchProgrammeRapport = useFetchProgrammeRapport();
   const { id }: any = router.query;
   const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state) => state.employe);
   const fetchLivrable = useFetchLivrableRapport();
   const { livrableRapportlist } = useAppSelector(
     (state) => state.livrableRapport
-  );
-  const fetchPlannedActivityListe = useFetchPlannedActivityList();
-  const { plannedActivityList } = useAppSelector(
-    (state) => state.plannedActivity
   );
   const fetchActivityRapport = useFetchActiviteRapport();
   const { activiteRapportlist } = useAppSelector(
@@ -71,7 +62,6 @@ const ListProgrammes = () => {
   React.useEffect(() => {
     fetchProgrammeRapport();
     fetchEmployes();
-    fetchPlannedActivityListe();
     fetchLivrable();
     fetchActivityRapport();
     fetchMissionaire();
@@ -84,7 +74,7 @@ const ListProgrammes = () => {
     setOpen(false);
   };
 
-  // console.log("list programme :", programmeRapportList)
+  //suppression
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer le programme de rapport",
@@ -105,6 +95,7 @@ const ListProgrammes = () => {
       .catch(() => {});
   };
 
+  //modification
   const handleClickEdit = async (id: any) => {
     await dispatch(editProgrammeRapport({ id }));
     handleClickOpen();
@@ -120,7 +111,6 @@ const ListProgrammes = () => {
                   <TableRow>
                     <TableCell>Date de début</TableCell>
                     <TableCell align="left">Date de fin</TableCell>
-                    {/* <TableCell align="left">Activités prévues</TableCell> */}
                     <TableCell align="left">Activités réalisées</TableCell>
                     <TableCell align="left">Livrables</TableCell>
                     <TableCell align="left">Responsable</TableCell>
@@ -129,9 +119,9 @@ const ListProgrammes = () => {
                 <TableBody>
                   {programmeRapportList
                     .filter((f: any) => f.missionId === id)
-                    .map((row: any) => (
+                    .map((row: any, index: any) => (
                       <TableRow
-                        key={row.id}
+                        key={index}
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
                         }}
@@ -153,9 +143,6 @@ const ListProgrammes = () => {
                             )?.activite
                           }
                         </TableCell>
-                        {/* <TableCell component="th" scope="row">
-                          {row.activiteRealise}
-                        </TableCell> */}
                         <TableCell
                           component="th"
                           scope="row"
@@ -180,7 +167,7 @@ const ListProgrammes = () => {
                           >
                             {row.responsableR.map((lp: any) => {
                               return (
-                                <Stack direction="column" spacing={2}>
+                                <Stack direction="column" spacing={2} key={lp}>
                                   {
                                     missionaireslist.find(
                                       (e: any) => e.id === lp
@@ -252,7 +239,6 @@ export default ListProgrammes;
 const MyTableContainer = styled(Stack)(({ theme }) => ({
   borderRadius: 20,
   background: "#fff",
-  // bottom: 2,
 }));
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));

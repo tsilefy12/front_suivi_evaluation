@@ -6,7 +6,6 @@ import {
   IconButton,
   Stack,
   styled,
-  Typography,
 } from "@mui/material";
 import React from "react";
 import Box from "@mui/material/Box";
@@ -20,7 +19,6 @@ import Paper from "@mui/material/Paper";
 import Data, { Order } from "./table/type-variable";
 import { rows } from "./table/constante";
 import EnhancedTableHead from "./table/EnhancedTableHead";
-import { getComparator, stableSort } from "./table/function";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
@@ -38,7 +36,6 @@ import useFetchEmploys from "../../../../GrantsEnCours/hooks/getResponsable";
 import {
   deleteBesoinVehiculeRapport,
   editBesoinVehiculeRapport,
-  getBesoinVehiculeRapportList,
 } from "../../../../../redux/features/besoinVehiculeRapport";
 import AddbesoinVehiculeRapport from "./add/addBesoinVehicule";
 import { BesoinvehiculeRapportItem } from "../../../../../redux/features/besoinVehiculeRapport/besoinVehiculeRapport.interface";
@@ -57,7 +54,6 @@ const ListbesoinVehiculeRapportRapport = () => {
   const { besoinVehiculeRapportList } = useAppSelector(
     (state) => state.besoinVehiculeRapport
   );
-  const { vehicleList } = useAppSelector((state: any) => state.vehicle);
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state: any) => state.employe);
   const router = useRouter();
@@ -137,7 +133,6 @@ const ListbesoinVehiculeRapportRapport = () => {
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -193,30 +188,19 @@ const ListbesoinVehiculeRapportRapport = () => {
                   rowCount={rows.length}
                 />
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
                   {besoinVehiculeRapportList
                     .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: BesoinvehiculeRapportItem, index: any) => {
-                      // const isItemSelected = isSelected(row.dateDébut);
                       const labelId = `enhanced-table-checkbox-${index}`;
                       return (
                         <TableRow
                           hover
-                          // onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                          // selected={isItemSelected}
                         >
-                          <TableCell
-                            padding="checkbox"
-                            // onClick={(event) =>
-                            //   handleClick(event, row.dateDébut)
-                            // }
-                          ></TableCell>
+                          <TableCell padding="checkbox"></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
@@ -243,6 +227,7 @@ const ListbesoinVehiculeRapportRapport = () => {
                           <TableCell align="left">
                             <FormControl
                               sx={{
+                                width: 300,
                                 height:
                                   row.responsable!.length <= 2 ? "auto" : 70,
                                 overflow: "auto",
@@ -253,8 +238,7 @@ const ListbesoinVehiculeRapportRapport = () => {
                                   <Stack
                                     direction="column"
                                     spacing={2}
-                                    height={25}
-                                    overflow="auto"
+                                    key={lp}
                                   >
                                     {
                                       employees.find((e: any) => e.id === lp)
@@ -320,10 +304,6 @@ const ListbesoinVehiculeRapportRapport = () => {
               labelDisplayedRows={defaultLabelDisplayedRows}
             />
           </Paper>
-          {/* <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      /> */}
         </Box>
       </SectionTable>
     </Container>
