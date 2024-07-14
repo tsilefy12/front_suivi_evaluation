@@ -239,7 +239,7 @@ const ListcalculCarburantRapport = () => {
                             {row.consommationKilo}
                           </TableCell>
                           <TableCell sx={{ minWidth: 20, maxwidth: 20 }}>
-                            {row.totalCarburant}
+                            {row.totalCarburant} L
                           </TableCell>
                           <TableCell>
                             <BtnActionContainer

@@ -15,7 +15,7 @@ import React from "react";
 import KeyValue from "../../../shared/keyValue";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { SelectChangeEvent } from "@mui/material/Select";
 import { useRouter } from "next/router";
 import Techniques, {
   PourcentageTechnique,
@@ -35,14 +35,8 @@ import useFetchPlannedActivityList from "../../../previsionMissions/organism/Tec
 import useFetchActiviteRapport from "../../../gereRapportDeMission/organism/Techniques/tableActivitésPrévues/hooks/useFetchActivityRapport";
 import useFetchDeliverableList from "../../../previsionMissions/organism/Techniques/tableLivrables/hooks/useFetchDeliverableList";
 import useFetchLivrableRapport from "../../../gereRapportDeMission/organism/Techniques/tableLivrables/hooks/useFetchLivrableRapport";
-import useFetchMissionLocationListe from "../../../previsionMissions/organism/Techniques/tableLieux/hooks/useFetchMissionLocationList";
 import useFetchMissionaryList from "../../../previsionMissions/organism/Techniques/tableMissionnaires/hooks/useFetchMissionaryList";
 import useFetchMissionaryRapportList from "../../../gereRapportDeMission/organism/Techniques/tableMissionnaires/hooks/useFetchMissionaryList";
-import useFetchVehicleList from "../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
-import useFetchAutreInfoRapport from "../../../gereRapportDeMission/organism/Techniques/tableAutreInfoAuto/hooks/useFetchAutreInfoRaport";
-import useFetchContactListe from "../../../previsionMissions/organism/Techniques/tableContactPendantMission/hooks/useFetchContactList";
-import useFetchLieuxRapport from "../../../gereRapportDeMission/organism/Techniques/tableLieux/hooks/useFetchLieuxRapport";
-import useFetchContactMissionRapport from "../../../gereRapportDeMission/organism/Techniques/tableContactPendantMission/hooks/useFetchContactMissionRapport";
 import useFetchProgrammePrevisionList from "../../../previsionMissions/organism/Techniques/tableProgramme/hooks/useFetchProgrammePrevision";
 import useFetchProgrammeRapport from "../../../gereRapportDeMission/organism/Techniques/tableProgramme/hooks/useFetchProgrammeRapport";
 import formatMontant from "../../../../hooks/format";
@@ -51,7 +45,6 @@ import { EmployeItem } from "../../../../redux/features/employe/employeSlice.int
 
 const BilanMission = () => {
   const [value, setValue] = React.useState(0);
-  const [age, setAge] = React.useState("");
   const router = useRouter();
   const fetchMission = useFetchMissionListe();
   const { missionListe } = useAppSelector((state: any) => state.mission);
@@ -78,21 +71,9 @@ const BilanMission = () => {
   const fetchDeliverableListe = useFetchDeliverableList();
   const fetchLivrableRapport = useFetchLivrableRapport();
 
-  //lieux
-  const fetchMissionLocationListe = useFetchMissionLocationListe();
-  const fetchLieuxRapport = useFetchLieuxRapport();
-
   //missionaire
   const fetchMissionaryList = useFetchMissionaryList();
   const fetchMissionaryRapportList = useFetchMissionaryRapportList();
-
-  //autre information importante
-  const fetchVehicleListe = useFetchVehicleList();
-  const fetchAutreInfoRapport = useFetchAutreInfoRapport();
-
-  //contact pendant la mission
-  const fetchContactList = useFetchContactListe();
-  const fetchContactMissionRapport = useFetchContactMissionRapport();
 
   //programme
   const fetchProgrammePrevision = useFetchProgrammePrevisionList();
@@ -110,22 +91,12 @@ const BilanMission = () => {
     fetchPlannedActivityListe();
     fetchLivrableRapport();
     fetchDeliverableListe();
-    fetchMissionLocationListe();
-    fetchLieuxRapport();
     fetchMissionaryList();
     fetchMissionaryRapportList();
-    fetchAutreInfoRapport();
-    fetchVehicleListe();
-    fetchContactList();
-    fetchContactMissionRapport();
     fetchProgrammePrevision();
     fetchProgrammeRapport();
     fetchEmployes();
-  }, [router.query]);
-
-  const handleChangeSelect = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
-  };
+  }, [id]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -134,7 +105,6 @@ const BilanMission = () => {
   const handleChangeIndex = (index: number) => {
     setValue(index);
   };
-  //  console.log("% :", percentageTechnique)
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -148,7 +118,7 @@ const BilanMission = () => {
               Retour
             </Button>
           </Link>
-          <Typography variant="h4">Rapport de mission</Typography>
+          <Typography variant="h4">Bilan de mission</Typography>
         </SectionNavigation>
         <Divider />
       </NavigationContainer>
@@ -217,7 +187,7 @@ const BilanMission = () => {
             </Grid>
           ))}
       </FormContainer>
-      <BodySection>
+      <BodySection sx={{ height: "calc(100vh - 200px)" }}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={2}
@@ -249,7 +219,7 @@ const BilanMission = () => {
               <Typography variant="h5">Bilan global</Typography>
               <Typography color="secondary" variant="body2">
                 La comparaison des données de prévisions par rapport aux données
-                de rapport nous donne les pourcentahes suivantes
+                de rapport nous donne les résultats suivants
               </Typography>
               <Grid>
                 <Grid>
@@ -320,16 +290,13 @@ const NavigationContainer = styled(Stack)(({ theme }) => ({
 export const BodySection = styled(Paper)(({ theme }) => ({
   borderRadius: "32px",
   marginBlock: 15,
-  padding: 30,
   display: "flex",
   flexDirection: "row",
   alignItems: "flex-start",
   gap: "16px",
-  border: `1px solid ${theme.palette.grey[100]}`,
 }));
 
 const CardBody = styled(Stack)(({ theme }) => ({
-  // paddingInline: theme.spacing(1),
   background: theme.palette.grey[100],
   // paddingBottom: theme.spacing(1),
   width: "100%",
@@ -338,6 +305,7 @@ const CardBody = styled(Stack)(({ theme }) => ({
   borderRadius: 14,
   gap: "32px",
   marginTop: 15,
+  border: 1,
 }));
 const FormContainer = styled(Stack)(({ theme }) => ({
   width: "100%",

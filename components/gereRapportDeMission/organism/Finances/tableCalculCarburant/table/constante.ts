@@ -30,7 +30,7 @@ export const headCells: readonly HeadCell[] = [
     id: "nb",
     numeric: true,
     disablePadding: false,
-    label: "Nombre de trajets",
+    label: "Nb trajet",
   },
   {
     id: "distanceTotal",
