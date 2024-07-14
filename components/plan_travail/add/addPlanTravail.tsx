@@ -148,7 +148,7 @@ const ObjectifStrategiqueForm = ({ handleClose, getId }: any) => {
                     <OSSelectField
                       id="outlined-basic"
                       label="Projet"
-                      name="grantsId"
+                      name="projectId"
                       options={projectList}
                       dataKey="title"
                       valueKey="id"

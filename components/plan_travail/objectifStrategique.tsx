@@ -109,7 +109,9 @@ const ListObjectifStrategique = ({
       setData([...planTravaillist].reverse());
     } else {
       const donnee = planTravaillist.filter((item) =>
-        ` ${item.title} ${item.description}`
+        ` ${item.title} ${item.description} ${
+          projectList.find((p: any) => p.id == item.projectId)?.title
+        }`
           .toLowerCase()
           .includes(filtre.toLowerCase())
       );
@@ -134,7 +136,7 @@ const ListObjectifStrategique = ({
         </Typography>
       </SectionNavigation>
       <Divider />
-      <SectionDetails>
+      <SectionDetails sx={{ height: "calc(100vh - 240px)", overflow: "auto" }}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 1, sm: 2, md: 4 }}
@@ -167,10 +169,10 @@ const ListObjectifStrategique = ({
         <ValueDetail>
           <FormLabel>Année : {new Date().getFullYear()}</FormLabel>
         </ValueDetail>
-        <Grid container spacing={2} mt={2}>
+        <Grid container spacing={2}>
           {data.map((row: PlanTravailItem, index: any) => (
             <Grid key={row.id!} item xs={12} md={6} lg={4}>
-              <LinkContainer>
+              <LinkContainer sx={{ backgroundColor: "grey.300" }}>
                 <Stack direction={"row"} spacing={4}>
                   <Stack direction={"column"}>
                     <Typography
@@ -265,7 +267,7 @@ const ListObjectifStrategique = ({
                   </Box>
                 </Link>
                 <Link href={`/plan_travail/${row.id}/site`}>
-                  <Button variant="outlined" color="accent" startIcon={<Add />}>
+                  <Button variant="outlined" color="info" startIcon={<Add />}>
                     Site
                   </Button>
                 </Link>
