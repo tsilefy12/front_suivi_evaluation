@@ -171,12 +171,9 @@ const BilanMission = () => {
                             )
                             .map((m: EmployeItem) => (
                               <Stack key={m.id} direction={"column"}>
-                                <Stack direction={"row"} gap={1}>
-                                  <span>Nom et prénoms :</span>
-                                  <span>
-                                    {m.name} {m.surname}
-                                  </span>
-                                </Stack>
+                                <span>
+                                  {m.name} {m.surname}
+                                </span>
                               </Stack>
                             ))}
                         </FormLabel>

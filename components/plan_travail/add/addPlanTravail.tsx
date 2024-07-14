@@ -98,7 +98,8 @@ const ObjectifStrategiqueForm = ({ handleClose, getId }: any) => {
               <SectionNavigation width={{ xs: "100%", sm: "560px" }}>
                 <DialogTitle>
                   {" "}
-                  {isEditing ? "Modifier" : "Créer"} plan de travail {isEditing ? planTravail?.projectId :""}
+                  {isEditing ? "Modifier" : "Nouveau"} plan de travail{" "}
+                  {isEditing ? planTravail?.projectId : ""}
                 </DialogTitle>
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
@@ -146,7 +147,7 @@ const ObjectifStrategiqueForm = ({ handleClose, getId }: any) => {
                     </FormControl>
                     <OSSelectField
                       id="outlined-basic"
-                      label="Project"
+                      label="Projet"
                       name="grantsId"
                       options={projectList}
                       dataKey="title"

@@ -22,7 +22,7 @@ import {
 import { useConfirm } from "material-ui-confirm";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { usePermitted } from "../../config/middleware";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import {
@@ -32,6 +32,8 @@ import {
 import { PlanTravailItem } from "../../redux/features/planTravail/planTravail.interface";
 import ObjectifStrategiqueForm from "./add/addPlanTravail";
 import useFetchPlanTravaile from "./hooks/useFetchPlanTravail";
+import Moment from "react-moment";
+import useFetchProject from "../GrantsEnCours/hooks/getProject";
 
 const ListObjectifStrategique = ({
   row,
@@ -39,7 +41,7 @@ const ListObjectifStrategique = ({
   handleClickDelete,
 }: any) => {
   const [open, setOpen] = React.useState(false);
-  const [filtre, setFiltre] = React.useState("")
+  const [filtre, setFiltre] = React.useState("");
   const fetchPlanTravail = useFetchPlanTravaile();
   const { planTravaillist, isEditing } = useAppSelector(
     (state) => state.planTravail
@@ -48,9 +50,12 @@ const ListObjectifStrategique = ({
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [getId, setGetId] = React.useState("");
+  const fetchProject = useFetchProject();
+  const { projectList } = useAppSelector((state: any) => state.project);
 
   React.useEffect(() => {
     fetchPlanTravail();
+    fetchProject();
   }, [router.query]);
   //  console.log("liste :", planTravaillist)
   const handleClickOpen = () => {
@@ -98,8 +103,19 @@ const ListObjectifStrategique = ({
     setAnchorEl(null);
     setGetSelectedId(null);
   };
-
-  // console.log("id selected :", getSelectId)
+  const [data, setData] = React.useState<any[]>([]);
+  useEffect(() => {
+    if (filtre === "") {
+      setData([...planTravaillist].reverse());
+    } else {
+      const donnee = planTravaillist.filter((item) =>
+        ` ${item.title} ${item.description}`
+          .toLowerCase()
+          .includes(filtre.toLowerCase())
+      );
+      setData([...donnee].reverse());
+    }
+  }, [planTravaillist, filtre]);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
@@ -144,7 +160,7 @@ const ListObjectifStrategique = ({
               placeholder="Recherche"
               size="small"
               value={filtre}
-              onChange={(e)=> setFiltre(e.target.value)}
+              onChange={(e) => setFiltre(e.target.value)}
             />
           </Stack>
         </Stack>
@@ -152,16 +168,53 @@ const ListObjectifStrategique = ({
           <FormLabel>Année : {new Date().getFullYear()}</FormLabel>
         </ValueDetail>
         <Grid container spacing={2} mt={2}>
-          {planTravaillist
-            .slice()
-            .filter(item =>(` ${item.title} ${item.description}`).toLowerCase().includes(filtre.toLowerCase()))
-            .map((row: PlanTravailItem, index: any) => (
+          {data.map((row: PlanTravailItem, index: any) => (
             <Grid key={row.id!} item xs={12} md={6} lg={4}>
               <LinkContainer>
                 <Stack direction={"row"} spacing={4}>
-                  <Typography color="GrayText" mb={1} variant="h6">
-                    {row.title} : {row.description}
-                  </Typography>
+                  <Stack direction={"column"}>
+                    <Typography
+                      color="info.main"
+                      mb={1}
+                      variant="h6"
+                      align="center"
+                    >
+                      {row.title}
+                    </Typography>
+                    <Typography
+                      color="GrayText"
+                      mb={1}
+                      variant="h6"
+                      title={row.description}
+                      sx={{
+                        cursor:
+                          row.description!.length > 30 ? "pointer" : "default",
+                        "&:hover": {
+                          color:
+                            row.description!.length > 30
+                              ? "primary.main"
+                              : "GrayText",
+                        },
+                      }}
+                    >
+                      {row.description?.slice(0, 28) + "..."}
+                    </Typography>
+                    <Typography mb={1} color="GrayText" variant="h6">
+                      Projet :{" "}
+                      {
+                        projectList.find((p: any) => p.id === row.projectId)
+                          ?.title
+                      }
+                    </Typography>
+                    <Typography mb={1} color="GrayText" variant="h6">
+                      Date de début :{" "}
+                      <Moment format="DD/MM/YYYY">{row.startDate}</Moment>
+                    </Typography>
+                    <Typography mb={1} color="GrayText" variant="h6">
+                      Date de fin :{" "}
+                      <Moment format="DD/MM/YYYY">{row.endDate}</Moment>
+                    </Typography>
+                  </Stack>
                   <Typography>
                     <IconButton
                       onClick={(event: any) =>
