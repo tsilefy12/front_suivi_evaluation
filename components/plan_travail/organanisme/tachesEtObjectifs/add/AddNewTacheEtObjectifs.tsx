@@ -68,13 +68,12 @@ const AddNewTacheEtObjectifs = () => {
         }
       }
     });
-    const newSn = (maxSn + 1).toString().padStart(4, "0");
+    const newSn = (maxSn + 1).toString().padStart(2, "0");
     return newSn;
   };
 
   const handleSubmit = async (values: any) => {
     values.participantsId = [...selectedEmployes.map((item) => item.id)];
-    // console.log("valeur participant id :", values.participantId)
     if (!values.sn) {
       values.sn = generateSerialNumber([tacheEtObjectif]);
     }
@@ -87,13 +86,13 @@ const AddNewTacheEtObjectifs = () => {
           timeFrame: values.timeFrame,
           responsableId: values.responsableId,
           expectedResult: values.expectedResult,
-          resources:values.resources,
+          resources: values.resources,
           participantsId: values.participantsId,
           notes: values.notes,
-          startDate : values.startDate,
-          endDate : values.endDate,
-          planTravaileId: values.planTravaileId
-        }
+          startDate: values.startDate,
+          endDate: values.endDate,
+          planTravaileId: values.planTravaileId,
+        };
         const res = await dispatch(
           updateTacheEtObjectifs({ idT, tacheEtObjectif })
         );

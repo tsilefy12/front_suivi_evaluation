@@ -61,7 +61,7 @@ const ListTacheEtObjectifs = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [filtre ,setFiltre] = React.useState("")
+  const [filtre, setFiltre] = React.useState("");
   const fetchTacheCle: any = useFetchTacheCle();
   const { tacheEtObjectifList } = useAppSelector(
     (state) => state.tacheEtObjectifs
@@ -196,7 +196,28 @@ const ListTacheEtObjectifs = () => {
   const handleClickEdit = async (id: string) => {
     await dispatch(editTacheEtObjectifs({ id }));
   };
-
+  const [data, setData] = React.useState<any[]>([]);
+  useEffect(() => {
+    if (filtre === "") {
+      setData(
+        [
+          ...tacheEtObjectifList.filter((e: any) => e.planTravaileId === id!),
+        ].reverse()
+      );
+    } else {
+      const donnee = tacheEtObjectifList
+        .filter((e: any) => e.planTravaileId === id!)
+        .filter((item) =>
+          `${item.keyTasks} ${
+            statuslist.find((e: any) => e.id === item.statusId)?.status
+          }
+        ${employees.find((e: any) => e.id == item?.responsableId)?.name}`
+            .toLowerCase()
+            .includes(filtre.toLowerCase())
+        );
+      setData([...donnee].reverse());
+    }
+  }, [tacheEtObjectifList, filtre]);
   return (
     <Container maxWidth="xl">
       {/* <NavigationContainer> */}
@@ -262,10 +283,7 @@ const ListTacheEtObjectifs = () => {
                   year={selectYear}
                 />
                 <TableBody>
-                  {tacheEtObjectifList
-                    .filter((e: any) => e.planTravaileId === id!)
-                    .filter(item => (`${item.keyTasks} ${statuslist.find((e: any) => e.id === item.statusId)?.status}
-                      ${employees.find((e: any) => e.id == item?.responsableId)?.name}`).toLowerCase().includes(filtre.toLowerCase()))
+                  {data
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: TacheEtObjectifItem, index: any) => {
                       // const isItemSelected = isSelected(row.id);
@@ -273,38 +291,39 @@ const ListTacheEtObjectifs = () => {
                       return (
                         <TableRow
                           hover
-                          //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                          // selected={isItemSelected}
                         >
-                          <TableCell
-                            padding="checkbox"
-                            // onClick={(event) => handleClick(event, row.tache)}
-                          ></TableCell>
+                          <TableCell padding="checkbox"></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             padding="none"
+                            align="center"
                           >
                             {row.sn}
                           </TableCell>
-                          <TableCell>{row.keyTasks}</TableCell>
+                          <TableCell sx={{ minWidth: 200, maxWidth: 250 }}>
+                            {row.keyTasks}
+                          </TableCell>
                           <TableCell>
                             {
                               statuslist.find((e: any) => e.id === row.statusId)
                                 ?.status
                             }
                           </TableCell>
-                          <TableCell>
-                            {
+                          <TableCell sx={{ minWidth: 200, maxWidth: 250 }}>
+                            {`${
                               employees.find(
                                 (e: any) => e.id == row?.responsableId
                               )?.name
-                            }
+                            } ${" "} ${
+                              employees.find(
+                                (e: any) => e.id == row?.responsableId
+                              )?.surname
+                            }`}
                           </TableCell>
                           <TableCell>
                             <Moment format="DD/MM/YYYY">{row.startDate}</Moment>

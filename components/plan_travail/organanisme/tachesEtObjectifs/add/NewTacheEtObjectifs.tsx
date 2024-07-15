@@ -69,7 +69,10 @@ const NewTacheEtObjectifs = ({
   useEffect(() => {
     fetchUtilsData();
   }, []);
-
+  const getEmployeeOption = (id: any, options: any) => {
+    if (!id) return null;
+    return options.find((option: any) => option.id === id) || null;
+  };
   return (
     <Form>
       <NavigationContainer>
@@ -162,15 +165,43 @@ const NewTacheEtObjectifs = ({
             />
           </Stack>
           <Stack direction="row" spacing={2}>
-            <OSSelectField
+            <Autocomplete
               fullWidth
               id="outlined-basic"
-              label="Responsable"
               options={employees}
-              dataKey="name"
-              valueKey="id"
-              variant="outlined"
-              name="responsableId"
+              getOptionLabel={(option: any) =>
+                `${option.name} ${option.surname}` as string
+              }
+              value={getEmployeeOption(
+                formikProps.values.responsableId,
+                employees
+              )}
+              onChange={(event, value) =>
+                formikProps.setFieldValue(
+                  "responsableId",
+                  value ? value.id : ""
+                )
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Responsable"
+                  variant="outlined"
+                  error={
+                    formikProps.touched.responsableId &&
+                    Boolean(formikProps.errors.responsableId)
+                  }
+                  helperText={
+                    formikProps.touched.responsableId &&
+                    typeof formikProps.errors.responsableId === "string"
+                      ? formikProps.errors.responsableId
+                      : ""
+                  }
+                />
+              )}
+              isOptionEqualToValue={(option: any, value: any) =>
+                option.id === value.id
+              }
             />
             <Autocomplete
               fullWidth
