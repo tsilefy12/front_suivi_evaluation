@@ -321,7 +321,7 @@ const ListMissions = () => {
             ))}
           </TextField>
         </Stack>
-        <Typography variant="h4" color="GrayText">
+        <Typography variant="h4" color="#849ba2">
           Missions
         </Typography>
       </SectionNavigation>
@@ -334,6 +334,7 @@ const ListMissions = () => {
             flex: "1 1 100%",
             justifyContent: "space-between",
             alignItems: "center",
+            paddingBottom: 2,
           }}
         >
           <Typography variant="h4" id="tableTitle" component="div">
@@ -361,13 +362,21 @@ const ListMissions = () => {
         <Grid container spacing={2} mt={-2}>
           {dataMission.map((mission: MissionItem, index: any) => (
             <Grid key={index} item md={6}>
-              <LinkContainer key={index}>
+              <LinkContainer
+                key={index}
+                sx={{
+                  backgroundColor: "#d2d5db",
+                  border: 1,
+                  borderRadius: 4,
+                  borderColor: "#F5F5F5",
+                }}
+              >
                 <CardHeader
                   direction="row"
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <Typography variant="h6" color="GrayText">
+                  <Typography variant="h6" color="#849ba2">
                     <Stack>
                       <Typography
                         color="info.main"
@@ -384,15 +393,17 @@ const ListMissions = () => {
                           "&:hover": {
                             color:
                               mission?.descriptionMission!.length > 4
-                                ? "primary.main"
-                                : "GrayText",
+                                ? "grey.800"
+                                : "#849ba2",
                           },
                         }}
                       >
                         Mission :{" "}
                         {mission?.descriptionMission?.slice(0, 40) + "..."}
                       </Typography>
-                      <FormLabel>Status : {mission.status}</FormLabel>
+                      <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
+                        Status : {mission.status}
+                      </FormLabel>
                     </Stack>
                   </Typography>
                   <div key={index}>
@@ -435,14 +446,14 @@ const ListMissions = () => {
                 </CardHeader>
                 <CardBody key={index}>
                   <Stack spacing={1} key={index}>
-                    <FormLabel>
+                    <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                       Référence : {"MISSION_" + mission?.reference}
                     </FormLabel>
-                    <FormLabel>
+                    <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                       Référence budget : <span></span>
                       {mission.RefBudget}
                     </FormLabel>
-                    <FormLabel>
+                    <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                       Responsable : <span></span>
                       {
                         employees.find(
@@ -455,7 +466,7 @@ const ListMissions = () => {
                         )?.surname
                       }
                     </FormLabel>
-                    <FormLabel>
+                    <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                       Vérificateur financier : <span></span>
                       {
                         employees.find((e: EmployeItem) =>
@@ -468,7 +479,7 @@ const ListMissions = () => {
                         )?.surname
                       }
                     </FormLabel>
-                    <FormLabel>
+                    <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                       Validateur financier : <span></span>
                       {
                         employees.find((e: EmployeItem) =>
@@ -481,7 +492,7 @@ const ListMissions = () => {
                         )?.surname
                       }
                     </FormLabel>
-                    <FormLabel>
+                    <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                       Vérificateur technique : <span></span>
                       {
                         employees.find((e: EmployeItem) =>
@@ -494,7 +505,7 @@ const ListMissions = () => {
                         )?.surname
                       }
                     </FormLabel>
-                    <FormLabel>
+                    <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                       {mission.budgetManagerId!.length > 1
                         ? "Gestionnaires"
                         : "Gestionnaire"}{" "}
@@ -512,11 +523,11 @@ const ListMissions = () => {
                           </Stack>
                         ))}
                     </FormLabel>
-                    <FormLabel>
+                    <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                       Début :{" "}
                       <Moment format="DD/MM/yyyy">{mission.dateDebut!}</Moment>
                     </FormLabel>
-                    <FormLabel>
+                    <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                       Fin :{" "}
                       <Moment format="DD/MM/yyyy">{mission.dateFin!}</Moment>
                     </FormLabel>
