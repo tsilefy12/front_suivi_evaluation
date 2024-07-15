@@ -1,4 +1,11 @@
-import { Stack, styled, Typography, TextField, Button, Link } from "@mui/material";
+import {
+  Stack,
+  styled,
+  Typography,
+  TextField,
+  Button,
+  Link,
+} from "@mui/material";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
@@ -9,16 +16,22 @@ import { Check, Close } from "@mui/icons-material";
 import { createSite, updateSite } from "../../../redux/features/site";
 import { cancelEdit } from "../../../redux/features/site/siteSlice";
 import useFetchSite from "./hooks/useFetchSite";
+import OSSelectField from "../../shared/select/OSSelectField";
+import useFetchPlanTravaile from "../../plan_travail/hooks/useFetchPlanTravail";
 
 const SiteForm = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { isEditing, site, sitelist } = useAppSelector((state: any) => state.site);
+  const { isEditing, site, sitelist } = useAppSelector(
+    (state: any) => state.site
+  );
   const fetchSite = useFetchSite();
-
-  React.useEffect(() =>{
+  const { planTravaillist } = useAppSelector((state) => state.planTravail);
+  const fetchPlanTravail = useFetchPlanTravaile();
+  React.useEffect(() => {
     fetchSite();
-  }, [router.query])
+    fetchPlanTravail();
+  }, [router.query]);
 
   const handleSubmit = async (values: any) => {
     try {
@@ -30,7 +43,6 @@ const SiteForm = () => {
           })
         );
       } else {
-
         await dispatch(createSite(values));
       }
       router.push("/configurations/site");
@@ -47,10 +59,9 @@ const SiteForm = () => {
           isEditing
             ? site
             : {
-              lieu: isEditing ? site?.lieu : "",
-              objectifAnnuelId: isEditing ? site?.objectifAnnuelId: null,
-              but: isEditing ? site?.but : null,
-            }
+                lieu: isEditing ? site?.lieu : "",
+                planTravaileId: isEditing ? site?.planTravaileId : "",
+              }
         }
         validationSchema={Yup.object({
           lieu: Yup.string().required("Champ obligatoire"),
@@ -72,9 +83,23 @@ const SiteForm = () => {
                 variant="outlined"
                 name="lieu"
               />
-              <BtnContainer direction="row" spacing={2} justifyContent="flex-end">
-                 <Link href={'/suivi-evaluation/configurations/site'}>
-                 <Button
+              <OSSelectField
+                fullWidth
+                id="outlined-basic"
+                label="Plan de travail"
+                variant="outlined"
+                name="planTravaileId"
+                options={planTravaillist}
+                dataKey={"title"}
+                valueKey={"id"}
+              />
+              <BtnContainer
+                direction="row"
+                spacing={2}
+                justifyContent="flex-end"
+              >
+                <Link href={"/suivi-evaluation/configurations/site"}>
+                  <Button
                     color="info"
                     variant="text"
                     startIcon={<Close />}
@@ -85,7 +110,7 @@ const SiteForm = () => {
                   >
                     Annuler
                   </Button>
-                 </Link>
+                </Link>
                 <Button
                   variant="contained"
                   color="primary"
@@ -99,7 +124,7 @@ const SiteForm = () => {
                 </Button>
               </BtnContainer>
             </Stack>
-          )
+          );
         }}
       </Formik>
     </FormContainer>

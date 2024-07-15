@@ -9,16 +9,17 @@ const useFetchPlanTravaile = () => {
   return async () => {
     let args: any = {
       include: {
+        sites: true,
         TacheCle: {
           include: {
             objectifAnnuel: {
               include: {
                 notes: true,
-              }
-            }
-          }
-        }
-      }
+              },
+            },
+          },
+        },
+      },
     };
     if (router.query.search) {
       args.where = {

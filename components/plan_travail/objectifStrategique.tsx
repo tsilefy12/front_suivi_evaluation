@@ -57,7 +57,6 @@ const ListObjectifStrategique = ({
     fetchPlanTravail();
     fetchProject();
   }, [router.query]);
-  //  console.log("liste :", planTravaillist)
   const handleClickOpen = () => {
     setOpen(true);
     setGetId("");

@@ -24,19 +24,19 @@ import { SiteItem } from "../../../../redux/features/site/site.interface";
 
 const ListeSites = () => {
   const fetchSite = useFetchSite();
-  const { sitelist } = useAppSelector((state) =>state.site);
+  const { sitelist } = useAppSelector((state) => state.site);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [filtre , setFiltre] = React.useState("")
+  const [filtre, setFiltre] = React.useState("");
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { id }: any = router.query;
 
-  React.useEffect(() =>{
-      fetchSite();
-  }, [router.query])
+  React.useEffect(() => {
+    fetchSite();
+  }, [router.query]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -51,8 +51,6 @@ const ListeSites = () => {
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - sitelist.length) : 0;
-
-
 
   const handleClickDelete = async (id: any) => {
     confirm({
@@ -73,7 +71,7 @@ const ListeSites = () => {
       })
       .catch(() => {});
   };
-  
+
   const handleClickEdit = async (id: any) => {
     router.push(`/configurations/site/${id}/edit`);
   };
@@ -90,14 +88,15 @@ const ListeSites = () => {
             >
               <PosteAnalytiqueTableHeader />
               <TableBody>
-                { sitelist
+                {sitelist
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .filter((item) => (`${item.lieu}`).toLowerCase().includes(filtre.toLowerCase()))
+                  .filter((item) =>
+                    `${item.lieu}`.toLowerCase().includes(filtre.toLowerCase())
+                  )
                   .map((row: SiteItem, index: any) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
-                      <TableRow
-                      >
+                      <TableRow key={row.id}>
                         <TableCell
                           component="th"
                           id={labelId}
@@ -121,7 +120,7 @@ const ListeSites = () => {
                                 handleClickEdit(row.id);
                               }}
                             >
-                              <EditIcon /> 
+                              <EditIcon />
                             </IconButton>
                             <IconButton
                               color="warning"
