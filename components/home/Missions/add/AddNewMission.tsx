@@ -112,6 +112,7 @@ const AddNewMission = () => {
 
     try {
       if (isEditing) {
+        values.budgetManagerId = [...selectedEmployes.map((item) => item.id)];
         if (startDaty > now && statut == "vide") {
           values.status = "En attente";
         } else if (startDaty <= now && endDaty >= now && statut == "vide") {
@@ -121,7 +122,7 @@ const AddNewMission = () => {
         } else {
           values.status = statut;
         }
-        values.budgetManagerId = [...selectedEmployes.map((item) => item.id)];
+
         await dispatch(
           updateMission({
             id: mission.id!,
@@ -129,6 +130,7 @@ const AddNewMission = () => {
           })
         );
       } else {
+        values.budgetManagerId = [...selectedEmployes.map((item) => item.id)];
         if (startDaty > now && statut == "vide") {
           values.status = "En attente";
         } else if (startDaty <= now && endDaty >= now && statut == "vide") {
@@ -138,7 +140,6 @@ const AddNewMission = () => {
         } else {
           values.status = statut;
         }
-        values.budgetManagerId = [...selectedEmployes.map((item) => item.id)];
         await dispatch(createMission(values));
       }
       router.push("/missions/ListMission");

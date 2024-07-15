@@ -369,10 +369,29 @@ const ListMissions = () => {
                 >
                   <Typography variant="h6" color="GrayText">
                     <Stack>
-                      <FormLabel>
-                        {" "}
-                        Mission: {mission?.descriptionMission}
-                      </FormLabel>
+                      <Typography
+                        color="info.main"
+                        mb={1}
+                        aria-label="Mission"
+                        variant="h6"
+                        title={mission?.descriptionMission}
+                        align="center"
+                        sx={{
+                          cursor:
+                            mission?.descriptionMission!.length > 4
+                              ? "pointer"
+                              : "default",
+                          "&:hover": {
+                            color:
+                              mission?.descriptionMission!.length > 4
+                                ? "primary.main"
+                                : "GrayText",
+                          },
+                        }}
+                      >
+                        Mission :{" "}
+                        {mission?.descriptionMission?.slice(0, 40) + "..."}
+                      </Typography>
                       <FormLabel>Status : {mission.status}</FormLabel>
                     </Stack>
                   </Typography>
@@ -485,13 +504,11 @@ const ListMissions = () => {
                           mission.budgetManagerId?.includes(e.id as string)
                         )
                         .map((m: EmployeItem) => (
-                          <Stack key={m.id} direction={"column"}>
-                            <Stack direction={"row"} gap={1}>
-                              {" "}
-                              <span>
-                                {m.name} {m.surname}
-                              </span>
-                            </Stack>
+                          <Stack direction={"column"} gap={1} key={m.id}>
+                            {" "}
+                            <span>
+                              {m.name} {m.surname}
+                            </span>
                           </Stack>
                         ))}
                     </FormLabel>
