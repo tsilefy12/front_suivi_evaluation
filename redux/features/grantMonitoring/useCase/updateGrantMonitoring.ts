@@ -19,7 +19,7 @@ export const updateGrantMonitoring = createAsyncThunk(
   ) => {
     try {
       const response = await axios.patch(
-        `/suivi-evaluation/grant-admin/${data.id}`,
+        `/suivi-evaluation/grant-monitoring/${data.id}`,
         data.grantMonitoring
       );
       thunkAPI.dispatch(
@@ -28,6 +28,7 @@ export const updateGrantMonitoring = createAsyncThunk(
           options: { variant: "success" },
         })
       );
+      console.log("response", response.data);
       return response.data;
     } catch (error: any) {
       if (error.response) {

@@ -156,8 +156,10 @@ const ListBudgetInitial = () => {
   const [dataFiltered, setDataFiltered] = React.useState<any[]>([]);
 
   useEffect(() => {
-    if (filtre === "") {
-      return setDataFiltered(budgetInitialList);
+    if (filtre == "") {
+      return setDataFiltered(
+        budgetInitialList.filter((p: any) => p.grant == idEdit)
+      );
     } else {
       const data = budgetInitialList.filter((p: any) => {
         return (

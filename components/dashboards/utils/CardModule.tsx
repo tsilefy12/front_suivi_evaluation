@@ -34,12 +34,16 @@ const CardModel = styled("div")<any>(({ theme, color }) => ({
   minWidth: 250,
   cursor: "pointer",
   backgroundColor: theme.palette.background.paper,
-  color: color ? theme.palette[color as keyof typeof theme.palette].main : theme.palette.text.primary,
+  color: color
+    ? theme.palette[color as keyof typeof theme.palette].main
+    : theme.palette.text.primary,
   fontWeight: "bold",
   transition: "background-color 0.3s ease",
   "&:hover": {
     color: theme.palette.background.paper,
     fontWeight: "bold",
-    backgroundColor: color ? theme.palette[color as keyof typeof theme.palette].main : theme.palette.action.hover,
+    backgroundColor: color
+      ? theme.palette[color as keyof typeof theme.palette].main
+      : theme.palette.action.hover,
   },
 }));
