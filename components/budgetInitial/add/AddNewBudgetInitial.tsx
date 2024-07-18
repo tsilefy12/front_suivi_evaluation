@@ -51,11 +51,11 @@ const BudgetForm = ({
   ]);
   const router = useRouter();
   const { id } = router.query;
+  const { idEdit } = router.query;
   const [ligneBudget, setLigneBudget] = useState<any>("");
   const [amount, setAmount] = useState<any>("");
-
   const handleAddLigneBudgetMontant = (
-    grantValue,
+    grantValue: any,
     ligneBudgetaire: any,
     montant: any
   ) => {
@@ -66,10 +66,21 @@ const BudgetForm = ({
     setLigneBudgetMontants(newLigneBudgetMontants);
     setBudgetForms([...budgetForms, { ligneBudgetaire, montant }]);
   };
+  const [checkColor, setCheckColor] = useState<any>("");
+  const handleValidegneBudgetMontant = () => {
+    ligneBudgetMontants.push({
+      grantValue,
+      ligneBudgetaire: ligneBudget,
+      montant: amount,
+    });
+    setCheckColor(ligneBudgetMontants.length != 0 ? "GrayText" : "primary");
+  };
   const handleDeleteLigneBudgetMontant = (indexToDelete: number) => {
     setBudgetForms((prevForms) =>
       prevForms.filter((form, index) => index !== indexToDelete)
     );
+    formikProps.setFieldValue(`ligneBudgetaire-${indexToDelete}`, "");
+    formikProps.setFieldValue(`montant-${indexToDelete}`, "");
   };
 
   const fetchGrant = useFetchGrants();
@@ -81,6 +92,7 @@ const BudgetForm = ({
     fetchGrant();
     fetchBudgetLine();
   }, []);
+
   return (
     <>
       {budgetForms.map((form, index) => (
@@ -91,21 +103,22 @@ const BudgetForm = ({
             id={`outlined-basic-ligneBudgetaire-${index}`}
             label="Ligne budgetaire"
             variant="outlined"
+            type="number"
             name={`ligneBudgetaire-${index}`}
-            value={
-              id ? ligneBudget : formikProps.values[`ligneBudgetaire-${index}`]
-            }
+            value={formikProps.values[`ligneBudgetaire-${index}`]}
             onChange={(e: any) => {
-              id
-                ? setLigneBudget(e.target.value)
-                : formikProps.setFieldValue(
-                    `ligneBudgetaire-${index}`,
-                    e.target.value
-                  );
+              {
+                id
+                  ? setLigneBudget(e.target.value)
+                  : formikProps.setFieldValue(
+                      `ligneBudgetaire-${index}`,
+                      e.target.value
+                    );
+              }
             }}
           >
             <MenuItem value="">Select budget line</MenuItem>
-            {id && grantValue
+            {grantValue
               ? grantEncoursList
                   .filter((m: any) => m.id == grantValue)
                   .map((m) =>
@@ -116,7 +129,7 @@ const BudgetForm = ({
                     ))
                   )
               : BudgetLineGrantList.map((m: any) => (
-                  <MenuItem key={m.id} value={m.id && m.id}>
+                  <MenuItem key={m.id} value={m.id}>
                     {m.code}
                   </MenuItem>
                 ))}
@@ -128,15 +141,44 @@ const BudgetForm = ({
             variant="outlined"
             name={`montant-${index}`}
             type="number"
-            value={id ? amount : formikProps.values[`montant-${index}`] || ""}
+            value={formikProps.values[`montant-${index}`]}
             onChange={(e: any) => {
-              id
-                ? setAmount(e.target.value)
-                : formikProps.setFieldValue(`montant-${index}`, e.target.value);
+              {
+                id
+                  ? setAmount(e.target.value)
+                  : formikProps.setFieldValue(
+                      `montant-${index}`,
+                      e.target.value
+                    );
+              }
             }}
-            disable={formikProps.values.montant != "" ? true : false}
           />
-          <Stack direction={"row"} gap={2}>
+          <Stack
+            direction={"row"}
+            gap={2}
+            justifyContent={"space-between"}
+            alignItems={"center"}
+          >
+            <Button
+              onClick={handleValidegneBudgetMontant}
+              style={{
+                borderRadius: "50%",
+                maxWidth: "10px",
+                minWidth: "10px",
+                display: id ? "block" : "none",
+                paddingTop: 12,
+                paddingRight: 12,
+              }}
+              disabled={ligneBudgetMontants.length != 0}
+              startIcon={
+                <Check
+                  style={{
+                    fontSize: 25,
+                    color: checkColor,
+                  }}
+                />
+              }
+            ></Button>
             <Button
               onClick={() =>
                 handleAddLigneBudgetMontant(
@@ -152,7 +194,9 @@ const BudgetForm = ({
                 borderRadius: "50%",
                 maxWidth: "10px",
                 minWidth: "10px",
-                marginLeft: 8,
+                paddingTop: 12,
+                paddingRight: 12,
+                display: idEdit && !!!id ? "block" : "none",
               }}
             ></Button>
             <Button
@@ -193,7 +237,7 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
   const [grantValue, setGrantValue] = useState<string>("vide");
   const { idEdit } = router.query;
   const { id } = router.query;
-
+  const { idd }: any = router.query;
   const uniqueValues = new Set();
   const [getIdGrant, setGetIdGrant] = useState(0);
   const [ligneBudgetMontants, setLigneBudgetMontants] = useState<any[]>([]);
@@ -266,11 +310,11 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
       return;
     }
 
-    let promises: Promise<any>[] = [];
     try {
       let createdBudgetInitialId = null;
       let updatedValues = { ...values };
 
+      let promises: Promise<any>[] = [];
       if (isEditing && grantValue !== "" && id) {
         updatedValues.grant = grantValue;
         await dispatch(
@@ -285,28 +329,31 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
           (f) => f.grantValue == grantValue
         );
 
-        const data = BudgetLineGrantList.map((f) => ({
-          id: f.id,
-          budgetInitialId: createdBudgetInitialId,
-          ligneBudgetaire: Number(
-            filteredLigneBudgetMontants.find(
-              (lb) => lb.grantValue == grantValue
-            )?.ligneBudgetaire
-          ),
-          montant: Number(
-            filteredLigneBudgetMontants.find(
-              (lb) => lb.grantValue == grantValue
-            )?.montant
-          ),
-        }));
+        const data = [
+          {
+            budgetInitialId: createdBudgetInitialId,
+            ligneBudgetaire: Number(
+              filteredLigneBudgetMontants.find(
+                (lb) => lb.grantValue == grantValue
+              )?.ligneBudgetaire
+            ),
+            montant: Number(
+              filteredLigneBudgetMontants.find(
+                (lb) => lb.grantValue == grantValue
+              )?.montant
+            ),
+          },
+        ];
+        console.log("data", data);
         for (const item of data) {
           await dispatch(
             updateGrantMonitoring({
-              id: item.id,
+              id: idd!,
               grantMonitoring: item,
             })
           );
         }
+        await Promise.all(promises);
       } else {
         values.grant = getIdGrant;
         const resultAction = await dispatch(createBudgetInitial(values));
@@ -321,11 +368,12 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
           );
         }
       }
+      await Promise.all(promises);
     } catch (error) {
       console.log("error", error);
     }
     router.push(`/grants/budgetInitial/${id ? grantValue : getIdGrant}/list`);
-    await Promise.all(promises);
+
     fetchBudgetInitial();
   };
 
@@ -366,7 +414,7 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
                   <Stack flexDirection={"row"}>
                     <Link
                       href={`/grants/budgetInitial/${
-                        id ? grantValue : getIdGrant
+                        id ? grantValue : grantValue == "vide" ? getIdGrant : ""
                       }/list`}
                     >
                       <Button
@@ -444,7 +492,7 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
                           (g) => Number(g.id) === Number(getIdGrant)
                         )?.code
                       : id
-                      ? grantEncoursList.find((g) => g.id === idEdit)?.code
+                      ? grantEncoursList.find((g) => g.id == idEdit)?.code
                       : ""
                   }
                   onChange={(e: any) => setGrantValue(e.target.value)}
@@ -482,12 +530,24 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Veuillez ajouter au moins une ligne budgetaire
+            <Stack direction={"column"} gap={1}>
+              <span>
+                {`Veuillez ${
+                  !!!id
+                    ? " ajouter au moins une ligne budgetaire "
+                    : "remplir et valider une ligne budgetaire"
+                } en cliquant sur icon :`}
+              </span>
+              <span style={{ display: "flex", alignItems: "center" }}>
+                {id ? <Check color="primary" /> : <Add color="primary" />}
+                <span>{"   " + "à droite du champ montant"}</span>
+              </span>
+            </Stack>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>
-            <Check />
+          <Button onClick={() => setOpen(false)} color="primary">
+            Ok
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,7 +1,7 @@
 import { Container } from "@mui/material";
 import React from "react";
-import BackOfficeLayout from "../../../../../../layouts/backOffice";
-import EditBudgetInitial from "../../../../../../components/budgetInitial/[idEdit]/[id]/edit";
+import BackOfficeLayout from "../../../../../../../layouts/backOffice";
+import EditBudgetInitial from "../../../../../../../components/budgetInitial/[idEdit]/[id]/[idd]/edit";
 
 const AddGrantAdmin = () => {
   return (

@@ -149,8 +149,16 @@ const ListBudgetInitial = () => {
       })
       .catch(() => {});
   };
-  const handleClickEdit = async (id: any, budgetId: any) => {
-    router.push(`/grants/budgetInitial/${budgetId}/${id}/edit`);
+  const [idLigneBudget, setLigneBudgetId] = React.useState<any>("");
+  const handleClickEdit = async (
+    id: any,
+    budgetId: any,
+    idLigneBudget: any
+  ) => {
+    setLigneBudgetId(idLigneBudget);
+    router.push(
+      `/grants/budgetInitial/${budgetId}/${id}/${idLigneBudget}/edit`
+    );
   };
   const [filtre, setFiltre] = React.useState("");
   const [dataFiltered, setDataFiltered] = React.useState<any[]>([]);
@@ -304,7 +312,11 @@ const ListBudgetInitial = () => {
                                     aria-label="Modifier"
                                     component="span"
                                     onClick={() =>
-                                      handleClickEdit(budget.id, budget.grant)
+                                      handleClickEdit(
+                                        budget.id,
+                                        budget.grant,
+                                        lb.id!
+                                      )
                                     }
                                   >
                                     <EditIcon />
