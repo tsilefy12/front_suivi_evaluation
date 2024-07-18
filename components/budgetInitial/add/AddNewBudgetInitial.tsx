@@ -414,11 +414,7 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
                   <Stack flexDirection={"row"}>
                     <Link
                       href={`/grants/budgetInitial/${
-                        id && grantValue != "vide"
-                          ? grantValue
-                          : idEdit == "vide"
-                          ? getIdGrant
-                          : ""
+                        id ? grantValue : getIdGrant
                       }/list`}
                     >
                       <Button
