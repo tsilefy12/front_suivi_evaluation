@@ -92,7 +92,7 @@ const BudgetForm = ({
     fetchGrant();
     fetchBudgetLine();
   }, []);
-  console.log("liste :", BudgetLineGrantList);
+
   return (
     <>
       {budgetForms.map((form, index) => (
