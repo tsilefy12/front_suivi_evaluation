@@ -92,7 +92,7 @@ const BudgetForm = ({
     fetchGrant();
     fetchBudgetLine();
   }, []);
-
+  console.log("liste :", BudgetLineGrantList);
   return (
     <>
       {budgetForms.map((form, index) => (
@@ -118,7 +118,7 @@ const BudgetForm = ({
             }}
           >
             <MenuItem value="">Select budget line</MenuItem>
-            {grantValue
+            {grantValue && id
               ? grantEncoursList
                   .filter((m: any) => m.id == grantValue)
                   .map((m) =>
@@ -414,7 +414,11 @@ const AddNewBudgetInitial = ({ budgetId }: any) => {
                   <Stack flexDirection={"row"}>
                     <Link
                       href={`/grants/budgetInitial/${
-                        id ? grantValue : grantValue == "vide" ? getIdGrant : ""
+                        id && grantValue != "vide"
+                          ? grantValue
+                          : idEdit == "vide"
+                          ? getIdGrant
+                          : ""
                       }/list`}
                     >
                       <Button

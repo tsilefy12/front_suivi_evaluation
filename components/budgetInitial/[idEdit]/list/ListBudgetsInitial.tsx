@@ -149,16 +149,8 @@ const ListBudgetInitial = () => {
       })
       .catch(() => {});
   };
-  const [idLigneBudget, setLigneBudgetId] = React.useState<any>("");
-  const handleClickEdit = async (
-    id: any,
-    budgetId: any,
-    idLigneBudget: any
-  ) => {
-    setLigneBudgetId(idLigneBudget);
-    router.push(
-      `/grants/budgetInitial/${budgetId}/${id}/${idLigneBudget}/edit`
-    );
+  const handleClickEdit = async (id: any, budgetId: any, idLigneBudg: any) => {
+    router.push(`/grants/budgetInitial/${budgetId}/${id}/${idLigneBudg}/edit`);
   };
   const [filtre, setFiltre] = React.useState("");
   const [dataFiltered, setDataFiltered] = React.useState<any[]>([]);
