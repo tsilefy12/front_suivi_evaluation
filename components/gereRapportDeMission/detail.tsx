@@ -1,5 +1,5 @@
 import React from "react";
-import { FormLabel, styled } from "@mui/material";
+import { FormLabel, styled, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import KeyValue from "../shared/keyValue";
@@ -28,10 +28,29 @@ const Detail = () => {
                 keyName="Référence mission"
                 value={"MISSION_" + item.reference!}
               />
-              <KeyValue
-                keyName="Description"
-                value={item.descriptionMission!}
-              />
+              <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                <span>Description : </span>
+                <Typography
+                  color="GrayText"
+                  mb={1}
+                  aria-label="Description"
+                  title={item?.descriptionMission}
+                  sx={{
+                    cursor:
+                      item?.descriptionMission!.length > 4
+                        ? "pointer"
+                        : "default",
+                    "&:hover": {
+                      color:
+                        item?.descriptionMission!.length > 4
+                          ? "info.main"
+                          : "GrayText",
+                    },
+                  }}
+                >
+                  {item?.descriptionMission?.slice(0, 20) + "..."}
+                </Typography>
+              </Stack>
             </Grid>
             <Grid item xs={12} md={4}>
               Responsable : <span> </span>
@@ -91,9 +110,11 @@ export default Detail;
 
 const FormContainer = styled(Stack)(({ theme }) => ({
   width: "100%",
-  marginBottom: theme.spacing(3),
-  padding: 30,
+  // marginBottom: theme.spacing(3),
+  padding: 20,
   borderRadius: 20,
   background: "#fff",
   border: `1px solid ${theme.palette.grey[100]}`,
+  height: "calc(100vh - 550px)",
+  overflow: "auto",
 }));

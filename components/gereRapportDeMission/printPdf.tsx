@@ -300,17 +300,25 @@ const PrintPdf = () => {
                   </View>
                 ))}
               <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Poste 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Signature 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Date 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Lieu 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
               </View>
               {/* Table Body */}
@@ -336,17 +344,25 @@ const PrintPdf = () => {
                   ))}
               </View>
               <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Poste 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Signature 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Date 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Lieu 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
               </View>
               {/* Table Body */}
@@ -372,17 +388,25 @@ const PrintPdf = () => {
                   ))}
               </View>
               <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Poste 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Signature 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Date 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Lieu 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
               </View>
 
@@ -411,17 +435,25 @@ const PrintPdf = () => {
                   ))}
               </View>
               <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Poste 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Signature 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Date 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Lieu 1</Text>
+                <View
+                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                >
+                  <Text style={styles.tableCell}></Text>
                 </View>
               </View>
               {/* Add more rows as needed */}
@@ -462,7 +494,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   table: {
-    display: "table",
+    display: "flex",
     width: "auto",
     borderStyle: "solid",
     borderWidth: 1,
@@ -509,6 +541,11 @@ const styles = StyleSheet.create({
   },
   colSingleTBValidated: {
     width: "100%",
+  },
+  colSingleTBValidatedBody: {
+    width: "100%",
+    minHeight: 40,
+    maxHeight: 40,
   },
   tableCellTBValidated: {
     margin: 5,

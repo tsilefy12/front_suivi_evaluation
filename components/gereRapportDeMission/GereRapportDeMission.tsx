@@ -178,13 +178,13 @@ const GereRapportDeMission = () => {
   };
   // console.log(valueGetPaye);
   return (
-    <Container maxWidth="xl">
+    <>
       <NavigationContainer>
         <SectionNavigation
           direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 1, sm: 2, md: 4 }}
           justifyContent="space-between"
-          sx={{ mb: 2 }}
+          sx={{ mb: 0 }}
         >
           <Stack direction={{ xs: "column", sm: "row" }}>
             <Link href="/missions/ListMission">
@@ -220,7 +220,7 @@ const GereRapportDeMission = () => {
         <Divider />
       </NavigationContainer>
       <Detail />
-      <BodySection sx={{ height: "calc(100vh - 380px)", overflow: "auto" }}>
+      <BodySection sx={{ height: "calc(100vh - 360px)", overflow: "auto" }}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 1, sm: 1, md: 2 }}
@@ -465,7 +465,7 @@ const GereRapportDeMission = () => {
           </Stack>
         </Stack>
       </BodySection>
-    </Container>
+    </>
   );
 };
 

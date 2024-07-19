@@ -17,6 +17,7 @@ import {
   OneButtonLink,
   OneButtonLinkWithItems,
 } from "./ButtonNav";
+import { Fragment } from "react";
 // import Link from "next/link";
 
 const NavbarBackOffice = ({ matches }: any) => {
@@ -34,7 +35,7 @@ const NavbarBackOffice = ({ matches }: any) => {
 
   return (
     <AppbarBackOffice position="static" elevation={0}>
-      <Container maxWidth="xl">
+      <>
         <ToolbarBackOffice variant="dense">
           <ListMenuContainer>
             <Link href="/">
@@ -78,7 +79,7 @@ const NavbarBackOffice = ({ matches }: any) => {
             <ButtonProfile handleClickLogout={handleClickLogout} />
           </MenuNavbarBo>
         </ToolbarBackOffice>
-      </Container>
+      </>
     </AppbarBackOffice>
   );
 };

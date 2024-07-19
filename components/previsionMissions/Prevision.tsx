@@ -172,14 +172,13 @@ const PrevisionDeMission = () => {
     }
   };
   return (
-    <Container maxWidth="xl">
+    <>
       <NavigationContainer>
         <SectionNavigation
           direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 1, sm: 2, md: 4 }}
           justifyContent="space-between"
           sx={{ mb: 2 }}
-          paddingBottom={10}
         >
           <Stack direction={{ xs: "column", sm: "row" }}>
             <Link href="/missions/ListMission">
@@ -214,7 +213,7 @@ const PrevisionDeMission = () => {
         </SectionNavigation>
       </NavigationContainer>
       <Detail />
-      <BodySection sx={{ height: "calc(100vh - 380px)", overflow: "auto" }}>
+      <BodySection sx={{ height: "calc(100vh - 370px)", overflow: "auto" }}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 1, sm: 1, md: 2 }}
@@ -467,7 +466,7 @@ const PrevisionDeMission = () => {
           </Stack>
         </Stack>
       </BodySection>
-    </Container>
+    </>
   );
 };
 
