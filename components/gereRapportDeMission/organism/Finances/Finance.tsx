@@ -15,7 +15,7 @@ import ListBesoinVehiculeRapport from "./tableBesoinVéhicules/ListBesoinVehicul
 
 const Finances = () => {
   return (
-    <Box>
+    <>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -76,7 +76,7 @@ const Finances = () => {
           <ListCalculCarburantRapport />
         </AccordionDetails>
       </Accordion>
-    </Box>
+    </>
   );
 };
 

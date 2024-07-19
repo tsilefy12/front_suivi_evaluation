@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Flare, Print } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import {
@@ -13,16 +13,35 @@ import {
 import { useRouter } from "next/router";
 import useFetchMissionListe from "../home/Missions/hooks/useFetchMissionListe";
 import { useAppSelector } from "../../hooks/reduxHooks";
+import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
+import useFetchLigneBudgetaire from "../budgetInitial/hooks/useFetchLigneBudgetaire";
+import formatMontant from "../../hooks/format";
+import useFetchResumeDepenseList from "./organism/Finances/tableResumeDepense/hooks/useFetchResumeDepense";
+import { format } from "date-fns";
+import useFetchEmployes from "../home/Missions/hooks/useFetchEmployees";
 
 const PrintPdfPrevision = () => {
   const router = useRouter();
   const { id } = router.query;
   const fetchMission = useFetchMissionListe();
   const { missionListe } = useAppSelector((state) => state.mission);
+  const fetchGrants = useFetchGrants();
+  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const fetchLigneBudgetaire = useFetchLigneBudgetaire();
+  const { budgetLineList } = useAppSelector((state) => state.budgetLine);
+  const fetchResumeDepense = useFetchResumeDepenseList();
+  const { resumeDepenseList } = useAppSelector((state) => state.resumeDepense);
+  const fetchEmployes = useFetchEmployes();
+  const { employees } = useAppSelector((state) => state.employe);
+
   useEffect(() => {
     fetchMission();
-  }, []);
-  console.log("mission list :", missionListe);
+    fetchGrants();
+    fetchLigneBudgetaire();
+    fetchResumeDepense();
+    fetchEmployes();
+  }, [id]);
+
   const pdfDocument = (
     <Document>
       <Page size="A4">
@@ -59,28 +78,48 @@ const PrintPdfPrevision = () => {
               Validation prévision de mission
             </Text>
           </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              paddingLeft: 35,
-              fontSize: 12,
-              paddingTop: 20,
-            }}
-          >
-            <Text style={{ paddingBottom: 3 }}>
-              Titre : Prévision de mission
-            </Text>
-            <Text style={{ paddingBottom: 3 }}>
-              Type : Mission (ou Administration)
-            </Text>
-            <Text style={{ paddingBottom: 3 }}>Référence budget : </Text>
-            <Text style={{ paddingBottom: 3 }}>
-              Gestionnaires : (nom et prénoms séparé par un , ou ; ou - )
-            </Text>
-            <Text style={{ paddingBottom: 3 }}>Du …………….. au ……………..</Text>
-            <Text>Description :</Text>
-          </View>
+          {missionListe
+            .filter((f) => f.id == id)
+            .map((mission) => (
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  paddingLeft: 35,
+                  fontSize: 12,
+                  paddingTop: 20,
+                }}
+              >
+                <Text style={{ paddingBottom: 3 }}>
+                  Titre : Prévision de mission
+                </Text>
+                <Text style={{ paddingBottom: 3 }}>
+                  Type : {mission.uncompleteTbbs?.map((type) => type.type)}
+                </Text>
+                <Text style={{ paddingBottom: 3 }}>
+                  Référence budget : {mission.RefBudget}
+                </Text>
+                <Text style={{ paddingBottom: 3 }}>
+                  Gestionnaires :{" "}
+                  {mission
+                    .budgetManagerId!.map((managerId) => {
+                      const manager = employees.find(
+                        (employee) => employee.id === managerId
+                      );
+                      return manager
+                        ? `${manager.name} ${manager.surname}`
+                        : "";
+                    })
+                    .filter((manager) => manager)
+                    .join(", ")}
+                </Text>
+                <Text style={{ paddingBottom: 3 }}>
+                  Du {format(new Date(mission.dateDebut as Date), "dd/MM/yyyy")}
+                  . au {format(new Date(mission.dateFin as Date), "dd/MM/yyyy")}
+                </Text>
+                <Text>Description : {mission.descriptionMission}</Text>
+              </View>
+            ))}
         </View>
         <View
           style={{
@@ -123,33 +162,48 @@ const PrintPdfPrevision = () => {
                   <Text style={styles.tableCellHeader}>Budget de dépense</Text>
                 </View>
                 <View style={styles.tableCol}>
-                  <Text style={styles.tableCellHeader}>Budget de dépense</Text>
-                </View>
-                <View style={styles.tableCol}>
                   <Text style={styles.tableCellHeader}>Remarques</Text>
                 </View>
               </View>
               {/* Table Body */}
-              <View style={styles.tableRow}>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>Grant 1</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>Ligne 1</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>1000</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>900</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>100</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>Note</Text>
-                </View>
-              </View>
+              {resumeDepenseList
+                .filter((resume) => resume.missionId == id)
+                .map((prevue: any) => (
+                  <View style={styles.tableRow} key={prevue.id}>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>
+                        {
+                          grantEncoursList.find(
+                            (grant) => grant.id == prevue.grant
+                          )?.code
+                        }
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>
+                        {
+                          budgetLineList.find(
+                            (budgetLine) =>
+                              budgetLine.id == prevue.ligneBudgetaire
+                          )?.code
+                        }
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>
+                        {formatMontant(Number(prevue.depensePrevue))}
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>
+                        {formatMontant(Number(prevue.budgetDepense))}
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>{prevue.remarque}</Text>
+                    </View>
+                  </View>
+                ))}
             </View>
           </View>
         </View>
@@ -184,12 +238,64 @@ const PrintPdfPrevision = () => {
                 </View>
               </View>
               {/* Table Body */}
+              {missionListe
+                .filter((mission) => mission.id == id)
+                .map((m) => (
+                  <View style={styles.tableRow}>
+                    <View
+                      style={[styles.tableCol, styles.colMergedTBValidated]}
+                    >
+                      <Text style={styles.tableCellTBValidated}>
+                        Élaboré par :{" "}
+                        {
+                          employees.find(
+                            (e: any) => e.id === m.missionManagerId
+                          )?.name as string
+                        }{" "}
+                        {
+                          employees.find(
+                            (e: any) => e.id === m.missionManagerId
+                          )?.surname as string
+                        }
+                      </Text>
+                    </View>
+                  </View>
+                ))}
               <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colMergedTBValidated]}>
-                  <Text style={styles.tableCellTBValidated}>
-                    Élaboré par : (nom et prénoms)
-                  </Text>
+                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                  <Text style={styles.tableCell}>Poste 1</Text>
                 </View>
+                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                  <Text style={styles.tableCell}>Signature 1</Text>
+                </View>
+                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                  <Text style={styles.tableCell}>Date 1</Text>
+                </View>
+                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                  <Text style={styles.tableCell}>Lieu 1</Text>
+                </View>
+              </View>
+              {/* Table Body */}
+              <View style={styles.tableRow}>
+                {missionListe
+                  .filter((mission) => mission.id == id)
+                  .map((m) => (
+                    <View
+                      style={[styles.tableCol, styles.colMergedTBValidated]}
+                    >
+                      <Text style={styles.tableCellTBValidated}>
+                        Vérificateur financier :{" "}
+                        {
+                          employees.find((e: any) => e.id === m.verifyFinancial)
+                            ?.name as string
+                        }{" "}
+                        {
+                          employees.find((e: any) => e.id === m.verifyFinancial)
+                            ?.surname as string
+                        }
+                      </Text>
+                    </View>
+                  ))}
               </View>
               <View style={styles.tableRow}>
                 <View style={[styles.tableCol, styles.colSingleTBValidated]}>
@@ -207,11 +313,25 @@ const PrintPdfPrevision = () => {
               </View>
               {/* Table Body */}
               <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colMergedTBValidated]}>
-                  <Text style={styles.tableCellTBValidated}>
-                    Vérificateur financier : (nom et prénoms)
-                  </Text>
-                </View>
+                {missionListe
+                  .filter((mission) => mission.id == id)
+                  .map((m) => (
+                    <View
+                      style={[styles.tableCol, styles.colMergedTBValidated]}
+                    >
+                      <Text style={styles.tableCellTBValidated}>
+                        Vérificateur technique :{" "}
+                        {
+                          employees.find((e: any) => e.id === m.verifyTechnic)
+                            ?.name as string
+                        }{" "}
+                        {
+                          employees.find((e: any) => e.id === m.verifyTechnic)
+                            ?.surname as string
+                        }
+                      </Text>
+                    </View>
+                  ))}
               </View>
               <View style={styles.tableRow}>
                 <View style={[styles.tableCol, styles.colSingleTBValidated]}>
@@ -227,57 +347,30 @@ const PrintPdfPrevision = () => {
                   <Text style={styles.tableCell}>Lieu 1</Text>
                 </View>
               </View>
+
               {/* Table Body */}
               <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colMergedTBValidated]}>
-                  <Text style={styles.tableCellTBValidated}>
-                    Validateur financier : (nom et prénoms)
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Poste 1</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Signature 1</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Date 1</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Lieu 1</Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colMergedTBValidated]}>
-                  <Text style={styles.tableCellTBValidated}>
-                    Vérificateur technique : (nom et prénoms)
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Poste 1</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Signature 1</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Date 1</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCell}>Lieu 1</Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colMergedTBValidated]}>
-                  <Text style={styles.tableCellTBValidated}>
-                    Payé par : (nom et prénoms)
-                  </Text>
-                </View>
+                {missionListe
+                  .filter((mission) => mission.id == id)
+                  .map((m) => (
+                    <View
+                      style={[styles.tableCol, styles.colMergedTBValidated]}
+                    >
+                      <Text style={styles.tableCellTBValidated}>
+                        Payé par :{" "}
+                        {
+                          employees.find(
+                            (e: any) => e.id === m.validateFinancial
+                          )?.name as string
+                        }{" "}
+                        {
+                          employees.find(
+                            (e: any) => e.id === m.validateFinancial
+                          )?.surname as string
+                        }
+                      </Text>
+                    </View>
+                  ))}
               </View>
               <View style={styles.tableRow}>
                 <View style={[styles.tableCol, styles.colSingleTBValidated]}>
@@ -307,6 +400,7 @@ const PrintPdfPrevision = () => {
     downloadLink.href = URL.createObjectURL(pdfBlob);
     downloadLink.download = "Prevision.pdf";
     downloadLink.click();
+    console.log("pdf blob", resumeDepenseList);
   };
 
   return (

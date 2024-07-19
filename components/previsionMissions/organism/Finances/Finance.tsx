@@ -15,7 +15,7 @@ import ListCalculCarburant from "./tableCalculCarburant/ListCalculCarburant";
 
 const Finances = () => {
   return (
-    <Box sx={{ paddingBottom: 25 }}>
+    <>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -76,7 +76,7 @@ const Finances = () => {
           <ListCalculCarburant />
         </AccordionDetails>
       </Accordion>
-    </Box>
+    </>
   );
 };
 

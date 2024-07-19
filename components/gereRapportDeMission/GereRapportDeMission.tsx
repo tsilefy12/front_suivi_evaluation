@@ -220,7 +220,7 @@ const GereRapportDeMission = () => {
         <Divider />
       </NavigationContainer>
       <Detail />
-      <BodySection>
+      <BodySection sx={{ height: "calc(100vh - 380px)", overflow: "auto" }}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 1, sm: 1, md: 2 }}

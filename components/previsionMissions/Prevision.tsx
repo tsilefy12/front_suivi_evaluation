@@ -1,4 +1,4 @@
-import { Check, Close } from "@mui/icons-material";
+import { Check, Close, Height } from "@mui/icons-material";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
@@ -214,7 +214,7 @@ const PrevisionDeMission = () => {
         </SectionNavigation>
       </NavigationContainer>
       <Detail />
-      <BodySection>
+      <BodySection sx={{ height: "calc(100vh - 380px)", overflow: "auto" }}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 1, sm: 1, md: 2 }}

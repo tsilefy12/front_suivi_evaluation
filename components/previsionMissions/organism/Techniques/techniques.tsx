@@ -19,7 +19,7 @@ import ListMissionnaires from "./tableMissionnaires/organisme/ListMissionnaires"
 
 const Techniques = () => {
   return (
-    <Box sx={{ paddingBottom: 10 }}>
+    <>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -130,7 +130,7 @@ const Techniques = () => {
           <ListProgrammes />
         </AccordionDetails>
       </Accordion>
-    </Box>
+    </>
   );
 };
 

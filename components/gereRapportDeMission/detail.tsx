@@ -66,19 +66,17 @@ const Detail = () => {
                       de budget :
                     </span>
                     <FormLabel>
-                      {employees
-                        .filter((e: EmployeItem) =>
-                          mission.budgetManagerId?.includes(e.id as string)
-                        )
-                        .map((m: EmployeItem) => (
-                          <Stack key={m.id} direction={"column"}>
-                            <Stack direction={"row"} gap={1}>
-                              <span>
-                                {m.name} {m.surname}
-                              </span>
-                            </Stack>
-                          </Stack>
-                        ))}
+                      {mission
+                        .budgetManagerId!.map((managerId) => {
+                          const manager = employees.find(
+                            (employee) => employee.id === managerId
+                          );
+                          return manager
+                            ? `${manager.name} ${manager.surname}`
+                            : "";
+                        })
+                        .filter((manager) => manager)
+                        .join(", ")}
                     </FormLabel>
                   </div>
                 ))}
