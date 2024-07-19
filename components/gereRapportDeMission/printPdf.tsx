@@ -18,6 +18,9 @@ import useFetchLigneBudgetaire from "../budgetInitial/hooks/useFetchLigneBudgeta
 import useFetchResumeDepenseList from "../previsionMissions/organism/Finances/tableResumeDepense/hooks/useFetchResumeDepense";
 import useFetchEmployes from "../home/Missions/hooks/useFetchEmployees";
 import { format } from "date-fns";
+import useFetchResumeDepensePrevue from "./organism/Finances/tableResumeDepense/hooks/useFetchResumeDepensePrevue";
+import formatMontant from "../../hooks/format";
+import { ResumeDepenseItem } from "../../redux/features/resumeDepense/reumeDepense.interface";
 
 const PrintPdf = () => {
   const router = useRouter();
@@ -32,6 +35,10 @@ const PrintPdf = () => {
   const { resumeDepenseList } = useAppSelector((state) => state.resumeDepense);
   const fetchEmployes = useFetchEmployes();
   const { employees } = useAppSelector((state) => state.employe);
+  const fetchResumeDepensePrevue = useFetchResumeDepensePrevue();
+  const { resumeDepensePrevueList } = useAppSelector(
+    (state: any) => state.resumeDepensePrevue
+  );
 
   useEffect(() => {
     fetchMission();
@@ -39,6 +46,7 @@ const PrintPdf = () => {
     fetchLigneBudgetaire();
     fetchResumeDepense();
     fetchEmployes();
+    fetchResumeDepensePrevue();
   }, [id]);
 
   const pdfDocument = (
@@ -168,80 +176,169 @@ const PrintPdf = () => {
                 </View>
               </View>
               {/* Table Body */}
-              <View style={styles.tableRow}>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>Grant 1</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>Ligne 1</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>1000</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>900</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>100</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>Note</Text>
-                </View>
-              </View>
+              {resumeDepensePrevueList
+                .filter((f) => f.missionId == id)
+                .map((prevue: any) => (
+                  <View style={styles.tableRow} key={prevue.id}>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>
+                        {
+                          grantEncoursList.find(
+                            (e: any) => e.id == prevue.grant
+                          )?.code
+                        }
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>
+                        {
+                          budgetLineList.find(
+                            (e: any) => e.id == prevue.ligneBudgetaire
+                          )?.code
+                        }
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>
+                        {formatMontant(Number(prevue.depensePrevue))}
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>
+                        {formatMontant(Number(prevue.budgetDepense))}
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>
+                        {(() => {
+                          const totalResumeDepense = resumeDepenseList
+                            .filter(
+                              (f) =>
+                                f.missionId == id &&
+                                f.grant == prevue.grant &&
+                                f.ligneBudgetaire == prevue.ligneBudgetaire
+                            )
+                            .reduce(
+                              (acc, resume: ResumeDepenseItem) =>
+                                acc + Number(resume.budgetDepense),
+                              0
+                            );
+
+                          return totalResumeDepense === 0
+                            ? Number(prevue.budgetDepense)
+                            : formatMontant(
+                                totalResumeDepense -
+                                  Number(prevue.budgetDepense)
+                              );
+                        })()}
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>{prevue.remarque}</Text>
+                    </View>
+                  </View>
+                ))}
               {/* Table Body */}
-              <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colMerged]}>
-                  <Text style={styles.tableCellColaps}>TOTAL BUDGET REÇU</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>1000</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>900</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>100</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>Note</Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colMerged]}>
-                  <Text style={styles.tableCellColaps}>DÉPENSE TOTAL</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>1000</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>900</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>100</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>Note</Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colMerged]}>
-                  <Text style={styles.tableCellColaps}>RESTE</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>1000</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>900</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>100</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>Note</Text>
-                </View>
-              </View>
+
+              {/* Calcul des totaux */}
+              {(() => {
+                const totalBudgetRecu = resumeDepensePrevueList
+                  .filter((f) => f.missionId == id)
+                  .reduce(
+                    (acc, prevue: any) => acc + Number(prevue.budgetDepense),
+                    0
+                  );
+
+                const totalDepensePrevue = resumeDepensePrevueList
+                  .filter((f) => f.missionId == id)
+                  .reduce(
+                    (acc, prevue: any) => acc + Number(prevue.depensePrevue),
+                    0
+                  );
+
+                const totalDepense = resumeDepenseList
+                  .filter((f) => f.missionId == id)
+                  .reduce(
+                    (acc, resume: ResumeDepenseItem) =>
+                      acc + Number(resume.budgetDepense),
+                    0
+                  );
+
+                const reste = totalBudgetRecu - totalDepense;
+
+                return (
+                  <>
+                    {/* TOTAL BUDGET REÇU */}
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCol, styles.colMerged]}>
+                        <Text style={styles.tableCellColaps}>
+                          TOTAL BUDGET REÇU
+                        </Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.colSingle]}>
+                        <Text style={styles.tableCell}>-</Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.colSingle]}>
+                        <Text style={styles.tableCell}>
+                          {formatMontant(totalBudgetRecu)}
+                        </Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.colSingle]}>
+                        <Text style={styles.tableCell}>-</Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.colSingle]}>
+                        <Text style={styles.tableCell}>-</Text>
+                      </View>
+                    </View>
+
+                    {/* DÉPENSE TOTAL */}
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCol, styles.colMerged]}>
+                        <Text style={styles.tableCellColaps}>
+                          DÉPENSE TOTAL
+                        </Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.colSingle]}>
+                        <Text style={styles.tableCell}>
+                          {formatMontant(totalDepensePrevue)}
+                        </Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.colSingle]}>
+                        <Text style={styles.tableCell}>
+                          {formatMontant(totalDepense)}
+                        </Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.colSingle]}>
+                        <Text style={styles.tableCell}>-</Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.colSingle]}>
+                        <Text style={styles.tableCell}>-</Text>
+                      </View>
+                    </View>
+
+                    {/* RESTE */}
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCol, styles.colMerged]}>
+                        <Text style={styles.tableCellColaps}>RESTE</Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.colSingle]}>
+                        <Text style={styles.tableCell}>
+                          {formatMontant(reste)}
+                        </Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.colSingle]}>
+                        <Text style={styles.tableCell}></Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.colSingle]}>
+                        <Text style={styles.tableCell}></Text>
+                      </View>
+                      <View style={[styles.tableCol, styles.colSingle]}>
+                        <Text style={styles.tableCell}></Text>
+                      </View>
+                    </View>
+                  </>
+                );
+              })()}
             </View>
           </View>
         </View>
