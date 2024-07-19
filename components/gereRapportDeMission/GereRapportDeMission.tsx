@@ -34,6 +34,7 @@ import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 import useFetchEmploys from "../GrantsEnCours/hooks/getResponsable";
 import { MissionItem } from "../../redux/features/mission/mission.interface";
 import Moment from "react-moment";
+import PrintPdf from "./printPdf";
 
 const GereRapportDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -459,9 +460,7 @@ const GereRapportDeMission = () => {
               </Stack>
             </CardBody>
             <CardFooter>
-              <Button variant="contained" color="primary" startIcon={<Print />}>
-                Imprimer
-              </Button>
+              <PrintPdf />
             </CardFooter>
           </Stack>
         </Stack>
