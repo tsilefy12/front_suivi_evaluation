@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Flare, Print } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import {
@@ -10,8 +10,19 @@ import {
   View,
   Image,
 } from "@react-pdf/renderer";
+import { useRouter } from "next/router";
+import useFetchMissionListe from "../home/Missions/hooks/useFetchMissionListe";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
-const PrintPdf = () => {
+const PrintPdfPrevision = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  const fetchMission = useFetchMissionListe();
+  const { missionListe } = useAppSelector((state) => state.mission);
+  useEffect(() => {
+    fetchMission();
+  }, []);
+  console.log("mission list :", missionListe);
   const pdfDocument = (
     <Document>
       <Page size="A4">
@@ -45,7 +56,7 @@ const PrintPdf = () => {
                 backgroundColor: "rgb(164, 199, 84)",
               }}
             >
-              Validation rapport de mission
+              Validation prévision de mission
             </Text>
           </View>
           <View
@@ -57,7 +68,9 @@ const PrintPdf = () => {
               paddingTop: 20,
             }}
           >
-            <Text style={{ paddingBottom: 3 }}>Titre : Rapport de mission</Text>
+            <Text style={{ paddingBottom: 3 }}>
+              Titre : Prévision de mission
+            </Text>
             <Text style={{ paddingBottom: 3 }}>
               Type : Mission (ou Administration)
             </Text>
@@ -86,7 +99,7 @@ const PrintPdf = () => {
               paddingBottom: 5,
             }}
           >
-            RÉSUMÉ DES DEPENSES PREVUES
+            RESUME DES DEPENSES PREVUES
           </Text>
           <View style={{ paddingLeft: 35, paddingRight: 35 }}>
             <View style={styles.table}>
@@ -110,7 +123,7 @@ const PrintPdf = () => {
                   <Text style={styles.tableCellHeader}>Budget de dépense</Text>
                 </View>
                 <View style={styles.tableCol}>
-                  <Text style={styles.tableCellHeader}>Différence</Text>
+                  <Text style={styles.tableCellHeader}>Budget de dépense</Text>
                 </View>
                 <View style={styles.tableCol}>
                   <Text style={styles.tableCellHeader}>Remarques</Text>
@@ -134,60 +147,6 @@ const PrintPdf = () => {
                   <Text style={styles.tableCell}>100</Text>
                 </View>
                 <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>Note</Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colMerged]}>
-                  <Text style={styles.tableCellColaps}>TOTAL BUDGET REÇU</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>1000</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>900</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>100</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>Note</Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colMerged]}>
-                  <Text style={styles.tableCellColaps}>DÉPENSE TOTAL</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>1000</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>900</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>100</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>Note</Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colMerged]}>
-                  <Text style={styles.tableCellColaps}>RESTE</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>1000</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>900</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
-                  <Text style={styles.tableCell}>100</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingle]}>
                   <Text style={styles.tableCell}>Note</Text>
                 </View>
               </View>
@@ -346,7 +305,7 @@ const PrintPdf = () => {
     const pdfBlob = await pdf(pdfDocument).toBlob();
     const downloadLink = document.createElement("a");
     downloadLink.href = URL.createObjectURL(pdfBlob);
-    downloadLink.download = "Rapport.pdf";
+    downloadLink.download = "Prevision.pdf";
     downloadLink.click();
   };
 
@@ -364,7 +323,7 @@ const PrintPdf = () => {
   );
 };
 
-export default PrintPdf;
+export default PrintPdfPrevision;
 
 const styles = StyleSheet.create({
   page: {

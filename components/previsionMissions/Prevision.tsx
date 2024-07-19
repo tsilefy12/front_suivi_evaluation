@@ -29,6 +29,8 @@ import useFetchMissionListe from "../home/Missions/hooks/useFetchMissionListe";
 import Detail from "./detail";
 import Finances from "./organism/Finances/Finance";
 import Techniques from "./organism/Techniques/techniques";
+import PrintPdfPrevision from "./printpDFPrevision";
+import { CardFooter } from "../gereRapportDeMission/GereRapportDeMission";
 
 const PrevisionDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -240,7 +242,14 @@ const PrevisionDeMission = () => {
             </TabPanel>
           </Stack>
           <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>
-            <CardPrevision key={0}>
+            <CardPrevision
+              key={0}
+              sx={{
+                height: "calc(100vh - 135px)",
+                paddingTop: 1,
+                overflow: "auto",
+              }}
+            >
               <Typography variant="h6" sx={{ textTransform: "uppercase" }}>
                 Etat des prévisions
               </Typography>
@@ -451,6 +460,9 @@ const PrevisionDeMission = () => {
                 </Typography>
                 <Divider />
               </Stack>
+              <Stack padding={1} width={"50%"}>
+                <PrintPdfPrevision />
+              </Stack>
             </CardPrevision>
           </Stack>
         </Stack>
@@ -498,7 +510,7 @@ export const BodySection = styled(Paper)(({ theme }) => ({
   marginBlock: 15,
   display: "flex",
   alignItems: "flex-start",
-  padding: "8px 20px",
+  padding: "20px",
   gap: "16px",
   border: `1px solid ${theme.palette.grey[100]}`,
   width: "100%",
@@ -507,9 +519,9 @@ export const BodySection = styled(Paper)(({ theme }) => ({
 const CardPrevision = styled("div")(({ theme }) => ({
   paddingInline: theme.spacing(3),
   background: theme.palette.grey[100],
-  paddingBottom: theme.spacing(1),
+  // paddingBottom: theme.spacing(1),
   width: "100%",
-  padding: "8px 18px",
+  // padding: "8px 18px",
   borderRadius: 14,
   gap: "32px",
   marginTop: 14,
