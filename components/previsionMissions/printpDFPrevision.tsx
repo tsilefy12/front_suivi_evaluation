@@ -99,7 +99,9 @@ const PrintPdfPrevision = () => {
                   Référence budget : {mission.RefBudget}
                 </Text>
                 <Text style={{ paddingBottom: 3 }}>
-                  Gestionnaires :{" "}
+                  {mission.budgetManagerId!.length > 0
+                    ? "Gestionnaires :"
+                    : "Gestionnaire :"}{" "}
                   {mission
                     .budgetManagerId!.map((managerId) => {
                       const manager = employees.find(
@@ -137,7 +139,7 @@ const PrintPdfPrevision = () => {
               paddingBottom: 5,
             }}
           >
-            RESUME DES DEPENSES PREVUES
+            RÉSUMÉ DES DEPENSES PREVUES
           </Text>
           <View style={{ paddingLeft: 35, paddingRight: 35 }}>
             <View style={styles.table}>
@@ -155,7 +157,7 @@ const PrintPdfPrevision = () => {
                   </View>
                 </View>
                 <View style={styles.tableCol}>
-                  <Text style={styles.tableCellHeader}>Dépenses prévus</Text>
+                  <Text style={styles.tableCellHeader}>Dépenses prévues</Text>
                 </View>
                 <View style={styles.tableCol}>
                   <Text style={styles.tableCellHeader}>Budget de dépense</Text>

@@ -107,7 +107,9 @@ const PrintPdf = () => {
                   Référence budget : {mission.RefBudget}
                 </Text>
                 <Text style={{ paddingBottom: 3 }}>
-                  Gestionnaires :{" "}
+                  {mission.budgetManagerId!.length > 0
+                    ? "Gestionnaires :"
+                    : "Gestionnaire :"}{" "}
                   {mission
                     .budgetManagerId!.map((managerId) => {
                       const manager = employees.find(
@@ -163,7 +165,7 @@ const PrintPdf = () => {
                   </View>
                 </View>
                 <View style={styles.tableCol}>
-                  <Text style={styles.tableCellHeader}>Dépenses prévus</Text>
+                  <Text style={styles.tableCellHeader}>Dépenses prévues</Text>
                 </View>
                 <View style={styles.tableCol}>
                   <Text style={styles.tableCellHeader}>Budget de dépense</Text>
@@ -224,12 +226,9 @@ const PrintPdf = () => {
                               0
                             );
 
-                          return totalResumeDepense === 0
-                            ? Number(prevue.budgetDepense)
-                            : formatMontant(
-                                totalResumeDepense -
-                                  Number(prevue.budgetDepense)
-                              );
+                          return formatMontant(
+                            totalResumeDepense - Number(prevue.budgetDepense)
+                          );
                         })()}
                       </Text>
                     </View>
@@ -238,8 +237,6 @@ const PrintPdf = () => {
                     </View>
                   </View>
                 ))}
-              {/* Table Body */}
-
               {/* Calcul des totaux */}
               {(() => {
                 const totalBudgetRecu = resumeDepensePrevueList
@@ -256,16 +253,24 @@ const PrintPdf = () => {
                     0
                   );
 
-                const totalDepense = resumeDepenseList
+                const totalBudgetPrevue = resumeDepenseList
                   .filter((f) => f.missionId == id)
                   .reduce(
                     (acc, resume: ResumeDepenseItem) =>
                       acc + Number(resume.budgetDepense),
                     0
                   );
-
-                const reste = totalBudgetRecu - totalDepense;
-
+                const depensePrevue = resumeDepenseList
+                  .filter((f) => f.missionId == id)
+                  .reduce(
+                    (acc, resume: ResumeDepenseItem) =>
+                      acc + Number(resume.depensePrevue),
+                    0
+                  );
+                const reste = depensePrevue - totalDepensePrevue;
+                const diffrence = totalBudgetPrevue - totalBudgetRecu;
+                const diffrenceDepense = depensePrevue - totalDepensePrevue;
+                const resteBudget = totalBudgetPrevue - totalBudgetRecu;
                 return (
                   <>
                     {/* TOTAL BUDGET REÇU */}
@@ -284,7 +289,9 @@ const PrintPdf = () => {
                         </Text>
                       </View>
                       <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>-</Text>
+                        <Text style={styles.tableCell}>
+                          {formatMontant(diffrence)}
+                        </Text>
                       </View>
                       <View style={[styles.tableCol, styles.colSingle]}>
                         <Text style={styles.tableCell}>-</Text>
@@ -304,12 +311,12 @@ const PrintPdf = () => {
                         </Text>
                       </View>
                       <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>
-                          {formatMontant(totalDepense)}
-                        </Text>
+                        <Text style={styles.tableCell}>-</Text>
                       </View>
                       <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>-</Text>
+                        <Text style={styles.tableCell}>
+                          {formatMontant(diffrenceDepense)}
+                        </Text>
                       </View>
                       <View style={[styles.tableCol, styles.colSingle]}>
                         <Text style={styles.tableCell}>-</Text>
@@ -327,13 +334,15 @@ const PrintPdf = () => {
                         </Text>
                       </View>
                       <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}></Text>
+                        <Text style={styles.tableCell}>-</Text>
                       </View>
                       <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}></Text>
+                        <Text style={styles.tableCell}>
+                          {formatMontant(resteBudget)}
+                        </Text>
                       </View>
                       <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}></Text>
+                        <Text style={styles.tableCell}>-</Text>
                       </View>
                     </View>
                   </>
