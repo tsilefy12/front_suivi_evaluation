@@ -174,7 +174,6 @@ const ListResumeDepense = () => {
   React.useEffect(() => {
     setData([...resumeDepenseList].reverse());
   }, [resumeDepenseList]);
-  console.log("data", data);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>

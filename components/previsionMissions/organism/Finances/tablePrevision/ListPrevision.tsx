@@ -4,7 +4,6 @@ import {
   Container,
   Dialog,
   FormControl,
-  FormControlLabel,
   FormLabel,
   IconButton,
   MenuItem,
@@ -40,18 +39,16 @@ import useFetchGrants from "../../../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "./hooks/useFetchbudgetLine";
 import { useConfirm } from "material-ui-confirm";
 import {
-  createPrevisionDepense,
   deletePrevisionDepense,
   editPrevisionDepense,
 } from "../../../../../redux/features/PrevisionDepense";
-import OSSelectField from "../../../../shared/select/OSSelectField";
 import OSTextField from "../../../../shared/input/OSTextField";
-import OSDatePicker from "../../../../shared/date/OSDatePicker";
 import { Form, Formik } from "formik";
-import { updateTacheEtObjectifs } from "../../../../../redux/features/tachesEtObjectifs";
 import formatMontant from "../../../../../hooks/format";
-import { margin } from "polished";
 import { Check } from "@mui/icons-material";
+import { axios } from "../../../../../axios";
+import { enqueueSnackbar } from "../../../../../redux/features/notification/notificationSlice";
+import useFetchImprevuePrevision from "./hooks/useFetchImprevuePrevision";
 
 const ListPrevision = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -74,11 +71,16 @@ const ListPrevision = () => {
   const dispatch: any = useAppDispatch();
   const [getGrantId, setGetGrantId]: any = React.useState(0);
   const { id }: any = router.query;
+  const fetchImprevuePrevision = useFetchImprevuePrevision();
+  const { imprevuePrevisionlist }: any = useAppSelector(
+    (state: any) => state.imprevuePrevision
+  );
 
   React.useEffect(() => {
     fetchPrevisionDepense();
     fetchGrant();
     fetchLigneBudgetaire();
+    fetchImprevuePrevision();
   }, [router.query]);
 
   const handleClickOpen = () => {
@@ -132,33 +134,34 @@ const ListPrevision = () => {
 
   let total: any = useMemo(() => {
     let totalBudget: any = 0;
-    previsionDepenselist.map((p: any) => {
-      if (p.imprevue === null) {
+    previsionDepenselist
+      .filter((f) => f.missionId == id)
+      .map((p: any) => {
         totalBudget += p.montant;
-      }
-    });
+      });
     return totalBudget;
   }, [previsionDepenselist]);
 
-  //select budget line depends grant
   const listLigne: { id: string; name: any }[] = [];
 
-  previsionDepenselist.forEach((b: any) => {
-    if (getGrantId !== null && getGrantId === b.grant) {
-      const budgetLineNames = budgetLineList
-        .filter(
-          (f: any) => f.grantId == getGrantId && f.id == b.ligneBudgetaire
-        )
-        .map((e: any) => e.code);
+  previsionDepenselist
+    .filter((f) => f.missionId == id)
+    .forEach((b: any) => {
+      if (getGrantId !== null && getGrantId === b.grant) {
+        const budgetLineNames = budgetLineList
+          .filter(
+            (f: any) => f.grantId == getGrantId && f.id == b.ligneBudgetaire
+          )
+          .map((e: any) => e.code);
 
-      listLigne.push({
-        id: b.ligneBudgetaire,
-        name: budgetLineNames,
-      });
-    } else {
-      listLigne.push({ id: "", name: "" });
-    }
-  });
+        listLigne.push({
+          id: b.ligneBudgetaire,
+          name: budgetLineNames,
+        });
+      } else {
+        listLigne.push({ id: "", name: "" });
+      }
+    });
 
   const [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
     () => {
@@ -177,45 +180,54 @@ const ListPrevision = () => {
     }
   );
 
-  let [regle, setRegle]: any = React.useState(0);
-  const [selectId, setSelecteId] = React.useState("");
+  let [regle, setRegle]: any = React.useState("");
+  const [selectId, setSelecteId] = React.useState(0);
   let [lib, setLibelle]: any = React.useState("");
-  let [prix, setPU]: any = React.useState("");
-
-  if (getGrantId != "") {
-    previsionDepenselist.forEach((element: any) => {
-      const budgetlineId = element.ligneBudgetaire;
-      if (budgetlineId === selectId) {
-        regle = element.regleme;
-        lib = element.libelle;
-        prix = element.pu;
-      }
-    });
-  }
+  let [prix, setPU]: any = React.useState(0);
+  useEffect(() => {
+    if (getGrantId) {
+      previsionDepenselist.map((element: PrevisionDepenseItem) => {
+        const budgetlineId = element.ligneBudgetaire;
+        if (Number(budgetlineId) == Number(selectId)) {
+          setPU(element.pu);
+          setLibelle(element.libelle);
+          setRegle(element.regleme);
+        }
+      });
+    }
+  }, [getGrantId, selectId]);
 
   const handleSubmit = async (values: any) => {
-    values.missionId = id!;
-    values.imprevue = total / 10;
-    values.libelle = lib;
-    values.grant = getGrantId;
-    values.date = new Date();
-    values.ligneBudgetaire = selectId;
-    values.nombre = 1;
-    values.montant = total / 10;
-    console.log("montant :", values.montant);
-    values.pu = prix;
-    values.regleme = regle;
+    console.log("values", selectId, getGrantId, regle, lib, prix);
+    (values.imprevue = total / 10),
+      (values.grant = getGrantId),
+      (values.date = new Date()),
+      (values.ligneBudgetaire = Number(selectId)),
+      (values.nombre = 1),
+      (values.idMission = id!),
+      (values.pu = prix),
+      (values.regleme = regle),
+      (values.libelle = lib);
     try {
-      await dispatch(createPrevisionDepense(values));
-      fetchPrevisionDepense();
-      handleClose();
+      await axios.post("/suivi-evaluation/imprevue-prevision", {
+        ...values,
+      });
+      dispatch(
+        enqueueSnackbar({
+          message: "L'imprévu de la prévision a été créé avec succès",
+          options: { variant: "success" },
+        })
+      );
+      fetchImprevuePrevision();
     } catch (error) {
-      console.log("error", error);
+      console.log(error);
     }
   };
   const [data, setData] = React.useState<any[]>([]);
   useEffect(() => {
-    setData([...previsionDepenselist].reverse());
+    setData(
+      [...previsionDepenselist.filter((f) => f.missionId == id)].reverse()
+    );
   }, [previsionDepenselist]);
   const getGrantOption = (id: any, options: any) => {
     setGetGrantId(id);
@@ -324,16 +336,16 @@ const ListPrevision = () => {
               enableReinitialize={isEditing ? true : false}
               initialValues={{
                 date: new Date(),
-                libelle: isEditing ? previsionDepense?.libelle : lib,
                 nombre: isEditing ? previsionDepense?.nombre : 1,
                 pu: isEditing ? previsionDepense?.pu : prix,
                 grant: isEditing ? previsionDepense?.grant : getGrantId,
                 ligneBudgetaire: isEditing
                   ? previsionDepense?.ligneBudgetaire
-                  : selectId,
-                regleme: isEditing ? previsionDepense?.regleme : regle,
-                montant: isEditing ? previsionDepense?.montant : total / 10,
+                  : Number(selectId),
+                idMission: isEditing ? previsionDepense?.idMission : id!,
                 imprevue: isEditing ? previsionDepense?.imprevue : total / 10,
+                libelle: isEditing ? previsionDepense?.libelle : lib,
+                regleme: isEditing ? previsionDepense?.regleme : regle,
               }}
               onSubmit={(value: any, action: any) => {
                 handleSubmit(value);
@@ -348,16 +360,16 @@ const ListPrevision = () => {
                         <TableHead sx={{ backgroundColor: "#e0e0e0" }}>
                           <TableRow>
                             <TableCell>Date</TableCell>
-                            <TableCell>Imprevue</TableCell>
                             <TableCell>Nombre</TableCell>
                             <TableCell>PU</TableCell>
                             <TableCell>Grant</TableCell>
                             <TableCell>Ligne budgetaire</TableCell>
-                            <TableCell>Montant</TableCell>
+                            <TableCell>Montant imprévu</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {previsionDepenselist
+                          {imprevuePrevisionlist
+                            .filter((f: any) => f.idMission == id)
                             .slice()
                             .map((row: PrevisionDepenseItem, index: any) => {
                               return (
@@ -370,9 +382,6 @@ const ListPrevision = () => {
                                     <Moment format="DD/MM/yyyy">
                                       {row.date}
                                     </Moment>
-                                  </TableCell>
-                                  <TableCell align="left">
-                                    {row.libelle}
                                   </TableCell>
                                   <TableCell align="left">
                                     {row.nombre}
@@ -396,32 +405,7 @@ const ListPrevision = () => {
                                   </TableCell>
 
                                   <TableCell align="left">
-                                    {formatMontant(Number(row.montant))}
-                                  </TableCell>
-                                  <TableCell align="left">
-                                    <BtnActionContainer
-                                      direction="row"
-                                      justifyContent="left"
-                                    >
-                                      <IconButton
-                                        color="primary"
-                                        aria-label="Modifier"
-                                        component="span"
-                                        onClick={() => handleClickEdit(row.id)}
-                                      >
-                                        <EditIcon />
-                                      </IconButton>
-                                      <IconButton
-                                        color="warning"
-                                        aria-label="Supprimer"
-                                        component="span"
-                                        onClick={() => {
-                                          handleClickDelete(row.id);
-                                        }}
-                                      >
-                                        <DeleteIcon />
-                                      </IconButton>
-                                    </BtnActionContainer>
+                                    {formatMontant(Number(row.imprevue))}
                                   </TableCell>
                                 </TableRow>
                               );
@@ -445,11 +429,11 @@ const ListPrevision = () => {
                               <OSTextField
                                 fullWidth
                                 id="outlined-basic"
-                                label="Montant"
+                                label="Imprevue"
                                 variant="outlined"
                                 size="small"
                                 value={formatMontant(Number(total / 10))}
-                                name="montant"
+                                name="imprevue"
                               />
                             </FormControl>
                             <FormControl sx={{ maxWidth: 100 }}>
@@ -470,11 +454,7 @@ const ListPrevision = () => {
                               <Autocomplete
                                 fullWidth
                                 id="outlined-basic"
-                                options={grantEncoursList.filter(
-                                  (e: any) =>
-                                    e.id ==
-                                    previsionDepenselist.map((p) => p.grant)
-                                )}
+                                options={grantEncoursList}
                                 getOptionLabel={(option: any) => option.code}
                                 value={getGrantOption(
                                   formikProps.values.grant,

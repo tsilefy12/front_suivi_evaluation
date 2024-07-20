@@ -57,6 +57,7 @@ import { missionairesSlice } from "./features/missionaires/missionairesSlice";
 import { grantMonitoringSlice } from "./features/grantMonitoring/grantMonitoringSlice";
 import { uncompleteTbbSlice } from "./features/unCompleteTbb/uncompleteTbbSlice";
 import { transportationEquipmentSlice } from "./features/transportation_equipment/transportationEquipmentSlice";
+import { imprevuePrevisionSlice } from "./features/imprevuePrevision/imprevuePrevisionSlice";
 
 export const store = configureStore({
   reducer: {
@@ -118,6 +119,7 @@ export const store = configureStore({
     grantMonitoring: grantMonitoringSlice.reducer,
     uncompleteTbb: uncompleteTbbSlice.reducer,
     transportation: transportationEquipmentSlice.reducer,
+    imprevuePrevision: imprevuePrevisionSlice.reducer,
   },
 });
 
