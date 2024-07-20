@@ -96,6 +96,7 @@ const PrintPdf = () => {
                   fontSize: 12,
                   paddingTop: 20,
                 }}
+                key={mission.id}
               >
                 <Text style={{ paddingBottom: 3 }}>
                   Titre : Prévision de mission
@@ -274,7 +275,7 @@ const PrintPdf = () => {
                 return (
                   <>
                     {/* TOTAL BUDGET REÇU */}
-                    <View style={styles.tableRow}>
+                    <View style={styles.tableRow} key={1}>
                       <View style={[styles.tableCol, styles.colMerged]}>
                         <Text style={styles.tableCellColaps}>
                           TOTAL BUDGET REÇU
@@ -299,7 +300,7 @@ const PrintPdf = () => {
                     </View>
 
                     {/* DÉPENSE TOTAL */}
-                    <View style={styles.tableRow}>
+                    <View style={styles.tableRow} key={2}>
                       <View style={[styles.tableCol, styles.colMerged]}>
                         <Text style={styles.tableCellColaps}>
                           DÉPENSE TOTAL
@@ -324,7 +325,7 @@ const PrintPdf = () => {
                     </View>
 
                     {/* RESTE */}
-                    <View style={styles.tableRow}>
+                    <View style={styles.tableRow} key={3}>
                       <View style={[styles.tableCol, styles.colMerged]}>
                         <Text style={styles.tableCellColaps}>RESTE</Text>
                       </View>
@@ -385,7 +386,7 @@ const PrintPdf = () => {
               {missionListe
                 .filter((mission) => mission.id == id)
                 .map((m) => (
-                  <View style={styles.tableRow}>
+                  <View style={styles.tableRow} key={m.id}>
                     <View
                       style={[styles.tableCol, styles.colMergedTBValidated]}
                     >
@@ -434,6 +435,7 @@ const PrintPdf = () => {
                   .map((m) => (
                     <View
                       style={[styles.tableCol, styles.colMergedTBValidated]}
+                      key={m.id}
                     >
                       <Text style={styles.tableCellTBValidated}>
                         Vérificateur financier :{" "}
@@ -478,6 +480,7 @@ const PrintPdf = () => {
                   .map((m) => (
                     <View
                       style={[styles.tableCol, styles.colMergedTBValidated]}
+                      key={m.id}
                     >
                       <Text style={styles.tableCellTBValidated}>
                         Vérificateur technique :{" "}
@@ -523,6 +526,7 @@ const PrintPdf = () => {
                   .map((m) => (
                     <View
                       style={[styles.tableCol, styles.colMergedTBValidated]}
+                      key={m.id}
                     >
                       <Text style={styles.tableCellTBValidated}>
                         Payé par :{" "}

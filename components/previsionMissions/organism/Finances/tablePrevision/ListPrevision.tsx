@@ -313,7 +313,7 @@ const ListPrevision = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            {/* <Formik
+            <Formik
               enableReinitialize={isEditing ? true : false}
               initialValues={{
                 date: new Date(),
@@ -434,8 +434,8 @@ const ListPrevision = () => {
                             sx={{ textAlign: "left" }}
                             gap={1}
                             top={4}
-                        
-                            {/* <FormLabel>Budget line selected amount : {getAmountBudget} Ar</FormLabel> 
+                          >
+                            {/* <FormLabel>Budget line selected amount : {getAmountBudget} Ar</FormLabel>  */}
                             <FormControl sx={{ maxWidth: 150 }}>
                               <OSTextField
                                 fullWidth
@@ -529,26 +529,19 @@ const ListPrevision = () => {
                               </OSTextField>
                             </FormControl>
                             <FormControl>
-                              {/* <Button
-                        color="warning"
-                      >
-                        Annuler
-                      </Button> 
+                              <Button color="warning">Annuler</Button>
                               <Button variant="contained" type="submit">
                                 Enregistrer
                               </Button>
                             </FormControl>
                           </Stack>
-                     
                         </Stack>
                       </Typography>
-
-                  
                     </Footer>
                   </Form>
                 );
               }}
-            </Formik> */}
+            </Formik>
             <Typography
               variant="body2"
               align="left"

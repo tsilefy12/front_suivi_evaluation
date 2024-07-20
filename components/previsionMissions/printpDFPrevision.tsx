@@ -88,6 +88,7 @@ const PrintPdfPrevision = () => {
                   fontSize: 12,
                   paddingTop: 20,
                 }}
+                key={mission.id}
               >
                 <Text style={{ paddingBottom: 3 }}>
                   Titre : Prévision de mission
@@ -242,7 +243,7 @@ const PrintPdfPrevision = () => {
               {missionListe
                 .filter((mission) => mission.id == id)
                 .map((m) => (
-                  <View style={styles.tableRow}>
+                  <View style={styles.tableRow} key={m.id}>
                     <View
                       style={[styles.tableCol, styles.colMergedTBValidated]}
                     >
@@ -291,6 +292,7 @@ const PrintPdfPrevision = () => {
                   .map((m) => (
                     <View
                       style={[styles.tableCol, styles.colMergedTBValidated]}
+                      key={m.id}
                     >
                       <Text style={styles.tableCellTBValidated}>
                         Vérificateur financier :{" "}
@@ -335,6 +337,7 @@ const PrintPdfPrevision = () => {
                   .map((m) => (
                     <View
                       style={[styles.tableCol, styles.colMergedTBValidated]}
+                      key={m.id}
                     >
                       <Text style={styles.tableCellTBValidated}>
                         Vérificateur technique :{" "}
@@ -380,6 +383,7 @@ const PrintPdfPrevision = () => {
                   .map((m) => (
                     <View
                       style={[styles.tableCol, styles.colMergedTBValidated]}
+                      key={m.id}
                     >
                       <Text style={styles.tableCellTBValidated}>
                         Payé par :{" "}

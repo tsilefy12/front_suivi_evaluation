@@ -135,7 +135,7 @@ const AddResultatAttendu = ({ handleClose }: any) => {
                     <FormContainer sx={{ height: 200, overflow: "auto" }}>
                       <Table sx={{ minWidth: 500 }} aria-label="simple table">
                         {exceptedResultList
-                          .filter((f: any) => f.missiomId === id)
+                          .filter((f: any) => f.missionId == id)
                           .map((item: ExceptedResultItem, index: any) => (
                             <TableRow
                               key={index}

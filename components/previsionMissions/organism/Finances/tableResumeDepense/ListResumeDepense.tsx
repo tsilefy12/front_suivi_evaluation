@@ -174,6 +174,7 @@ const ListResumeDepense = () => {
   React.useEffect(() => {
     setData([...resumeDepenseList].reverse());
   }, [resumeDepenseList]);
+  console.log("data", data);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -202,17 +203,13 @@ const ListResumeDepense = () => {
                   rowCount={rows.length}
                 />
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
                   {data
                     .filter((f: any) => f.missionId == id)
                     .map((row: ResumeDepenseItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
-
                       return (
                         <TableRow
                           hover
-                          //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
                           tabIndex={-1}
                           key={row.id!}
