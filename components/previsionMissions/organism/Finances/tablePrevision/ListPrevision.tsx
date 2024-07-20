@@ -51,6 +51,7 @@ import { Form, Formik } from "formik";
 import { updateTacheEtObjectifs } from "../../../../../redux/features/tachesEtObjectifs";
 import formatMontant from "../../../../../hooks/format";
 import { margin } from "polished";
+import { Check } from "@mui/icons-material";
 
 const ListPrevision = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -145,7 +146,9 @@ const ListPrevision = () => {
   previsionDepenselist.forEach((b: any) => {
     if (getGrantId !== null && getGrantId === b.grant) {
       const budgetLineNames = budgetLineList
-        .filter((f: any) => f.grantId === getGrantId)
+        .filter(
+          (f: any) => f.grantId == getGrantId && f.id == b.ligneBudgetaire
+        )
         .map((e: any) => e.code);
 
       listLigne.push({
@@ -189,7 +192,7 @@ const ListPrevision = () => {
       }
     });
   }
-  // console.log("vola :", selectId)
+
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
     values.imprevue = total / 10;
@@ -214,7 +217,11 @@ const ListPrevision = () => {
   useEffect(() => {
     setData([...previsionDepenselist].reverse());
   }, [previsionDepenselist]);
-
+  const getGrantOption = (id: any, options: any) => {
+    setGetGrantId(id);
+    if (!id) return null;
+    return options.find((option: any) => option.id == id) || null;
+  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -325,7 +332,6 @@ const ListPrevision = () => {
                   ? previsionDepense?.ligneBudgetaire
                   : selectId,
                 regleme: isEditing ? previsionDepense?.regleme : regle,
-                // missionId: isEditing ? previsionDepense?.missionId : id,
                 montant: isEditing ? previsionDepense?.montant : total / 10,
                 imprevue: isEditing ? previsionDepense?.imprevue : total / 10,
               }}
@@ -352,7 +358,6 @@ const ListPrevision = () => {
                         </TableHead>
                         <TableBody>
                           {previsionDepenselist
-                            .filter((e: any) => e.imprevue != null)
                             .slice()
                             .map((row: PrevisionDepenseItem, index: any) => {
                               return (
@@ -462,40 +467,49 @@ const ListPrevision = () => {
                               sx={{ flex: "1", textAlign: "left" }}
                               fullWidth
                             >
-                              <OSTextField
+                              <Autocomplete
                                 fullWidth
-                                select
                                 id="outlined-basic"
-                                label="Grant"
-                                variant="outlined"
+                                options={grantEncoursList.filter(
+                                  (e: any) =>
+                                    e.id ==
+                                    previsionDepenselist.map((p) => p.grant)
+                                )}
+                                getOptionLabel={(option: any) => option.code}
+                                value={getGrantOption(
+                                  formikProps.values.grant,
+                                  grantEncoursList
+                                )}
+                                onChange={(event, value) =>
+                                  formikProps.setFieldValue(
+                                    "grant",
+                                    value ? value.id : ""
+                                  )
+                                }
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    label="Grant"
+                                    variant="outlined"
+                                    error={
+                                      formikProps.touched.grant &&
+                                      Boolean(formikProps.errors.grant)
+                                    }
+                                    helperText={
+                                      formikProps.touched.grant &&
+                                      typeof formikProps.errors.grant ===
+                                        "string"
+                                        ? formikProps.errors.grant
+                                        : ""
+                                    }
+                                  />
+                                )}
+                                isOptionEqualToValue={(
+                                  option: any,
+                                  value: any
+                                ) => option.id === value.id}
                                 size="small"
-                                name="grant"
-                                value={getGrantId}
-                                onChange={(e: any) =>
-                                  setGetGrantId(e.target.value)
-                                }
-                              >
-                                <MenuItem value="vide">Select grant</MenuItem>
-                                {
-                                  // Filtrer les éléments uniques de grantEncoursList
-                                  Array.from(
-                                    new Set(
-                                      previsionDepenselist.map(
-                                        (item: any) => item.grant
-                                      )
-                                    )
-                                  ).map((grantId: any) => {
-                                    const grant = grantEncoursList.find(
-                                      (e: any) => e.id === grantId
-                                    );
-                                    return grant ? (
-                                      <MenuItem key={grantId} value={grantId}>
-                                        {grant.code}
-                                      </MenuItem>
-                                    ) : null;
-                                  })
-                                }
-                              </OSTextField>
+                              />
                             </FormControl>
                             <FormControl sx={{ flex: "1", textAlign: "left" }}>
                               <OSTextField
@@ -518,20 +532,20 @@ const ListPrevision = () => {
                                   }
                                 }}
                               >
-                                <MenuItem value="vide">
-                                  Select budget line
-                                </MenuItem>
                                 {listLigne.map((item: any) => (
-                                  <MenuItem key={item.id!} value={item.name}>
+                                  <MenuItem key={item.id!} value={item.id}>
                                     {item.name}
                                   </MenuItem>
                                 ))}
                               </OSTextField>
                             </FormControl>
                             <FormControl>
-                              <Button color="warning">Annuler</Button>
-                              <Button variant="contained" type="submit">
-                                Enregistrer
+                              <Button
+                                variant="contained"
+                                type="submit"
+                                startIcon={<Check />}
+                              >
+                                Valider
                               </Button>
                             </FormControl>
                           </Stack>
