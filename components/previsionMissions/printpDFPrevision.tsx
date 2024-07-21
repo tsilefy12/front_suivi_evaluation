@@ -135,7 +135,7 @@ const PrintPdfPrevision = () => {
               textAlign: "center",
               width: "100%",
               color: "black",
-              fontWeight: "bold",
+              fontWeight: 700,
               fontSize: 15,
               paddingBottom: 5,
             }}

@@ -6,9 +6,9 @@ import GereRapportDeMission from "../../../../components/gereRapportDeMission/Ge
 const GereRapport = () => {
   return (
     <BackOfficeLayout>
-      <Container maxWidth="xl">
+      <div style={{ paddingLeft: 4, paddingRight: 8 }}>
         <GereRapportDeMission />
-      </Container>
+      </div>
     </BackOfficeLayout>
   );
 };

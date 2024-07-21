@@ -1,13 +1,13 @@
 import React from "react";
-import { Container } from "@mui/material";
 import type { NextPage } from "next";
-import DashboardM from "../../components/home";
+import BackOfficeLayout from "../../layouts/backOffice";
+import DashboardMission from "../../components/home/Missions/DashboardMission";
 
 const Home: NextPage = () => {
   return (
-    <>
-      <DashboardM />
-    </>
+    <BackOfficeLayout>
+      <DashboardMission />
+    </BackOfficeLayout>
   );
 };
 

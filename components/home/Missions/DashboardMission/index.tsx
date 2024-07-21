@@ -76,7 +76,7 @@ const DashboardMission = () => {
     }
   }, [search, missionListe]);
   return (
-    <Container maxWidth="xl">
+    <div style={{ paddingLeft: 2, paddingRight: 2 }}>
       <Link href={"/"}>
         <Button color="info" variant="text" startIcon={<ArrowBack />}>
           Retour
@@ -550,7 +550,7 @@ const DashboardMission = () => {
           </Table>
         </div>
       </SectionDetails>
-    </Container>
+    </div>
   );
 };
 

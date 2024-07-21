@@ -35,51 +35,49 @@ const NavbarBackOffice = ({ matches }: any) => {
 
   return (
     <AppbarBackOffice position="static" elevation={0}>
-      <>
-        <ToolbarBackOffice variant="dense">
-          <ListMenuContainer>
-            <Link href="/">
-              <IconBntNavBO aria-label="home">
-                <HomeWorkIcon fontSize="inherit" />
-              </IconBntNavBO>
-            </Link>
-            <Typography variant="h5" paddingX={2} color="GrayText">
-              Suivis et évaluations
-            </Typography>
-            <ListPageContainer>
-              {navMenu.map((page, index) =>
-                page.items.length === 0 ? (
-                  <OneButtonLink page={page} key={index} />
-                ) : (
-                  <OneButtonLinkWithItems page={page} key={index} />
-                )
-              )}
-            </ListPageContainer>
-          </ListMenuContainer>
-          <MenuNavbarBo>
-            <Tooltip title="Open notification" sx={{ mx: 4 }}>
-              <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
-                color="inherit"
+      <ToolbarBackOffice variant="dense">
+        <ListMenuContainer>
+          <Link href="/">
+            <IconBntNavBO aria-label="home">
+              <HomeWorkIcon fontSize="inherit" />
+            </IconBntNavBO>
+          </Link>
+          <Typography variant="h5" paddingX={2} color="GrayText">
+            Suivis et évaluations
+          </Typography>
+          <ListPageContainer>
+            {navMenu.map((page, index) =>
+              page.items.length === 0 ? (
+                <OneButtonLink page={page} key={index} />
+              ) : (
+                <OneButtonLinkWithItems page={page} key={index} />
+              )
+            )}
+          </ListPageContainer>
+        </ListMenuContainer>
+        <MenuNavbarBo>
+          <Tooltip title="Open notification" sx={{ mx: 4 }}>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+            >
+              <Badge
+                badgeContent={17}
+                color="error"
+                sx={{
+                  ".MuiBadge-badge": {
+                    top: 6,
+                  },
+                }}
               >
-                <Badge
-                  badgeContent={17}
-                  color="error"
-                  sx={{
-                    ".MuiBadge-badge": {
-                      top: 6,
-                    },
-                  }}
-                >
-                  <CircleNotificationsIcon fontSize="large" />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-            <ButtonProfile handleClickLogout={handleClickLogout} />
-          </MenuNavbarBo>
-        </ToolbarBackOffice>
-      </>
+                <CircleNotificationsIcon fontSize="large" />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          <ButtonProfile handleClickLogout={handleClickLogout} />
+        </MenuNavbarBo>
+      </ToolbarBackOffice>
     </AppbarBackOffice>
   );
 };

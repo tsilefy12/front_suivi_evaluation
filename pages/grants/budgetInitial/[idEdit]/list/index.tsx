@@ -6,9 +6,9 @@ import ListBudgetInitial from "../../../../../components/budgetInitial/[idEdit]/
 const BudgetInitial = () => {
   return (
     <BackOfficeLayout>
-      <Container maxWidth="xl">
+      <div style={{ paddingLeft: 2, paddingRight: 2 }}>
         <ListBudgetInitial />
-      </Container>
+      </div>
     </BackOfficeLayout>
   );
 };

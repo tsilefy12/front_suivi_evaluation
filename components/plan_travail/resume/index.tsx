@@ -116,7 +116,12 @@ const ListResume = () => {
             Liste résumé des sites
           </Typography>
         </SectionNavigation>
-        <BodySection>
+        <BodySection
+          sx={{
+            height: "calc(100vh - 230px)",
+            overflow: "auto",
+          }}
+        >
           <Box sx={{ width: "100%" }}>
             <Paper sx={{ width: "100%", mb: 2 }}>
               <TableContainer>

@@ -6,9 +6,9 @@ import ListPlanFinancement from "../../../components/planFinancement";
 const PlanFinancement = () => {
   return (
     <BackOfficeLayout>
-      <Container maxWidth="xl">
+      <div style={{ paddingLeft: 2, paddingRight: 2 }}>
         <ListPlanFinancement />
-      </Container>
+      </div>
     </BackOfficeLayout>
   );
 };

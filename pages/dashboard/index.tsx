@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material"
+import { Stack } from "@mui/material";
 import BudgetEngageChart from "../../components/dashboards/budgetEngage";
 import Menu from "../../components/dashboards/Menu";
 import Mission from "../../components/dashboards/Mission";
@@ -17,7 +17,7 @@ export default function Dashboard() {
     >
       <Stack direction={"row"}>
         <Stack flex={2} direction={"column"} gap={2}>
-          < BudgetEngageChart/>
+          <BudgetEngageChart />
         </Stack>
         <Stack flex={1}>
           <Menu />

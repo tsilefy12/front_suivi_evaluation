@@ -132,10 +132,29 @@ const BilanMission = () => {
                   keyName="Ref mission"
                   value={"MISSION_" + item.reference!}
                 />
-                <KeyValue
-                  keyName="Description"
-                  value={item.descriptionMission!}
-                />
+                <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                  <span>Description : </span>
+                  <Typography
+                    color="GrayText"
+                    mb={1}
+                    aria-label="Description"
+                    title={item?.descriptionMission}
+                    sx={{
+                      cursor:
+                        item?.descriptionMission!.length > 4
+                          ? "pointer"
+                          : "default",
+                      "&:hover": {
+                        color:
+                          item?.descriptionMission!.length > 4
+                            ? "info.main"
+                            : "GrayText",
+                      },
+                    }}
+                  >
+                    {item?.descriptionMission?.slice(0, 20) + "..."}
+                  </Typography>
+                </Stack>
               </Grid>
               <Grid item xs={12} md={4}>
                 Responsable :
@@ -158,28 +177,32 @@ const BilanMission = () => {
                 </FormLabel>
               </Grid>
               <Grid item xs={12} md={4}>
-                <FormLabel>
-                  {missionListe
-                    .filter((mission: MissionItem) => mission.id === id)
-                    .map((mission: MissionItem) => (
-                      <div key={mission.id}>
-                        <span>Gestionnaire de budget :</span>
-                        <FormLabel>
-                          {employees
-                            .filter((e: EmployeItem) =>
-                              mission.budgetManagerId?.includes(e.id as string)
-                            )
-                            .map((m: EmployeItem) => (
-                              <Stack key={m.id} direction={"column"}>
-                                <span>
-                                  {m.name} {m.surname}
-                                </span>
-                              </Stack>
-                            ))}
-                        </FormLabel>
-                      </div>
-                    ))}
-                </FormLabel>
+                {missionListe
+                  .filter((mission: MissionItem) => mission.id === id)
+                  .map((mission: MissionItem) => (
+                    <div key={mission.id}>
+                      <span>
+                        {mission.budgetManagerId &&
+                        mission.budgetManagerId.length > 1
+                          ? "Gestionnaires"
+                          : "Gestionnaire"}{" "}
+                        de budget :{" "}
+                      </span>
+                      <FormLabel>
+                        {mission
+                          .budgetManagerId!.map((managerId) => {
+                            const manager = employees.find(
+                              (employee) => employee.id === managerId
+                            );
+                            return manager
+                              ? `${manager.name} ${manager.surname}`
+                              : "";
+                          })
+                          .filter((manager) => manager)
+                          .join(", ")}
+                      </FormLabel>
+                    </div>
+                  ))}
               </Grid>
             </Grid>
           ))}
@@ -311,4 +334,6 @@ const FormContainer = styled(Stack)(({ theme }) => ({
   borderRadius: 20,
   background: "#fff",
   border: `1px solid ${theme.palette.grey[100]}`,
+  height: "calc(100vh - 540px)",
+  overflow: "auto",
 }));

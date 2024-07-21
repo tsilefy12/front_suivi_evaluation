@@ -6,9 +6,9 @@ import PrevisionDeMission from "../../../../components/previsionMissions/Previsi
 const PrevisionMissions = () => {
   return (
     <BackOfficeLayout>
-      <Container maxWidth="xl">
+      <div style={{ paddingLeft: 4, paddingRight: 8 }}>
         <PrevisionDeMission />
-      </Container>
+      </div>
     </BackOfficeLayout>
   );
 };

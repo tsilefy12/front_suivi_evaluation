@@ -24,19 +24,19 @@ import { cancelEdit } from "../../../../redux/features/type/typeSlice";
 import { useRouter } from "next/router";
 
 const ListType = () => {
-  const { typeList } = useAppSelector((state) =>state.types);
+  const { typeList } = useAppSelector((state) => state.types);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [filtre , setFiltre] = React.useState("")
+  const [filtre, setFiltre] = React.useState("");
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { id }: any = router.query;
 
-  React.useEffect(() =>{
-      dispatch(getType({}))
-  }, [typeList])
+  React.useEffect(() => {
+    dispatch(getType({}));
+  }, [typeList]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -52,10 +52,8 @@ const ListType = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - typeList.length) : 0;
 
-
-
   const handleClickDelete = async (id: any) => {
-    dispatch(cancelEdit())
+    dispatch(cancelEdit());
     confirm({
       title: "Supprimer le type",
       description: "Voulez-vous vraiment supprimer ce type ?",
@@ -74,7 +72,7 @@ const ListType = () => {
       })
       .catch(() => {});
   };
-  
+
   const handleClickEdit = async (id: any) => {
     router.push(`/configurations/type/${id}/edit`);
   };
@@ -91,14 +89,15 @@ const ListType = () => {
             >
               <TypeTableHeader />
               <TableBody>
-                { typeList
+                {typeList
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .filter((item) => (`${item.name}`).toLowerCase().includes(filtre.toLowerCase()))
+                  .filter((item) =>
+                    `${item.name}`.toLowerCase().includes(filtre.toLowerCase())
+                  )
                   .map((row: TypeItem, index: any) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
-                      <TableRow
-                      >
+                      <TableRow>
                         <TableCell
                           component="th"
                           id={labelId}
