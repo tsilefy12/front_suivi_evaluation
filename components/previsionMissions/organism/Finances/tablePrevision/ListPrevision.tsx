@@ -142,43 +142,25 @@ const ListPrevision = () => {
     return totalBudget;
   }, [previsionDepenselist]);
 
-  const listLigne: { id: string; name: any }[] = [];
+  const listLigne = useMemo(() => {
+    const lignes: any[] = [];
+    previsionDepenselist
+      .filter((f) => f.missionId == id)
+      .forEach((b) => {
+        if (getGrantId !== null && getGrantId === b.grant) {
+          const budgetLineNames = budgetLineList
+            .filter((f) => f.grantId == getGrantId && f.id == b.ligneBudgetaire)
+            .map((e) => e.code);
 
-  previsionDepenselist
-    .filter((f) => f.missionId == id)
-    .forEach((b: any) => {
-      if (getGrantId !== null && getGrantId === b.grant) {
-        const budgetLineNames = budgetLineList
-          .filter(
-            (f: any) => f.grantId == getGrantId && f.id == b.ligneBudgetaire
-          )
-          .map((e: any) => e.code);
+          lignes.push({ id: b.ligneBudgetaire, name: budgetLineNames });
+        } else {
+          lignes.push({ id: "", name: "" });
+        }
+      });
+    return lignes;
+  }, [previsionDepenselist, budgetLineList, getGrantId]);
 
-        listLigne.push({
-          id: b.ligneBudgetaire,
-          name: budgetLineNames,
-        });
-      } else {
-        listLigne.push({ id: "", name: "" });
-      }
-    });
-
-  const [selectedBudgetLine, setSelectedBudgetLine] = React.useState<any[]>(
-    () => {
-      if (isEditing) {
-        const uniqueBudgetLines = new Set(
-          budgetLineList.filter(
-            (pg: any) =>
-              Array.isArray(previsionDepense?.ligneBudgetaire) &&
-              previsionDepense?.ligneBudgetaire?.includes(pg.id)
-          )
-        );
-        return Array.from(uniqueBudgetLines);
-      } else {
-        return listLigne.length > 0 ? listLigne : [];
-      }
-    }
-  );
+  const [selectedBudgetLine, setSelectedBudgetLine] = React.useState("");
 
   let [regle, setRegle]: any = React.useState("");
   const [selectId, setSelecteId] = React.useState(0);
@@ -198,11 +180,11 @@ const ListPrevision = () => {
   }, [getGrantId, selectId]);
 
   const handleSubmit = async (values: any) => {
-    console.log("values", selectId, getGrantId, regle, lib, prix);
+    console.log("values", selectedBudgetLine, getGrantId, regle, lib, prix);
     (values.imprevue = total / 10),
       (values.grant = getGrantId),
       (values.date = new Date()),
-      (values.ligneBudgetaire = Number(selectId)),
+      (values.ligneBudgetaire = Number(selectedBudgetLine)),
       (values.nombre = 1),
       (values.idMission = id!),
       (values.pu = prix),
@@ -341,7 +323,7 @@ const ListPrevision = () => {
                 grant: isEditing ? previsionDepense?.grant : getGrantId,
                 ligneBudgetaire: isEditing
                   ? previsionDepense?.ligneBudgetaire
-                  : Number(selectId),
+                  : "",
                 idMission: isEditing ? previsionDepense?.idMission : id!,
                 imprevue: isEditing ? previsionDepense?.imprevue : total / 10,
                 libelle: isEditing ? previsionDepense?.libelle : lib,
@@ -360,8 +342,6 @@ const ListPrevision = () => {
                         <TableHead sx={{ backgroundColor: "#e0e0e0" }}>
                           <TableRow>
                             <TableCell>Date</TableCell>
-                            <TableCell>Nombre</TableCell>
-                            <TableCell>PU</TableCell>
                             <TableCell>Grant</TableCell>
                             <TableCell>Ligne budgetaire</TableCell>
                             <TableCell>Montant imprévu</TableCell>
@@ -382,12 +362,6 @@ const ListPrevision = () => {
                                     <Moment format="DD/MM/yyyy">
                                       {row.date}
                                     </Moment>
-                                  </TableCell>
-                                  <TableCell align="left">
-                                    {row.nombre}
-                                  </TableCell>
-                                  <TableCell align="left">
-                                    {formatMontant(Number(row.pu))}
                                   </TableCell>
                                   <TableCell align="left">
                                     {
@@ -436,17 +410,6 @@ const ListPrevision = () => {
                                 name="imprevue"
                               />
                             </FormControl>
-                            <FormControl sx={{ maxWidth: 100 }}>
-                              <OSTextField
-                                id="outlined-basic"
-                                label="Nombre"
-                                variant="outlined"
-                                size="small"
-                                name="nombre"
-                                value={1}
-                                disabled
-                              />
-                            </FormControl>
                             <FormControl
                               sx={{ flex: "1", textAlign: "left" }}
                               fullWidth
@@ -454,7 +417,11 @@ const ListPrevision = () => {
                               <Autocomplete
                                 fullWidth
                                 id="outlined-basic"
-                                options={grantEncoursList}
+                                options={grantEncoursList.filter((grant) =>
+                                  previsionDepenselist.some(
+                                    (prevision) => prevision.grant === grant.id
+                                  )
+                                )}
                                 getOptionLabel={(option: any) => option.code}
                                 value={getGrantOption(
                                   formikProps.values.grant,
@@ -500,20 +467,18 @@ const ListPrevision = () => {
                                 variant="outlined"
                                 size="small"
                                 name="ligneBudgetaire"
-                                value={selectedBudgetLine}
-                                key={selectId}
-                                onChange={(e: any) => {
+                                value={formikProps.values.ligneBudgetaire}
+                                key={formikProps.values.ligneBudgetaire}
+                                onChange={(e) => {
                                   setSelectedBudgetLine(e.target.value);
-                                  const selectedItem = listLigne.find(
-                                    (item: any) => item.name === e.target.value
+                                  formikProps.setFieldValue(
+                                    "ligneBudgetaire",
+                                    e.target.value
                                   );
-                                  if (selectedItem) {
-                                    setSelecteId(selectedItem.id);
-                                  }
                                 }}
                               >
-                                {listLigne.map((item: any) => (
-                                  <MenuItem key={item.id!} value={item.id}>
+                                {listLigne.map((item) => (
+                                  <MenuItem key={item.id} value={item.id}>
                                     {item.name}
                                   </MenuItem>
                                 ))}
