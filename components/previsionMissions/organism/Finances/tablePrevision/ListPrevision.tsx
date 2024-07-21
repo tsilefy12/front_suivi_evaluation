@@ -418,9 +418,12 @@ const ListPrevision = () => {
                                 fullWidth
                                 id="outlined-basic"
                                 options={grantEncoursList.filter((grant) =>
-                                  previsionDepenselist.some(
-                                    (prevision) => prevision.grant === grant.id
-                                  )
+                                  previsionDepenselist
+                                    .filter((f) => f.missionId == id)
+                                    .some(
+                                      (prevision) =>
+                                        prevision.grant === grant.id
+                                    )
                                 )}
                                 getOptionLabel={(option: any) => option.code}
                                 value={getGrantOption(
