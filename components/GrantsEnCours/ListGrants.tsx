@@ -19,9 +19,7 @@ import TableRow from "@mui/material/TableRow";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import Data, { Order } from "./table/type-variable";
-// import { rows } from "./table/constante";
 import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
-// import { getComparator, stableSort } from "./table/function";
 import { Edit, Search } from "@mui/icons-material";
 import Add from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -68,11 +66,14 @@ const ListGrantsEnCours = () => {
   );
   const fetchEpmloyes = useFetchEmployes();
   const { employees } = useAppSelector((state: any) => state.employe);
+  async function fetchData() {
+    await fetchProject();
+    await fetchEpmloyes();
+    await fetchtReliquatGrant();
+    await fetchGrants();
+  }
   React.useEffect(() => {
-    fetchGrants();
-    fetchProject();
-    fetchtReliquatGrant();
-    fetchEpmloyes();
+    fetchData();
   }, []);
   const validate = usePermitted();
 
@@ -82,7 +83,7 @@ const ListGrantsEnCours = () => {
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-  // console.log("list :", grantEncoursList);
+  console.log("list :", grantEncoursList);
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -104,8 +105,6 @@ const ListGrantsEnCours = () => {
       return setDataGrant([...filteredData].reverse());
     }
   }, [filtre, grantEncoursList, reliquatGrantList]);
-
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0
       ? Math.max(0, (1 + page) * rowsPerPage - grantEncoursList.length)
