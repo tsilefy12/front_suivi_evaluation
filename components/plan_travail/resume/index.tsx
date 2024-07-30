@@ -34,7 +34,7 @@ const ListResume = () => {
   const { id }: any = router.query;
   const fetchObjectifAnnuel = useFetchObjectifsAnnuel();
   const fetchSite = useFetchSite();
-  const { sitelist, isEditing, site } = useAppSelector((state) => state.site);
+  const { sitelist } = useAppSelector((state) => state.site);
   const dispatch: any = useAppDispatch();
   const fetchObjectStrategique = useFetchPlanTravaile();
   const { planTravaillist } = useAppSelector((state) => state.planTravail);
@@ -61,7 +61,7 @@ const ListResume = () => {
       });
       dispatch(
         enqueueSnackbar({
-          message: "Note créé avec succès",
+          message: "Note créée avec succès",
           options: { variant: "success" },
         })
       );
@@ -69,6 +69,15 @@ const ListResume = () => {
       console.log(error);
     }
   };
+
+  const uniqueYears = Array.from(
+    new Set(
+      planTravaillist.flatMap((p) =>
+        p.TacheCle!.flatMap((t) => t.objectifAnnuel!.map((o) => o.year))
+      )
+    )
+  );
+
   return (
     <>
       <Container maxWidth="xl">
@@ -94,23 +103,12 @@ const ListResume = () => {
               }
             >
               <MenuItem value="">Tous</MenuItem>
-              {Array.from(
-                new Set(
-                  planTravaillist.flatMap((p) =>
-                    p.TacheCle!.flatMap((t) =>
-                      t.objectifAnnuel!.map((o) => o.year)
-                    )
-                  )
-                )
-              ).map((y) => (
-                <MenuItem value={y}>{y}</MenuItem>
+              {uniqueYears.map((y) => (
+                <MenuItem key={y} value={y}>
+                  {y}
+                </MenuItem>
               ))}
             </TextField>
-            {/* <Link href={`/plan_travail/${id}/resume`}>
-            <Button color="info" variant="text" startIcon={<Add />}>
-                Résumé des sites
-              </Button>
-            </Link> */}
           </Stack>
           <Typography variant="h4" color="GrayText">
             Liste résumé des sites
@@ -125,275 +123,120 @@ const ListResume = () => {
           <Box sx={{ width: "100%" }}>
             <Paper sx={{ width: "100%", mb: 2 }}>
               <TableContainer>
-                <Table sx={{ padding: 2 }}>
+                <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ minWidth: 200, minHeight: 200 }}>
+                      <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
                         Goals
                       </TableCell>
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            {/* <TableCell
-                              sx={{
-                                minWidth: 100,
-                                maxWidth: 100,
-                                paddingLeft: 4,
-                              }}
-                            >
-                              S/N
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                minWidth: 250,
-                                maxWidth: 250,
-                                paddingLeft: 1,
-                              }}
-                            >
-                              Key Tasks
-                            </TableCell>
-                            <TableCell
-                              sx={{ minWidth: 250, maxWidth: 250 }}
-                              align="center"
-                            >
-                              {filtre} Targets
-                            </TableCell> */}
-                            {sitelist.map((s) => (
-                              <TableCell
-                                key={s.id}
-                                sx={{
-                                  minWidth: 150,
-                                  maxWidth: 150,
-                                  paddingLeft: 8,
-                                }}
-                              >
-                                {s.lieu}
-                              </TableCell>
-                            ))}
-                          </TableRow>
-                        </TableHead>
-                      </Table>
+                      {sitelist.map((s) => (
+                        <TableCell
+                          key={s.id}
+                          sx={{ minWidth: 100, maxWidth: 100 }}
+                          align="right"
+                        >
+                          <Stack direction={"row"} gap={1}>
+                            {s.lieu}
+                          </Stack>
+                        </TableCell>
+                      ))}
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {planTravaillist.map(
-                      (plan: PlanTravailItem, yearIndex: any) => (
-                        <Fragment key={yearIndex}>
-                          <TableRow>
-                            <TableCell sx={{ minWidth: 200, minHeight: 200 }}>
-                              {plan.description}
+                    {planTravaillist.map((plan, yearIndex) => (
+                      <Fragment key={yearIndex}>
+                        <TableRow>
+                          <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
+                            {plan.description}
+                          </TableCell>
+                          {/* {sitelist.map((site) => (
+                            <TableCell key={site.id} align="center">
+                              {plan.TacheCle?.flatMap((t) =>
+                                t.objectifAnnuel
+                                  ?.filter((o) =>
+                                    typeof filtre === "number"
+                                      ? o.year === filtre
+                                      : o
+                                  )
+                                  .reduce((acc, o) => {
+                                    const note = o.notes?.find(
+                                      (n) => n.siteId === site.id
+                                    );
+                                    return acc + (note?.note || 0);
+                                  }, 0)
+                              ).reduce((acc, cur) => acc + cur, 0)}
                             </TableCell>
-                            <TableCell>
-                              <Table>
-                                <TableBody>
-                                  {plan.TacheCle?.map((t) => (
-                                    <TableRow key={t.id}>
-                                      {/* <TableCell
-                                        sx={{ minWidth: 70, maxWidth: 70 }}
-                                      >
-                                        {t.sn}
-                                      </TableCell>
-                                      <TableCell
-                                        sx={{ minWidth: 250, maxWidth: 250 }}
-                                      >
-                                        {t.keyTasks}
-                                      </TableCell> */}
-                                      <TableCell>
-                                        <Table>
-                                          <TableBody>
-                                            {t.objectifAnnuel
-                                              ?.filter((o) =>
-                                                typeof filtre === "number"
-                                                  ? o.year === filtre
-                                                  : o
-                                              )
-                                              .map((o) => (
-                                                <TableRow key={o.id}>
-                                                  {/* <TableCell
-                                                    sx={{
-                                                      minWidth: 250,
-                                                      maxWidth: 250,
-                                                    }}
-                                                    align="center"
-                                                  >
-                                                    {o.objectiveTitle}
-                                                  </TableCell> */}
-                                                  {sitelist.map((s) => (
-                                                    <TableCell
-                                                      key={s.id}
-                                                      sx={{
-                                                        minWidth: 150,
-                                                        maxWidth: 150,
-                                                      }}
-                                                      align="center"
-                                                    >
-                                                      {o.notes?.find(
-                                                        (n) => n.siteId === s.id
-                                                      )
-                                                        ? o.notes!.find(
-                                                            (n) =>
-                                                              n.siteId === s.id
-                                                          )!.note
-                                                        : ""}
-                                                    </TableCell>
-                                                  ))}
-                                                </TableRow>
-                                              ))}
-                                          </TableBody>
-                                        </Table>
-                                      </TableCell>
-                                    </TableRow>
-                                  ))}
-                                </TableBody>
-                              </Table>
+                          ))} */}
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="left">Sous-total</TableCell>
+                          {sitelist.map((site) => (
+                            <TableCell
+                              key={site.id}
+                              align="left"
+                              sx={{
+                                minWidth: 100,
+                                maxWidth: 100,
+                                paddingLeft: 8,
+                              }}
+                            >
+                              {plan.TacheCle?.flatMap((t) =>
+                                t.objectifAnnuel
+                                  ?.filter((o) =>
+                                    typeof filtre === "number"
+                                      ? o.year === filtre
+                                      : o
+                                  )
+                                  .reduce((acc, o) => {
+                                    const note = o.notes?.find(
+                                      (n) => n.siteId === site.id
+                                    );
+                                    return acc + (note?.note || 0);
+                                  }, 0)
+                              ).reduce((acc: any, cur: any) => acc + cur, 0)}
                             </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="left">Sous-total</TableCell>
-                            <TableCell>
-                              <Table>
-                                <TableBody>
-                                  <TableRow>
-                                    {/* <TableCell
-                                      sx={{ minWidth: 70, maxWidth: 70 }}
-                                    ></TableCell>
-                                    <TableCell
-                                      sx={{ minWidth: 250, maxWidth: 250 }}
-                                    ></TableCell> */}
-                                    <TableCell>
-                                      <Table>
-                                        <TableBody>
-                                          <TableRow>
-                                            {/* <TableCell
-                                              sx={{
-                                                minWidth: 250,
-                                                maxWidth: 250,
-                                              }}
-                                            ></TableCell> */}
-                                            {sitelist.map((s) => (
-                                              <TableCell
-                                                key={s.id}
-                                                sx={{
-                                                  minWidth: 150,
-                                                  maxWidth: 150,
-                                                }}
-                                                align="center"
-                                              >
-                                                {plan.TacheCle?.reduce(
-                                                  (acc, curr) =>
-                                                    acc +
-                                                    curr
-                                                      .objectifAnnuel!.filter(
-                                                        (o) =>
-                                                          typeof filtre ===
-                                                          "number"
-                                                            ? o.year === filtre
-                                                            : o
-                                                      )
-                                                      .reduce(
-                                                        (ac, cur) =>
-                                                          ac +
-                                                          cur
-                                                            .notes!.filter(
-                                                              (n) =>
-                                                                n.siteId ===
-                                                                s.id
-                                                            )
-                                                            .reduce(
-                                                              (a, c) =>
-                                                                a + c.note!,
-                                                              0
-                                                            ),
-                                                        0
-                                                      ),
-                                                  0
-                                                )}
-                                              </TableCell>
-                                            ))}
-                                          </TableRow>
-                                        </TableBody>
-                                      </Table>
-                                    </TableCell>
-                                  </TableRow>
-                                </TableBody>
-                              </Table>
-                            </TableCell>
-                          </TableRow>
-                        </Fragment>
-                      )
-                    )}
-                  </TableBody>
-                  <TableHead>
+                          ))}
+                        </TableRow>
+                      </Fragment>
+                    ))}
                     <TableRow>
                       <TableCell align="left">TOTAUX</TableCell>
-                      <TableCell>
-                        <Table>
-                          <TableBody>
-                            <TableRow>
-                              {/* <TableCell
-                                sx={{ minWidth: 70, maxWidth: 70 }}
-                              ></TableCell>
-                              <TableCell
-                                sx={{ minWidth: 250, maxWidth: 250 }}
-                              ></TableCell> */}
-                              <TableCell>
-                                <Table>
-                                  <TableHead>
-                                    <TableRow>
-                                      {/* <TableCell
-                                        sx={{ minWidth: 250, maxWidth: 250 }}
-                                      ></TableCell> */}
-                                      {sitelist.map((s) => (
-                                        <TableCell
-                                          key={s.id}
-                                          sx={{ minWidth: 150, maxWidth: 150 }}
-                                          align="center"
-                                        >
-                                          {planTravaillist.reduce(
-                                            (accc, plan) =>
-                                              accc +
-                                              plan.TacheCle!.reduce(
-                                                (acc, curr) =>
-                                                  acc +
-                                                  curr
-                                                    .objectifAnnuel!.filter(
-                                                      (o) =>
-                                                        typeof filtre ===
-                                                        "number"
-                                                          ? o.year === filtre
-                                                          : o
-                                                    )
-                                                    .reduce(
-                                                      (ac, cur) =>
-                                                        ac +
-                                                        cur
-                                                          .notes!.filter(
-                                                            (n) =>
-                                                              n.siteId === s.id
-                                                          )
-                                                          .reduce(
-                                                            (a, c) =>
-                                                              a + c.note!,
-                                                            0
-                                                          ),
-                                                      0
-                                                    ),
-                                                0
-                                              ),
-                                            0
-                                          )}
-                                        </TableCell>
-                                      ))}
-                                    </TableRow>
-                                  </TableHead>
-                                </Table>
-                              </TableCell>
-                            </TableRow>
-                          </TableBody>
-                        </Table>
-                      </TableCell>
+                      {sitelist.map((s) => (
+                        <TableCell
+                          key={s.id}
+                          sx={{ minWidth: 150, maxWidth: 150, paddingLeft: 8 }}
+                          align="left"
+                        >
+                          {planTravaillist.reduce(
+                            (accc, plan) =>
+                              accc +
+                              plan.TacheCle!.reduce(
+                                (acc, curr) =>
+                                  acc +
+                                  curr
+                                    .objectifAnnuel!.filter((o) =>
+                                      typeof filtre === "number"
+                                        ? o.year === filtre
+                                        : o
+                                    )
+                                    .reduce(
+                                      (ac, cur) =>
+                                        ac +
+                                        cur
+                                          .notes!.filter(
+                                            (n) => n.siteId === s.id
+                                          )
+                                          .reduce((a, c) => a + c.note!, 0),
+                                      0
+                                    ),
+                                0
+                              ),
+                            0
+                          )}
+                        </TableCell>
+                      ))}
                     </TableRow>
-                  </TableHead>
+                  </TableBody>
                 </Table>
               </TableContainer>
             </Paper>
@@ -405,8 +248,3 @@ const ListResume = () => {
 };
 
 export default ListResume;
-const styleDialog = {
-  position: "fixed",
-  left: 50,
-  top: 0,
-};
