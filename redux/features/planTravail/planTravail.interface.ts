@@ -9,7 +9,6 @@ export interface PlanTravailItem {
   description?: string;
   projectId?: number;
   TacheCle?: TacheEtObjectifItem[];
-  sites?: SiteItem[];
 }
 export interface PlanTravailInitialState {
   planTravaillist: PlanTravailItem[];

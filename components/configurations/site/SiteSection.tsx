@@ -2,7 +2,6 @@ import React from "react";
 import Container from "@mui/material/Container";
 import { Grid } from "@mui/material";
 import SiteForm from "./SiteForm";
-import ListSite from "../../plan_travail/organanisme/tachesEtObjectifs/[id]/site";
 import ListeSites from "./table/ListSite";
 
 const SiteSection = () => {
@@ -10,7 +9,7 @@ const SiteSection = () => {
     <Container maxWidth="xl">
       <Grid container spacing={1}>
         <Grid item xs={12} md={4}>
-          <SiteForm/>
+          <SiteForm />
         </Grid>
         <Grid item xs={12} md={8}>
           <ListeSites />
