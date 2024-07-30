@@ -9,7 +9,6 @@ const useFetchPlanTravaile = () => {
   return async () => {
     let args: any = {
       include: {
-        sites: true,
         TacheCle: {
           include: {
             objectifAnnuel: {

@@ -134,7 +134,7 @@ const ListResume = () => {
                       <Table>
                         <TableHead>
                           <TableRow>
-                            <TableCell
+                            {/* <TableCell
                               sx={{
                                 minWidth: 100,
                                 maxWidth: 100,
@@ -157,14 +157,14 @@ const ListResume = () => {
                               align="center"
                             >
                               {filtre} Targets
-                            </TableCell>
+                            </TableCell> */}
                             {sitelist.map((s) => (
                               <TableCell
                                 key={s.id}
                                 sx={{
                                   minWidth: 150,
                                   maxWidth: 150,
-                                  paddingLeft: 1,
+                                  paddingLeft: 8,
                                 }}
                               >
                                 {s.lieu}
@@ -188,7 +188,7 @@ const ListResume = () => {
                                 <TableBody>
                                   {plan.TacheCle?.map((t) => (
                                     <TableRow key={t.id}>
-                                      <TableCell
+                                      {/* <TableCell
                                         sx={{ minWidth: 70, maxWidth: 70 }}
                                       >
                                         {t.sn}
@@ -197,7 +197,7 @@ const ListResume = () => {
                                         sx={{ minWidth: 250, maxWidth: 250 }}
                                       >
                                         {t.keyTasks}
-                                      </TableCell>
+                                      </TableCell> */}
                                       <TableCell>
                                         <Table>
                                           <TableBody>
@@ -209,7 +209,7 @@ const ListResume = () => {
                                               )
                                               .map((o) => (
                                                 <TableRow key={o.id}>
-                                                  <TableCell
+                                                  {/* <TableCell
                                                     sx={{
                                                       minWidth: 250,
                                                       maxWidth: 250,
@@ -217,7 +217,7 @@ const ListResume = () => {
                                                     align="center"
                                                   >
                                                     {o.objectiveTitle}
-                                                  </TableCell>
+                                                  </TableCell> */}
                                                   {sitelist.map((s) => (
                                                     <TableCell
                                                       key={s.id}
@@ -254,22 +254,22 @@ const ListResume = () => {
                               <Table>
                                 <TableBody>
                                   <TableRow>
-                                    <TableCell
+                                    {/* <TableCell
                                       sx={{ minWidth: 70, maxWidth: 70 }}
                                     ></TableCell>
                                     <TableCell
                                       sx={{ minWidth: 250, maxWidth: 250 }}
-                                    ></TableCell>
+                                    ></TableCell> */}
                                     <TableCell>
                                       <Table>
                                         <TableBody>
                                           <TableRow>
-                                            <TableCell
+                                            {/* <TableCell
                                               sx={{
                                                 minWidth: 250,
                                                 maxWidth: 250,
                                               }}
-                                            ></TableCell>
+                                            ></TableCell> */}
                                             {sitelist.map((s) => (
                                               <TableCell
                                                 key={s.id}
@@ -330,19 +330,19 @@ const ListResume = () => {
                         <Table>
                           <TableBody>
                             <TableRow>
-                              <TableCell
+                              {/* <TableCell
                                 sx={{ minWidth: 70, maxWidth: 70 }}
                               ></TableCell>
                               <TableCell
                                 sx={{ minWidth: 250, maxWidth: 250 }}
-                              ></TableCell>
+                              ></TableCell> */}
                               <TableCell>
                                 <Table>
                                   <TableHead>
                                     <TableRow>
-                                      <TableCell
+                                      {/* <TableCell
                                         sx={{ minWidth: 250, maxWidth: 250 }}
-                                      ></TableCell>
+                                      ></TableCell> */}
                                       {sitelist.map((s) => (
                                         <TableCell
                                           key={s.id}

@@ -3,8 +3,6 @@ import { PlanTravailItem } from "../planTravail/planTravail.interface";
 export interface SiteItem {
   id?: string;
   lieu?: string;
-  planTravaileId?: string;
-  planTravailes?: PlanTravailItem[];
 }
 export interface SiteInitialState {
   sitelist: SiteItem[];

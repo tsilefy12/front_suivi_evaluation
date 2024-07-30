@@ -26,11 +26,8 @@ const SiteForm = () => {
     (state: any) => state.site
   );
   const fetchSite = useFetchSite();
-  const { planTravaillist } = useAppSelector((state) => state.planTravail);
-  const fetchPlanTravail = useFetchPlanTravaile();
   React.useEffect(() => {
     fetchSite();
-    fetchPlanTravail();
   }, [router.query]);
 
   const handleSubmit = async (values: any) => {
@@ -60,7 +57,6 @@ const SiteForm = () => {
             ? site
             : {
                 lieu: isEditing ? site?.lieu : "",
-                planTravaileId: isEditing ? site?.planTravaileId : "",
               }
         }
         validationSchema={Yup.object({
@@ -82,16 +78,6 @@ const SiteForm = () => {
                 label="Site"
                 variant="outlined"
                 name="lieu"
-              />
-              <OSSelectField
-                fullWidth
-                id="outlined-basic"
-                label="Plan de travail"
-                variant="outlined"
-                name="planTravaileId"
-                options={planTravaillist}
-                dataKey={"title"}
-                valueKey={"id"}
               />
               <BtnContainer
                 direction="row"
