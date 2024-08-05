@@ -1,7 +1,17 @@
-import { Stack, styled, Typography, TextField, Button, Link } from "@mui/material";
+import {
+  Stack,
+  styled,
+  Typography,
+  TextField,
+  Button,
+  Link,
+} from "@mui/material";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { createPostAnalytic, updatePostAnalytic } from "../../../redux/features/postAnalytique";
+import {
+  createPostAnalytic,
+  updatePostAnalytic,
+} from "../../../redux/features/postAnalytique";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -12,9 +22,10 @@ import { createProject, updateProject } from "../../../redux/features/project";
 
 const ProjectForm = () => {
   const dispatch = useAppDispatch();
-  const router = useRouter()
-  const { isEditing, project } = useAppSelector((state) => state.project)
+  const router = useRouter();
+  const { isEditing, project } = useAppSelector((state) => state.project);
   const handleSubmit = async (values: any) => {
+    values.descriptionFr = values.descriptionEn;
     try {
       if (isEditing) {
         await dispatch(
@@ -24,7 +35,6 @@ const ProjectForm = () => {
           })
         );
       } else {
-
         await dispatch(createProject(values));
       }
       router.push("/configurations/project");
@@ -41,15 +51,15 @@ const ProjectForm = () => {
           isEditing
             ? project
             : {
-              title: isEditing ? project?.title : "",
-              descriptionEn: isEditing ? project?.descriptionEn : "",
-              descriptionFr: isEditing ? project?.descriptionFr : ""
-            }
+                title: isEditing ? project?.title : "",
+                descriptionEn: isEditing ? project?.descriptionEn : "",
+                // descriptionFr: isEditing ? project?.descriptionFr : formikProps.values.descriptionEn
+              }
         }
         validationSchema={Yup.object({
           title: Yup.string().required("Champ obligatoire"),
           descriptionEn: Yup.string().required("Champ obligatoire"),
-          descriptionFr: Yup.string().required("Champ obligatoire"),
+          // descriptionFr: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -74,13 +84,17 @@ const ProjectForm = () => {
                 variant="outlined"
                 name="descriptionEn"
               />
-              <OSTextField
+              {/* <OSTextField
                 id="outlined-basic"
                 label="Titre en Français"
                 variant="outlined"
                 name="descriptionFr"
-              />
-              <BtnContainer direction="row" spacing={2} justifyContent="flex-end">
+              /> */}
+              <BtnContainer
+                direction="row"
+                spacing={2}
+                justifyContent="flex-end"
+              >
                 <Button
                   color="info"
                   variant="text"
@@ -105,7 +119,7 @@ const ProjectForm = () => {
                 </Button>
               </BtnContainer>
             </Stack>
-          )
+          );
         }}
       </Formik>
     </FormContainer>

@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { useAppDispatch } from "../../../hooks/reduxHooks";
-import { getCurrencyListe } from "../../../redux/features/currency";
+import { getInterns } from "../../../redux/features/stagiaire";
 
-const useFetchCurrency = () => {
+const useFetchStagiaire = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -23,8 +23,8 @@ const useFetchCurrency = () => {
           break;
       }
     }
-    await dispatch(getCurrencyListe({ args }));
+    await dispatch(getInterns({ args }));
   };
 };
 
-export default useFetchCurrency;
+export default useFetchStagiaire;

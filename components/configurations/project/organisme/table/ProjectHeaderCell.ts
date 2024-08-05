@@ -2,21 +2,21 @@ import { HeadCell } from "./HeadCell.interface";
 
 export const projectHeadCells: readonly HeadCell[] = [
   {
-    id: 'title',
+    id: "title",
     numeric: false,
     disablePadding: true,
-    label: 'Titre',
+    label: "Titre",
   },
   {
-    id: 'descriptionEn',
+    id: "descriptionEn",
     numeric: false,
     disablePadding: true,
-    label: 'Titre en Anglais'
+    label: "Titre en Anglais",
   },
-  {
-    id: 'description',
-    numeric: false,
-    disablePadding: true,
-    label: 'Titre en français',
-  },
+  // {
+  //   id: 'description',
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: 'Titre en français',
+  // },
 ];

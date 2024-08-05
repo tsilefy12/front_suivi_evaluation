@@ -6,6 +6,7 @@ export interface GrantEncoursItem {
   postAnalyticId?: number;
   projectId?: number;
   bankId?: number;
+  programmeId?: number;
   // titleFr?: string;
   // titleEn?: string;
   bailleur?: string;

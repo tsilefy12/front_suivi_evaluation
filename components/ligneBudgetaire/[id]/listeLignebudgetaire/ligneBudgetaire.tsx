@@ -123,7 +123,9 @@ const ListBudgetLine = () => {
       );
       setDataFilter([...filteredData].reverse());
     } else {
-      setDataFilter([...budgetLineList].reverse());
+      setDataFilter(
+        [...budgetLineList.filter((e: any) => e.grantId == id)].reverse()
+      );
     }
   }, [filtre, budgetLineList]);
   return (

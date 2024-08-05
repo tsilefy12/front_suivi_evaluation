@@ -1,16 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axios } from "../../../../axios";
 
-export const getCurrency = createAsyncThunk(
-  "currency/getCurrency",
-  async (data: { id: string; args?: any }, thunkAPI) => {
+export const getCurrencyListe = createAsyncThunk(
+  "currency/getCurrencyListe",
+  async (data: { args?: any }, thunkAPI) => {
     try {
       const params = {
         args: JSON.stringify(data.args),
       };
-      const response = await axios.get(`/compta/currency/${data.id}`, {
-        params,
-      });
+      const response = await axios.get("/compta/currency");
+      // console.log("response", response);
+      
       return response.data;
     } catch (error: any) {
       if (error.response) {

@@ -182,19 +182,19 @@ const AddNewBudgetLine = () => {
                 spacing={2}
               >
                 <Stack direction="column" spacing={2}>
-                  <OSTextField
+                  {/* <OSTextField
                     fullWidth
                     id="outlined-basic"
                     label="Grant"
                     variant="outlined"
                     name="grantId"
                     value={grantCode}
-                  />
+                  /> */}
                   <Stack direction="row" spacing={2}>
                     <OSTextField
                       fullWidth
                       id="outlined-basic"
-                      label="Code"
+                      label="Ligne budgetaire"
                       variant="outlined"
                       name="code"
                     />
@@ -214,7 +214,7 @@ const AddNewBudgetLine = () => {
                     <OSSelectField
                       fullWidth
                       id="outlined-basic"
-                      label="Type"
+                      label="Grant line 1"
                       options={typeList}
                       dataKey="name"
                       valueKey="id"
@@ -227,7 +227,7 @@ const AddNewBudgetLine = () => {
                       options={lineBudgetList}
                       dataKey="name"
                       valueKey="id"
-                      label="Ligne de budget"
+                      label="Grant line 2"
                       variant="outlined"
                       name="configBudgetLineId"
                     />

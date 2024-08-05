@@ -58,6 +58,9 @@ import { grantMonitoringSlice } from "./features/grantMonitoring/grantMonitoring
 import { uncompleteTbbSlice } from "./features/unCompleteTbb/uncompleteTbbSlice";
 import { transportationEquipmentSlice } from "./features/transportation_equipment/transportationEquipmentSlice";
 import { imprevuePrevisionSlice } from "./features/imprevuePrevision/imprevuePrevisionSlice";
+import { programmeRHSlice } from "./features/programmeRH/programmeRHSlice";
+import { internSlice } from "./features/stagiaire/internshipSlice";
+import { prestataireSlice } from "./features/prestataire/prestataireSlice";
 
 export const store = configureStore({
   reducer: {
@@ -120,6 +123,9 @@ export const store = configureStore({
     uncompleteTbb: uncompleteTbbSlice.reducer,
     transportation: transportationEquipmentSlice.reducer,
     imprevuePrevision: imprevuePrevisionSlice.reducer,
+    programmeRH: programmeRHSlice.reducer,
+    stagiaire: internSlice.reducer,
+    prestataire: prestataireSlice.reducer,
   },
 });
 

@@ -22,6 +22,9 @@ import Moment from "react-moment";
 import useFetchEmploys from "../../hooks/getResponsable";
 import useFetchCurrency from "../../hooks/getCurrency";
 import formatMontant from "../../../../hooks/format";
+import useFetchBank from "../../hooks";
+import useFetchStagiaire from "../../hooks/getStagiaire";
+import useFetchPrestataire from "../../hooks/getPrestataire";
 
 const DetailGrantsEnCours = () => {
   const router = useRouter();
@@ -37,14 +40,25 @@ const DetailGrantsEnCours = () => {
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state: any) => state.employe);
   const fetchCurreny = useFetchCurrency();
-  const { currencylist } = useAppSelector((state: any) => state.currency);
+  const { currencyListe } = useAppSelector((state: any) => state.currency);
+  const fetchBank = useFetchBank();
+  const { bankList } = useAppSelector((state: any) => state.bank);
+  const fetchStagiaire = useFetchStagiaire();
+  const { interns } = useAppSelector((state: any) => state.stagiaire);
+  const fetchPrestataire = useFetchPrestataire();
+  const { prestataireListe } = useAppSelector(
+    (state: any) => state.prestataire
+  );
 
   React.useEffect(() => {
     fetchGrant();
     fetchProject();
     fetchEmployes();
     fetchCurreny();
-  }, [router.query]);
+    fetchBank();
+    fetchStagiaire();
+    fetchPrestataire();
+  }, []);
 
   // console.log("list details :", grantEncours)
 
@@ -65,6 +79,7 @@ const DetailGrantsEnCours = () => {
     techValide: string;
     FDate: Date;
     techD: Date;
+    bankId: number;
   }[] = [];
 
   grantEncoursList.forEach((g: any) => {
@@ -87,10 +102,24 @@ const DetailGrantsEnCours = () => {
         techValide: g.techValidator,
         FDate: g.financeDate,
         techD: g.techDate,
+        bankId: g.bankId!,
       });
     }
   });
+  const formatOptions = (options: any) => {
+    return options.map((option: any) => ({
+      id: option.id,
+      name: option.name,
+      surname: option.surname || "",
+    }));
+  };
 
+  // Fusionner les listes et les transformer
+  const allOptions = [
+    ...formatOptions(employees),
+    ...formatOptions(interns),
+    ...formatOptions(prestataireListe),
+  ];
   return (
     <Container maxWidth="xl" sx={{ pb: 5 }}>
       <SectionNavigation
@@ -129,22 +158,42 @@ const DetailGrantsEnCours = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <KeyValue
-                  keyName="Currency"
-                  value={currencylist.find((e: any) => e.id === row.curr)?.name}
+                  keyName="Devise"
+                  value={
+                    currencyListe.find((e: any) => e.id === row.curr)?.name
+                  }
                 />
               </Grid>
               <Grid item xs={12} md={12}>
+                Banque :
+                {bankList &&
+                  bankList
+                    .filter((f: any) => f.id === row.bankId)
+                    .map((e: any) => (
+                      <Stack
+                        style={{ color: "GrayText" }}
+                        direction={"column"}
+                        gap={2}
+                      >
+                        <span>N° : {e.numero}</span>
+                        <span>Nom : {e.name}</span>
+                        <span>Chequier : {e.chequier}</span>
+                        <span>Titre : {e.title}</span>
+                      </Stack>
+                    ))}
+              </Grid>
+              <Grid item xs={12} md={12}>
                 Responsables :
-                {employees &&
-                  employees.map((e: any) =>
-                    row.respo!.includes(e.id) ? (
-                      <span style={{ color: "GrayText" }}>
-                        {" "}
-                        {e.name} {e.surname}
+                {allOptions &&
+                  allOptions.map((o: any) =>
+                    row.respo!.includes(o.id) ? (
+                      <span key={o.id} style={{ color: "GrayText" }}>
+                        {o.name} {o.surname ? o.surname : ""}
                       </span>
                     ) : null
                   )}
               </Grid>
+
               <Grid item xs={12} md={6}>
                 <KeyValue
                   keyName="Finance validateur"
@@ -154,31 +203,6 @@ const DetailGrantsEnCours = () => {
                           ?.name
                       }  ${
                     employees.find((e: any) => e.id === row.FValidator)?.surname
-                  }`}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <KeyValue
-                  keyName="Finance vérificateur"
-                  value={`
-                      ${
-                        employees.find((e: any) => e.id === row.FVerifcator)
-                          ?.name
-                      } ${
-                    employees.find((e: any) => e.id === row.FVerifcator)
-                      ?.surname
-                  }`}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <KeyValue
-                  keyName="Validateur technique"
-                  value={`
-                      ${
-                        employees.find((e: any) => e.id === row.techValide)
-                          ?.name
-                      } ${
-                    employees.find((e: any) => e.id === row.techValide)?.surname
                   }`}
                 />
               </Grid>
@@ -221,6 +245,31 @@ const DetailGrantsEnCours = () => {
               <Grid item xs={12} md={6}>
                 Montant en MGA : <span></span>
                 <FormLabel>{formatMontant(Number(row.mga))}</FormLabel>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <KeyValue
+                  keyName="Finance vérificateur"
+                  value={`
+                      ${
+                        employees.find((e: any) => e.id === row.FVerifcator)
+                          ?.name
+                      } ${
+                    employees.find((e: any) => e.id === row.FVerifcator)
+                      ?.surname
+                  }`}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <KeyValue
+                  keyName="Validateur technique"
+                  value={`
+                      ${
+                        employees.find((e: any) => e.id === row.techValide)
+                          ?.name
+                      } ${
+                    employees.find((e: any) => e.id === row.techValide)?.surname
+                  }`}
+                />
               </Grid>
             </Stack>
             <Stack></Stack>

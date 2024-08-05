@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CurrenncyInitialState } from "./currencyinterface";
+import { CurrencyInitialState } from "./currencySlice.interface";
+import { updateCurrencyDefault } from "./useCase/changeDefault";
+import { createCurrency } from "./useCase/createCurrency";
+import { deleteCurrency } from "./useCase/deleteCurrency";
+import { editCurrency } from "./useCase/editCurrency";
 import { getCurrency } from "./useCase/getCurrency";
-import { getCurrencyList } from "./useCase/getCurrencyList";
+import { getCurrencyListe } from "./useCase/getCurrencyListe";
+import { updateCurrency } from "./useCase/updateCurrency";
 
-
-const currencyInitialState: CurrenncyInitialState = {
-  currencylist: [],
+const initialState: CurrencyInitialState = {
+  currencyListe: [],
   currency: {},
   isEditing: false,
   loading: false,
@@ -14,7 +18,7 @@ const currencyInitialState: CurrenncyInitialState = {
 
 export const currencySlice = createSlice({
   name: "currency",
-  initialState: currencyInitialState,
+  initialState,
   reducers: {
     cancelEdit: (state) => {
       state.isEditing = false;
@@ -22,32 +26,92 @@ export const currencySlice = createSlice({
     },
   },
   extraReducers: {
-    // get programme prevision
     [getCurrency.pending.type]: (state) => {
       state.loading = true;
     },
     [getCurrency.fulfilled.type]: (state, action) => {
-      state.loading = false;
       state.currency = action.payload;
+      state.loading = false;
     },
     [getCurrency.rejected.type]: (state, action) => {
+      state.error = action.error;
+      state.loading = false;
+    },
+
+    [getCurrencyListe.pending.type]: (state) => {
+      state.loading = true;
+    },
+    [getCurrencyListe.fulfilled.type]: (state, action) => {
+      state.currencyListe = action.payload;
+      state.loading = false;
+    },
+    [getCurrencyListe.rejected.type]: (state, action) => {
+      state.error = action.error;
+      state.loading = false;
+    },
+
+    [createCurrency.pending.type]: (state) => {
+      state.loading = true;
+    },
+    [createCurrency.fulfilled.type]: (state, action) => {
+      state.loading = false;
+      // state.currencyListe.push(action.payload);
+    },
+    [createCurrency.rejected.type]: (state, action) => {
       state.loading = false;
       state.error = action.error;
     },
 
-    // get currency
-    [getCurrencyList.pending.type]: (state) => {
+    [updateCurrency.pending.type]: (state) => {
       state.loading = true;
     },
-    [getCurrencyList.fulfilled.type]: (state, action) => {
+    [updateCurrency.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.currencylist = action.payload;
+      state.isEditing = false;
+      state.currency = {};
     },
-    [getCurrencyList.rejected.type]: (state, action) => {
-      state.loading = false;
+    [updateCurrency.rejected.type]: (state, action) => {
       state.error = action.error;
+      state.loading = false;
     },
-}
+
+    [updateCurrencyDefault.pending.type]: (state) => {
+      state.loading = true;
+    },
+    [updateCurrencyDefault.fulfilled.type]: (state, action) => {
+      state.loading = false;
+      state.isEditing = false;
+      state.currency = {};
+    },
+    [updateCurrencyDefault.rejected.type]: (state, action) => {
+      state.error = action.error;
+      state.loading = false;
+    },
+
+    [deleteCurrency.pending.type]: (state) => {
+      state.loading = true;
+    },
+    [deleteCurrency.fulfilled.type]: (state, action) => {
+      state.loading = false;
+    },
+    [deleteCurrency.rejected.type]: (state, action) => {
+      state.error = action.error;
+      state.loading = false;
+    },
+
+    [editCurrency.pending.type]: (state) => {
+      state.loading = true;
+    },
+    [editCurrency.fulfilled.type]: (state, action) => {
+      state.currency = action.payload;
+      state.loading = false;
+      state.isEditing = true;
+    },
+    [editCurrency.rejected.type]: (state, action) => {
+      state.error = action.error;
+      state.loading = false;
+    },
+  },
 });
 
 export const { cancelEdit } = currencySlice.actions;

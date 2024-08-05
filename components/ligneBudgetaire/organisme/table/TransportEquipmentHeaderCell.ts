@@ -5,7 +5,7 @@ export const transportEquipmentHeadCells: readonly HeadCell[] = [
     id: "code",
     numeric: false,
     disablePadding: true,
-    label: "CODE",
+    label: "LIGNE BUDGETAIRE",
   },
   {
     id: "grant",
@@ -17,13 +17,13 @@ export const transportEquipmentHeadCells: readonly HeadCell[] = [
     id: "lineBudget",
     numeric: true,
     disablePadding: false,
-    label: "LIGNE BUDGET",
+    label: "GRANT LINE 2",
   },
   {
     id: "type",
     numeric: true,
     disablePadding: false,
-    label: "TYPE",
+    label: "GRANT LINE 1",
   },
   {
     id: "organisation",

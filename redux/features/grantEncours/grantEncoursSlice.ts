@@ -103,7 +103,7 @@ export const grantEncoursSlice = createSlice({
       state.loading = false;
       state.error = action.error;
     },
-}
+  },
 });
 
 export const { cancelEdit } = grantEncoursSlice.actions;

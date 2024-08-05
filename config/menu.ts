@@ -43,7 +43,7 @@ function allMenu() {
           .find((t) => t.id === 2)
           .items.push({
             id: 21,
-            name: "Grants en cours",
+            name: "Grant de mise en oeuvre",
             link: "/grants/grantsEnCours",
             icon: "",
           });
@@ -126,20 +126,20 @@ function allMenu() {
           items: [
             {
               id: 42,
-              name: "Type de budget",
+              name: "Grant line 1",
               link: "/configurations/type",
               icon: "",
             },
             {
               id: 43,
-              name: "Organisation",
-              link: "/configurations/organisation",
+              name: "Grant line 2",
+              link: "/configurations/lineBudget",
               icon: "",
             },
             {
               id: 44,
-              name: "Ligne de budget",
-              link: "/configurations/lineBudget",
+              name: "Organisation",
+              link: "/configurations/organisation",
               icon: "",
             },
             {
@@ -158,6 +158,12 @@ function allMenu() {
               id: 47,
               name: "Site",
               link: "/configurations/site",
+              icon: "",
+            },
+            {
+              id: 48,
+              name: "Devise",
+              link: "/configurations/devise",
               icon: "",
             },
           ],

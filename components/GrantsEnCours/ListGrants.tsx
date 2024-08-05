@@ -140,7 +140,7 @@ const ListGrantsEnCours = () => {
           </Link>
         )}
         <Typography variant="h5" color="GrayText">
-          Liste de Grant en cours
+          Grant de mise en oeuvre
         </Typography>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
@@ -195,24 +195,24 @@ const ListGrantsEnCours = () => {
                           <TableCell align="left">
                             {
                               employees.find(
-                                (e: any) => e.id === row.financeValidator
+                                (e: any) => e.id === row.financeVerificator
                               )?.name
                             }{" "}
                             {
                               employees.find(
-                                (e: any) => e.id === row.financeValidator
+                                (e: any) => e.id === row.financeVerificator
                               )?.surname
                             }
                           </TableCell>
                           <TableCell align="left">
                             {
                               employees.find(
-                                (e: any) => e.id === row.financeVerificator
+                                (e: any) => e.id === row.financeValidator
                               )?.name
                             }{" "}
                             {
                               employees.find(
-                                (e: any) => e.id === row.financeVerificator
+                                (e: any) => e.id === row.financeValidator
                               )?.surname
                             }
                           </TableCell>
@@ -227,7 +227,7 @@ const ListGrantsEnCours = () => {
                               gap={1}
                             >
                               <Link
-                                href={`/grants/ligneBudgetaire/${row.id}/add`}
+                                href={`/grants/ligneBudgetaire/${row.id}/listeLignebudgetaire`}
                               >
                                 <Button
                                   variant="outlined"

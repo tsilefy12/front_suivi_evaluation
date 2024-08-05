@@ -33,6 +33,9 @@ import useFetchEmploys from "../hooks/getResponsable";
 import useFetchPostAnalytique from "../hooks/getPostAnalytique";
 import useFetchProject from "../hooks/getProject";
 import useFetchCurrency from "../hooks/getCurrency";
+import useFetchProgrammeRH from "../hooks/getProgrammeListe";
+import useFetchStagiaire from "../hooks/getStagiaire";
+import useFetchPrestataire from "../hooks/getPrestataire";
 
 const AddNewGrantsEnCours = () => {
   const router = useRouter();
@@ -45,11 +48,19 @@ const AddNewGrantsEnCours = () => {
   const { bankList } = useAppSelector((state: any) => state.bank);
   const { employees } = useAppSelector((state: any) => state.employe);
   const fetchPostAnalytique = useFetchPostAnalytique();
+  const fetchStagiaire = useFetchStagiaire();
+  const { interns } = useAppSelector((state: any) => state.stagiaire);
+  const fetchPrestataire = useFetchPrestataire();
+  const { prestataireListe } = useAppSelector(
+    (state: any) => state.prestataire
+  );
 
   const fetcProject = useFetchProject();
   const fetchCurreny = useFetchCurrency();
-  const { currencylist } = useAppSelector((state: any) => state.currency);
+  const { currencyListe } = useAppSelector((state: any) => state.currency);
   const { projectList } = useAppSelector((state: any) => state.project);
+  const fetchProgrammeRH = useFetchProgrammeRH();
+  const { programmeRHList } = useAppSelector((state: any) => state.programmeRH);
 
   const [open, setOpen] = React.useState(false);
 
@@ -59,13 +70,17 @@ const AddNewGrantsEnCours = () => {
     fetchPostAnalytique();
     fetcProject();
     fetchCurreny();
+    fetchProgrammeRH();
+    fetchStagiaire();
+    fetchPrestataire();
   }, []);
 
+  // console.log("prestataire :", interns);
   const listBank: { id: string; name: string }[] = [];
   //get list bank
   if (bankList.length > 0) {
     bankList.forEach((element: any) => {
-      listBank.push({ id: element["id"], name: element["name"] });
+      listBank.push({ id: element["id"], name: element["chequier"] });
     });
   } else {
     listBank.push({ id: "", name: "" });
@@ -98,6 +113,21 @@ const AddNewGrantsEnCours = () => {
       console.log("error", error);
     }
   };
+  const formatOptions = (options: any) => {
+    return options.map((option: any) => ({
+      id: option.id,
+      name: option.name,
+      surname: option.surname,
+    }));
+  };
+
+  // Fusionner les listes et les transformer
+  const allOptions = [
+    ...formatOptions(employees),
+    ...formatOptions(interns),
+    ...formatOptions(prestataireListe),
+  ];
+
   return (
     <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>
       <Formik
@@ -107,7 +137,7 @@ const AddNewGrantsEnCours = () => {
             ? grantEncour
             : {
                 code: isEditing ? grantEncour?.code : "",
-                // postAnalyticId: isEditing ? grantEncour?.postAnalyticId : null,
+                programmeId: isEditing ? grantEncour?.programmeId : "",
                 projectId: isEditing ? grantEncour?.projectId : "",
                 bankId: isEditing ? grantEncour?.bankId : "",
                 // titleFr: isEditing ? grantEncour?.titleFr : "",
@@ -215,6 +245,17 @@ const AddNewGrantsEnCours = () => {
                   <OSSelectField
                     fullWidth
                     id="outlined-basic"
+                    label="Programme"
+                    variant="outlined"
+                    name="programmeId"
+                    type="string"
+                    options={programmeRHList}
+                    dataKey="name"
+                    valueKey="id"
+                  />
+                  <OSSelectField
+                    fullWidth
+                    id="outlined-basic"
                     label="Projet"
                     variant="outlined"
                     name="projectId"
@@ -249,9 +290,9 @@ const AddNewGrantsEnCours = () => {
                   <OSSelectField
                     fullWidth
                     id="outlined-basic"
-                    label="Finance validateur"
+                    label="Validateur technique"
                     variant="outlined"
-                    name="financeValidator"
+                    name="techValidator"
                     options={employees}
                     dataKey={["name", "surname"]}
                     valueKey="id"
@@ -269,9 +310,9 @@ const AddNewGrantsEnCours = () => {
                   <OSSelectField
                     fullWidth
                     id="outlined-basic"
-                    label="Validateur technique"
+                    label="Finance validateur"
                     variant="outlined"
-                    name="techValidator"
+                    name="financeValidator"
                     options={employees}
                     dataKey={["name", "surname"]}
                     valueKey="id"
@@ -341,7 +382,7 @@ const AddNewGrantsEnCours = () => {
                   label="Currency"
                   variant="outlined"
                   name="currencyId"
-                  options={currencylist}
+                  options={currencyListe}
                   dataKey={["name"]}
                   valueKey="id"
                 />
@@ -352,7 +393,7 @@ const AddNewGrantsEnCours = () => {
                     label="Responsable"
                     variant="outlined"
                     name="responsable"
-                    options={employees}
+                    options={allOptions}
                     dataKey={["name", "surname"]}
                     valueKey="id"
                   />
