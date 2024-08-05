@@ -43,7 +43,7 @@ function allMenu() {
           .find((t) => t.id === 2)
           .items.push({
             id: 21,
-            name: "Grant de mise en oeuvre",
+            name: "Grant en cours",
             link: "/grants/grantsEnCours",
             icon: "",
           });
@@ -70,16 +70,16 @@ function allMenu() {
             icon: "",
           });
       }
-      if (user?.groups?.some((g) => g.service.name === "Suivi période")) {
-        temp
-          .find((t) => t.id === 2)
-          .items.push({
-            id: 24,
-            name: "Période et budget initial",
-            link: "/grants/periode",
-            icon: "",
-          });
-      }
+      // if (user?.groups?.some((g) => g.service.name === "Suivi période")) {
+      //   temp
+      //     .find((t) => t.id === 2)
+      //     .items.push({
+      //       id: 24,
+      //       name: "Période et budget initial",
+      //       link: "/grants/periode",
+      //       icon: "",
+      //     });
+      // }
       if (
         user?.groups?.some((g) => g.service.name === "Suivi plan financement")
       ) {
@@ -87,7 +87,7 @@ function allMenu() {
           .find((t) => t.id === 2)
           .items.push({
             id: 25,
-            name: "Plan financement",
+            name: "Plan financement (Période et budget initial)",
             link: "/grants/planFinancement",
             icon: "",
           });

@@ -38,6 +38,7 @@ import EnhancedTableHead from "./table/EnhancedTableHead";
 import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
 import Data, { Order } from "./table/type-variable";
 import { Search } from "@mui/icons-material";
+import useFetchReliquatGrant from "../reliquetGrant/hooks/useFetchEliquatGrant";
 
 const ListGrantsAdmin = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -46,7 +47,7 @@ const ListGrantsAdmin = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [filtre , setFiltre] = React.useState("")
+  const [filtre, setFiltre] = React.useState("");
   const fetchGrantAdmin = useFetchGrantAdmin();
   const { grantAdminlist } = useAppSelector((state) => state.grantAdmin);
   const router = useRouter();
@@ -55,10 +56,15 @@ const ListGrantsAdmin = () => {
   const fetchGrants = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const validate = usePermitted();
+  const fetchtReliquatGrant = useFetchReliquatGrant();
+  const { reliquatGrantList } = useAppSelector(
+    (state: any) => state.reliquatGrant
+  );
 
   React.useEffect(() => {
     fetchGrantAdmin();
     fetchGrants();
+    fetchtReliquatGrant();
   }, []);
   const [dataFiltered, setDataFiltered] = React.useState<any[]>([]);
   const [searchGrantAdmin, setSearchGrantAdmin] = React.useState<string>("");
@@ -165,13 +171,17 @@ const ListGrantsAdmin = () => {
           </Link>
         )}
         <Typography variant="h4" color="GrayText">
-          Grant admin
+          Grant de fonctionnement
         </Typography>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2 }}>
-            <EnhancedTableToolbar numSelected={selected.length} filtre={filtre} setFiltre={setFiltre}/>
+            <EnhancedTableToolbar
+              numSelected={selected.length}
+              filtre={filtre}
+              setFiltre={setFiltre}
+            />
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -190,10 +200,24 @@ const ListGrantsAdmin = () => {
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
                   {dataFiltered
+                    .filter(
+                      (item) =>
+                        !reliquatGrantList.some((rg: any) =>
+                          item.grant.toString().includes(rg.grant.toString())
+                        )
+                    )
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .filter( item => (`
-                        ${grantEncoursList.find((e: any) => e.id === item?.grant)?.code} ${item.bailleur}
-                      `).toLowerCase().includes(filtre.toLowerCase()))
+                    .filter((item) =>
+                      `
+                        ${
+                          grantEncoursList.find(
+                            (e: any) => e.id === item?.grant
+                          )?.code
+                        } ${item.bailleur}
+                      `
+                        .toLowerCase()
+                        .includes(filtre.toLowerCase())
+                    )
                     .map((row: GrantAdminItem, index) => {
                       // const isItemSelected = isSelected(row.id);
                       const labelId = `enhanced-table-checkbox-${index}`;

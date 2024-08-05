@@ -47,7 +47,7 @@ const GrantsList = () => {
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
   const fetchCurrency = useFetchCurrency();
-  const { currencylist } = useAppSelector((state) => state.currency);
+  const { currencyListe } = useAppSelector((state: any) => state.currency);
 
   React.useEffect(() => {
     fetchGrants();
@@ -105,7 +105,7 @@ const GrantsList = () => {
       Start: format(new Date(row.startDate as string), "dd/MM/yyyy"),
       End: format(new Date(row.endDate as string), "dd/MM/yyyy"),
       Amount: row.amount,
-      Currency: currencylist.find((f: CurrencyItem) => f.id === row.currencyId)
+      Currency: currencyListe.find((f: CurrencyItem) => f.id === row.currencyId)
         ?.name,
       Statut: row.status,
       "MV Lead": "",
@@ -311,7 +311,7 @@ const GrantsList = () => {
                           </TableCell>
                           <TableCell align="center" sx={{ width: "100%" }}>
                             {
-                              currencylist.find(
+                              currencyListe.find(
                                 (f: any) => f.id === row.currencyId
                               )?.name
                             }

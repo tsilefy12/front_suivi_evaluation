@@ -23,7 +23,7 @@ import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
 import useFetchPeriode from "../periode/hooks/useFetchPeriode";
 import useFetchBudgetLine from "../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchbudgetLine";
 import Link from "next/link";
-import { ArrowBack } from "@mui/icons-material";
+import { Add, ArrowBack } from "@mui/icons-material";
 import { BudgetInitialItem } from "../../redux/features/budgetInitial/budgetInitial.interface";
 
 const ListPlanFinancement = () => {
@@ -88,11 +88,18 @@ const ListPlanFinancement = () => {
   return (
     <Container maxWidth="xl">
       <Stack direction={"column"} spacing={2} alignItems={"start"}>
-        <Link href="/">
-          <Button variant="text" startIcon={<ArrowBack />} color="info">
-            Retour
-          </Button>
-        </Link>
+        <Stack direction={"row"} alignItems={"center"} gap={2}>
+          <Link href="/">
+            <Button variant="text" startIcon={<ArrowBack />} color="info">
+              Retour
+            </Button>
+          </Link>
+          <Link href="/grants/periode/add">
+            <Button variant="contained" startIcon={<Add />}>
+              Créer période
+            </Button>
+          </Link>
+        </Stack>
         <Stack
           direction={"row"}
           alignItems={"center"}
