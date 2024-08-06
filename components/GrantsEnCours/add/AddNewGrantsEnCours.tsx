@@ -10,6 +10,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  TextField,
+  Autocomplete,
 } from "@mui/material";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -127,7 +129,7 @@ const AddNewGrantsEnCours = () => {
     ...formatOptions(interns),
     ...formatOptions(prestataireListe),
   ];
-
+  const [selectedOption, setSelectedOption] = useState<any>(null);
   return (
     <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>
       <Formik
@@ -145,7 +147,9 @@ const AddNewGrantsEnCours = () => {
                 bailleur: isEditing ? grantEncour?.bailleur : "",
                 amount: isEditing ? grantEncour?.amount : 0,
                 amountMGA: isEditing ? grantEncour?.amountMGA : 0,
-                responsable: isEditing ? grantEncour?.responsable : "",
+                responsable: isEditing
+                  ? grantEncour?.responsable
+                  : selectedOption.id!,
                 startDate: isEditing
                   ? grantEncour?.startDate
                   : new Date().toISOString(),
@@ -387,15 +391,29 @@ const AddNewGrantsEnCours = () => {
                   valueKey="id"
                 />
                 <FormControl>
-                  <OSSelectField
+                  <Autocomplete
                     fullWidth
                     id="outlined-basic"
-                    label="Responsable"
-                    variant="outlined"
-                    name="responsable"
                     options={allOptions}
-                    dataKey={["name", "surname"]}
-                    valueKey="id"
+                    getOptionLabel={(option) =>
+                      `${option.name} ${option.surname}`
+                    }
+                    value={formikProps.values.responsable || null}
+                    onChange={(event, newValue) => {
+                      setSelectedOption(newValue);
+                      formikProps.setFieldValue("responsable", newValue);
+                    }}
+                    isOptionEqualToValue={(option, value) =>
+                      option.id === value?.id
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Responsable"
+                        variant="outlined"
+                        name="responsable"
+                      />
+                    )}
                   />
                 </FormControl>
                 <CustomStack

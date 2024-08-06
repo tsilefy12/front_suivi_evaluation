@@ -5,11 +5,7 @@ import {
   Typography,
   TextField,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Stack,
-  Divider,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -33,9 +29,6 @@ import { cancelEdit } from "../../../redux/features/periode/periodeSlice";
 import { createPeriode, updatePeriode } from "../../../redux/features/periode";
 import useFetchPeriode from "../hooks/useFetchPeriode";
 import OSDatePicker from "../../shared/date/OSDatePicker";
-import { useConfirm } from "material-ui-confirm";
-import { format } from "date-fns";
-
 const AddNewPeriodeGrants = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -87,17 +80,11 @@ const AddNewPeriodeGrants = () => {
                 grant: isEditing ? periode?.grant : "",
                 debut: isEditing ? periode?.debut : new Date(),
                 fin: isEditing ? periode?.fin : new Date(),
-                dateFinance: isEditing ? periode?.dateFinance : new Date(),
-                dateTechnic: isEditing ? periode?.dateTechnic : new Date(),
-                deadline: isEditing ? periode?.deadline : new Date(),
-                notes: isEditing ? periode?.notes : "",
               }
         }
         validationSchema={Yup.object({
           periode: Yup.string().required("Champ obligatoire"),
           montant: Yup.number().required("Champ obligatoire"),
-          // grant: Yup.number().required("Champ obligatoire"),
-          notes: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -261,63 +248,6 @@ const AddNewPeriodeGrants = () => {
                     }}
                   />
                 </CustomStack>
-                <Stack direction={"row"} gap={2}>
-                  <OSDatePicker
-                    fullWidth
-                    id="outlined-basic"
-                    label="Date finance"
-                    variant="outlined"
-                    name="dateFinance"
-                    value={
-                      !isEditing
-                        ? formikProps.values.dateFinance
-                        : periode?.dateFinance
-                    }
-                    onChange={(value: any) =>
-                      formikProps.setFieldValue("dateFinance", value)
-                    }
-                  />
-                  <OSDatePicker
-                    fullWidth
-                    id="outlined-basic"
-                    label="Date tech"
-                    variant="outlined"
-                    name="dateTechnic"
-                    value={
-                      !isEditing
-                        ? formikProps.values.dateTechnic
-                        : periode?.dateTechnic
-                    }
-                    onChange={(value: any) =>
-                      formikProps.setFieldValue("dateTechnic", value)
-                    }
-                  />
-                  <OSDatePicker
-                    fullWidth
-                    id="outlined-basic"
-                    label="Deadline"
-                    variant="outlined"
-                    name="deadline"
-                    value={
-                      !isEditing
-                        ? formikProps.values.deadline
-                        : periode?.deadline
-                    }
-                    onChange={(value: any) =>
-                      formikProps.setFieldValue("deadline", value)
-                    }
-                  />
-                </Stack>
-                <OSTextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Notes"
-                  variant="outlined"
-                  name="notes"
-                  multiline
-                  rows={3}
-                  size="small"
-                />
               </FormContainer>
             </Form>
           );

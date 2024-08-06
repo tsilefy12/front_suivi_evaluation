@@ -5,10 +5,6 @@ export interface PeriodeItem {
   grant?: number;
   debut?: Date;
   fin?: Date;
-  deadline?: Date;
-  notes?: string;
-  dateFinance?: Date;
-  dateTechnic?: Date;
 }
 export interface PeriodeInitialState {
   periodelist: PeriodeItem[];

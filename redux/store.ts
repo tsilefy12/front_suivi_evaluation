@@ -61,6 +61,7 @@ import { imprevuePrevisionSlice } from "./features/imprevuePrevision/imprevuePre
 import { programmeRHSlice } from "./features/programmeRH/programmeRHSlice";
 import { internSlice } from "./features/stagiaire/internshipSlice";
 import { prestataireSlice } from "./features/prestataire/prestataireSlice";
+import { deadlineSlice } from "./features/deadline/deadlineSlice";
 
 export const store = configureStore({
   reducer: {
@@ -126,6 +127,7 @@ export const store = configureStore({
     programmeRH: programmeRHSlice.reducer,
     stagiaire: internSlice.reducer,
     prestataire: prestataireSlice.reducer,
+    deadline: deadlineSlice.reducer,
   },
 });
 

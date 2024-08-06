@@ -1,6 +1,14 @@
-import { Button, Container, Stack, styled, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  Dialog,
+  IconButton,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -21,9 +29,7 @@ import useFetchProject from "../../../GrantsEnCours/hooks/getProject";
 import Moment from "react-moment";
 import TransportEquipmentTableHeader from "../../organisme/table/TransportEquipmentTableHeader";
 import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
-import { ArrowBack, Backpack, Download, Pages } from "@mui/icons-material";
-import useFetchPeriode from "../../../periode/hooks/useFetchPeriode";
-import { PeriodeItem } from "../../../../redux/features/periode/periode.interface";
+import { Add, ArrowBack, Download, Edit } from "@mui/icons-material";
 import * as XLSX from "xlsx";
 import { format } from "date-fns";
 import {
@@ -35,6 +41,15 @@ import {
   pdf,
 } from "@react-pdf/renderer";
 import { ProjectItem } from "../../../../redux/features/project/project.interface";
+import AddNewDeadline from "../add/AddNewDeadline";
+import { padding } from "polished";
+import useFetchDeadlinelist from "../../hooks/useFetchDeadline";
+import { DeadlineItem } from "../../../../redux/features/deadline/deadline.interface";
+import { ro } from "date-fns/locale";
+import { usePermitted } from "../../../../config/middleware";
+import { editDeadline } from "../../../../redux/features/deadline";
+import useFetchStagiaire from "../../../GrantsEnCours/hooks/getStagiaire";
+import useFetchPrestataire from "../../../GrantsEnCours/hooks/getPrestataire";
 
 const ListGrantsMonitoring = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -50,16 +65,37 @@ const ListGrantsMonitoring = () => {
   const { projectList } = useAppSelector((state) => state.project);
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
-  const fetchPeriode = useFetchPeriode();
-  const { periodelist } = useAppSelector((state) => state.periode);
+  const fetchDeadline = useFetchDeadlinelist();
+  const { deadlinelist } = useAppSelector((state) => state.deadline);
+  const fetchStagiaire = useFetchStagiaire();
+  const { interns } = useAppSelector((state: any) => state.stagiaire);
+  const fetchPrestataire = useFetchPrestataire();
+  const { prestataireListe } = useAppSelector(
+    (state: any) => state.prestataire
+  );
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    fetchGrants();
-    fetchProject();
-    fetchEmployes();
-    fetchPeriode();
-  }, [router.query]);
+    const fetchData = async () => {
+      try {
+        await fetchProject();
+        await fetchGrants();
+        await fetchEmployes();
+        await fetchStagiaire();
+        await fetchPrestataire();
+        await fetchDeadline();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
+    fetchData();
+  }, []);
+
+  const handelClose = () => {
+    setOpen(false);
+  };
+  const validate = usePermitted();
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected: readonly string[] = [];
@@ -94,48 +130,56 @@ const ListGrantsMonitoring = () => {
   const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDense(event.target.checked);
   };
-
+  // console.log(deadlinelist);
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
-  const groupedBudgets: { [key: string]: typeof periodelist } = {};
+  const groupedBudgets: { [key: string]: typeof deadlinelist } = {};
 
-  periodelist
-    .filter((g: PeriodeItem) => g.grant == id)
-    .forEach((budget: PeriodeItem) => {
+  deadlinelist
+    .filter((g: DeadlineItem) => g.grantId == id)
+    .forEach((budget: DeadlineItem) => {
       const grantCode =
         grantEncoursList.find(
-          (grant: GrantEncoursItem) => grant.id == budget.grant
+          (grant: GrantEncoursItem) => grant.id == budget.grantId
         )?.code || "";
       if (!groupedBudgets[grantCode]) {
         groupedBudgets[grantCode] = [];
       }
       groupedBudgets[grantCode].push(budget);
     });
+  const formatOptions = (options: any) => {
+    return options.map((option: any) => ({
+      id: option.id,
+      name: option.name,
+      surname: option.surname,
+    }));
+  };
 
+  const allOptions = [
+    ...formatOptions(employees),
+    ...formatOptions(interns),
+    ...formatOptions(prestataireListe),
+  ];
   const exportToExcel = () => {
     const dataToExport = Object.keys(groupedBudgets).flatMap((grantCode) => {
-      return groupedBudgets[grantCode].map((row: PeriodeItem) => {
+      return groupedBudgets[grantCode].map((row: DeadlineItem) => {
         const projectId = grantEncoursList.find(
           (f: GrantEncoursItem) => f.id == id
         )?.projectId;
         const projectTitle = projectList.find(
           (p: any) => p.id == projectId
         )?.title;
-        const employeeId = grantEncoursList.find(
-          (f: GrantEncoursItem) => f.id == id
-        )?.responsable;
-        const employee = employees.find((e: any) => e.id == employeeId);
-        const employeeName = `${employee?.name ?? ""} ${
-          employee?.surname ?? ""
-        }`;
 
         return {
           "Grant code": grantCode,
           "Project Title": projectTitle,
           Deadline: format(new Date(row.deadline as Date), "dd/MM/yyyy"),
-          "Période start": format(new Date(row.debut as Date), "dd/MM/yyyy"),
-          "Période end": format(new Date(row.fin as Date), "dd/MM/yyyy"),
+          "Période start": format(
+            new Date(row.startDate as Date),
+            "dd/MM/yyyy"
+          ),
+          "Période end": format(new Date(row.endDate as Date), "dd/MM/yyyy"),
           "Technical submitted": format(
-            new Date(row.dateTechnic as Date),
+            new Date(row.dateTech as Date),
             "dd/MM/yyyy"
           ),
           "Financial submitted": format(
@@ -143,14 +187,16 @@ const ListGrantsMonitoring = () => {
             "dd/MM/yyyy"
           ),
           "Technical delay":
-            (new Date(row.dateTechnic as Date).getTime() -
+            (new Date(row.dateTech as Date).getTime() -
               new Date(row.deadline as Date).getTime()) /
             (24 * 60 * 60 * 1000),
           "Finance delay":
             (new Date(row.dateFinance as Date).getTime() -
               new Date(row.deadline as Date).getTime()) /
             (24 * 60 * 60 * 1000),
-          Responsable: employeeName,
+          Responsable: `${
+            employees.find((e: any) => e.id == row.responsable)?.name
+          } ${employees.find((e: any) => e.id == row.responsable)?.surname}`,
           Notes: row.notes,
           "Days left": Math.ceil(
             (new Date().getTime() - new Date(row.deadline as Date).getTime()) /
@@ -360,7 +406,7 @@ const ListGrantsMonitoring = () => {
             {/* Table Row */}
             {Object.keys(groupedBudgets).map((grantCode) => {
               const budgets = groupedBudgets[grantCode];
-              return budgets.map((row: PeriodeItem, index: any) => (
+              return budgets.map((row: DeadlineItem) => (
                 <View style={styles.tableRow}>
                   <View style={styles.tableCol}>
                     <Text
@@ -381,7 +427,7 @@ const ListGrantsMonitoring = () => {
                         marginLeft: 8,
                       }}
                     >
-                      {format(new Date(row.debut as Date), "dd/MM/yyyy")}
+                      {format(new Date(row.startDate as Date), "dd/MM/yyyy")}
                     </Text>
                   </View>
                   <View style={styles.tableCol}>
@@ -392,7 +438,7 @@ const ListGrantsMonitoring = () => {
                         marginLeft: 8,
                       }}
                     >
-                      {format(new Date(row.fin as Date), "dd/MM/yyyy")}
+                      {format(new Date(row.endDate as Date), "dd/MM/yyyy")}
                     </Text>
                   </View>
                   <View style={styles.tableCol}>
@@ -403,7 +449,7 @@ const ListGrantsMonitoring = () => {
                         marginLeft: 8,
                       }}
                     >
-                      {format(new Date(row.dateTechnic as Date), "dd/MM/yyyy")}
+                      {format(new Date(row.dateTech as Date), "dd/MM/yyyy")}
                     </Text>
                   </View>
                   <View style={styles.tableCol}>
@@ -425,7 +471,7 @@ const ListGrantsMonitoring = () => {
                         marginLeft: 8,
                       }}
                     >
-                      {(new Date(row.dateTechnic as Date).getTime() -
+                      {(new Date(row.dateTech as Date).getTime() -
                         new Date(row.deadline as Date).getTime()) /
                         (24 * 60 * 60 * 1000)}
                     </Text>
@@ -452,13 +498,12 @@ const ListGrantsMonitoring = () => {
                       }}
                     >
                       {(() => {
-                        const employeeId = grantEncoursList.find(
-                          (f: GrantEncoursItem) => f.id == id
-                        )?.responsable;
-                        const employee = employees.find(
-                          (e: any) => e.id == employeeId
+                        const responsiblePerson = allOptions.find(
+                          (e: any) => e.id === row.responsable
                         );
-                        return `${employee?.name ?? ""}`;
+                        return responsiblePerson
+                          ? `${responsiblePerson.name} ${responsiblePerson.surname}`
+                          : "";
                       })()}
                     </Text>
                   </View>
@@ -470,7 +515,7 @@ const ListGrantsMonitoring = () => {
                         marginLeft: 8,
                       }}
                     >
-                      {row.notes}
+                      {/* {row.notes} */}
                     </Text>
                   </View>
                   <View style={styles.tableCol}>
@@ -496,11 +541,7 @@ const ListGrantsMonitoring = () => {
                         marginLeft: 8,
                       }}
                     >
-                      {new Date(
-                        periodelist.find(
-                          (p: PeriodeItem) => p.grant == id
-                        )?.deadline!
-                      ).getFullYear()}
+                      {new Date(row.deadline as Date).getFullYear()}
                     </Text>
                   </View>
                 </View>
@@ -519,21 +560,36 @@ const ListGrantsMonitoring = () => {
     downloadLink.download = "Deadline.pdf";
     downloadLink.click();
   };
+  const handleClickEdit = async (id: any) => {
+    await dispatch(editDeadline({ id }));
+    setOpen(true);
+  };
 
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Stack direction={"row"} gap={2}>
-          <Link href="/grants/grantMonitoring">
-            <Button color="info" startIcon={<ArrowBack />}>
-              Retour
+        <Stack
+          direction={"row"}
+          justifyContent={"space-between"}
+          alignItems="center"
+        >
+          <Stack direction={"row"} gap={2}>
+            <Link href="/grants/grantMonitoring">
+              <Button color="info" startIcon={<ArrowBack />}>
+                Retour
+              </Button>
+            </Link>
+            <Button
+              color="primary"
+              variant="contained"
+              startIcon={<Add />}
+              onClick={() => setOpen(true)}
+            >
+              Créer
             </Button>
-          </Link>
-          <Typography variant="h4" color="GrayText">
-            DEADLINE LIST
-          </Typography>
+          </Stack>
         </Stack>
-        <Stack direction={"row"} gap={2}>
+        <Stack direction={"row"} gap={2} padding={2}>
           <Button
             onClick={clickPDF}
             color="primary"
@@ -550,6 +606,9 @@ const ListGrantsMonitoring = () => {
           >
             Excel
           </Button>
+          <Typography variant="h4" color="GrayText">
+            Deadline list
+          </Typography>
         </Stack>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
@@ -565,7 +624,7 @@ const ListGrantsMonitoring = () => {
                 <TableBody>
                   {Object.keys(groupedBudgets).map((grantCode) => {
                     const budgets = groupedBudgets[grantCode];
-                    return budgets.map((row: PeriodeItem, index: any) => (
+                    return budgets.map((row: DeadlineItem, index: any) => (
                       <TableRow
                         hover
                         role="checkbox"
@@ -604,19 +663,19 @@ const ListGrantsMonitoring = () => {
                           align="center"
                           sx={{ minWidth: 150, maxWidth: 150 }}
                         >
-                          <Moment format="DD/MM/yyyy">{row.debut}</Moment>
+                          <Moment format="DD/MM/yyyy">{row.startDate}</Moment>
                         </TableCell>
                         <TableCell
                           align="center"
                           sx={{ minWidth: 150, maxWidth: 150 }}
                         >
-                          <Moment format="DD/MM/yyyy">{row.fin}</Moment>
+                          <Moment format="DD/MM/yyyy">{row.endDate}</Moment>
                         </TableCell>
                         <TableCell
                           align="left"
                           sx={{ minWidth: 50, maxWidth: 50 }}
                         >
-                          <Moment format="DD/MM/yyyy">{row.dateTechnic}</Moment>
+                          <Moment format="DD/MM/yyyy">{row.dateTech}</Moment>
                         </TableCell>
                         <TableCell
                           align="left"
@@ -628,34 +687,36 @@ const ListGrantsMonitoring = () => {
                           align="left"
                           sx={{ minWidth: 50, maxWidth: 50 }}
                         >
-                          {(new Date(row.dateTechnic as Date).getTime() -
-                            new Date(row.deadline as Date).getTime()) /
-                            (24 * 60 * 60 * 1000)}
+                          {Math.ceil(
+                            (new Date(row.dateTech as Date).getTime() -
+                              new Date(row.deadline as Date).getTime()) /
+                              (24 * 60 * 60 * 1000)
+                          )}
                         </TableCell>
                         <TableCell
                           align="left"
                           sx={{ minWidth: 50, maxWidth: 50 }}
                         >
-                          {(new Date(row.dateFinance as Date).getTime() -
-                            new Date(row.deadline as Date).getTime()) /
-                            (24 * 60 * 60 * 1000)}
+                          {Math.ceil(
+                            (new Date(row.dateFinance as Date).getTime() -
+                              new Date(row.deadline as Date).getTime()) /
+                              (24 * 60 * 60 * 1000)
+                          )}
                         </TableCell>
                         <TableCell
                           align="center"
                           sx={{ minWidth: 200, maxWidth: 200 }}
                         >
                           {(() => {
-                            const employeeId = grantEncoursList.find(
-                              (f: GrantEncoursItem) => f.id == id
-                            )?.responsable;
-                            const employee = employees.find(
-                              (e: any) => e.id == employeeId
+                            const responsiblePerson = allOptions.find(
+                              (e: any) => e.id === row.responsable
                             );
-                            return `${employee?.name ?? ""} ${
-                              employee?.surname ?? ""
-                            }`;
+                            return responsiblePerson
+                              ? `${responsiblePerson.name} ${responsiblePerson.surname}`
+                              : "";
                           })()}
                         </TableCell>
+
                         <TableCell
                           align="center"
                           sx={{ minWidth: 300, maxWidth: 300 }}
@@ -676,11 +737,22 @@ const ListGrantsMonitoring = () => {
                           align="left"
                           sx={{ minWidth: 50, maxWidth: 50 }}
                         >
-                          {new Date(
-                            periodelist.find(
-                              (p: PeriodeItem) => p.grant == id
-                            )?.deadline!
-                          ).getFullYear()}
+                          {new Date(row.deadline as Date).getFullYear()}
+                        </TableCell>
+                        <TableCell>
+                          {validate("Suivi grant en cours", "U") && (
+                            <IconButton
+                              color="primary"
+                              aria-label="Modifier"
+                              component="span"
+                              size="small"
+                              onClick={() => {
+                                handleClickEdit(row.id);
+                              }}
+                            >
+                              <Edit />
+                            </IconButton>
+                          )}
                         </TableCell>
                       </TableRow>
                     ));
@@ -688,6 +760,20 @@ const ListGrantsMonitoring = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+            <Dialog
+              open={open}
+              disablePortal={false}
+              PaperProps={{
+                style: {
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                  padding: 6,
+                },
+              }}
+            >
+              <AddNewDeadline handelClose={handelClose} />
+            </Dialog>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
@@ -757,3 +843,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
 });
+const styleDialog = {
+  top: 20,
+  width: "auto",
+  alignItem: "center",
+  padding: 4,
+};
