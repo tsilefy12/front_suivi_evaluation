@@ -111,6 +111,9 @@ const AddNewTacheEtObjectifs = () => {
               objectiveTitle: item.objectiveTitle,
               year: item.year,
               taskAndObjectiveId: res.payload.id,
+              indicateur: item.indicateur,
+              prevision: item.prevision,
+              realisation: item.realisation,
             };
             if (idT) {
               dispatch(
@@ -148,6 +151,9 @@ const AddNewTacheEtObjectifs = () => {
               objectiveTitle: element.objectiveTitle,
               year: Number(element.year),
               taskAndObjectiveId: res.payload.id!,
+              indicateur: element.indicateur,
+              prevision: element.prevision,
+              realisation: element.realisation,
             };
             await dispatch(createObejectifAnnuel(newData));
           }

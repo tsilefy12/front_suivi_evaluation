@@ -179,8 +179,11 @@ const NewTacheEtObjectifs = ({
             <Table sx={{ minWidth: 700 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Titre objectifs</TableCell>
                   <TableCell align="left">Année</TableCell>
+                  <TableCell align="left">Objectif</TableCell>
+                  <TableCell align="left">Indicateur</TableCell>
+                  <TableCell align="left">Prévision</TableCell>
+                  <TableCell align="left">Réalisation</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
@@ -190,10 +193,19 @@ const NewTacheEtObjectifs = ({
                     key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
+                    <TableCell align="left">{item.year}</TableCell>
                     <TableCell component="th" scope="row">
                       {item.objectiveTitle}
                     </TableCell>
-                    <TableCell align="left">{item.year}</TableCell>
+                    <TableCell align="left">
+                      {item.indicateur ? item.indicateur : ""}
+                    </TableCell>
+                    <TableCell align="left">
+                      {item.prevision ? item.prevision : ""}
+                    </TableCell>
+                    <TableCell align="left">
+                      {item.realisation ? item.realisation : ""}
+                    </TableCell>
                     <TableCell
                       align="center"
                       sx={{ width: 150, background: "#F5F5F5" }}
@@ -210,14 +222,26 @@ const NewTacheEtObjectifs = ({
                           component="span"
                           size="small"
                           onClick={() => {
+                            formikProps.setFieldValue("year", item.year);
                             formikProps.setFieldValue(
                               "objectiveTitle",
                               item.objectiveTitle
                             );
-                            formikProps.setFieldValue("year", item.year);
                             formikProps.setFieldValue(
                               "taskAndObjectiveId",
                               item.taskAndObjectiveId
+                            );
+                            formikProps.setFieldValue(
+                              "indicateur",
+                              item.indicateur
+                            );
+                            formikProps.setFieldValue(
+                              "prevision",
+                              item.prevision
+                            );
+                            formikProps.setFieldValue(
+                              "realisation",
+                              item.realisation
                             );
                             setIdValues(item.id);
                           }}
@@ -254,41 +278,6 @@ const NewTacheEtObjectifs = ({
                   key="index"
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
-                    <FormControl fullWidth>
-                      <OSTextField
-                        id="objectiveTitle"
-                        label="Titre objectifs"
-                        name="objectiveTitle"
-                        type="text"
-                        onChange={(event: any) => {
-                          const objectif = event.target.value;
-                          formikProps.setFieldValue("objectiveTitle", objectif);
-
-                          const annee = formikProps.values.year;
-
-                          const data = tacheEtObjectifList
-                            .filter((item) => item.planTravaileId == id)
-                            .flatMap((item) => item.objectifAnnuel);
-                          const ans = data.map((item) => Number(item?.year));
-                          const objectifs = data.map(
-                            (item) => item?.objectiveTitle
-                          );
-                          const anneeNumber = Number(annee);
-                          const found = ans.some(
-                            (year, index) =>
-                              year === anneeNumber &&
-                              objectifs[index] === objectif
-                          );
-
-                          if (found) {
-                            setOpen(true);
-                            return;
-                          }
-                        }}
-                      />
-                    </FormControl>
-                  </TableCell>
                   <TableCell align="left">
                     <FormControl fullWidth>
                       <OSTextField
@@ -325,6 +314,86 @@ const NewTacheEtObjectifs = ({
                       />
                     </FormControl>
                   </TableCell>
+                  <TableCell component="th" scope="row">
+                    <FormControl fullWidth>
+                      <OSTextField
+                        id="objectiveTitle"
+                        label="Titre objectifs"
+                        name="objectiveTitle"
+                        type="text"
+                        onChange={(event: any) => {
+                          const objectif = event.target.value;
+                          formikProps.setFieldValue("objectiveTitle", objectif);
+
+                          const annee = formikProps.values.year;
+
+                          const data = tacheEtObjectifList
+                            .filter((item) => item.planTravaileId == id)
+                            .flatMap((item) => item.objectifAnnuel);
+                          const ans = data.map((item) => Number(item?.year));
+                          const objectifs = data.map(
+                            (item) => item?.objectiveTitle
+                          );
+                          const anneeNumber = Number(annee);
+                          const found = ans.some(
+                            (year, index) =>
+                              year === anneeNumber &&
+                              objectifs[index] === objectif
+                          );
+
+                          if (found) {
+                            setOpen(true);
+                            return;
+                          }
+                        }}
+                      />
+                    </FormControl>
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    <FormControl fullWidth>
+                      <OSTextField
+                        id="indicateur"
+                        label="Indicateur"
+                        name="indicateur"
+                        type="number"
+                        value={formikProps.values.indicateur}
+                        onChange={(event: any) => {
+                          const indicateur = event.target.value;
+                          formikProps.setFieldValue("indicateur", indicateur);
+                        }}
+                      />
+                    </FormControl>
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    <FormControl fullWidth>
+                      <OSTextField
+                        id="prevision"
+                        label="Prévision"
+                        name="prevision"
+                        type="number"
+                        value={formikProps.values.prevision}
+                        onChange={(event: any) => {
+                          const prevision = event.target.value;
+                          formikProps.setFieldValue("prevision", prevision);
+                        }}
+                      />
+                    </FormControl>
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    <FormControl fullWidth>
+                      <OSTextField
+                        id="realisation"
+                        label="Réalisation"
+                        name="realisation"
+                        type="number"
+                        value={formikProps.values.realisation}
+                        onChange={(event: any) => {
+                          const realisation = event.target.value;
+                          formikProps.setFieldValue("realisation", realisation);
+                        }}
+                      />
+                    </FormControl>
+                  </TableCell>
                   <TableCell
                     align="center"
                     sx={{ width: 150, background: "#F5F5F5" }}
@@ -341,6 +410,9 @@ const NewTacheEtObjectifs = ({
                           const objectiveTitle =
                             formikProps.values.objectiveTitle;
                           const year = formikProps.values.year;
+                          const indicateur = formikProps.values.indicateur;
+                          const prevision = formikProps.values.prevision;
+                          const realisation = formikProps.values.realisation;
                           if (objectiveTitle.trim()) {
                             if (idValues) {
                               setValuesArticle((prev: any[]) => {
@@ -349,8 +421,11 @@ const NewTacheEtObjectifs = ({
                                     if (ValId.id === idValues) {
                                       return {
                                         id: idValues,
-                                        objectiveTitle,
                                         year,
+                                        objectiveTitle,
+                                        indicateur,
+                                        prevision,
+                                        realisation,
                                       };
                                     }
                                     return ValId;
@@ -362,14 +437,20 @@ const NewTacheEtObjectifs = ({
                               setValuesArticle((prev: any[]) => {
                                 let temp = [...prev];
                                 temp.push({
-                                  objectiveTitle,
                                   year,
+                                  objectiveTitle,
+                                  indicateur,
+                                  prevision,
+                                  realisation,
                                 });
                                 return temp;
                               });
                             }
-                            formikProps.setFieldValue("objectiveTitle", "");
                             formikProps.setFieldValue("year", 0);
+                            formikProps.setFieldValue("objectiveTitle", "");
+                            formikProps.setFieldValue("indicateur", 0);
+                            formikProps.setFieldValue("prevision", 0);
+                            formikProps.setFieldValue("realisation", 0);
                           }
                         }}
                       >
@@ -378,8 +459,11 @@ const NewTacheEtObjectifs = ({
                       <IconButton
                         type="button"
                         onClick={() => {
-                          formikProps.setFieldValue("objectiveTitle", "");
                           formikProps.setFieldValue("year", 0);
+                          formikProps.setFieldValue("objectiveTitle", "");
+                          formikProps.setFieldValue("indicateur", 0);
+                          formikProps.setFieldValue("prevision", 0);
+                          formikProps.setFieldValue("realisation", 0);
                         }}
                       >
                         <Close />

@@ -6,6 +6,9 @@ export interface ObjectifAnnuelItem {
   year?: number;
   taskAndObjectiveId?: string;
   tacheCle?: TacheEtObjectifItem[];
+  indicateur?: number;
+  prevision?: number;
+  realisation?: number;
   notes?: { siteId: string; objectifAnnuelId: string; note: number }[];
 }
 export interface ObjectifAnnuelsInitialState {

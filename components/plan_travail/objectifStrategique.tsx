@@ -105,14 +105,25 @@ const ListObjectifStrategique = ({
   const [data, setData] = React.useState<any[]>([]);
   useEffect(() => {
     if (filtre === "") {
-      setData([...planTravaillist].reverse());
+      setData(
+        [
+          ...planTravaillist.filter(
+            (p) =>
+              new Date(p.endDate as Date).getFullYear() ===
+              new Date().getFullYear()
+          ),
+        ].reverse()
+      );
     } else {
-      const donnee = planTravaillist.filter((item) =>
-        ` ${item.title} ${item.description} ${
-          projectList.find((p: any) => p.id == item.projectId)?.title
-        }`
-          .toLowerCase()
-          .includes(filtre.toLowerCase())
+      const donnee = planTravaillist.filter(
+        (item) =>
+          new Date(item.endDate as Date).getFullYear() ===
+            new Date().getFullYear() &&
+          ` ${item.title} ${item.description} ${
+            projectList.find((p: any) => p.id == item.projectId)?.title
+          }`
+            .toLowerCase()
+            .includes(filtre.toLowerCase())
       );
       setData([...donnee].reverse());
     }

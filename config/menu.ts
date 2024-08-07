@@ -87,7 +87,7 @@ function allMenu() {
           .find((t) => t.id === 2)
           .items.push({
             id: 25,
-            name: "Plan financement (Période et budget initial)",
+            name: "Plan financement",
             link: "/grants/planFinancement",
             icon: "",
           });

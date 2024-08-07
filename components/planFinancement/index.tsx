@@ -142,6 +142,7 @@ const ListPlanFinancement = () => {
           <TableHead>
             <TableRow>
               <TableCell>GRANT</TableCell>
+              <TableCell>ANNÉE</TableCell>
               <TableCell>PERIODE</TableCell>
               <TableCell>DATE DEBUT</TableCell>
               <TableCell>DATE FIN</TableCell>
@@ -164,6 +165,14 @@ const ListPlanFinancement = () => {
                       periodelist.find((p) => p.id === budget.periodeId)
                         ?.periode
                     }
+                  </TableCell>
+                  <TableCell>
+                    {(() => {
+                      const annee = periodelist
+                        .find((p) => p.id === budget.periodeId)
+                        ?.fin!.getFullYear();
+                      return annee ? annee : "";
+                    })()}
                   </TableCell>
                   <TableCell>
                     <Moment format="DD/MM/yyyy">
