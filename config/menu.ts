@@ -17,7 +17,7 @@ function allMenu() {
     if (user) {
       if (user?.groups?.some((g) => g.service.name === "Suivi dashboard")) {
         temp.push({
-          name: " Budget engagé",
+          name: "Tableau de bord financier",
           link: "/budegetEngage",
           color: "warning",
           icon: "dashboardIcon",

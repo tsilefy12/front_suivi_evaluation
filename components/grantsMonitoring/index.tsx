@@ -107,17 +107,26 @@ const GrantsList = () => {
       Amount: row.amount,
       Currency: currencyListe.find((f: CurrencyItem) => f.id === row.currencyId)
         ?.name,
-      Statut: row.status,
+      Statut:
+        row.status == "PENDING"
+          ? "EN ATTENTE"
+          : row.status == "COMPLETED"
+          ? "TERMINÉ"
+          : row.status == "IN_PROGRESS"
+          ? "EN COURS"
+          : "",
       "MV Lead": "",
       "VALIDATION TECHNIQUE": `${
-        employees.find((f: any) => f.id === row.techValidator)?.name
-      } ${employees.find((f) => f.id === row.techValidator)?.surname}`,
+        employees.find((f: any) => f.id === row.techValidator)?.name || ""
+      } ${employees.find((f) => f.id === row.techValidator)?.surname || ""}`,
       "VERIFICATION FINANCIERE": `${
-        employees.find((f: any) => f.id === row.financeVerificator)?.name
-      } ${employees.find((f) => f.id === row.financeVerificator)?.surname}`,
+        employees.find((f: any) => f.id === row.financeVerificator)?.name || ""
+      } ${
+        employees.find((f) => f.id === row.financeVerificator)?.surname || ""
+      }`,
       "VALIDATION FINANCIERE": `${
-        employees.find((f: any) => f.id === row.financeValidator)?.name
-      } ${employees.find((f) => f.id === row.financeValidator)?.surname}`,
+        employees.find((f: any) => f.id === row.financeValidator)?.name || ""
+      } ${employees.find((f) => f.id === row.financeValidator)?.surname || ""}`,
     }));
 
     const ws = XLSX.utils.json_to_sheet(data);
@@ -191,10 +200,10 @@ const GrantsList = () => {
                     <TableCell align="center" sx={{ width: "100%" }}>
                       Deadline
                     </TableCell>
-                    <TableCell align="center" sx={{ width: "100%" }}>
+                    <TableCell align="left" sx={{ width: "100%" }}>
                       Grant
                     </TableCell>
-                    <TableCell align="center" sx={{ width: "100%" }}>
+                    <TableCell align="left" sx={{ width: "100%" }}>
                       Bailleur
                     </TableCell>
                     <TableCell align="center" sx={{ width: "100%" }}>
@@ -209,7 +218,7 @@ const GrantsList = () => {
                     <TableCell align="center" sx={{ width: "100%" }}>
                       Fin
                     </TableCell>
-                    <TableCell align="center" sx={{ width: "100%" }}>
+                    <TableCell align="left" sx={{ width: "100%" }}>
                       Montant
                     </TableCell>
                     <TableCell align="center" sx={{ width: "100%" }}>
@@ -221,13 +230,13 @@ const GrantsList = () => {
                     <TableCell align="center" sx={{ width: "100%" }}>
                       MV Lead
                     </TableCell>
-                    <TableCell align="center" sx={{ width: "100%" }}>
+                    <TableCell align="left" sx={{ width: "100%" }}>
                       VALIDATION TECHNIQUE
                     </TableCell>
-                    <TableCell align="center" sx={{ width: "100%" }}>
+                    <TableCell align="left" sx={{ width: "100%" }}>
                       VERIFICATION FINANCIERE
                     </TableCell>
-                    <TableCell align="center" sx={{ width: "100%" }}>
+                    <TableCell align="left" sx={{ width: "100%" }}>
                       VALIDATION FINANCIERE
                     </TableCell>
                     {/* <TableCell
@@ -278,12 +287,15 @@ const GrantsList = () => {
                             id={labelId}
                             scope="row"
                             padding="none"
-                            align="center"
-                            sx={{ width: "100%" }}
+                            align="left"
+                            sx={{ minWidth: 120, maxWidth: 120 }}
                           >
                             {row.code}
                           </TableCell>
-                          <TableCell align="center" sx={{ width: "100%" }}>
+                          <TableCell
+                            align="left"
+                            sx={{ minWidth: 150, maxWidth: 150 }}
+                          >
                             {row.bailleur}
                           </TableCell>
                           <TableCell align="center" sx={{ width: "100%" }}>
@@ -306,7 +318,10 @@ const GrantsList = () => {
                           <TableCell align="center" sx={{ width: "100%" }}>
                             <Moment format="DD/MM/yyyy">{row.endDate}</Moment>
                           </TableCell>
-                          <TableCell align="center" sx={{ width: "100%" }}>
+                          <TableCell
+                            align="left"
+                            sx={{ minWidth: 150, maxWidth: 150 }}
+                          >
                             {formatMontant(Number(row.amount))}
                           </TableCell>
                           <TableCell align="center" sx={{ width: "100%" }}>
@@ -316,7 +331,10 @@ const GrantsList = () => {
                               )?.name
                             }
                           </TableCell>
-                          <TableCell align="center" sx={{ width: "100%" }}>
+                          <TableCell
+                            align="center"
+                            sx={{ minWidth: 150, maxWidth: 150 }}
+                          >
                             {(row.status === "IN_PROGRESS" && "En cours") ||
                               (row.status === "COMPLETED" && "Terminé") ||
                               (row.status === "" && "Annulé") ||
@@ -324,39 +342,48 @@ const GrantsList = () => {
                           </TableCell>
                           <TableCell
                             align="center"
-                            sx={{ width: "100%" }}
+                            sx={{ minWidth: 150, maxWidth: 150 }}
                           ></TableCell>
-                          <TableCell align="center" sx={{ width: "100%" }}>
+                          <TableCell
+                            align="left"
+                            sx={{ minWidth: 250, maxWidth: 250 }}
+                          >
                             {`${
                               employees.find(
                                 (f: any) => f.id === row.techValidator
-                              )?.name
+                              )?.name || ""
                             } ${" "} ${
                               employees.find(
                                 (f: any) => f.id === row.techValidator
-                              )?.surname
+                              )?.surname || ""
                             }`}
                           </TableCell>
-                          <TableCell align="center" sx={{ width: "100%" }}>
+                          <TableCell
+                            align="left"
+                            sx={{ minWidth: 250, maxWidth: 250 }}
+                          >
                             {`${
                               employees.find(
                                 (f: any) => f.id === row.financeVerificator
-                              )?.name
+                              )?.name || ""
                             } ${" "} ${
                               employees.find(
                                 (f: any) => f.id === row.financeVerificator
-                              )?.surname
+                              )?.surname || ""
                             }`}
                           </TableCell>
-                          <TableCell align="center" sx={{ width: "100%" }}>
+                          <TableCell
+                            align="left"
+                            sx={{ minWidth: 250, maxWidth: 250 }}
+                          >
                             {`${
                               employees.find(
                                 (f: any) => f.id === row.financeValidator
-                              )?.name
+                              )?.name || ""
                             } ${" "} ${
                               employees.find(
                                 (f: any) => f.id === row.financeValidator
-                              )?.surname
+                              )?.surname || ""
                             }`}
                           </TableCell>
 

@@ -684,7 +684,7 @@ const ListGrantsMonitoring = () => {
                           <Moment format="DD/MM/yyyy">{row.dateFinance}</Moment>
                         </TableCell>
                         <TableCell
-                          align="left"
+                          align="center"
                           sx={{ minWidth: 50, maxWidth: 50 }}
                         >
                           {Math.ceil(
@@ -694,7 +694,7 @@ const ListGrantsMonitoring = () => {
                           )}
                         </TableCell>
                         <TableCell
-                          align="left"
+                          align="center"
                           sx={{ minWidth: 50, maxWidth: 50 }}
                         >
                           {Math.ceil(
