@@ -5,6 +5,11 @@ import {
   Autocomplete,
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   FormControl,
   IconButton,
@@ -24,7 +29,7 @@ import Delete from "@mui/icons-material/Delete";
 import Check from "@mui/icons-material/Check";
 import Close from "@mui/icons-material/Close";
 
-import { ArrowBack } from "@mui/icons-material";
+import { ArrowBack, Warning } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   useAppDispatch,
@@ -35,6 +40,10 @@ import useFetchEmploys from "../../../../GrantsEnCours/hooks/getResponsable";
 import { getStatuslist } from "../../../../../redux/features/status";
 import OSSelectField from "../../../../shared/select/OSSelectField";
 import OSDatePicker from "../../../../shared/date/OSDatePicker";
+import useFetchObjectifAnnuel from "../hooks/useFetchObjectiflAnnuel";
+import useFetchTacheEtObjectifs from "../hooks/useFetchTacheEtObjectifs";
+import useFetchStagiaire from "../../../../GrantsEnCours/hooks/getStagiaire";
+import useFetchPrestataire from "../../../../GrantsEnCours/hooks/getPrestataire";
 
 const NewTacheEtObjectifs = ({
   formikProps,
@@ -43,6 +52,8 @@ const NewTacheEtObjectifs = ({
   setIdDelete,
   selectedEmployes,
   setSelectedEmployes,
+  open,
+  setOpen,
 }: {
   formikProps: FormikProps<any>;
   valuesArticle: any;
@@ -50,6 +61,8 @@ const NewTacheEtObjectifs = ({
   setIdDelete: any;
   selectedEmployes: any;
   setSelectedEmployes: any;
+  open: boolean;
+  setOpen: any;
 }) => {
   const dispatch = useAppDispatch();
   const route = useRouter();
@@ -58,12 +71,27 @@ const NewTacheEtObjectifs = ({
   const { statuslist } = useAppSelector((state: any) => state.status);
   const { employees } = useAppSelector((state: any) => state.employe);
 
-  const { isEditing } = useAppSelector((state: any) => state.tacheEtObjectifs);
+  const fetchTacheCle = useFetchTacheEtObjectifs();
+  const { isEditing, tacheEtObjectifList, tacheEtObjectif } = useAppSelector(
+    (state) => state.tacheEtObjectifs
+  );
   const fetchEmployes = useFetchEmploys();
+  const router = useRouter();
+  const { id }: any = router.query;
+  const fetchStagiaire = useFetchStagiaire();
+  const { interns } = useAppSelector((state: any) => state.stagiaire);
+  const fetchPrestataire = useFetchPrestataire();
+  const { prestataireListe } = useAppSelector(
+    (state: any) => state.prestataire
+  );
+  const [valide, setValide] = useState(false);
 
   const fetchUtilsData = () => {
     fetchEmployes();
     dispatch(getStatuslist({}));
+    fetchTacheCle();
+    fetchStagiaire();
+    fetchPrestataire();
   };
 
   useEffect(() => {
@@ -73,6 +101,21 @@ const NewTacheEtObjectifs = ({
     if (!id) return null;
     return options.find((option: any) => option.id === id) || null;
   };
+
+  const formatOptions = (options: any) => {
+    return options.map((option: any) => ({
+      id: option.id,
+      name: option.name,
+      surname: option.surname,
+    }));
+  };
+
+  const allOptions = [
+    ...formatOptions(employees),
+    ...formatOptions(interns),
+    ...formatOptions(prestataireListe),
+  ];
+
   return (
     <Form>
       <NavigationContainer>
@@ -118,158 +161,6 @@ const NewTacheEtObjectifs = ({
         </SectionNavigation>
         <Divider />
       </NavigationContainer>
-      <FormContainer spacing={2}>
-        <Stack
-          direction="row"
-          sx={{
-            flex: "1 1 100%",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h6" id="tableTitle" component="div">
-            Tâche et objectifs
-          </Typography>
-        </Stack>
-        <Stack direction="column" spacing={2}>
-          <Stack direction="row" spacing={2}>
-            <OSTextField
-              fullWidth
-              id="outlined-basic"
-              label=" Tâche clé"
-              variant="outlined"
-              name="keyTasks"
-            />
-          </Stack>
-          <Stack direction="row" spacing={2}>
-            <OSTextField
-              fullWidth
-              id="outlined-basic"
-              label="Time frame "
-              variant="outlined"
-              name="timeFrame"
-            />
-            <OSTextField
-              fullWidth
-              id="outlined-basic"
-              label="Resultat attendus"
-              variant="outlined"
-              name="expectedResult"
-            />
-            <OSTextField
-              fullWidth
-              id="outlined-basic"
-              label="Ressources "
-              variant="outlined"
-              name="resources"
-            />
-          </Stack>
-          <Stack direction="row" spacing={2}>
-            <Autocomplete
-              fullWidth
-              id="outlined-basic"
-              options={employees}
-              getOptionLabel={(option: any) =>
-                `${option.name} ${option.surname}` as string
-              }
-              value={getEmployeeOption(
-                formikProps.values.responsableId,
-                employees
-              )}
-              onChange={(event, value) =>
-                formikProps.setFieldValue(
-                  "responsableId",
-                  value ? value.id : ""
-                )
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Responsable"
-                  variant="outlined"
-                  error={
-                    formikProps.touched.responsableId &&
-                    Boolean(formikProps.errors.responsableId)
-                  }
-                  helperText={
-                    formikProps.touched.responsableId &&
-                    typeof formikProps.errors.responsableId === "string"
-                      ? formikProps.errors.responsableId
-                      : ""
-                  }
-                />
-              )}
-              isOptionEqualToValue={(option: any, value: any) =>
-                option.id === value.id
-              }
-            />
-            <Autocomplete
-              fullWidth
-              multiple
-              id="tags-standard"
-              options={employees}
-              getOptionLabel={(employee: any) =>
-                `${employee.name} ${employee.surname}` as string
-              }
-              value={selectedEmployes}
-              onChange={(event, newValue) => {
-                setSelectedEmployes(newValue);
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  id="outlined-basic"
-                  label="Sélectionnez participant"
-                  variant="outlined"
-                />
-              )}
-            />
-          </Stack>
-          <Stack direction="row" spacing={2}>
-            <OSTextField
-              fullWidth
-              id="outlined-basic"
-              label="Notes"
-              variant="outlined"
-              name="notes"
-            />
-            <OSSelectField
-              fullWidth
-              id="outlined-basic"
-              options={statuslist}
-              dataKey="status"
-              valueKey="id"
-              label="Status"
-              variant="outlined"
-              name="statusId"
-            />
-          </Stack>
-          <Stack direction="row" spacing={2}>
-            <OSDatePicker
-              fullWidth
-              id="outlined-basic"
-              label="Date début"
-              variant="outlined"
-              value={formikProps.values.startDate!}
-              onChange={(value: any) =>
-                formikProps.setFieldValue("startDate", value)
-              }
-              name="startDate"
-            />
-            <OSDatePicker
-              fullWidth
-              id="outlined-basic"
-              label="Date fin"
-              variant="outlined"
-              value={formikProps.values.endDate!}
-              onChange={(value: any) =>
-                formikProps.setFieldValue("endDate", value)
-              }
-              name="endDate"
-            />
-          </Stack>
-        </Stack>
-      </FormContainer>
       <Box>
         <FormContainer spacing={2}>
           <Stack
@@ -370,6 +261,31 @@ const NewTacheEtObjectifs = ({
                         label="Titre objectifs"
                         name="objectiveTitle"
                         type="text"
+                        onChange={(event: any) => {
+                          const objectif = event.target.value;
+                          formikProps.setFieldValue("objectiveTitle", objectif);
+
+                          const annee = formikProps.values.year;
+
+                          const data = tacheEtObjectifList
+                            .filter((item) => item.planTravaileId == id)
+                            .flatMap((item) => item.objectifAnnuel);
+                          const ans = data.map((item) => Number(item?.year));
+                          const objectifs = data.map(
+                            (item) => item?.objectiveTitle
+                          );
+                          const anneeNumber = Number(annee);
+                          const found = ans.some(
+                            (year, index) =>
+                              year === anneeNumber &&
+                              objectifs[index] === objectif
+                          );
+
+                          if (found) {
+                            setOpen(true);
+                            return;
+                          }
+                        }}
                       />
                     </FormControl>
                   </TableCell>
@@ -380,6 +296,32 @@ const NewTacheEtObjectifs = ({
                         label="Année"
                         name="year"
                         type="number"
+                        value={formikProps.values.year}
+                        onChange={(event: any) => {
+                          const annee = event.target.value;
+                          formikProps.setFieldValue("year", annee);
+
+                          const data = tacheEtObjectifList
+                            .filter((item) => item.planTravaileId == id)
+                            .flatMap((item) => item.objectifAnnuel);
+                          const ans = data.map((item) => Number(item?.year));
+                          const objectifs = data.map(
+                            (item) => item?.objectiveTitle
+                          );
+
+                          const objectif = formikProps.values.objectiveTitle;
+                          const anneeNumber = Number(annee);
+                          const found = ans.some(
+                            (year, index) =>
+                              year === anneeNumber &&
+                              objectifs[index] === objectif
+                          );
+
+                          if (found) {
+                            setOpen(true);
+                            return;
+                          }
+                        }}
                       />
                     </FormControl>
                   </TableCell>
@@ -450,6 +392,205 @@ const NewTacheEtObjectifs = ({
           </TableContainer>
         </FormContainer>
       </Box>
+      <FormContainer spacing={2}>
+        <Stack
+          direction="row"
+          sx={{
+            flex: "1 1 100%",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h6" id="tableTitle" component="div">
+            Tâche et objectifs
+          </Typography>
+        </Stack>
+        <Stack direction="column" spacing={2}>
+          <Stack direction="row" spacing={2}>
+            <OSTextField
+              fullWidth
+              id="outlined-basic"
+              label=" Tâche clé"
+              variant="outlined"
+              name="keyTasks"
+            />
+            <OSSelectField
+              fullWidth
+              id="outlined-basic"
+              options={statuslist}
+              dataKey="status"
+              valueKey="id"
+              label="Status"
+              variant="outlined"
+              name="statusId"
+            />
+          </Stack>
+          <FormControl fullWidth>
+            <Autocomplete
+              fullWidth
+              id="outlined-basic"
+              options={allOptions}
+              getOptionLabel={(option) => `${option.name} ${option.surname}`}
+              onChange={(event, newValue) => {
+                formikProps.setFieldValue(
+                  "responsableId",
+                  newValue != null ? newValue.id : null
+                );
+              }}
+              isOptionEqualToValue={(option, value) => option.id === value?.id}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Responsable"
+                  variant="outlined"
+                  name="responsableId"
+                  value={
+                    isEditing
+                      ? allOptions.find(
+                          (option) =>
+                            option.id === tacheEtObjectif?.responsableId
+                        )?.name +
+                        " " +
+                        allOptions.find(
+                          (option) =>
+                            option.id === tacheEtObjectif?.responsableId
+                        )?.surname
+                      : ""
+                  }
+                />
+              )}
+            />
+          </FormControl>
+          <Stack direction="row" spacing={2}>
+            {/* <OSTextField
+              fullWidth
+              id="outlined-basic"
+              label="Time frame "
+              variant="outlined"
+              name="timeFrame"
+            /> */}
+            <OSTextField
+              fullWidth
+              id="outlined-basic"
+              label="Resultat attendus"
+              variant="outlined"
+              name="expectedResult"
+            />
+            <OSTextField
+              fullWidth
+              id="outlined-basic"
+              label="Ressources "
+              variant="outlined"
+              name="resources"
+            />
+          </Stack>
+          <Stack direction="row" spacing={2}>
+            <Autocomplete
+              fullWidth
+              multiple
+              id="tags-standard"
+              options={allOptions}
+              getOptionLabel={(employee: any) =>
+                `${employee.name} ${employee.surname}` as string
+              }
+              value={selectedEmployes}
+              onChange={(event, newValue) => {
+                setSelectedEmployes(newValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  id="outlined-basic"
+                  label="Sélectionnez participant"
+                  variant="outlined"
+                />
+              )}
+            />
+          </Stack>
+          <Stack direction="row" spacing={2}>
+            <OSTextField
+              fullWidth
+              id="outlined-basic"
+              label="Notes"
+              variant="outlined"
+              name="notes"
+            />
+          </Stack>
+          <Stack direction="row" spacing={2}>
+            <OSDatePicker
+              fullWidth
+              id="outlined-basic"
+              label="Date début"
+              variant="outlined"
+              value={formikProps.values.startDate!}
+              onChange={(value: any) => {
+                formikProps.setFieldValue("startDate", value);
+                const dt1 = new Date(formikProps.values.startDate!).getTime();
+                const dt2 = new Date(formikProps.values.endDate!).getTime();
+                if (dt1 > dt2) {
+                  setValide(true);
+                  return;
+                }
+              }}
+              name="startDate"
+            />
+            <OSDatePicker
+              fullWidth
+              id="outlined-basic"
+              label="Date fin"
+              variant="outlined"
+              value={formikProps.values.endDate!}
+              onChange={(value: any) => {
+                formikProps.setFieldValue("endDate", value);
+                const dt1 = new Date(formikProps.values.startDate!).getTime();
+                const dt2 = new Date(formikProps.values.endDate!).getTime();
+                if (dt1 > dt2) {
+                  setValide(true);
+                  return;
+                }
+              }}
+              name="endDate"
+            />
+          </Stack>
+        </Stack>
+        <Dialog open={open} onClose={() => setOpen(false)}>
+          <DialogTitle color={"error"}>Information</DialogTitle>
+          <DialogContent>
+            <DialogContentText sx={{ alignItems: "center" }}>
+              <span>
+                L'objectif que vous avez saisi est déjà associé avec cette
+                année.
+              </span>
+            </DialogContentText>
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                <Check />
+              </Button>
+            </DialogActions>
+          </DialogContent>
+        </Dialog>
+        <Dialog open={valide} onClose={() => setValide(false)}>
+          <DialogTitle color={"error"}>Information</DialogTitle>
+          <DialogContent>
+            <DialogContentText sx={{ alignItems: "center" }}>
+              La date de fin doit être supérieure à la date de début.
+            </DialogContentText>
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  setValide(false);
+                }}
+              >
+                <Check />
+              </Button>
+            </DialogActions>
+          </DialogContent>
+        </Dialog>
+      </FormContainer>
       {/* <AddNewTacheEtObjectifs selectedEmployes={selectedEmployes} /> */}
     </Form>
   );

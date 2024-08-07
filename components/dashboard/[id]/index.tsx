@@ -78,7 +78,7 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
             marginLeft={4}
             marginTop={2}
           >
-            Détail de budget engagé
+            Détail de tableau de bord financier
           </Typography>
           <IconButton onClick={handleClose}>
             <Close />
@@ -106,7 +106,7 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
                   BUDGET TOTAL
                 </TableCell>
                 <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="center">
-                  PERIODES
+                  BUDGET REÇU
                 </TableCell>
                 <TableCell sx={{ minWidth: 160, maxWidth: 160 }} align="center">
                   BUDGET ENGAGE

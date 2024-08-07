@@ -13,7 +13,7 @@ export const createTacheEtObjectifs = createAsyncThunk(
       );
       thunkAPI.dispatch(
         enqueueSnackbar({
-          message: "créé avec succès",
+          message: "Tache et objectif créé avec succès",
           options: { variant: "success" },
         })
       );

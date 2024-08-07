@@ -122,7 +122,7 @@ const Dashboard: NextPage = () => {
           sx={{ mb: 2, width: "100%" }}
         >
           <Typography variant="h4" color="GrayText">
-            Budget engagé
+            Tableau de bord financier
           </Typography>
           <Autocomplete
             sx={{ width: 300 }}
@@ -155,7 +155,7 @@ const Dashboard: NextPage = () => {
             <TableRow>
               <TableCell>GRANT</TableCell>
               <TableCell align="center">BUDGET TOTAL</TableCell>
-              <TableCell align="center">PERIODES</TableCell>
+              <TableCell align="center">BUDGET REÇU</TableCell>
               <TableCell align="center">BUDGET ENGAGE</TableCell>
               <TableCell align="center">SOLDE</TableCell>
               <TableCell>LIGNE BUDGETAIRE</TableCell>

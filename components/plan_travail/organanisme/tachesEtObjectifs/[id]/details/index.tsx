@@ -33,6 +33,8 @@ import { TacheEtObjectifItem } from "../../../../../../redux/features/tachesEtOb
 import useFetchMissionListe from "../../../../../home/Missions/hooks/useFetchMissionListe";
 import Moment from "react-moment";
 import useFetchStatus from "../../../../../configurations/status/hooks/useFetchStatus";
+import useFetchStagiaire from "../../../../../GrantsEnCours/hooks/getStagiaire";
+import useFetchPrestataire from "../../../../../GrantsEnCours/hooks/getPrestataire";
 
 const DetailTacheCles = () => {
   const router = useRouter();
@@ -48,12 +50,22 @@ const DetailTacheCles = () => {
   const { employees } = useAppSelector((state: any) => state.employe);
   const fetchStatus = useFetchStatus();
   const { statuslist } = useAppSelector((state: any) => state.status);
-
+  const fetchStagiaire = useFetchStagiaire();
+  const { interns } = useAppSelector((state: any) => state.stagiaire);
+  const fetchPrestataire = useFetchPrestataire();
+  const { prestataireListe } = useAppSelector(
+    (state: any) => state.prestataire
+  );
+  const data = async () => {
+    await fetchResponsable();
+    await fetchTacheCle();
+    await fetchStatus();
+    await fetchStagiaire();
+    await fetchPrestataire();
+    await getTacheCleDetails();
+  };
   useEffect(() => {
-    getTacheCleDetails();
-    fetchResponsable();
-    fetchTacheCle();
-    fetchStatus();
+    data();
   }, [idT]);
 
   const getTacheCleDetails = () => {
@@ -76,7 +88,19 @@ const DetailTacheCles = () => {
       i = i + 1;
     }
   });
-  // console.log("list respon :", listResponsable)
+  const formatOptions = (options: any) => {
+    return options.map((option: any) => ({
+      id: option.id,
+      name: option.name,
+      surname: option.surname,
+    }));
+  };
+
+  const allOptions = [
+    ...formatOptions(employees),
+    ...formatOptions(interns),
+    ...formatOptions(prestataireListe),
+  ];
   return (
     <Container maxWidth="xl" sx={{ pb: 5 }}>
       <SectionNavigation
@@ -140,14 +164,14 @@ const DetailTacheCles = () => {
                         overflow: "auot",
                       }}
                     >
-                      {row.participantsId!.map((lp: any) => {
-                        return (
-                          <Stack direction="column" spacing={2}>
-                            {employees.find((e: any) => e.id === lp)?.name}{" "}
-                            {employees.find((e: any) => e.id === lp)?.surname}
-                          </Stack>
-                        );
-                      })}
+                      {allOptions
+                        .filter((e: any) => row.participantsId!.includes(e.id))
+                        .map((e: any) => (
+                          <Stack
+                            key={e.id}
+                            gap={2}
+                          >{`${e.name} ${e.surname}`}</Stack>
+                        ))}
                     </FormControl>
                   </TableCell>
                 </TableRow>

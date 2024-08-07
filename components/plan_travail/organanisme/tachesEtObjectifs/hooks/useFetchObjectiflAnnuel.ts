@@ -1,15 +1,16 @@
 import { useRouter } from "next/router";
 import { useAppDispatch } from "../../../../../hooks/reduxHooks";
 import { getTacheEtObjectifsList } from "../../../../../redux/features/tachesEtObjectifs";
+import { getObjectifAnnuelslist } from "../../../../../redux/features/objectifAnnuels";
 
-const useFetchTacheEtObjectifs = () => {
+const useFetchObjectifAnnuel = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   return async () => {
     let args: any = {
       include: {
-        objectifAnnuel: true,
+        tacheCle: true,
       },
     };
     if (router.query.search) {
@@ -27,8 +28,8 @@ const useFetchTacheEtObjectifs = () => {
           break;
       }
     }
-    await dispatch(getTacheEtObjectifsList({ args }));
+    await dispatch(getObjectifAnnuelslist({ args }));
   };
 };
 
-export default useFetchTacheEtObjectifs;
+export default useFetchObjectifAnnuel;

@@ -189,16 +189,18 @@ const ListObjectifStrategique = ({
                       title={row.description}
                       sx={{
                         cursor:
-                          row.description!.length > 30 ? "pointer" : "default",
+                          row.description!.length > 100 ? "pointer" : "default",
                         "&:hover": {
                           color:
-                            row.description!.length > 30
+                            row.description!.length > 100
                               ? "primary.main"
                               : "GrayText",
                         },
                       }}
                     >
-                      {row.description?.slice(0, 28) + "..."}
+                      {row.description && row.description.length > 100
+                        ? row.description?.slice(0, 30) + "..."
+                        : row.description}
                     </Typography>
                     <Typography mb={1} color="GrayText" variant="h6">
                       Projet :{" "}

@@ -22,20 +22,23 @@ import {
   updateObjectifAnnuel,
 } from "../../../../../redux/features/objectifAnnuels";
 import { TacheEtObjectifItem } from "../../../../../redux/features/tachesEtObjectifs/tacheETObjectifs.interface";
+import useFetchTacheEtObjectifs from "../hooks/useFetchTacheEtObjectifs";
 
 const AddNewTacheEtObjectifs = () => {
   const router = useRouter();
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state: any) => state.employe);
-  const { isEditing, tacheEtObjectif } = useAppSelector(
-    (state) => state.tacheEtObjectifs
-  );
   const dispatch = useAppDispatch();
   const [valuesArticle, setValuesArticle] = useState<any[]>([]);
   const [idDelete, setIdDelete] = useState<any[]>([]);
 
   const { idT }: any = router.query;
   const { id }: any = router.query;
+  const [open, setOpen] = useState(false);
+  const fetchTacheCle = useFetchTacheEtObjectifs();
+  const { isEditing, tacheEtObjectif, tacheEtObjectifList } = useAppSelector(
+    (state) => state.tacheEtObjectifs
+  );
 
   React.useEffect(() => {
     if (isEditing) {
@@ -47,7 +50,7 @@ const AddNewTacheEtObjectifs = () => {
     }
     fetchEmployes();
     dispatch(getStatuslist({}));
-    dispatch(getTacheEtObjectifsList({}));
+    fetchTacheCle();
   }, [router.query]);
 
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
@@ -77,13 +80,18 @@ const AddNewTacheEtObjectifs = () => {
     if (!values.sn) {
       values.sn = generateSerialNumber([tacheEtObjectif]);
     }
+    const dt1 = new Date(values.startDate!).getTime();
+    const dt2 = new Date(values.endDate!).getTime();
+    if (dt1 > dt2) {
+      return;
+    }
     try {
       if (isEditing) {
         const tacheEtObjectif = {
           sn: values.sn,
           keyTasks: values.keyTasks,
           statusId: values.statusId,
-          timeFrame: values.timeFrame,
+          // timeFrame: values.timeFrame,
           responsableId: values.responsableId,
           expectedResult: values.expectedResult,
           resources: values.resources,
@@ -98,7 +106,6 @@ const AddNewTacheEtObjectifs = () => {
         );
         if (valuesArticle.length > 0) {
           valuesArticle?.forEach((item: any, index: any) => {
-            console.log("idT :", item.id);
             const idT = item.idT;
             const objectifAnnuels = {
               objectiveTitle: item.objectiveTitle,
@@ -124,15 +131,26 @@ const AddNewTacheEtObjectifs = () => {
         router.push(`/plan_travail/${id}/tachesEtObjectifs/`);
       } else {
         const res = await dispatch(createTacheEtObjectifs(values));
+        const data = tacheEtObjectifList
+          .filter((item) => item.planTravaileId == id)
+          .flatMap((item) => item.objectifAnnuel);
+        const ans = data.map((item) => Number(item?.year));
+        const objectifs = data.map((item) => item?.objectiveTitle);
         if (valuesArticle.length > 0) {
-          valuesArticle.forEach((element: any, index: any) => {
+          for (const element of valuesArticle) {
+            const isExisting =
+              objectifs.includes(element.objectiveTitle) &&
+              ans.includes(element.year);
+            if (isExisting) {
+              return;
+            }
             const newData = {
               objectiveTitle: element.objectiveTitle,
-              year: element.year,
+              year: Number(element.year),
               taskAndObjectiveId: res.payload.id!,
             };
-            dispatch(createObejectifAnnuel(newData));
-          });
+            await dispatch(createObejectifAnnuel(newData));
+          }
         }
         router.push(`/plan_travail/${id}/tachesEtObjectifs/`);
       }
@@ -152,7 +170,7 @@ const AddNewTacheEtObjectifs = () => {
                 sn: isEditing ? tacheEtObjectif?.sn : "",
                 keyTasks: isEditing ? tacheEtObjectif?.keyTasks : "",
                 statusId: isEditing ? tacheEtObjectif?.statusId : "",
-                timeFrame: isEditing ? tacheEtObjectif?.timeFrame : "",
+                // timeFrame: isEditing ? tacheEtObjectif?.timeFrame : "",
                 responsableId: isEditing ? tacheEtObjectif?.responsableId : "",
                 expectedResult: isEditing
                   ? tacheEtObjectif?.expectedResult
@@ -191,6 +209,8 @@ const AddNewTacheEtObjectifs = () => {
             setValuesArticle={setValuesArticle}
             selectedEmployes={selectedEmployes}
             setSelectedEmployes={setSelectedEmployes}
+            setOpen={setOpen}
+            open={open}
           />
         )}
       </Formik>

@@ -50,6 +50,8 @@ import { getPlanTravail } from "../../../../redux/features/planTravail";
 import Moment from "react-moment";
 import { getStatuslist } from "../../../../redux/features/status";
 import { TacheEtObjectifItem } from "../../../../redux/features/tachesEtObjectifs/tacheETObjectifs.interface";
+import useFetchStagiaire from "../../../GrantsEnCours/hooks/getStagiaire";
+import useFetchPrestataire from "../../../GrantsEnCours/hooks/getPrestataire";
 
 const ListTacheEtObjectifs = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -79,6 +81,12 @@ const ListTacheEtObjectifs = () => {
     (state) => state.planTravail
   );
   const { statuslist } = useAppSelector((state: any) => state.status);
+  const fetchStagiaire = useFetchStagiaire();
+  const { interns } = useAppSelector((state: any) => state.stagiaire);
+  const fetchPrestataire = useFetchPrestataire();
+  const { prestataireListe } = useAppSelector(
+    (state: any) => state.prestataire
+  );
 
   React.useEffect(() => {
     fetchProject();
@@ -87,6 +95,8 @@ const ListTacheEtObjectifs = () => {
     fetchPlanTravail();
     getPlanTravaile();
     getTache();
+    fetchStagiaire();
+    fetchPrestataire();
     dispatch(getStatuslist({}));
   }, [router.query]);
 
@@ -143,14 +153,6 @@ const ListTacheEtObjectifs = () => {
 
     setSelected(newSelected);
   };
-
-  useEffect(() => {
-    console.log(
-      new Set(
-        tacheEtObjectifList.flatMap((e) => e.objectifAnnuel?.map((i) => i.year))
-      )
-    );
-  }, [tacheEtObjectifList]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -218,6 +220,19 @@ const ListTacheEtObjectifs = () => {
       setData([...donnee].reverse());
     }
   }, [tacheEtObjectifList, filtre]);
+  const formatOptions = (options: any) => {
+    return options.map((option: any) => ({
+      id: option.id,
+      name: option.name,
+      surname: option.surname,
+    }));
+  };
+
+  const allOptions = [
+    ...formatOptions(employees),
+    ...formatOptions(interns),
+    ...formatOptions(prestataireListe),
+  ];
   return (
     <Container maxWidth="xl">
       {/* <NavigationContainer> */}
@@ -247,7 +262,7 @@ const ListTacheEtObjectifs = () => {
           </Button>
         </Stack>
         <Typography variant="h4" color="GrayText">
-          Tâches et objectifs
+          Tâche et résultat
         </Typography>
       </SectionNavigation>
       {/* </NavigationContainer> */}
@@ -300,30 +315,29 @@ const ListTacheEtObjectifs = () => {
                             component="th"
                             id={labelId}
                             scope="row"
-                            padding="none"
-                            align="center"
+                            align="left"
+                            sx={{ paddingLeft: 2 }}
                           >
                             {row.sn}
                           </TableCell>
                           <TableCell sx={{ minWidth: 200, maxWidth: 250 }}>
                             {row.keyTasks}
                           </TableCell>
-                          <TableCell>
+                          <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
                             {
                               statuslist.find((e: any) => e.id === row.statusId)
                                 ?.status
                             }
                           </TableCell>
                           <TableCell sx={{ minWidth: 200, maxWidth: 250 }}>
-                            {`${
-                              employees.find(
-                                (e: any) => e.id == row?.responsableId
-                              )?.name
-                            } ${" "} ${
-                              employees.find(
-                                (e: any) => e.id == row?.responsableId
-                              )?.surname
-                            }`}
+                            {(() => {
+                              const responsiblePerson = allOptions.find(
+                                (e: any) => e.id == row.responsableId
+                              );
+                              return responsiblePerson
+                                ? `${responsiblePerson.name} ${responsiblePerson.surname}`
+                                : "";
+                            })()}
                           </TableCell>
                           <TableCell>
                             <Moment format="DD/MM/YYYY">{row.startDate}</Moment>
