@@ -141,10 +141,37 @@ const ListSite = () => {
                       >
                         Key Tasks
                       </TableCell>
-                      <TableCell
-                        sx={{ minWidth: 250, maxWidth: 250, paddingLeft: 1 }}
-                      >
-                        {filtre} Targets
+                      <TableCell>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell
+                                sx={{ minWidth: 150, maxWidth: 150 }}
+                                align="left"
+                              >
+                                Targets
+                              </TableCell>
+                              <TableCell
+                                sx={{ minWidth: 150, maxWidth: 150 }}
+                                align="left"
+                              >
+                                Indicateur
+                              </TableCell>
+                              <TableCell
+                                sx={{ minWidth: 150, maxWidth: 150 }}
+                                align="left"
+                              >
+                                Prévision
+                              </TableCell>
+                              <TableCell
+                                sx={{ minWidth: 150, maxWidth: 150 }}
+                                align="left"
+                              >
+                                Réalisation
+                              </TableCell>
+                            </TableRow>
+                          </TableHead>
+                        </Table>
                       </TableCell>
                       {sitelist.map((s) => (
                         <TableCell
@@ -197,11 +224,39 @@ const ListSite = () => {
                                                 <TableRow key={o.id}>
                                                   <TableCell
                                                     sx={{
-                                                      minWidth: 250,
-                                                      maxWidth: 250,
+                                                      minWidth: 150,
+                                                      maxWidth: 150,
+                                                      paddingLeft: 2,
                                                     }}
                                                   >
                                                     {o.objectiveTitle}
+                                                  </TableCell>
+                                                  <TableCell
+                                                    sx={{
+                                                      minWidth: 150,
+                                                      maxWidth: 150,
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    {o.indicateur || ""}
+                                                  </TableCell>
+                                                  <TableCell
+                                                    sx={{
+                                                      minWidth: 150,
+                                                      maxWidth: 150,
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    {o.prevision || ""}
+                                                  </TableCell>
+                                                  <TableCell
+                                                    sx={{
+                                                      minWidth: 150,
+                                                      maxWidth: 150,
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    {o.realisation || ""}
                                                   </TableCell>
                                                   {sitelist.map((s) => (
                                                     <TableCell
@@ -209,6 +264,7 @@ const ListSite = () => {
                                                       sx={{
                                                         minWidth: 150,
                                                         maxWidth: 150,
+                                                        paddingLeft: 4,
                                                       }}
                                                     >
                                                       <TextField
@@ -276,6 +332,9 @@ const ListSite = () => {
                                     <TableCell
                                       sx={{ minWidth: 250, maxWidth: 250 }}
                                     ></TableCell>
+                                    <TableCell
+                                      sx={{ minWidth: 250, maxWidth: 250 }}
+                                    ></TableCell>
                                     <TableCell>
                                       <Table>
                                         <TableBody>
@@ -284,6 +343,12 @@ const ListSite = () => {
                                               sx={{
                                                 minWidth: 250,
                                                 maxWidth: 250,
+                                              }}
+                                            ></TableCell>
+                                            <TableCell
+                                              sx={{
+                                                minWidth: 150,
+                                                maxWidth: 150,
                                               }}
                                             ></TableCell>
                                             {sitelist.map((s) => (

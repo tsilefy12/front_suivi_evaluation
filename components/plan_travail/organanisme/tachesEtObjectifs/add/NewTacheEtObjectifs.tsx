@@ -355,7 +355,7 @@ const NewTacheEtObjectifs = ({
                         id="indicateur"
                         label="Indicateur"
                         name="indicateur"
-                        type="number"
+                        type="text"
                         value={formikProps.values.indicateur}
                         onChange={(event: any) => {
                           const indicateur = event.target.value;
@@ -370,7 +370,7 @@ const NewTacheEtObjectifs = ({
                         id="prevision"
                         label="Prévision"
                         name="prevision"
-                        type="number"
+                        type="text"
                         value={formikProps.values.prevision}
                         onChange={(event: any) => {
                           const prevision = event.target.value;
@@ -385,7 +385,7 @@ const NewTacheEtObjectifs = ({
                         id="realisation"
                         label="Réalisation"
                         name="realisation"
-                        type="number"
+                        type="text"
                         value={formikProps.values.realisation}
                         onChange={(event: any) => {
                           const realisation = event.target.value;
@@ -448,9 +448,9 @@ const NewTacheEtObjectifs = ({
                             }
                             formikProps.setFieldValue("year", 0);
                             formikProps.setFieldValue("objectiveTitle", "");
-                            formikProps.setFieldValue("indicateur", 0);
-                            formikProps.setFieldValue("prevision", 0);
-                            formikProps.setFieldValue("realisation", 0);
+                            formikProps.setFieldValue("indicateur", "");
+                            formikProps.setFieldValue("prevision", "");
+                            formikProps.setFieldValue("realisation", "");
                           }
                         }}
                       >
@@ -461,9 +461,9 @@ const NewTacheEtObjectifs = ({
                         onClick={() => {
                           formikProps.setFieldValue("year", 0);
                           formikProps.setFieldValue("objectiveTitle", "");
-                          formikProps.setFieldValue("indicateur", 0);
-                          formikProps.setFieldValue("prevision", 0);
-                          formikProps.setFieldValue("realisation", 0);
+                          formikProps.setFieldValue("indicateur", "");
+                          formikProps.setFieldValue("prevision", "");
+                          formikProps.setFieldValue("realisation", "");
                         }}
                       >
                         <Close />
