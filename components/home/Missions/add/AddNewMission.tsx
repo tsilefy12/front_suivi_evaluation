@@ -82,30 +82,6 @@ const AddNewMission = () => {
     const now = new Date().getTime();
     const startDaty = new Date(values.dateDebut).getTime();
     const endDaty = new Date(values.dateFin).getTime();
-
-    const verifierRefBudget = missionListe
-      .filter((f: MissionItem) => f.id)
-      .map((e: MissionItem) => {
-        setGetMission(e.reference as string);
-        return e.RefBudget;
-      });
-
-    if (verifierRefBudget.includes(values.RefBudget) && !isEditing) {
-      const budgets = "budgets";
-      setGetVerify(budgets);
-      return setOpen(true);
-    }
-    if (
-      values.missionManagerId == "" ||
-      values.verifyFinancial == "" ||
-      values.validateFinancial == "" ||
-      values.verifyTechnic == "" ||
-      values.budgetManagerId.length == 0 ||
-      values.RefBudget == "" ||
-      values.descriptionMission == ""
-    ) {
-      return values;
-    }
     if (!values.reference) {
       values.reference = ref.toString().padStart(3, "0");
     }
@@ -142,9 +118,9 @@ const AddNewMission = () => {
         }
         await dispatch(createMission(values));
       }
-      router.push("/missions/ListMission");
+      return router.push("/missions/ListMission");
     } catch (error) {
-      console.log("error", error);
+      return console.log("error", error);
     }
   };
   const statusList = [
@@ -179,6 +155,8 @@ const AddNewMission = () => {
                 dateDebut: isEditing ? mission?.dateDebut : new Date(),
                 dateFin: isEditing ? mission?.dateFin : new Date(),
                 status: isEditing ? mission?.status : "",
+                dateRF: isEditing ? mission?.dateRF : new Date(),
+                validateLogistic: isEditing ? mission?.validateLogistic : "",
               }
         }
         validationSchema={Yup.object().shape({
@@ -283,37 +261,71 @@ const AddNewMission = () => {
                       option.id === value.id
                     }
                   />
+                  <Autocomplete
+                    fullWidth
+                    multiple
+                    id="tags-standard"
+                    options={employees}
+                    getOptionLabel={(employee: any) =>
+                      `${employee.name} ${employee.surname}` as string
+                    }
+                    value={selectedEmployes}
+                    onChange={(event, newValue) => {
+                      setSelectedEmployes(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        id="outlined-basic"
+                        label="Gestionnaires"
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                </Stack>
+                <Stack direction={"row"} gap={2} alignItems={"center"}>
                   <OSTextField
                     id="outlined-basic"
                     label="Référence budget"
                     name="RefBudget"
                     inputProps={{ autoComplete: "off" }}
                     value={formikProps.values.RefBudget}
-                    onChange={(e: any) =>
-                      formikProps.setFieldValue("RefBudget", e.target.value)
-                    }
+                    onChange={(e: any) => {
+                      formikProps.setFieldValue("RefBudget", e.target.value);
+                      const verifierRefBudget = missionListe
+                        .filter((f: MissionItem) => f.id)
+                        .map((e: MissionItem) => {
+                          setGetMission(e.reference as string);
+                          return e.RefBudget;
+                        });
+                      if (
+                        verifierRefBudget.includes(e.target.value) &&
+                        !isEditing
+                      ) {
+                        const budgets = "budgets";
+                        setGetVerify(budgets);
+                        return setOpen(true);
+                      }
+                    }}
                   />
+                  <OSTextField
+                    fullWidth
+                    select
+                    id="outlined-basic"
+                    label="Status"
+                    name="status"
+                    value={
+                      statut != "vide" ? statut : formikProps.values.status
+                    }
+                    onChange={(e: any) => setStatut(e.target.value)}
+                  >
+                    {statusList.map((s) => (
+                      <MenuItem key={s.id} value={s.id}>
+                        {s.name}
+                      </MenuItem>
+                    ))}
+                  </OSTextField>
                 </Stack>
-                <Autocomplete
-                  multiple
-                  id="tags-standard"
-                  options={employees}
-                  getOptionLabel={(employee: any) =>
-                    `${employee.name} ${employee.surname}` as string
-                  }
-                  value={selectedEmployes}
-                  onChange={(event, newValue) => {
-                    setSelectedEmployes(newValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      id="outlined-basic"
-                      label="Gestionnaires"
-                      variant="outlined"
-                    />
-                  )}
-                />
                 <Stack direction={"row"} gap={2}>
                   <OSDatePicker
                     fullWidth
@@ -349,26 +361,59 @@ const AddNewMission = () => {
                       }
                     }}
                   />
-
-                  <OSTextField
-                    fullWidth
-                    select
+                  <OSDatePicker
                     id="outlined-basic"
-                    label="Status"
-                    name="status"
-                    value={
-                      statut != "vide" ? statut : formikProps.values.status
+                    label="Date RF"
+                    name="dateRF"
+                    value={formikProps.values.dateRF}
+                    onChange={(value: any) =>
+                      formikProps.setFieldValue("dateRF", value)
                     }
-                    onChange={(e: any) => setStatut(e.target.value)}
-                  >
-                    {statusList.map((s) => (
-                      <MenuItem key={s.id} value={s.id}>
-                        {s.name}
-                      </MenuItem>
-                    ))}
-                  </OSTextField>
+                  />
                 </Stack>
+                <OSTextField
+                  id="outlined-basic"
+                  label="Description de la mission"
+                  name="descriptionMission"
+                  type="textarea"
+                  inputProps={{ autoComplete: "off" }}
+                  multiline
+                  rows={3}
+                />
                 <Stack direction={"row"} gap={2}>
+                  <Autocomplete
+                    fullWidth
+                    id="outlined-basic"
+                    options={employees}
+                    getOptionLabel={(option: any) =>
+                      option.name + " " + option.surname
+                    }
+                    value={getResponsableOption(
+                      formikProps.values.verifyTechnic,
+                      employees
+                    )}
+                    onChange={(event, value) =>
+                      formikProps.setFieldValue(
+                        "verifyTechnic",
+                        value ? value.id : ""
+                      )
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Vérificateur technique"
+                        variant="outlined"
+                        error={
+                          formikProps.touched.verifyTechnic &&
+                          Boolean(formikProps.errors.verifyTechnic)
+                        }
+                        required
+                      />
+                    )}
+                    isOptionEqualToValue={(option: any, value: any) =>
+                      option.id === value.id
+                    }
+                  />
                   <Autocomplete
                     fullWidth
                     id="outlined-basic"
@@ -443,23 +488,23 @@ const AddNewMission = () => {
                       option.name + " " + option.surname
                     }
                     value={getResponsableOption(
-                      formikProps.values.verifyTechnic,
+                      formikProps.values.validateLogistic,
                       employees
                     )}
                     onChange={(event, value) =>
                       formikProps.setFieldValue(
-                        "verifyTechnic",
+                        "validateLogistic",
                         value ? value.id : ""
                       )
                     }
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Vérificateur technique"
+                        label="Validateur logistique"
                         variant="outlined"
                         error={
-                          formikProps.touched.verifyTechnic &&
-                          Boolean(formikProps.errors.verifyTechnic)
+                          formikProps.touched.validateLogistic &&
+                          Boolean(formikProps.errors.validateLogistic)
                         }
                         required
                       />
@@ -469,15 +514,6 @@ const AddNewMission = () => {
                     }
                   />
                 </Stack>
-                <OSTextField
-                  id="outlined-basic"
-                  label="Description de la mission"
-                  name="descriptionMission"
-                  type="textarea"
-                  inputProps={{ autoComplete: "off" }}
-                  multiline
-                  rows={3}
-                />
               </FormContainer>
             </Form>
           );

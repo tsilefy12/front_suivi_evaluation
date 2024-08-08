@@ -23,7 +23,9 @@ export interface MissionItem {
   RefBudget?: string;
   dateDebut?: Date;
   dateFin?: Date;
+  dateRF?: Date;
   status?: string;
+  validateLogistic?: string;
   activites?: ActiviteRapportItem[];
   livrables?: LivrableRapportItem[];
   previsionDepense?: PrevisionDepenseItem[];

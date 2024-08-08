@@ -8,7 +8,6 @@ export interface UnCompleteTbbItem {
   ordreDeMission?: string;
   piecesClassees?: string;
   remarqueAttente?: string;
-  dateRF?: Date;
   explicationImprevu?: string;
   type?: string;
 }

@@ -197,7 +197,12 @@ const ListMissions = () => {
   const [searchYear, setSearchYear] = React.useState<string>("Toutes");
   useEffect(() => {
     // Restore original missionListe and then filter based on search criteria
-    let filteredData = [...missionListe];
+    let filteredData = [
+      ...missionListe.filter(
+        (f) =>
+          new Date(f.dateFin as Date).getFullYear() == new Date().getFullYear()
+      ),
+    ];
 
     if (searchMission !== "") {
       filteredData = filteredData.filter((m: MissionItem) => {
@@ -212,7 +217,7 @@ const ListMissions = () => {
     }
 
     if (searchMonth !== "Tous") {
-      filteredData = filteredData.filter((m: MissionItem) =>
+      filteredData = missionListe.filter((m: MissionItem) =>
         (new Date(m.dateDebut as Date).getMonth() + 1)
           .toString()
           .includes(searchMonth)
@@ -220,7 +225,7 @@ const ListMissions = () => {
     }
 
     if (searchYear !== "Toutes") {
-      filteredData = filteredData.filter((m: MissionItem) =>
+      filteredData = missionListe.filter((m: MissionItem) =>
         new Date(m.dateDebut!).getFullYear().toString().includes(searchYear)
       );
     }
@@ -326,7 +331,13 @@ const ListMissions = () => {
         </Typography>
       </SectionNavigation>
       <Divider />
-      <SectionDetails sx={{ height: "calc(100vh - 250px)", overflow: "auto" }}>
+      <SectionDetails
+        sx={{
+          minHeight: "100%",
+          maxHeight: searchMission != "" ? "100%" : "calc(100vh - 250px)",
+          overflow: "auto",
+        }}
+      >
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 1, sm: 2, md: 4 }}
@@ -387,19 +398,21 @@ const ListMissions = () => {
                         align="center"
                         sx={{
                           cursor:
-                            mission?.descriptionMission!.length > 4
+                            mission?.descriptionMission!.length > 100
                               ? "pointer"
                               : "default",
                           "&:hover": {
                             color:
-                              mission?.descriptionMission!.length > 4
+                              mission?.descriptionMission!.length > 100
                                 ? "grey.800"
                                 : "#849ba2",
                           },
                         }}
                       >
                         Mission :{" "}
-                        {mission?.descriptionMission?.slice(0, 40) + "..."}
+                        {mission?.descriptionMission!.length > 100
+                          ? mission?.descriptionMission!.slice(0, 100) + "..."
+                          : mission?.descriptionMission!}
                       </Typography>
                       <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                         Status : {mission.status}

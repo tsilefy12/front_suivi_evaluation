@@ -78,7 +78,6 @@ const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
                 remarqueAttente: isEditing
                   ? uncompleteTbb?.remarqueAttente
                   : "",
-                dateRF: isEditing ? uncompleteTbb?.dateRF : new Date(),
                 explicationImprevu: isEditing
                   ? uncompleteTbb?.explicationImprevu
                   : "",
@@ -198,17 +197,6 @@ const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
                       label="Remarque attente"
                       name="remarqueAttente"
                       inputProps={{ autoComplete: "off" }}
-                    />
-                  </Stack>
-                  <Stack direction={"row"} gap={2} paddingBottom={2}>
-                    <OSDatePicker
-                      id="outlined-basic"
-                      label="Date RF"
-                      name="dateRF"
-                      value={formikProps.values.dateRF}
-                      onChange={(value: any) =>
-                        formikProps.setFieldValue("dateRF", value)
-                      }
                     />
                   </Stack>
                   <OSTextField

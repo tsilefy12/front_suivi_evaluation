@@ -57,7 +57,7 @@ const DashboardMission = () => {
   const [data, setData] = React.useState<any[]>([]);
 
   useEffect(() => {
-    if (search !== "") {
+    if (search != "") {
       const donne = missionListe.filter(
         (m: MissionItem) =>
           m.RefBudget!.toLowerCase().includes(search.toLowerCase()) ||
@@ -68,12 +68,14 @@ const DashboardMission = () => {
           employees
             .find((e: EmployeItem) => e.id === m.missionManagerId)
             ?.surname!.toLowerCase()
-            .includes(search.toLowerCase())
+            .includes(search.toLowerCase()) ||
+          m
+            .uncompleteTbbs!.map((m: UnCompleteTbbItem) => m.type)
+            .some((t: any) => t.toLowerCase().includes(search.toLowerCase()))
       );
-      setData(donne.reverse());
-    } else {
-      setData([...missionListe].reverse());
+      return setData(donne.reverse());
     }
+    return setData([...missionListe].reverse());
   }, [search, missionListe]);
   return (
     <div style={{ paddingLeft: 2, paddingRight: 2 }}>
@@ -82,8 +84,12 @@ const DashboardMission = () => {
           Retour
         </Button>
       </Link>
+
       <SectionDetails
-        sx={{ height: search === "" ? "calc(100vh - 240px)" : "100%" }}
+        sx={{
+          minHeight: "100%",
+          maxHeight: search != "" ? "100%" : "calc(100vh - 250px)",
+        }}
       >
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -127,7 +133,7 @@ const DashboardMission = () => {
             />
           </Stack>
         </Stack>
-        <div>
+        <div style={{ overflow: "auto" }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -505,19 +511,12 @@ const DashboardMission = () => {
                     {row.uncompleteTbbs!.map((m) => m.explicationImprevu)}
                   </TableCell>
                   <TableCell align="left" sx={{ width: "100%" }}>
-                    {row.uncompleteTbbs!.map((m) => (
-                      <Moment format="DD/MM/yyyy" key={m.id}>
-                        {m.dateRF}
-                      </Moment>
-                    ))}
+                    <Moment format="DD/MM/yyyy">{row.dateRF}</Moment>
                   </TableCell>
                   <TableCell align="left" sx={{ width: "100%" }}>
                     {(() => {
-                      const dates = row
-                        .uncompleteTbbs!.map((m) => m.dateRF)
-                        .filter(Boolean);
-                      const date = dates.length > 0 ? dates[0] : "";
-                      if (!date) {
+                      const date = row.dateRF;
+                      if (date == null) {
                         return "Alarme";
                       } else {
                         const dateRF = new Date(date);
@@ -565,7 +564,6 @@ const SectionDetails = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
-  overflow: "auto",
 }));
 
 export const InfoItems = styled(Stack)(({ theme }) => ({}));
