@@ -137,7 +137,7 @@ const DashboardMission = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ width: "100%" }} align="left">
+                <TableCell sx={{ minWidth: 150, maxWidth: 150 }} align="left">
                   Réf. budget
                 </TableCell>
                 <TableCell sx={{ width: "100%" }} align="left">
@@ -232,7 +232,7 @@ const DashboardMission = () => {
             <TableBody>
               {data.map((row: MissionItem, index: any) => (
                 <TableRow key={row.id}>
-                  <TableCell align="left" sx={{ width: "100%" }}>
+                  <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
                     {row.RefBudget}
                   </TableCell>
                   <TableCell align="left" sx={{ width: "100%" }}>

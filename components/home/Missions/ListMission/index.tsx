@@ -57,12 +57,14 @@ const ListMissions = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [getMissionId, setGetMissionId] = React.useState<string>("");
   const validate = usePermitted();
-
+  const data = async () => {
+    await fetchEmployes();
+    await fetchMissionListe();
+  };
   useEffect(() => {
-    fetchMissionListe();
-    fetchEmployes();
+    data();
   }, []);
-  // console.log(missionListe);
+
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer la Mission",
@@ -196,7 +198,6 @@ const ListMissions = () => {
   const [searchMonth, setSearchMonth] = React.useState<string>("Tous");
   const [searchYear, setSearchYear] = React.useState<string>("Toutes");
   useEffect(() => {
-    // Restore original missionListe and then filter based on search criteria
     let filteredData = [
       ...missionListe.filter(
         (f) =>
@@ -527,14 +528,8 @@ const ListMissions = () => {
                         .filter((e: EmployeItem) =>
                           mission.budgetManagerId?.includes(e.id as string)
                         )
-                        .map((m: EmployeItem) => (
-                          <Stack direction={"column"} gap={1} key={m.id}>
-                            {" "}
-                            <span>
-                              {m.name} {m.surname}
-                            </span>
-                          </Stack>
-                        ))}
+                        .map((m: EmployeItem) => `${m.name} ${m.surname}`)
+                        .join(", ")}
                     </FormLabel>
                     <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                       Début :{" "}
@@ -569,7 +564,7 @@ const ListMissions = () => {
                         color="info"
                         onClick={() => addComplete(mission.id!)}
                       >
-                        Admin
+                        Administration
                       </Button>
                     </Stack>
                   </Stack>

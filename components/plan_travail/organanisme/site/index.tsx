@@ -1,4 +1,4 @@
-import { ArrowBack, Add } from "@mui/icons-material";
+import { ArrowBack, Add, Download } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -29,6 +29,7 @@ import { BodySection as OriginalBodySection } from "../tachesEtObjectifs/ListTac
 import { PlanTravailItem } from "../../../../redux/features/planTravail/planTravail.interface";
 import useFetchObjectifsAnnuel from "./hooks/useFetchObjectifAnnuel";
 import { axios } from "../../../../axios";
+import * as XLSX from "xlsx";
 
 const ListSite = () => {
   const router = useRouter();
@@ -70,6 +71,86 @@ const ListSite = () => {
       console.log(error);
     }
   };
+  const prepareExportData = () => {
+    const data: any[] = [];
+    planTravaillist
+      .filter((f) => f.id == id)
+      .forEach((plan: PlanTravailItem) => {
+        const planData =
+          plan.TacheCle?.flatMap((t) =>
+            t.objectifAnnuel
+              ?.filter((o) =>
+                typeof filtre === "number" ? o.year === filtre : o
+              )
+              .map((o) => ({
+                Goals: plan.description,
+                SN: t.sn,
+                KeyTasks: t.keyTasks,
+                Targets: o.objectiveTitle,
+                Indicateur: o.indicateur,
+                Prévision: o.prevision,
+                Réalisation: o.realisation,
+                ...sitelist.reduce((acc, s) => {
+                  acc[s.lieu] =
+                    o.notes?.find((n) => n.siteId === s.id)?.note || "";
+                  return acc;
+                }, {} as Record<string, number>),
+              }))
+          ) || [];
+        data.push(...planData);
+        const subTotal = sitelist.reduce((acc: any, s: any) => {
+          acc[s.lieu] = planData.reduce(
+            (sum, item) =>
+              sum + (typeof item[s.lieu] === "number" ? item[s.lieu] : 0),
+            0
+          );
+          return acc;
+        }, {} as Record<string, number>);
+
+        data.push({
+          Goals: "Sous-total",
+          SN: "",
+          KeyTasks: "",
+          Targets: "",
+          Indicateur: "",
+          Prévision: "",
+          Réalisation: "",
+          ...subTotal,
+        });
+      });
+
+    return data;
+  };
+
+  const exportToExcel = (data: any[], fileName: string) => {
+    const ws = XLSX.utils.json_to_sheet(data, {
+      header: [
+        "Goals",
+        "SN",
+        "KeyTasks",
+        "Targets",
+        "Indicateur",
+        "Prévision",
+        "Réalisation",
+        ...sitelist.map((s) => s.lieu),
+      ],
+    });
+    const headerRow = [
+      "Goals",
+      "SN",
+      "KeyTasks",
+      "Targets",
+      "Indicateur",
+      "Prévision",
+      "Réalisation",
+      ...sitelist.map((s) => s.lieu),
+    ];
+    ws["!rows"] = headerRow.map((_, index) => ({ hpt: 30, wpx: 100 }));
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    XLSX.writeFile(wb, fileName);
+  };
 
   return (
     <>
@@ -81,11 +162,26 @@ const ListSite = () => {
           sx={{ mb: 2 }}
         >
           <Stack direction={"row"} spacing={2} alignItems={"center"}>
-            <Link href={`/plan_travail`}>
-              <Button color="info" variant="text" startIcon={<ArrowBack />}>
-                Retour
+            <Stack direction={"row"} spacing={2} alignItems={"center"}>
+              <Link href={`/plan_travail`}>
+                <Button color="info" variant="text" startIcon={<ArrowBack />}>
+                  Retour
+                </Button>
+              </Link>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() =>
+                  exportToExcel(
+                    prepareExportData(),
+                    `Sites_${filtre || "all"}.xlsx`
+                  )
+                }
+                startIcon={<Download />}
+              >
+                Excel
               </Button>
-            </Link>
+            </Stack>
             <TextField
               label="Année"
               size="small"
