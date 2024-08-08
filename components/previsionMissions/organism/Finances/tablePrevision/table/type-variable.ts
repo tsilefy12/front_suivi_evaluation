@@ -6,6 +6,7 @@ export default interface Data {
   montant: string;
   grant: string;
   ligne: string;
+  regleme: string;
 }
 
 export type Order = "asc" | "desc";
@@ -20,7 +21,7 @@ export interface HeadCell {
 export interface EnhancedTableToolbarProps {
   numSelected: number;
   filtre: any;
-  setFiltre : any;
+  setFiltre: any;
 }
 
 export interface EnhancedTableProps {

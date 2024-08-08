@@ -42,6 +42,8 @@ import {
 import useFetchBesoinEnVehiculeRapportList from "../hooks/useFetchBesoinEnVehicule";
 import useFetchVehicleList from "../../../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
 import useFetchVoiture from "../../../../../previsionMissions/organism/Finances/tableBesoinVéhicules/hooks/useFetchVoiture";
+import useFetchMissionaryRapportList from "../../../Techniques/tableMissionnaires/hooks/useFetchMissionaryList";
+import { MissionairesItem } from "../../../../../../redux/features/missionaires/missionaires.interface";
 
 const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
@@ -51,21 +53,23 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
   const router = useRouter();
   const { id }: any = router.query;
   const [open, setOpen] = React.useState(false);
-  const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) => state.employe);
-  const { vehicleList } = useAppSelector((state: any) => state.vehicle);
-  const fetchVehicleListe = useFetchVehicleList();
   const fetchBesoinEnVehiculeRapportList =
     useFetchBesoinEnVehiculeRapportList();
   const fetchVoiture = useFetchVoiture();
   const { transportationEquipments } = useAppSelector(
     (state: any) => state.transportation
   );
+  const fetchMissionaryRapportList = useFetchMissionaryRapportList();
+  const { missionaireslist } = useAppSelector(
+    (state: any) => state.missionaires
+  );
+  const data = async () => {
+    await fetchVoiture();
+    await fetchMissionaryRapportList();
+    await fetchBesoinEnVehiculeRapportList();
+  };
   React.useEffect(() => {
-    fetchBesoinEnVehiculeRapportList();
-    fetchEmployes();
-    fetchVehicleListe();
-    fetchVoiture();
+    data();
   }, [router.query]);
 
   const handleSubmit = async (values: any) => {
@@ -96,10 +100,14 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-  const [selectedEmployes, setSelectedEmployes] = React.useState<EmployeItem[]>(
+  const [selectedEmployes, setSelectedEmployes] = React.useState<
+    MissionairesItem[]
+  >(
     isEditing
-      ? employees.filter((employee: any) =>
-          besoinVehiculeRapport?.responsable?.includes(employee.id!)
+      ? missionaireslist.filter(
+          (missionaire: MissionairesItem) =>
+            besoinVehiculeRapport?.responsable?.includes(missionaire.id!) &&
+            missionaire.missionId == id
         )
       : []
   );
@@ -245,9 +253,12 @@ const AddbesoinVehiculeRapport = ({ handleClose }: any) => {
                       <Autocomplete
                         multiple
                         id="tags-standard"
-                        options={employees}
-                        getOptionLabel={(employee: any) =>
-                          `${employee.name} ${employee.surname}` as string
+                        options={missionaireslist.filter(
+                          (missionaire: MissionairesItem) =>
+                            missionaire.missionId == id
+                        )}
+                        getOptionLabel={(missionaire: any) =>
+                          `${missionaire.lastNameMissionary} ${missionaire.firstNameMissionary}` as string
                         }
                         value={selectedEmployes}
                         onChange={(event, newValue) => {

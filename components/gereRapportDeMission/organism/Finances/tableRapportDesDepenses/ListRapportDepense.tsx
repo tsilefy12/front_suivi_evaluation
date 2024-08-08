@@ -207,8 +207,8 @@ const ListRapportDepenses = () => {
                     <TableCell align="left">Date</TableCell>
                     <TableCell align="left">Libellés</TableCell>
                     <TableCell align="left">Grant</TableCell>
+                    <TableCell align="left">Ligne budgetaire</TableCell>
                     <TableCell align="left">Montant</TableCell>
-                    <TableCell align="left">Budget line</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -238,14 +238,14 @@ const ListRapportDepenses = () => {
                             }
                           </TableCell>
                           <TableCell align="left">
-                            {formatMontant(Number(row.montant))}
-                          </TableCell>
-                          <TableCell align="left">
                             {
                               budgetLineList.find(
                                 (e: any) => e.id === row.ligneBudgetaire
                               )?.code
                             }
+                          </TableCell>
+                          <TableCell align="left">
+                            {formatMontant(Number(row.montant))}
                           </TableCell>
                           <TableCell align="left">
                             <BtnActionContainer

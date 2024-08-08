@@ -283,6 +283,7 @@ const ListPrevision = () => {
                             )?.code
                           }
                         </TableCell>
+                        <TableCell>{row.regleme}</TableCell>
                         <TableCell align="left">
                           <BtnActionContainer
                             direction="row"

@@ -215,17 +215,11 @@ const ListResumeDepense = () => {
                       return (
                         <TableRow
                           hover
-                          //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.grant}
-                          // selected={isItemSelected}
                         >
-                          <TableCell
-                            padding="checkbox"
-                            // onClick={(event) => handleClick(event, row.grant)}
-                          ></TableCell>
+                          <TableCell padding="checkbox"></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
@@ -244,17 +238,6 @@ const ListResumeDepense = () => {
                                 (e: any) => e.id === row.ligneBudgetaire
                               )?.code
                             }
-                            {/* <FormControl sx={{ height: (row.ligneBudgetaire!).length <= 2 ? "auot" : 70, overflow: "auto" }}>
-                              {
-                                 Array.isArray(row.ligneBudgetaire) && (row.ligneBudgetaire).map((lb: any) => {
-                                  return (
-                                    <Stack direction="column" spacing={2}>
-                                      {budgetLineList.find((b: any) => b.id === lb)?.code}
-                                    </Stack>
-                                  )
-                                })
-                              }
-                            </FormControl> */}
                           </TableCell>
                           <TableCell align="left">
                             {formatMontant(Number(row.depensePrevue))}

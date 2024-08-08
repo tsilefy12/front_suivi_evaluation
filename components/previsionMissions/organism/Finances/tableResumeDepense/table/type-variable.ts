@@ -2,7 +2,7 @@ export default interface Data {
   grant: string;
   ligne: string;
   depenses: string;
-  budget: string;
+  // budget: string;
   remarques: string;
 }
 
@@ -18,7 +18,7 @@ export interface HeadCell {
 export interface EnhancedTableToolbarProps {
   numSelected: number;
   filtre: any;
-  setFiltre : any;
+  setFiltre: any;
 }
 
 export interface EnhancedTableProps {

@@ -40,7 +40,7 @@ const Finances = () => {
           <ListResumeDepense />
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+      {/* <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -51,7 +51,7 @@ const Finances = () => {
         <AccordionDetails>
           <ListCalculDesPiles />
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}

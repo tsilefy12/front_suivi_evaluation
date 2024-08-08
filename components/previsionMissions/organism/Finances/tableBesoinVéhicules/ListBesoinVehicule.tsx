@@ -44,6 +44,7 @@ import {
 import useFetchVehicleList from "../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
 import useFetchEmploys from "../../../../GrantsEnCours/hooks/getResponsable";
 import useFetchVoiture from "./hooks/useFetchVoiture";
+import useFetchMissionaryList from "../../Techniques/tableMissionnaires/hooks/useFetchMissionaryList";
 
 const ListBesoinVehicule = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -57,10 +58,6 @@ const ListBesoinVehicule = () => {
   const { besoinVehiculeList } = useAppSelector(
     (state) => state.besoinVehicule
   );
-  const fetchVehicule = useFetchVehicleList();
-  const { vehicleList } = useAppSelector((state: any) => state.vehicle);
-  const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) => state.employe);
   const router = useRouter();
   const { id } = router.query;
   const confirm = useConfirm();
@@ -69,12 +66,15 @@ const ListBesoinVehicule = () => {
   const { transportationEquipments } = useAppSelector(
     (state: any) => state.transportation
   );
-
+  const { missionaryList } = useAppSelector((state) => state.missionary);
+  const fetchMissionaryList = useFetchMissionaryList();
+  const data = async () => {
+    await fetchVoiture();
+    await fetchMissionaryList();
+    await fetchBesoinEnVehicule();
+  };
   React.useEffect(() => {
-    fetchBesoinEnVehicule();
-    fetchVehicule();
-    fetchEmployes();
-    fetchVoiture();
+    data();
   }, []);
   const handleClickOpen = () => {
     setOpen(true);
@@ -241,7 +241,7 @@ const ListBesoinVehicule = () => {
                               )?.registration
                             } `}
                           </TableCell>
-                          <TableCell sx={{ minWidth: 50, maxWidth: 50 }}>
+                          <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
                             {row.trajet}
                           </TableCell>
                           <TableCell sx={{ minWidth: 250, maxWidth: 250 }}>
@@ -256,21 +256,26 @@ const ListBesoinVehicule = () => {
                                     key={index}
                                     sx={{ minWidth: 250, maxWidth: 250 }}
                                   >
-                                    -
                                     {
-                                      employees.find((e: any) => e.id == lp)
-                                        ?.name
+                                      missionaryList
+                                        .filter((f) => f.missionId == id)
+                                        .find((e) => e.id == lp)
+                                        ?.lastNameMissionary
                                     }{" "}
                                     {
-                                      employees.find((e: any) => e.id == lp)
-                                        ?.surname
+                                      missionaryList
+                                        .filter((f) => f.missionId == id)
+                                        .find((e) => e.id == lp)
+                                        ?.firstNameMissionary
                                     }
                                   </Stack>
                                 );
                               })}
                             </FormControl>
                           </TableCell>
-                          <TableCell align="center">{row.nombreJour}</TableCell>
+                          <TableCell sx={{ minWidth: 60, maxWidth: 60 }}>
+                            {row.nombreJour}
+                          </TableCell>
                           <TableCell>
                             <BtnActionContainer
                               direction="row"

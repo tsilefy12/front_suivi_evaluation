@@ -82,21 +82,24 @@ const ListSite = () => {
               ?.filter((o) =>
                 typeof filtre === "number" ? o.year === filtre : o
               )
-              .map((o) => ({
-                Goals: plan.description,
-                SN: t.sn,
-                KeyTasks: t.keyTasks,
-                Targets: o.objectiveTitle,
-                Indicateur: o.indicateur,
-                Prévision: o.prevision,
-                Réalisation: o.realisation,
-                ...sitelist.reduce((acc, s) => {
-                  acc[s.lieu] =
-                    o.notes?.find((n) => n.siteId === s.id)?.note || "";
-                  return acc;
-                }, {} as Record<string, number>),
-              }))
+              .map((o) => {
+                return {
+                  Goals: plan.description!,
+                  SN: t.sn,
+                  KeyTasks: t.keyTasks,
+                  Targets: o.objectiveTitle,
+                  Indicateur: o.indicateur,
+                  Prévision: o.prevision,
+                  Réalisation: o.realisation,
+                  ...sitelist.reduce((acc: any, s: any) => {
+                    acc[s.lieu] =
+                      o.notes?.find((n) => n.siteId === s.id)?.note || 0;
+                    return acc;
+                  }, {} as Record<string, number>),
+                };
+              })
           ) || [];
+
         data.push(...planData);
         const subTotal = sitelist.reduce((acc: any, s: any) => {
           acc[s.lieu] = planData.reduce(
@@ -118,6 +121,19 @@ const ListSite = () => {
           ...subTotal,
         });
       });
+    data.push({
+      Goals: "",
+      SN: "",
+      KeyTasks: "",
+      Targets: "",
+      Indicateur: "",
+      Prévision: "",
+      Réalisation: "",
+      ...sitelist.reduce((acc: any, s: any) => {
+        acc[s.lieu] = "";
+        return acc;
+      }, {} as Record<string, number>),
+    });
 
     return data;
   };
@@ -168,19 +184,6 @@ const ListSite = () => {
                   Retour
                 </Button>
               </Link>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() =>
-                  exportToExcel(
-                    prepareExportData(),
-                    `Sites_${filtre || "all"}.xlsx`
-                  )
-                }
-                startIcon={<Download />}
-              >
-                Excel
-              </Button>
             </Stack>
             <TextField
               label="Année"
@@ -206,6 +209,19 @@ const ListSite = () => {
                 </MenuItem>
               ))}
             </TextField>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() =>
+                exportToExcel(
+                  prepareExportData(),
+                  `Sites_${filtre || "tous"}.xlsx`
+                )
+              }
+              startIcon={<Download />}
+            >
+              Excel
+            </Button>
           </Stack>
           <Typography variant="h4" color="GrayText">
             Liste des sites

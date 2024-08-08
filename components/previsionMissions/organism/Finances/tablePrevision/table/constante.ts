@@ -44,8 +44,23 @@ export const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: "Ligne budgetaire",
   },
+  {
+    id: "regleme",
+    numeric: true,
+    disablePadding: false,
+    label: "Mode de paiement",
+  },
 ];
 
 export const rows = [
-  createData("08/10/2021", "Sac", "10", "10000", "10000", "ADM-MOT-001", "LB1"),
+  createData(
+    "08/10/2021",
+    "Sac",
+    "10",
+    "10000",
+    "10000",
+    "ADM-MOT-001",
+    "LB1",
+    "MVola"
+  ),
 ];

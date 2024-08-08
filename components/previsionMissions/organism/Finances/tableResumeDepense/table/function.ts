@@ -4,14 +4,14 @@ export function createData(
   grant: string,
   ligne: string,
   depenses: string,
-  budget: string,
+  // budget: string,
   remarques: string
 ): Data {
   return {
     grant,
     ligne,
     depenses,
-    budget,
+    // budget,
     remarques,
   };
 }

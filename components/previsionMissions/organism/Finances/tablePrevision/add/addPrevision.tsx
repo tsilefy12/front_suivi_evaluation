@@ -96,7 +96,13 @@ const AddPrevisionMission = ({ handleClose }: any) => {
       return [];
     });
   }, [grantEncoursList, grantValue]);
-
+  const modepaiementList = [
+    { id: "Virement", name: "Virement" },
+    { id: "Cheque", name: "Cheque" },
+    { id: " Mobile money", name: " Mobile money" },
+    { id: " Taxi admin ", name: " Taxi admin " },
+    { id: "Especes", name: "Especes" },
+  ];
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -238,7 +244,7 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                         fullWidth
                         select
                         id="outlined-basic"
-                        label="Budget line"
+                        label="Ligne budgetaire"
                         variant="outlined"
                         name="ligneBudgetaire"
                         options={BudgetLineGrantList}
@@ -246,13 +252,16 @@ const AddPrevisionMission = ({ handleClose }: any) => {
                         valueKey="id"
                       ></OSSelectField>
                     </FormControl>
-                    <OSTextField
+                    <OSSelectField
                       fullWidth
                       id="outlined-basic"
-                      label="Reglème"
+                      label="Mode de paiement"
                       variant="outlined"
                       name="regleme"
-                      inputProps={{ autoComplete: "off" }}
+                      options={modepaiementList}
+                      value={formikProps.values.regleme}
+                      dataKey={["name"]}
+                      valueKey="id"
                     />
                   </FormContainer>
                 </DialogContent>

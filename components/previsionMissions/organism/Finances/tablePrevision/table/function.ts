@@ -7,7 +7,8 @@ export function createData(
   pu: string,
   montant: string,
   grant: string,
-  ligne: string
+  ligne: string,
+  regleme: string
 ): Data {
   return {
     date,
@@ -17,6 +18,7 @@ export function createData(
     montant,
     grant,
     ligne,
+    regleme,
   };
 }
 

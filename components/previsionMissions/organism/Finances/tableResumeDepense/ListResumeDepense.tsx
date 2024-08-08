@@ -219,7 +219,7 @@ const ListResumeDepense = () => {
                             id={labelId}
                             scope="row"
                             padding="none"
-                            sx={{ minWidth: 150, maxWidth: 150 }}
+                            sx={{ minWidth: 100, maxWidth: 100 }}
                           >
                             {
                               grantEncoursList.find(
@@ -227,23 +227,23 @@ const ListResumeDepense = () => {
                               )?.code
                             }
                           </TableCell>
-                          <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
+                          <TableCell sx={{ minWidth: 100, maxWidth: 100 }}>
                             {
                               budgetLineList.find(
                                 (e: any) => e.id === row.ligneBudgetaire
                               )?.code
                             }
                           </TableCell>
-                          <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
+                          <TableCell sx={{ minWidth: 100, maxWidth: 100 }}>
                             {formatMontant(Number(row.depensePrevue))}
                           </TableCell>
-                          <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
+                          {/* <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
                             {formatMontant(Number(row.budgetDepense))}
-                          </TableCell>
-                          <TableCell sx={{ width: "100%" }}>
+                          </TableCell> */}
+                          <TableCell sx={{ minWidth: 60, maxWidth: 60 }}>
                             {row.remarque}
                           </TableCell>
-                          <TableCell sx={{ width: "100%" }}>
+                          <TableCell sx={{ minWidth: 60, maxWidth: 60 }}>
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"

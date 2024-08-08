@@ -116,7 +116,15 @@ const ListMissions = () => {
       });
       setDataMission([...filteredData].reverse());
     } else {
-      setDataMission([...missionListe].reverse());
+      setDataMission(
+        [
+          ...missionListe.filter(
+            (f) =>
+              new Date(f.dateFin as Date).getFullYear() ===
+              new Date().getFullYear()
+          ),
+        ].reverse()
+      );
     }
   }, [searchMission, missionListe, employees]);
 
@@ -198,13 +206,17 @@ const ListMissions = () => {
   const [searchMonth, setSearchMonth] = React.useState<string>("Tous");
   const [searchYear, setSearchYear] = React.useState<string>("Toutes");
   useEffect(() => {
-    let filteredData = [
-      ...missionListe.filter(
-        (f) =>
-          new Date(f.dateFin as Date).getFullYear() == new Date().getFullYear()
-      ),
-    ];
+    let filteredData = [...missionListe];
 
+    if (searchMission === "") {
+      filteredData = [
+        ...missionListe.filter(
+          (f) =>
+            new Date(f.dateFin as Date).getFullYear() ==
+            new Date().getFullYear()
+        ),
+      ];
+    }
     if (searchMission !== "") {
       filteredData = filteredData.filter((m: MissionItem) => {
         const missionManager = employees.find(
@@ -381,6 +393,7 @@ const ListMissions = () => {
                   border: 1,
                   borderRadius: 4,
                   borderColor: "#F5F5F5",
+                  width: 400,
                 }}
               >
                 <CardHeader
@@ -460,9 +473,9 @@ const ListMissions = () => {
                 </CardHeader>
                 <CardBody key={index}>
                   <Stack spacing={1} key={index}>
-                    <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
+                    {/* <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                       Référence : {"MISSION_" + mission?.reference}
-                    </FormLabel>
+                    </FormLabel> */}
                     <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                       Référence budget : <span></span>
                       {mission.RefBudget}

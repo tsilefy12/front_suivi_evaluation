@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
@@ -39,6 +39,8 @@ import { EmployeItem } from "../../../../../../redux/features/employe/employeSli
 import useFetchVehicleList from "../../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
 import useFetchVoiture from "../hooks/useFetchVoiture";
 import { getVehicle } from "../../../../../../redux/features/vehicle";
+import useFetchMissionaryList from "../../../Techniques/tableMissionnaires/hooks/useFetchMissionaryList";
+import { MissionaryItem } from "../../../../../../redux/features/missionary/missionarySlice.interface";
 
 const AddBesoinVehicule = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
@@ -49,19 +51,19 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
   const router = useRouter();
   const { id }: any = router.query;
   const [open, setOpen] = React.useState(false);
-  const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) => state.employe);
   const fetchVehicule = useFetchVehicleList();
   const { vehicleList } = useAppSelector((state: any) => state.vehicle);
   const fetchVoiture = useFetchVoiture();
   const { transportationEquipments } = useAppSelector(
     (state: any) => state.transportation
   );
+  const { missionaryList } = useAppSelector((state) => state.missionary);
+  const fetchMissionaryList = useFetchMissionaryList();
 
   React.useEffect(() => {
     fetchVehicule();
-    fetchEmployes();
     fetchVoiture();
+    fetchMissionaryList();
   }, [router.query]);
 
   const handleSubmit = async (values: any) => {
@@ -94,10 +96,15 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-  const [selectedEmployes, setSelectedEmployes] = React.useState<EmployeItem[]>(
+
+  const [selectedEmployes, setSelectedEmployes] = React.useState<
+    MissionaryItem[]
+  >(
     isEditing
-      ? employees.filter((employee: any) =>
-          besoinVehicule?.responsable?.includes(employee.id!)
+      ? missionaryList.filter(
+          (missionary: any) =>
+            besoinVehicule?.responsable?.includes(missionary.id!) &&
+            missionary.missionId === id
         )
       : []
   );
@@ -235,9 +242,11 @@ const AddBesoinVehicule = ({ handleClose }: any) => {
                       <Autocomplete
                         multiple
                         id="tags-standard"
-                        options={employees}
-                        getOptionLabel={(employee: any) =>
-                          `${employee.name} ${employee.surname}` as string
+                        options={missionaryList.filter(
+                          (missionary) => missionary.missionId === id
+                        )}
+                        getOptionLabel={(missionary) =>
+                          `${missionary.firstNameMissionary} ${missionary.lastNameMissionary}` as string
                         }
                         value={selectedEmployes}
                         onChange={(event, newValue) => {

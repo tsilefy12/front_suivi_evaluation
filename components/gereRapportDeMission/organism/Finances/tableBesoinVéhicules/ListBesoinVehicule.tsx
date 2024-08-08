@@ -41,6 +41,8 @@ import AddbesoinVehiculeRapport from "./add/addBesoinVehicule";
 import { BesoinvehiculeRapportItem } from "../../../../../redux/features/besoinVehiculeRapport/besoinVehiculeRapport.interface";
 import useFetchBesoinEnVehiculeRapportList from "./hooks/useFetchBesoinEnVehicule";
 import useFetchVoiture from "../../../../previsionMissions/organism/Finances/tableBesoinVéhicules/hooks/useFetchVoiture";
+import useFetchMissionaryRapportList from "../../Techniques/tableMissionnaires/hooks/useFetchMissionaryList";
+import { MissionairesItem } from "../../../../../redux/features/missionaires/missionaires.interface";
 
 const ListbesoinVehiculeRapportRapport = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -66,11 +68,19 @@ const ListbesoinVehiculeRapportRapport = () => {
   const { transportationEquipments } = useAppSelector(
     (state: any) => state.transportation
   );
+  const fetchMissionaryRapportList = useFetchMissionaryRapportList();
+  const { missionaireslist } = useAppSelector(
+    (state: any) => state.missionaires
+  );
+  const data = async () => {
+    await fetchVoiture();
+    await fetchMissionaryRapportList();
+    await fetchBesoinEnVehiculeRapportList();
+  };
   React.useEffect(() => {
-    fetchBesoinEnVehiculeRapportList();
-    fetchEmployes();
-    fetchVoiture();
-  }, []);
+    data();
+  }, [router.query]);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -227,7 +237,8 @@ const ListbesoinVehiculeRapportRapport = () => {
                           <TableCell align="left">
                             <FormControl
                               sx={{
-                                width: 300,
+                                minWidth: 150,
+                                maxWidth: 150,
                                 height:
                                   row.responsable!.length <= 2 ? "auto" : 70,
                                 overflow: "auto",
@@ -241,20 +252,40 @@ const ListbesoinVehiculeRapportRapport = () => {
                                     key={lp}
                                   >
                                     {
-                                      employees.find((e: any) => e.id === lp)
-                                        ?.name
+                                      missionaireslist
+                                        .filter(
+                                          (f: MissionairesItem) =>
+                                            f.missionId == id
+                                        )
+                                        .find(
+                                          (e: MissionairesItem) => e.id === lp
+                                        )?.lastNameMissionary
                                     }{" "}
                                     {
-                                      employees.find((e: any) => e.id === lp)
-                                        ?.surname
+                                      missionaireslist
+                                        .filter(
+                                          (f: MissionairesItem) =>
+                                            f.missionId == id
+                                        )
+                                        .find(
+                                          (e: MissionairesItem) => e.id === lp
+                                        )?.firstNameMissionary
                                     }
                                   </Stack>
                                 );
                               })}
                             </FormControl>
                           </TableCell>
-                          <TableCell align="center">{row.nombreJour}</TableCell>
-                          <TableCell align="left">
+                          <TableCell
+                            align="left"
+                            sx={{ minWidth: 50, maxWidth: 50 }}
+                          >
+                            {row.nombreJour}
+                          </TableCell>
+                          <TableCell
+                            align="left"
+                            sx={{ minWidth: 50, maxWidth: 50 }}
+                          >
                             <BtnActionContainer
                               direction="row"
                               justifyContent="left"

@@ -29,7 +29,6 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            sx={{ width: "100%" }}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
