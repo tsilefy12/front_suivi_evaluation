@@ -1,15 +1,14 @@
 export interface UnCompleteTbbItem {
   id?: string;
   missionId?: string;
-  retenuAdmin?: number;
-  moyenRemise?: string;
-  depenseAdmin?: number;
-  depensesResp?: number;
   ordreDeMission?: string;
   piecesClassees?: string;
   remarqueAttente?: string;
   explicationImprevu?: string;
   type?: string;
+  devise?: number;
+  coursDevise?: number;
+  [x: string]: any;
 }
 
 export interface UncompleteTbbInitialState {

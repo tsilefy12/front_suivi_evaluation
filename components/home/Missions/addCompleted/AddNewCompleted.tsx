@@ -24,19 +24,21 @@ import {
   updateUncompleteTbb,
 } from "../../../../redux/features/unCompleteTbb";
 import OSSelectField from "../../../shared/select/OSSelectField";
-import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
 import useFetchUncompleteTbbListe from "../hooks/useFetchUncompleteTbb";
+import useFetchCurrencyListe from "../../../configurations/currency/hooks/useFetchCurrency";
 
-const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
+const AddNewCompleted = ({ fermerDialog, getMissionId }: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isEditing, uncompleteTbb, unCompleteTbbList } = useAppSelector(
+  const { isEditing, uncompleteTbb } = useAppSelector(
     (state) => state.uncompleteTbb
   );
   const fetchUncompleteTbb = useFetchUncompleteTbbListe();
-
+  const fetchCurrencyListe = useFetchCurrencyListe();
+  const { currencyListe } = useAppSelector((state) => state.currency);
   React.useEffect(() => {
     fetchUncompleteTbb();
+    fetchCurrencyListe();
   }, [router.query]);
 
   const handleSubmit = async (values: any) => {
@@ -69,10 +71,6 @@ const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
           isEditing
             ? uncompleteTbb
             : {
-                retenuAdmin: isEditing ? uncompleteTbb?.retenuAdmin : 0,
-                moyenRemise: isEditing ? uncompleteTbb?.moyenRemise : "",
-                depenseAdmin: isEditing ? uncompleteTbb?.depenseAdmin : 0,
-                depensesResp: isEditing ? uncompleteTbb?.depensesResp : 0,
                 ordreDeMission: isEditing ? uncompleteTbb?.ordreDeMission : "",
                 piecesClassees: isEditing ? uncompleteTbb?.piecesClassees : "",
                 remarqueAttente: isEditing
@@ -82,18 +80,18 @@ const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
                   ? uncompleteTbb?.explicationImprevu
                   : "",
                 type: isEditing ? uncompleteTbb?.type : "",
+                devise: isEditing ? uncompleteTbb?.devise : "",
+                coursDevise: isEditing ? uncompleteTbb?.coursDevise : 0,
               }
         }
         validationSchema={Yup.object({
-          // retenuAdmin: Yup.string().required("Champ obligatoire"),
-          moyenRemise: Yup.string().required("Champ obligatoire"),
-          // depenseAdmin: Yup.number().required("Champ obligatoire"),
-          // depensesResp: Yup.number().required("Champ obligatoire"),
           ordreDeMission: Yup.string().required("Champ obligatoire"),
           piecesClassees: Yup.string().required("Champ obligatoire"),
           remarqueAttente: Yup.string().required("Champ obligatoire"),
           explicationImprevu: Yup.string().required("Champ obligatoire"),
           type: Yup.string().required("Champ obligatoire"),
+          devise: Yup.string().required("Champ obligatoire"),
+          coursDevise: Yup.number().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -119,7 +117,7 @@ const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
                     size="small"
                     startIcon={<Check />}
                     sx={{ marginInline: 3 }}
-                    type="submit"
+                    type="button"
                     onClick={formikProps.submitForm}
                   >
                     Enregistrer
@@ -142,35 +140,6 @@ const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
               <DialogContent sx={{ width: "100%" }}>
                 <Divider />
                 <div style={{ marginTop: 15 }}>
-                  <Stack direction={"row"} gap={2} paddingBottom={2}>
-                    <OSTextField
-                      id="outlined-basic"
-                      label="Retenu admin"
-                      name="retenuAdmin"
-                      type="number"
-                      inputProps={{ autoComplete: "off", min: 0 }}
-                    />
-                    <OSTextField
-                      id="outlined-basic"
-                      label="Moyen remise"
-                      name="moyenRemise"
-                      inputProps={{ autoComplete: "off" }}
-                    />
-                    <OSTextField
-                      id="outlined-basic"
-                      label="Dépense admin"
-                      name="depenseAdmin"
-                      type="number"
-                      inputProps={{ autoComplete: "off", min: 0 }}
-                    />
-                    <OSTextField
-                      id="outlined-basic"
-                      label="Dépense responsable"
-                      name="depensesResp"
-                      type="number"
-                      inputProps={{ autoComplete: "off", min: 0 }}
-                    />
-                  </Stack>
                   <Stack direction={"row"} gap={2} paddingBottom={2}>
                     <OSSelectField
                       id="outlined-basic"
@@ -197,6 +166,22 @@ const AddNewCompleted = ({ fermerDialog, getMissionId, missionListe }: any) => {
                       label="Remarque attente"
                       name="remarqueAttente"
                       inputProps={{ autoComplete: "off" }}
+                    />
+                  </Stack>
+                  <Stack direction={"row"} gap={2} paddingBottom={2}>
+                    <OSSelectField
+                      id="outlined-basic"
+                      label="Devise"
+                      name="devise"
+                      options={currencyListe}
+                      dataKey={"name"}
+                      valueKey="id"
+                    />
+                    <OSTextField
+                      id="outlined-basic"
+                      label="Cours devise"
+                      name="coursDevise"
+                      inputProps={{ autoComplete: "off", type: "number" }}
                     />
                   </Stack>
                   <OSTextField

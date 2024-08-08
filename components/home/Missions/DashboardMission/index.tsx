@@ -331,11 +331,7 @@ const DashboardMission = () => {
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ width: "100%" }}>
-                    {formatMontant(
-                      Number(
-                        row.uncompleteTbbs!.map((retenu) => retenu.retenuAdmin)
-                      )
-                    )}
+                    {formatMontant(Number(row.retenuAdmin))}
                   </TableCell>
                   <TableCell align="left" sx={{ width: "100%" }}>
                     {formatMontant(
@@ -351,15 +347,11 @@ const DashboardMission = () => {
                             const imprevu = Number(cur.imprevue);
                             return acc + (isNaN(imprevu) ? 0 : imprevu);
                           }, 0) || 0) -
-                        Number(
-                          row.uncompleteTbbs!.map(
-                            (retenu) => retenu.retenuAdmin
-                          )
-                        )
+                        Number(row.retenuAdmin)
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ width: "100%" }}>
-                    {row.uncompleteTbbs!.map((m) => m.moyenRemise)}
+                    {row.moyenRemise}
                   </TableCell>
                   <TableCell>
                     {
@@ -373,20 +365,14 @@ const DashboardMission = () => {
                     }
                   </TableCell>
                   <TableCell align="left" sx={{ width: "100%" }}>
-                    {formatMontant(
-                      Number(row.uncompleteTbbs!.map((m) => m.depenseAdmin))
-                    )}
+                    {formatMontant(Number(row.depenseAdmin))}
+                  </TableCell>
+                  <TableCell align="left" sx={{ width: "100%" }}>
+                    {formatMontant(Number(row.depensesResp))}
                   </TableCell>
                   <TableCell align="left" sx={{ width: "100%" }}>
                     {formatMontant(
-                      Number(row.uncompleteTbbs!.map((m) => m.depensesResp))
-                    )}
-                  </TableCell>
-                  <TableCell align="left" sx={{ width: "100%" }}>
-                    {formatMontant(
-                      Number(
-                        row.uncompleteTbbs!.map((retenu) => retenu.retenuAdmin)
-                      ) - Number(row.uncompleteTbbs!.map((m) => m.depenseAdmin))
+                      Number(row.retenuAdmin) - Number(row.depenseAdmin)
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ width: "100%" }}>
