@@ -1,9 +1,10 @@
-import { ArrowBack, Search, Visibility } from "@mui/icons-material";
+import { ArrowBack, Download, Search, Visibility } from "@mui/icons-material";
 import {
   Box,
   Button,
   Container,
   InputAdornment,
+  MenuItem,
   Stack,
   styled,
   Table,
@@ -33,8 +34,8 @@ import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
 import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
 import useFetchPrevisionDepenseList from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchPrevisionDepense";
 import useFetchMissionListe from "../hooks/useFetchMissionListe";
-import { da } from "date-fns/locale";
-import { set } from "date-fns";
+import * as XLSX from "xlsx";
+
 const DashboardMission = () => {
   const router = useRouter();
   // const id: any = router.query;
@@ -55,6 +56,7 @@ const DashboardMission = () => {
   }, []);
   const [search, setSearch] = React.useState("");
   const [data, setData] = React.useState<any[]>([]);
+  const [filterYear, setFilterYear] = React.useState<any>("Tous");
 
   useEffect(() => {
     if (search != "") {
@@ -75,15 +77,183 @@ const DashboardMission = () => {
       );
       return setData(donne.reverse());
     }
+    if (filterYear !== "Tous") {
+      const donne = [...missionListe]
+        .filter(
+          (m: MissionItem) =>
+            new Date(m.dateFin as Date).getFullYear() == filterYear
+        )
+        .reverse();
+      return setData(donne);
+    }
     return setData([...missionListe].reverse());
-  }, [search, missionListe]);
+  }, [search, missionListe, filterYear]);
+
+  const exportToExcel = (data: MissionItem[]) => {
+    const ws = XLSX.utils.json_to_sheet(
+      data.map((row) => ({
+        "Réf. budget": row.RefBudget,
+        Type: row.uncompleteTbbs
+          ?.map((m: UnCompleteTbbItem) => m.type)
+          .join(", "),
+        Responsable: `${
+          employees.find((e) => e.id === row.missionManagerId)?.name || ""
+        } ${
+          employees.find((e) => e.id === row.missionManagerId)?.surname || ""
+        }`,
+        Gestionnaires: row.budgetManagerId
+          ?.map(
+            (id) =>
+              `${employees.find((e) => e.id === id)?.name || ""} ${
+                employees.find((e) => e.id === id)?.surname || ""
+              }`
+          )
+          .join(", "),
+        Lieu: row.missionLocation
+          ?.map((l: MissionLocationItem) => l.district)
+          .join(", "),
+        "Vérif. technique": `${
+          employees.find((e) => e.id === row.verifyTechnic)?.name || ""
+        } ${employees.find((e) => e.id === row.verifyTechnic)?.surname || ""}`,
+        "Vérif. financier": `${
+          employees.find((e) => e.id === row.verifyFinancial)?.name || ""
+        } ${
+          employees.find((e) => e.id === row.verifyFinancial)?.surname || ""
+        }`,
+        Budgets: formatMontant(
+          row.resumeDepensePrevue
+            ?.filter((f: ResumeDepensePrevueItem) => f.grant)
+            .reduce((acc, cur) => acc + (Number(cur.budgetDepense) || 0), 0) ||
+            0
+        ),
+        Grants: grantEncoursList.find(
+          (g: GrantEncoursItem) =>
+            g.id === row.resumeDepensePrevue?.map((m) => m.grant)
+        )?.code,
+        Imprevu: formatMontant(
+          row.previsionDepense
+            ?.filter((f: PrevisionDepenseItem) => f.grant)
+            .reduce((acc, cur) => acc + (Number(cur.imprevue) || 0), 0) || 0
+        ),
+        "Total budget": formatMontant(
+          (row.resumeDepensePrevue
+            ?.filter((f: ResumeDepensePrevueItem) => f.grant)
+            .reduce((acc, cur) => acc + (Number(cur.budgetDepense) || 0), 0) ||
+            0) +
+            (row.previsionDepense
+              ?.filter((f: PrevisionDepenseItem) => f.grant)
+              .reduce((acc, cur) => acc + (Number(cur.imprevue) || 0), 0) || 0)
+        ),
+        "Retenu admin": formatMontant(Number(row.retenuAdmin)),
+        "Remis responsable total": formatMontant(
+          (row.resumeDepensePrevue
+            ?.filter((f: ResumeDepensePrevueItem) => f.grant)
+            .reduce((acc, cur) => acc + (Number(cur.budgetDepense) || 0), 0) ||
+            0) +
+            (row.previsionDepense
+              ?.filter((f: PrevisionDepenseItem) => f.grant)
+              .reduce((acc, cur) => acc + (Number(cur.imprevue) || 0), 0) ||
+              0) -
+            Number(row.retenuAdmin)
+        ),
+        "Moyen remise": row.moyenRemise,
+        "Remise Grants": grantEncoursList.find(
+          (g: any) =>
+            g.id == row.rapportDepense?.map((m: RapportDepenseItem) => m.grant)
+        )?.code,
+        "Dépenses admin": formatMontant(Number(row.depenseAdmin)),
+        "Dépenses responsable": formatMontant(Number(row.depensesResp)),
+        "Reliquat admin": formatMontant(
+          Number(row.retenuAdmin) - Number(row.depenseAdmin)
+        ),
+        "Reliquat responsable": formatMontant(
+          (row.resumeDepensePrevue
+            ?.filter((f: ResumeDepensePrevueItem) => f.grant)
+            .reduce((acc, cur) => acc + (Number(cur.budgetDepense) || 0), 0) ||
+            0) +
+            (row.previsionDepense
+              ?.filter((f: PrevisionDepenseItem) => f.grant)
+              .reduce((acc, cur) => acc + (Number(cur.imprevue) || 0), 0) ||
+              0) -
+            Number(
+              row.uncompleteTbbs?.map((retenu) => retenu.retenuAdmin) || 0
+            ) -
+            Number(row.uncompleteTbbs?.map((m) => m.depensesResp) || 0)
+        ),
+        "Coût mission": formatMontant(
+          Number(row.uncompleteTbbs?.map((m) => m.depenseAdmin) || 0) +
+            Number(row.uncompleteTbbs?.map((m) => m.depensesResp) || 0)
+        ),
+        "Rapport technique": row.uncompleteTbbs
+          ?.map((m) => m.ordreDeMission)
+          .join(", "),
+        "Rapport financier": row.uncompleteTbbs
+          ?.map((m) => m.piecesClassees)
+          .join(", "),
+        "Ordre de mission": row.status,
+        "Pièces classées": row.uncompleteTbbs
+          ?.map((m) => m.remarqueAttente)
+          .join(", "),
+        Status: row.status,
+        "Remarque attente": row.uncompleteTbbs
+          ?.map((m) => m.remarqueAttente)
+          .join(", "),
+        "Utilisation imprevue": row.uncompleteTbbs
+          ?.map((m) => m.explicationImprevu)
+          .join(", "),
+        "Explication imprevue": row.uncompleteTbbs
+          ?.map((m) => m.explicationImprevu)
+          .join(", "),
+        "Date RF": row.dateRF
+          ? new Date(row.dateRF).toLocaleDateString("fr-FR")
+          : "",
+      }))
+    );
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Missions");
+
+    XLSX.writeFile(wb, `TBB_${filterYear || "tous"}.xlsx`);
+  };
   return (
     <div style={{ paddingLeft: 2, paddingRight: 2 }}>
-      <Link href={"/"}>
-        <Button color="info" variant="text" startIcon={<ArrowBack />}>
-          Retour
+      <Stack direction="row" alignItems="center" mb={2} gap={2}>
+        <Link href={"/"}>
+          <Button color="info" variant="text" startIcon={<ArrowBack />}>
+            Retour
+          </Button>
+        </Link>
+        <TextField
+          select
+          id="outlined-basic"
+          label="Année"
+          variant="outlined"
+          size="small"
+          value={filterYear}
+          onChange={(e) => setFilterYear(e.target.value)}
+          sx={{ width: 100 }}
+        >
+          <MenuItem value={"Tous"}>Tous</MenuItem>
+          {missionListe.map((m: MissionItem) => (
+            <MenuItem
+              key={m.id}
+              value={new Date(m.dateFin as Date).getFullYear()}
+            >
+              {new Date(m.dateFin as Date).getFullYear()}
+            </MenuItem>
+          ))}
+        </TextField>
+        <Button
+          color="primary"
+          variant="contained"
+          size="small"
+          sx={{ minHeight: 40, maxHeight: 40 }}
+          onClick={() => exportToExcel(data)}
+          startIcon={<Download />}
+        >
+          Excel
         </Button>
-      </Link>
+      </Stack>
 
       <SectionDetails
         sx={{
@@ -223,9 +393,6 @@ const DashboardMission = () => {
                 </TableCell>
                 <TableCell sx={{ width: "100%" }} align="left">
                   Date RF
-                </TableCell>
-                <TableCell sx={{ width: "100%" }} align="left">
-                  Alarme
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -499,7 +666,7 @@ const DashboardMission = () => {
                   <TableCell align="left" sx={{ width: "100%" }}>
                     <Moment format="DD/MM/yyyy">{row.dateRF}</Moment>
                   </TableCell>
-                  <TableCell align="left" sx={{ width: "100%" }}>
+                  {/* <TableCell align="left" sx={{ width: "100%" }}>
                     {(() => {
                       const date = row.dateRF;
                       if (date == null) {
@@ -514,7 +681,7 @@ const DashboardMission = () => {
                         }
                       }
                     })()}
-                  </TableCell>
+                  </TableCell> */}
 
                   <TableCell>
                     {validate("Suivi liste mission", "RA") && (

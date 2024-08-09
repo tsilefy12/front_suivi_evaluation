@@ -208,6 +208,8 @@ const ListRapportDepenses = () => {
                     <TableCell align="left">Libellés</TableCell>
                     <TableCell align="left">Grant</TableCell>
                     <TableCell align="left">Ligne budgetaire</TableCell>
+                    <TableCell align="left">Référence de pièce</TableCell>
+                    <TableCell align="left">Mode de paiement</TableCell>
                     <TableCell align="left">Montant</TableCell>
                   </TableRow>
                 </TableHead>
@@ -244,6 +246,8 @@ const ListRapportDepenses = () => {
                               )?.code
                             }
                           </TableCell>
+                          <TableCell align="left">{row.refPiece}</TableCell>
+                          <TableCell align="left">{row.modePaiement}</TableCell>
                           <TableCell align="left">
                             {formatMontant(Number(row.montant))}
                           </TableCell>

@@ -183,6 +183,14 @@ const AddRapportdepense = ({ handleClose }: any) => {
       return [];
     });
   }, [grantEncoursList, grantValue]);
+
+  const modepaiementList = [
+    { id: "Virement", name: "Virement" },
+    { id: "Cheque", name: "Cheque" },
+    { id: " Mobile money", name: " Mobile money" },
+    { id: " Taxi admin ", name: " Taxi admin " },
+    { id: "Especes", name: "Especes" },
+  ];
   return (
     <Container
       maxWidth="xl"
@@ -201,13 +209,17 @@ const AddRapportdepense = ({ handleClose }: any) => {
                 ligneBudgetaire: isEditing
                   ? rapportDepense?.ligneBudgetaire
                   : "",
+                refPiece: isEditing ? rapportDepense?.refPiece : "",
+                modePaiement: isEditing ? rapportDepense?.modePaiement : "",
               }
         }
         validationSchema={Yup.object({
-          // grant: Yup.string().required("Champ obligatoire"),
-          // libelle: Yup.string().required("Champ obligatoire"),
-          // montant: Yup.string().required("Champ obligatoire"),
-          // ligneBudgetaire: Yup.string().required("Champ obligatoire"),
+          grant: Yup.string().required("Champ obligatoire"),
+          libelle: Yup.string().required("Champ obligatoire"),
+          montant: Yup.string().required("Champ obligatoire"),
+          ligneBudgetaire: Yup.string().required("Champ obligatoire"),
+          modePaiement: Yup.string().required("Champ obligatoire"),
+          refPiece: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -309,6 +321,26 @@ const AddRapportdepense = ({ handleClose }: any) => {
                             bdg === 0 ? formikProps.values.ligneBudgetaire : bdg
                           }
                         ></OSSelectField>
+                        <OSTextField
+                          fullWidth
+                          id="outlined-basic"
+                          label="Référence de pièce"
+                          variant="outlined"
+                          name="refPiece"
+                          inputProps={{ autoComplete: "off" }}
+                          value={formikProps.values.refPiece}
+                        />
+                        <OSSelectField
+                          fullWidth
+                          id="outlined-basic"
+                          label="Mode de paiement"
+                          variant="outlined"
+                          name="modePaiement"
+                          options={modepaiementList}
+                          value={formikProps.values.modePaiement}
+                          dataKey={["name"]}
+                          valueKey="id"
+                        />
                       </Stack>
                     </FormControl>
                     {/* <Stack flexDirection="row">

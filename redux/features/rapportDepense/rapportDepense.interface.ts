@@ -1,16 +1,18 @@
 export interface RapportDepenseItem {
-    id?: string;
-    date?: Date;
-    libelle?: string;
-    montant?: number;
-    grant?: number;
-    ligneBudgetaire?: number;
-    missionId?: string;
+  id?: string;
+  date?: Date;
+  libelle?: string;
+  montant?: number;
+  grant?: number;
+  ligneBudgetaire?: number;
+  missionId?: string;
+  refPiece?: string;
+  modePaiement?: string;
 }
 export interface RapportDepenseInitialState {
-    rapportDepenseList: RapportDepenseItem[];
-    rapportDepense: RapportDepenseItem;
-    isEditing: boolean;
-    loading: boolean;
-    [key: string]: any;
+  rapportDepenseList: RapportDepenseItem[];
+  rapportDepense: RapportDepenseItem;
+  isEditing: boolean;
+  loading: boolean;
+  [key: string]: any;
 }
