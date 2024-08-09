@@ -2,9 +2,11 @@ import {
   Button,
   Container,
   IconButton,
+  MenuItem,
   Stack,
   styled,
   TableHead,
+  TextField,
   Typography,
 } from "@mui/material";
 import Link from "next/link";
@@ -92,8 +94,32 @@ const GrantsList = () => {
   };
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
+
+  const [filter, setFilter] = React.useState<string>("");
+  const [filteredData, setFilteredData] = React.useState<any[]>([]);
+  const [filterMontant1, setFilterMontant1] = React.useState<any>("");
+  const [filterMontant2, setFilterMontant2] = React.useState<any>("");
+
+  React.useEffect(() => {
+    if (filter !== "") {
+      const filtered = grantEncoursList.filter((row: GrantEncoursItem) =>
+        row.status!.toString().toLowerCase().includes(filter.toLowerCase())
+      );
+      return setFilteredData(filtered);
+    }
+    if (filterMontant1 !== "" && filterMontant2 !== "") {
+      const filtered = grantEncoursList.filter(
+        (row: GrantEncoursItem) =>
+          Number(row.amountMGA) >= Number(filterMontant1) &&
+          Number(row.amountMGA) <= Number(filterMontant2)
+      );
+      return setFilteredData(filtered);
+    }
+    return setFilteredData([...grantEncoursList]);
+  }, [filter, grantEncoursList, filterMontant1, filterMontant2]);
+
   const handleExportExcel = () => {
-    const data = grantEncoursList.map((row: GrantEncoursItem) => ({
+    const data = filteredData.map((row: GrantEncoursItem) => ({
       "Grant code": row.code,
       Bailleur: row.bailleur,
       "Project title": projectList.find(
@@ -115,7 +141,9 @@ const GrantsList = () => {
           : row.status == "IN_PROGRESS"
           ? "EN COURS"
           : "",
-      "MV Lead": "",
+      "MV Lead": `${
+        employees.find((f: any) => f.id === row.responsable)?.name || ""
+      } ${employees.find((f) => f.id === row.responsable)?.surname || ""}`,
       "VALIDATION TECHNIQUE": `${
         employees.find((f: any) => f.id === row.techValidator)?.name || ""
       } ${employees.find((f) => f.id === row.techValidator)?.surname || ""}`,
@@ -141,6 +169,7 @@ const GrantsList = () => {
       { wpx: 80 }, // Amount
       { wpx: 80 }, // Currency
       { wpx: 80 }, // Statut
+      { wpx: 150 }, // MV Lead
       { wpx: 150 }, // VALIDATION TECHNIQUE
       { wpx: 150 }, // VERIFICATION FINANCIERE
       { wpx: 150 }, // VALIDATION FINANCIERE
@@ -166,17 +195,62 @@ const GrantsList = () => {
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        <Typography variant="h4" color="GrayText">
-          Grant monitoring
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<Download />}
-          onClick={handleExportExcel}
-        >
-          Excel
-        </Button>
+        <Stack direction={"row"} gap={2} alignContent={"center"}>
+          <Typography variant="h4" color="GrayText">
+            Grant monitoring
+          </Typography>
+          <TextField
+            select
+            id="outlined-basic"
+            label="Montant"
+            variant="outlined"
+            size="small"
+            value={filterMontant1}
+            onChange={(e) => setFilterMontant1(e.target.value)}
+            sx={{ width: 120 }}
+          >
+            <MenuItem value={""}>Tous</MenuItem>
+            {grantEncoursList.map((row: GrantEncoursItem) => (
+              <MenuItem value={row.amountMGA}>{row.amountMGA}</MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            select
+            id="outlined-basic"
+            label="Montant"
+            variant="outlined"
+            size="small"
+            value={filterMontant2}
+            onChange={(e) => setFilterMontant2(e.target.value)}
+            sx={{ width: 120 }}
+          >
+            <MenuItem value={""}>Tous</MenuItem>
+            {grantEncoursList.map((row: GrantEncoursItem) => (
+              <MenuItem value={row.amountMGA}>{row.amountMGA}</MenuItem>
+            ))}
+          </TextField>
+        </Stack>
+        <Stack direction={"row"} gap={2} alignItems={"center"}>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Download />}
+            onClick={handleExportExcel}
+          >
+            Excel
+          </Button>
+          <TextField
+            id="outlined-basic"
+            label="Search"
+            variant="outlined"
+            size="small"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            InputProps={{
+              autoComplete: "off",
+            }}
+          />
+        </Stack>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
@@ -248,7 +322,7 @@ const GrantsList = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {grantEncoursList
+                  {filteredData
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row: GrantEncoursItem, index: any) => {
                       // const isItemSelected = isSelected(row.id);
@@ -322,7 +396,15 @@ const GrantsList = () => {
                             align="left"
                             sx={{ minWidth: 150, maxWidth: 150 }}
                           >
-                            {formatMontant(Number(row.amount))}
+                            {(() => {
+                              const devise = currencyListe.find(
+                                (f: any) => f.id === row.currencyId
+                              )?.name;
+                              if (devise == "Ariary") {
+                                return formatMontant(Number(row.amountMGA));
+                              }
+                              return formatMontant(Number(row.amount));
+                            })()}
                           </TableCell>
                           <TableCell align="center" sx={{ width: "100%" }}>
                             {
@@ -342,8 +424,18 @@ const GrantsList = () => {
                           </TableCell>
                           <TableCell
                             align="center"
-                            sx={{ minWidth: 150, maxWidth: 150 }}
-                          ></TableCell>
+                            sx={{ minWidth: 250, maxWidth: 250 }}
+                          >
+                            {`${
+                              employees.find(
+                                (f: any) => f.id === row.responsable
+                              )?.name || ""
+                            } ${" "} ${
+                              employees.find(
+                                (f: any) => f.id === row.responsable
+                              )?.surname || ""
+                            }`}
+                          </TableCell>
                           <TableCell
                             align="left"
                             sx={{ minWidth: 250, maxWidth: 250 }}
