@@ -34,6 +34,8 @@ import { CurrencyItem } from "../../redux/features/currency/currencyinterface";
 import { PeriodeItem } from "../../redux/features/periode/periode.interface";
 import * as XLSX from "xlsx";
 import { format } from "date-fns";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import GrantsListPDF from "./printPDF";
 
 const GrantsList = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -100,22 +102,33 @@ const GrantsList = () => {
   const [filterMontant1, setFilterMontant1] = React.useState<any>("");
   const [filterMontant2, setFilterMontant2] = React.useState<any>("");
 
+  const unique = new Set<string>();
+  const [filterStatus, setFilterStatus] = React.useState<string[]>([]);
   React.useEffect(() => {
+    grantEncoursList.forEach((item) => {
+      if (item.status) {
+        unique.add(item.status);
+      }
+    });
+    setFilterStatus(Array.from(unique));
+    let filteredData = grantEncoursList;
+
     if (filter !== "") {
-      const filtered = grantEncoursList.filter((row: GrantEncoursItem) =>
-        row.status!.toString().toLowerCase().includes(filter.toLowerCase())
+      filteredData = filteredData.filter(
+        (item) =>
+          item.status &&
+          item.status.toLowerCase().includes(filter.toLowerCase())
       );
-      return setFilteredData(filtered);
     }
+
     if (filterMontant1 !== "" && filterMontant2 !== "") {
-      const filtered = grantEncoursList.filter(
+      filteredData = filteredData.filter(
         (row: GrantEncoursItem) =>
           Number(row.amountMGA) >= Number(filterMontant1) &&
           Number(row.amountMGA) <= Number(filterMontant2)
       );
-      return setFilteredData(filtered);
     }
-    return setFilteredData([...grantEncoursList]);
+    setFilteredData(filteredData);
   }, [filter, grantEncoursList, filterMontant1, filterMontant2]);
 
   const handleExportExcel = () => {
@@ -130,7 +143,11 @@ const GrantsList = () => {
       )?.descriptionFr,
       Start: format(new Date(row.startDate as string), "dd/MM/yyyy"),
       End: format(new Date(row.endDate as string), "dd/MM/yyyy"),
-      Amount: row.amount,
+      Amount:
+        currencyListe.find((f: CurrencyItem) => f.id === row.currencyId)
+          ?.name === "Ariary"
+          ? formatMontant(Number(row.amountMGA))
+          : formatMontant(Number(row.amount)),
       Currency: currencyListe.find((f: CurrencyItem) => f.id === row.currencyId)
         ?.name,
       Statut:
@@ -188,10 +205,11 @@ const GrantsList = () => {
       }
     });
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "GrantsList");
+    XLSX.utils.book_append_sheet(wb, ws, "Grants_Monitoring");
 
-    XLSX.writeFile(wb, "GrantsList.xlsx");
+    XLSX.writeFile(wb, "Grants-monitoring.xlsx");
   };
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -231,6 +249,7 @@ const GrantsList = () => {
           </TextField>
         </Stack>
         <Stack direction={"row"} gap={2} alignItems={"center"}>
+          <GrantsListPDF data={filteredData} />
           <Button
             variant="contained"
             color="primary"
@@ -240,8 +259,9 @@ const GrantsList = () => {
             Excel
           </Button>
           <TextField
+            select
             id="outlined-basic"
-            label="Search"
+            label="Recherche statut"
             variant="outlined"
             size="small"
             value={filter}
@@ -249,7 +269,21 @@ const GrantsList = () => {
             InputProps={{
               autoComplete: "off",
             }}
-          />
+            sx={{ width: 180 }}
+          >
+            <MenuItem value={""}>Tous</MenuItem>
+            {filterStatus.map((status) => (
+              <MenuItem key={status} value={status}>
+                {status === "PENDING"
+                  ? "En attente"
+                  : status === "COMPLETED"
+                  ? "Terminée"
+                  : status === "IN_PROGRESS"
+                  ? "En cours"
+                  : status}
+              </MenuItem>
+            ))}
+          </TextField>
         </Stack>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
