@@ -37,6 +37,7 @@ import { SectionNavigation } from "../GrantsEnCours/ListGrants";
 import useFetchPeriode from "../periode/hooks/useFetchPeriode";
 import { GrantEncoursItem } from "../../redux/features/grantEncours/grantEncours.interface";
 import { Search } from "@mui/icons-material";
+import useFetchCurrencyListe from "../configurations/currency/hooks/useFetchCurrency";
 
 const Dashboard: NextPage = () => {
   const basePath = useBasePath();
@@ -55,18 +56,28 @@ const Dashboard: NextPage = () => {
   const { caisselist } = useAppSelector((state) => state.reliquatGrant);
   const fetchPeriode = useFetchPeriode();
   const { periodelist } = useAppSelector((state) => state.periode);
+  const fetchCurrency = useFetchCurrencyListe();
+  const { currencyListe } = useAppSelector((state) => state.currency);
 
   const [open, setOpen] = useState(false);
   const [getId, setGetId] = useState("");
 
   useEffect(() => {
-    fetchBudgetEngagedList();
-    fetchGrants();
-    fetchReliquatGrant();
-    fetchBudgetInitial();
-    fetchBudgetLine();
-    fetchCaisse();
-    fetchPeriode();
+    const data = async () => {
+      try {
+        await fetchCurrency();
+        await fetchBudgetEngagedList();
+        await fetchReliquatGrant();
+        await fetchBudgetInitial();
+        await fetchBudgetLine();
+        await fetchCaisse();
+        await fetchPeriode();
+        await fetchGrants();
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    data();
   }, [router.query]);
 
   const handleClick = (id: string) => {
@@ -82,10 +93,10 @@ const Dashboard: NextPage = () => {
 
   useEffect(() => {
     if (filter === "") {
-      setDataFilter(grantEncoursList);
+      setDataFilter(grantEncoursList.filter((f) => f.type == null));
     } else {
       const filteredGrantEncours = grantEncoursList.filter((grant) => {
-        return grant.code === filter;
+        return grant.code === filter && grant.type == null;
       });
       setDataFilter(filteredGrantEncours);
     }
@@ -128,7 +139,7 @@ const Dashboard: NextPage = () => {
             sx={{ width: 300 }}
             size="small"
             id="outlined-basic"
-            options={grantEncoursList}
+            options={grantEncoursList.filter((f) => f.type == null)}
             getOptionLabel={(option: any) => option.code}
             renderInput={(params) => (
               <TextField
@@ -141,7 +152,9 @@ const Dashboard: NextPage = () => {
               option.id === value.id
             }
             value={
-              grantEncoursList.find((grant) => grant.code === filter) || null
+              grantEncoursList
+                .filter((f) => f.type == null)
+                .find((grant) => grant.code === filter) || null
             }
             onChange={(event: any, value: any) => {
               setFilter(value ? value.code : "");
@@ -166,7 +179,14 @@ const Dashboard: NextPage = () => {
               <TableRow key={row.id}>
                 <TableCell>{row.code}</TableCell>
                 <TableCell align="center">
-                  {formatMontant(Number(row.amountMGA))}
+                  {(() => {
+                    const currency = currencyListe.find(
+                      (f) => f.name == row.currencyId
+                    )?.name;
+                    return currency == "Ariary"
+                      ? formatMontant(Number(row.amountMGA))
+                      : formatMontant(Number(row.amount));
+                  })()}
                 </TableCell>
                 <TableCell align="center">
                   {formatMontant(
@@ -179,7 +199,12 @@ const Dashboard: NextPage = () => {
                   {formatMontant(Number(budgetEngaged))}
                 </TableCell>
                 <TableCell align="center">
-                  {formatMontant(Number(row.amountMGA! - budgetEngaged))}
+                  {(() => {
+                    const budgetRecu = periodelist
+                      .filter((f) => f.grant == row.id)
+                      .reduce((acc, curr) => acc + curr.montant!, 0);
+                    return formatMontant(Number(budgetRecu - budgetEngaged));
+                  })()}
                 </TableCell>
                 <TableCell>
                   <Button

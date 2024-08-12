@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Button,
   Container,
@@ -31,6 +31,7 @@ import useFetchPeriode from "../../periode/hooks/useFetchPeriode";
 import useFetchCaisee from "../../reliquetGrant/hooks/useFetchCaisse";
 import useFetchGrantMonitoring from "../hooks/useFetchGrantMonitorings";
 import { GrantMonitoringItem } from "../../../redux/features/grantMonitoring/grantMonitoring.interface";
+import { GrantEncoursItem } from "../../../redux/features/grantEncours/grantEncours.interface";
 
 const DetailsDashboard = ({ handleClose, getId }: any) => {
   const basePath = useBasePath();
@@ -50,13 +51,21 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
   const { grantMonitoringlist } = useAppSelector(
     (state) => state.grantMonitoring
   );
+
   useEffect(() => {
-    fetchGrants();
-    fetchBudgetInitial();
-    fetchBudgetLine();
-    fetchPeriode();
-    fetchCaisse();
-    fetchGrantMonitorings();
+    const data = async () => {
+      try {
+        await fetchBudgetInitial();
+        await fetchBudgetLine();
+        await fetchPeriode();
+        await fetchCaisse();
+        await fetchGrantMonitorings();
+        await fetchGrants();
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    data();
   }, [router.query]);
 
   const [grantBI, setGrantBI] = useState("");
@@ -67,6 +76,40 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
       setGrantBI(grant.code!);
     }
   }, [grantEncoursList, getId]);
+  const [filter, setFilter] = useState<string>("");
+  const [dataFilter, setDataFilter] = useState<GrantEncoursItem[]>([]);
+
+  useEffect(() => {
+    if (filter === "") {
+      setDataFilter(grantEncoursList.filter((f) => f.type == null));
+    } else {
+      const filteredGrantEncours = grantEncoursList.filter((grant) => {
+        return grant.code === filter && grant.type == null;
+      });
+      setDataFilter(filteredGrantEncours);
+    }
+  }, [filter, grantEncoursList]);
+
+  // const soldeByGrant = useMemo(() => {
+  //   if (!dataFilter) return 0;
+
+  //   return dataFilter
+  //     .filter((g) => g.id)
+  //     .flatMap((m) => m.journalBanks)
+  //     .reduce(
+  //       (acc, curr) => acc + ((curr?.debit || 0) - (curr?.credit || 0)),
+  //       0
+  //     );
+  // }, [dataFilter]);
+  // // console.log("dataFilter", caisselist);
+  // const budgetEngaged = useMemo(() => {
+  //   if (!caisselist) return soldeByGrant;
+
+  //   const caisseSolde = caisselist
+  //     .filter((f: any) => f.budgetLineId)
+  //     .reduce((sum: any, m: any) => sum + (m.debit! - m.credit!), 0);
+  //   return soldeByGrant + caisseSolde;
+  // }, [caisselist, soldeByGrant]);
 
   return (
     <div>
@@ -146,49 +189,32 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
                       sx={{ minWidth: 160, maxWidth: 160 }}
                       align="center"
                     >
-                      {formatMontant(
-                        Number(
-                          grantMonitoringlist
-                            .filter(
-                              (gm: GrantMonitoringItem) =>
-                                gm.ligneBudgetaire == row.id
-                            )
-                            .reduce((acc, curr) => acc + curr.montant!, 0)
-                        )
-                      )}
+                      {(() => {
+                        const budgetRecu = periodelist
+                          .filter((f) => f.grant == row.grantId && f.id)
+                          .reduce((acc, curr) => acc + curr.montant!, 0);
+                        return formatMontant(Number(budgetRecu));
+                      })()}
                     </TableCell>
                     <TableCell
                       sx={{ minWidth: 160, maxWidth: 160 }}
                       align="center"
                     >
-                      {formatMontant(
-                        Number(
-                          caisselist
-                            .filter((c: any) => c.budgetLineId == row.id)
-                            .reduce(
-                              (acc: any, curr: any) =>
-                                acc + (curr.debit! - curr.credit!),
-                              0
-                            )
-                        )
-                      )}
+                      {formatMontant(Number(row.amount || 0))}
                     </TableCell>
                     <TableCell
                       sx={{ minWidth: 160, maxWidth: 160 }}
                       align="center"
                     >
-                      {formatMontant(
-                        Number(
-                          row.amount! -
-                            caisselist
-                              .filter((c: any) => c.budgetLineId == row.id)
-                              .reduce(
-                                (acc: any, curr: any) =>
-                                  acc + (curr.debit! - curr.credit!),
-                                0
-                              )
-                        )
-                      )}
+                      {(() => {
+                        const budgetRecu = periodelist
+                          .filter((f) => f.grant == row.grantId)
+                          .reduce((acc, curr) => acc + curr.montant!, 0);
+
+                        return formatMontant(
+                          Number(budgetRecu - row.amount!) || 0
+                        );
+                      })()}
                     </TableCell>
                   </TableRow>
                 ))}

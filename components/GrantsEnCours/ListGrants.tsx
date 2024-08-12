@@ -1,12 +1,9 @@
 import {
   Button,
-  CircularProgress,
   Container,
   IconButton,
-  InputAdornment,
   Stack,
   styled,
-  TextField,
   Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -21,7 +18,7 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import Data, { Order } from "./table/type-variable";
 import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
-import { Edit, Search } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import Add from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -40,8 +37,6 @@ import useFetchReliquatGrant from "../reliquetGrant/hooks/useFetchEliquatGrant";
 import useFetchGrants from "./hooks/getGrants";
 import useFetchProject from "./hooks/getProject";
 import TransportEquipmentTableHeader from "./organisme/table/TransportEquipmentTableHeader";
-import { fi } from "date-fns/locale";
-import { ReliquatGrantsItem } from "../../redux/features/reliquatGrants/reliquatGrants.interface";
 
 const ListGrantsEnCours = () => {
   const [order, setOrder] = React.useState<Order>("asc");
