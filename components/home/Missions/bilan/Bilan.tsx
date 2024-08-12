@@ -42,6 +42,7 @@ import useFetchProgrammeRapport from "../../../gereRapportDeMission/organism/Tec
 import formatMontant from "../../../../hooks/format";
 import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
 import { EmployeItem } from "../../../../redux/features/employe/employeSlice.interface";
+import Logistiques from "./organism/Logistique/Logistique";
 
 const BilanMission = () => {
   const [value, setValue] = React.useState(0);
@@ -226,12 +227,16 @@ const BilanMission = () => {
             >
               <Tab label="TECHNIQUE" {...a11yProps(0)} />
               <Tab label="FINANCE" {...a11yProps(1)} />
+              <Tab label="LOGISTIQUE" {...a11yProps(2)} />
             </Tabs>
             <TabPanel value={value} index={0}>
               <Techniques />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Finances />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <Logistiques />
             </TabPanel>
           </Stack>
           <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>

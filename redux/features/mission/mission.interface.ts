@@ -38,16 +38,19 @@ export interface MissionItem {
     responsableId: string;
     missionId: string;
     validation: boolean;
+    type: string;
   }[];
   validationRapport?: {
     responsableId: string;
     missionId: string;
     validation: boolean;
+    type: string;
   }[];
   validationLogistique?: {
     responsableId: string;
     missionId: string;
     validation: boolean;
+    type: string;
   }[];
   [x: string]: any;
   uncompleteTbbs?: UnCompleteTbbItem[];

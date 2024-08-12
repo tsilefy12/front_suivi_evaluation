@@ -12,22 +12,15 @@ import { useRouter } from "next/router";
 import formatMontant from "../../../../../../hooks/format";
 import useFetchResumeDepenseList from "../../../../../previsionMissions/organism/Finances/tableResumeDepense/hooks/useFetchResumeDepense";
 import useFetchResumeDepensePrevue from "../../../../../gereRapportDeMission/organism/Finances/tableResumeDepense/hooks/useFetchResumeDepensePrevue";
-import useFetchCalculCarburantList from "../../../../../previsionMissions/organism/Logistique/tableCalculCarburant/hooks/useFetchCarbuant";
-import useFetchCalculCarburantRapportList from "../../../../../gereRapportDeMission/organism/Logistique/tableCalculCarburant/hooks/useFetchCarbuant";
 
 const Finances = () => {
   const router = useRouter();
   const fetchPrevisionDepense = useFetchResumeDepenseList();
-  const fetchcalculCarburantRapport = useFetchCalculCarburantRapportList();
-  const fetchCalculCarburant = useFetchCalculCarburantList();
-  const { totalDepensePrevue, totalDepenseRapport, totalCarburant, montant } =
-    Montant();
+  const { totalDepensePrevue, totalDepenseRapport, montant } = Montant();
   const fetchRapportDepense = useFetchResumeDepensePrevue();
   React.useEffect(() => {
     fetchPrevisionDepense();
     fetchRapportDepense();
-    fetchCalculCarburant();
-    fetchcalculCarburantRapport();
   }, [router.query]);
 
   const rows = [
@@ -39,7 +32,6 @@ const Finances = () => {
       "Dépense dans le rapport : " + formatMontant(Number(totalDepenseRapport))
     ),
     createData("Différence: " + formatMontant(Number(montant))),
-    createData("Carburant pendant la mission : " + totalCarburant + " L"),
   ];
 
   return (
@@ -85,13 +77,6 @@ export const Montant = () => {
   const { resumeDepensePrevueList } = useAppSelector(
     (state) => state.resumeDepensePrevue
   );
-  const { calculCarburantList } = useAppSelector(
-    (state) => state.calculCarburant
-  );
-
-  const { calculCarburantRapportList } = useAppSelector(
-    (state) => state.calculCarburantRapport
-  );
 
   let totalDepensePrevue: any = useMemo(() => {
     let totalBudget: any = 0;
@@ -118,35 +103,9 @@ export const Montant = () => {
     return calcul;
   }, [totalDepensePrevue, totalDepenseRapport]);
 
-  const calculCarburant = useMemo(() => {
-    let calcul = 0;
-    calculCarburantList
-      .filter((c: any) => c.missionId === id)
-      .map((c: any) => {
-        calcul += c.totalCarburant;
-      });
-    return calcul;
-  }, [calculCarburantList]);
-
-  const calculCarburantRapport = useMemo(() => {
-    let calcul = 0;
-    calculCarburantRapportList
-      .filter((c: any) => c.missionId === id)
-      .map((c: any) => {
-        calcul += c.totalCarburant;
-      });
-    return calcul;
-  }, [calculCarburantRapportList]);
-
-  const totalCarburant = useMemo(() => {
-    let calcul = calculCarburant - calculCarburantRapport;
-    return calcul;
-  }, [calculCarburant, calculCarburantRapport]);
-
   return {
     totalDepensePrevue,
     totalDepenseRapport,
-    totalCarburant,
     montant,
   };
 };

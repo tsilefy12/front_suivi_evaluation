@@ -41,7 +41,7 @@ const PrevisionDeMission = () => {
     setValue(newValue);
   };
   const fetchMission = useFetchMissionListe();
-  const { missionListe } = useAppSelector((state) => state.mission);
+  const { missionListe, loading } = useAppSelector((state) => state.mission);
   const dispatch = useAppDispatch();
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
@@ -68,13 +68,15 @@ const PrevisionDeMission = () => {
         validateFinancial,
         validationPrevision,
         validateLogistique,
+        type,
       } = mission;
 
       const isFinanceVerified = validationPrevision!.some(
         (v: any) =>
           v.responsableId == verifyFinancial &&
           v.missionId == id &&
-          v.validation == true
+          v.validation == true &&
+          v.type == type
       );
 
       setGetVerificateurFinance(isFinanceVerified);
@@ -85,7 +87,8 @@ const PrevisionDeMission = () => {
         (v: any) =>
           v.responsableId == verifyTechnic &&
           v.missionId == id &&
-          v.validation == true
+          v.validation == true &&
+          v.type == type
       );
 
       setGetVerificateurTechnic(isTechnicVerified);
@@ -96,7 +99,8 @@ const PrevisionDeMission = () => {
         (v: any) =>
           v.responsableId == validateFinancial &&
           v.missionId == id &&
-          v.validation == true
+          v.validation == true &&
+          v.type == type
       );
 
       setGetValidatePay(isFinanceValidated);
@@ -106,7 +110,8 @@ const PrevisionDeMission = () => {
         (v: any) =>
           v.responsableId == validateLogistique &&
           v.missionId == id &&
-          v.validation == true
+          v.validation == true &&
+          v.type == type
       );
       setGetValidateLogistique(isLogistiqueValidated);
     }
@@ -115,13 +120,15 @@ const PrevisionDeMission = () => {
   const handleValidationFinance = async (
     responsableId: string,
     missionId: string,
-    validation: boolean
+    validation: boolean,
+    type: string
   ) => {
     try {
       await axios.post("/suivi-evaluation/validation-prevision", {
         responsableId,
         missionId,
         validation,
+        type,
       });
       setGetVerificateurFinance(validation);
 
@@ -141,13 +148,15 @@ const PrevisionDeMission = () => {
   const handleValidationTechnique = async (
     responsableId: string,
     missionId: string,
-    validation: boolean
+    validation: boolean,
+    type: string
   ) => {
     try {
       await axios.post("/suivi-evaluation/validation-prevision", {
         responsableId,
         missionId,
         validation,
+        type,
       });
       setGetVerificateurTechnic(validation);
       dispatch(
@@ -165,13 +174,15 @@ const PrevisionDeMission = () => {
   const handleValidationPaye = async (
     responsableId: string,
     missionId: string,
-    validation: boolean
+    validation: boolean,
+    type: string
   ) => {
     try {
       await axios.post("/suivi-evaluation/validation-prevision", {
         responsableId,
         missionId,
         validation,
+        type,
       });
       setGetValidatePay(validation);
       dispatch(
@@ -189,13 +200,15 @@ const PrevisionDeMission = () => {
   const handleValidateLogistique = async (
     responsableId: string,
     missionId: string,
-    validation: boolean
+    validation: boolean,
+    type: string
   ) => {
     try {
       await axios.post("/suivi-evaluation/validation-prevision", {
         responsableId,
         missionId,
         validation,
+        type,
       });
       setGetValidateLogistique(validation);
       dispatch(
@@ -348,7 +361,8 @@ const PrevisionDeMission = () => {
                               handleValidationFinance(
                                 row.verifyFinancial!,
                                 id,
-                                getVerificateurFinance == true ? false : true
+                                getVerificateurFinance == true ? false : true,
+                                "finance"
                               )
                             }
                           >
@@ -412,7 +426,8 @@ const PrevisionDeMission = () => {
                               handleValidationTechnique(
                                 row.verifyTechnic!,
                                 id,
-                                getVerificateurTechnic == true ? false : true
+                                getVerificateurTechnic == true ? false : true,
+                                "technique"
                               )
                             }
                             disabled={getVerificateurFinance == false}
@@ -478,7 +493,8 @@ const PrevisionDeMission = () => {
                               handleValidateLogistique(
                                 row.validateLogistic!,
                                 id,
-                                getValidateLogistique == true ? false : true
+                                getValidateLogistique == true ? false : true,
+                                "logistique"
                               )
                             }
                             // disabled={getVerificateurLogistic == false}
@@ -536,7 +552,8 @@ const PrevisionDeMission = () => {
                               handleValidationPaye(
                                 row.validateFinancial!,
                                 id,
-                                getValidatePaye == true ? false : true
+                                getValidatePaye == true ? false : true,
+                                "paye"
                               )
                             }
                             disabled={getVerificateurTechnic == false}

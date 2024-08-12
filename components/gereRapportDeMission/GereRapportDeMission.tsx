@@ -82,14 +82,14 @@ const GereRapportDeMission = () => {
         verifyTechnic,
         validateFinancial,
         validateLogistic,
-        id,
+        type,
       } = mission;
 
       const isFinanceVerified = validationRapport!.some(
         (v: any) =>
           v.responsableId == verifyFinancial &&
           v.missionId == id &&
-          v.id == mission.id &&
+          v.type == type &&
           v.validation == true
       );
 
@@ -98,7 +98,7 @@ const GereRapportDeMission = () => {
         (v: any) =>
           v.responsableId == verifyTechnic &&
           v.missionId == id &&
-          v.id == mission.id &&
+          v.type == type &&
           v.validation == true
       );
 
@@ -108,7 +108,7 @@ const GereRapportDeMission = () => {
         (v: any) =>
           v.responsableId === validateFinancial &&
           v.missionId == id &&
-          v.id == mission.id &&
+          v.type == type &&
           v.validation == true
       );
 
@@ -118,7 +118,7 @@ const GereRapportDeMission = () => {
         (v: any) =>
           v.responsableId === validateLogistic &&
           v.missionId == id &&
-          v.id == mission.id &&
+          v.type == type &&
           v.validation == true
       );
       setGetVerificateurLogistic(isLogisticValidated);
@@ -127,7 +127,8 @@ const GereRapportDeMission = () => {
   const handleValidationFinance = async (
     responsableId: string,
     missionId: string,
-    validation: boolean
+    validation: boolean,
+    type: string
   ) => {
     try {
       // Send the updated validation state to the server
@@ -135,6 +136,7 @@ const GereRapportDeMission = () => {
         responsableId,
         missionId,
         validation,
+        type,
       });
       setGetVerificateurFinance(validation);
       dispatch(
@@ -151,13 +153,15 @@ const GereRapportDeMission = () => {
   const handleValidationTechnique = async (
     responsableId: string,
     missionId: string,
-    validation: boolean
+    validation: boolean,
+    type: string
   ) => {
     try {
       await axios.post("/suivi-evaluation/validation-rapport", {
         responsableId,
         missionId,
         validation,
+        type,
       });
       setGetVerificateurTechnic(validation);
       dispatch(
@@ -175,13 +179,15 @@ const GereRapportDeMission = () => {
   const handleValidationPaye = async (
     responsableId: string,
     missionId: string,
-    validation: boolean
+    validation: boolean,
+    type: string
   ) => {
     try {
       await axios.post("/suivi-evaluation/validation-rapport", {
         responsableId,
         missionId,
         validation,
+        type,
       });
       setGetValidatePay(validation);
       dispatch(
@@ -199,13 +205,15 @@ const GereRapportDeMission = () => {
   const handleValidateLogistique = async (
     responsableId: string,
     missionId: string,
-    validation: boolean
+    validation: boolean,
+    type: string
   ) => {
     try {
       await axios.post(`/suivi-evaluation/validation-rapport`, {
         responsableId,
         missionId,
         validation,
+        type,
       });
       setGetVerificateurLogistic(validation);
       dispatch(
@@ -353,7 +361,8 @@ const GereRapportDeMission = () => {
                               handleValidationFinance(
                                 row.verifyFinancial!,
                                 id,
-                                getVerificateurFinance == true ? false : true
+                                getVerificateurFinance == true ? false : true,
+                                "finance"
                               )
                             }
                           >
@@ -417,7 +426,8 @@ const GereRapportDeMission = () => {
                               handleValidationTechnique(
                                 row.verifyTechnic!,
                                 id,
-                                getVerificateurTechnic == true ? false : true
+                                getVerificateurTechnic == true ? false : true,
+                                "technique"
                               )
                             }
                             disabled={getVerificateurFinance == false}
@@ -483,7 +493,8 @@ const GereRapportDeMission = () => {
                               handleValidateLogistique(
                                 row.validateLogistic!,
                                 id,
-                                getVerificateurLogistic == true ? false : true
+                                getVerificateurLogistic == true ? false : true,
+                                "logistique"
                               )
                             }
                             // disabled={getVerificateurLogistic == false}
@@ -542,7 +553,8 @@ const GereRapportDeMission = () => {
                               handleValidationPaye(
                                 row.validateFinancial!,
                                 id,
-                                getValidatePaye == true ? false : true
+                                getValidatePaye == true ? false : true,
+                                "paye"
                               )
                             }
                             disabled={getVerificateurTechnic == false}
