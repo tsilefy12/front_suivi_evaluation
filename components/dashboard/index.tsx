@@ -9,6 +9,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
   TextField,
@@ -38,13 +39,16 @@ import useFetchPeriode from "../periode/hooks/useFetchPeriode";
 import { GrantEncoursItem } from "../../redux/features/grantEncours/grantEncours.interface";
 import { Search } from "@mui/icons-material";
 import useFetchCurrencyListe from "../configurations/currency/hooks/useFetchCurrency";
+import { TableLoading } from "../shared/loading";
 
 const Dashboard: NextPage = () => {
   const basePath = useBasePath();
   const dispatch = useDispatch();
   const router = useRouter();
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const { grantEncoursList, loading } = useAppSelector(
+    (state) => state.grantEncours
+  );
   const fetchBudgetLine = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state) => state.budgetLine);
   const fetchBudgetEngagedList = useFetchBudgetEngaged();
@@ -163,63 +167,66 @@ const Dashboard: NextPage = () => {
         </Stack>
       </SectionNavigation>
       <BodySection sx={{ height: "calc(100vh - 255px)", overflow: "auto" }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>GRANT</TableCell>
-              <TableCell align="center">BUDGET TOTAL</TableCell>
-              <TableCell align="center">BUDGET REÇU</TableCell>
-              <TableCell align="center">BUDGET ENGAGE</TableCell>
-              <TableCell align="center">SOLDE</TableCell>
-              <TableCell>LIGNE BUDGETAIRE</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {dataFilter.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>{row.code}</TableCell>
-                <TableCell align="center">
-                  {(() => {
-                    const currency = currencyListe.find(
-                      (f) => f.name == row.currencyId
-                    )?.name;
-                    return currency == "Ariary"
-                      ? formatMontant(Number(row.amountMGA))
-                      : formatMontant(Number(row.amount));
-                  })()}
-                </TableCell>
-                <TableCell align="center">
-                  {formatMontant(
-                    periodelist
-                      .filter((f) => f.grant === row.id)
-                      .reduce((acc, curr) => acc + curr.montant!, 0)
-                  )}
-                </TableCell>
-                <TableCell align="center">
-                  {formatMontant(Number(budgetEngaged))}
-                </TableCell>
-                <TableCell align="center">
-                  {(() => {
-                    const budgetRecu = periodelist
-                      .filter((f) => f.grant == row.id)
-                      .reduce((acc, curr) => acc + curr.montant!, 0);
-                    return formatMontant(Number(budgetRecu - budgetEngaged));
-                  })()}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    startIcon={<Add />}
-                    onClick={() => handleClick(row.id!)}
-                  >
-                    Voir détails
-                  </Button>
-                </TableCell>
+        <TableContainer>
+          {grantEncoursList.length === 0 ? loading && <TableLoading /> : null}
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>GRANT</TableCell>
+                <TableCell align="center">BUDGET TOTAL</TableCell>
+                <TableCell align="center">BUDGET REÇU</TableCell>
+                <TableCell align="center">BUDGET ENGAGE</TableCell>
+                <TableCell align="center">SOLDE</TableCell>
+                <TableCell>LIGNE BUDGETAIRE</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {dataFilter.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.code}</TableCell>
+                  <TableCell align="center">
+                    {(() => {
+                      const currency = currencyListe.find(
+                        (f) => f.name == row.currencyId
+                      )?.name;
+                      return currency == "Ariary"
+                        ? formatMontant(Number(row.amountMGA))
+                        : formatMontant(Number(row.amount));
+                    })()}
+                  </TableCell>
+                  <TableCell align="center">
+                    {formatMontant(
+                      periodelist
+                        .filter((f) => f.grant === row.id)
+                        .reduce((acc, curr) => acc + curr.montant!, 0)
+                    )}
+                  </TableCell>
+                  <TableCell align="center">
+                    {formatMontant(Number(budgetEngaged))}
+                  </TableCell>
+                  <TableCell align="center">
+                    {(() => {
+                      const budgetRecu = periodelist
+                        .filter((f) => f.grant == row.id)
+                        .reduce((acc, curr) => acc + curr.montant!, 0);
+                      return formatMontant(Number(budgetRecu - budgetEngaged));
+                    })()}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<Add />}
+                      onClick={() => handleClick(row.id!)}
+                    >
+                      Voir détails
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </BodySection>
       <Dialog
         open={open}

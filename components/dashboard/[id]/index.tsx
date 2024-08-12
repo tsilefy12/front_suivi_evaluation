@@ -32,6 +32,7 @@ import useFetchCaisee from "../../reliquetGrant/hooks/useFetchCaisse";
 import useFetchGrantMonitoring from "../hooks/useFetchGrantMonitorings";
 import { GrantMonitoringItem } from "../../../redux/features/grantMonitoring/grantMonitoring.interface";
 import { GrantEncoursItem } from "../../../redux/features/grantEncours/grantEncours.interface";
+import { TableLoading } from "../../shared/loading";
 
 const DetailsDashboard = ({ handleClose, getId }: any) => {
   const basePath = useBasePath();
@@ -40,7 +41,9 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
   const fetchGrants = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
-  const { budgetLineList } = useAppSelector((state) => state.budgetLine);
+  const { budgetLineList, loading } = useAppSelector(
+    (state) => state.budgetLine
+  );
   const fetchBudgetInitial = useFetchBudgetInitial();
   const { budgetInitialList } = useAppSelector((state) => state.budgetInitial);
   const fetchPeriode = useFetchPeriode();
@@ -136,6 +139,7 @@ const DetailsDashboard = ({ handleClose, getId }: any) => {
             maxHeight: "calc(100vh - 250px)",
           }}
         >
+          {budgetLineList.length === 0 ? loading && <TableLoading /> : null}
           <Table>
             <TableHead>
               <TableRow>
