@@ -1,5 +1,5 @@
 import { Download } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import {
   Page,
   Text,
@@ -25,7 +25,7 @@ const PrintPDF = () => {
   const fetchGrants = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchDeadline = useFetchDeadlinelist();
-  const { deadlinelist } = useAppSelector((state) => state.deadline);
+  const { deadlinelist, loading } = useAppSelector((state) => state.deadline);
   const router = useRouter();
   const { id } = router.query;
   const fetchProject = useFetchProject();
@@ -404,14 +404,18 @@ const PrintPDF = () => {
   };
   return (
     <>
-      <Button
-        onClick={clickPDF}
-        color="primary"
-        variant="contained"
-        startIcon={<Download />}
-      >
-        PDF
-      </Button>
+      {deadlinelist.length == 0 ? (
+        loading && <CircularProgress color="primary" />
+      ) : (
+        <Button
+          onClick={clickPDF}
+          color="primary"
+          variant="contained"
+          startIcon={<Download />}
+        >
+          PDF
+        </Button>
+      )}
     </>
   );
 };

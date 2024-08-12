@@ -1,5 +1,6 @@
 import {
   Button,
+  CircularProgress,
   Container,
   Dialog,
   DialogActions,
@@ -325,14 +326,19 @@ const ListGrantsMonitoring = () => {
         </Stack>
         <Stack direction={"row"} gap={2} padding={2}>
           <PrintPDF />
-          <Button
-            onClick={exportToExcel}
-            color="primary"
-            variant="contained"
-            startIcon={<Download />}
-          >
-            Excel
-          </Button>
+          {deadlinelist.length == 0 ? (
+            loading && <CircularProgress color="primary" />
+          ) : (
+            <Button
+              onClick={exportToExcel}
+              color="primary"
+              variant="contained"
+              startIcon={<Download />}
+            >
+              Excel
+            </Button>
+          )}
+
           <Typography variant="h4" color="GrayText">
             Deadline list
           </Typography>

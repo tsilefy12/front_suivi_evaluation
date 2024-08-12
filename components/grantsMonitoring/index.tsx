@@ -1,5 +1,6 @@
 import {
   Button,
+  CircularProgress,
   Container,
   IconButton,
   MenuItem,
@@ -282,15 +283,19 @@ const GrantsList = () => {
           </TextField>
         </Stack>
         <Stack direction={"row"} gap={2} alignItems={"center"}>
-          <GrantsListPDF data={filteredData} />
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<Download />}
-            onClick={handleExportExcel}
-          >
-            Excel
-          </Button>
+          <GrantsListPDF data={filteredData} loading={loading} />
+          {grantEncoursList.filter((f) => f.type == null).length == 0 ? (
+            loading && <CircularProgress color="primary" />
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<Download />}
+              onClick={handleExportExcel}
+            >
+              Excel
+            </Button>
+          )}
           <TextField
             select
             id="outlined-basic"

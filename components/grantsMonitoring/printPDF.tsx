@@ -8,7 +8,7 @@ import {
   StyleSheet,
   pdf,
 } from "@react-pdf/renderer";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { Download } from "@mui/icons-material";
 
 // Define styles for your PDF
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const GrantsListPDF = ({ data }: any) => {
+const GrantsListPDF = ({ data, loading }: any) => {
   const pdfDocument = (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -153,14 +153,18 @@ const GrantsListPDF = ({ data }: any) => {
   };
   return (
     <>
-      <Button
-        variant="contained"
-        color="primary"
-        startIcon={<Download />}
-        onClick={clickPDF}
-      >
-        PDF
-      </Button>
+      {data.length == 0 ? (
+        loading && <CircularProgress color="primary" />
+      ) : (
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Download />}
+          onClick={clickPDF}
+        >
+          PDF
+        </Button>
+      )}
     </>
   );
 };
