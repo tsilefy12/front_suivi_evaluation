@@ -1,16 +1,16 @@
 import { Container } from "@mui/material";
 import React from "react";
 import BackOfficeLayout from "../../../../../layouts/backOffice";
-import EditGrantAdmin from "../../../../../components/grantsAdmin/[id]/edit";
+import DetailGrantsAdmin from "../../../../../components/grantsAdmin/[id]/detail/DetailGrantsEnCours";
 
-const AddGrantAdmin = () => {
+const DetailGrantsAdmins = () => {
   return (
     <BackOfficeLayout>
       <div style={{ paddingLeft: 2, paddingRight: 2 }}>
-        <EditGrantAdmin />
+        <DetailGrantsAdmin />
       </div>
     </BackOfficeLayout>
   );
 };
 
-export default AddGrantAdmin;
+export default DetailGrantsAdmins;

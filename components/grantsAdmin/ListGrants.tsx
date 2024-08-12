@@ -1,6 +1,3 @@
-import Add from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
   Container,
@@ -19,103 +16,69 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { useConfirm } from "material-ui-confirm";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import Data, { Order } from "./table/type-variable";
+import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
+import { Edit, Search } from "@mui/icons-material";
+import Add from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useConfirm } from "material-ui-confirm";
+import { useRouter } from "next/router";
 import { usePermitted } from "../../config/middleware";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../config/table.config";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { deleteGrantAdmin } from "../../redux/features/grantAdmin";
-import { GrantAdminItem } from "../../redux/features/grantAdmin/grantAdmin.interface";
-import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
-import useFetchGrantAdmin from "./hooks/useFetchGrantAdmin";
-import { rows } from "./table/constante";
-import EnhancedTableHead from "./table/EnhancedTableHead";
-import EnhancedTableToolbar from "./table/EnhancedTableToolbar";
-import Data, { Order } from "./table/type-variable";
-import { Search } from "@mui/icons-material";
+import { deleteGrantEncours } from "../../redux/features/grantEncours";
+import { GrantEncoursItem } from "../../redux/features/grantEncours/grantEncours.interface";
+import useFetchEmployes from "../home/Missions/hooks/useFetchEmployees";
 import useFetchReliquatGrant from "../reliquetGrant/hooks/useFetchEliquatGrant";
+import useFetchGrants from "../GrantsEnCours/hooks/getGrants";
+import useFetchProject from "../GrantsEnCours/hooks/getProject";
+import TransportEquipmentTableHeader from "../GrantsEnCours/organisme/table/TransportEquipmentTableHeader";
+import { deleteGrantAdmin } from "../../redux/features/grantAdmin";
 
 const ListGrantsAdmin = () => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("bailleur");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const confirm = useConfirm();
+  const dispatch = useAppDispatch();
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [filtre, setFiltre] = React.useState("");
-  const fetchGrantAdmin = useFetchGrantAdmin();
-  const { grantAdminlist } = useAppSelector((state) => state.grantAdmin);
+
   const router = useRouter();
-  const confirm = useConfirm();
-  const dispatch = useAppDispatch();
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
-  const validate = usePermitted();
+  const { grantEncoursList } = useAppSelector(
+    (state: any) => state.grantEncours
+  );
+  const fetchProject = useFetchProject();
+  const { projectList } = useAppSelector((state: any) => state.project);
   const fetchtReliquatGrant = useFetchReliquatGrant();
   const { reliquatGrantList } = useAppSelector(
     (state: any) => state.reliquatGrant
   );
-
+  const fetchEpmloyes = useFetchEmployes();
+  const { employees } = useAppSelector((state: any) => state.employe);
+  async function fetchData() {
+    await fetchProject();
+    await fetchEpmloyes();
+    await fetchtReliquatGrant();
+    await fetchGrants();
+  }
   React.useEffect(() => {
-    fetchGrantAdmin();
-    fetchGrants();
-    fetchtReliquatGrant();
+    fetchData();
   }, []);
-  const [dataFiltered, setDataFiltered] = React.useState<any[]>([]);
-  const [searchGrantAdmin, setSearchGrantAdmin] = React.useState<string>("");
-  useEffect(() => {
-    if (searchGrantAdmin === "") {
-      setDataFiltered(grantAdminlist);
-    } else {
-      const data = grantAdminlist.filter((e: any) =>
-        e.bailleur.toLowerCase().includes(searchGrantAdmin.toLowerCase())
-      );
-      setDataFiltered(data);
-    }
-  }, [searchGrantAdmin]);
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
+  const validate = usePermitted();
+
+  const handleClickEdit = async (id: any) => {
+    router.push(`/grants/grantsAdmin/${id}/edit`);
   };
-
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.grants);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected: readonly string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -126,20 +89,33 @@ const ListGrantsAdmin = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-  };
-
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
-  // Avoid a layout jump when reaching the last page with empty rows.
+  const [dataGrant, setDataGrant] = React.useState<any[]>([]);
+  useEffect(() => {
+    if (filtre === "") {
+      return setDataGrant(
+        [
+          ...grantEncoursList.filter((f: GrantEncoursItem) => f.type != null),
+        ].reverse()
+      );
+    } else {
+      const filteredData = grantEncoursList.filter((item: any) => {
+        return (
+          (item.type != null &&
+            item.code.toLowerCase().includes(filtre.toLowerCase())) ||
+          item.bailleur.toLowerCase().includes(filtre.toLowerCase()) ||
+          item.amountMGA.toString().toLowerCase().includes(filtre.toLowerCase())
+        );
+      });
+      return setDataGrant([...filteredData].reverse());
+    }
+  }, [filtre, grantEncoursList, reliquatGrantList]);
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - grantEncoursList.length)
+      : 0;
   const handleClickDelete = async (id: any) => {
     confirm({
-      title: "Supprimer grant admin",
+      title: "Supprimer le grant admin",
       description: "Voulez-vous vraiment supprimer ?",
       cancellationText: "Annuler",
       confirmationText: "Supprimer",
@@ -151,32 +127,29 @@ const ListGrantsAdmin = () => {
       },
     })
       .then(async () => {
-        await dispatch(deleteGrantAdmin({ id }));
-        fetchGrantAdmin();
+        await dispatch(deleteGrantEncours({ id }));
+        fetchGrants();
       })
       .catch(() => {});
   };
 
-  const handleClickEdit = async (id: any) => {
-    router.push(`/grants/grantsAdmin/${id}/edit`);
-  };
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
-        {validate("Suivi grant admin", "C") && (
+        {validate("Suivi grant en cours", "C") && (
           <Link href="/grants/grantsAdmin/add">
             <Button variant="contained" startIcon={<Add />}>
               Créer
             </Button>
           </Link>
         )}
-        <Typography variant="h4" color="GrayText">
-          Grant de fonctionnement
+        <Typography variant="h5" color="GrayText">
+          Grant admin
         </Typography>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2 }}>
+          <Paper sx={{ width: "100%", mb: 2, ml: 4 }}>
             <EnhancedTableToolbar
               numSelected={selected.length}
               filtre={filtre}
@@ -188,77 +161,110 @@ const ListGrantsAdmin = () => {
                 aria-labelledby="tableTitle"
                 size={dense ? "small" : "medium"}
               >
-                <EnhancedTableHead
-                  numSelected={selected.length}
-                  order={order}
-                  orderBy={orderBy}
-                  onSelectAllClick={handleSelectAllClick}
-                  onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
-                />
+                <TransportEquipmentTableHeader />
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
-                  {dataFiltered
+                  {dataGrant
                     .filter(
                       (item) =>
                         !reliquatGrantList.some((rg: any) =>
-                          item.grant.toString().includes(rg.grant.toString())
+                          item.id.toString().includes(rg.grant.toString())
                         )
                     )
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .filter((item) =>
-                      `
-                        ${
-                          grantEncoursList.find(
-                            (e: any) => e.id === item?.grant
-                          )?.code
-                        } ${item.bailleur}
-                      `
-                        .toLowerCase()
-                        .includes(filtre.toLowerCase())
-                    )
-                    .map((row: GrantAdminItem, index) => {
-                      // const isItemSelected = isSelected(row.id);
+                    .map((row: GrantEncoursItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
-
                       return (
                         <TableRow
                           hover
-                          //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                          // selected={isItemSelected}
                         >
-                          <TableCell padding="checkbox"></TableCell>
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                          >
+                          <TableCell padding="checkbox" sx={{ width: "100px" }}>
+                            {row.code}
+                          </TableCell>
+                          <TableCell align="left">
                             {
-                              grantEncoursList.find(
-                                (e: any) => e.id === row?.grant
-                              )?.code
+                              employees.find(
+                                (e: any) => e.id === row.techValidator
+                              )?.name
+                            }{" "}
+                            {
+                              employees.find(
+                                (e: any) => e.id === row.techValidator
+                              )?.surname
                             }
                           </TableCell>
-                          <TableCell align="right">{row.bailleur}</TableCell>
-                          <TableCell align="right">
+                          <TableCell align="left">
+                            {
+                              employees.find(
+                                (e: any) => e.id === row.financeVerificator
+                              )?.name
+                            }{" "}
+                            {
+                              employees.find(
+                                (e: any) => e.id === row.financeVerificator
+                              )?.surname
+                            }
+                          </TableCell>
+                          <TableCell align="left">
+                            {
+                              employees.find(
+                                (e: any) => e.id === row.financeValidator
+                              )?.name
+                            }{" "}
+                            {
+                              employees.find(
+                                (e: any) => e.id === row.financeValidator
+                              )?.surname
+                            }
+                          </TableCell>
+                          <TableCell align="left">{row.bailleur}</TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{ minWidth: 400, maxWidth: 400 }}
+                          >
                             <BtnActionContainer
                               direction="row"
                               justifyContent="right"
+                              gap={1}
                             >
-                              {/* <IconButton
+                              <Link
+                                href={`/grants/ligneBudgetaire/${row.id}/listeLignebudgetaire`}
+                              >
+                                <Button
+                                  variant="outlined"
+                                  color="accent"
+                                  startIcon={<Add />}
+                                >
+                                  L. Budg
+                                </Button>
+                              </Link>
+                              {validate("Suivi reliquat grant", "C") && (
+                                <Link
+                                  href={`/grants/reliquatGrants/${row.id}/add`}
+                                >
+                                  <Button
+                                    variant="outlined"
+                                    color="accent"
+                                    startIcon={<Add />}
+                                  >
+                                    Reliquat
+                                  </Button>
+                                </Link>
+                              )}
+                              <Link
+                                href={`/grants/grantsAdmin/${row.id}/detail`}
+                              >
+                                <IconButton
                                   color="accent"
                                   aria-label="Details"
                                   component="span"
                                 >
                                   <VisibilityIcon />
-                                </IconButton> */}
-                              {validate("Suivi grant admin", "U") && (
+                                </IconButton>
+                              </Link>
+                              {validate("Suivi grant en cours", "U") && (
                                 <IconButton
                                   color="primary"
                                   aria-label="Modifier"
@@ -268,17 +274,15 @@ const ListGrantsAdmin = () => {
                                     handleClickEdit(row.id);
                                   }}
                                 >
-                                  <EditIcon />
+                                  <Edit />
                                 </IconButton>
                               )}
-                              {validate("Suivi grant admin", "D") && (
+                              {validate("Suivi grant en cours", "D") && (
                                 <IconButton
                                   color="warning"
                                   aria-label="Supprimer"
                                   component="span"
-                                  onClick={() => {
-                                    handleClickDelete(row.id);
-                                  }}
+                                  onClick={() => handleClickDelete(row.id)}
                                 >
                                   <DeleteIcon />
                                 </IconButton>
@@ -303,7 +307,7 @@ const ListGrantsAdmin = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={rows.length}
+              count={grantEncoursList.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -312,10 +316,6 @@ const ListGrantsAdmin = () => {
               labelDisplayedRows={defaultLabelDisplayedRows}
             />
           </Paper>
-          {/* <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      /> */}
         </Box>
       </SectionTable>
     </Container>

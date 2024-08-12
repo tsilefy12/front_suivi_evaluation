@@ -96,6 +96,7 @@ const AddNewGrantsEnCours = () => {
 
   const handleSubmit = async (values: any) => {
     values.postAnalyticid = null;
+    values.type = null;
     if (values.bankId === "") {
       values.bankId = null;
     }
@@ -142,14 +143,15 @@ const AddNewGrantsEnCours = () => {
                 programmeId: isEditing ? grantEncour?.programmeId : "",
                 projectId: isEditing ? grantEncour?.projectId : "",
                 bankId: isEditing ? grantEncour?.bankId : "",
-                // titleFr: isEditing ? grantEncour?.titleFr : "",
-                // titleEn: isEditing ? grantEncour?.titleEn : "",
+                type: isEditing ? grantEncour?.type : "",
                 bailleur: isEditing ? grantEncour?.bailleur : "",
                 amount: isEditing ? grantEncour?.amount : 0,
                 amountMGA: isEditing ? grantEncour?.amountMGA : 0,
                 responsable: isEditing
                   ? grantEncour?.responsable
-                  : selectedOption.id!,
+                  : selectedOption
+                  ? selectedOption.id!
+                  : "",
                 startDate: isEditing
                   ? grantEncour?.startDate
                   : new Date().toISOString(),
@@ -208,7 +210,7 @@ const AddNewGrantsEnCours = () => {
                       size="small"
                       startIcon={<Check />}
                       sx={{ marginInline: 3 }}
-                      type="button" // Modifier le type à "button"
+                      type="button"
                       onClick={formikProps.submitForm}
                     >
                       Enregistrer
@@ -398,13 +400,20 @@ const AddNewGrantsEnCours = () => {
                     getOptionLabel={(option) =>
                       `${option.name} ${option.surname}`
                     }
-                    value={formikProps.values.responsable || null}
+                    value={
+                      allOptions.find(
+                        (option) => option.id === formikProps.values.responsable
+                      ) || null
+                    }
                     onChange={(event, newValue) => {
-                      setSelectedOption(newValue);
-                      formikProps.setFieldValue("responsable", newValue);
+                      setSelectedOption(newValue ? newValue.id : null);
+                      formikProps.setFieldValue(
+                        "responsable",
+                        newValue ? newValue.id : ""
+                      );
                     }}
                     isOptionEqualToValue={(option, value) =>
-                      option.id === value?.id
+                      option.id === value
                     }
                     renderInput={(params) => (
                       <TextField

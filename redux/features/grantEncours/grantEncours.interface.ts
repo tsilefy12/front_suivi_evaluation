@@ -7,8 +7,7 @@ export interface GrantEncoursItem {
   projectId?: number;
   bankId?: number;
   programmeId?: number;
-  // titleFr?: string;
-  // titleEn?: string;
+  type?: string;
   bailleur?: string;
   amount?: number;
   amountMGA?: number;
@@ -16,14 +15,10 @@ export interface GrantEncoursItem {
   responsable?: string;
   startDate?: string;
   endDate?: string;
-  // deadline?: string;
-  // techDate?: string;
-  // financeDate?: string;
   status?: string;
   techValidator?: string;
   financeValidator?: string;
   financeVerificator?: string;
-  // note?: string;
   budgetLines?: BudgetLineItem[];
   journalBanks?: { grantId: number; debit: number; credit: number }[];
 }

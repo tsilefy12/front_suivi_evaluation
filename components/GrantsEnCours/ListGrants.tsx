@@ -93,11 +93,14 @@ const ListGrantsEnCours = () => {
   const [dataGrant, setDataGrant] = React.useState<any[]>([]);
   useEffect(() => {
     if (filtre === "") {
-      return setDataGrant([...grantEncoursList].reverse());
+      return setDataGrant(
+        [...grantEncoursList.filter((f: any) => f.type == null)].reverse()
+      );
     } else {
       const filteredData = grantEncoursList.filter((item: any) => {
         return (
-          item.code.toLowerCase().includes(filtre.toLowerCase()) ||
+          (item.type == null &&
+            item.code.toLowerCase().includes(filtre.toLowerCase())) ||
           item.bailleur.toLowerCase().includes(filtre.toLowerCase()) ||
           item.amountMGA.toString().toLowerCase().includes(filtre.toLowerCase())
         );
@@ -107,7 +110,12 @@ const ListGrantsEnCours = () => {
   }, [filtre, grantEncoursList, reliquatGrantList]);
   const emptyRows =
     page > 0
-      ? Math.max(0, (1 + page) * rowsPerPage - grantEncoursList.length)
+      ? Math.max(
+          0,
+          (1 + page) * rowsPerPage -
+            grantEncoursList.filter((f: GrantEncoursItem) => f.type == null)
+              .length
+        )
       : 0;
   const handleClickDelete = async (id: any) => {
     confirm({

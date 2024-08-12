@@ -13,22 +13,21 @@ import React, { useEffect } from "react";
 import { SectionNavigation } from "../../ListGrants";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import KeyValue from "../../../shared/keyValue";
-import useFetchGrants from "../../hooks/getGrants";
-import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
-import { getGrantEncours } from "../../../../redux/features/grantEncours";
-import useFetchProject from "../../hooks/getProject";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
+import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
+import useFetchProject from "../../../GrantsEnCours/hooks/getProject";
+import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
+import useFetchCurrency from "../../../GrantsEnCours/hooks/getCurrency";
+import useFetchBank from "../../../GrantsEnCours/hooks";
+import useFetchStagiaire from "../../../GrantsEnCours/hooks/getStagiaire";
+import useFetchPrestataire from "../../../GrantsEnCours/hooks/getPrestataire";
 import Moment from "react-moment";
-import useFetchEmploys from "../../hooks/getResponsable";
-import useFetchCurrency from "../../hooks/getCurrency";
 import formatMontant from "../../../../hooks/format";
-import useFetchBank from "../../hooks";
-import useFetchStagiaire from "../../hooks/getStagiaire";
-import useFetchPrestataire from "../../hooks/getPrestataire";
+import { GrantEncoursItem } from "../../../../redux/features/grantEncours/grantEncours.interface";
 
-const DetailGrantsEnCours = () => {
+const DetailGrantsAdmin = () => {
   const router = useRouter();
-  const dispatch: any = useAppDispatch();
   const { id }: any = router.query;
 
   const fetchGrant = useFetchGrants();
@@ -60,8 +59,6 @@ const DetailGrantsEnCours = () => {
     fetchPrestataire();
   }, []);
 
-  // console.log("list details :", grantEncours)
-
   const listDetailGrantEncours: {
     idD: number;
     cd: string;
@@ -82,30 +79,31 @@ const DetailGrantsEnCours = () => {
     bankId: number;
   }[] = [];
 
-  grantEncoursList.forEach((g: any) => {
-    // console.log("respo :", g.responsable)
-    if (parseInt(g.id!) === parseInt(id!)) {
-      listDetailGrantEncours.push({
-        idD: parseInt(g.id!),
-        cd: g.code!,
-        baille: g.bailleur!,
-        curr: parseInt(g.currencyId!),
-        respo: g.responsable!,
-        debut: g.startDate!,
-        fin: g.endDate!,
-        duree: g.deadline!,
-        devise: parseInt(g.amount!),
-        mga: parseInt(g.amountMGA!),
-        FValidator: g.financeValidator,
-        FVerifcator: g.financeVerificator,
-        stat: g.status,
-        techValide: g.techValidator,
-        FDate: g.financeDate,
-        techD: g.techDate,
-        bankId: g.bankId!,
-      });
-    }
-  });
+  grantEncoursList
+    .filter((f: GrantEncoursItem) => f.type != null)
+    .forEach((g: any) => {
+      if (parseInt(g.id!) === parseInt(id!)) {
+        listDetailGrantEncours.push({
+          idD: parseInt(g.id!),
+          cd: g.code!,
+          baille: g.bailleur!,
+          curr: parseInt(g.currencyId!),
+          respo: g.responsable!,
+          debut: g.startDate!,
+          fin: g.endDate!,
+          duree: g.deadline!,
+          devise: parseInt(g.amount!),
+          mga: parseInt(g.amountMGA!),
+          FValidator: g.financeValidator,
+          FVerifcator: g.financeVerificator,
+          stat: g.status,
+          techValide: g.techValidator,
+          FDate: g.financeDate,
+          techD: g.techDate,
+          bankId: g.bankId!,
+        });
+      }
+    });
   const formatOptions = (options: any) => {
     return options.map((option: any) => ({
       id: option.id,
@@ -128,13 +126,13 @@ const DetailGrantsEnCours = () => {
         justifyContent="space-between"
         sx={{ mb: 2 }}
       >
-        <Link href="/grants/grantsEnCours">
+        <Link href="/grants/grantsAdmin">
           <Button color="info" variant="text" startIcon={<ArrowBackIcon />}>
             Retour
           </Button>
         </Link>
         <Typography variant="h4" color="GrayText">
-          Détails grants
+          Détails grants admin
         </Typography>
       </SectionNavigation>
       <DetailsContainer sx={{ backgroundColor: "#fff", pb: 5 }}>
@@ -200,9 +198,10 @@ const DetailGrantsEnCours = () => {
                   value={`
                       ${
                         employees.find((e: any) => e.id === row.FValidator)
-                          ?.name
+                          ?.name || ""
                       }  ${
-                    employees.find((e: any) => e.id === row.FValidator)?.surname
+                    employees.find((e: any) => e.id === row.FValidator)
+                      ?.surname || ""
                   }`}
                 />
               </Grid>
@@ -252,10 +251,10 @@ const DetailGrantsEnCours = () => {
                   value={`
                       ${
                         employees.find((e: any) => e.id === row.FVerifcator)
-                          ?.name
+                          ?.name || ""
                       } ${
                     employees.find((e: any) => e.id === row.FVerifcator)
-                      ?.surname
+                      ?.surname || ""
                   }`}
                 />
               </Grid>
@@ -265,9 +264,10 @@ const DetailGrantsEnCours = () => {
                   value={`
                       ${
                         employees.find((e: any) => e.id === row.techValide)
-                          ?.name
+                          ?.name || ""
                       } ${
-                    employees.find((e: any) => e.id === row.techValide)?.surname
+                    employees.find((e: any) => e.id === row.techValide)
+                      ?.surname || ""
                   }`}
                 />
               </Grid>
@@ -280,7 +280,7 @@ const DetailGrantsEnCours = () => {
   );
 };
 
-export default DetailGrantsEnCours;
+export default DetailGrantsAdmin;
 
 const DetailsContainer = styled("div")(({ theme }) => ({
   padding: 30,

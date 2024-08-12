@@ -44,7 +44,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           }}
         >
           <Typography variant="h6" id="tableTitle" component="div">
-            Liste des grants
+            Liste des grants des fonctionnements
           </Typography>
           <TextField
             variant="outlined"

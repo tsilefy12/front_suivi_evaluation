@@ -1,8 +1,14 @@
 import { Stack, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { getGrantAdmin, getGrantAdminlist } from "../../redux/features/grantAdmin";
-import { getGrantEncours, getGrantEncoursList } from "../../redux/features/grantEncours";
+import {
+  getGrantAdmin,
+  getGrantAdminlist,
+} from "../../redux/features/grantAdmin";
+import {
+  getGrantEncours,
+  getGrantEncoursList,
+} from "../../redux/features/grantEncours";
 import { getReliquatGrantList } from "../../redux/features/reliquatGrants";
 import { getPlanTravaillist } from "../../redux/features/planTravail";
 import { getSitelist } from "../../redux/features/site";
@@ -51,11 +57,7 @@ export default function Counter() {
   }, []);
   return (
     <Stack direction={"column"} gap={2}>
-      <Stack
-        direction={"column"}
-        gap={2}
-        justifyContent={"center"}
-      >
+      <Stack direction={"column"} gap={2} justifyContent={"center"}>
         <Stack
           direction={"column"}
           alignItems={"center"}
@@ -68,15 +70,15 @@ export default function Counter() {
           }}
         >
           <Typography variant={"caption"} fontWeight={"bolder"}>
-             Grants
+            Grants
           </Typography>
-          <Stack direction={"row"}  gap={2} width={"100%"} flexWrap={"wrap"}>
+          <Stack direction={"row"} gap={2} width={"100%"} flexWrap={"wrap"}>
             <Stack flex={1} alignItems={"center"} justifyContent={"center"}>
               <Typography variant={"caption"} fontWeight={"bolder"}>
                 En cours
               </Typography>
               <Typography sx={{ color: "#00C49F" }} variant={"h4"}>
-                {grantEncoursList.length}
+                {grantEncoursList.filter((grant) => grant.type == null).length}
               </Typography>
             </Stack>
             <Stack flex={1} alignItems={"center"} justifyContent={"center"}>
@@ -84,7 +86,7 @@ export default function Counter() {
                 Admin
               </Typography>
               <Typography sx={{ color: "#00C49F" }} variant={"h4"}>
-                {grantAdminlist.length}
+                {grantEncoursList.filter((grant) => grant.type != null).length}
               </Typography>
             </Stack>
             <Stack flex={1} alignItems={"center"} justifyContent={"center"}>
@@ -109,9 +111,9 @@ export default function Counter() {
           }}
         >
           <Typography variant={"caption"} fontWeight={"bolder"}>
-             PTA
+            PTA
           </Typography>
-          <Stack direction={"row"}  gap={2} width={"100%"} flexWrap={"wrap"}>
+          <Stack direction={"row"} gap={2} width={"100%"} flexWrap={"wrap"}>
             <Stack flex={1} alignItems={"center"} justifyContent={"center"}>
               <Typography variant={"caption"} fontWeight={"bolder"}>
                 Site

@@ -3,79 +3,178 @@ import {
   Container,
   styled,
   Typography,
-  TextField,
-  Stack,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Divider,
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  TextField,
+  Autocomplete,
 } from "@mui/material";
 import Link from "next/link";
-import React from "react";
-import * as Yup from "yup";
+import React, { useState } from "react";
 import { SectionNavigation } from "../ListGrants";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { Check, Close } from "@mui/icons-material";
-import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { useRouter } from "next/router";
-import useFetchGrants from "../../GrantsEnCours/hooks/getGrants";
-import { Form, Formik } from "formik";
-import OSSelectField from "../../shared/select/OSSelectField";
 import OSTextField from "../../shared/input/OSTextField";
+import { Formik } from "formik";
+import { useRouter } from "next/router";
+import * as Yup from "yup";
+import { useAppSelector, useAppDispatch } from "../../../hooks/reduxHooks";
 import {
-  createGrantAdmin,
-  updateGrantAdmin,
-} from "../../../redux/features/grantAdmin";
-import useFetchGrantAdmin from "../hooks/useFetchGrantAdmin";
-import { cancelEdit } from "../../../redux/features/grantAdmin/periodeSlice";
+  createGrantEncours,
+  updateGrantEncours,
+} from "../../../redux/features/grantEncours";
+import OSDatePicker from "../../shared/date/OSDatePicker";
+import { cancelEdit } from "../../../redux/features/grantEncours/grantEncoursSlice";
+import useFetchBank from "../../GrantsEnCours/hooks";
+import useFetchEmploys from "../../GrantsEnCours/hooks/getResponsable";
+import useFetchPostAnalytique from "../../GrantsEnCours/hooks/getPostAnalytique";
+import useFetchStagiaire from "../../GrantsEnCours/hooks/getStagiaire";
+import useFetchPrestataire from "../../GrantsEnCours/hooks/getPrestataire";
+import useFetchProject from "../../GrantsEnCours/hooks/getProject";
+import useFetchCurrency from "../../GrantsEnCours/hooks/getCurrency";
+import useFetchProgrammeRH from "../../GrantsEnCours/hooks/getProgrammeListe";
+import OSSelectField from "../../shared/select/OSSelectField";
 
 const AddNewGrantsAdmin = () => {
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const fetchGrant = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
-  const { isEditing, grantAdmin } = useAppSelector((state) => state.grantAdmin);
-  const fetchGrantAdmin = useFetchGrantAdmin();
+  const { isEditing, grantEncour }: any = useAppSelector(
+    (state: any) => state.grantEncours
+  );
+  const dispatch: any = useAppDispatch();
+  const fetchBank = useFetchBank();
+  const fetchEmploys = useFetchEmploys();
+  const { bankList } = useAppSelector((state: any) => state.bank);
+  const { employees } = useAppSelector((state: any) => state.employe);
+  const fetchPostAnalytique = useFetchPostAnalytique();
+  const fetchStagiaire = useFetchStagiaire();
+  const { interns } = useAppSelector((state: any) => state.stagiaire);
+  const fetchPrestataire = useFetchPrestataire();
+  const { prestataireListe } = useAppSelector(
+    (state: any) => state.prestataire
+  );
+
+  const fetcProject = useFetchProject();
+  const fetchCurreny = useFetchCurrency();
+  const { currencyListe } = useAppSelector((state: any) => state.currency);
+  const { projectList } = useAppSelector((state: any) => state.project);
+  const fetchProgrammeRH = useFetchProgrammeRH();
+  const { programmeRHList } = useAppSelector((state: any) => state.programmeRH);
+
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    fetchGrant();
-    fetchGrantAdmin();
-  }, [router.query]);
+    fetchBank();
+    fetchEmploys();
+    fetchPostAnalytique();
+    fetcProject();
+    fetchCurreny();
+    fetchProgrammeRH();
+    fetchStagiaire();
+    fetchPrestataire();
+  }, []);
+
+  const listBank: { id: string; name: string }[] = [];
+  //get list bank
+  if (bankList.length > 0) {
+    bankList.forEach((element: any) => {
+      listBank.push({ id: element["id"], name: element["chequier"] });
+    });
+  } else {
+    listBank.push({ id: "", name: "" });
+  }
+
+  const listStatus = [
+    { id: "PENDING", name: "PENDING" },
+    { id: "IN_PROGRESS", name: "IN_PROGRESS" },
+    { id: "COMPLETED", name: "COMPLETED" },
+  ];
+
   const handleSubmit = async (values: any) => {
+    values.postAnalyticid = null;
+    values.type = "Grant admin";
+    if (values.bankId === "") {
+      values.bankId = null;
+    }
     try {
       if (isEditing) {
         await dispatch(
-          updateGrantAdmin({
-            id: grantAdmin.id!,
-            grantAdmin: values,
+          updateGrantEncours({
+            id: grantEncour.id!,
+            grantEncour: values,
           })
         );
       } else {
-        await dispatch(createGrantAdmin(values));
-        fetchGrantAdmin();
+        await dispatch(createGrantEncours(values));
       }
       router.push("/grants/grantsAdmin");
     } catch (error) {
       console.log("error", error);
     }
   };
-  const listVide = [{ id: "Vide", name: "Vide" }];
+  const formatOptions = (options: any) => {
+    return options.map((option: any) => ({
+      id: option.id,
+      name: option.name,
+      surname: option.surname,
+    }));
+  };
+
+  // Fusionner les listes et les transformer
+  const allOptions = [
+    ...formatOptions(employees),
+    ...formatOptions(interns),
+    ...formatOptions(prestataireListe),
+  ];
+  const [selectedOption, setSelectedOption] = useState<any>(null);
+
+  console.log("selectedOption", selectedOption ? selectedOption.id : "");
   return (
-    <Container maxWidth="xl" sx={{ pb: 5 }}>
+    <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>
       <Formik
         enableReinitialize={isEditing ? true : false}
         initialValues={
           isEditing
-            ? grantAdmin
+            ? grantEncour
             : {
-                grant: isEditing ? grantAdmin?.grant : "",
-                bailleur: isEditing ? grantAdmin?.bailleur : "",
+                code: isEditing ? grantEncour?.code : "",
+                programmeId: isEditing ? grantEncour?.programmeId : "",
+                projectId: isEditing ? grantEncour?.projectId : "",
+                bankId: isEditing ? grantEncour?.bankId : "",
+                type: isEditing ? grantEncour?.type : "Grant admin",
+                bailleur: isEditing ? grantEncour?.bailleur : "",
+                amount: isEditing ? grantEncour?.amount : 0,
+                amountMGA: isEditing ? grantEncour?.amountMGA : 0,
+                responsable: isEditing
+                  ? grantEncour?.responsable
+                  : selectedOption
+                  ? selectedOption.id!
+                  : "",
+                startDate: isEditing
+                  ? grantEncour?.startDate
+                  : new Date().toISOString(),
+                endDate: isEditing
+                  ? grantEncour?.endDate
+                  : new Date().toISOString(),
+                status: isEditing ? grantEncour?.status : "",
+                financeValidator: isEditing
+                  ? grantEncour?.financeValidator
+                  : "",
+                financeVerificator: isEditing
+                  ? grantEncour?.financeVerificator
+                  : "",
+                techValidator: isEditing ? grantEncour?.techValidator : "",
+                currencyId: isEditing ? grantEncour?.currencyId : "",
               }
         }
         validationSchema={Yup.object({
-          grant: Yup.number().required("Champ obligatoire"),
+          code: Yup.string().required("Champ obligatoire"),
           bailleur: Yup.string().required("Champ obligatoire"),
+          amount: Yup.string().required("Champ obligatoire"),
+          amountMGA: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -84,13 +183,13 @@ const AddNewGrantsAdmin = () => {
       >
         {(formikProps) => {
           return (
-            <Form>
+            <Container maxWidth="xl" sx={{ pb: 5 }}>
               <NavigationContainer>
                 <SectionNavigation
                   direction={{ xs: "column", sm: "row" }}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                   justifyContent="space-between"
-                  sx={{ mb: 2 }}
+                  sx={{ mb: 4 }}
                 >
                   <Stack flexDirection={"row"}>
                     <Link href="/grants/grantsAdmin">
@@ -98,6 +197,10 @@ const AddNewGrantsAdmin = () => {
                         color="info"
                         variant="text"
                         startIcon={<ArrowBack />}
+                        onClick={() => {
+                          formikProps.resetForm();
+                          dispatch(cancelEdit());
+                        }}
                       >
                         Retour
                       </Button>
@@ -108,7 +211,7 @@ const AddNewGrantsAdmin = () => {
                       size="small"
                       startIcon={<Check />}
                       sx={{ marginInline: 3 }}
-                      type="button" // Modifier le type à "button"
+                      type="button"
                       onClick={formikProps.submitForm}
                     >
                       Enregistrer
@@ -128,37 +231,240 @@ const AddNewGrantsAdmin = () => {
                     </Button>
                   </Stack>
                   <Typography variant="h5">
-                    {isEditing ? "Modifier" : "Créer"} Grant admin
+                    {isEditing ? "Modif Grant" : "Nouveau Grant"}
                   </Typography>
                 </SectionNavigation>
-                <Divider />
+                {/* <Divider /> */}
               </NavigationContainer>
 
-              <FormContainer sx={{ backgroundColor: "#fff" }} spacing={2}>
+              <FormContainer
+                sx={{ backgroundColor: "#fff", pb: 5 }}
+                spacing={2}
+              >
+                <Stack direction="row" spacing={2}>
+                  <OSTextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Code"
+                    variant="outlined"
+                    name="code"
+                  />
+                  <OSSelectField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Programme"
+                    variant="outlined"
+                    name="programmeId"
+                    type="string"
+                    options={programmeRHList}
+                    dataKey="name"
+                    valueKey="id"
+                  />
+                  <OSSelectField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Projet"
+                    variant="outlined"
+                    name="projectId"
+                    type="string"
+                    options={projectList}
+                    dataKey="title"
+                    valueKey="id"
+                  />
+                  <OSTextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Bailleur"
+                    variant="outlined"
+                    name="bailleur"
+                  />
+                  <OSSelectField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Statut"
+                    variant="outlined"
+                    name="status"
+                    type="string"
+                    options={listStatus}
+                    dataKey="name"
+                    valueKey="id"
+                  />
+                </Stack>
+                <CustomStack
+                  direction={{ xs: "column", sm: "column", md: "row" }}
+                  spacing={{ xs: 2, sm: 2, md: 1 }}
+                >
+                  <OSSelectField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Validateur technique"
+                    variant="outlined"
+                    name="techValidator"
+                    options={employees}
+                    dataKey={["name", "surname"]}
+                    valueKey="id"
+                  />
+                  <OSSelectField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Finance vérificateur"
+                    variant="outlined"
+                    name="financeVerificator"
+                    options={employees}
+                    dataKey={["name", "surname"]}
+                    valueKey="id"
+                  />
+                  <OSSelectField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Finance validateur"
+                    variant="outlined"
+                    name="financeValidator"
+                    options={employees}
+                    dataKey={["name", "surname"]}
+                    valueKey="id"
+                  />
+                </CustomStack>
+                <CustomStack direction="row" spacing={4}>
+                  <OSDatePicker
+                    fullWidth
+                    id="outlined-basic"
+                    label="Date de début"
+                    variant="outlined"
+                    value={
+                      !isEditing
+                        ? formikProps.values.startDate
+                        : grantEncour?.startDate
+                    }
+                    onChange={(value: any) => {
+                      formikProps.setFieldValue("startDate", value);
+                      const date1 = new Date(value);
+                      const DateNumber1 = date1.getTime();
+                      const date2 = new Date(formikProps.values.endDate);
+                      const DateNumber2 = date2.getTime();
+
+                      if (DateNumber1 >= DateNumber2) {
+                        return setOpen(true);
+                      }
+                    }}
+                  />
+                  <OSDatePicker
+                    fullWidth
+                    id="outlined-basic"
+                    label="Date de fin"
+                    variant="outlined"
+                    value={
+                      !isEditing
+                        ? formikProps.values.endDate
+                        : grantEncour?.endDate
+                    }
+                    onChange={(value: any) => {
+                      formikProps.setFieldValue("endDate", value);
+                      const date1 = new Date(formikProps.values.startDate);
+                      const DateNumber1 = date1.getTime();
+                      const date2 = new Date(value);
+                      const DateNumber2 = date2.getTime();
+
+                      if (DateNumber1 >= DateNumber2) {
+                        return setOpen(true);
+                      }
+                    }}
+                  />
+                </CustomStack>
                 <FormControl fullWidth>
                   <OSSelectField
                     fullWidth
                     id="outlined-basic"
-                    label="Grant"
+                    label="Compte banque"
                     variant="outlined"
-                    options={grantEncoursList ? grantEncoursList : listVide}
-                    dataKey={grantEncoursList ? ["code"] : "name"}
+                    name="bankId"
+                    options={listBank}
+                    dataKey="name"
                     valueKey="id"
-                    name="grant"
                   />
                 </FormControl>
-                <OSTextField
+                <OSSelectField
                   fullWidth
                   id="outlined-basic"
-                  label="Bailleur"
+                  label="Currency"
                   variant="outlined"
-                  name="bailleur"
+                  name="currencyId"
+                  options={currencyListe}
+                  dataKey={["name"]}
+                  valueKey="id"
                 />
+                <FormControl>
+                  <Autocomplete
+                    fullWidth
+                    id="outlined-basic"
+                    options={allOptions}
+                    getOptionLabel={(option) =>
+                      `${option.name} ${option.surname}`
+                    }
+                    value={
+                      allOptions.find(
+                        (option) => option.id === formikProps.values.responsable
+                      ) || null
+                    } // Ensure value is a valid option or null
+                    onChange={(event, newValue) => {
+                      setSelectedOption(newValue ? newValue.id : null); // Store the ID
+                      formikProps.setFieldValue(
+                        "responsable",
+                        newValue ? newValue.id : "" // Set the ID
+                      );
+                    }}
+                    isOptionEqualToValue={
+                      (option, value) => option.id === value // Compare IDs
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Responsable"
+                        variant="outlined"
+                        name="responsable"
+                      />
+                    )}
+                  />
+                </FormControl>
+                <CustomStack
+                  direction={{ xs: "column", sm: "column", md: "row" }}
+                  spacing={{ xs: 2, sm: 2, md: 1 }}
+                >
+                  <OSTextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Montant en dévise"
+                    variant="outlined"
+                    name="amount"
+                    type="number"
+                  />
+                  <OSTextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Montant en MGA"
+                    variant="outlined"
+                    name="amountMGA"
+                    type="number"
+                  />
+                </CustomStack>
               </FormContainer>
-            </Form>
+            </Container>
           );
         }}
       </Formik>
+      <Dialog open={open} disablePortal={false} sx={styleDialog}>
+        <DialogTitle color="red">Attention!!</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            La date début doit être inférieure de la date fin
+          </DialogContentText>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)}>
+              <Check color="primary" />
+            </Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 };
@@ -183,3 +489,10 @@ const FormContainer = styled(Stack)(({ theme }) => ({
   border: "1px solid #E0E0E0",
   borderRadius: 20,
 }));
+const styleDialog = {
+  position: "fixed",
+  //left: 150,
+  top: 20,
+  width: "auto",
+  alignItem: "center",
+};

@@ -2,6 +2,9 @@
 export default interface Data {
   grants: string;
   bailleur: string;
+  anglais: string;
+  francais: string;
+  responsable: string;
   }
   
 

@@ -11,11 +11,8 @@ import { headCells } from "./constante";
 
 const EnhancedTableHead = (props: EnhancedTableProps) => {
   const {
-    onSelectAllClick,
     order,
     orderBy,
-    numSelected,
-    rowCount,
     onRequestSort,
   } = props;
   const createSortHandler =
