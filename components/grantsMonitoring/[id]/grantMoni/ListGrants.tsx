@@ -2,13 +2,17 @@ import {
   Button,
   Container,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   Stack,
   styled,
   Typography,
 } from "@mui/material";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -29,27 +33,17 @@ import useFetchProject from "../../../GrantsEnCours/hooks/getProject";
 import Moment from "react-moment";
 import TransportEquipmentTableHeader from "../../organisme/table/TransportEquipmentTableHeader";
 import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
-import { Add, ArrowBack, Download, Edit } from "@mui/icons-material";
+import { Add, ArrowBack, Check, Download, Edit } from "@mui/icons-material";
 import * as XLSX from "xlsx";
 import { format } from "date-fns";
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-  pdf,
-} from "@react-pdf/renderer";
-import { ProjectItem } from "../../../../redux/features/project/project.interface";
 import AddNewDeadline from "../add/AddNewDeadline";
-import { padding } from "polished";
 import useFetchDeadlinelist from "../../hooks/useFetchDeadline";
 import { DeadlineItem } from "../../../../redux/features/deadline/deadline.interface";
-import { ro } from "date-fns/locale";
 import { usePermitted } from "../../../../config/middleware";
 import { editDeadline } from "../../../../redux/features/deadline";
 import useFetchStagiaire from "../../../GrantsEnCours/hooks/getStagiaire";
 import useFetchPrestataire from "../../../GrantsEnCours/hooks/getPrestataire";
+import PrintPDF from "./print";
 
 const ListGrantsMonitoring = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -74,6 +68,14 @@ const ListGrantsMonitoring = () => {
     (state: any) => state.prestataire
   );
   const [open, setOpen] = React.useState(false);
+  const [alerts, setAlerts] = useState<string[]>([]);
+  const [openAlerte, setOpenAlerte] = useState(false);
+
+  const daysBetween = (date1: Date, date2: Date) => {
+    return Math.ceil(
+      (date1.getTime() - date2.getTime()) / (24 * 60 * 60 * 1000)
+    );
+  };
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -91,6 +93,57 @@ const ListGrantsMonitoring = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const today = new Date();
+
+    const newAlerts: string[] = [];
+
+    deadlinelist
+      .filter((g: DeadlineItem) => g.grantId == id)
+      .forEach((row: DeadlineItem) => {
+        const deadlineDate = new Date(row.deadline as Date);
+        const techDate = new Date(row.dateTech as Date);
+        const financeDate = new Date(row.dateFinance as Date);
+
+        if (daysBetween(today, deadlineDate) === 15) {
+          newAlerts.push(
+            `Il reste 15 jours pour la date de début du projet (la date fin ${format(
+              deadlineDate,
+              "dd/MM/yyyy"
+            )})`
+          );
+          return setOpenAlerte(true);
+        }
+
+        if (daysBetween(today, techDate) === 15) {
+          newAlerts.push(
+            `Il reste 15 jours pour la date de début du projet (la date fin ${format(
+              deadlineDate,
+              "dd/MM/yyyy"
+            )}`
+          );
+          return setOpenAlerte(true);
+        }
+
+        if (daysBetween(today, financeDate) === 15) {
+          newAlerts.push(
+            `Il reste 15 jours pour la date de début du projet (la date fin ${format(
+              deadlineDate,
+              "dd/MM/yyyy"
+            )}`
+          );
+          return setOpenAlerte(true);
+        }
+
+        if (daysBetween(today, deadlineDate) === 0) {
+          newAlerts.push(`La date de début du projet est déjà arrivée`);
+          return setOpenAlerte(true);
+        }
+      });
+
+    setAlerts(newAlerts);
+  }, [deadlinelist, id]);
 
   const handelClose = () => {
     setOpen(false);
@@ -240,326 +293,6 @@ const ListGrantsMonitoring = () => {
     XLSX.writeFile(workbook, "Deadline.xlsx");
   };
 
-  const pdfDocument = (
-    <Document>
-      <Page size="A4" style={styles.page} orientation="landscape">
-        <View style={styles.section}>
-          <Text style={styles.text}>
-            GRANT CODE :{" "}
-            {grantEncoursList
-              .filter((g: GrantEncoursItem) => g.id == id)
-              .map((m) => m.code!)}
-          </Text>
-          <Text style={styles.text}>
-            PROJECT TITLE :{" "}
-            {
-              projectList.find(
-                (p: any) =>
-                  p.id ==
-                  grantEncoursList
-                    .filter((f: any) => f.id == id)
-                    ?.map((m) => m.projectId)
-              )?.descriptionEn
-            }
-          </Text>
-          <Text style={styles.textDate}>
-            Date : {format(new Date(), "dd/MM/yyyy")}
-          </Text>
-        </View>
-        <View style={styles.sectionTableau}>
-          <View style={styles.table}>
-            {/* Table Header */}
-            <View style={styles.tableRow}>
-              <View style={styles.tableCol}>
-                <Text
-                  style={{
-                    ...styles.tableCell,
-                    textAlign: "left",
-                    marginLeft: 8,
-                    fontSize: 15,
-                  }}
-                >
-                  Deadline
-                </Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text
-                  style={{
-                    ...styles.tableCell,
-                    textAlign: "left",
-                    marginLeft: 8,
-                    fontSize: 15,
-                  }}
-                >
-                  Periode start
-                </Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text
-                  style={{
-                    ...styles.tableCell,
-                    textAlign: "left",
-                    marginLeft: 8,
-                    fontSize: 15,
-                  }}
-                >
-                  Periode end
-                </Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text
-                  style={{
-                    ...styles.tableCell,
-                    textAlign: "left",
-                    marginLeft: 8,
-                    fontSize: 15,
-                  }}
-                >
-                  Technical submitted
-                </Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text
-                  style={{
-                    ...styles.tableCell,
-                    textAlign: "left",
-                    marginLeft: 8,
-                    fontSize: 15,
-                  }}
-                >
-                  Financial submitted
-                </Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text
-                  style={{
-                    ...styles.tableCell,
-                    textAlign: "left",
-                    marginLeft: 8,
-                    fontSize: 15,
-                  }}
-                >
-                  Technical delay
-                </Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text
-                  style={{
-                    ...styles.tableCell,
-                    textAlign: "left",
-                    marginLeft: 8,
-                    fontSize: 15,
-                  }}
-                >
-                  Financial delay
-                </Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text
-                  style={{
-                    ...styles.tableCell,
-                    textAlign: "left",
-                    marginLeft: 8,
-                    fontSize: 15,
-                  }}
-                >
-                  Responsable
-                </Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text
-                  style={{
-                    ...styles.tableCell,
-                    textAlign: "left",
-                    marginLeft: 8,
-                    fontSize: 15,
-                  }}
-                >
-                  Notes
-                </Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text
-                  style={{
-                    ...styles.tableCell,
-                    textAlign: "left",
-                    marginLeft: 8,
-                    fontSize: 15,
-                  }}
-                >
-                  Days left
-                </Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text
-                  style={{
-                    ...styles.tableCell,
-                    textAlign: "left",
-                    marginLeft: 8,
-                    fontSize: 15,
-                  }}
-                >
-                  Year
-                </Text>
-              </View>
-            </View>
-            {/* Table Row */}
-            {Object.keys(groupedBudgets).map((grantCode) => {
-              const budgets = groupedBudgets[grantCode];
-              return budgets.map((row: DeadlineItem) => (
-                <View style={styles.tableRow}>
-                  <View style={styles.tableCol}>
-                    <Text
-                      style={{
-                        ...styles.tableCell,
-                        textAlign: "left",
-                        marginLeft: 8,
-                      }}
-                    >
-                      {format(new Date(row.deadline as Date), "dd/MM/yyyy")}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text
-                      style={{
-                        ...styles.tableCell,
-                        textAlign: "left",
-                        marginLeft: 8,
-                      }}
-                    >
-                      {format(new Date(row.startDate as Date), "dd/MM/yyyy")}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text
-                      style={{
-                        ...styles.tableCell,
-                        textAlign: "left",
-                        marginLeft: 8,
-                      }}
-                    >
-                      {format(new Date(row.endDate as Date), "dd/MM/yyyy")}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text
-                      style={{
-                        ...styles.tableCell,
-                        textAlign: "left",
-                        marginLeft: 8,
-                      }}
-                    >
-                      {format(new Date(row.dateTech as Date), "dd/MM/yyyy")}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text
-                      style={{
-                        ...styles.tableCell,
-                        textAlign: "left",
-                        marginLeft: 8,
-                      }}
-                    >
-                      {format(new Date(row.dateFinance as Date), "dd/MM/yyyy")}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text
-                      style={{
-                        ...styles.tableCell,
-                        textAlign: "left",
-                        marginLeft: 8,
-                      }}
-                    >
-                      {(new Date(row.dateTech as Date).getTime() -
-                        new Date(row.deadline as Date).getTime()) /
-                        (24 * 60 * 60 * 1000)}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text
-                      style={{
-                        ...styles.tableCell,
-                        textAlign: "left",
-                        marginLeft: 8,
-                      }}
-                    >
-                      {(new Date(row.dateFinance as Date).getTime() -
-                        new Date(row.deadline as Date).getTime()) /
-                        (24 * 60 * 60 * 1000)}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text
-                      style={{
-                        ...styles.tableCell,
-                        textAlign: "left",
-                        marginLeft: 8,
-                      }}
-                    >
-                      {(() => {
-                        const responsiblePerson = allOptions.find(
-                          (e: any) => e.id === row.responsable
-                        );
-                        return responsiblePerson
-                          ? `${responsiblePerson.name} ${responsiblePerson.surname}`
-                          : "";
-                      })()}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text
-                      style={{
-                        ...styles.tableCell,
-                        textAlign: "left",
-                        marginLeft: 8,
-                      }}
-                    >
-                      {/* {row.notes} */}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text
-                      style={{
-                        ...styles.tableCell,
-                        textAlign: "left",
-                        marginLeft: 8,
-                      }}
-                    >
-                      {Math.ceil(
-                        (new Date().getTime() -
-                          new Date(row.deadline as Date).getTime()) /
-                          (24 * 60 * 60 * 1000)
-                      )}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text
-                      style={{
-                        ...styles.tableCell,
-                        textAlign: "left",
-                        marginLeft: 8,
-                      }}
-                    >
-                      {new Date(row.deadline as Date).getFullYear()}
-                    </Text>
-                  </View>
-                </View>
-              ));
-            })}
-          </View>
-        </View>
-      </Page>
-    </Document>
-  );
-
-  const clickPDF = async () => {
-    const pdfBlob = await pdf(pdfDocument).toBlob();
-    const downloadLink = document.createElement("a");
-    downloadLink.href = URL.createObjectURL(pdfBlob);
-    downloadLink.download = "Deadline.pdf";
-    downloadLink.click();
-  };
   const handleClickEdit = async (id: any) => {
     await dispatch(editDeadline({ id }));
     setOpen(true);
@@ -590,14 +323,7 @@ const ListGrantsMonitoring = () => {
           </Stack>
         </Stack>
         <Stack direction={"row"} gap={2} padding={2}>
-          <Button
-            onClick={clickPDF}
-            color="primary"
-            variant="contained"
-            startIcon={<Download />}
-          >
-            PDF
-          </Button>
+          <PrintPDF />
           <Button
             onClick={exportToExcel}
             color="primary"
@@ -786,10 +512,21 @@ const ListGrantsMonitoring = () => {
               labelDisplayedRows={defaultLabelDisplayedRows}
             />
           </Paper>
-          {/* <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      /> */}
+          <Dialog open={openAlerte} onClose={handelClose}>
+            <DialogTitle color={"error"}>Alerte</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                {alerts.map((alert: string, index: number) => (
+                  <p key={index}>{alert}</p>
+                ))}
+              </DialogContentText>
+              <DialogActions>
+                <Button onClick={() => setOpenAlerte(false)}>
+                  <Check color="success" />
+                </Button>
+              </DialogActions>
+            </DialogContent>
+          </Dialog>
         </Box>
       </SectionTable>
     </Container>
@@ -801,51 +538,3 @@ export default ListGrantsMonitoring;
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
 const SectionTable = styled("div")(({ theme }) => ({}));
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: "column",
-    backgroundColor: "#E4E4E4",
-  },
-  section: {
-    paddingTop: 40,
-    paddingLeft: 60,
-  },
-  sectionTableau: {
-    paddingTop: 20,
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-  text: {
-    padding: 10,
-  },
-  textDate: {
-    paddingLeft: 10,
-    paddingTop: 40,
-  },
-  table: {
-    display: "flex",
-    width: "auto",
-    border: "1px solid black",
-    textAlign: "left",
-  },
-  tableRow: {
-    flexDirection: "row",
-    borderColor: "black",
-    borderBottomColor: "0.3px solid black",
-  },
-  tableCol: {
-    width: "100%",
-    border: "0.5px solid black",
-  },
-  tableCell: {
-    margin: "auto",
-    marginTop: 5,
-    fontSize: 10,
-  },
-});
-const styleDialog = {
-  top: 20,
-  width: "auto",
-  alignItem: "center",
-  padding: 4,
-};

@@ -152,8 +152,8 @@ const ListGrantsEnCours = () => {
         </Typography>
       </SectionNavigation>
       <SectionTable sx={{ backgroundColor: "#fff" }}>
-        <Box sx={{ width: "100%" }}>
-          <Paper sx={{ width: "100%", mb: 2, ml: 4 }}>
+        <Box sx={{ width: "99%" }}>
+          <Paper sx={{ width: "99%", mb: 2, ml: 4 }}>
             <EnhancedTableToolbar
               numSelected={selected.length}
               filtre={filtre}

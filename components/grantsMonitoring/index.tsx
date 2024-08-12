@@ -36,6 +36,8 @@ import * as XLSX from "xlsx";
 import { format } from "date-fns";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import GrantsListPDF from "./printPDF";
+import useFetchStagiaire from "../GrantsEnCours/hooks/getStagiaire";
+import useFetchPrestataire from "../GrantsEnCours/hooks/getPrestataire";
 
 const GrantsList = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -43,7 +45,6 @@ const GrantsList = () => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const router = useRouter();
-  const dispatch = useAppDispatch();
   const fetchGrants = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchProject = useFetchProject();
@@ -52,14 +53,36 @@ const GrantsList = () => {
   const { employees } = useAppSelector((state) => state.employe);
   const fetchCurrency = useFetchCurrency();
   const { currencyListe } = useAppSelector((state: any) => state.currency);
-
+  const fetchStagiaire = useFetchStagiaire();
+  const { interns } = useAppSelector((state: any) => state.stagiaire);
+  const fetchPrestataire = useFetchPrestataire();
+  const { prestataireListe } = useAppSelector(
+    (state: any) => state.prestataire
+  );
+  const data = async () => {
+    await fetchProject();
+    await fetchCurrency();
+    await fetchEmployes();
+    await fetchStagiaire();
+    await fetchPrestataire();
+    await fetchGrants();
+  };
   React.useEffect(() => {
-    fetchGrants();
-    fetchProject();
-    fetchEmployes();
-    fetchCurrency();
+    data();
   }, [router.query]);
+  const formatOptions = (options: any) => {
+    return options.map((option: any) => ({
+      id: option.id,
+      name: option.name,
+      surname: option.surname,
+    }));
+  };
 
+  const allOptions = [
+    ...formatOptions(employees),
+    ...formatOptions(interns),
+    ...formatOptions(prestataireListe),
+  ];
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected: readonly string[] = [];
@@ -105,13 +128,15 @@ const GrantsList = () => {
   const unique = new Set<string>();
   const [filterStatus, setFilterStatus] = React.useState<string[]>([]);
   React.useEffect(() => {
-    grantEncoursList.forEach((item) => {
-      if (item.status) {
-        unique.add(item.status);
-      }
-    });
+    grantEncoursList
+      .filter((f) => f.type == null)
+      .forEach((item) => {
+        if (item.status) {
+          unique.add(item.status);
+        }
+      });
     setFilterStatus(Array.from(unique));
-    let filteredData = grantEncoursList;
+    let filteredData = grantEncoursList.filter((f) => f.type == null);
 
     if (filter !== "") {
       filteredData = filteredData.filter(
@@ -158,9 +183,14 @@ const GrantsList = () => {
           : row.status == "IN_PROGRESS"
           ? "EN COURS"
           : "",
-      "MV Lead": `${
-        employees.find((f: any) => f.id === row.responsable)?.name || ""
-      } ${employees.find((f) => f.id === row.responsable)?.surname || ""}`,
+      "MV Lead": (() => {
+        const responsiblePerson = allOptions.find(
+          (e: any) => e.id == row.responsable
+        );
+        return responsiblePerson
+          ? `${responsiblePerson.name} ${responsiblePerson.surname}`
+          : "";
+      })(),
       "VALIDATION TECHNIQUE": `${
         employees.find((f: any) => f.id === row.techValidator)?.name || ""
       } ${employees.find((f) => f.id === row.techValidator)?.surname || ""}`,
@@ -460,15 +490,14 @@ const GrantsList = () => {
                             align="center"
                             sx={{ minWidth: 250, maxWidth: 250 }}
                           >
-                            {`${
-                              employees.find(
-                                (f: any) => f.id === row.responsable
-                              )?.name || ""
-                            } ${" "} ${
-                              employees.find(
-                                (f: any) => f.id === row.responsable
-                              )?.surname || ""
-                            }`}
+                            {(() => {
+                              const responsiblePerson = allOptions.find(
+                                (e: any) => e.id == row.responsable
+                              );
+                              return responsiblePerson
+                                ? `${responsiblePerson.name} ${responsiblePerson.surname}`
+                                : "";
+                            })()}
                           </TableCell>
                           <TableCell
                             align="left"
