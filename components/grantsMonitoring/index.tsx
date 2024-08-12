@@ -38,6 +38,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import GrantsListPDF from "./printPDF";
 import useFetchStagiaire from "../GrantsEnCours/hooks/getStagiaire";
 import useFetchPrestataire from "../GrantsEnCours/hooks/getPrestataire";
+import { TableLoading } from "../shared/loading";
 
 const GrantsList = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -46,7 +47,9 @@ const GrantsList = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const router = useRouter();
   const fetchGrants = useFetchGrants();
-  const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
+  const { grantEncoursList, loading } = useAppSelector(
+    (state) => state.grantEncours
+  );
   const fetchProject = useFetchProject();
   const { projectList } = useAppSelector((state) => state.project);
   const fetchEmployes = useFetchEmploys();
@@ -319,6 +322,9 @@ const GrantsList = () => {
       <SectionTable sx={{ backgroundColor: "#fff" }}>
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2, position: "flex", left: 0 }}>
+            {grantEncoursList.filter((f) => f.type == null).length == 0
+              ? loading && <TableLoading />
+              : null}
             <TableContainer
               sx={{
                 width: "100%",

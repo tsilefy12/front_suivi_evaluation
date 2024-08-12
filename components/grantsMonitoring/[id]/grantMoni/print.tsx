@@ -309,9 +309,11 @@ const PrintPDF = () => {
                         marginLeft: 8,
                       }}
                     >
-                      {(new Date(row.dateTech as Date).getTime() -
-                        new Date(row.deadline as Date).getTime()) /
-                        (24 * 60 * 60 * 1000)}
+                      {Math.ceil(
+                        (new Date(row.dateTech as Date).getTime() -
+                          new Date(row.deadline as Date).getTime()) /
+                          (24 * 60 * 60 * 1000)
+                      )}
                     </Text>
                   </View>
                   <View style={styles.tableCol}>
@@ -322,9 +324,11 @@ const PrintPDF = () => {
                         marginLeft: 8,
                       }}
                     >
-                      {(new Date(row.dateFinance as Date).getTime() -
-                        new Date(row.deadline as Date).getTime()) /
-                        (24 * 60 * 60 * 1000)}
+                      {Math.ceil(
+                        (new Date(row.dateFinance as Date).getTime() -
+                          new Date(row.deadline as Date).getTime()) /
+                          (24 * 60 * 60 * 1000)
+                      )}
                     </Text>
                   </View>
                   <View style={styles.tableCol}>

@@ -44,6 +44,7 @@ import { editDeadline } from "../../../../redux/features/deadline";
 import useFetchStagiaire from "../../../GrantsEnCours/hooks/getStagiaire";
 import useFetchPrestataire from "../../../GrantsEnCours/hooks/getPrestataire";
 import PrintPDF from "./print";
+import { TableLoading } from "../../../shared/loading";
 
 const ListGrantsMonitoring = () => {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -60,7 +61,7 @@ const ListGrantsMonitoring = () => {
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
   const fetchDeadline = useFetchDeadlinelist();
-  const { deadlinelist } = useAppSelector((state) => state.deadline);
+  const { deadlinelist, loading } = useAppSelector((state) => state.deadline);
   const fetchStagiaire = useFetchStagiaire();
   const { interns } = useAppSelector((state: any) => state.stagiaire);
   const fetchPrestataire = useFetchPrestataire();
@@ -341,6 +342,7 @@ const ListGrantsMonitoring = () => {
         <Box sx={{ width: "100%" }}>
           <Paper sx={{ width: "100%", mb: 2, ml: 2 }}>
             <TableContainer>
+              {deadlinelist.length == 0 ? loading && <TableLoading /> : null}
               <Table
                 sx={{ minWidth: 750 }}
                 aria-labelledby="tableTitle"
