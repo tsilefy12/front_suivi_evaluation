@@ -2,7 +2,6 @@ import {
   Button,
   Container,
   Dialog,
-  FormControl,
   IconButton,
   Stack,
   styled,
@@ -19,66 +18,56 @@ import Paper from "@mui/material/Paper";
 import Data, { Order } from "./table/type-variable";
 import { rows } from "./table/constante";
 import EnhancedTableHead from "./table/EnhancedTableHead";
+import { getComparator, stableSort } from "./table/function";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../../../../config/table.config";
+import AddCalculCarburant from "./add/addCalculCarburant";
+import useFetchCalculCarburantList from "./hooks/useFetchCarbuant";
 import {
   useAppDispatch,
   useAppSelector,
 } from "../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
-import Moment from "react-moment";
 import { useConfirm } from "material-ui-confirm";
-import useFetchEmploys from "../../../../GrantsEnCours/hooks/getResponsable";
 import {
-  deleteBesoinVehiculeRapport,
-  editBesoinVehiculeRapport,
-} from "../../../../../redux/features/besoinVehiculeRapport";
-import AddbesoinVehiculeRapport from "./add/addBesoinVehicule";
-import { BesoinvehiculeRapportItem } from "../../../../../redux/features/besoinVehiculeRapport/besoinVehiculeRapport.interface";
-import useFetchBesoinEnVehiculeRapportList from "./hooks/useFetchBesoinEnVehicule";
-import useFetchVoiture from "../../../../previsionMissions/organism/Finances/tableBesoinVéhicules/hooks/useFetchVoiture";
-import useFetchMissionaryRapportList from "../../Techniques/tableMissionnaires/hooks/useFetchMissionaryList";
-import { MissionairesItem } from "../../../../../redux/features/missionaires/missionaires.interface";
+  deleteCalculCarburant,
+  editCalculCarburant,
+} from "../../../../../redux/features/calculCarburant";
+import { CalculCarburantItem } from "../../../../../redux/features/calculCarburant/calculCarburant.interface";
+import useFetchVehicleList from "../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
+import useFetchVoiture from "../tableBesoinVéhicules/hooks/useFetchVoiture";
+import formatMontant from "../../../../../hooks/format";
 
-const ListbesoinVehiculeRapportRapport = () => {
+const ListCalculCarburant = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("dateDébut");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("trajet");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [filtre, setFiltre] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const { besoinVehiculeRapportList } = useAppSelector(
-    (state) => state.besoinVehiculeRapport
+  const fetchCalculCarburant = useFetchCalculCarburantList();
+  const { calculCarburantList } = useAppSelector(
+    (state) => state.calculCarburant
   );
-  const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) => state.employe);
   const router = useRouter();
   const { id } = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
-  const fetchBesoinEnVehiculeRapportList =
-    useFetchBesoinEnVehiculeRapportList();
+  const fetchVehicule = useFetchVehicleList();
+  const { vehicleList } = useAppSelector((state: any) => state.vehicle);
   const fetchVoiture = useFetchVoiture();
   const { transportationEquipments } = useAppSelector(
     (state: any) => state.transportation
   );
-  const fetchMissionaryRapportList = useFetchMissionaryRapportList();
-  const { missionaireslist } = useAppSelector(
-    (state: any) => state.missionaires
-  );
-  const data = async () => {
-    await fetchVoiture();
-    await fetchMissionaryRapportList();
-    await fetchBesoinEnVehiculeRapportList();
-  };
+
   React.useEffect(() => {
-    data();
+    fetchCalculCarburant();
+    fetchVoiture();
   }, [router.query]);
 
   const handleClickOpen = () => {
@@ -99,7 +88,7 @@ const ListbesoinVehiculeRapportRapport = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.dateDébut);
+      const newSelecteds = rows.map((n) => n.trajet);
       setSelected(newSelecteds);
       return;
     }
@@ -143,12 +132,13 @@ const ListbesoinVehiculeRapportRapport = () => {
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
+  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const handleClickDelete = async (id: any) => {
     confirm({
-      title: "Supprimer besoin véhicule",
+      title: "Supprimer calcul carburant",
       description: "Voulez-vous vraiment supprimer ?",
       cancellationText: "Annuler",
       confirmationText: "Supprimer",
@@ -160,13 +150,13 @@ const ListbesoinVehiculeRapportRapport = () => {
       },
     })
       .then(async () => {
-        await dispatch(deleteBesoinVehiculeRapport({ id }));
-        fetchBesoinEnVehiculeRapportList();
+        await dispatch(deleteCalculCarburant({ id }));
+        fetchCalculCarburant();
       })
       .catch(() => {});
   };
   const handleClickEdit = async (id: any) => {
-    await dispatch(editBesoinVehiculeRapport({ id }));
+    await dispatch(editCalculCarburant({ id }));
     handleClickOpen();
   };
 
@@ -177,7 +167,7 @@ const ListbesoinVehiculeRapportRapport = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddbesoinVehiculeRapport handleClose={handleClose} />
+          <AddCalculCarburant handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -198,31 +188,39 @@ const ListbesoinVehiculeRapportRapport = () => {
                   rowCount={rows.length}
                 />
                 <TableBody>
-                  {besoinVehiculeRapportList
+                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+              rows.slice().sort(getComparator(order, orderBy)) */}
+                  {calculCarburantList
                     .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: BesoinvehiculeRapportItem, index: any) => {
+                    .map((row: CalculCarburantItem, index) => {
+                      // const isItemSelected = isSelected(row.trajet);
                       const labelId = `enhanced-table-checkbox-${index}`;
+
                       return (
                         <TableRow
                           hover
+                          //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
+                          // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.id}
+                          key={row.id!}
+                          // selected={isItemSelected}
                         >
-                          <TableCell padding="checkbox"></TableCell>
+                          <TableCell
+                            padding="checkbox"
+                            // onClick={(event) => handleClick(event, row.trajet)}
+                          ></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             padding="none"
+                            sx={{ minWidth: 100, maxWidth: 100 }}
                           >
-                            <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
+                            {row.trajet}
                           </TableCell>
-                          <TableCell align="left">
-                            <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
-                          </TableCell>
-                          <TableCell align="left">
+                          <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
                             {`${
                               transportationEquipments.find(
                                 (e: any) => e.id === row.vehicule
@@ -231,64 +229,20 @@ const ListbesoinVehiculeRapportRapport = () => {
                               transportationEquipments.find(
                                 (e: any) => e.id === row.vehicule
                               )?.registration
-                            }`}
+                            } `}
                           </TableCell>
-                          <TableCell align="left">{row.trajet}</TableCell>
-                          <TableCell align="left">
-                            <FormControl
-                              sx={{
-                                minWidth: 150,
-                                maxWidth: 150,
-                                height:
-                                  row.responsable!.length <= 2 ? "auto" : 70,
-                                overflow: "auto",
-                              }}
-                            >
-                              {row.responsable!.map((lp: any) => {
-                                return (
-                                  <Stack
-                                    direction="column"
-                                    spacing={2}
-                                    key={lp}
-                                  >
-                                    {
-                                      missionaireslist
-                                        .filter(
-                                          (f: MissionairesItem) =>
-                                            f.missionId == id
-                                        )
-                                        .find(
-                                          (e: MissionairesItem) => e.id === lp
-                                        )?.lastNameMissionary
-                                    }{" "}
-                                    {
-                                      missionaireslist
-                                        .filter(
-                                          (f: MissionairesItem) =>
-                                            f.missionId == id
-                                        )
-                                        .find(
-                                          (e: MissionairesItem) => e.id === lp
-                                        )?.firstNameMissionary
-                                    }
-                                  </Stack>
-                                );
-                              })}
-                            </FormControl>
+                          <TableCell>{row.typeCarburant}</TableCell>
+                          <TableCell sx={{ minWidth: 20, maxWidth: 20 }}>
+                            {row.distance}
                           </TableCell>
-                          <TableCell
-                            align="left"
-                            sx={{ minWidth: 50, maxWidth: 50 }}
-                          >
-                            {row.nombreJour}
-                          </TableCell>
-                          <TableCell
-                            align="left"
-                            sx={{ minWidth: 50, maxWidth: 50 }}
-                          >
+                          <TableCell>{row.nombreTrajet}</TableCell>
+                          <TableCell>{row.distanceTotal}</TableCell>
+                          <TableCell>{row.consommationKilo}</TableCell>
+                          <TableCell>{row.totalCarburant} L</TableCell>
+                          <TableCell>
                             <BtnActionContainer
                               direction="row"
-                              justifyContent="left"
+                              justifyContent="right"
                             >
                               <IconButton
                                 color="primary"
@@ -335,13 +289,17 @@ const ListbesoinVehiculeRapportRapport = () => {
               labelDisplayedRows={defaultLabelDisplayedRows}
             />
           </Paper>
+          {/* <FormControlLabel
+        control={<Switch checked={dense} onChange={handleChangeDense} />}
+        label="Dense padding"
+      /> */}
         </Box>
       </SectionTable>
     </Container>
   );
 };
 
-export default ListbesoinVehiculeRapportRapport;
+export default ListCalculCarburant;
 
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));

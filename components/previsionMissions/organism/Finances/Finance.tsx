@@ -10,8 +10,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ListPrevision from "./tablePrevision/ListPrevision";
 import ListResumeDepense from "./tableResumeDepense/ListResumeDepense";
 import ListCalculDesPiles from "./tableCalculDesPile/ListCalculDesPile";
-import ListBesoinVehicule from "./tableBesoinVéhicules/ListBesoinVehicule";
-import ListCalculCarburant from "./tableCalculCarburant/ListCalculCarburant";
+import ListBesoinVehicule from "../Logistique/tableBesoinVéhicules/ListBesoinVehicule";
+import ListCalculCarburant from "../Logistique/tableCalculCarburant/ListCalculCarburant";
 
 const Finances = () => {
   return (
@@ -52,7 +52,7 @@ const Finances = () => {
           <ListCalculDesPiles />
         </AccordionDetails>
       </Accordion> */}
-      <Accordion>
+      {/* <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -75,7 +75,7 @@ const Finances = () => {
         <AccordionDetails>
           <ListCalculCarburant />
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
     </>
   );
 };

@@ -44,6 +44,11 @@ export interface MissionItem {
     missionId: string;
     validation: boolean;
   }[];
+  validationLogistique?: {
+    responsableId: string;
+    missionId: string;
+    validation: boolean;
+  }[];
   [x: string]: any;
   uncompleteTbbs?: UnCompleteTbbItem[];
   lieux?: LieuxRapportItem[];

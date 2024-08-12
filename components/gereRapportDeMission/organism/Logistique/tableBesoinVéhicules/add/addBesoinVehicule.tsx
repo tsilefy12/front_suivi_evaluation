@@ -41,7 +41,7 @@ import {
 } from "../../../../../../redux/features/besoinVehiculeRapport";
 import useFetchBesoinEnVehiculeRapportList from "../hooks/useFetchBesoinEnVehicule";
 import useFetchVehicleList from "../../../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
-import useFetchVoiture from "../../../../../previsionMissions/organism/Finances/tableBesoinVéhicules/hooks/useFetchVoiture";
+import useFetchVoiture from "../../../../../previsionMissions/organism/Logistique/tableBesoinVéhicules/hooks/useFetchVoiture";
 import useFetchMissionaryRapportList from "../../../Techniques/tableMissionnaires/hooks/useFetchMissionaryList";
 import { MissionairesItem } from "../../../../../../redux/features/missionaires/missionaires.interface";
 

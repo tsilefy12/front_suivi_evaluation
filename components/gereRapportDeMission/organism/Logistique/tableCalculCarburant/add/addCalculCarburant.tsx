@@ -29,8 +29,8 @@ import OSTextField from "../../../../../shared/input/OSTextField";
 import OSSelectField from "../../../../../shared/select/OSSelectField";
 import { cancelEdit } from "../../../../../../redux/features/calculCarburantRapport/calculCarburantRapportSlice";
 import { useRouter } from "next/router";
-import useFetchBesoinEnVehiculeList from "../../../../../previsionMissions/organism/Finances/tableBesoinVéhicules/hooks/useFetchBesoinEnVehicule";
-import useFetchVoiture from "../../../../../previsionMissions/organism/Finances/tableBesoinVéhicules/hooks/useFetchVoiture";
+import useFetchBesoinEnVehiculeList from "../../../../../previsionMissions/organism/Logistique/tableBesoinVéhicules/hooks/useFetchBesoinEnVehicule";
+import useFetchVoiture from "../../../../../previsionMissions/organism/Logistique/tableBesoinVéhicules/hooks/useFetchVoiture";
 
 const AddcalculCarburantRapport = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();

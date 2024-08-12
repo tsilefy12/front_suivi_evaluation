@@ -6,7 +6,7 @@ import {
   Stack,
   styled,
 } from "@mui/material";
-import React from "react";
+import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -18,15 +18,13 @@ import Paper from "@mui/material/Paper";
 import Data, { Order } from "./table/type-variable";
 import { rows } from "./table/constante";
 import EnhancedTableHead from "./table/EnhancedTableHead";
-import { getComparator, stableSort } from "./table/function";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../../../../config/table.config";
-import AddCalculCarburant from "./add/addCalculCarburant";
-import useFetchCalculCarburantList from "./hooks/useFetchCarbuant";
+import useFetchcalculCarburantRapportList from "./hooks/useFetchCarbuant";
 import {
   useAppDispatch,
   useAppSelector,
@@ -34,15 +32,15 @@ import {
 import { useRouter } from "next/router";
 import { useConfirm } from "material-ui-confirm";
 import {
-  deleteCalculCarburant,
-  editCalculCarburant,
-} from "../../../../../redux/features/calculCarburant";
-import { CalculCarburantItem } from "../../../../../redux/features/calculCarburant/calculCarburant.interface";
-import useFetchVehicleList from "../../Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
-import useFetchVoiture from "../tableBesoinVéhicules/hooks/useFetchVoiture";
-import formatMontant from "../../../../../hooks/format";
+  deleteCalculCarburantRapport,
+  editCalculCarburantRapport,
+} from "../../../../../redux/features/calculCarburantRapport";
+import AddcalculCarburantRapport from "./add/addCalculCarburant";
+import { CalculCarburantRapportItem } from "../../../../../redux/features/calculCarburantRapport/calculCarburantRapport.interface";
+import useFetchVehicleList from "../../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
+import useFetchVoiture from "../../../../previsionMissions/organism/Logistique/tableBesoinVéhicules/hooks/useFetchVoiture";
 
-const ListCalculCarburant = () => {
+const ListcalculCarburantRapport = () => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("trajet");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -50,15 +48,15 @@ const ListCalculCarburant = () => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
-  const fetchCalculCarburant = useFetchCalculCarburantList();
-  const { calculCarburantList } = useAppSelector(
-    (state) => state.calculCarburant
+  const fetchcalculCarburantRapport = useFetchcalculCarburantRapportList();
+  const { calculCarburantRapportList } = useAppSelector(
+    (state) => state.calculCarburantRapport
   );
   const router = useRouter();
   const { id } = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
-  const fetchVehicule = useFetchVehicleList();
+  const fetchVehicleList = useFetchVehicleList();
   const { vehicleList } = useAppSelector((state: any) => state.vehicle);
   const fetchVoiture = useFetchVoiture();
   const { transportationEquipments } = useAppSelector(
@@ -66,9 +64,10 @@ const ListCalculCarburant = () => {
   );
 
   React.useEffect(() => {
-    fetchCalculCarburant();
+    fetchcalculCarburantRapport();
+    fetchVehicleList();
     fetchVoiture();
-  }, [router.query]);
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -150,16 +149,22 @@ const ListCalculCarburant = () => {
       },
     })
       .then(async () => {
-        await dispatch(deleteCalculCarburant({ id }));
-        fetchCalculCarburant();
+        await dispatch(deleteCalculCarburantRapport({ id }));
+        fetchcalculCarburantRapport();
       })
       .catch(() => {});
   };
   const handleClickEdit = async (id: any) => {
-    await dispatch(editCalculCarburant({ id }));
+    await dispatch(editCalculCarburantRapport({ id }));
     handleClickOpen();
   };
- 
+  let total: any = useMemo(() => {
+    let calcul = 0;
+    calculCarburantRapportList.map((c: any) => {
+      calcul += c.totalCarburant;
+    });
+    return calcul;
+  }, [calculCarburantRapportList]);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -167,7 +172,7 @@ const ListCalculCarburant = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddCalculCarburant handleClose={handleClose} />
+          <AddcalculCarburantRapport handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -188,57 +193,54 @@ const ListCalculCarburant = () => {
                   rowCount={rows.length}
                 />
                 <TableBody>
-                  {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
-                  {calculCarburantList
+                  {calculCarburantRapportList
                     .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: CalculCarburantItem, index) => {
-                      // const isItemSelected = isSelected(row.trajet);
+                    .map((row: CalculCarburantRapportItem, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
                         <TableRow
                           hover
-                          //   onClick={(event) => handleClick(event, row.reference)}
                           role="checkbox"
-                          // aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={row.id!}
-                          // selected={isItemSelected}
+                          key={row.trajet}
                         >
-                          <TableCell
-                            padding="checkbox"
-                            // onClick={(event) => handleClick(event, row.trajet)}
-                          ></TableCell>
+                          <TableCell padding="checkbox"></TableCell>
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             padding="none"
-                            sx={{ minWidth: 100, maxWidth: 100 }}
+                            sx={{ minWidth: 200, maxwidth: 200 }}
                           >
                             {row.trajet}
                           </TableCell>
-                          <TableCell sx={{ minWidth: 150, maxWidth: 150 }}>
-                            {`${
-                              transportationEquipments.find(
-                                (e: any) => e.id === row.vehicule
-                              )?.brand
-                            } ${"-"}${
+                          <TableCell sx={{ minWidth: 100, maxwidth: 100 }}>
+                            {
                               transportationEquipments.find(
                                 (e: any) => e.id === row.vehicule
                               )?.registration
-                            } `}
+                            }
                           </TableCell>
-                          <TableCell>{row.typeCarburant}</TableCell>
-                          <TableCell sx={{ minWidth: 20, maxWidth: 20 }}>
+                          <TableCell sx={{ minWidth: 30, maxwidth: 30 }}>
+                            {row.typeCarburant}
+                          </TableCell>
+                          <TableCell sx={{ minWidth: 25, maxwidth: 25 }}>
                             {row.distance}
                           </TableCell>
-                          <TableCell>{row.nombreTrajet}</TableCell>
-                          <TableCell>{row.distanceTotal}</TableCell>
-                          <TableCell>{row.consommationKilo}</TableCell>
-                          <TableCell>{row.totalCarburant} L</TableCell>
+                          <TableCell sx={{ minWidth: 10, maxwidth: 10 }}>
+                            {row.nombreTrajet}
+                          </TableCell>
+                          <TableCell sx={{ minWidth: 30, maxwidth: 30 }}>
+                            {row.distanceTotal}
+                          </TableCell>
+                          <TableCell sx={{ minWidth: 10, maxwidth: 10 }}>
+                            {row.consommationKilo}
+                          </TableCell>
+                          <TableCell sx={{ minWidth: 20, maxwidth: 20 }}>
+                            {row.totalCarburant} L
+                          </TableCell>
                           <TableCell>
                             <BtnActionContainer
                               direction="row"
@@ -276,6 +278,9 @@ const ListCalculCarburant = () => {
                   )}
                 </TableBody>
               </Table>
+              {/* <FormControl fullWidth  sx={{textAlign: "right",padding: 2}}>
+                  Total carburant : {total}
+              </FormControl> */}
             </TableContainer>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
@@ -299,7 +304,7 @@ const ListCalculCarburant = () => {
   );
 };
 
-export default ListCalculCarburant;
+export default ListcalculCarburantRapport;
 
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));

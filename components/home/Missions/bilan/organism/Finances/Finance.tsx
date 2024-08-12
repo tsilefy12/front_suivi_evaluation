@@ -12,8 +12,8 @@ import { useRouter } from "next/router";
 import formatMontant from "../../../../../../hooks/format";
 import useFetchResumeDepenseList from "../../../../../previsionMissions/organism/Finances/tableResumeDepense/hooks/useFetchResumeDepense";
 import useFetchResumeDepensePrevue from "../../../../../gereRapportDeMission/organism/Finances/tableResumeDepense/hooks/useFetchResumeDepensePrevue";
-import useFetchCalculCarburantList from "../../../../../previsionMissions/organism/Finances/tableCalculCarburant/hooks/useFetchCarbuant";
-import useFetchCalculCarburantRapportList from "../../../../../gereRapportDeMission/organism/Finances/tableCalculCarburant/hooks/useFetchCarbuant";
+import useFetchCalculCarburantList from "../../../../../previsionMissions/organism/Logistique/tableCalculCarburant/hooks/useFetchCarbuant";
+import useFetchCalculCarburantRapportList from "../../../../../gereRapportDeMission/organism/Logistique/tableCalculCarburant/hooks/useFetchCarbuant";
 
 const Finances = () => {
   const router = useRouter();

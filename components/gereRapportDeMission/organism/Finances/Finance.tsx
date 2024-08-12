@@ -1,7 +1,4 @@
 import React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import { Box } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -10,8 +7,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ListRapportDepenses from "./tableRapportDesDepenses/ListRapportDepense";
 import ListResumeDepense from "./tableResumeDepense/ListResumeDepense";
 import ListCalculDesPilesRapport from "./tableCalculDesPile/ListCalculDesPile";
-import ListCalculCarburantRapport from "./tableCalculCarburant/ListCalculCarburant";
-import ListBesoinVehiculeRapport from "./tableBesoinVéhicules/ListBesoinVehicule";
+import ListCalculCarburantRapport from "../Logistique/tableCalculCarburant/ListCalculCarburant";
+import ListBesoinVehiculeRapport from "../Logistique/tableBesoinVéhicules/ListBesoinVehicule";
 
 const Finances = () => {
   return (
@@ -52,13 +49,13 @@ const Finances = () => {
           <ListCalculDesPilesRapport />
         </AccordionDetails>
       </Accordion> */}
-      <Accordion>
+      {/* <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Besoin en véhicules</Typography>
+          {/* <Typography>Besoin en véhicules</Typography> 
         </AccordionSummary>
         <AccordionDetails>
           <ListBesoinVehiculeRapport />
@@ -75,7 +72,7 @@ const Finances = () => {
         <AccordionDetails>
           <ListCalculCarburantRapport />
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
     </>
   );
 };

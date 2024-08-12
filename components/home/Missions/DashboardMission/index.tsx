@@ -35,11 +35,12 @@ import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
 import useFetchPrevisionDepenseList from "../../../previsionMissions/organism/Finances/tablePrevision/hooks/useFetchPrevisionDepense";
 import useFetchMissionListe from "../hooks/useFetchMissionListe";
 import * as XLSX from "xlsx";
+import { TableLoading } from "../../../shared/loading";
 
 const DashboardMission = () => {
   const router = useRouter();
   // const id: any = router.query;
-  const { missionListe } = useAppSelector((state) => state.mission);
+  const { missionListe, loading } = useAppSelector((state) => state.mission);
   const fetchMissionListe = useFetchMissionListe();
   const fetchGrants = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
@@ -304,6 +305,7 @@ const DashboardMission = () => {
           </Stack>
         </Stack>
         <div style={{ overflow: "auto" }}>
+          {missionListe.length === 0 && loading && <TableLoading />}
           <Table>
             <TableHead>
               <TableRow>

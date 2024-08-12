@@ -35,6 +35,8 @@ import useFetchEmploys from "../GrantsEnCours/hooks/getResponsable";
 import { MissionItem } from "../../redux/features/mission/mission.interface";
 import Moment from "react-moment";
 import PrintPdf from "./printPdf";
+import Logistiques from "./organism/Logistique/Logistique";
+import { TableLoading } from "../shared/loading";
 
 const GereRapportDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -53,7 +55,7 @@ const GereRapportDeMission = () => {
   };
 
   const fetchMission = useFetchMissionListe();
-  const { missionListe } = useAppSelector((state) => state.mission);
+  const { missionListe, loading } = useAppSelector((state) => state.mission);
   const dispatch = useAppDispatch();
   const fetchGrants = useFetchGrants();
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
@@ -64,6 +66,8 @@ const GereRapportDeMission = () => {
   const [getVerificateurTechnic, setGetVerificateurTechnic] =
     React.useState<boolean>(false);
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
+  const [getVerificateurLogistic, setGetVerificateurLogistic] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
     fetchEmployes();
@@ -77,12 +81,15 @@ const GereRapportDeMission = () => {
         validationRapport,
         verifyTechnic,
         validateFinancial,
+        validateLogistic,
+        id,
       } = mission;
 
       const isFinanceVerified = validationRapport!.some(
         (v: any) =>
           v.responsableId == verifyFinancial &&
           v.missionId == id &&
+          v.id == mission.id &&
           v.validation == true
       );
 
@@ -91,6 +98,7 @@ const GereRapportDeMission = () => {
         (v: any) =>
           v.responsableId == verifyTechnic &&
           v.missionId == id &&
+          v.id == mission.id &&
           v.validation == true
       );
 
@@ -100,10 +108,20 @@ const GereRapportDeMission = () => {
         (v: any) =>
           v.responsableId === validateFinancial &&
           v.missionId == id &&
+          v.id == mission.id &&
           v.validation == true
       );
 
       setGetValidatePay(isFinanceValidated);
+
+      const isLogisticValidated = validationRapport!.some(
+        (v: any) =>
+          v.responsableId === validateLogistic &&
+          v.missionId == id &&
+          v.id == mission.id &&
+          v.validation == true
+      );
+      setGetVerificateurLogistic(isLogisticValidated);
     }
   }, []);
   const handleValidationFinance = async (
@@ -176,7 +194,30 @@ const GereRapportDeMission = () => {
       console.log(error);
     }
   };
-  // console.log(valueGetPaye);
+
+  //validateur logistique
+  const handleValidateLogistique = async (
+    responsableId: string,
+    missionId: string,
+    validation: boolean
+  ) => {
+    try {
+      await axios.post(`/suivi-evaluation/validation-rapport`, {
+        responsableId,
+        missionId,
+        validation,
+      });
+      setGetVerificateurLogistic(validation);
+      dispatch(
+        enqueueSnackbar({
+          message: " Logistique validé avec succès",
+          options: { variant: "success" },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <NavigationContainer>
@@ -220,6 +261,7 @@ const GereRapportDeMission = () => {
         <Divider />
       </NavigationContainer>
       <Detail />
+      {missionListe.length == 0 && loading && <TableLoading />}
       <BodySection sx={{ height: "calc(100vh - 360px)", overflow: "auto" }}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -239,12 +281,16 @@ const GereRapportDeMission = () => {
             >
               <Tab label="TECHNIQUE" {...a11yProps(0)} />
               <Tab label="FINANCE" {...a11yProps(1)} />
+              <Tab label="LOGISTIQUE" {...a11yProps(2)} />
             </Tabs>
             <TabPanel value={value} index={0}>
               <Techniques />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Finances />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <Logistiques />
             </TabPanel>
           </Stack>
           <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>
@@ -393,6 +439,72 @@ const GereRapportDeMission = () => {
                             sx={{
                               display:
                                 getVerificateurTechnic == true
+                                  ? "block"
+                                  : "none",
+                            }}
+                          >
+                            <Check color="primary" />
+                          </FormLabel>
+                        </Stack>
+                      </Stack>
+                    ))}
+                </Typography>
+                <Divider />
+                <Typography>
+                  <span>Vérifié logistiquement par : </span>
+                  {missionListe
+                    .filter((f: MissionItem) => f.id === id)
+                    .map((row: MissionItem) => (
+                      <Stack
+                        direction={"column"}
+                        gap={2}
+                        justifyContent={"space-between"}
+                        alignItems={"start"}
+                        key={row.id!}
+                      >
+                        <FormLabel>
+                          {
+                            employees.find(
+                              (e: any) => e.id === row.validateLogistic
+                            )?.name as string
+                          }{" "}
+                          {
+                            employees.find(
+                              (e: any) => e.id === row.validateLogistic
+                            )?.surname as string
+                          }
+                        </FormLabel>
+                        <Stack direction={"row"} gap={4}>
+                          <Button
+                            variant="contained"
+                            size="small"
+                            startIcon={<DoneIcon />}
+                            onClick={() =>
+                              handleValidateLogistique(
+                                row.validateLogistic!,
+                                id,
+                                getVerificateurLogistic == true ? false : true
+                              )
+                            }
+                            // disabled={getVerificateurLogistic == false}
+                          >
+                            Valider Logistique
+                          </Button>
+                          <FormLabel
+                            sx={{
+                              display:
+                                getVerificateurLogistic == true
+                                  ? "none"
+                                  : "block",
+                            }}
+                            // disabled={getVerificateurLogistic == false}
+                          >
+                            <Close color="error" />
+                          </FormLabel>
+                          <FormLabel
+                            sx={{
+                              display:
+                                getVerificateurLogistic == true
                                   ? "block"
                                   : "none",
                             }}

@@ -31,6 +31,7 @@ import Finances from "./organism/Finances/Finance";
 import Techniques from "./organism/Techniques/techniques";
 import PrintPdfPrevision from "./printpDFPrevision";
 import { CardFooter } from "../gereRapportDeMission/GereRapportDeMission";
+import Logistiques from "./organism/Logistique/Logistique";
 
 const PrevisionDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -51,6 +52,8 @@ const PrevisionDeMission = () => {
   const [getVerificateurTechnic, setGetVerificateurTechnic] =
     React.useState<boolean>(false);
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
+  const [getValidateLogistique, setGetValidateLogistique] =
+    React.useState<boolean>(false);
 
   useEffect(() => {
     fetchGrants();
@@ -64,6 +67,7 @@ const PrevisionDeMission = () => {
         verifyTechnic,
         validateFinancial,
         validationPrevision,
+        validateLogistique,
       } = mission;
 
       const isFinanceVerified = validationPrevision!.some(
@@ -96,6 +100,15 @@ const PrevisionDeMission = () => {
       );
 
       setGetValidatePay(isFinanceValidated);
+
+      //logistique
+      const isLogistiqueValidated = validationPrevision!.some(
+        (v: any) =>
+          v.responsableId == validateLogistique &&
+          v.missionId == id &&
+          v.validation == true
+      );
+      setGetValidateLogistique(isLogistiqueValidated);
     }
   }, []);
 
@@ -171,6 +184,30 @@ const PrevisionDeMission = () => {
       console.log(error);
     }
   };
+
+  //validation logistique
+  const handleValidateLogistique = async (
+    responsableId: string,
+    missionId: string,
+    validation: boolean
+  ) => {
+    try {
+      await axios.post("/suivi-evaluation/validation-prevision", {
+        responsableId,
+        missionId,
+        validation,
+      });
+      setGetValidateLogistique(validation);
+      dispatch(
+        enqueueSnackbar({
+          message: " Prévision validé avec succès",
+          options: { variant: "success" },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <NavigationContainer>
@@ -232,12 +269,16 @@ const PrevisionDeMission = () => {
             >
               <Tab label="TECHNIQUE" {...a11yProps(0)} />
               <Tab label="FINANCE" {...a11yProps(1)} />
+              <Tab label="LOGISTIQUE" {...a11yProps(2)} />
             </Tabs>
             <TabPanel value={value} index={0}>
               <Techniques key={value} />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Finances key={value} />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <Logistiques key={value} />
             </TabPanel>
           </Stack>
           <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>
@@ -393,6 +434,71 @@ const PrevisionDeMission = () => {
                             sx={{
                               display:
                                 getVerificateurTechnic == true
+                                  ? "block"
+                                  : "none",
+                            }}
+                          >
+                            <Check color="primary" />
+                          </FormLabel>
+                        </Stack>
+                      </Stack>
+                    ))}
+                </Typography>
+                <Divider />
+                <Typography>
+                  <span>Vérifié logistiquement par : </span>
+                  {missionListe
+                    .filter((f: MissionItem) => f.id == id)
+                    .map((row: MissionItem) => (
+                      <Stack
+                        direction={"column"}
+                        gap={2}
+                        justifyContent={"space-between"}
+                        alignItems={"start"}
+                        key={row.id!}
+                      >
+                        <FormLabel>
+                          {
+                            employees.find(
+                              (e: any) => e.id === row.validateLogistique
+                            )?.name as string
+                          }{" "}
+                          {
+                            employees.find(
+                              (e: any) => e.id === row.validateLogistique
+                            )?.surname as string
+                          }
+                        </FormLabel>
+                        <Stack direction={"row"} gap={4}>
+                          <Button
+                            variant="contained"
+                            size="small"
+                            startIcon={<DoneIcon />}
+                            onClick={() =>
+                              handleValidateLogistique(
+                                row.validateLogistic!,
+                                id,
+                                getValidateLogistique == true ? false : true
+                              )
+                            }
+                            // disabled={getVerificateurLogistic == false}
+                          >
+                            Valider Logistique
+                          </Button>
+                          <FormLabel
+                            sx={{
+                              display:
+                                getValidateLogistique == true
+                                  ? "none"
+                                  : "block",
+                            }}
+                          >
+                            <Close color="error" />
+                          </FormLabel>
+                          <FormLabel
+                            sx={{
+                              display:
+                                getValidateLogistique == true
                                   ? "block"
                                   : "none",
                             }}

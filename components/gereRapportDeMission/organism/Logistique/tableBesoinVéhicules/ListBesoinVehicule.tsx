@@ -2,11 +2,12 @@ import {
   Button,
   Container,
   Dialog,
+  FormControl,
   IconButton,
   Stack,
   styled,
 } from "@mui/material";
-import React, { useMemo } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -24,50 +25,61 @@ import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../../../../config/table.config";
-import useFetchcalculCarburantRapportList from "./hooks/useFetchCarbuant";
 import {
   useAppDispatch,
   useAppSelector,
 } from "../../../../../hooks/reduxHooks";
 import { useRouter } from "next/router";
+import Moment from "react-moment";
 import { useConfirm } from "material-ui-confirm";
+import useFetchEmploys from "../../../../GrantsEnCours/hooks/getResponsable";
 import {
-  deleteCalculCarburantRapport,
-  editCalculCarburantRapport,
-} from "../../../../../redux/features/calculCarburantRapport";
-import AddcalculCarburantRapport from "./add/addCalculCarburant";
-import { CalculCarburantRapportItem } from "../../../../../redux/features/calculCarburantRapport/calculCarburantRapport.interface";
-import useFetchVehicleList from "../../../../previsionMissions/organism/Techniques/tableAutreInfoAuto/hooks/useFetchVehicleList";
-import useFetchVoiture from "../../../../previsionMissions/organism/Finances/tableBesoinVéhicules/hooks/useFetchVoiture";
+  deleteBesoinVehiculeRapport,
+  editBesoinVehiculeRapport,
+} from "../../../../../redux/features/besoinVehiculeRapport";
+import AddbesoinVehiculeRapport from "./add/addBesoinVehicule";
+import { BesoinvehiculeRapportItem } from "../../../../../redux/features/besoinVehiculeRapport/besoinVehiculeRapport.interface";
+import useFetchBesoinEnVehiculeRapportList from "./hooks/useFetchBesoinEnVehicule";
+import useFetchVoiture from "../../../../previsionMissions/organism/Logistique/tableBesoinVéhicules/hooks/useFetchVoiture";
+import useFetchMissionaryRapportList from "../../Techniques/tableMissionnaires/hooks/useFetchMissionaryList";
+import { MissionairesItem } from "../../../../../redux/features/missionaires/missionaires.interface";
 
-const ListcalculCarburantRapport = () => {
+const ListbesoinVehiculeRapportRapport = () => {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("trajet");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("dateDébut");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [filtre, setFiltre] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const fetchcalculCarburantRapport = useFetchcalculCarburantRapportList();
-  const { calculCarburantRapportList } = useAppSelector(
-    (state) => state.calculCarburantRapport
+  const { besoinVehiculeRapportList } = useAppSelector(
+    (state) => state.besoinVehiculeRapport
   );
+  const fetchEmployes = useFetchEmploys();
+  const { employees } = useAppSelector((state: any) => state.employe);
   const router = useRouter();
   const { id } = router.query;
   const confirm = useConfirm();
   const dispatch = useAppDispatch();
-  const fetchVehicleList = useFetchVehicleList();
-  const { vehicleList } = useAppSelector((state: any) => state.vehicle);
+  const fetchBesoinEnVehiculeRapportList =
+    useFetchBesoinEnVehiculeRapportList();
   const fetchVoiture = useFetchVoiture();
   const { transportationEquipments } = useAppSelector(
     (state: any) => state.transportation
   );
-
+  const fetchMissionaryRapportList = useFetchMissionaryRapportList();
+  const { missionaireslist } = useAppSelector(
+    (state: any) => state.missionaires
+  );
+  const data = async () => {
+    await fetchVoiture();
+    await fetchMissionaryRapportList();
+    await fetchBesoinEnVehiculeRapportList();
+  };
   React.useEffect(() => {
-    fetchcalculCarburantRapport();
-    fetchVehicleList();
-    fetchVoiture();
-  }, []);
+    data();
+  }, [router.query]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -87,7 +99,7 @@ const ListcalculCarburantRapport = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.trajet);
+      const newSelecteds = rows.map((n) => n.dateDébut);
       setSelected(newSelecteds);
       return;
     }
@@ -131,13 +143,12 @@ const ListcalculCarburantRapport = () => {
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const handleClickDelete = async (id: any) => {
     confirm({
-      title: "Supprimer calcul carburant",
+      title: "Supprimer besoin véhicule",
       description: "Voulez-vous vraiment supprimer ?",
       cancellationText: "Annuler",
       confirmationText: "Supprimer",
@@ -149,22 +160,16 @@ const ListcalculCarburantRapport = () => {
       },
     })
       .then(async () => {
-        await dispatch(deleteCalculCarburantRapport({ id }));
-        fetchcalculCarburantRapport();
+        await dispatch(deleteBesoinVehiculeRapport({ id }));
+        fetchBesoinEnVehiculeRapportList();
       })
       .catch(() => {});
   };
   const handleClickEdit = async (id: any) => {
-    await dispatch(editCalculCarburantRapport({ id }));
+    await dispatch(editBesoinVehiculeRapport({ id }));
     handleClickOpen();
   };
-  let total: any = useMemo(() => {
-    let calcul = 0;
-    calculCarburantRapportList.map((c: any) => {
-      calcul += c.totalCarburant;
-    });
-    return calcul;
-  }, [calculCarburantRapportList]);
+
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={2}>
@@ -172,7 +177,7 @@ const ListcalculCarburantRapport = () => {
           Ajouter
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <AddcalculCarburantRapport handleClose={handleClose} />
+          <AddbesoinVehiculeRapport handleClose={handleClose} />
         </Dialog>
       </SectionNavigation>
       <SectionTable>
@@ -193,18 +198,17 @@ const ListcalculCarburantRapport = () => {
                   rowCount={rows.length}
                 />
                 <TableBody>
-                  {calculCarburantRapportList
+                  {besoinVehiculeRapportList
                     .filter((f: any) => f.missionId === id)
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row: CalculCarburantRapportItem, index) => {
+                    .map((row: BesoinvehiculeRapportItem, index: any) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
-
                       return (
                         <TableRow
                           hover
                           role="checkbox"
                           tabIndex={-1}
-                          key={row.trajet}
+                          key={row.id}
                         >
                           <TableCell padding="checkbox"></TableCell>
                           <TableCell
@@ -212,39 +216,79 @@ const ListcalculCarburantRapport = () => {
                             id={labelId}
                             scope="row"
                             padding="none"
-                            sx={{ minWidth: 200, maxwidth: 200 }}
                           >
-                            {row.trajet}
+                            <Moment format="DD/MM/yyyy">{row.dateDebut}</Moment>
                           </TableCell>
-                          <TableCell sx={{ minWidth: 100, maxwidth: 100 }}>
-                            {
+                          <TableCell align="left">
+                            <Moment format="DD/MM/yyyy">{row.dateFin}</Moment>
+                          </TableCell>
+                          <TableCell align="left">
+                            {`${
+                              transportationEquipments.find(
+                                (e: any) => e.id === row.vehicule
+                              )?.brand
+                            } ${"-"}${
                               transportationEquipments.find(
                                 (e: any) => e.id === row.vehicule
                               )?.registration
-                            }
+                            }`}
                           </TableCell>
-                          <TableCell sx={{ minWidth: 30, maxwidth: 30 }}>
-                            {row.typeCarburant}
+                          <TableCell align="left">{row.trajet}</TableCell>
+                          <TableCell align="left">
+                            <FormControl
+                              sx={{
+                                minWidth: 150,
+                                maxWidth: 150,
+                                height:
+                                  row.responsable!.length <= 2 ? "auto" : 70,
+                                overflow: "auto",
+                              }}
+                            >
+                              {row.responsable!.map((lp: any) => {
+                                return (
+                                  <Stack
+                                    direction="column"
+                                    spacing={2}
+                                    key={lp}
+                                  >
+                                    {
+                                      missionaireslist
+                                        .filter(
+                                          (f: MissionairesItem) =>
+                                            f.missionId == id
+                                        )
+                                        .find(
+                                          (e: MissionairesItem) => e.id === lp
+                                        )?.lastNameMissionary
+                                    }{" "}
+                                    {
+                                      missionaireslist
+                                        .filter(
+                                          (f: MissionairesItem) =>
+                                            f.missionId == id
+                                        )
+                                        .find(
+                                          (e: MissionairesItem) => e.id === lp
+                                        )?.firstNameMissionary
+                                    }
+                                  </Stack>
+                                );
+                              })}
+                            </FormControl>
                           </TableCell>
-                          <TableCell sx={{ minWidth: 25, maxwidth: 25 }}>
-                            {row.distance}
+                          <TableCell
+                            align="left"
+                            sx={{ minWidth: 50, maxWidth: 50 }}
+                          >
+                            {row.nombreJour}
                           </TableCell>
-                          <TableCell sx={{ minWidth: 10, maxwidth: 10 }}>
-                            {row.nombreTrajet}
-                          </TableCell>
-                          <TableCell sx={{ minWidth: 30, maxwidth: 30 }}>
-                            {row.distanceTotal}
-                          </TableCell>
-                          <TableCell sx={{ minWidth: 10, maxwidth: 10 }}>
-                            {row.consommationKilo}
-                          </TableCell>
-                          <TableCell sx={{ minWidth: 20, maxwidth: 20 }}>
-                            {row.totalCarburant} L
-                          </TableCell>
-                          <TableCell>
+                          <TableCell
+                            align="left"
+                            sx={{ minWidth: 50, maxWidth: 50 }}
+                          >
                             <BtnActionContainer
                               direction="row"
-                              justifyContent="right"
+                              justifyContent="left"
                             >
                               <IconButton
                                 color="primary"
@@ -278,9 +322,6 @@ const ListcalculCarburantRapport = () => {
                   )}
                 </TableBody>
               </Table>
-              {/* <FormControl fullWidth  sx={{textAlign: "right",padding: 2}}>
-                  Total carburant : {total}
-              </FormControl> */}
             </TableContainer>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
@@ -294,17 +335,13 @@ const ListcalculCarburantRapport = () => {
               labelDisplayedRows={defaultLabelDisplayedRows}
             />
           </Paper>
-          {/* <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      /> */}
         </Box>
       </SectionTable>
     </Container>
   );
 };
 
-export default ListcalculCarburantRapport;
+export default ListbesoinVehiculeRapportRapport;
 
 export const BtnActionContainer = styled(Stack)(({ theme }) => ({}));
 export const SectionNavigation = styled(Stack)(({ theme }) => ({}));
