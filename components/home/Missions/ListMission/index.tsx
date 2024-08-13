@@ -204,7 +204,9 @@ const ListMissions = () => {
   });
   const uniqueManagersArray: string[] = Array.from(uniqueManagers);
   const [searchMonth, setSearchMonth] = React.useState<string>("Tous");
-  const [searchYear, setSearchYear] = React.useState<string>("Toutes");
+  const [searchYear, setSearchYear] = React.useState<any>(
+    new Date().getFullYear()
+  );
   useEffect(() => {
     let filteredData = [...missionListe];
 
@@ -237,7 +239,7 @@ const ListMissions = () => {
       );
     }
 
-    if (searchYear !== "Toutes") {
+    if (searchYear !== new Date().getFullYear()) {
       filteredData = missionListe.filter((m: MissionItem) =>
         new Date(m.dateDebut!).getFullYear().toString().includes(searchYear)
       );
@@ -293,6 +295,8 @@ const ListMissions = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataMission.length) : 0;
 
+  const ref = new Date().getUTCFullYear();
+  const references = ref.toString().slice(2);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
@@ -328,10 +332,10 @@ const ListMissions = () => {
             id="annee"
             label="Année"
             variant="outlined"
+            defaultValue={new Date().getFullYear()}
             value={searchYear}
             onChange={handleYearChange}
           >
-            <MenuItem value={"Toutes"}>Toutes</MenuItem>
             {years.map((year) => (
               <MenuItem key={year} value={year}>
                 {year}
@@ -383,7 +387,7 @@ const ListMissions = () => {
           />
         </Stack>
 
-        <Grid container spacing={2} mt={-2}>
+        <Stack gap={2} direction={"row"}>
           {dataMission.map((mission: MissionItem, index: any) => (
             <Grid key={index} item md={6}>
               <LinkContainer
@@ -430,6 +434,16 @@ const ListMissions = () => {
                       </Typography>
                       <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                         Status : {mission.status}
+                      </FormLabel>
+                      <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
+                        {`${
+                          mission.reference != null
+                            ? "Référence : " +
+                              references +
+                              "-" +
+                              mission.reference
+                            : ""
+                        }`}
                       </FormLabel>
                     </Stack>
                   </Typography>
@@ -610,7 +624,7 @@ const ListMissions = () => {
               <TableCell colSpan={6} />
             </TableRow>
           )}
-        </Grid>
+        </Stack>
         <Box sx={{ marginTop: 2 }}>
           <TablePagination
             rowsPerPageOptions={[5, 2, 25]}

@@ -32,6 +32,8 @@ import Techniques from "./organism/Techniques/techniques";
 import PrintPdfPrevision from "./printpDFPrevision";
 import { CardFooter } from "../gereRapportDeMission/GereRapportDeMission";
 import Logistiques from "./organism/Logistique/Logistique";
+import { updateMission } from "../../redux/features/mission";
+import emailjs from "emailjs-com";
 
 const PrevisionDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -41,7 +43,9 @@ const PrevisionDeMission = () => {
     setValue(newValue);
   };
   const fetchMission = useFetchMissionListe();
-  const { missionListe, loading } = useAppSelector((state) => state.mission);
+  const { missionListe, loading, mission, isEditing } = useAppSelector(
+    (state) => state.mission
+  );
   const dispatch = useAppDispatch();
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
@@ -221,6 +225,36 @@ const PrevisionDeMission = () => {
       console.log(error);
     }
   };
+
+  //send mail to admin
+  const [ref, setReference] = React.useState(0);
+  const currentYear = new Date().getFullYear();
+
+  React.useEffect(() => {
+    const refer = missionListe
+      .filter((f) => f.reference != null)
+      .map((m: any) => m.reference);
+    setReference(Math.max(...refer) + 1);
+  }, []);
+
+  // Submit the updated mission
+  const updateMissionReference = async () => {
+    try {
+      await dispatch(
+        updateMission({
+          id: id,
+          mission: {
+            ...mission,
+            reference: `${ref.toString().padStart(3, "0")}`,
+          },
+        })
+      );
+      return router.push("/missions/ListMission");
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <>
       <NavigationContainer>
@@ -246,6 +280,7 @@ const PrevisionDeMission = () => {
               size="small"
               startIcon={<DoneIcon />}
               sx={{ marginInline: 3 }}
+              onClick={() => updateMissionReference()}
             >
               Soumettre la prévision
             </Button>

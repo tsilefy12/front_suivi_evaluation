@@ -3,22 +3,19 @@ import { FormLabel, styled, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import KeyValue from "../shared/keyValue";
-import useFetchMissionListe from "../home/Missions/hooks/useFetchMissionListe";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import { useRouter } from "next/router";
 import { MissionItem } from "../../redux/features/mission/mission.interface";
-import useFetchEmploys from "../GrantsEnCours/hooks/getResponsable";
 import { EmployeItem } from "../../redux/features/employe/employeSlice.interface";
 
 const Detail = () => {
   const router = useRouter();
-  // const fetchMission = useFetchMissionListe();
   const { missionListe } = useAppSelector((state: any) => state.mission);
   const { id }: any = router.query;
-  // const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
+  const ref = new Date().getUTCFullYear();
+  const references = ref.toString().slice(2);
 
-  // console.log("list mission :", missionListe)
   return (
     <FormContainer spacing={2}>
       {missionListe
@@ -28,7 +25,11 @@ const Detail = () => {
             <Grid item xs={12} md={4}>
               <KeyValue
                 keyName="Référence mission"
-                value={"MISSION_" + item.reference!}
+                value={`${
+                  item.reference != null
+                    ? "Référence : " + references + "-" + item.reference
+                    : ""
+                }`}
               />
               <Stack direction={"row"} alignItems={"center"} spacing={1}>
                 <span>Description : </span>

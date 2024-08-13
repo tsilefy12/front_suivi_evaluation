@@ -62,15 +62,6 @@ const AddNewMission = () => {
     fetchMission();
   }, []);
 
-  const [ref, setReference] = React.useState(0);
-  React.useEffect(() => {
-    const refer = missionListe.map((m: any) => Number(m.reference));
-    if (refer.length == 0) {
-      refer.push(0);
-      return setReference(Math.max(...refer) + 1);
-    }
-    return setReference(Math.max(...refer) + 1);
-  }, [missionListe]);
   const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
     isEditing
       ? employees.filter((employee: any) =>
@@ -82,9 +73,6 @@ const AddNewMission = () => {
     const now = new Date().getTime();
     const startDaty = new Date(values.dateDebut).getTime();
     const endDaty = new Date(values.dateFin).getTime();
-    if (!values.reference) {
-      values.reference = ref.toString().padStart(3, "0");
-    }
 
     try {
       if (isEditing) {
@@ -133,7 +121,8 @@ const AddNewMission = () => {
     if (!id) return null;
     return options.find((option: any) => option.id === id) || null;
   };
-
+  const ref = new Date().getUTCFullYear();
+  const references = ref.toString().slice(2);
   return (
     <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>
       <Formik
@@ -142,7 +131,7 @@ const AddNewMission = () => {
           isEditing
             ? mission
             : {
-                reference: isEditing ? mission?.reference : "",
+                reference: isEditing ? mission?.reference : null,
                 missionManagerId: isEditing ? mission?.missionManagerId : "",
                 budgetManagerId: isEditing ? mission?.budgetManagerId : [],
                 descriptionMission: isEditing
@@ -558,7 +547,7 @@ const AddNewMission = () => {
           <DialogContentText>
             {`${
               getVerify == "budgets"
-                ? `Référence budget existe déjà avec la mission de "MISSION_${getMission}"`
+                ? `Référence budget existe déjà avec la mission de ${references}-${getMission}"`
                 : " La date début doit être inférieure que la date fin"
             }`}
           </DialogContentText>

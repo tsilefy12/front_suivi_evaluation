@@ -106,6 +106,10 @@ const BilanMission = () => {
   const handleChangeIndex = (index: number) => {
     setValue(index);
   };
+
+  const ref = new Date().getUTCFullYear();
+  const references = ref.toString().slice(2);
+
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -131,7 +135,11 @@ const BilanMission = () => {
               <Grid item xs={12} md={4}>
                 <KeyValue
                   keyName="Ref mission"
-                  value={"MISSION_" + item.reference!}
+                  value={`${
+                    item.reference != null
+                      ? "Référence : " + references + "-" + item.reference
+                      : ""
+                  }`}
                 />
                 <Stack direction={"row"} alignItems={"center"} spacing={1}>
                   <span>Description : </span>
