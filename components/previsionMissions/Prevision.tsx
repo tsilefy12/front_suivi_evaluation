@@ -33,7 +33,6 @@ import PrintPdfPrevision from "./printpDFPrevision";
 import { CardFooter } from "../gereRapportDeMission/GereRapportDeMission";
 import Logistiques from "./organism/Logistique/Logistique";
 import { updateMission } from "../../redux/features/mission";
-import emailjs from "emailjs-com";
 
 const PrevisionDeMission = () => {
   const [value, setValue] = React.useState(0);
