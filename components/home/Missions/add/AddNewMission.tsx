@@ -121,8 +121,7 @@ const AddNewMission = () => {
     if (!id) return null;
     return options.find((option: any) => option.id === id) || null;
   };
-  const ref = new Date().getUTCFullYear();
-  const references = ref.toString().slice(2);
+
   return (
     <Container maxWidth="xl" sx={{ paddingBottom: 8 }}>
       <Formik
@@ -547,7 +546,7 @@ const AddNewMission = () => {
           <DialogContentText>
             {`${
               getVerify == "budgets"
-                ? `Référence budget existe déjà avec la mission de ${references}-${getMission}"`
+                ? `Référence budget existe déjà avec la mission de ${getMission}"`
                 : " La date début doit être inférieure que la date fin"
             }`}
           </DialogContentText>

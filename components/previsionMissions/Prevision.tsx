@@ -227,14 +227,53 @@ const PrevisionDeMission = () => {
 
   //send mail to admin
   const [ref, setReference] = React.useState(0);
-  const currentYear = new Date().getFullYear();
+  const [annee, setAnnee] = React.useState<any>(
+    new Date().getFullYear().toString().slice(2)
+  );
 
   React.useEffect(() => {
     const refer = missionListe
       .filter((f) => f.reference != null)
       .map((m: any) => m.reference);
-    setReference(Math.max(...refer) + 1);
-  }, []);
+    if (refer.length == 0) {
+      return setReference(1);
+    }
+    const filteredMissions = missionListe.filter((f) => f.id != id).reverse();
+    const currentMission = missionListe.filter((f) => f.id == id)[0];
+    if (currentMission) {
+      const dateDerniere = currentMission.dateFin;
+
+      const date1 =
+        filteredMissions.length > 0
+          ? new Date(filteredMissions[0].dateFin as Date).getFullYear()
+          : new Date().getFullYear();
+      const date2 = new Date(dateDerniere as Date).getFullYear();
+
+      setAnnee(date2.toString().slice(2));
+      const temp = [...refer].reverse();
+      const deuxPremier = temp[0].slice(0, 2);
+
+      if (date1 + 1 == date2) {
+        const nombre = 0;
+        return setReference(nombre + 1);
+      }
+      if (date1 == date2 && deuxPremier == annee) {
+        const missions = missionListe
+          .filter(
+            (f) =>
+              f.id != id && new Date(f.dateFin as Date).getFullYear() == date2
+          )
+          .map((m: any) => m.reference);
+        const endData = [...missions].reverse();
+        const end = endData[0].slice(3);
+
+        return setReference(parseInt(end) + 1);
+      }
+    } else {
+      console.warn("Current mission not found");
+      return setReference(1);
+    }
+  }, [missionListe, id, annee, ref]);
 
   // Submit the updated mission
   const updateMissionReference = async () => {
@@ -244,7 +283,7 @@ const PrevisionDeMission = () => {
           id: id,
           mission: {
             ...mission,
-            reference: `${ref.toString().padStart(3, "0")}`,
+            reference: `${annee}-${ref.toString().padStart(3, "0")}`,
           },
         })
       );

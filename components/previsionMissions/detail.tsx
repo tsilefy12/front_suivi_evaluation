@@ -13,8 +13,6 @@ const Detail = () => {
   const { missionListe } = useAppSelector((state: any) => state.mission);
   const { id }: any = router.query;
   const { employees } = useAppSelector((state) => state.employe);
-  const ref = new Date().getUTCFullYear();
-  const references = ref.toString().slice(2);
 
   return (
     <FormContainer spacing={2}>
@@ -26,9 +24,7 @@ const Detail = () => {
               <KeyValue
                 keyName="Référence mission"
                 value={`${
-                  item.reference != null
-                    ? "Référence : " + references + "-" + item.reference
-                    : ""
+                  item.reference != null ? "Référence : " + item.reference : ""
                 }`}
               />
               <Stack direction={"row"} alignItems={"center"} spacing={1}>

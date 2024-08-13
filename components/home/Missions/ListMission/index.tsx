@@ -204,9 +204,8 @@ const ListMissions = () => {
   });
   const uniqueManagersArray: string[] = Array.from(uniqueManagers);
   const [searchMonth, setSearchMonth] = React.useState<string>("Tous");
-  const [searchYear, setSearchYear] = React.useState<any>(
-    new Date().getFullYear()
-  );
+  const [searchYear, setSearchYear] = React.useState<string>("Toutes");
+
   useEffect(() => {
     let filteredData = [...missionListe];
 
@@ -220,7 +219,7 @@ const ListMissions = () => {
       ];
     }
     if (searchMission !== "") {
-      filteredData = filteredData.filter((m: MissionItem) => {
+      filteredData = missionListe.filter((m: MissionItem) => {
         const missionManager = employees.find(
           (e: EmployeItem) => e.id === m.missionManagerId
         );
@@ -233,15 +232,18 @@ const ListMissions = () => {
 
     if (searchMonth !== "Tous") {
       filteredData = missionListe.filter((m: MissionItem) =>
-        (new Date(m.dateDebut as Date).getMonth() + 1)
+        (new Date(m.dateFin as Date).getMonth() + 1)
           .toString()
           .includes(searchMonth)
       );
     }
 
-    if (searchYear !== new Date().getFullYear()) {
+    if (searchYear !== "Toutes") {
       filteredData = missionListe.filter((m: MissionItem) =>
-        new Date(m.dateDebut!).getFullYear().toString().includes(searchYear)
+        new Date(m.dateFin as Date)
+          .getFullYear()
+          .toString()
+          .includes(searchYear)
       );
     }
 
@@ -250,7 +252,7 @@ const ListMissions = () => {
 
   const monthsSet: any = new Set();
   missionListe.forEach((m) => {
-    const month = new Date(m.dateDebut!).getMonth() + 1;
+    const month = new Date(m.dateFin as Date).getMonth() + 1;
     monthsSet.add(month);
   });
   const months = [...monthsSet]
@@ -266,7 +268,7 @@ const ListMissions = () => {
 
   const yearsSet: any = new Set();
   missionListe.forEach((m) => {
-    const year = new Date(m.dateDebut!).getFullYear();
+    const year = new Date(m.dateFin as Date).getFullYear();
     yearsSet.add(year);
   });
   const years = [...yearsSet].sort((a, b) => a - b);
@@ -295,8 +297,6 @@ const ListMissions = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataMission.length) : 0;
 
-  const ref = new Date().getUTCFullYear();
-  const references = ref.toString().slice(2);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
@@ -332,10 +332,10 @@ const ListMissions = () => {
             id="annee"
             label="Année"
             variant="outlined"
-            defaultValue={new Date().getFullYear()}
             value={searchYear}
             onChange={handleYearChange}
           >
+            <MenuItem value={"Toutes"}>Toutes</MenuItem>
             {years.map((year) => (
               <MenuItem key={year} value={year}>
                 {year}
@@ -387,7 +387,13 @@ const ListMissions = () => {
           />
         </Stack>
 
-        <Stack gap={2} direction={"row"}>
+        <Stack
+          gap={2}
+          direction={"row"}
+          width={"100%"}
+          flexWrap={"wrap"}
+          display={"flex"}
+        >
           {dataMission.map((mission: MissionItem, index: any) => (
             <Grid key={index} item md={6}>
               <LinkContainer
@@ -438,10 +444,7 @@ const ListMissions = () => {
                       <FormLabel sx={{ color: "grey.800", fontWeight: "bold" }}>
                         {`${
                           mission.reference != null
-                            ? "Référence : " +
-                              references +
-                              "-" +
-                              mission.reference
+                            ? "Référence : " + mission.reference
                             : ""
                         }`}
                       </FormLabel>

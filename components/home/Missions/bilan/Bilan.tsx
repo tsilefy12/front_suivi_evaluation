@@ -107,9 +107,6 @@ const BilanMission = () => {
     setValue(index);
   };
 
-  const ref = new Date().getUTCFullYear();
-  const references = ref.toString().slice(2);
-
   return (
     <Container maxWidth="xl">
       <NavigationContainer>
@@ -137,7 +134,7 @@ const BilanMission = () => {
                   keyName="Ref mission"
                   value={`${
                     item.reference != null
-                      ? "Référence : " + references + "-" + item.reference
+                      ? "Référence : " + item.reference
                       : ""
                   }`}
                 />

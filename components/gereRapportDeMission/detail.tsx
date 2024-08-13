@@ -27,9 +27,7 @@ const Detail = () => {
               <KeyValue
                 keyName="Référence mission"
                 value={`${
-                  item.reference != null
-                    ? "Référence : " + references + "-" + item.reference
-                    : ""
+                  item.reference != null ? "Référence : " + item.reference : ""
                 }`}
               />
               <Stack direction={"row"} alignItems={"center"} spacing={1}>
