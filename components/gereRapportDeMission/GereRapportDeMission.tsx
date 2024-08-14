@@ -124,6 +124,7 @@ const GereRapportDeMission = () => {
       setGetVerificateurLogistic(isLogisticValidated);
     }
   }, []);
+
   const handleValidationFinance = async (
     responsableId: string,
     missionId: string,
@@ -246,7 +247,7 @@ const GereRapportDeMission = () => {
                 Retour
               </Button>
             </Link>
-            <Button
+            {/* <Button
               variant="contained"
               size="small"
               startIcon={<DoneIcon />}
@@ -262,7 +263,7 @@ const GereRapportDeMission = () => {
               sx={{ marginInline: 3 }}
             >
               Annuler la soumission
-            </Button>
+            </Button> */}
           </Stack>
           <Typography variant="h4">Rapport de mission</Typography>
         </SectionNavigation>

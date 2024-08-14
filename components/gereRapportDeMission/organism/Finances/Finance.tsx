@@ -9,6 +9,7 @@ import ListResumeDepense from "./tableResumeDepense/ListResumeDepense";
 import ListCalculDesPilesRapport from "./tableCalculDesPile/ListCalculDesPile";
 import ListCalculCarburantRapport from "../Logistique/tableCalculCarburant/ListCalculCarburant";
 import ListBesoinVehiculeRapport from "../Logistique/tableBesoinVéhicules/ListBesoinVehicule";
+import AddFile from "./rapportFinance/add/AddFile";
 
 const Finances = () => {
   return (
@@ -37,18 +38,18 @@ const Finances = () => {
           <ListResumeDepense />
         </AccordionDetails>
       </Accordion>
-      {/* <Accordion>
+      <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Calcul des piles</Typography>
+          <Typography>Rapport financier</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <ListCalculDesPilesRapport />
+          <AddFile />
         </AccordionDetails>
-      </Accordion> */}
+      </Accordion>
       {/* <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}

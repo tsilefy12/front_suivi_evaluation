@@ -62,6 +62,9 @@ import { programmeRHSlice } from "./features/programmeRH/programmeRHSlice";
 import { internSlice } from "./features/stagiaire/internshipSlice";
 import { prestataireSlice } from "./features/prestataire/prestataireSlice";
 import { deadlineSlice } from "./features/deadline/deadlineSlice";
+import { fileSlice } from "./features/file/fileSlice";
+import { rapportFinanceSlice } from "./features/rapportFinance/rapportFinanceSlice";
+import { rapportTechniqueSlice } from "./features/rapportTechnique/rapportTechniqueSlice";
 
 export const store = configureStore({
   reducer: {
@@ -128,6 +131,9 @@ export const store = configureStore({
     stagiaire: internSlice.reducer,
     prestataire: prestataireSlice.reducer,
     deadline: deadlineSlice.reducer,
+    file: fileSlice.reducer,
+    rapportFinance: rapportFinanceSlice.reducer,
+    rapportTechnique: rapportTechniqueSlice.reducer,
   },
 });
 
