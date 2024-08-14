@@ -5,14 +5,26 @@ import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHoo
 import { createFile } from "../../../../../../redux/features/file/fileSlice";
 import { createRapportTechnique } from "../../../../../../redux/features/rapportTechnique";
 import { useRouter } from "next/router";
+import useFetchRapportTechnique from "../hooks/useFetchRapportTechnique";
+import { useEffect, useState } from "react";
+import { FormLabel } from "@mui/material";
 
 
 const AddFileTechnique = () => {
     const dispatch = useAppDispatch();
-    const {rapportFinance} = useAppSelector((state) => state.rapportFinance);
     const router = useRouter();
     const {id} = router.query;
-    // const {} = useAppSelecto((state) =>state.file);
+    const fetchRapportTechnique = useFetchRapportTechnique();
+    const {rapportTechniqueList} = useAppSelector((state) => state.rapportTechnique);
+    const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+    useEffect(() => {        
+        fetchRapportTechnique();
+    },[]); 
+
+    const temp = [...rapportTechniqueList.filter((f) =>f.missionId == id )].reverse();
+    const data = temp[0];
+
     const handleSubmit = async (values: any) => {
         values.missionId = id;
         try {
@@ -23,8 +35,10 @@ const AddFileTechnique = () => {
                   createFile(formData)
                 ).unwrap();
                 values.pieceJointe = images[0].url;
+                setDownloadUrl(images[0].url); 
               }
               await dispatch(createRapportTechnique(values)).unwrap();
+              fetchRapportTechnique();
         } catch (e) {
           console.log(e);
         }
@@ -47,6 +61,19 @@ const AddFileTechnique = () => {
                     <Button variant="contained" type="submit">
                         Enregistrer
                     </Button>
+                    {downloadUrl && (
+                      <Stack direction="row" gap={2}>
+                          <Button 
+                            variant="outlined"
+                            component="a" 
+                            href={downloadUrl} 
+                            download
+                          >
+                            Télécharger
+                          </Button>
+                          <FormLabel>{data?.pieceJointe}</FormLabel>
+                      </Stack>
+                    )}
                     </Stack>
                 </Form>
             )}

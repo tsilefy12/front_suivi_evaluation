@@ -5,14 +5,25 @@ import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHoo
 import { createFile } from "../../../../../../redux/features/file/fileSlice";
 import { createRapportFinance } from "../../../../../../redux/features/rapportFinance";
 import { useRouter } from "next/router";
-
+import useFetchRapportFinance from "../hooks/useFetchRapportFinance";
+import { useEffect, useState } from "react";
+import { FormLabel } from "@mui/material";
 
 const AddFile = () => {
     const dispatch = useAppDispatch();
-    const {rapportFinance} = useAppSelector((state) => state.rapportFinance);
     const router = useRouter();
     const {id} = router.query;
-    // const {} = useAppSelecto((state) =>state.file);
+    const fetchRapportFinance = useFetchRapportFinance();
+    const {rapportFinanceList} = useAppSelector((state) => state.rapportFinance);
+    const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+    useEffect(() => {        
+        fetchRapportFinance();
+    },[]);
+
+    const temp = [...rapportFinanceList.filter((f) =>f.missionId == id )].reverse();
+    const data = temp[0];
+
     const handleSubmit = async (values: any) => {
         values.missionId = id;
         try {
@@ -23,12 +34,15 @@ const AddFile = () => {
                   createFile(formData)
                 ).unwrap();
                 values.pieceJointe = images[0].url;
+                setDownloadUrl(images[0].url); // Enregistrez l'URL pour le téléchargement
               }
               await dispatch(createRapportFinance(values)).unwrap();
+              fetchRapportFinance();
         } catch (e) {
           console.log(e);
         }
       };
+
   return (
       <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
         <Formik
@@ -47,6 +61,19 @@ const AddFile = () => {
                     <Button variant="contained" type="submit">
                         Enregistrer
                     </Button>
+                    {downloadUrl && (
+                      <Stack direction="row" gap={2}>
+                          <Button 
+                            variant="outlined"
+                            component="a" 
+                            href={downloadUrl} 
+                            download
+                          >
+                            Télécharger
+                          </Button>
+                          <FormLabel>{data?.pieceJointe}</FormLabel>
+                      </Stack>
+                    )}
                     </Stack>
                 </Form>
             )}
