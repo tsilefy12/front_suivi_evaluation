@@ -1,7 +1,7 @@
 export interface RapportTechniqueItem {
-  id: string;
-  missionId: string;
-  pieceJointe: string;
+  id?: string;
+  missionId?: string;
+  pieceJointe?: string;
 }
 
 export interface RapportTechniqueInitialState {

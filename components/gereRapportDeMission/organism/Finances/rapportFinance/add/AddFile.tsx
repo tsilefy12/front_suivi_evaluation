@@ -4,13 +4,17 @@ import OSFileUpload from "../../../../../shared/input/OSFileUpload";
 import { useAppDispatch, useAppSelector } from "../../../../../../hooks/reduxHooks";
 import { createFile } from "../../../../../../redux/features/file/fileSlice";
 import { createRapportFinance } from "../../../../../../redux/features/rapportFinance";
+import { useRouter } from "next/router";
 
 
 const AddFile = () => {
     const dispatch = useAppDispatch();
     const {rapportFinance} = useAppSelector((state) => state.rapportFinance);
+    const router = useRouter();
+    const {id} = router.query;
     // const {} = useAppSelecto((state) =>state.file);
     const handleSubmit = async (values: any) => {
+        values.missionId = id;
         try {
             if (values.pieceJointe && values.pieceJointe.name !== null) {
                 const formData = new FormData();
