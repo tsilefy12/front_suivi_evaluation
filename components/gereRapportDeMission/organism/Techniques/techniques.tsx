@@ -16,6 +16,7 @@ import ListAutreInfoAuto from "./tableAutreInfoAuto/organisme/ListAutreInfoAuto"
 import ListContactPendantMission from "./tableContactPendantMission/organisme/ListContactPendantMission";
 import ListProgrammes from "./tableProgramme/organisme/ListProgrammes";
 import ListMissionnairesRapport from "./tableMissionnaires/organisme/ListMissionnaires";
+import AddFileTechnique from "./rapportTechnique/add/AddFileTechnique";
 
 const Techniques = () => {
   return (
@@ -128,6 +129,18 @@ const Techniques = () => {
         </AccordionSummary>
         <AccordionDetails>
           <ListProgrammes />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Rapport technique</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <AddFileTechnique />
         </AccordionDetails>
       </Accordion>
     </>
