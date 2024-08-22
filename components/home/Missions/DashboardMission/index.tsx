@@ -63,6 +63,7 @@ const DashboardMission = () => {
     if (search != "") {
       const donne = missionListe.filter(
         (m: MissionItem) =>
+          new Date(m.dateFin as Date).getFullYear() == new Date().getFullYear() &&
           m.RefBudget!.toLowerCase().includes(search.toLowerCase()) ||
           employees
             .find((e: EmployeItem) => e.id === m.missionManagerId)
@@ -79,7 +80,7 @@ const DashboardMission = () => {
       return setData(donne.reverse());
     }
     if (filterYear !== "Tous") {
-      const donne = [...missionListe]
+      const donne = [...missionListe.filter((m) => new Date(m.dateFin as Date).getFullYear() == new Date().getFullYear())]
         .filter(
           (m: MissionItem) =>
             new Date(m.dateFin as Date).getFullYear() == filterYear
@@ -87,7 +88,7 @@ const DashboardMission = () => {
         .reverse();
       return setData(donne);
     }
-    return setData([...missionListe].reverse());
+    return setData([...missionListe.filter((m) => new Date(m.dateFin as Date).getFullYear() == new Date().getFullYear())].reverse());
   }, [search, missionListe, filterYear]);
 
   const exportToExcel = (data: MissionItem[]) => {

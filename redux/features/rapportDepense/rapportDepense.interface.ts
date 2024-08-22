@@ -8,6 +8,7 @@ export interface RapportDepenseItem {
   missionId?: string;
   refPiece?: string;
   modePaiement?: string;
+  typeRapport?: string;
 }
 export interface RapportDepenseInitialState {
   rapportDepenseList: RapportDepenseItem[];

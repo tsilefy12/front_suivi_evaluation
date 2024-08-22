@@ -191,6 +191,10 @@ const AddRapportdepense = ({ handleClose }: any) => {
     { id: " Taxi admin ", name: " Taxi admin " },
     { id: "Especes", name: "Especes" },
   ];
+  const typeRapportList = [
+    { id: "Dépense", name: "Dépense" },
+    { id: "Imprévu", name: "Imprévu" },
+  ];
   return (
     <Container
       maxWidth="xl"
@@ -211,6 +215,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                   : "",
                 refPiece: isEditing ? rapportDepense?.refPiece : "",
                 modePaiement: isEditing ? rapportDepense?.modePaiement : "",
+                typeRapport: isEditing ? rapportDepense?.typeRapport : "",
               }
         }
         validationSchema={Yup.object({
@@ -220,6 +225,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
           ligneBudgetaire: Yup.string().required("Champ obligatoire"),
           modePaiement: Yup.string().required("Champ obligatoire"),
           refPiece: Yup.string().required("Champ obligatoire"),
+          typeRapport: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -338,6 +344,17 @@ const AddRapportdepense = ({ handleClose }: any) => {
                           name="modePaiement"
                           options={modepaiementList}
                           value={formikProps.values.modePaiement}
+                          dataKey={["name"]}
+                          valueKey="id"
+                        />
+                        <OSSelectField
+                          fullWidth
+                          id="outlined-basic"
+                          label="Type de rapport"
+                          variant="outlined"
+                          name="typeRapport"
+                          options={typeRapportList}
+                          value={formikProps.values.typeRapport}
                           dataKey={["name"]}
                           valueKey="id"
                         />

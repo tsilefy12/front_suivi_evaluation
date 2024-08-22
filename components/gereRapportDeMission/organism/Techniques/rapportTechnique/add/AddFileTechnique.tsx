@@ -24,7 +24,7 @@ const AddFileTechnique = () => {
 
     const temp = [...rapportTechniqueList.filter((f) =>f.missionId == id )].reverse();
     const data = temp[0];
-
+ console.log(data);
     const handleSubmit = async (values: any) => {
         values.missionId = id;
         try {
