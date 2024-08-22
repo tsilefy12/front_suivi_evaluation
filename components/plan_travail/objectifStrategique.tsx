@@ -34,6 +34,7 @@ import ObjectifStrategiqueForm from "./add/addPlanTravail";
 import useFetchPlanTravaile from "./hooks/useFetchPlanTravail";
 import Moment from "react-moment";
 import useFetchProject from "../GrantsEnCours/hooks/getProject";
+import { Close } from "@mui/icons-material";
 
 const ListObjectifStrategique = ({
   row,
@@ -52,6 +53,7 @@ const ListObjectifStrategique = ({
   const [getId, setGetId] = React.useState("");
   const fetchProject = useFetchProject();
   const { projectList } = useAppSelector((state: any) => state.project);
+  const [cloture, setCloture] = React.useState(false);
 
   React.useEffect(() => {
     fetchPlanTravail();
@@ -65,7 +67,12 @@ const ListObjectifStrategique = ({
   const handleClose = () => {
     setOpen(false);
   };
-
+  const handleClickCloture = () => {
+    if(cloture===false){
+      setCloture(true);
+    }
+    setCloture(true);
+  };
   handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer le plan de travail",
@@ -234,6 +241,7 @@ const ListObjectifStrategique = ({
                       onClick={(event: any) =>
                         handleMenuClick(event.currentTarget, row.id!)
                       }
+                      disabled={cloture===true}
                     >
                       <MoreVertIcon />
                     </IconButton>
@@ -273,16 +281,22 @@ const ListObjectifStrategique = ({
                       variant="text"
                       color="info"
                       startIcon={<SettingsIcon />}
+                      disabled={cloture===true}
                     >
                       Tâches et objectifs
                     </Button>
                   </Box>
                 </Link>
+               <Stack direction={"row"} gap={2}>
                 <Link href={`/plan_travail/${row.id}/site`}>
-                  <Button variant="outlined" color="info" startIcon={<Add />}>
-                    Site
-                  </Button>
+                    <Button variant="outlined" color="info" startIcon={<Add />} disabled={cloture===true}>
+                      Site
+                    </Button>
                 </Link>
+                <Button variant="outlined" color="info" startIcon={<Close />} onClick={handleClickCloture}>
+                    Clôturer
+                </Button>
+               </Stack>
               </LinkContainer>
             </Grid>
           ))}
