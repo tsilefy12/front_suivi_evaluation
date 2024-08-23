@@ -72,6 +72,7 @@ const AddFile = () => {
                   <Stack direction="row" gap={2}>
                     <Button
                       variant="outlined"
+                      color="info"
                       component="a"
                       href={m.pieceJointe}
                       download
