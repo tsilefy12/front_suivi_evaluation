@@ -397,10 +397,11 @@ const ListTacheEtObjectifs = () => {
                                   aria-label="Modifier"
                                   component="span"
                                   onClick={() => handleClickEdit(row.id!)}
-                                  disabled={row.planTravaile
-                                    ?.flatMap((e: any) => e.clotures)
-                                    .map((e: any) => e.planTravaileId)
-                                    .includes(row.planTravaileId)}
+                                  disabled={planTravaillist
+                                    .filter((p) => p.id === id)
+                                    .flatMap((p) => p.clotures)
+                                    .map((c: any) => c.planTravaileId)
+                                    .includes(id!)}
                                 >
                                   <EditIcon />
                                 </IconButton>
@@ -410,10 +411,11 @@ const ListTacheEtObjectifs = () => {
                                 aria-label="Supprimer"
                                 component="span"
                                 onClick={() => handleClickDelete(row.id!)}
-                                disabled={row.planTravaile
-                                  ?.flatMap((e: any) => e.clotures)
-                                  .map((e: any) => e.planTravaileId)
-                                  .includes(row.planTravaileId)}
+                                disabled={planTravaillist
+                                  .filter((p) => p.id === id)
+                                  .flatMap((p) => p.clotures)
+                                  .map((c: any) => c.planTravaileId)
+                                  .includes(id!)}
                               >
                                 <DeleteIcon />
                               </IconButton>
