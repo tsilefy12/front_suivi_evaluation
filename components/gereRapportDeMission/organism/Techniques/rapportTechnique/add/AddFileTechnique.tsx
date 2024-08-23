@@ -21,16 +21,18 @@ const AddFileTechnique = () => {
     (state) => state.rapportTechnique
   );
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-
+  const dataRapportTechnique = async () => {
+    await fetchRapportTechnique();
+  };
   useEffect(() => {
-    fetchRapportTechnique();
+    dataRapportTechnique();
   }, []);
 
   const temp = [
     ...rapportTechniqueList.filter((f) => f.missionId == id),
   ].reverse();
   const data = temp[0];
-  console.log(data);
+
   const handleSubmit = async (values: any) => {
     values.missionId = id;
     try {
@@ -65,22 +67,18 @@ const AddFileTechnique = () => {
               <Button variant="contained" type="submit">
                 Enregistrer
               </Button>
-              {rapportTechniqueList
-                .filter((f) => f.missionId == id)
-                .map((m) => (
-                  <Stack direction="row" gap={2}>
-                    <Button
-                      variant="outlined"
-                      color="info"
-                      component="a"
-                      href={m.pieceJointe}
-                      download
-                    >
-                      Télécharger
-                    </Button>
-                    <FormLabel>{m.pieceJointe}</FormLabel>
-                  </Stack>
-                ))}
+              <Stack direction="row" gap={2}>
+                <Button
+                  variant="outlined"
+                  color="info"
+                  component="a"
+                  href={data?.pieceJointe}
+                  download
+                >
+                  Télécharger
+                </Button>
+                <FormLabel>{data?.pieceJointe}</FormLabel>
+              </Stack>
             </Stack>
           </Form>
         )}

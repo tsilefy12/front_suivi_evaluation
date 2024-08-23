@@ -20,10 +20,11 @@ const AddFile = () => {
   const { rapportFinanceList } = useAppSelector(
     (state) => state.rapportFinance
   );
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-
+  const dataRapportFinance = async () => {
+    await fetchRapportFinance();
+  };
   useEffect(() => {
-    fetchRapportFinance();
+    dataRapportFinance();
   }, []);
 
   const temp = [
@@ -39,7 +40,6 @@ const AddFile = () => {
         formData.append("file", values.pieceJointe);
         const { images } = await dispatch(createFile(formData)).unwrap();
         values.pieceJointe = images[0].url;
-        setDownloadUrl(images[0].url); // Enregistrez l'URL pour le téléchargement
       }
       await dispatch(createRapportFinance(values)).unwrap();
       fetchRapportFinance();
@@ -66,22 +66,18 @@ const AddFile = () => {
               <Button variant="contained" type="submit">
                 Enregistrer
               </Button>
-              {rapportFinanceList
-                .filter((f) => f.missionId == id)
-                .map((m) => (
-                  <Stack direction="row" gap={2}>
-                    <Button
-                      variant="outlined"
-                      color="info"
-                      component="a"
-                      href={m.pieceJointe}
-                      download
-                    >
-                      Télécharger
-                    </Button>
-                    <FormLabel>{m.pieceJointe}</FormLabel>
-                  </Stack>
-                ))}
+              <Stack direction="row" gap={2}>
+                <Button
+                  variant="outlined"
+                  color="info"
+                  component="a"
+                  href={data?.pieceJointe}
+                  download
+                >
+                  Télécharger
+                </Button>
+                <FormLabel>{data?.pieceJointe}</FormLabel>
+              </Stack>
             </Stack>
           </Form>
         )}
