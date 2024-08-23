@@ -148,7 +148,7 @@ const ListSite = () => {
         "Indicateur",
         "Prévision",
         "Réalisation",
-        ...sitelist.map((s) => s.lieu),
+        ...sitelist.map((s) => s.lieu || ""),
       ],
     });
     const headerRow = [
