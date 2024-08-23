@@ -98,7 +98,6 @@ const AddFile = () => {
                       color: "white",
                     },
                   }}
-                  onClick={handleDownload}
                 >
                   Télécharger
                 </Button>
