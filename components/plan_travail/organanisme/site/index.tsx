@@ -406,6 +406,12 @@ const ListSite = () => {
                                                             )
                                                           )
                                                         }
+                                                        disabled={plan.clotures
+                                                          .map(
+                                                            (c) =>
+                                                              c.planTravaileId
+                                                          )
+                                                          .includes(plan.id)}
                                                       >
                                                         <MenuItem value={0}>
                                                           0
