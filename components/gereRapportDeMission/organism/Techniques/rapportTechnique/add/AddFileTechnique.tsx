@@ -22,13 +22,12 @@ const AddFileTechnique = () => {
   );
   const [data, setData] = useState<any>([]);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-
+  const dataRapportTechnique = async () => {
+    await fetchRapportTechnique();
+  };
   useEffect(() => {
-    const dataRapportTechnique = async () => {
-      await fetchRapportTechnique();
-    };
     dataRapportTechnique();
-  }, [fetchRapportTechnique]);
+  }, []);
 
   useEffect(() => {
     const temp = [

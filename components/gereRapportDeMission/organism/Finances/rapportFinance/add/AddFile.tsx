@@ -21,13 +21,12 @@ const AddFile = () => {
     (state) => state.rapportFinance
   );
 
-  useEffect(() => {
-    dataRapportFinance();
-  }, []);
-
   const dataRapportFinance = async () => {
     await fetchRapportFinance();
   };
+  useEffect(() => {
+    dataRapportFinance();
+  }, []);
 
   const [data, setData] = useState<any>([]);
 
