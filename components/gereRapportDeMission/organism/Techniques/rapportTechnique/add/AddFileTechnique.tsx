@@ -1,4 +1,4 @@
-import { Button, Container, Stack } from "@mui/material";
+import { Button, Container, Stack, FormLabel } from "@mui/material";
 import { Form, Formik } from "formik";
 import OSFileUpload from "../../../../../shared/input/OSFileUpload";
 import {
@@ -10,7 +10,7 @@ import { createRapportTechnique } from "../../../../../../redux/features/rapport
 import { useRouter } from "next/router";
 import useFetchRapportTechnique from "../hooks/useFetchRapportTechnique";
 import { useEffect, useState } from "react";
-import { FormLabel } from "@mui/material";
+import { Document, Page, pdf, View, Text } from "@react-pdf/renderer";
 
 const AddFileTechnique = () => {
   const dispatch = useAppDispatch();
@@ -20,25 +20,51 @@ const AddFileTechnique = () => {
   const { rapportTechniqueList } = useAppSelector(
     (state) => state.rapportTechnique
   );
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-  const dataRapportTechnique = async () => {
-    await fetchRapportTechnique();
-  };
-  useEffect(() => {
-    dataRapportTechnique();
-  }, []);
   const [data, setData] = useState<any>([]);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const dataRapportTechnique = async () => {
+      await fetchRapportTechnique();
+    };
+    dataRapportTechnique();
+  }, [fetchRapportTechnique]);
+
   useEffect(() => {
     const temp = [
-      ...rapportTechniqueList.filter((f) => f.missionId == id),
+      ...rapportTechniqueList.filter((f) => f.missionId === id),
     ].reverse();
     setData(temp[0]);
-  }, []);
+  }, [id, rapportTechniqueList]);
+
+  const Documents = ({ pieceJointe }: { pieceJointe: string }) => (
+    <Document>
+      <Page size="A4">
+        <View>
+          <Text>{pieceJointe}</Text> {/* Replace with actual content */}
+        </View>
+      </Page>
+    </Document>
+  );
+
+  const clickPDF = async () => {
+    try {
+      const pdfBlob = await pdf(
+        <Documents pieceJointe={data.pieceJointe} />
+      ).toBlob();
+      const downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(pdfBlob);
+      downloadLink.download = "Rapport.pdf";
+      downloadLink.click();
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    }
+  };
 
   const handleSubmit = async (values: any) => {
     values.missionId = id;
     try {
-      if (values.pieceJointe && values.pieceJointe.name !== null) {
+      if (values.pieceJointe && values.pieceJointe.name) {
         const formData = new FormData();
         formData.append("file", values.pieceJointe);
         const { images } = await dispatch(createFile(formData)).unwrap();
@@ -51,6 +77,7 @@ const AddFileTechnique = () => {
       console.log(e);
     }
   };
+
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -73,9 +100,13 @@ const AddFileTechnique = () => {
                 <Button
                   variant="outlined"
                   color="info"
-                  component="a"
-                  href={data?.pieceJointe}
-                  download
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "info.main",
+                      color: "white",
+                    },
+                  }}
+                  onClick={clickPDF}
                 >
                   Télécharger
                 </Button>

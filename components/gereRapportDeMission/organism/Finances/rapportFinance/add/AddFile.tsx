@@ -1,4 +1,4 @@
-import { Button, Container, Stack } from "@mui/material";
+import { Button, Container, Stack, FormLabel } from "@mui/material";
 import { Form, Formik } from "formik";
 import OSFileUpload from "../../../../../shared/input/OSFileUpload";
 import {
@@ -10,7 +10,7 @@ import { createRapportFinance } from "../../../../../../redux/features/rapportFi
 import { useRouter } from "next/router";
 import useFetchRapportFinance from "../hooks/useFetchRapportFinance";
 import { useEffect, useState } from "react";
-import { FormLabel } from "@mui/material";
+import { Document, Page, pdf, View, Text } from "@react-pdf/renderer";
 
 const AddFile = () => {
   const dispatch = useAppDispatch();
@@ -20,19 +20,47 @@ const AddFile = () => {
   const { rapportFinanceList } = useAppSelector(
     (state) => state.rapportFinance
   );
-  const dataRapportFinance = async () => {
-    await fetchRapportFinance();
-  };
+
   useEffect(() => {
     dataRapportFinance();
   }, []);
+
+  const dataRapportFinance = async () => {
+    await fetchRapportFinance();
+  };
+
   const [data, setData] = useState<any>([]);
+
   useEffect(() => {
     const temp = [
-      ...rapportFinanceList.filter((f) => f.missionId == id),
+      ...rapportFinanceList.filter((f) => f.missionId === id),
     ].reverse();
     setData(temp[0]);
-  }, []);
+  }, [id, rapportFinanceList]);
+
+  const Documents = ({ pieceJointe }: { pieceJointe: string }) => (
+    <Document>
+      <Page size="A4">
+        <View>
+          <Text>{pieceJointe}</Text>
+        </View>
+      </Page>
+    </Document>
+  );
+
+  const clickPDF = async () => {
+    try {
+      const pdfBlob = await pdf(
+        <Documents pieceJointe={data.pieceJointe} />
+      ).toBlob();
+      const downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(pdfBlob);
+      downloadLink.download = "Rapport.pdf";
+      downloadLink.click();
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    }
+  };
 
   const handleSubmit = async (values: any) => {
     values.missionId = id;
@@ -72,9 +100,13 @@ const AddFile = () => {
                 <Button
                   variant="outlined"
                   color="info"
-                  component="a"
-                  href={data?.pieceJointe}
-                  download
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "info.main",
+                      color: "white",
+                    },
+                  }}
+                  onClick={clickPDF}
                 >
                   Télécharger
                 </Button>
