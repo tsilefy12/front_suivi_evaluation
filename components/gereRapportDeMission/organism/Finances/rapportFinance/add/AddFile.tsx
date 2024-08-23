@@ -87,23 +87,21 @@ const AddFile = () => {
                 Enregistrer
               </Button>
               <Stack direction="row" gap={2}>
-                {data?.pieceJointe && (
-                  <Button
-                    variant="outlined"
-                    color="info"
-                    component="a"
-                    onClick={handleDownload}
-                    sx={{
-                      "&:hover": {
-                        backgroundColor: "info.main",
-                        color: "white",
-                      },
-                    }}
-                  >
-                    Télécharger
-                  </Button>
-                )}
-                <FormLabel>{data?.pieceJointe}</FormLabel>
+                <Button
+                  variant="outlined"
+                  color="info"
+                  component="a"
+                  onClick={handleDownload}
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "info.main",
+                      color: "white",
+                    },
+                  }}
+                >
+                  Télécharger
+                </Button>
+                <FormLabel>{data?.pieceJointe!}</FormLabel>
               </Stack>
             </Stack>
           </Form>

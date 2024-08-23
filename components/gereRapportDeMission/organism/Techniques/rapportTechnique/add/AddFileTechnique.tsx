@@ -10,7 +10,6 @@ import { createRapportTechnique } from "../../../../../../redux/features/rapport
 import { useRouter } from "next/router";
 import useFetchRapportTechnique from "../hooks/useFetchRapportTechnique";
 import { useEffect, useState } from "react";
-import { Document, Page, pdf, View, Text } from "@react-pdf/renderer";
 
 const AddFileTechnique = () => {
   const dispatch = useAppDispatch();
@@ -20,20 +19,26 @@ const AddFileTechnique = () => {
   const { rapportTechniqueList } = useAppSelector(
     (state) => state.rapportTechnique
   );
-  const [data, setData] = useState<any>([]);
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
   const dataRapportTechnique = async () => {
     await fetchRapportTechnique();
   };
+
   useEffect(() => {
     dataRapportTechnique();
   }, []);
+
+  const [data, setData] = useState<any>([]);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const temp = [
       ...rapportTechniqueList.filter((f) => f.missionId === id),
     ].reverse();
     setData(temp[0]);
+    if (temp[0]?.pieceJointe) {
+      setDownloadUrl(temp[0].pieceJointe);
+    }
   }, [id, rapportTechniqueList]);
 
   const handleSubmit = async (values: any) => {
@@ -50,6 +55,21 @@ const AddFileTechnique = () => {
       fetchRapportTechnique();
     } catch (e) {
       console.log(e);
+    }
+  };
+
+  // Télécharger le fichier PDF
+  const handleDownload = () => {
+    if (downloadUrl) {
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.setAttribute("download", "file.zip");
+      document.body.appendChild(link);
+      link.click();
+
+      if (link.parentNode) {
+        link.parentNode.removeChild(link);
+      }
     }
   };
 
@@ -72,13 +92,12 @@ const AddFileTechnique = () => {
                 Enregistrer
               </Button>
               <Stack direction="row" gap={2}>
-                {data?.pieceJointe && (
+                {downloadUrl && (
                   <Button
                     variant="outlined"
                     color="info"
                     component="a"
-                    href={data.pieceJointe}
-                    download="Rapport technique"
+                    onClick={handleDownload}
                     sx={{
                       "&:hover": {
                         backgroundColor: "info.main",
@@ -89,7 +108,17 @@ const AddFileTechnique = () => {
                     Télécharger
                   </Button>
                 )}
-                <FormLabel>{data?.pieceJointe}</FormLabel>
+                {downloadUrl && (
+                  <FormLabel sx={{ wordBreak: "break-word" }}>
+                    <a
+                      href={downloadUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {downloadUrl}
+                    </a>
+                  </FormLabel>
+                )}
               </Stack>
             </Stack>
           </Form>
