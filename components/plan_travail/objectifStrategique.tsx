@@ -260,10 +260,9 @@ const ListObjectifStrategique = ({
                       onClick={(event: any) =>
                         handleMenuClick(event.currentTarget, row.id!)
                       }
-                      disabled={
-                        row.id ===
-                        row.clotures?.map((c: any) => c.planTravaileId)
-                      }
+                      disabled={row.clotures
+                        ?.map((c: any) => c.planTravaileId)
+                        .includes(row.id)}
                     >
                       <MoreVertIcon />
                     </IconButton>
@@ -303,10 +302,9 @@ const ListObjectifStrategique = ({
                       variant="text"
                       color="info"
                       startIcon={<SettingsIcon />}
-                      disabled={
-                        row.id ===
-                        row.clotures?.map((c: any) => c.planTravaileId)
-                      }
+                      disabled={row.clotures
+                        ?.map((c: any) => c.planTravaileId)
+                        .includes(row.id)}
                     >
                       Tâches et objectifs
                     </Button>
@@ -318,10 +316,9 @@ const ListObjectifStrategique = ({
                       variant="outlined"
                       color="info"
                       startIcon={<Add />}
-                      disabled={
-                        row.id ===
-                        row.clotures?.map((c: any) => c.planTravaileId)
-                      }
+                      disabled={row.clotures
+                        ?.map((c: any) => c.planTravaileId)
+                        .includes(row.id)}
                     >
                       Site
                     </Button>
