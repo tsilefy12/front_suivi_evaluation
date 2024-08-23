@@ -5,6 +5,8 @@ import { EmployeItem } from "../employe/employeSlice.interface";
 import { LieuxRapportItem } from "../lieuxRapport/lieuxRapport.interface";
 import { MissionLocationItem } from "../missionLocation/missionLocationSlice.interface";
 import { RapportDepenseItem } from "../rapportDepense/rapportDepense.interface";
+import { RapportFinanceItem } from "../rapportFinance/rapportFinance.interface";
+import { RapportTechniqueItem } from "../rapportTechnique/rapportTechnique.interface";
 import { ResumeDepenseItem } from "../resumeDepense/reumeDepense.interface";
 import { ResumeDepensePrevueItem } from "../resumeDepensePrevue/reumeDepensePrevue.interface";
 import { UnCompleteTbbItem } from "../unCompleteTbb/unCompleteTbb.interface";
@@ -58,6 +60,8 @@ export interface MissionItem {
   resumeDepense?: ResumeDepenseItem[];
   missionLocation?: MissionLocationItem[];
   resumeDepensePrevue?: ResumeDepensePrevueItem[];
+  rapportFinance?: RapportFinanceItem[];
+  rapportTechnique?: RapportTechniqueItem[];
 }
 
 export interface MissionInitialState {

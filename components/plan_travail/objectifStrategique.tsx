@@ -274,6 +274,10 @@ const ListObjectifStrategique = ({
                             handleClickEdit(getSelectId);
                             handleMenuClose();
                           }}
+                          disabled={planTravaillist
+                            .flatMap((row) => row.clotures)
+                            .map((c: any) => c.planTravaileId)
+                            .includes(row.id)}
                         >
                           <EditIcon color="primary" />
                           Modifier

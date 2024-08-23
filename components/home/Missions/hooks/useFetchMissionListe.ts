@@ -21,6 +21,8 @@ const useFetchMissionListe = () => {
         lieux: true,
         missionLocation: true,
         resumeDepensePrevue: true,
+        rapportFinance: true,
+        rapportTechnique: true,
       },
     };
     if (router.query.search) {
