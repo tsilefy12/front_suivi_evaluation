@@ -172,7 +172,17 @@ const ListObjectifStrategique = ({
         </Typography>
       </SectionNavigation>
       <Divider />
-      <SectionDetails sx={{ height: "calc(100vh - 240px)", overflow: "auto" }}>
+      <SectionDetails
+        sx={{
+          minHeight:
+            planTravaillist.length == 0 && filtre == "" ? "auto" : "auto",
+          maxHeight:
+            filtre === "" && planTravaillist.length != 0
+              ? "calc(100vh - 240px)"
+              : "auto",
+          overflow: "auto",
+        }}
+      >
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 1, sm: 2, md: 4 }}
