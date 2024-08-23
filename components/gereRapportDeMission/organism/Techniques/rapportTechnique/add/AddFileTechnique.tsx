@@ -34,7 +34,7 @@ const AddFileTechnique = () => {
     ].reverse();
     setData(temp[0]);
   }, [id, rapportTechniqueList]);
-
+  console.log("data", data);
   const handleSubmit = async (values: any) => {
     values.missionId = id;
     try {
@@ -96,7 +96,7 @@ const AddFileTechnique = () => {
                 >
                   Télécharger
                 </Button>
-                <FormLabel>{data[0]?.pieceJointe || ""}</FormLabel>
+                <FormLabel>{data?.pieceJointe || ""}</FormLabel>
               </Stack>
             </Stack>
           </Form>
