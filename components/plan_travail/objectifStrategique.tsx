@@ -328,6 +328,9 @@ const ListObjectifStrategique = ({
                     color="info"
                     startIcon={<Close />}
                     onClick={() => handleClickCloture(row.id!)}
+                    disabled={row.clotures
+                      ?.map((c: any) => c.planTravaileId)
+                      .includes(row.id)}
                   >
                     Clôturer
                   </Button>
