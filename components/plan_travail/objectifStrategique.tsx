@@ -330,7 +330,7 @@ const ListObjectifStrategique = ({
                     variant="outlined"
                     color="info"
                     startIcon={<Close />}
-                    onClick={() => handleClickCloture(row.id)}
+                    onClick={() => handleClickCloture(row.id!)}
                   >
                     Clôturer
                   </Button>
