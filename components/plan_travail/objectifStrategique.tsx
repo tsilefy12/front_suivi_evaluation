@@ -297,18 +297,16 @@ const ListObjectifStrategique = ({
                   </Typography>
                 </Stack>
                 <Link href={`/plan_travail/${row.id}/tachesEtObjectifs`}>
-                  <Box>
-                    <Button
-                      variant="text"
-                      color="info"
-                      startIcon={<SettingsIcon />}
-                      disabled={row.clotures
-                        ?.map((c: any) => c.planTravaileId)
-                        .includes(row.id)}
-                    >
-                      Tâches et objectifs
-                    </Button>
-                  </Box>
+                  <Button
+                    variant="text"
+                    color="info"
+                    startIcon={<SettingsIcon />}
+                    disabled={row.clotures
+                      ?.map((c: any) => c.planTravaileId)
+                      .includes(row.id)}
+                  >
+                    Tâches et objectifs
+                  </Button>
                 </Link>
                 <Stack direction={"row"} gap={2}>
                   <Link href={`/plan_travail/${row.id}/site`}>
