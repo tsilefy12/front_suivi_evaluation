@@ -20,19 +20,18 @@ const AddFileTechnique = () => {
     (state) => state.rapportTechnique
   );
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-  const dataRapportTechnique = async () => {
-    await fetchRapportTechnique();
-  };
+
   useEffect(() => {
-    dataRapportTechnique();
+    fetchRapportTechnique();
   }, []);
 
   const [data, setData] = useState<any>(null);
-
+  console.log("rapportTechniqueList", rapportTechniqueList);
   useEffect(() => {
-    if (id && rapportTechniqueList.length > 0) {
+    if (rapportTechniqueList.length > 0) {
       const temp = rapportTechniqueList
-        .filter((f) => f.missionId === id)
+        .filter((f) => f.missionId == id)
+        .map((m) => m.pieceJointe)
         .reverse();
       if (temp.length > 0) {
         setData(temp[0]);
