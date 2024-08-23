@@ -53,6 +53,21 @@ const AddFile = () => {
     }
   };
 
+  //download pdf
+  const handleDownload = () => {
+    const url = `https://91.134.91.43/${data.pieceJointe}`;
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "file.zip");
+    document.body.appendChild(link);
+    link.click();
+
+    // Vérifiez si link.parentNode existe avant de le supprimer
+    if (link.parentNode) {
+      link.parentNode.removeChild(link);
+    }
+  };
+
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -77,8 +92,7 @@ const AddFile = () => {
                     variant="outlined"
                     color="info"
                     component="a"
-                    href={data.pieceJointe}
-                    download="Rapport financier"
+                    onClick={handleDownload}
                     sx={{
                       "&:hover": {
                         backgroundColor: "info.main",
