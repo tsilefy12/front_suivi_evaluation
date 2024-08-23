@@ -260,9 +260,6 @@ const ListObjectifStrategique = ({
                       onClick={(event: any) =>
                         handleMenuClick(event.currentTarget, row.id!)
                       }
-                      disabled={row.clotures
-                        ?.map((c: any) => c.planTravaileId)
-                        .includes(row.id)}
                     >
                       <MoreVertIcon />
                     </IconButton>
@@ -301,23 +298,13 @@ const ListObjectifStrategique = ({
                     variant="text"
                     color="info"
                     startIcon={<SettingsIcon />}
-                    disabled={row.clotures
-                      ?.map((c: any) => c.planTravaileId)
-                      .includes(row.id)}
                   >
                     Tâches et objectifs
                   </Button>
                 </Link>
                 <Stack direction={"row"} gap={2}>
                   <Link href={`/plan_travail/${row.id}/site`}>
-                    <Button
-                      variant="outlined"
-                      color="info"
-                      startIcon={<Add />}
-                      disabled={row.clotures
-                        ?.map((c: any) => c.planTravaileId)
-                        .includes(row.id)}
-                    >
+                    <Button variant="outlined" color="info" startIcon={<Add />}>
                       Site
                     </Button>
                   </Link>
