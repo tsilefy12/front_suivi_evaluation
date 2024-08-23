@@ -52,13 +52,12 @@ const AddFile = () => {
       console.log(e);
     }
   };
-
   //download pdf
   const handleDownload = () => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}${data.pieceJointe}`;
     const link = document.createElement("a");
     link.href = url;
-    // link.setAttribute("download", "file.pdf");
+    link.setAttribute("download", data.pieceJointe.split("/")[1]);
     document.body.appendChild(link);
     link.click();
 

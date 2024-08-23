@@ -56,7 +56,7 @@ const AddFileTechnique = () => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}${data.pieceJointe}`;
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "file.zip");
+    link.setAttribute("download", data.pieceJointe.split("/")[1]);
     document.body.appendChild(link);
     link.click();
     if (link.parentNode) {
