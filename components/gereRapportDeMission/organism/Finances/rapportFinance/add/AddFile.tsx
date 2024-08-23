@@ -78,7 +78,7 @@ const AddFile = () => {
                     color="info"
                     component="a"
                     href={data.pieceJointe}
-                    download="Rapport financier.pdf"
+                    download="Rapport financier"
                     sx={{
                       "&:hover": {
                         backgroundColor: "info.main",

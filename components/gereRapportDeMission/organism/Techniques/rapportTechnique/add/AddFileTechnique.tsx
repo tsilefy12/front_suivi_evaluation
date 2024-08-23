@@ -78,7 +78,7 @@ const AddFileTechnique = () => {
                     color="info"
                     component="a"
                     href={data.pieceJointe}
-                    download="Rapport technique.pdf"
+                    download="Rapport technique"
                     sx={{
                       "&:hover": {
                         backgroundColor: "info.main",
