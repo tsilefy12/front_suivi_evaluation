@@ -257,6 +257,11 @@ const ListTacheEtObjectifs = () => {
             onClick={(e) =>
               router.push(`/plan_travail/${id}/tachesEtObjectifs/add`)
             }
+            disabled={planTravaillist
+              .filter((p) => p.id == id)
+              .flatMap((p) => p.clotures)
+              .map((c) => c.planTravailId)
+              .includes(id!)}
           >
             Créer
           </Button>
