@@ -36,30 +36,6 @@ const AddFileTechnique = () => {
     setData(temp[0]);
   }, [id, rapportTechniqueList]);
 
-  const Documents = ({ pieceJointe }: { pieceJointe: string }) => (
-    <Document>
-      <Page size="A4">
-        <View>
-          <Text>{pieceJointe}</Text> {/* Replace with actual content */}
-        </View>
-      </Page>
-    </Document>
-  );
-
-  const clickPDF = async () => {
-    try {
-      const pdfBlob = await pdf(
-        <Documents pieceJointe={data.pieceJointe} />
-      ).toBlob();
-      const downloadLink = document.createElement("a");
-      downloadLink.href = URL.createObjectURL(pdfBlob);
-      downloadLink.download = "Rapport.pdf";
-      downloadLink.click();
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-    }
-  };
-
   const handleSubmit = async (values: any) => {
     values.missionId = id;
     try {
@@ -96,19 +72,23 @@ const AddFileTechnique = () => {
                 Enregistrer
               </Button>
               <Stack direction="row" gap={2}>
-                <Button
-                  variant="outlined"
-                  color="info"
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: "info.main",
-                      color: "white",
-                    },
-                  }}
-                  onClick={clickPDF}
-                >
-                  Télécharger
-                </Button>
+                {data?.pieceJointe && (
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    component="a"
+                    href={data.pieceJointe}
+                    download="Rapport technique.pdf"
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "info.main",
+                        color: "white",
+                      },
+                    }}
+                  >
+                    Télécharger
+                  </Button>
+                )}
                 <FormLabel>{data?.pieceJointe}</FormLabel>
               </Stack>
             </Stack>
