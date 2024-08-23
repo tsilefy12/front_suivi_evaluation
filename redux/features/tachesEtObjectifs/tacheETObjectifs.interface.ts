@@ -1,4 +1,5 @@
 import { ObjectifAnnuelItem } from "../objectifAnnuels/objectifAnnuel.interface";
+import { PlanTravailItem } from "../planTravail/planTravail.interface";
 
 export interface TacheEtObjectifItem {
   id?: string;
@@ -15,7 +16,7 @@ export interface TacheEtObjectifItem {
   objectifAnnuel?: ObjectifAnnuelItem[];
   endDate?: Date;
   planTravaileId?: string;
-  planTravaile?: any;
+  planTravaile?: PlanTravailItem[];
 }
 export interface TacheEtObjectifInitialState {
   tacheEtObjectifList: TacheEtObjectifItem[];

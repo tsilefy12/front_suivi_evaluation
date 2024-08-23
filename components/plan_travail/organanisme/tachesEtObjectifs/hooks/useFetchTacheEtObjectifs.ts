@@ -10,6 +10,7 @@ const useFetchTacheEtObjectifs = () => {
     let args: any = {
       include: {
         objectifAnnuel: true,
+        planTravaile: true,
       },
     };
     if (router.query.search) {
