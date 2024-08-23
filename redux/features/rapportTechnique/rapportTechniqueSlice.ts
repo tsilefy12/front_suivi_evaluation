@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RapportTechniqueInitialState } from "./rapportTechnique.interface";
 import { createRapportTechnique } from "./useCase/createRapportTechnique";
+import { getRapportTechniqueList } from "./useCase/getRapportTechnique";
 
 const rapportTechniqueInitialState: RapportTechniqueInitialState = {
   rapportTechniqueList: [],
@@ -32,21 +33,21 @@ export const rapportTechniqueSlice = createSlice({
     //     state.error = action.error;
     //   },
     //   // get rapport Technique list
-    //   [getRapportTechniqueList.pending.type]: (state) => {
-    //     state.loading = true;
-    //   },
-    //   [getRapportTechniqueList.fulfilled.type]: (state, action) => {
-    //     state.loading = false;
-    //     state.rapportTechniqueList = action.payload;
-    //   },
-    //   [getRapportTechniqueList.rejected.type]: (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.error;
-    //   },
+      [getRapportTechniqueList.pending.type]: (state) => {
+        state.loading = true;
+      },
+      [getRapportTechniqueList.fulfilled.type]: (state, action) => {
+        state.loading = false;
+        state.rapportTechniqueList = action.payload;
+      },
+      [getRapportTechniqueList.rejected.type]: (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      },
     //   // create rapport Technique
-    //   [createRapportTechnique.pending.type]: (state) => {
-    //     state.loading = true;
-    //   },
+      [createRapportTechnique.pending.type]: (state) => {
+        state.loading = true;
+      },
       [createRapportTechnique.fulfilled.type]: (state, action) => {
         state.loading = false;
         state.rapportTechniqueList.push(action.payload);

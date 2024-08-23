@@ -102,7 +102,7 @@ const AddFileTechnique = () => {
                 >
                   Télécharger
                 </Button>
-                <FormLabel>{data?.pieceJointe || ""}</FormLabel>
+                <FormLabel>{data || ""}</FormLabel>
               </Stack>
             </Stack>
           </Form>

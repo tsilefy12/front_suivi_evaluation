@@ -33,7 +33,8 @@ const AddFile = () => {
   useEffect(() => {
     if (id && rapportFinanceList.length > 0) {
       const temp = rapportFinanceList
-        .filter((f) => f.missionId === id)
+        .filter((f) => f.missionId == id)
+        .map((m) => m.pieceJointe)
         .reverse();
       if (temp.length > 0) {
         setData(temp[0]);
@@ -65,7 +66,7 @@ const AddFile = () => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}${data.pieceJointe}`;
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "Rapport-finance");
+    link.setAttribute("download", data);
     document.body.appendChild(link);
     link.click();
 
@@ -108,7 +109,7 @@ const AddFile = () => {
                 >
                   Télécharger
                 </Button>
-                <FormLabel>{data?.pieceJointe!}</FormLabel>
+                <FormLabel>{data || ""}</FormLabel>
               </Stack>
             </Stack>
           </Form>
