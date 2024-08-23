@@ -26,11 +26,13 @@ const AddFile = () => {
   useEffect(() => {
     dataRapportFinance();
   }, []);
-
-  const temp = [
-    ...rapportFinanceList.filter((f) => f.missionId == id),
-  ].reverse();
-  const data = temp[0];
+  const [data, setData] = useState<any>([]);
+  useEffect(() => {
+    const temp = [
+      ...rapportFinanceList.filter((f) => f.missionId == id),
+    ].reverse();
+    setData(temp[0]);
+  }, []);
 
   const handleSubmit = async (values: any) => {
     values.missionId = id;

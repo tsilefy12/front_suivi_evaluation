@@ -27,11 +27,13 @@ const AddFileTechnique = () => {
   useEffect(() => {
     dataRapportTechnique();
   }, []);
-
-  const temp = [
-    ...rapportTechniqueList.filter((f) => f.missionId == id),
-  ].reverse();
-  const data = temp[0];
+  const [data, setData] = useState<any>([]);
+  useEffect(() => {
+    const temp = [
+      ...rapportTechniqueList.filter((f) => f.missionId == id),
+    ].reverse();
+    setData(temp[0]);
+  }, []);
 
   const handleSubmit = async (values: any) => {
     values.missionId = id;
