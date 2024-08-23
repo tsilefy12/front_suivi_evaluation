@@ -259,9 +259,9 @@ const ListTacheEtObjectifs = () => {
               router.push(`/plan_travail/${id}/tachesEtObjectifs/add`)
             }
             disabled={planTravaillist
-              .filter((p) => p.id == id)
+              .filter((p) => p.id === id)
               .flatMap((p) => p.clotures)
-              .map((c: CloturePTAItem) => c.planTravaileId)
+              .map((c: any) => c.planTravaileId)
               .includes(id!)}
           >
             Créer
