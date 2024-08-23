@@ -44,8 +44,6 @@ const AddFile = () => {
     }
   }, [id, rapportFinanceList]);
 
-  console.log("data", data);
-
   const handleSubmit = async (values: any) => {
     values.missionId = id;
     try {
@@ -63,7 +61,7 @@ const AddFile = () => {
   };
   //download pdf
   const handleDownload = () => {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}${data.pieceJointe}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}${data}`;
     const link = document.createElement("a");
     link.href = url;
     link.setAttribute("download", data);

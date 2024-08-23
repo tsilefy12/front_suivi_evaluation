@@ -26,7 +26,7 @@ const AddFileTechnique = () => {
   }, []);
 
   const [data, setData] = useState<any>(null);
-  console.log("rapportTechniqueList", rapportTechniqueList);
+
   useEffect(() => {
     if (rapportTechniqueList.length > 0) {
       const temp = rapportTechniqueList
@@ -40,7 +40,7 @@ const AddFileTechnique = () => {
       }
     }
   }, [id, rapportTechniqueList]);
-  console.log("data", data);
+
   const handleSubmit = async (values: any) => {
     values.missionId = id;
     try {
@@ -59,10 +59,10 @@ const AddFileTechnique = () => {
   };
   //download pdf
   const handleDownload = () => {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}${data.pieceJointe}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}${data}`;
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "Rapport-technique");
+    link.setAttribute("download", data);
     document.body.appendChild(link);
     link.click();
     if (link.parentNode) {
