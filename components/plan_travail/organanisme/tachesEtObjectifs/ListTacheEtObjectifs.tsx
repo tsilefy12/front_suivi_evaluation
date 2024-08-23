@@ -52,6 +52,7 @@ import { getStatuslist } from "../../../../redux/features/status";
 import { TacheEtObjectifItem } from "../../../../redux/features/tachesEtObjectifs/tacheETObjectifs.interface";
 import useFetchStagiaire from "../../../GrantsEnCours/hooks/getStagiaire";
 import useFetchPrestataire from "../../../GrantsEnCours/hooks/getPrestataire";
+import { CloturePTAItem } from "../../../../redux/features/cloturePTA/cloturePTA.interface";
 
 const ListTacheEtObjectifs = () => {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -260,7 +261,7 @@ const ListTacheEtObjectifs = () => {
             disabled={planTravaillist
               .filter((p) => p.id == id)
               .flatMap((p) => p.clotures)
-              .map((c) => c.planTravailId)
+              .map((c: CloturePTAItem) => c.planTravaileId)
               .includes(id!)}
           >
             Créer
