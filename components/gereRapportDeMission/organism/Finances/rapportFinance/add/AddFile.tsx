@@ -28,14 +28,22 @@ const AddFile = () => {
     dataRapportFinance();
   }, []);
 
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    const temp = [
-      ...rapportFinanceList.filter((f) => f.missionId === id),
-    ].reverse();
-    setData(temp[0]);
+    if (id && rapportFinanceList.length > 0) {
+      const temp = rapportFinanceList
+        .filter((f) => f.missionId === id)
+        .reverse();
+      if (temp.length > 0) {
+        setData(temp[0]);
+      } else {
+        setData(null);
+      }
+    }
   }, [id, rapportFinanceList]);
+
+  console.log("data", data);
 
   const handleSubmit = async (values: any) => {
     values.missionId = id;

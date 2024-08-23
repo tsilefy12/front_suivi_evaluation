@@ -19,7 +19,6 @@ const AddFileTechnique = () => {
   const { rapportTechniqueList } = useAppSelector(
     (state) => state.rapportTechnique
   );
-  const [data, setData] = useState<any>([]);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const dataRapportTechnique = async () => {
     await fetchRapportTechnique();
@@ -28,11 +27,19 @@ const AddFileTechnique = () => {
     dataRapportTechnique();
   }, []);
 
+  const [data, setData] = useState<any>(null);
+
   useEffect(() => {
-    const temp = [
-      ...rapportTechniqueList.filter((f) => f.missionId === id),
-    ].reverse();
-    setData(temp[0]);
+    if (id && rapportTechniqueList.length > 0) {
+      const temp = rapportTechniqueList
+        .filter((f) => f.missionId === id)
+        .reverse();
+      if (temp.length > 0) {
+        setData(temp[0]);
+      } else {
+        setData(null);
+      }
+    }
   }, [id, rapportTechniqueList]);
   console.log("data", data);
   const handleSubmit = async (values: any) => {
