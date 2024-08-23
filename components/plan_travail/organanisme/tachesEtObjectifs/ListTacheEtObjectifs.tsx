@@ -392,8 +392,7 @@ const ListTacheEtObjectifs = () => {
                                   component="span"
                                   onClick={() => handleClickEdit(row.id!)}
                                   disabled={row.planTravaile
-                                    .map((e: any) => e.clotures)
-                                    .flat()
+                                    ?.flatMap((e: any) => e.clotures)
                                     .map((e: any) => e.planTravaileId)
                                     .includes(row.planTravaileId)}
                                 >
@@ -406,8 +405,7 @@ const ListTacheEtObjectifs = () => {
                                 component="span"
                                 onClick={() => handleClickDelete(row.id!)}
                                 disabled={row.planTravaile
-                                  .map((e: any) => e.clotures)
-                                  .flat()
+                                  ?.flatMap((e: any) => e.clotures)
                                   .map((e: any) => e.planTravaileId)
                                   .includes(row.planTravaileId)}
                               >
