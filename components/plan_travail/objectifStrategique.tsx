@@ -35,6 +35,7 @@ import useFetchPlanTravaile from "./hooks/useFetchPlanTravail";
 import Moment from "react-moment";
 import useFetchProject from "../GrantsEnCours/hooks/getProject";
 import { Close } from "@mui/icons-material";
+import { createCloture } from "../../redux/features/cloturePTA";
 
 const ListObjectifStrategique = ({
   row,
@@ -53,7 +54,7 @@ const ListObjectifStrategique = ({
   const [getId, setGetId] = React.useState("");
   const fetchProject = useFetchProject();
   const { projectList } = useAppSelector((state: any) => state.project);
-  const [cloture, setCloture] = React.useState(false);
+  const { cloture } = useAppSelector((state: any) => state.cloturePTA);
 
   React.useEffect(() => {
     fetchPlanTravail();
@@ -67,11 +68,29 @@ const ListObjectifStrategique = ({
   const handleClose = () => {
     setOpen(false);
   };
-  const handleClickCloture = () => {
-    if(cloture===false){
-      setCloture(true);
-    }
-    setCloture(true);
+  const handleClickCloture = (id: string) => {
+    confirm({
+      title: "Clôturer le plan de travail",
+      description: "Etes-vous sûr de vouloir clôturer ce plan de travail ?",
+      cancellationText: "Annuler",
+      confirmationText: "Supprimer",
+      cancellationButtonProps: {
+        color: "warning",
+      },
+      confirmationButtonProps: {
+        color: "error",
+      },
+    })
+      .then(async () => {
+        await dispatch(
+          createCloture({
+            planTravaileId: id,
+            dateCloture: new Date(),
+          })
+        );
+        fetchPlanTravail();
+      })
+      .catch(() => {});
   };
   handleClickDelete = async (id: any) => {
     confirm({
@@ -241,7 +260,10 @@ const ListObjectifStrategique = ({
                       onClick={(event: any) =>
                         handleMenuClick(event.currentTarget, row.id!)
                       }
-                      disabled={cloture===true}
+                      disabled={
+                        row.id ===
+                        row.clotures?.map((c: any) => c.planTravaileId)
+                      }
                     >
                       <MoreVertIcon />
                     </IconButton>
@@ -281,22 +303,38 @@ const ListObjectifStrategique = ({
                       variant="text"
                       color="info"
                       startIcon={<SettingsIcon />}
-                      disabled={cloture===true}
+                      disabled={
+                        row.id ===
+                        row.clotures?.map((c: any) => c.planTravaileId)
+                      }
                     >
                       Tâches et objectifs
                     </Button>
                   </Box>
                 </Link>
-               <Stack direction={"row"} gap={2}>
-                <Link href={`/plan_travail/${row.id}/site`}>
-                    <Button variant="outlined" color="info" startIcon={<Add />} disabled={cloture===true}>
+                <Stack direction={"row"} gap={2}>
+                  <Link href={`/plan_travail/${row.id}/site`}>
+                    <Button
+                      variant="outlined"
+                      color="info"
+                      startIcon={<Add />}
+                      disabled={
+                        row.id ===
+                        row.clotures?.map((c: any) => c.planTravaileId)
+                      }
+                    >
                       Site
                     </Button>
-                </Link>
-                <Button variant="outlined" color="info" startIcon={<Close />} onClick={handleClickCloture}>
+                  </Link>
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    startIcon={<Close />}
+                    onClick={() => handleClickCloture(row.id)}
+                  >
                     Clôturer
-                </Button>
-               </Stack>
+                  </Button>
+                </Stack>
               </LinkContainer>
             </Grid>
           ))}

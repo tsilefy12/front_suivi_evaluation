@@ -65,6 +65,7 @@ import { deadlineSlice } from "./features/deadline/deadlineSlice";
 import { fileSlice } from "./features/file/fileSlice";
 import { rapportFinanceSlice } from "./features/rapportFinance/rapportFinanceSlice";
 import { rapportTechniqueSlice } from "./features/rapportTechnique/rapportTechniqueSlice";
+import { cloturePTASlice } from "./features/cloturePTA/clotureSlice";
 
 export const store = configureStore({
   reducer: {
@@ -134,6 +135,7 @@ export const store = configureStore({
     file: fileSlice.reducer,
     rapportFinance: rapportFinanceSlice.reducer,
     rapportTechnique: rapportTechniqueSlice.reducer,
+    cloturePTA: cloturePTASlice.reducer,
   },
 });
 

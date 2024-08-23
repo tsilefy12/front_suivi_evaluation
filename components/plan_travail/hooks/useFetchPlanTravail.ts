@@ -18,6 +18,7 @@ const useFetchPlanTravaile = () => {
             },
           },
         },
+        clotures: true
       },
     };
     if (router.query.search) {
