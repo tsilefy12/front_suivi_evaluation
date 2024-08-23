@@ -174,12 +174,8 @@ const ListObjectifStrategique = ({
       <Divider />
       <SectionDetails
         sx={{
-          minHeight:
-            planTravaillist.length == 0 && filtre == "" ? "auto" : "auto",
-          maxHeight:
-            filtre === "" && planTravaillist.length != 0
-              ? "calc(100vh - 240px)"
-              : "auto",
+          minHeight: "100%",
+          maxHeight: filtre != "" ? "100%" : "calc(100vh - 240px)",
           overflow: "auto",
         }}
       >
