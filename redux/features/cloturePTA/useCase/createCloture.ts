@@ -7,7 +7,10 @@ export const createCloture = createAsyncThunk(
   "cloturePTA/createCloture",
   async (cloture: CloturePTAItem, thunkAPI) => {
     try {
-      const response = await axios.post("/suivi-evaluation/cloture-pta", cloture);
+      const response = await axios.post(
+        "/suvi-evaluation/cloture-pta",
+        cloture
+      );
       thunkAPI.dispatch(
         enqueueSnackbar({
           message: "Plan de travail est clôturé",
@@ -23,4 +26,3 @@ export const createCloture = createAsyncThunk(
     }
   }
 );
-

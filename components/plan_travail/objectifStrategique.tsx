@@ -73,7 +73,7 @@ const ListObjectifStrategique = ({
       title: "Clôturer le plan de travail",
       description: "Etes-vous sûr de vouloir clôturer ce plan de travail ?",
       cancellationText: "Annuler",
-      confirmationText: "Supprimer",
+      confirmationText: "Ok",
       cancellationButtonProps: {
         color: "warning",
       },

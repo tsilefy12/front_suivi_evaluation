@@ -6,7 +6,7 @@ export const getClotureList = createAsyncThunk(
   async (data: { args?: any }, thunkAPI) => {
     try {
       const params = JSON.stringify(data.args);
-      const response = await axios.get("/suivi-evaluation/cloture-pta", {
+      const response = await axios.get("/suvi-evaluation/cloture-pta", {
         params,
       });
       return response.data;
