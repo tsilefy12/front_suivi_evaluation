@@ -16,14 +16,11 @@ import {
 } from "@mui/material";
 import { Check, Close } from "@mui/icons-material";
 import PrintPdf from "../../gereRapportDeMission/printPdf";
-import useFetchNotify from "../hooks/useFetchNotify";
 import DoneIcon from "@mui/icons-material/Done";
 
 const ValidationRapport = () => {
   const fetchMission = useFetchMissionListe();
-  const { missionListe, loading, mission } = useAppSelector(
-    (state) => state.mission
-  );
+  const { missionListe, mission } = useAppSelector((state) => state.mission);
   const dispatch = useAppDispatch();
   const fetchGrants = useFetchGrants();
 
@@ -36,13 +33,13 @@ const ValidationRapport = () => {
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
   const [getVerificateurLogistic, setGetVerificateurLogistic] =
     React.useState<boolean>(false);
-  // const fetchNotify = useFetchNotify();
-  // const { notifyList, notify } = useAppSelector((state) => state.notify);
   React.useEffect(() => {
     fetchEmployes();
     fetchGrants();
     fetchMission();
-
+    const mission = missionListe.find((f: MissionItem) =>
+      f.notify!.map((n) => n.missionId).includes(f.id)
+    );
     if (mission) {
       const {
         verifyFinancial,

@@ -3,13 +3,11 @@ import BackOfficeLayout from "../../../layouts/backOffice";
 
 const ValidationRapportPage = () => {
   return (
-    <>
-      <BackOfficeLayout>
-        <div>
-          <ValidationRapport />
-        </div>
-      </BackOfficeLayout>
-    </>
+    <BackOfficeLayout>
+      <div style={{ paddingLeft: 2, paddingRight: 2 }}>
+        <ValidationRapport />
+      </div>
+    </BackOfficeLayout>
   );
 };
 export default ValidationRapportPage;
