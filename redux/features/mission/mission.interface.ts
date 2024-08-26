@@ -4,6 +4,7 @@ import { ActiviteRapportItem } from "../activitesRapport/activiteRapport.interfa
 import { EmployeItem } from "../employe/employeSlice.interface";
 import { LieuxRapportItem } from "../lieuxRapport/lieuxRapport.interface";
 import { MissionLocationItem } from "../missionLocation/missionLocationSlice.interface";
+import { NotifyItem } from "../notify/notify.interface";
 import { RapportDepenseItem } from "../rapportDepense/rapportDepense.interface";
 import { RapportFinanceItem } from "../rapportFinance/rapportFinance.interface";
 import { RapportTechniqueItem } from "../rapportTechnique/rapportTechnique.interface";
@@ -62,6 +63,7 @@ export interface MissionItem {
   resumeDepensePrevue?: ResumeDepensePrevueItem[];
   rapportFinance?: RapportFinanceItem[];
   rapportTechnique?: RapportTechniqueItem[];
+  notifys?: NotifyItem[];
 }
 
 export interface MissionInitialState {

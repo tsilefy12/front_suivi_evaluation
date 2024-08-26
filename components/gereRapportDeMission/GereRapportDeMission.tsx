@@ -37,6 +37,7 @@ import Moment from "react-moment";
 import PrintPdf from "./printPdf";
 import Logistiques from "./organism/Logistique/Logistique";
 import { TableLoading } from "../shared/loading";
+import { createNotify } from "../../redux/features/notify";
 
 const GereRapportDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -61,170 +62,234 @@ const GereRapportDeMission = () => {
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
-  const [getVerificateurFinance, setGetVerificateurFinance] =
-    React.useState<boolean>(false);
-  const [getVerificateurTechnic, setGetVerificateurTechnic] =
-    React.useState<boolean>(false);
-  const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
-  const [getVerificateurLogistic, setGetVerificateurLogistic] =
-    React.useState<boolean>(false);
 
   React.useEffect(() => {
     fetchEmployes();
     fetchGrants();
     fetchMission();
-    const mission = missionListe.find((m: MissionItem) => m.id == id);
-
-    if (mission) {
-      const {
-        verifyFinancial,
-        validationRapport,
-        verifyTechnic,
-        validateFinancial,
-        validateLogistic,
-        type,
-      } = mission;
-
-      const isFinanceVerified = validationRapport!.some(
-        (v: any) =>
-          v.responsableId == verifyFinancial &&
-          v.missionId == id &&
-          v.type == type &&
-          v.validation == true
-      );
-
-      setGetVerificateurFinance(isFinanceVerified);
-      const isTechnicVerified = validationRapport!.some(
-        (v: any) =>
-          v.responsableId == verifyTechnic &&
-          v.missionId == id &&
-          v.type == type &&
-          v.validation == true
-      );
-
-      setGetVerificateurTechnic(isTechnicVerified);
-
-      const isFinanceValidated = validationRapport!.some(
-        (v: any) =>
-          v.responsableId === validateFinancial &&
-          v.missionId == id &&
-          v.type == type &&
-          v.validation == true
-      );
-
-      setGetValidatePay(isFinanceValidated);
-
-      const isLogisticValidated = validationRapport!.some(
-        (v: any) =>
-          v.responsableId === validateLogistic &&
-          v.missionId == id &&
-          v.type == type &&
-          v.validation == true
-      );
-      setGetVerificateurLogistic(isLogisticValidated);
-    }
   }, []);
+  // React.useEffect(() => {
+  //   fetchEmployes();
+  //   fetchGrants();
+  //   fetchMission();
+  //   const mission = missionListe.find((m: MissionItem) => m.id == id);
 
-  const handleValidationFinance = async (
-    responsableId: string,
-    missionId: string,
-    validation: boolean,
-    type: string
-  ) => {
+  //   if (mission) {
+  //     const {
+  //       verifyFinancial,
+  //       validationRapport,
+  //       verifyTechnic,
+  //       validateFinancial,
+  //       validateLogistic,
+  //       type,
+  //     } = mission;
+
+  //     const isFinanceVerified = validationRapport!.some(
+  //       (v: any) =>
+  //         v.responsableId == verifyFinancial &&
+  //         v.missionId == id &&
+  //         v.type == type &&
+  //         v.validation == true
+  //     );
+
+  //     setGetVerificateurFinance(isFinanceVerified);
+  //     const isTechnicVerified = validationRapport!.some(
+  //       (v: any) =>
+  //         v.responsableId == verifyTechnic &&
+  //         v.missionId == id &&
+  //         v.type == type &&
+  //         v.validation == true
+  //     );
+
+  //     setGetVerificateurTechnic(isTechnicVerified);
+
+  //     const isFinanceValidated = validationRapport!.some(
+  //       (v: any) =>
+  //         v.responsableId === validateFinancial &&
+  //         v.missionId == id &&
+  //         v.type == type &&
+  //         v.validation == true
+  //     );
+
+  //     setGetValidatePay(isFinanceValidated);
+
+  //     const isLogisticValidated = validationRapport!.some(
+  //       (v: any) =>
+  //         v.responsableId === validateLogistic &&
+  //         v.missionId == id &&
+  //         v.type == type &&
+  //         v.validation == true
+  //     );
+  //     setGetVerificateurLogistic(isLogisticValidated);
+  //   }
+  // }, []);
+
+  // const handleValidationFinance = async (
+  //   responsableId: string,
+  //   missionId: string,
+  //   validation: boolean,
+  //   type: string
+  // ) => {
+  //   try {
+  //     // Send the updated validation state to the server
+  //     await axios.post("/suivi-evaluation/validation-rapport", {
+  //       responsableId,
+  //       missionId,
+  //       validation,
+  //       type,
+  //     });
+  //     setGetVerificateurFinance(validation);
+  //     dispatch(
+  //       enqueueSnackbar({
+  //         message: "Rapport validé avec succès",
+  //         options: { variant: "success" },
+  //       })
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const handleValidationTechnique = async (
+  //   responsableId: string,
+  //   missionId: string,
+  //   validation: boolean,
+  //   type: string
+  // ) => {
+  //   try {
+  //     await axios.post("/suivi-evaluation/validation-rapport", {
+  //       responsableId,
+  //       missionId,
+  //       validation,
+  //       type,
+  //     });
+  //     setGetVerificateurTechnic(validation);
+  //     dispatch(
+  //       enqueueSnackbar({
+  //         message: " Rapport validé avec succès",
+  //         options: { variant: "success" },
+  //       })
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // //paye
+  // const handleValidationPaye = async (
+  //   responsableId: string,
+  //   missionId: string,
+  //   validation: boolean,
+  //   type: string
+  // ) => {
+  //   try {
+  //     await axios.post("/suivi-evaluation/validation-rapport", {
+  //       responsableId,
+  //       missionId,
+  //       validation,
+  //       type,
+  //     });
+  //     setGetValidatePay(validation);
+  //     dispatch(
+  //       enqueueSnackbar({
+  //         message: " Rapport validé avec succès",
+  //         options: { variant: "success" },
+  //       })
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // //validateur logistique
+  // const handleValidateLogistique = async (
+  //   responsableId: string,
+  //   missionId: string,
+  //   validation: boolean,
+  //   type: string
+  // ) => {
+  //   try {
+  //     await axios.post(`/suivi-evaluation/validation-rapport`, {
+  //       responsableId,
+  //       missionId,
+  //       validation,
+  //       type,
+  //     });
+  //     setGetVerificateurLogistic(validation);
+  //     dispatch(
+  //       enqueueSnackbar({
+  //         message: " Logistique validé avec succès",
+  //         options: { variant: "success" },
+  //       })
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // Submit the updated mission
+  const envoyerNotification = async () => {
+    const verifyFinance = missionListe
+      .filter((f) => f.id == id)
+      .map((m) => m.verifyFinancial);
+    const verifyTech = missionListe
+      .filter((f) => f.id == id)
+      .map((m) => m.verifyTechnic);
+    const validateLog = missionListe
+      .filter((f) => f.id == id)
+      .map((m) => m.validateLogistic);
+    const validateFinance = missionListe
+      .filter((f) => f.id == id)
+      .map((m) => m.validateFinancial);
     try {
-      // Send the updated validation state to the server
-      await axios.post("/suivi-evaluation/validation-rapport", {
-        responsableId,
-        missionId,
-        validation,
-        type,
-      });
-      setGetVerificateurFinance(validation);
+      let promises: Promise<any>[] = [];
+      promises.push(
+        dispatch(
+          createNotify({
+            missionId: id,
+            responsableId: verifyFinance[0],
+            type: "Rapport",
+            link: "/validationMission/validationRapport",
+            ready: false,
+          })
+        ),
+        dispatch(
+          createNotify({
+            missionId: id,
+            responsableId: verifyTech[0],
+            type: "Rapport",
+            link: "/validationMission/validationRapport",
+            ready: false,
+          })
+        ),
+        dispatch(
+          createNotify({
+            missionId: id,
+            responsableId: validateLog[0],
+            type: "Rapport",
+            link: "/validationMission/validationRapport",
+            ready: false,
+          })
+        ),
+        dispatch(
+          createNotify({
+            missionId: id,
+            responsableId: validateFinance[0],
+            type: "Rapport",
+            link: "/validationMission/validationRapport",
+            ready: false,
+          })
+        )
+      );
+      await Promise.all(promises);
       dispatch(
         enqueueSnackbar({
-          message: "Rapport validé avec succès",
+          message: "Message envoyé avec succès",
           options: { variant: "success" },
         })
       );
+      return router.push("/missions/ListMission");
     } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleValidationTechnique = async (
-    responsableId: string,
-    missionId: string,
-    validation: boolean,
-    type: string
-  ) => {
-    try {
-      await axios.post("/suivi-evaluation/validation-rapport", {
-        responsableId,
-        missionId,
-        validation,
-        type,
-      });
-      setGetVerificateurTechnic(validation);
-      dispatch(
-        enqueueSnackbar({
-          message: " Rapport validé avec succès",
-          options: { variant: "success" },
-        })
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //paye
-  const handleValidationPaye = async (
-    responsableId: string,
-    missionId: string,
-    validation: boolean,
-    type: string
-  ) => {
-    try {
-      await axios.post("/suivi-evaluation/validation-rapport", {
-        responsableId,
-        missionId,
-        validation,
-        type,
-      });
-      setGetValidatePay(validation);
-      dispatch(
-        enqueueSnackbar({
-          message: " Rapport validé avec succès",
-          options: { variant: "success" },
-        })
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //validateur logistique
-  const handleValidateLogistique = async (
-    responsableId: string,
-    missionId: string,
-    validation: boolean,
-    type: string
-  ) => {
-    try {
-      await axios.post(`/suivi-evaluation/validation-rapport`, {
-        responsableId,
-        missionId,
-        validation,
-        type,
-      });
-      setGetVerificateurLogistic(validation);
-      dispatch(
-        enqueueSnackbar({
-          message: " Logistique validé avec succès",
-          options: { variant: "success" },
-        })
-      );
-    } catch (error) {
-      console.log(error);
+      console.log("error", error);
     }
   };
   return (
@@ -247,6 +312,15 @@ const GereRapportDeMission = () => {
                 Retour
               </Button>
             </Link>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<DoneIcon />}
+              sx={{ marginInline: 3 }}
+              onClick={() => envoyerNotification()}
+            >
+              Soumettre la rapport
+            </Button>
             {/* <Button
               variant="contained"
               size="small"
@@ -302,7 +376,7 @@ const GereRapportDeMission = () => {
               <Logistiques />
             </TabPanel>
           </Stack>
-          <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>
+          {/* <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>
             <CardBody>
               <Typography variant="h6" sx={{ textTransform: "uppercase" }}>
                 Etat des rapports
@@ -587,7 +661,7 @@ const GereRapportDeMission = () => {
             <CardFooter>
               <PrintPdf />
             </CardFooter>
-          </Stack>
+          </Stack> */}
         </Stack>
       </BodySection>
     </>
@@ -655,18 +729,18 @@ export const CardFooter = styled("div")(({ theme }) => ({
   marginTop: "20px",
 }));
 
-const CardBody = styled(Stack)(({ theme }) => ({
-  paddingInline: theme.spacing(3),
-  background: theme.palette.grey[100],
-  paddingBottom: theme.spacing(1),
-  width: "100%",
-  padding: "10px 14px",
-  borderRadius: 14,
-  gap: "32px",
-  marginTop: 15,
-}));
+// const CardBody = styled(Stack)(({ theme }) => ({
+//   paddingInline: theme.spacing(3),
+//   background: theme.palette.grey[100],
+//   paddingBottom: theme.spacing(1),
+//   width: "100%",
+//   padding: "10px 14px",
+//   borderRadius: 14,
+//   gap: "32px",
+//   marginTop: 15,
+// }));
 
-const CardMain = styled(Stack)(({ theme }) => ({
-  marginTop: "10px",
-  paddingBottom: theme.spacing(1),
-}));
+// const CardMain = styled(Stack)(({ theme }) => ({
+//   marginTop: "10px",
+//   paddingBottom: theme.spacing(1),
+// }));

@@ -33,6 +33,8 @@ import PrintPdfPrevision from "./printpDFPrevision";
 import { CardFooter } from "../gereRapportDeMission/GereRapportDeMission";
 import Logistiques from "./organism/Logistique/Logistique";
 import { updateMission } from "../../redux/features/mission";
+import { createNotify } from "../../redux/features/notify";
+import { promises } from "dns";
 
 const PrevisionDeMission = () => {
   const [value, setValue] = React.useState(0);
@@ -50,182 +52,185 @@ const PrevisionDeMission = () => {
   const { employees } = useAppSelector((state) => state.employe);
   const fetchGrants = useFetchGrants();
   const validate = usePermitted();
-  const [getVerificateurFinance, setGetVerificateurFinance] =
-    React.useState<boolean>(false);
-  const [getVerificateurTechnic, setGetVerificateurTechnic] =
-    React.useState<boolean>(false);
-  const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
-  const [getValidateLogistique, setGetValidateLogistique] =
-    React.useState<boolean>(false);
-
+  // const [getVerificateurFinance, setGetVerificateurFinance] =
+  //   React.useState<boolean>(false);
+  // const [getVerificateurTechnic, setGetVerificateurTechnic] =
+  //   React.useState<boolean>(false);
+  // const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
+  // const [getValidateLogistique, setGetValidateLogistique] =
+  //   React.useState<boolean>(false);
   useEffect(() => {
-    fetchGrants();
     fetchEmployes();
+    fetchGrants();
     fetchMission();
-    const mission = missionListe.find((m: MissionItem) => m.id == id);
-
-    if (mission) {
-      const {
-        verifyFinancial,
-        verifyTechnic,
-        validateFinancial,
-        validationPrevision,
-        validateLogistique,
-        type,
-      } = mission;
-
-      const isFinanceVerified = validationPrevision!.some(
-        (v: any) =>
-          v.responsableId == verifyFinancial &&
-          v.missionId == id &&
-          v.validation == true &&
-          v.type == type
-      );
-
-      setGetVerificateurFinance(isFinanceVerified);
-
-      //technic
-
-      const isTechnicVerified = validationPrevision!.some(
-        (v: any) =>
-          v.responsableId == verifyTechnic &&
-          v.missionId == id &&
-          v.validation == true &&
-          v.type == type
-      );
-
-      setGetVerificateurTechnic(isTechnicVerified);
-
-      //paye
-
-      const isFinanceValidated = validationPrevision!.some(
-        (v: any) =>
-          v.responsableId == validateFinancial &&
-          v.missionId == id &&
-          v.validation == true &&
-          v.type == type
-      );
-
-      setGetValidatePay(isFinanceValidated);
-
-      //logistique
-      const isLogistiqueValidated = validationPrevision!.some(
-        (v: any) =>
-          v.responsableId == validateLogistique &&
-          v.missionId == id &&
-          v.validation == true &&
-          v.type == type
-      );
-      setGetValidateLogistique(isLogistiqueValidated);
-    }
   }, []);
+  // useEffect(() => {
+  //   fetchGrants();
+  //   fetchEmployes();
+  //   fetchMission();
+  //   const mission = missionListe.find((m: MissionItem) => m.id == id);
 
-  const handleValidationFinance = async (
-    responsableId: string,
-    missionId: string,
-    validation: boolean,
-    type: string
-  ) => {
-    try {
-      await axios.post("/suivi-evaluation/validation-prevision", {
-        responsableId,
-        missionId,
-        validation,
-        type,
-      });
-      setGetVerificateurFinance(validation);
+  //   if (mission) {
+  //     const {
+  //       verifyFinancial,
+  //       verifyTechnic,
+  //       validateFinancial,
+  //       validationPrevision,
+  //       validateLogistique,
+  //       type,
+  //     } = mission;
 
-      dispatch(
-        enqueueSnackbar({
-          message: "Prévision validé avec succès",
-          options: { variant: "success" },
-        })
-      );
-      console.log("Ok");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     const isFinanceVerified = validationPrevision!.some(
+  //       (v: any) =>
+  //         v.responsableId == verifyFinancial &&
+  //         v.missionId == id &&
+  //         v.validation == true &&
+  //         v.type == type
+  //     );
 
-  // //validation technique
-  const handleValidationTechnique = async (
-    responsableId: string,
-    missionId: string,
-    validation: boolean,
-    type: string
-  ) => {
-    try {
-      await axios.post("/suivi-evaluation/validation-prevision", {
-        responsableId,
-        missionId,
-        validation,
-        type,
-      });
-      setGetVerificateurTechnic(validation);
-      dispatch(
-        enqueueSnackbar({
-          message: " Prévision validé avec succès",
-          options: { variant: "success" },
-        })
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     setGetVerificateurFinance(isFinanceVerified);
 
-  //validation paiement
-  const handleValidationPaye = async (
-    responsableId: string,
-    missionId: string,
-    validation: boolean,
-    type: string
-  ) => {
-    try {
-      await axios.post("/suivi-evaluation/validation-prevision", {
-        responsableId,
-        missionId,
-        validation,
-        type,
-      });
-      setGetValidatePay(validation);
-      dispatch(
-        enqueueSnackbar({
-          message: " Prévision validé avec succès",
-          options: { variant: "success" },
-        })
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     //technic
 
-  //validation logistique
-  const handleValidateLogistique = async (
-    responsableId: string,
-    missionId: string,
-    validation: boolean,
-    type: string
-  ) => {
-    try {
-      await axios.post("/suivi-evaluation/validation-prevision", {
-        responsableId,
-        missionId,
-        validation,
-        type,
-      });
-      setGetValidateLogistique(validation);
-      dispatch(
-        enqueueSnackbar({
-          message: " Prévision validé avec succès",
-          options: { variant: "success" },
-        })
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     const isTechnicVerified = validationPrevision!.some(
+  //       (v: any) =>
+  //         v.responsableId == verifyTechnic &&
+  //         v.missionId == id &&
+  //         v.validation == true &&
+  //         v.type == type
+  //     );
 
-  //send mail to admin
+  //     setGetVerificateurTechnic(isTechnicVerified);
+
+  //     //paye
+
+  //     const isFinanceValidated = validationPrevision!.some(
+  //       (v: any) =>
+  //         v.responsableId == validateFinancial &&
+  //         v.missionId == id &&
+  //         v.validation == true &&
+  //         v.type == type
+  //     );
+
+  //     setGetValidatePay(isFinanceValidated);
+
+  //     //logistique
+  //     const isLogistiqueValidated = validationPrevision!.some(
+  //       (v: any) =>
+  //         v.responsableId == validateLogistique &&
+  //         v.missionId == id &&
+  //         v.validation == true &&
+  //         v.type == type
+  //     );
+  //     setGetValidateLogistique(isLogistiqueValidated);
+  //   }
+  // }, []);
+
+  // const handleValidationFinance = async (
+  //   responsableId: string,
+  //   missionId: string,
+  //   validation: boolean,
+  //   type: string
+  // ) => {
+  //   try {
+  //     await axios.post("/suivi-evaluation/validation-prevision", {
+  //       responsableId,
+  //       missionId,
+  //       validation,
+  //       type,
+  //     });
+  //     setGetVerificateurFinance(validation);
+
+  //     dispatch(
+  //       enqueueSnackbar({
+  //         message: "Prévision validé avec succès",
+  //         options: { variant: "success" },
+  //       })
+  //     );
+  //     console.log("Ok");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // // //validation technique
+  // const handleValidationTechnique = async (
+  //   responsableId: string,
+  //   missionId: string,
+  //   validation: boolean,
+  //   type: string
+  // ) => {
+  //   try {
+  //     await axios.post("/suivi-evaluation/validation-prevision", {
+  //       responsableId,
+  //       missionId,
+  //       validation,
+  //       type,
+  //     });
+  //     setGetVerificateurTechnic(validation);
+  //     dispatch(
+  //       enqueueSnackbar({
+  //         message: " Prévision validé avec succès",
+  //         options: { variant: "success" },
+  //       })
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // //validation paiement
+  // const handleValidationPaye = async (
+  //   responsableId: string,
+  //   missionId: string,
+  //   validation: boolean,
+  //   type: string
+  // ) => {
+  //   try {
+  //     await axios.post("/suivi-evaluation/validation-prevision", {
+  //       responsableId,
+  //       missionId,
+  //       validation,
+  //       type,
+  //     });
+  //     setGetValidatePay(validation);
+  //     dispatch(
+  //       enqueueSnackbar({
+  //         message: " Prévision validé avec succès",
+  //         options: { variant: "success" },
+  //       })
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // //validation logistique
+  // const handleValidateLogistique = async (
+  //   responsableId: string,
+  //   missionId: string,
+  //   validation: boolean,
+  //   type: string
+  // ) => {
+  //   try {
+  //     await axios.post("/suivi-evaluation/validation-prevision", {
+  //       responsableId,
+  //       missionId,
+  //       validation,
+  //       type,
+  //     });
+  //     setGetValidateLogistique(validation);
+  //     dispatch(
+  //       enqueueSnackbar({
+  //         message: " Prévision validé avec succès",
+  //         options: { variant: "success" },
+  //       })
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const [ref, setReference] = React.useState(0);
   const [annee, setAnnee] = React.useState<any>(
     new Date().getFullYear().toString().slice(2)
@@ -277,14 +282,72 @@ const PrevisionDeMission = () => {
 
   // Submit the updated mission
   const updateMissionReference = async () => {
+    const verifyFinance = missionListe
+      .filter((f) => f.id == id)
+      .map((m) => m.verifyFinancial);
+    const verifyTech = missionListe
+      .filter((f) => f.id == id)
+      .map((m) => m.verifyTechnic);
+    const validateLog = missionListe
+      .filter((f) => f.id == id)
+      .map((m) => m.validateLogistic);
+    const validateFinance = missionListe
+      .filter((f) => f.id == id)
+      .map((m) => m.validateFinancial);
     try {
-      await dispatch(
-        updateMission({
-          id: id,
-          mission: {
-            ...mission,
-            reference: `${annee}-${ref.toString().padStart(3, "0")}`,
-          },
+      let promises: Promise<any>[] = [];
+      promises.push(
+        dispatch(
+          updateMission({
+            id: id,
+            mission: {
+              ...mission,
+              reference: `${annee}-${ref.toString().padStart(3, "0")}`,
+            },
+          })
+        ),
+        dispatch(
+          createNotify({
+            missionId: id,
+            responsableId: verifyFinance[0],
+            type: "Prevision",
+            link: "/validationMission/validationPrevision",
+            ready: false,
+          })
+        ),
+        dispatch(
+          createNotify({
+            missionId: id,
+            responsableId: verifyTech[0],
+            type: "Prevision",
+            link: "/validationMission/validationPrevision",
+            ready: false,
+          })
+        ),
+        dispatch(
+          createNotify({
+            missionId: id,
+            responsableId: validateLog[0],
+            type: "Prevision",
+            link: "/validationMission/validationPrevision",
+            ready: false,
+          })
+        ),
+        dispatch(
+          createNotify({
+            missionId: id,
+            responsableId: validateFinance[0],
+            type: "Prevision",
+            link: "/validationMission/validationPrevision",
+            ready: false,
+          })
+        )
+      );
+      await Promise.all(promises);
+      dispatch(
+        enqueueSnackbar({
+          message: "Message envoyé avec succès",
+          options: { variant: "success" },
         })
       );
       return router.push("/missions/ListMission");
@@ -367,7 +430,7 @@ const PrevisionDeMission = () => {
               <Logistiques key={value} />
             </TabPanel>
           </Stack>
-          <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>
+          {/* <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>
             <CardPrevision
               key={0}
               sx={{
@@ -659,7 +722,7 @@ const PrevisionDeMission = () => {
                 <PrintPdfPrevision />
               </Stack>
             </CardPrevision>
-          </Stack>
+          </Stack> */}
         </Stack>
       </BodySection>
     </>
@@ -709,17 +772,6 @@ export const BodySection = styled(Paper)(({ theme }) => ({
   gap: "16px",
   border: `1px solid ${theme.palette.grey[100]}`,
   width: "100%",
-}));
-
-const CardPrevision = styled("div")(({ theme }) => ({
-  paddingInline: theme.spacing(3),
-  background: theme.palette.grey[100],
-  // paddingBottom: theme.spacing(1),
-  width: "100%",
-  // padding: "8px 18px",
-  borderRadius: 14,
-  gap: "32px",
-  marginTop: 14,
 }));
 
 const NavigationContainer = styled(Stack)(({ theme }) => ({

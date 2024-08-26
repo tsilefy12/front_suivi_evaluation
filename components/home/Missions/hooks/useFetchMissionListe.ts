@@ -23,6 +23,7 @@ const useFetchMissionListe = () => {
         resumeDepensePrevue: true,
         rapportFinance: true,
         rapportTechnique: true,
+        notifys: true,
       },
     };
     if (router.query.search) {

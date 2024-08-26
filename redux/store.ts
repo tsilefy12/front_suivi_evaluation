@@ -66,6 +66,7 @@ import { fileSlice } from "./features/file/fileSlice";
 import { rapportFinanceSlice } from "./features/rapportFinance/rapportFinanceSlice";
 import { rapportTechniqueSlice } from "./features/rapportTechnique/rapportTechniqueSlice";
 import { cloturePTASlice } from "./features/cloturePTA/clotureSlice";
+import { notifySlice } from "./features/notify/notifySlice";
 
 export const store = configureStore({
   reducer: {
@@ -136,6 +137,7 @@ export const store = configureStore({
     rapportFinance: rapportFinanceSlice.reducer,
     rapportTechnique: rapportTechniqueSlice.reducer,
     cloturePTA: cloturePTASlice.reducer,
+    notify: notifySlice.reducer,
   },
 });
 
