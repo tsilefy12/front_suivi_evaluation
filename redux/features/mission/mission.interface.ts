@@ -63,7 +63,7 @@ export interface MissionItem {
   resumeDepensePrevue?: ResumeDepensePrevueItem[];
   rapportFinance?: RapportFinanceItem[];
   rapportTechnique?: RapportTechniqueItem[];
-  notifys?: NotifyItem[];
+  notify?: NotifyItem[];
 }
 
 export interface MissionInitialState {
