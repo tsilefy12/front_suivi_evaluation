@@ -47,22 +47,28 @@ export default function Rapport() {
             <TableCell padding="none">Status</TableCell>
           </TableHead>
           <TableBody>
-            {missionListe.map((row: MissionItem, index: any) => (
-              <TableRow key={row.id}>
-                <TableCell padding="none" sx={{ paddingY: 1 }}>
-                  {"MISSION_" + row?.reference}
-                </TableCell>
-                <TableCell padding="none">{row.RefBudget}</TableCell>
-                <TableCell padding="none">
-                  {row.uncompleteTbbs!.map((m) => (
-                    <Moment format="DD/MM/yyyy" key={m.id}>
-                      {m.dateRF}
-                    </Moment>
-                  ))}
-                </TableCell>
-                <TableCell padding="none">{row.status}</TableCell>
-              </TableRow>
-            ))}
+            {missionListe
+              .filter(
+                (f) =>
+                  new Date(f.dateFin as Date).getFullYear() ===
+                    new Date().getFullYear() && f.status === "Terminé"
+              )
+              .map((row: MissionItem, index: any) => (
+                <TableRow key={row.id}>
+                  <TableCell padding="none" sx={{ paddingY: 1 }}>
+                    {"MISSION_" + row?.reference}
+                  </TableCell>
+                  <TableCell padding="none">{row.RefBudget}</TableCell>
+                  <TableCell padding="none">
+                    {row.uncompleteTbbs!.map((m) => (
+                      <Moment format="DD/MM/yyyy" key={m.id}>
+                        {m.dateRF}
+                      </Moment>
+                    ))}
+                  </TableCell>
+                  <TableCell padding="none">{row.status}</TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </Stack>
