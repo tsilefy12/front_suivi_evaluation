@@ -405,7 +405,7 @@ const PrevisionDeMission = () => {
           spacing={{ xs: 1, sm: 1, md: 2 }}
           sx={{ padding: "0px", width: "100%" }}
         >
-          <Stack width={{ xs: "100%", sm: "100%", md: "70%" }}>
+          <Stack width={{ xs: "100%", sm: "100%" }}>
             <Tabs
               value={value}
               onChange={handleChange}
