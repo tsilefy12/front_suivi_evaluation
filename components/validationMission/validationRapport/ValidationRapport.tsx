@@ -36,13 +36,12 @@ const ValidationRapport = () => {
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
   const [getVerificateurLogistic, setGetVerificateurLogistic] =
     React.useState<boolean>(false);
-  const fetchNotify = useFetchNotify();
-  const { notifyList, notify } = useAppSelector((state) => state.notify);
+  // const fetchNotify = useFetchNotify();
+  // const { notifyList, notify } = useAppSelector((state) => state.notify);
   React.useEffect(() => {
     fetchEmployes();
     fetchGrants();
     fetchMission();
-    fetchNotify();
 
     if (mission) {
       const {
@@ -208,8 +207,10 @@ const ValidationRapport = () => {
             <div>
               <FormLabel>Elaboré par : </FormLabel>
               {missionListe
-                .filter((f: MissionItem) =>
-                  notifyList.map((n) => n.missionId).includes(f.id)
+                .filter(
+                  (f: MissionItem) =>
+                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((m) => m.type == "Rapport")
                 )
                 .map((row: MissionItem) => (
                   <span key={row.id!}>
@@ -230,11 +231,8 @@ const ValidationRapport = () => {
               {missionListe
                 .filter(
                   (f: MissionItem) =>
-                    notifyList.map((n) => n.missionId).includes(f.id) &&
-                    notifyList
-                      .map((n) => n.responsableId)
-                      .includes(f.verifyFinancial) &&
-                    f.notifys!.map((m) => m.type == "Rapport")
+                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((m) => m.type == "Rapport")
                 )
                 .map((row: MissionItem) => (
                   <Stack
@@ -297,11 +295,8 @@ const ValidationRapport = () => {
               {missionListe
                 .filter(
                   (f: MissionItem) =>
-                    notifyList.map((n) => n.missionId).includes(f.id) &&
-                    notifyList
-                      .map((n) => n.responsableId)
-                      .includes(f.verifyTechnic) &&
-                    f.notifys!.map((m) => m.type == "Rapport")
+                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((m) => m.type == "Rapport")
                 )
                 .map((row: MissionItem) => (
                   <Stack
@@ -365,11 +360,8 @@ const ValidationRapport = () => {
               {missionListe
                 .filter(
                   (f: MissionItem) =>
-                    notifyList.map((n) => n.missionId).includes(f.id) &&
-                    notifyList
-                      .map((n) => n.responsableId)
-                      .includes(f.validateLogistic) &&
-                    f.notifys!.map((m) => m.type == "Rapport")
+                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((m) => m.type == "Rapport")
                 )
                 .map((row: MissionItem) => (
                   <Stack
@@ -434,11 +426,8 @@ const ValidationRapport = () => {
               {missionListe
                 .filter(
                   (f: MissionItem) =>
-                    notifyList.map((n) => n.missionId).includes(f.id) &&
-                    notifyList
-                      .map((n) => n.responsableId)
-                      .includes(f.validateFinancial) &&
-                    f.notifys!.map((m) => m.type == "Rapport")
+                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((m) => m.type == "Rapport")
                 )
                 .map((row: MissionItem) => (
                   <Fragment key={row.id}>

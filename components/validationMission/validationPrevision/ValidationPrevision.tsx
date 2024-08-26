@@ -33,14 +33,12 @@ const ValidationPrevision = () => {
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
   const [getValidateLogistique, setGetValidateLogistique] =
     React.useState<boolean>(false);
-  const fetchNotify = useFetchNotify();
-  const { notifyList, notify } = useAppSelector((state) => state.notify);
+  // const fetchNotify = useFetchNotify();
+  // const { notifyList, notify } = useAppSelector((state) => state.notify);
   useEffect(() => {
     fetchGrants();
     fetchEmployes();
     fetchMission();
-    fetchNotify();
-
     if (mission) {
       const {
         verifyFinancial,
@@ -219,8 +217,10 @@ const ValidationPrevision = () => {
             <div>
               <FormLabel>Elaboré par : </FormLabel>
               {missionListe
-                .filter((f: MissionItem) =>
-                  f.notify!.map((n) => n.missionId).includes(f.id)
+                .filter(
+                  (f: MissionItem) =>
+                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((m) => m.type == "Prevision")
                 )
                 .map((row: MissionItem) => (
                   <span key={row.id!}>
@@ -239,8 +239,10 @@ const ValidationPrevision = () => {
             <Typography>
               <span> Vérifié financièrement par : </span>
               {missionListe
-                .filter((f: MissionItem) =>
-                  f.notify!.map((n: any) => n.type).includes("Prevision")
+                .filter(
+                  (f: MissionItem) =>
+                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((n: any) => n.type).includes("Prevision")
                 )
                 .map((row: MissionItem) => (
                   <Stack
@@ -301,8 +303,10 @@ const ValidationPrevision = () => {
             <Typography>
               <span>Vérifié techniquement par : </span>
               {missionListe
-                .filter((f: MissionItem) =>
-                  f.notify!.map((n: any) => n.type).includes("Prevision")
+                .filter(
+                  (f: MissionItem) =>
+                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((n: any) => n.type).includes("Prevision")
                 )
                 .map((row: MissionItem) => (
                   <Stack
@@ -364,8 +368,10 @@ const ValidationPrevision = () => {
             <Typography>
               <span>Vérifié logistiquement par : </span>
               {missionListe
-                .filter((f: MissionItem) =>
-                  f.notify!.map((n: any) => n.type).includes("Prevision")
+                .filter(
+                  (f: MissionItem) =>
+                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((n: any) => n.type).includes("Prevision")
                 )
                 .map((row: MissionItem) => (
                   <Stack
@@ -427,8 +433,10 @@ const ValidationPrevision = () => {
             <Divider />
             <Typography>
               {missionListe
-                .filter((f: MissionItem) =>
-                  f.notify!.map((n: any) => n.type).includes("Prevision")
+                .filter(
+                  (f: MissionItem) =>
+                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((n: any) => n.type).includes("Prevision")
                 )
                 .map((row: MissionItem) => (
                   <Fragment key={row.id}>
