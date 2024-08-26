@@ -47,7 +47,7 @@ export default function Rapport() {
             <TableCell padding="none">Status</TableCell>
           </TableHead>
           <TableBody>
-            {missionListe.filter((f) =>new Date(f.endDate as Date).getFullYear() == new Date().getFullYear()).map((row: MissionItem, index: any) => (
+            {missionListe.map((row: MissionItem, index: any) => (
               <TableRow key={row.id}>
                 <TableCell padding="none" sx={{ paddingY: 1 }}>
                   {"MISSION_" + row?.reference}

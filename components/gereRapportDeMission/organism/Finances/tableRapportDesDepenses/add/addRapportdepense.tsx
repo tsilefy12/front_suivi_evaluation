@@ -454,7 +454,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                         TOTAL GENERAL BUDGET : {total + total / 10} Ar
                       </Typography>
                     </Footer> */}
-                    <TablePagination
+                    {/* <TablePagination
                       rowsPerPageOptions={[5, 10, 25]}
                       component="div"
                       count={[1, 2, 3, 4, 5].length}
@@ -464,7 +464,7 @@ const AddRapportdepense = ({ handleClose }: any) => {
                       onRowsPerPageChange={handleChangeRowsPerPage}
                       labelRowsPerPage={labelRowsPerPage}
                       labelDisplayedRows={defaultLabelDisplayedRows}
-                    />
+                    /> */}
                   </FormContainer>
                 </DialogContent>
                 <DialogActions>

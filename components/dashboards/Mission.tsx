@@ -46,31 +46,33 @@ export default function Mission() {
             <TableCell padding="none">Fin</TableCell>
           </TableHead>
           <TableBody>
-            {missionListe.filter((f) =>new Date(f.endDate as Date).getFullYear() == new Date().getFullYear()).map((row: MissionItem, index: any) => (
-              <TableRow key={row.id}>
-                <TableCell padding="none" sx={{ paddingY: 1 }}>
-                  {row.RefBudget}
-                </TableCell>
-                <TableCell padding="none">
-                  {`${
-                    employees.find(
-                      (e: EmployeItem) => e.id === row.missionManagerId
-                    )?.name as string
-                  } ${" "}
+            {missionListe
+              .filter((f) => f.status === "En cours")
+              .map((row: MissionItem, index: any) => (
+                <TableRow key={row.id}>
+                  <TableCell padding="none" sx={{ paddingY: 1 }}>
+                    {row.RefBudget}
+                  </TableCell>
+                  <TableCell padding="none">
+                    {`${
+                      employees.find(
+                        (e: EmployeItem) => e.id === row.missionManagerId
+                      )?.name as string
+                    } ${" "}
                       ${
                         employees.find(
                           (e: EmployeItem) => e.id === row.missionManagerId
                         )?.surname as string
                       } `}
-                </TableCell>
-                <TableCell padding="none">
-                  {row.missionLocation!.map(
-                    (l: MissionLocationItem) => l.district!
-                  )}
-                </TableCell>
-                <TableCell padding="none"></TableCell>
-              </TableRow>
-            ))}
+                  </TableCell>
+                  <TableCell padding="none">
+                    {row.missionLocation!.map(
+                      (l: MissionLocationItem) => l.district!
+                    )}
+                  </TableCell>
+                  <TableCell padding="none"></TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </Stack>
