@@ -195,12 +195,19 @@ const ValidationRapport = () => {
 
   return (
     <>
-      <Stack width={{ xs: "100%", sm: "100%", md: "30%" }}>
-        <CardBody>
+      <Stack width={{ xs: "100%", sm: "100%", md: "100%" }}>
+        <CardBody
+          sx={{
+            height: "calc(100vh - 200px)",
+            paddingTop: 1,
+            overflow: "auto",
+            border: "1px solid #E5E5E5",
+          }}
+        >
           <Typography variant="h6" sx={{ textTransform: "uppercase" }}>
             Etat des rapports
           </Typography>
-          <Stack spacing={2}>
+          <Stack gap={2}>
             <div>
               <FormLabel>Elaboré par : </FormLabel>
               {missionListe
@@ -474,10 +481,10 @@ const ValidationRapport = () => {
                 ))}
             </Typography>
           </Stack>
+          <CardFooter>
+            <PrintPdf />
+          </CardFooter>
         </CardBody>
-        <CardFooter>
-          <PrintPdf />
-        </CardFooter>
       </Stack>
     </>
   );
@@ -488,7 +495,7 @@ const CardBody = styled(Stack)(({ theme }) => ({
   background: theme.palette.grey[100],
   paddingBottom: theme.spacing(1),
   width: "100%",
-  padding: "10px 14px",
+  // padding: "10px 14px",
   borderRadius: 14,
   gap: "32px",
   marginTop: 15,
@@ -503,7 +510,7 @@ export const CardFooter = styled("div")(({ theme }) => ({
   paddingBlock: theme.spacing(1),
   borderBottomLeftRadius: theme.spacing(2),
   borderBottomRightRadius: theme.spacing(2),
-  width: "100%",
-  padding: "10px 22px",
+  width: "auto",
+  // padding: "10px 22px",
   marginTop: "20px",
 }));

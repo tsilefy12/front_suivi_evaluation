@@ -203,11 +203,11 @@ const ValidationPrevision = () => {
     }
   };
   return (
-    <Stack width={{ xs: "100%", sm: "100%" }}>
+    <Stack width={{ xs: "100%", sm: "100%", md: "100%" }}>
       <CardPrevision
         key={0}
         sx={{
-          height: "calc(100vh - 300px)",
+          height: "calc(100vh - 250px)",
           paddingTop: 1,
           overflow: "auto",
         }}
@@ -489,9 +489,9 @@ const ValidationPrevision = () => {
           </Typography>
           <Divider />
         </Stack>
-        <Stack padding={1} width={"50%"}>
+        <CardFooter>
           <PrintPdfPrevision />
-        </Stack>
+        </CardFooter>
       </CardPrevision>
     </Stack>
   );
@@ -506,4 +506,13 @@ const CardPrevision = styled("div")(({ theme }) => ({
   borderRadius: 14,
   gap: "32px",
   marginTop: 14,
+}));
+export const CardFooter = styled("div")(({ theme }) => ({
+  paddingInline: theme.spacing(2),
+  paddingBlock: theme.spacing(1),
+  borderBottomLeftRadius: theme.spacing(2),
+  borderBottomRightRadius: theme.spacing(2),
+  width: "auto",
+  // padding: "10px 22px",
+  marginTop: "20px",
 }));
