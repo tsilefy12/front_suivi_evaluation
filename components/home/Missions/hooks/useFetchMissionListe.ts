@@ -24,6 +24,9 @@ const useFetchMissionListe = () => {
         rapportFinance: true,
         rapportTechnique: true,
         notify: true,
+        missionGoals: true,
+        exceptedResults: true,
+        plannedActivities: true,
       },
     };
     if (router.query.search) {

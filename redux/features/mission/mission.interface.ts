@@ -2,9 +2,12 @@ import { LivrableRapportItem } from "../LivrableRapport/livrableRapport.interfac
 import { PrevisionDepenseItem } from "../PrevisionDepense/previsionDepense.interface";
 import { ActiviteRapportItem } from "../activitesRapport/activiteRapport.interface";
 import { EmployeItem } from "../employe/employeSlice.interface";
+import { ExceptedResultItem } from "../exceptedResult/exceptedResultSlice.interface";
 import { LieuxRapportItem } from "../lieuxRapport/lieuxRapport.interface";
+import { MissionGoalItem } from "../missionGoal/missionGoalSlice.interface";
 import { MissionLocationItem } from "../missionLocation/missionLocationSlice.interface";
 import { NotifyItem } from "../notify/notify.interface";
+import { PlannedActivityItem } from "../plannedActivity/plannedActivitySlice.interface";
 import { RapportDepenseItem } from "../rapportDepense/rapportDepense.interface";
 import { RapportFinanceItem } from "../rapportFinance/rapportFinance.interface";
 import { RapportTechniqueItem } from "../rapportTechnique/rapportTechnique.interface";
@@ -64,6 +67,9 @@ export interface MissionItem {
   rapportFinance?: RapportFinanceItem[];
   rapportTechnique?: RapportTechniqueItem[];
   notify?: NotifyItem[];
+  missionGoals?: MissionGoalItem[];
+  exceptedResults?: ExceptedResultItem[];
+  plannedActivities?: PlannedActivityItem[];
 }
 
 export interface MissionInitialState {

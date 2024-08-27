@@ -19,6 +19,7 @@ import formatMontant from "../../hooks/format";
 import useFetchResumeDepenseList from "./organism/Finances/tableResumeDepense/hooks/useFetchResumeDepense";
 import { format } from "date-fns";
 import useFetchEmployes from "../home/Missions/hooks/useFetchEmployees";
+import { MissionItem } from "../../redux/features/mission/mission.interface";
 
 const PrintPdfPrevision = () => {
   const router = useRouter();
@@ -64,21 +65,32 @@ const PrintPdfPrevision = () => {
               style={{
                 border: 1.5,
                 paddingTop: 5,
-                paddingBottom: 13,
+                paddingBottom: 6,
                 width: "65%",
                 display: "flex",
                 alignItems: "center",
                 textAlign: "center",
                 color: "#D2691E",
                 fontWeight: "bold",
-                backgroundColor: "rgb(164, 199, 84)",
+                backgroundColor: "rgb(223, 227, 232)",
               }}
             >
-              Validation prévision de mission
+              Prévision de mission,{" "}
+              {missionListe
+                .filter(
+                  (f: MissionItem) =>
+                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((n) => n.type).includes("Prevision")
+                )
+                .map((mission) => mission.reference)}
             </Text>
           </View>
           {missionListe
-            .filter((f) => f.id == id)
+            .filter(
+              (f: MissionItem) =>
+                f.notify!.map((n) => n.missionId).includes(f.id) &&
+                f.notify!.map((n) => n.type).includes("Prevision")
+            )
             .map((mission) => (
               <View
                 style={{
@@ -86,40 +98,196 @@ const PrintPdfPrevision = () => {
                   flexDirection: "column",
                   paddingLeft: 35,
                   fontSize: 12,
-                  paddingTop: 20,
+                  paddingTop: 5,
+                  border: "1px solid gray",
                 }}
                 key={mission.id}
               >
-                <Text style={{ paddingBottom: 3 }}>
-                  Titre : Prévision de mission
-                </Text>
-                <Text style={{ paddingBottom: 3 }}>
-                  Type : {mission.uncompleteTbbs?.map((type) => type.type)}
-                </Text>
-                <Text style={{ paddingBottom: 3 }}>
-                  Référence budget : {mission.RefBudget}
-                </Text>
-                <Text style={{ paddingBottom: 3 }}>
-                  {mission.budgetManagerId!.length > 0
-                    ? "Gestionnaires :"
-                    : "Gestionnaire :"}{" "}
-                  {mission
-                    .budgetManagerId!.map((managerId) => {
-                      const manager = employees.find(
-                        (employee) => employee.id === managerId
-                      );
-                      return manager
-                        ? `${manager.name} ${manager.surname}`
-                        : "";
-                    })
-                    .filter((manager) => manager)
-                    .join(", ")}
-                </Text>
-                <Text style={{ paddingBottom: 3 }}>
-                  Du {format(new Date(mission.dateDebut as Date), "dd/MM/yyyy")}
-                  . au {format(new Date(mission.dateFin as Date), "dd/MM/yyyy")}
-                </Text>
-                <Text>Description : {mission.descriptionMission}</Text>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: 5,
+                    alignItems: "center",
+                    paddingBottom: 5,
+                    fontSize: 8,
+                  }}
+                >
+                  <Text>RESPONSABLE DE MISSION</Text>
+                  <Text
+                    style={{
+                      border: 1.5,
+                      padding: 4,
+                      minWidth: 350,
+                      maxWidth: 350,
+                    }}
+                  >
+                    {
+                      employees.find((e) => e.id === mission.missionManagerId)
+                        ?.name as string
+                    }{" "}
+                    {
+                      employees.find((e) => e.id === mission.missionManagerId)
+                        ?.surname as string
+                    }
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: 5,
+                    alignItems: "center",
+                    paddingBottom: 5,
+                    fontSize: 8,
+                  }}
+                >
+                  <Text>GESTIONNAIRE DU BUDGET</Text>
+                  <Text
+                    style={{
+                      border: 1.5,
+                      padding: 4,
+                      minWidth: 350,
+                      maxWidth: 350,
+                    }}
+                  >
+                    {mission
+                      .budgetManagerId!.map((managerId) => {
+                        const manager = employees.find(
+                          (employee) => employee.id === managerId
+                        );
+                        return manager
+                          ? `${manager.name} ${manager.surname}`
+                          : "";
+                      })
+                      .filter((manager) => manager)
+                      .join(", ")}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    borderLeft: 2,
+                    borderColor: "grey",
+                  }}
+                >
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      width: "20.6%",
+                      textAlign: "left",
+                      borderTop: 2,
+                      borderColor: "grey",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        ...styles.tableCellHeader,
+                        fontSize: 9,
+                      }}
+                    >
+                      Objectifs de la mission :{" "}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      width: "62.5%",
+                      borderTop: 2,
+                      borderColor: "grey",
+                      textAlign: "left",
+                    }}
+                  >
+                    <Text style={styles.tableCellHeader}>
+                      {mission.missionGoals
+                        ?.map((er) => er.description)
+                        .join(",")}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    borderLeft: 2,
+                    borderColor: "grey",
+                  }}
+                >
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      width: "20.6%",
+                      textAlign: "left",
+                      borderTop: 2,
+                      borderColor: "grey",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        ...styles.tableCellHeader,
+                        fontSize: 9,
+                      }}
+                    >
+                      Resultats attendus :{" "}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      width: "62.5%",
+                      borderTop: 2,
+                      borderColor: "grey",
+                      textAlign: "left",
+                    }}
+                  >
+                    <Text style={styles.tableCellHeader}>
+                      {mission.exceptedResults
+                        ?.map((er) => er.description)
+                        .join(",")}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    borderLeft: 2,
+                    borderColor: "grey",
+                  }}
+                >
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      width: "20.6%",
+                      textAlign: "left",
+                      borderTop: 2,
+                      borderColor: "grey",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        ...styles.tableCellHeader,
+                        fontSize: 9,
+                        backgroundColor: "grey",
+                      }}
+                    >
+                      Activités prevues :{" "}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      width: "62.5%",
+                      borderTop: 2,
+                      borderColor: "grey",
+                      textAlign: "left",
+                    }}
+                  >
+                    <Text style={styles.tableCellHeader}>
+                      {mission.plannedActivities
+                        ?.map((er) => er.description)
+                        .join(",")}
+                    </Text>
+                  </View>
+                </View>
               </View>
             ))}
         </View>

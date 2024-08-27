@@ -17,11 +17,10 @@ import {
 import { Check, Close } from "@mui/icons-material";
 import PrintPdfPrevision from "../../previsionMissions/printpDFPrevision";
 import DoneIcon from "@mui/icons-material/Done";
-import useFetchNotify from "../hooks/useFetchNotify";
 
 const ValidationPrevision = () => {
   const fetchMission = useFetchMissionListe();
-  const { missionListe, mission } = useAppSelector((state) => state.mission);
+  const { missionListe } = useAppSelector((state) => state.mission);
   const dispatch = useAppDispatch();
   const fetchEmployes = useFetchEmploys();
   const { employees } = useAppSelector((state) => state.employe);
@@ -119,7 +118,6 @@ const ValidationPrevision = () => {
           options: { variant: "success" },
         })
       );
-      console.log("Ok");
     } catch (error) {
       console.log(error);
     }
