@@ -27,6 +27,10 @@ const useFetchMissionListe = () => {
         missionGoals: true,
         exceptedResults: true,
         plannedActivities: true,
+        deliverables: true,
+        missionary: true,
+        vehicle: true,
+        contacts: true,
       },
     };
     if (router.query.search) {

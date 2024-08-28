@@ -1,11 +1,14 @@
 import { LivrableRapportItem } from "../LivrableRapport/livrableRapport.interface";
 import { PrevisionDepenseItem } from "../PrevisionDepense/previsionDepense.interface";
 import { ActiviteRapportItem } from "../activitesRapport/activiteRapport.interface";
+import { ContactItem } from "../contact/contactSlice.interface";
+import { DeliverableItem } from "../deliverable/deliverableSlice.interface";
 import { EmployeItem } from "../employe/employeSlice.interface";
 import { ExceptedResultItem } from "../exceptedResult/exceptedResultSlice.interface";
 import { LieuxRapportItem } from "../lieuxRapport/lieuxRapport.interface";
 import { MissionGoalItem } from "../missionGoal/missionGoalSlice.interface";
 import { MissionLocationItem } from "../missionLocation/missionLocationSlice.interface";
+import { MissionaryItem } from "../missionary/missionarySlice.interface";
 import { NotifyItem } from "../notify/notify.interface";
 import { PlannedActivityItem } from "../plannedActivity/plannedActivitySlice.interface";
 import { RapportDepenseItem } from "../rapportDepense/rapportDepense.interface";
@@ -14,6 +17,7 @@ import { RapportTechniqueItem } from "../rapportTechnique/rapportTechnique.inter
 import { ResumeDepenseItem } from "../resumeDepense/reumeDepense.interface";
 import { ResumeDepensePrevueItem } from "../resumeDepensePrevue/reumeDepensePrevue.interface";
 import { UnCompleteTbbItem } from "../unCompleteTbb/unCompleteTbb.interface";
+import { VehicleItem } from "../vehicle/vehicleSlice.interface";
 
 export interface MissionItem {
   id?: string;
@@ -70,6 +74,10 @@ export interface MissionItem {
   missionGoals?: MissionGoalItem[];
   exceptedResults?: ExceptedResultItem[];
   plannedActivities?: PlannedActivityItem[];
+  deliverables?: DeliverableItem[];
+  missionary?: MissionaryItem[];
+  vehicle?: VehicleItem[];
+  contacts?: ContactItem[];
 }
 
 export interface MissionInitialState {
