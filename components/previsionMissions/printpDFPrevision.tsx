@@ -2151,227 +2151,190 @@ const PrintPdfPrevision = () => {
                     </View>
                   </View>
                 </View>
+                <View>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      width: "100%",
+                      color: "black",
+                      fontWeight: "bold",
+                      fontSize: 15,
+                      paddingBottom: 5,
+                    }}
+                  >
+                    VALIDATION
+                  </Text>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={styles.tableCellHeader}>Poste</Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={styles.tableCellHeader}>Signature</Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={styles.tableCellHeader}>Date</Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={styles.tableCellHeader}>Lieu</Text>
+                  </View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCol, styles.colMergedTBValidated]}>
+                    <Text style={styles.tableCellTBValidated}>
+                      Élaboré par :{" "}
+                      {(() => {
+                        const nom = employees.find(
+                          (e: any) => e.id === mission.missionManagerId
+                        )?.name as string;
+
+                        const prenom = employees.find(
+                          (e: any) => e.id === mission.missionManagerId
+                        )?.surname as string;
+                        return nom + " " + prenom;
+                      })()}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCol, styles.colMergedTBValidated]}>
+                    <Text style={styles.tableCellTBValidated}>
+                      Vérificateur financier :{" "}
+                      {(() => {
+                        const nom = employees.find(
+                          (e: any) => e.id === mission.verifyFinancial
+                        )?.name as string;
+                        const prenom = employees.find(
+                          (e: any) => e.id === mission.verifyFinancial
+                        )?.surname as string;
+                        return nom + " " + prenom;
+                      })()}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCol, styles.colMergedTBValidated]}>
+                    <Text style={styles.tableCellTBValidated}>
+                      Vérificateur technique :{" "}
+                      {(() => {
+                        const nom = employees.find(
+                          (e: any) => e.id === mission.verifyTechnic
+                        )?.name as string;
+                        const prenom = employees.find(
+                          (e: any) => e.id === mission.verifyTechnic
+                        )?.surname as string;
+                        return nom + " " + prenom;
+                      })()}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCol, styles.colMergedTBValidated]}>
+                    <Text style={styles.tableCellTBValidated}>
+                      Payé par :{" "}
+                      {(() => {
+                        const nom = employees.find(
+                          (e: any) => e.id === mission.validateFinancial
+                        )?.name as string;
+                        const prenom = employees.find(
+                          (e: any) => e.id === mission.validateFinancial
+                        )?.surname as string;
+
+                        return nom + " " + prenom;
+                      })()}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                  <View
+                    style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                  >
+                    <Text style={styles.tableCell}></Text>
+                  </View>
+                </View>
               </View>
             ))}
-        </View>
-
-        <View style={{ paddingTop: 10 }}>
-          <Text
-            style={{
-              textAlign: "center",
-              width: "100%",
-              color: "black",
-              fontWeight: "bold",
-              fontSize: 15,
-              paddingBottom: 5,
-            }}
-          >
-            VALIDATION
-          </Text>
-          <View style={{ paddingLeft: 35, paddingRight: 35 }}>
-            <View style={styles.table}>
-              {/* Table Header */}
-              <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCellHeader}>Poste</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCellHeader}>Signature</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCellHeader}>Date</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCellHeader}>Lieu</Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              {missionListe
-                .filter((mission) => mission.id == id)
-                .map((m) => (
-                  <View style={styles.tableRow} key={m.id}>
-                    <View
-                      style={[styles.tableCol, styles.colMergedTBValidated]}
-                    >
-                      <Text style={styles.tableCellTBValidated}>
-                        Élaboré par :{" "}
-                        {
-                          employees.find(
-                            (e: any) => e.id === m.missionManagerId
-                          )?.name as string
-                        }{" "}
-                        {
-                          employees.find(
-                            (e: any) => e.id === m.missionManagerId
-                          )?.surname as string
-                        }
-                      </Text>
-                    </View>
-                  </View>
-                ))}
-              <View style={styles.tableRow}>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                {missionListe
-                  .filter((mission) => mission.id == id)
-                  .map((m) => (
-                    <View
-                      style={[styles.tableCol, styles.colMergedTBValidated]}
-                      key={m.id}
-                    >
-                      <Text style={styles.tableCellTBValidated}>
-                        Vérificateur financier :{" "}
-                        {
-                          employees.find((e: any) => e.id === m.verifyFinancial)
-                            ?.name as string
-                        }{" "}
-                        {
-                          employees.find((e: any) => e.id === m.verifyFinancial)
-                            ?.surname as string
-                        }
-                      </Text>
-                    </View>
-                  ))}
-              </View>
-              <View style={styles.tableRow}>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                {missionListe
-                  .filter((mission) => mission.id == id)
-                  .map((m) => (
-                    <View
-                      style={[styles.tableCol, styles.colMergedTBValidated]}
-                      key={m.id}
-                    >
-                      <Text style={styles.tableCellTBValidated}>
-                        Vérificateur technique :{" "}
-                        {
-                          employees.find((e: any) => e.id === m.verifyTechnic)
-                            ?.name as string
-                        }{" "}
-                        {
-                          employees.find((e: any) => e.id === m.verifyTechnic)
-                            ?.surname as string
-                        }
-                      </Text>
-                    </View>
-                  ))}
-              </View>
-              <View style={styles.tableRow}>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-              </View>
-
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                {missionListe
-                  .filter((mission) => mission.id == id)
-                  .map((m) => (
-                    <View
-                      style={[styles.tableCol, styles.colMergedTBValidated]}
-                      key={m.id}
-                    >
-                      <Text style={styles.tableCellTBValidated}>
-                        Payé par :{" "}
-                        {
-                          employees.find(
-                            (e: any) => e.id === m.validateFinancial
-                          )?.name as string
-                        }{" "}
-                        {
-                          employees.find(
-                            (e: any) => e.id === m.validateFinancial
-                          )?.surname as string
-                        }
-                      </Text>
-                    </View>
-                  ))}
-              </View>
-              <View style={styles.tableRow}>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-              </View>
-              {/* Add more rows as needed */}
-            </View>
-          </View>
         </View>
       </Page>
     </Document>
