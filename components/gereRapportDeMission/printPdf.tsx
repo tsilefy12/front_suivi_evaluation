@@ -53,7 +53,7 @@ const PrintPdf = () => {
   const pdfDocument = (
     <Document>
       <Page size="A4">
-        <View>
+        <View style={{ width: "83.1%" }}>
           <View
             style={{
               paddingTop: 40,
@@ -152,8 +152,9 @@ const PrintPdf = () => {
                 <View
                   style={{
                     ...styles.tableCol,
-                    width: "20.6%",
+                    width: "100%",
                     textAlign: "left",
+                    border: "none",
                     // borderTop: 1,
                     // borderTopColor: "grey",
                     backgroundColor: "darkgrey",
@@ -174,12 +175,15 @@ const PrintPdf = () => {
                     borderLeft: 1,
                     borderLeftColor: "grey",
                     fontSize: 8,
+                    borderTop: 1,
+                    borderTopColor: "grey",
+                    width: "100%",
                   }}
                 >
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "25%",
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -197,7 +201,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -210,7 +214,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -223,7 +227,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -241,12 +245,13 @@ const PrintPdf = () => {
                       borderLeft: 1,
                       borderLeftColor: "grey",
                       fontSize: 8,
+                      width: "100%",
                     }}
                   >
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.6%",
+                        width: "25%",
                         textAlign: "left",
                       }}
                     >
@@ -262,7 +267,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         textAlign: "left",
                       }}
                     >
@@ -273,7 +278,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         textAlign: "left",
                       }}
                     >
@@ -287,7 +292,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         textAlign: "left",
                       }}
                     >
@@ -311,12 +316,13 @@ const PrintPdf = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
+                    width: "100%",
                   }}
                 >
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "25%",
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -336,7 +342,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -349,7 +355,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -362,7 +368,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -385,7 +391,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.6%",
+                        width: "25%",
                         textAlign: "left",
                         // borderTop: 1,
                         // borderTopColor: "grey",
@@ -402,7 +408,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         // borderTop: 1,
                         // borderTopColor: "grey",
                         textAlign: "left",
@@ -415,7 +421,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         // borderTop: 1,
                         // borderTopColor: "grey",
                         textAlign: "left",
@@ -428,7 +434,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         // borderTop: 1,
                         // borderTopColor: "grey",
                         textAlign: "left",
@@ -445,12 +451,13 @@ const PrintPdf = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
+                    width: "100%",
                   }}
                 >
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "50%",
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -468,7 +475,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
+                      width: "50%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -479,56 +486,59 @@ const PrintPdf = () => {
                     </Text>
                   </View>
                 </View>
-                {mission.resultats?.map((r) => (
-                  <View
-                    style={{
-                      ...styles.tableRow,
-                      borderLeft: 1,
-                      borderLeftColor: "grey",
-                    }}
-                  >
-                    {missionListe
-                      .filter(
-                        (f: MissionItem) =>
-                          f.notify!.map((n) => n.missionId).includes(f.id) &&
-                          f.notify!.map((n) => n.type).includes("Prevision")
-                      )
-                      .flatMap((rp) => rp.exceptedResults)
-                      .map((er) => (
-                        <View
-                          style={{
-                            ...styles.tableCol,
-                            width: "20.6%",
-                            textAlign: "left",
-                            // borderTop: 1,
-                            // borderTopColor: "grey",
-                          }}
-                        >
-                          <Text
-                            style={{
-                              ...styles.tableCellHeader,
-                              fontSize: 9,
-                            }}
-                          >
-                            {er?.description}
-                          </Text>
-                        </View>
-                      ))}
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    borderLeft: 1,
+                    borderLeftColor: "grey",
+                    width: "100%",
+                  }}
+                >
+                  {mission.exceptedResults?.map((er) => (
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "62.5%",
+                        textAlign: "left",
                         // borderTop: 1,
                         // borderTopColor: "grey",
-                        textAlign: "left",
+                        display: "flex",
+                        flexDirection: "column",
+                        flexWrap: "wrap",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
-                        {r.resultat}
+                      <Text
+                        style={{
+                          ...styles.tableCellHeader,
+                          fontSize: 9,
+                        }}
+                      >
+                        {er.description}
                       </Text>
                     </View>
-                  </View>
-                ))}
+                  ))}
+                  {mission.resultats?.map((ro) => (
+                    <View
+                      style={{
+                        ...styles.tableCol,
+                        textAlign: "left",
+                        // borderTop: 1,
+                        // borderTopColor: "grey",
+                        display: "flex",
+                        flexDirection: "column",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          ...styles.tableCellHeader,
+                          fontSize: 9,
+                        }}
+                      >
+                        {ro.resultat}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
                 <View
                   style={{
                     ...styles.tableRow,
@@ -539,7 +549,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "25%",
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -587,7 +597,7 @@ const PrintPdf = () => {
                         <View
                           style={{
                             ...styles.tableCol,
-                            width: "20.6%",
+                            width: "25%",
                             textAlign: "left",
                             // borderTop: 1,
                             // borderTopColor: "grey",
@@ -628,7 +638,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "25%",
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -676,7 +686,7 @@ const PrintPdf = () => {
                         <View
                           style={{
                             ...styles.tableCol,
-                            width: "20.6%",
+                            width: "25%",
                             textAlign: "left",
                             // borderTop: 1,
                             // borderTopColor: "grey",
@@ -736,7 +746,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "25%",
                       textAlign: "left",
                       borderTop: 1,
                       borderTopColor: "grey",
@@ -840,7 +850,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "25%",
                       textAlign: "left",
                       borderTop: 1,
                       borderTopColor: "grey",
