@@ -175,8 +175,8 @@ const PrintPdfPrevision = () => {
                       ...styles.tableCol,
                       width: "20.6%",
                       textAlign: "left",
-                      // borderTop: 1,
-                      // borderTopColor: "grey",
+                      borderTop: 1,
+                      borderTopColor: "grey",
                     }}
                   >
                     <Text
@@ -344,7 +344,6 @@ const PrintPdfPrevision = () => {
                       style={{
                         ...styles.tableCellHeader,
                         fontSize: 9,
-                        backgroundColor: "grey",
                       }}
                     >
                       Livrable :{" "}
@@ -424,7 +423,6 @@ const PrintPdfPrevision = () => {
                       style={{
                         ...styles.tableCellHeader,
                         fontSize: 9,
-                        backgroundColor: "grey",
                       }}
                     >
                       Lieux de mission :{" "}
@@ -558,7 +556,6 @@ const PrintPdfPrevision = () => {
                       style={{
                         ...styles.tableCellHeader,
                         fontSize: 9,
-                        backgroundColor: "grey",
                       }}
                     >
                       Les missionnaires(MV):{" "}
@@ -743,7 +740,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableCol,
                     width: "83.1%",
                     height: "auto",
-                    backgroundColor: "grey",
+                    backgroundColor: "darkgrey",
                     border: "none",
                     textAlign: "center",
                   }}
