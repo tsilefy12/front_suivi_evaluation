@@ -10,12 +10,14 @@ import { ExceptedResultItem } from "../exceptedResult/exceptedResultSlice.interf
 import { LieuxRapportItem } from "../lieuxRapport/lieuxRapport.interface";
 import { MissionGoalItem } from "../missionGoal/missionGoalSlice.interface";
 import { MissionLocationItem } from "../missionLocation/missionLocationSlice.interface";
+import { MissionairesItem } from "../missionaires/missionaires.interface";
 import { MissionaryItem } from "../missionary/missionarySlice.interface";
 import { NotifyItem } from "../notify/notify.interface";
 import { PlannedActivityItem } from "../plannedActivity/plannedActivitySlice.interface";
 import { RapportDepenseItem } from "../rapportDepense/rapportDepense.interface";
 import { RapportFinanceItem } from "../rapportFinance/rapportFinance.interface";
 import { RapportTechniqueItem } from "../rapportTechnique/rapportTechnique.interface";
+import { ResultatRapportItem } from "../resultatAttendu/resultatRapport.interface";
 import { ResumeDepenseItem } from "../resumeDepense/reumeDepense.interface";
 import { ResumeDepensePrevueItem } from "../resumeDepensePrevue/reumeDepensePrevue.interface";
 import { UnCompleteTbbItem } from "../unCompleteTbb/unCompleteTbb.interface";
@@ -82,6 +84,8 @@ export interface MissionItem {
   contacts?: ContactItem[];
   besoinEnVehicule?: BesoinvehiculeItem[];
   calculCarburant?: CalculCarburantItem[];
+  missionaireRapport?: MissionairesItem[];
+  resultats?: ResultatRapportItem[];
 }
 
 export interface MissionInitialState {

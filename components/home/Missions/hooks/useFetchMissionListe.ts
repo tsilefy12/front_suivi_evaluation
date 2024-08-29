@@ -33,6 +33,8 @@ const useFetchMissionListe = () => {
         contacts: true,
         besoinEnVehicule: true,
         calculCarburant: true,
+        missionaireRapport: true,
+        resultats: true,
       },
     };
     if (router.query.search) {
