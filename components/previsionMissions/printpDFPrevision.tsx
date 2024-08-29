@@ -2170,6 +2170,7 @@ const PrintPdfPrevision = () => {
                       backgroundColor: "darkgrey",
                       border: "none",
                       textAlign: "center",
+                      width: "100%",
                     }}
                   >
                     <Text
@@ -2309,6 +2310,7 @@ const PrintPdfPrevision = () => {
                       backgroundColor: "darkgrey",
                       border: "none",
                       textAlign: "center",
+                      width: "100%",
                     }}
                   >
                     <Text
