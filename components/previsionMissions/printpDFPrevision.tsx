@@ -2462,6 +2462,7 @@ const PrintPdfPrevision = () => {
                       backgroundColor: "darkgrey",
                       border: "none",
                       textAlign: "center",
+                      width: "100%",
                     }}
                   >
                     <Text
