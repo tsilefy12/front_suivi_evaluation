@@ -1,6 +1,8 @@
 import { LivrableRapportItem } from "../LivrableRapport/livrableRapport.interface";
 import { PrevisionDepenseItem } from "../PrevisionDepense/previsionDepense.interface";
 import { ActiviteRapportItem } from "../activitesRapport/activiteRapport.interface";
+import { BesoinvehiculeItem } from "../besoinVehicule/besoinVehicule.interface";
+import { CalculCarburantItem } from "../calculCarburant/calculCarburant.interface";
 import { ContactItem } from "../contact/contactSlice.interface";
 import { DeliverableItem } from "../deliverable/deliverableSlice.interface";
 import { EmployeItem } from "../employe/employeSlice.interface";
@@ -78,6 +80,8 @@ export interface MissionItem {
   missionary?: MissionaryItem[];
   vehicle?: VehicleItem[];
   contacts?: ContactItem[];
+  besoinEnVehicule?: BesoinvehiculeItem[];
+  calculCarburant?: CalculCarburantItem[];
 }
 
 export interface MissionInitialState {

@@ -20,6 +20,7 @@ import useFetchResumeDepenseList from "./organism/Finances/tableResumeDepense/ho
 import { format } from "date-fns";
 import useFetchEmployes from "../home/Missions/hooks/useFetchEmployees";
 import { MissionItem } from "../../redux/features/mission/mission.interface";
+import useFetchVoiture from "./organism/Logistique/tableBesoinVéhicules/hooks/useFetchVoiture";
 
 const PrintPdfPrevision = () => {
   const router = useRouter();
@@ -34,8 +35,13 @@ const PrintPdfPrevision = () => {
   const { resumeDepenseList } = useAppSelector((state) => state.resumeDepense);
   const fetchEmployes = useFetchEmployes();
   const { employees } = useAppSelector((state) => state.employe);
+  const fetchVoiture = useFetchVoiture();
+  const { transportationEquipments } = useAppSelector(
+    (state: any) => state.transportation
+  );
 
   useEffect(() => {
+    fetchVoiture();
     fetchMission();
     fetchGrants();
     fetchLigneBudgetaire();
@@ -653,8 +659,6 @@ const PrintPdfPrevision = () => {
                         ...styles.tableCol,
                         width: "20.6%",
                         textAlign: "left",
-                        borderTop: 1,
-                        borderTopColor: "grey",
                       }}
                     >
                       <Text
@@ -670,8 +674,6 @@ const PrintPdfPrevision = () => {
                       style={{
                         ...styles.tableCol,
                         width: "20.83%",
-                        borderTop: 1,
-                        borderTopColor: "grey",
                         textAlign: "left",
                       }}
                     >
@@ -683,8 +685,6 @@ const PrintPdfPrevision = () => {
                       style={{
                         ...styles.tableCol,
                         width: "20.83%",
-                        borderTop: 1,
-                        borderTopColor: "grey",
                         textAlign: "left",
                       }}
                     >
@@ -699,8 +699,6 @@ const PrintPdfPrevision = () => {
                       style={{
                         ...styles.tableCol,
                         width: "20.83%",
-                        borderTop: 1,
-                        borderTopColor: "grey",
                         textAlign: "left",
                       }}
                     >
@@ -1434,6 +1432,7 @@ const PrintPdfPrevision = () => {
                   <Text
                     style={{
                       color: "#1976d2",
+                      fontSize: 9,
                     }}
                   >
                     PROGRAMME DE LA MISSION
@@ -1684,6 +1683,7 @@ const PrintPdfPrevision = () => {
                   <Text
                     style={{
                       color: "#1976d2",
+                      fontSize: 9,
                     }}
                   >
                     PRÉVISION DES DÉPENSES
@@ -1737,7 +1737,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20%",
+                      width: "10.3875%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
@@ -1749,7 +1749,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "10.3875%",
+                      width: "20%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
@@ -1840,7 +1840,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "10.3875%",
+                        width: "20%",
                         borderColor: "grey",
                         textAlign: "left",
                       }}
@@ -1878,7 +1878,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "10.3875%",
+                        width: "20%",
                         borderColor: "grey",
                         display: "flex",
                         flexWrap: "wrap",
@@ -1898,7 +1898,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "10.3875%",
+                        width: "20%",
                         borderColor: "grey",
                         display: "flex",
                         flexWrap: "wrap",
@@ -1918,7 +1918,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "10.3875%",
+                        width: "20%",
                         borderColor: "grey",
                         textAlign: "left",
                       }}
@@ -1933,7 +1933,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "10.3875%",
+                        width: "20%",
                         borderColor: "grey",
                         textAlign: "left",
                       }}
@@ -1949,7 +1949,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "10.3875%",
+                        width: "20%",
                         borderColor: "grey",
                         textAlign: "left",
                       }}
@@ -1974,7 +1974,7 @@ const PrintPdfPrevision = () => {
                       width: "100%",
                       color: "black",
                       fontWeight: 700,
-                      fontSize: 15,
+                      fontSize: 9,
                       paddingBottom: 5,
                     }}
                   >
@@ -2145,6 +2145,472 @@ const PrintPdfPrevision = () => {
                       <Text style={{ ...styles.tableCell, fontSize: 9 }}></Text>
                     </View>
                   </View>
+                </View>
+                <View
+                  style={{
+                    textAlign: "center",
+                    paddingTop: 15,
+                    paddingBottom: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#1976d2",
+                      fontSize: 9,
+                    }}
+                  >
+                    SUIVI LOGISTIQUE
+                  </Text>
+                </View>
+                <View style={{ width: "83.1%" }}>
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      width: "83.1%",
+                      height: "auto",
+                      backgroundColor: "darkgrey",
+                      border: "none",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        ...styles.tableCellHeader,
+                        fontSize: 9,
+                        border: "none",
+                      }}
+                    >
+                      BESOIN EN VEHICULE
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderTop: 1,
+                      borderTopColor: "grey",
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Du
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Au
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Nbre de
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Véhicule
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Trajet prévu
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Commentaires
+                      </Text>
+                    </View>
+                  </View>
+                  {mission.besoinEnVehicule?.map((bv) => (
+                    <View
+                      style={{
+                        ...styles.tableRow,
+                        borderTop: 1,
+                        borderTopColor: "grey",
+                        borderLeft: 1,
+                        borderLeftColor: "grey",
+                      }}
+                    >
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                        >
+                          {format(new Date(bv.dateDebut as Date), "dd/MM/yyyy")}
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                        >
+                          {format(new Date(bv.dateFin as Date), "dd/MM/yyyy")}
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                        >
+                          {bv.nombreJour}
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                        >
+                          {
+                            transportationEquipments.find(
+                              (f: any) => f.id == bv.vehicule
+                            )?.registration
+                          }
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                        >
+                          {bv.trajet}
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                        ></Text>
+                      </View>
+                    </View>
+                  ))}
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      width: "83.1%",
+                      height: "auto",
+                      backgroundColor: "darkgrey",
+                      border: "none",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        ...styles.tableCellHeader,
+                        fontSize: 9,
+                        border: "none",
+                      }}
+                    >
+                      CONSOMMATION EN CARBURANT-Gasoil
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderTop: 1,
+                      borderTopColor: "grey",
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Du
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Au
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Activités
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Trajets
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Distance prévu(Km)
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Consommation/100Km(L)
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Total Gasoil(L)
+                      </Text>
+                    </View>
+                  </View>
+                  {mission.calculCarburant
+                    ?.filter((f) => f.typeCarburant == "Gasoil")
+                    .map((c) => (
+                      <View
+                        style={{
+                          ...styles.tableRow,
+                          borderTop: 1,
+                          borderTopColor: "grey",
+                          borderLeft: 1,
+                          borderLeftColor: "grey",
+                        }}
+                      >
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          ></Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          ></Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          >
+                            Activités
+                          </Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          >
+                            {c.trajet}
+                          </Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          >
+                            {c.distanceTotal}
+                          </Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          >
+                            {c.consommationKilo}
+                          </Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          >
+                            {(Number(c.distanceTotal || 0) *
+                              Number(c.consommationKilo || 0)) /
+                              100}
+                          </Text>
+                        </View>
+                      </View>
+                    ))}
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      width: "83.1%",
+                      height: "auto",
+                      backgroundColor: "darkgrey",
+                      border: "none",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        ...styles.tableCellHeader,
+                        fontSize: 9,
+                        border: "none",
+                      }}
+                    >
+                      CONSOMMATION EN CARBURANT-Essence
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderTop: 1,
+                      borderTopColor: "grey",
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Du
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Au
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Activités
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Trajets
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Distance prévu(Km)
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Consommation/100Km(L)
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Total Gasoil(L)
+                      </Text>
+                    </View>
+                  </View>
+                  {mission.calculCarburant
+                    ?.filter((f) => f.typeCarburant == "Essence")
+                    .map((c) => (
+                      <View
+                        style={{
+                          ...styles.tableRow,
+                          borderTop: 1,
+                          borderTopColor: "grey",
+                          borderLeft: 1,
+                          borderLeftColor: "grey",
+                        }}
+                      >
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          ></Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          ></Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          >
+                            Activités
+                          </Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          >
+                            {c.trajet}
+                          </Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          >
+                            {c.distanceTotal}
+                          </Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          >
+                            {c.consommationKilo}
+                          </Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.colSingleTBValidated]}
+                        >
+                          <Text
+                            style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          >
+                            {(Number(c.distanceTotal || 0) *
+                              Number(c.consommationKilo || 0)) /
+                              100}
+                          </Text>
+                        </View>
+                      </View>
+                    ))}
                 </View>
                 <View>
                   <Text

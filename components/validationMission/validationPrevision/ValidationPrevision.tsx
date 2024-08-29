@@ -10,6 +10,7 @@ import {
   Button,
   Divider,
   FormLabel,
+  LinearProgress,
   Stack,
   styled,
   Typography,
@@ -202,6 +203,9 @@ const ValidationPrevision = () => {
   };
   return (
     <Stack width={{ xs: "100%", sm: "100%", md: "100%" }}>
+      {missionListe.length == 0 ? (
+        <LinearProgress color="success" sx={{ width: "100%" }} />
+      ) : null}
       <CardPrevision
         key={0}
         sx={{
