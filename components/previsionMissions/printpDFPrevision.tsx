@@ -99,7 +99,6 @@ const PrintPdfPrevision = () => {
                   paddingLeft: 35,
                   fontSize: 12,
                   paddingTop: 5,
-                  border: "1px solid gray",
                 }}
                 key={mission.id}
               >
@@ -260,7 +259,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
-                      backgroundColor: "grey",
+                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
@@ -306,7 +305,6 @@ const PrintPdfPrevision = () => {
                         style={{
                           ...styles.tableCellHeader,
                           fontSize: 9,
-                          backgroundColor: "grey",
                         }}
                       ></Text>
                     </View>
@@ -339,7 +337,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
-                      backgroundColor: "grey",
+                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
@@ -419,7 +417,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
-                      backgroundColor: "grey",
+                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
@@ -553,7 +551,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
-                      backgroundColor: "grey",
+                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
