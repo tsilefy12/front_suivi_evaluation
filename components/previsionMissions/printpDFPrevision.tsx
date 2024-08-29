@@ -2166,7 +2166,6 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "83.1%",
                       height: "auto",
                       backgroundColor: "darkgrey",
                       border: "none",
@@ -2210,7 +2209,7 @@ const PrintPdfPrevision = () => {
                       style={[styles.tableCol, styles.colSingleTBValidated]}
                     >
                       <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
-                        Nbre de
+                        Nbre de jours
                       </Text>
                     </View>
                     <View
@@ -2306,7 +2305,6 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "83.1%",
                       height: "auto",
                       backgroundColor: "darkgrey",
                       border: "none",
@@ -2460,7 +2458,6 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "83.1%",
                       height: "auto",
                       backgroundColor: "darkgrey",
                       border: "none",
@@ -2616,10 +2613,9 @@ const PrintPdfPrevision = () => {
                   <Text
                     style={{
                       textAlign: "center",
-                      width: "100%",
-                      color: "black",
+                      color: "#1976d2",
                       fontWeight: "bold",
-                      fontSize: 15,
+                      fontSize: 9,
                       paddingBottom: 10,
                       paddingTop: 15,
                     }}
