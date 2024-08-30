@@ -22,6 +22,7 @@ import useFetchResumeDepensePrevue from "./organism/Finances/tableResumeDepense/
 import formatMontant from "../../hooks/format";
 import { ResumeDepenseItem } from "../../redux/features/resumeDepense/reumeDepense.interface";
 import { MissionItem } from "../../redux/features/mission/mission.interface";
+import useFetchVoiture from "../previsionMissions/organism/Logistique/tableBesoinVéhicules/hooks/useFetchVoiture";
 
 const PrintPdf = () => {
   const router = useRouter();
@@ -40,8 +41,13 @@ const PrintPdf = () => {
   const { resumeDepensePrevueList } = useAppSelector(
     (state: any) => state.resumeDepensePrevue
   );
+  const fetchVoiture = useFetchVoiture();
+  const { transportationEquipments } = useAppSelector(
+    (state: any) => state.transportation
+  );
 
   useEffect(() => {
+    fetchVoiture();
     fetchMission();
     fetchGrants();
     fetchLigneBudgetaire();
