@@ -1342,7 +1342,7 @@ const PrintPdf = () => {
                     <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       {(() => {
                         const totalRealise = mission.rappportDepense
-                          ?.filter((f) => (f.missionId = mission.id))
+                          ?.filter((f: any) => (f.missionId = mission.id))
                           .reduce(
                             (acc: any, curr: any) => acc + curr.montant,
                             0
