@@ -1380,51 +1380,67 @@ const PrintPdf = () => {
                     RÉSUMÉ DES DEPENSES PREVUES
                   </Text>
                 </View>
-                <View style={styles.tableRow}>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>Grant</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <View style={styles.flexColumn}>
-                      <Text style={[styles.tableCellHeader]}>Ligne</Text>
-                      <Text style={[styles.tableCellHeader, styles.flexEnd]}>
-                        budgétaire
+                <View style={{ width: "100%" }}>
+                  <View style={styles.tableRow}>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>Grant</Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <View style={styles.flexColumn}>
+                        <Text style={[styles.tableCellHeader]}>Ligne</Text>
+                        <Text style={[styles.tableCellHeader, styles.flexEnd]}>
+                          budgétaire
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>
+                        Dépenses prévues
                       </Text>
                     </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>
+                        Dépenses réalisées
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>Différence</Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>Remarques</Text>
+                    </View>
                   </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>Dépenses prévues</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>
-                      Dépenses réalisées
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>Différence</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>Remarques</Text>
-                  </View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>1</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>2</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>3</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>4</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>5</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>6</Text>
+                  <View style={styles.tableRow}>
+                    <View style={styles.tableCol}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        1
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        2
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        3
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        4
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        5
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        6
+                      </Text>
+                    </View>
                   </View>
                 </View>
                 <View
@@ -1443,40 +1459,42 @@ const PrintPdf = () => {
                     CALCUL DES RELIQUATS
                   </Text>
                 </View>
-                <View style={styles.tableRow}>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>
-                      Total des dépenses en espèces
-                    </Text>
+                <View style={{ width: "100%" }}>
+                  <View style={styles.tableRow}>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>
+                        Total des dépenses en espèces
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>
+                        Total des reliquats en espèces
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>Balance</Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>Remarques</Text>
+                    </View>
                   </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>
-                      Total des reliquats en espèces
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>Balance</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>Remarques</Text>
-                  </View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>
-                      Total des dépenses en espèces
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>
-                      Total des reliquats en espèces
-                    </Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>Balance</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCellHeader}>Remarques</Text>
+                  <View style={styles.tableRow}>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>
+                        Total des dépenses en espèces
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>
+                        Total des reliquats en espèces
+                      </Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>Balance</Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCellHeader}>Remarques</Text>
+                    </View>
                   </View>
                 </View>
                 {/*besoin en vehicule*/}
@@ -1817,7 +1835,7 @@ const PrintPdf = () => {
                       textAlign: "center",
                       color: "#1976d2",
                       fontWeight: "bold",
-                      fontSize: 9,
+                      fontSize: 14,
                       paddingBottom: 10,
                       paddingTop: 15,
                     }}
@@ -1825,7 +1843,7 @@ const PrintPdf = () => {
                     VALIDATION
                   </Text>
                 </View>
-                <View style={{ width: "83.1%" }}>
+                <View style={{ width: "100%" }}>
                   <View
                     style={{
                       ...styles.tableRow,
@@ -1838,28 +1856,28 @@ const PrintPdf = () => {
                     <View
                       style={[styles.tableCol, styles.colSingleTBValidated]}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Poste
                       </Text>
                     </View>
                     <View
                       style={[styles.tableCol, styles.colSingleTBValidated]}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Signature
                       </Text>
                     </View>
                     <View
                       style={[styles.tableCol, styles.colSingleTBValidated]}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Date
                       </Text>
                     </View>
                     <View
                       style={[styles.tableCol, styles.colSingleTBValidated]}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Lieu
                       </Text>
                     </View>
@@ -1875,7 +1893,7 @@ const PrintPdf = () => {
                       style={[styles.tableCol, styles.colMergedTBValidated]}
                     >
                       <Text
-                        style={{ ...styles.tableCellTBValidated, fontSize: 9 }}
+                        style={{ ...styles.tableCellTBValidated, fontSize: 14 }}
                       >
                         Élaboré par :{" "}
                         {(() => {
@@ -1930,7 +1948,7 @@ const PrintPdf = () => {
                       style={[styles.tableCol, styles.colMergedTBValidated]}
                     >
                       <Text
-                        style={{ ...styles.tableCellTBValidated, fontSize: 9 }}
+                        style={{ ...styles.tableCellTBValidated, fontSize: 14 }}
                       >
                         Vérificateur financier :{" "}
                         {(() => {
@@ -1984,7 +2002,7 @@ const PrintPdf = () => {
                       style={[styles.tableCol, styles.colMergedTBValidated]}
                     >
                       <Text
-                        style={{ ...styles.tableCellTBValidated, fontSize: 9 }}
+                        style={{ ...styles.tableCellTBValidated, fontSize: 14 }}
                       >
                         Vérificateur technique :{" "}
                         {(() => {
@@ -2038,7 +2056,7 @@ const PrintPdf = () => {
                       style={[styles.tableCol, styles.colMergedTBValidated]}
                     >
                       <Text
-                        style={{ ...styles.tableCellTBValidated, fontSize: 9 }}
+                        style={{ ...styles.tableCellTBValidated, fontSize: 14 }}
                       >
                         Payé par :{" "}
                         {(() => {
