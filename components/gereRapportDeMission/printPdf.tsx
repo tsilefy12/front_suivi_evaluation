@@ -1421,6 +1421,662 @@ const PrintPdf = () => {
                     <Text style={styles.tableCell}>6</Text>
                   </View>
                 </View>
+                <View
+                  style={{
+                    textAlign: "center",
+                    paddingTop: 15,
+                    paddingBottom: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#1976d2",
+                      fontSize: 14,
+                    }}
+                  >
+                    CALCUL DES RELIQUATS
+                  </Text>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>
+                      Total des dépenses en espèces
+                    </Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>
+                      Total des reliquats en espèces
+                    </Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>Balance</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>Remarques</Text>
+                  </View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>
+                      Total des dépenses en espèces
+                    </Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>
+                      Total des reliquats en espèces
+                    </Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>Balance</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>Remarques</Text>
+                  </View>
+                </View>
+                {/*besoin en vehicule*/}
+                <View
+                  style={{
+                    textAlign: "center",
+                    paddingTop: 15,
+                    paddingBottom: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#1976d2",
+                      fontSize: 14,
+                    }}
+                  >
+                    SUIVI LOGISTIQUE
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.tableCol,
+                    height: "auto",
+                    backgroundColor: "darkgrey",
+                    border: "none",
+                    textAlign: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      ...styles.tableCellHeader,
+                      fontSize: 14,
+                      border: "none",
+                    }}
+                  >
+                    BESOIN EN VEHICULE
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    borderTop: 1,
+                    borderTopColor: "grey",
+                    borderLeft: 1,
+                    borderLeftColor: "grey",
+                  }}
+                >
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Du
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Au
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Nbre de jours
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Véhicule utilisé
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Trajets
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Commentaires
+                    </Text>
+                  </View>
+                </View>
+                {mission.besoinVehiculeRapport?.map((bv) => (
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderTop: 1,
+                      borderTopColor: "grey",
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {format(new Date(bv.dateDebut as Date), "dd/MM/yyyy")}
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {format(new Date(bv.dateFin as Date), "dd/MM/yyyy")}
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {bv.nombreJour}
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {
+                          transportationEquipments.find(
+                            (f: any) => f.id == bv.vehicule
+                          )?.registration
+                        }
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {bv.trajet}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+                <View
+                  style={{
+                    ...styles.tableCol,
+                    height: "auto",
+                    backgroundColor: "darkgrey",
+                    border: "none",
+                    textAlign: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      ...styles.tableCellHeader,
+                      fontSize: 14,
+                      border: "none",
+                    }}
+                  >
+                    CONSOMMATION EN CARBURANT-Gasoil
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    borderTop: 1,
+                    borderTopColor: "grey",
+                    borderLeft: 1,
+                    borderLeftColor: "grey",
+                  }}
+                >
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Consommation/100Km
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Trajet
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Distance parcourue(Km)
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Total Gasoil(L)
+                    </Text>
+                  </View>
+                </View>
+                {mission.calculCarburantRapport
+                  ?.filter((f) => f.typeCarburant == "Gasoil")
+                  .map((c) => (
+                    <View
+                      style={{
+                        ...styles.tableRow,
+                        borderTop: 1,
+                        borderTopColor: "grey",
+                        borderLeft: 1,
+                        borderLeftColor: "grey",
+                      }}
+                    >
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
+                        >
+                          {c.consommationKilo}
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
+                        >
+                          {c.trajet}
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
+                        >
+                          {c.distanceTotal}
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
+                        >
+                          {(Number(c.distanceTotal || 0) *
+                            Number(c.consommationKilo || 0)) /
+                            100}
+                        </Text>
+                      </View>
+                    </View>
+                  ))}
+                <View
+                  style={{
+                    ...styles.tableCol,
+                    height: "auto",
+                    backgroundColor: "darkgrey",
+                    border: "none",
+                    textAlign: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      ...styles.tableCellHeader,
+                      fontSize: 14,
+                      border: "none",
+                    }}
+                  >
+                    CONSOMMATION EN CARBURANT-Essence
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    borderTop: 1,
+                    borderTopColor: "grey",
+                    borderLeft: 1,
+                    borderLeftColor: "grey",
+                  }}
+                >
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Consommation/100Km
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Trajet
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Distance parcourue(Km)
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCol, styles.colSingleTBValidated]}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      Total Gasoil(L)
+                    </Text>
+                  </View>
+                </View>
+                {mission.calculCarburantRapport
+                  ?.filter((f) => f.typeCarburant == "Essence")
+                  .map((c) => (
+                    <View
+                      style={{
+                        ...styles.tableRow,
+                        borderTop: 1,
+                        borderTopColor: "grey",
+                        borderLeft: 1,
+                        borderLeftColor: "grey",
+                      }}
+                    >
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
+                        >
+                          {c.consommationKilo}
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
+                        >
+                          {c.trajet}
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
+                        >
+                          {c.distanceTotal}
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.tableCol, styles.colSingleTBValidated]}
+                      >
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
+                        >
+                          {(Number(c.distanceTotal || 0) *
+                            Number(c.consommationKilo || 0)) /
+                            100}
+                        </Text>
+                      </View>
+                    </View>
+                  ))}
+                <View>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      color: "#1976d2",
+                      fontWeight: "bold",
+                      fontSize: 9,
+                      paddingBottom: 10,
+                      paddingTop: 15,
+                    }}
+                  >
+                    VALIDATION
+                  </Text>
+                </View>
+                <View style={{ width: "83.1%" }}>
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderTop: 1,
+                      borderTopColor: "grey",
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Poste
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Signature
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Date
+                      </Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidated]}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                        Lieu
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colMergedTBValidated]}
+                    >
+                      <Text
+                        style={{ ...styles.tableCellTBValidated, fontSize: 9 }}
+                      >
+                        Élaboré par :{" "}
+                        {(() => {
+                          const nom = employees.find(
+                            (e: any) => e.id === mission.missionManagerId
+                          )?.name as string;
+
+                          const prenom = employees.find(
+                            (e: any) => e.id === mission.missionManagerId
+                          )?.surname as string;
+                          return nom + " " + prenom;
+                        })()}
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colMergedTBValidated]}
+                    >
+                      <Text
+                        style={{ ...styles.tableCellTBValidated, fontSize: 9 }}
+                      >
+                        Vérificateur financier :{" "}
+                        {(() => {
+                          const nom = employees.find(
+                            (e: any) => e.id === mission.verifyFinancial
+                          )?.name as string;
+                          const prenom = employees.find(
+                            (e: any) => e.id === mission.verifyFinancial
+                          )?.surname as string;
+                          return nom + " " + prenom;
+                        })()}
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colMergedTBValidated]}
+                    >
+                      <Text
+                        style={{ ...styles.tableCellTBValidated, fontSize: 9 }}
+                      >
+                        Vérificateur technique :{" "}
+                        {(() => {
+                          const nom = employees.find(
+                            (e: any) => e.id === mission.verifyTechnic
+                          )?.name as string;
+                          const prenom = employees.find(
+                            (e: any) => e.id === mission.verifyTechnic
+                          )?.surname as string;
+                          return nom + " " + prenom;
+                        })()}
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colMergedTBValidated]}
+                    >
+                      <Text
+                        style={{ ...styles.tableCellTBValidated, fontSize: 9 }}
+                      >
+                        Payé par :{" "}
+                        {(() => {
+                          const nom = employees.find(
+                            (e: any) => e.id === mission.validateFinancial
+                          )?.name as string;
+                          const prenom = employees.find(
+                            (e: any) => e.id === mission.validateFinancial
+                          )?.surname as string;
+
+                          return nom + " " + prenom;
+                        })()}
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                    <View
+                      style={[styles.tableCol, styles.colSingleTBValidatedBody]}
+                    >
+                      <Text style={styles.tableCell}></Text>
+                    </View>
+                  </View>
+                </View>
               </View>
             ))}
         </View>
