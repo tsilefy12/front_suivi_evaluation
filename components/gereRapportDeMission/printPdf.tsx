@@ -66,7 +66,6 @@ const PrintPdf = () => {
               flexDirection: "row",
               justifyContent: "space-around",
               alignItems: "center",
-              paddingLeft: 10,
               paddingRight: 50,
             }}
           >
@@ -89,7 +88,7 @@ const PrintPdf = () => {
                   flexDirection: "column",
                   paddingLeft: 35,
                   fontSize: 14,
-                  paddingTop: 20,
+                  paddingTop: 10,
                 }}
                 key={mission.id}
               >
@@ -108,8 +107,9 @@ const PrintPdf = () => {
                     style={{
                       border: 1.5,
                       padding: 4,
-                      minWidth: 510,
-                      maxWidth: 510,
+                      minWidth: 530,
+                      maxWidth: 530,
+                      marginLeft: 4,
                     }}
                   >
                     {
@@ -137,8 +137,8 @@ const PrintPdf = () => {
                     style={{
                       border: 1.5,
                       padding: 4,
-                      minWidth: 510,
-                      maxWidth: 510,
+                      minWidth: 530,
+                      maxWidth: 530,
                     }}
                   >
                     {mission
@@ -322,6 +322,7 @@ const PrintPdf = () => {
                     borderLeft: 1,
                     borderLeftColor: "grey",
                     width: "100%",
+                    backgroundColor: "darkgrey",
                   }}
                 >
                   <View
@@ -331,7 +332,6 @@ const PrintPdf = () => {
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
-                      backgroundColor: "darkgrey",
                       rowGap: mission.lieux!.length + 1,
                     }}
                   >
@@ -1376,7 +1376,7 @@ const PrintPdf = () => {
                       fontSize: 14,
                     }}
                   >
-                    RÉSUMÉ DES DEPENSES PREVUES
+                    RÉSUMÉ DES DEPENSES PRÉVUES
                   </Text>
                 </View>
                 <View
@@ -1415,7 +1415,16 @@ const PrintPdf = () => {
                     <Text style={styles.tableCellHeader}>Remarques</Text>
                   </View>
                 </View>
-                <View style={{ ...styles.tableRow, width: "100%" }}>
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    width: "100%",
+                    borderTop: 1,
+                    borderTopColor: "grey",
+                    borderLeft: 1,
+                    borderLeftColor: "grey",
+                  }}
+                >
                   <View style={{ ...styles.tableCol, width: "16.67%" }}>
                     <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       1
@@ -1490,7 +1499,16 @@ const PrintPdf = () => {
                     <Text style={styles.tableCellHeader}>Remarques</Text>
                   </View>
                 </View>
-                <View style={{ ...styles.tableRow, width: "100%" }}>
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    width: "100%",
+                    borderTop: 1,
+                    borderTopColor: "grey",
+                    borderLeft: 1,
+                    borderLeftColor: "grey",
+                  }}
+                >
                   <View style={{ ...styles.tableCol, width: "33.33%" }}>
                     <Text style={styles.tableCellHeader}>
                       {(() => {
@@ -2153,10 +2171,10 @@ export default PrintPdf;
 const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
-    paddingTop: 30,
-    paddingBottom: 35,
-    paddingLeft: 30,
-    paddingRight: 30,
+    paddingLeft: 20,
+    paddingBottom: 20,
+    paddingRight: 20,
+    paddingTop: 20,
   },
   table: {
     display: "flex",
@@ -2207,8 +2225,8 @@ const styles = StyleSheet.create({
   },
   colSingleTBValidatedBody: {
     width: "100%",
-    minHeight: 40,
-    maxHeight: 40,
+    minHeight: 60,
+    maxHeight: 60,
   },
   tableCellTBValidated: {
     margin: 5,
