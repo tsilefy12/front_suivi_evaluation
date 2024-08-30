@@ -449,7 +449,7 @@ const PrintPdf = () => {
                 <View
                   style={{
                     ...styles.tableRow,
-                    borderLeft: 1,
+                    borderLeftWidth: 1,
                     borderLeftColor: "grey",
                     width: "100%",
                   }}
@@ -459,8 +459,6 @@ const PrintPdf = () => {
                       ...styles.tableCol,
                       width: "50%",
                       textAlign: "left",
-                      // borderTop: 1,
-                      // borderTopColor: "grey",
                     }}
                   >
                     <Text
@@ -472,12 +470,29 @@ const PrintPdf = () => {
                       Résultats attendus
                     </Text>
                   </View>
+                   {mission.exceptedResults?.map((er, index) => (
+                    <View
+                      key={`expected-result-${index}`}
+                      style={{
+                        ...styles.tableCol,
+                        width: "50%",
+                        textAlign: "left",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          ...styles.tableCell,
+                          fontSize: 9,
+                        }}
+                      >
+                        {er.description}
+                      </Text>
+                    </View>
+                  ))}
                   <View
                     style={{
                       ...styles.tableCol,
                       width: "50%",
-                      // borderTop: 1,
-                      // borderTopColor: "grey",
                       textAlign: "left",
                     }}
                   >
@@ -486,29 +501,27 @@ const PrintPdf = () => {
                     </Text>
                   </View>
                 </View>
+
                 <View
                   style={{
                     ...styles.tableRow,
-                    borderLeft: 1,
+                    borderLeftWidth: 1,
                     borderLeftColor: "grey",
                     width: "100%",
                   }}
                 >
-                  {mission.exceptedResults?.map((er) => (
+                  {mission.exceptedResults?.map((er, index) => (
                     <View
+                      key={`expected-result-${index}`}
                       style={{
                         ...styles.tableCol,
+                        width: "50%",
                         textAlign: "left",
-                        // borderTop: 1,
-                        // borderTopColor: "grey",
-                        display: "flex",
-                        flexDirection: "column",
-                        flexWrap: "wrap",
                       }}
                     >
                       <Text
                         style={{
-                          ...styles.tableCellHeader,
+                          ...styles.tableCell,
                           fontSize: 9,
                         }}
                       >
@@ -516,21 +529,19 @@ const PrintPdf = () => {
                       </Text>
                     </View>
                   ))}
-                  {mission.resultats?.map((ro) => (
+
+                  {mission.resultats?.map((ro, index) => (
                     <View
+                      key={`result-${index}`}
                       style={{
                         ...styles.tableCol,
+                        width: "50%",
                         textAlign: "left",
-                        // borderTop: 1,
-                        // borderTopColor: "grey",
-                        display: "flex",
-                        flexDirection: "column",
-                        flexWrap: "wrap",
                       }}
                     >
                       <Text
                         style={{
-                          ...styles.tableCellHeader,
+                          ...styles.tableCell,
                           fontSize: 9,
                         }}
                       >
@@ -539,6 +550,7 @@ const PrintPdf = () => {
                     </View>
                   ))}
                 </View>
+
                 <View
                   style={{
                     ...styles.tableRow,
