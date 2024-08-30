@@ -37,6 +37,7 @@ const useFetchMissionListe = () => {
         resultats: true,
         besoinVehiculeRapport: true,
         calculCarburantRapport: true,
+        resumeDepense: true,
       },
     };
     if (router.query.search) {

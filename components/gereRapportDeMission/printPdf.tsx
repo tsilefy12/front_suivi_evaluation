@@ -1415,47 +1415,58 @@ const PrintPdf = () => {
                     <Text style={styles.tableCellHeader}>Remarques</Text>
                   </View>
                 </View>
-                <View
-                  style={{
-                    ...styles.tableRow,
-                    width: "100%",
-                    borderTop: 1,
-                    borderTopColor: "grey",
-                    borderLeft: 1,
-                    borderLeftColor: "grey",
-                  }}
-                >
-                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                      1
-                    </Text>
+                {mission.resumeDepensePrevue?.map((rd) => (
+                  <View
+                    style={{
+                      ...styles.tableRow,
+                      width: "100%",
+                      borderTop: 1,
+                      borderTopColor: "grey",
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {
+                          grantEncoursList.find((grant) => grant.id == rd.grant)
+                            ?.code
+                        }
+                      </Text>
+                    </View>
+                    <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {
+                          budgetLineList.find(
+                            (budgetLine) => budgetLine.id == rd.ligneBudgetaire
+                          )?.code
+                        }
+                      </Text>
+                    </View>
+                    <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {formatMontant(Number(rd.depensePrevue))}
+                      </Text>
+                    </View>
+                    <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {formatMontant(Number(rd.budgetDepense))}
+                      </Text>
+                    </View>
+                    <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {formatMontant(
+                          Number(rd.depensePrevue - rd.budgetDepense)
+                        )}
+                      </Text>
+                    </View>
+                    <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {rd.remarque}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                      2
-                    </Text>
-                  </View>
-                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                      3
-                    </Text>
-                  </View>
-                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                      4
-                    </Text>
-                  </View>
-                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                      5
-                    </Text>
-                  </View>
-                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                      6
-                    </Text>
-                  </View>
-                </View>
+                ))}
                 <View
                   style={{
                     textAlign: "center",
