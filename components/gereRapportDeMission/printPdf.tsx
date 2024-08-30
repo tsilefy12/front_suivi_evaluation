@@ -52,8 +52,8 @@ const PrintPdf = () => {
 
   const pdfDocument = (
     <Document>
-      <Page size="A4">
-        <View style={{ width: "83.1%" }}>
+      <Page size="A4" orientation="landscape" style={styles.page}>
+        <View style={{ width: "95%" }}>
           <View
             style={{
               paddingTop: 40,
@@ -83,7 +83,7 @@ const PrintPdf = () => {
                   display: "flex",
                   flexDirection: "column",
                   paddingLeft: 35,
-                  fontSize: 12,
+                  fontSize: 14,
                   paddingTop: 20,
                 }}
                 key={mission.id}
@@ -95,7 +95,7 @@ const PrintPdf = () => {
                     gap: 5,
                     alignItems: "center",
                     paddingBottom: 5,
-                    fontSize: 8,
+                    fontSize: 14,
                   }}
                 >
                   <Text>RESPONSABLE DE MISSION</Text>
@@ -103,8 +103,8 @@ const PrintPdf = () => {
                     style={{
                       border: 1.5,
                       padding: 4,
-                      minWidth: 350,
-                      maxWidth: 350,
+                      minWidth: 510,
+                      maxWidth: 510,
                     }}
                   >
                     {
@@ -124,7 +124,7 @@ const PrintPdf = () => {
                     gap: 5,
                     alignItems: "center",
                     paddingBottom: 5,
-                    fontSize: 8,
+                    fontSize: 14,
                   }}
                 >
                   <Text>GESTIONNAIRE DU BUDGET</Text>
@@ -132,8 +132,8 @@ const PrintPdf = () => {
                     style={{
                       border: 1.5,
                       padding: 4,
-                      minWidth: 350,
-                      maxWidth: 350,
+                      minWidth: 510,
+                      maxWidth: 510,
                     }}
                   >
                     {mission
@@ -163,7 +163,7 @@ const PrintPdf = () => {
                   <Text
                     style={{
                       ...styles.tableCellHeader,
-                      fontSize: 9,
+                      fontSize: 14,
                     }}
                   >
                     Les missionnaires:{" "}
@@ -174,7 +174,7 @@ const PrintPdf = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                     borderTop: 1,
                     borderTopColor: "grey",
                     width: "100%",
@@ -192,7 +192,7 @@ const PrintPdf = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Nom et prénoms
@@ -207,7 +207,7 @@ const PrintPdf = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Date de départ
                     </Text>
                   </View>
@@ -220,7 +220,7 @@ const PrintPdf = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Date de retour
                     </Text>
                   </View>
@@ -233,7 +233,7 @@ const PrintPdf = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Responsabilité pendant la mission
                     </Text>
                   </View>
@@ -244,7 +244,7 @@ const PrintPdf = () => {
                       ...styles.tableRow,
                       borderLeft: 1,
                       borderLeftColor: "grey",
-                      fontSize: 8,
+                      fontSize: 14,
                       width: "100%",
                     }}
                   >
@@ -258,7 +258,7 @@ const PrintPdf = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                         }}
                       >
                         {`${m.firstNameMissionary} ${m.lastNameMissionary}`}
@@ -271,7 +271,7 @@ const PrintPdf = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {format(new Date(m.startDateMissionary!), "dd/MM/yyyy")}
                       </Text>
                     </View>
@@ -282,7 +282,7 @@ const PrintPdf = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {format(
                           new Date(m.returnDateMissionary!),
                           "dd/MM/yyyy"
@@ -296,7 +296,7 @@ const PrintPdf = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {(() => {
                           const nom = employees.find(
                             (f) => f.id == m.missionResponsabilityMissionary
@@ -333,7 +333,7 @@ const PrintPdf = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Lieux de mission :{" "}
@@ -348,7 +348,7 @@ const PrintPdf = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Fokontany
                     </Text>
                   </View>
@@ -361,7 +361,7 @@ const PrintPdf = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Commune
                     </Text>
                   </View>
@@ -374,7 +374,7 @@ const PrintPdf = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       District
                     </Text>
                   </View>
@@ -385,7 +385,7 @@ const PrintPdf = () => {
                       ...styles.tableRow,
                       borderLeft: 1,
                       borderLeftColor: "grey",
-                      fontSize: 8,
+                      fontSize: 14,
                     }}
                   >
                     <View
@@ -400,7 +400,7 @@ const PrintPdf = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                           backgroundColor: "grey",
                         }}
                       ></Text>
@@ -414,7 +414,7 @@ const PrintPdf = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {er.fokontany}
                       </Text>
                     </View>
@@ -427,7 +427,7 @@ const PrintPdf = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {er.commune}
                       </Text>
                     </View>
@@ -440,7 +440,7 @@ const PrintPdf = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {er.district}
                       </Text>
                     </View>
@@ -448,287 +448,288 @@ const PrintPdf = () => {
                 ))}
                 <View
                   style={{
-                    ...styles.tableRow,
-                    borderLeftWidth: 1,
-                    borderLeftColor: "grey",
+                    display: "flex",
+                    flexDirection: "row",
                     width: "100%",
+                    borderRight: 1.5,
+                    borderRightColor: "grey",
+                    borderBottom: 1.5,
+                    borderBottomColor: "grey",
                   }}
                 >
                   <View
                     style={{
-                      ...styles.tableCol,
+                      display: "flex",
+                      flexDirection: "column",
                       width: "50%",
-                      textAlign: "left",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        ...styles.tableCellHeader,
-                        fontSize: 9,
-                      }}
-                    >
-                      Résultats attendus
-                    </Text>
-                  </View>
-                   {mission.exceptedResults?.map((er, index) => (
-                    <View
-                      key={`expected-result-${index}`}
-                      style={{
-                        ...styles.tableCol,
-                        width: "50%",
-                        textAlign: "left",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          ...styles.tableCell,
-                          fontSize: 9,
-                        }}
-                      >
-                        {er.description}
-                      </Text>
-                    </View>
-                  ))}
-                  <View
-                    style={{
-                      ...styles.tableCol,
-                      width: "50%",
-                      textAlign: "left",
-                    }}
-                  >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
-                      Résultats obtenus
-                    </Text>
-                  </View>
-                </View>
-
-                <View
-                  style={{
-                    ...styles.tableRow,
-                    borderLeftWidth: 1,
-                    borderLeftColor: "grey",
-                    width: "100%",
-                  }}
-                >
-                  {mission.exceptedResults?.map((er, index) => (
-                    <View
-                      key={`expected-result-${index}`}
-                      style={{
-                        ...styles.tableCol,
-                        width: "50%",
-                        textAlign: "left",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          ...styles.tableCell,
-                          fontSize: 9,
-                        }}
-                      >
-                        {er.description}
-                      </Text>
-                    </View>
-                  ))}
-
-                  {mission.resultats?.map((ro, index) => (
-                    <View
-                      key={`result-${index}`}
-                      style={{
-                        ...styles.tableCol,
-                        width: "50%",
-                        textAlign: "left",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          ...styles.tableCell,
-                          fontSize: 9,
-                        }}
-                      >
-                        {ro.resultat}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
-
-                <View
-                  style={{
-                    ...styles.tableRow,
-                    borderLeft: 1,
-                    borderLeftColor: "grey",
-                  }}
-                >
-                  <View
-                    style={{
-                      ...styles.tableCol,
-                      width: "25%",
-                      textAlign: "left",
-                      // borderTop: 1,
-                      // borderTopColor: "grey",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        ...styles.tableCellHeader,
-                        fontSize: 9,
-                      }}
-                    >
-                      Activités prévues
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      ...styles.tableCol,
-                      width: "62.5%",
-                      // borderTop: 1,
-                      // borderTopColor: "grey",
-                      textAlign: "left",
-                    }}
-                  >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
-                      Activités réalisées
-                    </Text>
-                  </View>
-                </View>
-                {mission.activites?.map((r) => (
-                  <View
-                    style={{
-                      ...styles.tableRow,
                       borderLeft: 1,
                       borderLeftColor: "grey",
                     }}
                   >
-                    {missionListe
-                      .filter(
-                        (f: MissionItem) =>
-                          f.notify!.map((n) => n.missionId).includes(f.id) &&
-                          f.notify!.map((n) => n.type).includes("Prevision")
-                      )
-                      .flatMap((rp) => rp.plannedActivities)
-                      .map((er) => (
-                        <View
-                          style={{
-                            ...styles.tableCol,
-                            width: "25%",
-                            textAlign: "left",
-                            // borderTop: 1,
-                            // borderTopColor: "grey",
-                          }}
-                        >
-                          <Text
-                            style={{
-                              ...styles.tableCellHeader,
-                              fontSize: 9,
-                            }}
-                          >
-                            {er?.description}
-                          </Text>
-                        </View>
-                      ))}
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "62.5%",
-                        // borderTop: 1,
-                        // borderTopColor: "grey",
-                        textAlign: "left",
+                        textAlign: "center",
+                        width: "100%",
+                        backgroundColor: "darkgrey",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
-                        {r.activite}
+                      <Text
+                        style={{
+                          ...styles.tableCellHeader,
+                          fontSize: 14,
+                        }}
+                      >
+                        Résultats attendus
                       </Text>
                     </View>
+                    {mission.exceptedResults?.map((er, index) => (
+                      <View
+                        key={`expected-result-${index}`}
+                        style={{
+                          ...styles.tableCol,
+                          textAlign: "left",
+                          width: "100%",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            ...styles.tableCellHeader,
+                            fontSize: 14,
+                          }}
+                        >
+                          {er.description}
+                        </Text>
+                      </View>
+                    ))}
                   </View>
-                ))}
+                  <View style={{ width: "50%" }}>
+                    <View
+                      style={{
+                        ...styles.tableCol,
+                        textAlign: "left",
+                        width: "100%",
+                        backgroundColor: "darkgrey",
+                        borderRight: "none",
+                      }}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        Résultats obtenus
+                      </Text>
+                    </View>
+                    {mission.resultats?.map((er, index) => (
+                      <View
+                        key={`expected-result-${index}`}
+                        style={{
+                          ...styles.tableCol,
+                          textAlign: "left",
+                          width: "100%",
+                          borderRight: "none",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            ...styles.tableCellHeader,
+                            fontSize: 14,
+                          }}
+                        >
+                          {er.resultat}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
                 <View
                   style={{
-                    ...styles.tableRow,
-                    borderLeft: 1,
-                    borderLeftColor: "grey",
+                    display: "flex",
+                    flexDirection: "row",
+                    width: "100%",
+                    borderRight: 1.5,
+                    borderRightColor: "grey",
+                    borderBottom: 1.5,
+                    borderBottomColor: "grey",
                   }}
                 >
                   <View
                     style={{
-                      ...styles.tableCol,
-                      width: "25%",
-                      textAlign: "left",
-                      // borderTop: 1,
-                      // borderTopColor: "grey",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        ...styles.tableCellHeader,
-                        fontSize: 9,
-                      }}
-                    >
-                      Livrables prévues
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      ...styles.tableCol,
-                      width: "62.5%",
-                      // borderTop: 1,
-                      // borderTopColor: "grey",
-                      textAlign: "left",
-                    }}
-                  >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
-                      Livrables obtenus
-                    </Text>
-                  </View>
-                </View>
-                {mission.livrables?.map((r) => (
-                  <View
-                    style={{
-                      ...styles.tableRow,
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "50%",
                       borderLeft: 1,
                       borderLeftColor: "grey",
                     }}
                   >
-                    {missionListe
-                      .filter(
-                        (f: MissionItem) =>
-                          f.notify!.map((n) => n.missionId).includes(f.id) &&
-                          f.notify!.map((n) => n.type).includes("Prevision")
-                      )
-                      .flatMap((rp) => rp.deliverables)
-                      .map((er) => (
-                        <View
-                          style={{
-                            ...styles.tableCol,
-                            width: "25%",
-                            textAlign: "left",
-                            // borderTop: 1,
-                            // borderTopColor: "grey",
-                          }}
-                        >
-                          <Text
-                            style={{
-                              ...styles.tableCellHeader,
-                              fontSize: 9,
-                            }}
-                          >
-                            {er?.description}
-                          </Text>
-                        </View>
-                      ))}
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "62.5%",
-                        // borderTop: 1,
-                        // borderTopColor: "grey",
-                        textAlign: "left",
+                        textAlign: "center",
+                        width: "100%",
+                        backgroundColor: "darkgrey",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
-                        {r.livrablee}
+                      <Text
+                        style={{
+                          ...styles.tableCellHeader,
+                          fontSize: 14,
+                        }}
+                      >
+                        Activités prévues
                       </Text>
                     </View>
+                    {mission.plannedActivities?.map((er, index) => (
+                      <View
+                        key={`expected-result-${index}`}
+                        style={{
+                          ...styles.tableCol,
+                          textAlign: "left",
+                          width: "100%",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            ...styles.tableCellHeader,
+                            fontSize: 14,
+                          }}
+                        >
+                          {er.description}
+                        </Text>
+                      </View>
+                    ))}
                   </View>
-                ))}
+                  <View
+                    style={{
+                      width: "50%",
+                    }}
+                  >
+                    <View
+                      style={{
+                        ...styles.tableCol,
+                        textAlign: "left",
+                        width: "100%",
+                        backgroundColor: "darkgrey",
+                        borderRight: "none",
+                      }}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        Activités réalisées
+                      </Text>
+                    </View>
+                    {mission.activites?.map((er, index) => (
+                      <View
+                        key={`expected-result-${index}`}
+                        style={{
+                          ...styles.tableCol,
+                          textAlign: "left",
+                          width: "100%",
+                          borderRight: "none",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            ...styles.tableCellHeader,
+                            fontSize: 14,
+                          }}
+                        >
+                          {er.activite}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    width: "100%",
+                    borderRight: 1.5,
+                    borderRightColor: "grey",
+                    borderBottom: 1.5,
+                    borderBottomColor: "grey",
+                  }}
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "50%",
+                      borderLeft: 1,
+                      borderLeftColor: "grey",
+                    }}
+                  >
+                    <View
+                      style={{
+                        ...styles.tableCol,
+                        textAlign: "center",
+                        width: "100%",
+                        backgroundColor: "darkgrey",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          ...styles.tableCellHeader,
+                          fontSize: 14,
+                        }}
+                      >
+                        Livrables prévues
+                      </Text>
+                    </View>
+                    {mission.deliverables?.map((er, index) => (
+                      <View
+                        key={`expected-result-${index}`}
+                        style={{
+                          ...styles.tableCol,
+                          textAlign: "left",
+                          width: "100%",
+                          borderBottom: 1,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            ...styles.tableCellHeader,
+                            fontSize: 14,
+                          }}
+                        >
+                          {er.description}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                  <View style={{ width: "50%", borderTop: "1px solid grey" }}>
+                    <View
+                      style={{
+                        ...styles.tableCol,
+                        textAlign: "left",
+                        width: "100%",
+                        backgroundColor: "darkgrey",
+                        borderRight: "none",
+                      }}
+                    >
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        Livrables obtenus
+                      </Text>
+                    </View>
+                    {mission.livrables?.map((er, index) => (
+                      <View
+                        key={`expected-result-${index}`}
+                        style={{
+                          ...styles.tableCol,
+                          textAlign: "left",
+                          width: "100%",
+                          borderRight: "none",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            ...styles.tableCellHeader,
+                            fontSize: 14,
+                          }}
+                        >
+                          {er.livrablee}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
                 <View
                   style={{
                     paddingTop: 10,
@@ -753,21 +754,22 @@ const PrintPdf = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
+                    width: "100%",
                   }}
                 >
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "25%",
                       textAlign: "left",
                       borderTop: 1,
                       borderTopColor: "grey",
+                      width: "14.29%",
                     }}
                   >
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Du
@@ -776,78 +778,78 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
                       borderTop: 1,
                       borderTopColor: "grey",
                       textAlign: "left",
+                      width: "14.29%",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Au
                     </Text>
                   </View>
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
                       borderTop: 1,
                       borderTopColor: "grey",
                       textAlign: "left",
+                      width: "14.29%",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Activités prévues
                     </Text>
                   </View>
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
                       borderTop: 1,
                       borderTopColor: "grey",
                       textAlign: "left",
+                      width: "14.29%",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Lieu
                     </Text>
                   </View>
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
                       borderTop: 1,
                       borderTopColor: "grey",
                       textAlign: "left",
+                      width: "14.29%",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Livrables prévues
                     </Text>
                   </View>
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
                       borderTop: 1,
                       borderTopColor: "grey",
                       textAlign: "left",
+                      width: "14.29%",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Livrables déposés
                     </Text>
                   </View>
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
                       borderTop: 1,
                       borderTopColor: "grey",
                       textAlign: "left",
+                      width: "14.29%",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Commentaires
                     </Text>
                   </View>
@@ -857,21 +859,22 @@ const PrintPdf = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
+                    width: "100%",
                   }}
                 >
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "25%",
                       textAlign: "left",
                       borderTop: 1,
                       borderTopColor: "grey",
+                      width: "14.29%",
                     }}
                   >
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       {format(
@@ -883,86 +886,89 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
                       borderTop: 1,
                       borderTopColor: "grey",
                       textAlign: "left",
+                      width: "14.29%",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       {format(new Date(mission.dateFin as Date), "dd/MM/yyyy")}
                     </Text>
                   </View>
-                  {mission.plannedActivities?.map((pa) => (
-                    <View
-                      style={{
-                        ...styles.tableCol,
-                        width: "62.5%",
-                        borderTop: 1,
-                        borderTopColor: "grey",
-                        textAlign: "left",
-                      }}
-                    >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
-                        {pa.description}
-                      </Text>
-                    </View>
-                  ))}
-                  {mission.lieux?.map((l) => (
-                    <View
-                      style={{
-                        ...styles.tableCol,
-                        width: "62.5%",
-                        borderTop: 1,
-                        borderTopColor: "grey",
-                        textAlign: "left",
-                      }}
-                    >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
-                        {l.fokontany}
-                      </Text>
-                    </View>
-                  ))}
-                  {mission.deliverables?.map((d) => (
-                    <View
-                      style={{
-                        ...styles.tableCol,
-                        width: "62.5%",
-                        borderTop: 1,
-                        borderTopColor: "grey",
-                        textAlign: "left",
-                      }}
-                    >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
-                        {d.description}
-                      </Text>
-                    </View>
-                  ))}
-                  {mission.livrables?.map((l) => (
-                    <View
-                      style={{
-                        ...styles.tableCol,
-                        width: "62.5%",
-                        borderTop: 1,
-                        borderTopColor: "grey",
-                        textAlign: "left",
-                      }}
-                    >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
-                        {l.livrablee}
-                      </Text>
-                    </View>
-                  ))}
+
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
                       borderTop: 1,
                       borderTopColor: "grey",
                       textAlign: "left",
+                      width: "14.29%",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    {mission.plannedActivities?.map((pa) => (
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {pa.description}
+                      </Text>
+                    ))}
+                  </View>
+
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      borderTop: 1,
+                      borderTopColor: "grey",
+                      textAlign: "left",
+                      width: "14.29%",
+                    }}
+                  >
+                    {mission.lieux?.map((l) => (
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {l.fokontany}
+                      </Text>
+                    ))}
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      borderTop: 1,
+                      borderTopColor: "grey",
+                      textAlign: "left",
+                      width: "14.29%",
+                    }}
+                  >
+                    {mission.deliverables?.map((d) => (
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {d.description}
+                      </Text>
+                    ))}
+                  </View>
+
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      borderTop: 1,
+                      borderTopColor: "grey",
+                      textAlign: "left",
+                      width: "14.29%",
+                    }}
+                  >
+                    {mission.livrables?.map((l) => (
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                        {l.livrablee}
+                      </Text>
+                    ))}
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      borderTop: 1,
+                      borderTopColor: "grey",
+                      textAlign: "left",
+                      width: "14.29%",
+                    }}
+                  >
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Commentaires
                     </Text>
                   </View>
@@ -977,7 +983,7 @@ const PrintPdf = () => {
                   <Text
                     style={{
                       color: "#1976d2",
-                      fontSize: 9,
+                      fontSize: 14,
                     }}
                   >
                     RAPPORT DES DÉPENSES
@@ -988,24 +994,25 @@ const PrintPdf = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                     borderTop: 1,
-                    width: "83.1%",
+                    width: "100%",
                     borderTopColor: "grey",
                   }}
                 >
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "10.3875%",
+
                       textAlign: "left",
                       borderColor: "grey",
+                      width: "12.5%",
                     }}
                   >
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Réf.PJ
@@ -1014,7 +1021,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "10.3875%",
+                      width: "12.5%",
                       textAlign: "left",
                       borderColor: "grey",
                     }}
@@ -1022,7 +1029,7 @@ const PrintPdf = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Date
@@ -1031,7 +1038,7 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20%",
+                      width: "12.5%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
@@ -1039,7 +1046,7 @@ const PrintPdf = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Libellés
@@ -1048,60 +1055,60 @@ const PrintPdf = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "10.3875%",
+                      width: "12.5%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Montant prévu
                     </Text>
                   </View>
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20%",
+                      width: "12.5%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Montant réalisé
                     </Text>
                   </View>
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20%",
+                      width: "12.5%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Grant
                     </Text>
                   </View>
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20%",
+                      width: "12.5%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Ligne budgétaire
                     </Text>
                   </View>
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20%",
+                      width: "12.5%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Règleme
                     </Text>
                   </View>
@@ -1111,9 +1118,8 @@ const PrintPdf = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                     borderTop: 1,
-                    width: "83.1%",
                     borderTopColor: "grey",
                   }}
                 >
@@ -1121,7 +1127,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "10.3875%",
+
                         textAlign: "left",
                         borderColor: "grey",
                       }}
@@ -1129,7 +1135,7 @@ const PrintPdf = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                         }}
                       >
                         {rd.refPiece}
@@ -1140,7 +1146,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "10.3875%",
+
                         textAlign: "left",
                         borderColor: "grey",
                       }}
@@ -1148,7 +1154,7 @@ const PrintPdf = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                         }}
                       >
                         {format(new Date(rd.date as Date), "dd/MM/yyyy")}
@@ -1159,7 +1165,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20%",
+
                         borderColor: "grey",
                         textAlign: "left",
                       }}
@@ -1167,7 +1173,7 @@ const PrintPdf = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                         }}
                       >
                         {rd.libelle}
@@ -1178,7 +1184,6 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "10.3875%",
                         borderColor: "grey",
                         display: "flex",
                         flexWrap: "wrap",
@@ -1188,7 +1193,7 @@ const PrintPdf = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                           marginBottom: 2,
                         }}
                       >
@@ -1200,7 +1205,6 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20%",
                         borderColor: "grey",
                         display: "flex",
                         flexWrap: "wrap",
@@ -1210,7 +1214,7 @@ const PrintPdf = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                           marginBottom: 2,
                         }}
                       >
@@ -1222,7 +1226,6 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20%",
                         borderColor: "grey",
                         display: "flex",
                         flexWrap: "wrap",
@@ -1232,7 +1235,7 @@ const PrintPdf = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                           marginBottom: 2,
                         }}
                       >
@@ -1244,12 +1247,11 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20%",
                         borderColor: "grey",
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {
                           budgetLineList.find(
                             (bg) => bg.id == rd.ligneBudgetaire
@@ -1263,458 +1265,164 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20%",
+
                         borderColor: "grey",
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {rd.modePaiement}
                       </Text>
                     </View>
                   ))}
                 </View>
-              </View>
-            ))}
-        </View>
-        <View
-          style={{
-            paddingTop: 10,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <Text
-            style={{
-              textAlign: "center",
-              width: "100%",
-              color: "black",
-              fontWeight: "bold",
-              fontSize: 15,
-              paddingBottom: 5,
-            }}
-          >
-            RÉSUMÉ DES DEPENSES PREVUES
-          </Text>
-          <View style={{ paddingLeft: 35, paddingRight: 35 }}>
-            <View style={styles.table}>
-              {/* Table Header */}
-              <View style={styles.tableRow}>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCellHeader}>Grant</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <View style={styles.flexColumn}>
-                    <Text style={[styles.tableCellHeader]}>Ligne</Text>
-                    <Text style={[styles.tableCellHeader, styles.flexEnd]}>
-                      budgétaire
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    borderLeft: 1,
+                    borderColor: "grey",
+                    fontSize: 14,
+                    borderTop: 1,
+                    width: "100%",
+                    borderTopColor: "grey",
+                  }}
+                >
+                  <View
+                    style={{
+                      ...styles.tableCol,
+
+                      textAlign: "left",
+                      borderColor: "grey",
+                      width: "37.5%",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        ...styles.tableCellHeader,
+                        fontSize: 14,
+                      }}
+                    >
+                      TOTAL DES DEPENSES
                     </Text>
                   </View>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCellHeader}>Dépenses prévues</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCellHeader}>Budget de dépense</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCellHeader}>Différence</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCellHeader}>Remarques</Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              {resumeDepensePrevueList
-                .filter((f) => f.missionId == id)
-                .map((prevue: any) => (
-                  <View style={styles.tableRow} key={prevue.id}>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>
-                        {
-                          grantEncoursList.find(
-                            (e: any) => e.id == prevue.grant
-                          )?.code
-                        }
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>
-                        {
-                          budgetLineList.find(
-                            (e: any) => e.id == prevue.ligneBudgetaire
-                          )?.code
-                        }
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>
-                        {formatMontant(Number(prevue.depensePrevue))}
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>
-                        {formatMontant(Number(prevue.budgetDepense))}
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>
-                        {(() => {
-                          const totalResumeDepense = resumeDepenseList
-                            .filter(
-                              (f) =>
-                                f.missionId == id &&
-                                f.grant == prevue.grant &&
-                                f.ligneBudgetaire == prevue.ligneBudgetaire
-                            )
-                            .reduce(
-                              (acc, resume: ResumeDepenseItem) =>
-                                acc + Number(resume.budgetDepense),
-                              0
-                            );
-
-                          return formatMontant(
-                            totalResumeDepense - Number(prevue.budgetDepense)
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      width: "12.5%",
+                      borderColor: "grey",
+                      textAlign: "left",
+                    }}
+                  >
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      {(() => {
+                        const totalPrevue = mission.previsionDepense
+                          ?.filter((f) => (f.missionId = mission.id))
+                          .reduce(
+                            (acc: any, curr: any) => acc + curr.montant,
+                            0
                           );
-                        })()}
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>{prevue.remarque}</Text>
-                    </View>
+                        return formatMontant(Number(totalPrevue || 0));
+                      })()}
+                    </Text>
                   </View>
-                ))}
-              {/* Calcul des totaux */}
-              {(() => {
-                const totalBudgetRecu = resumeDepensePrevueList
-                  .filter((f) => f.missionId == id)
-                  .reduce(
-                    (acc, prevue: any) => acc + Number(prevue.budgetDepense),
-                    0
-                  );
-
-                const totalDepensePrevue = resumeDepensePrevueList
-                  .filter((f) => f.missionId == id)
-                  .reduce(
-                    (acc, prevue: any) => acc + Number(prevue.depensePrevue),
-                    0
-                  );
-
-                const totalBudgetPrevue = resumeDepenseList
-                  .filter((f) => f.missionId == id)
-                  .reduce(
-                    (acc, resume: ResumeDepenseItem) =>
-                      acc + Number(resume.budgetDepense),
-                    0
-                  );
-                const depensePrevue = resumeDepenseList
-                  .filter((f) => f.missionId == id)
-                  .reduce(
-                    (acc, resume: ResumeDepenseItem) =>
-                      acc + Number(resume.depensePrevue),
-                    0
-                  );
-                const reste = depensePrevue - totalDepensePrevue;
-                const diffrence = totalBudgetPrevue - totalBudgetRecu;
-                const diffrenceDepense = depensePrevue - totalDepensePrevue;
-                const resteBudget = totalBudgetPrevue - totalBudgetRecu;
-                return (
-                  <>
-                    {/* TOTAL BUDGET REÇU */}
-                    <View style={styles.tableRow} key={1}>
-                      <View style={[styles.tableCol, styles.colMerged]}>
-                        <Text style={styles.tableCellColaps}>
-                          TOTAL BUDGET REÇU
-                        </Text>
-                      </View>
-                      <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>-</Text>
-                      </View>
-                      <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>
-                          {formatMontant(totalBudgetRecu)}
-                        </Text>
-                      </View>
-                      <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>
-                          {formatMontant(diffrence)}
-                        </Text>
-                      </View>
-                      <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>-</Text>
-                      </View>
-                    </View>
-
-                    {/* DÉPENSE TOTAL */}
-                    <View style={styles.tableRow} key={2}>
-                      <View style={[styles.tableCol, styles.colMerged]}>
-                        <Text style={styles.tableCellColaps}>
-                          DÉPENSE TOTAL
-                        </Text>
-                      </View>
-                      <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>
-                          {formatMontant(totalDepensePrevue)}
-                        </Text>
-                      </View>
-                      <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>-</Text>
-                      </View>
-                      <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>
-                          {formatMontant(diffrenceDepense)}
-                        </Text>
-                      </View>
-                      <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>-</Text>
-                      </View>
-                    </View>
-
-                    {/* RESTE */}
-                    <View style={styles.tableRow} key={3}>
-                      <View style={[styles.tableCol, styles.colMerged]}>
-                        <Text style={styles.tableCellColaps}>RESTE</Text>
-                      </View>
-                      <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>
-                          {formatMontant(reste)}
-                        </Text>
-                      </View>
-                      <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>-</Text>
-                      </View>
-                      <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>
-                          {formatMontant(resteBudget)}
-                        </Text>
-                      </View>
-                      <View style={[styles.tableCol, styles.colSingle]}>
-                        <Text style={styles.tableCell}>-</Text>
-                      </View>
-                    </View>
-                  </>
-                );
-              })()}
-            </View>
-          </View>
-        </View>
-        <View style={{ paddingTop: 10 }}>
-          <Text
-            style={{
-              textAlign: "center",
-              width: "100%",
-              color: "black",
-              fontWeight: "bold",
-              fontSize: 15,
-              paddingBottom: 5,
-            }}
-          >
-            VALIDATION
-          </Text>
-          <View style={{ paddingLeft: 35, paddingRight: 35 }}>
-            <View style={styles.table}>
-              {/* Table Header */}
-              <View style={styles.tableRow}>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCellHeader}>Poste</Text>
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      width: "12.5%",
+                      borderColor: "grey",
+                      textAlign: "left",
+                    }}
+                  >
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      {(() => {
+                        const totalRealise = mission.rappportDepense
+                          ?.filter((f) => (f.missionId = mission.id))
+                          .reduce(
+                            (acc: any, curr: any) => acc + curr.montant,
+                            0
+                          );
+                        return formatMontant(Number(totalRealise || 0));
+                      })()}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      width: "37.5%",
+                      borderColor: "grey",
+                      textAlign: "left",
+                    }}
+                  >
+                    <Text
+                      style={{ ...styles.tableCellHeader, fontSize: 14 }}
+                    ></Text>
+                  </View>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCellHeader}>Signature</Text>
+                <View
+                  style={{
+                    textAlign: "center",
+                    paddingTop: 15,
+                    paddingBottom: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#1976d2",
+                      fontSize: 14,
+                    }}
+                  >
+                    RÉSUMÉ DES DEPENSES PREVUES
+                  </Text>
                 </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCellHeader}>Date</Text>
-                </View>
-                <View style={[styles.tableCol, styles.colSingleTBValidated]}>
-                  <Text style={styles.tableCellHeader}>Lieu</Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              {missionListe
-                .filter((mission) => mission.id == id)
-                .map((m) => (
-                  <View style={styles.tableRow} key={m.id}>
-                    <View
-                      style={[styles.tableCol, styles.colMergedTBValidated]}
-                    >
-                      <Text style={styles.tableCellTBValidated}>
-                        Élaboré par :{" "}
-                        {
-                          employees.find(
-                            (e: any) => e.id === m.missionManagerId
-                          )?.name as string
-                        }{" "}
-                        {
-                          employees.find(
-                            (e: any) => e.id === m.missionManagerId
-                          )?.surname as string
-                        }
+                <View style={styles.tableRow}>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>Grant</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <View style={styles.flexColumn}>
+                      <Text style={[styles.tableCellHeader]}>Ligne</Text>
+                      <Text style={[styles.tableCellHeader, styles.flexEnd]}>
+                        budgétaire
                       </Text>
                     </View>
                   </View>
-                ))}
-              <View style={styles.tableRow}>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>Dépenses prévues</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>
+                      Dépenses réalisées
+                    </Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>Différence</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCellHeader}>Remarques</Text>
+                  </View>
                 </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-              </View>
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                {missionListe
-                  .filter((mission) => mission.id == id)
-                  .map((m) => (
-                    <View
-                      style={[styles.tableCol, styles.colMergedTBValidated]}
-                      key={m.id}
-                    >
-                      <Text style={styles.tableCellTBValidated}>
-                        Vérificateur financier :{" "}
-                        {
-                          employees.find((e: any) => e.id === m.verifyFinancial)
-                            ?.name as string
-                        }{" "}
-                        {
-                          employees.find((e: any) => e.id === m.verifyFinancial)
-                            ?.surname as string
-                        }
-                      </Text>
-                    </View>
-                  ))}
-              </View>
-              <View style={styles.tableRow}>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
+                <View style={styles.tableRow}>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>1</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>2</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>3</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>4</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>5</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>6</Text>
+                  </View>
                 </View>
               </View>
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                {missionListe
-                  .filter((mission) => mission.id == id)
-                  .map((m) => (
-                    <View
-                      style={[styles.tableCol, styles.colMergedTBValidated]}
-                      key={m.id}
-                    >
-                      <Text style={styles.tableCellTBValidated}>
-                        Vérificateur technique :{" "}
-                        {
-                          employees.find((e: any) => e.id === m.verifyTechnic)
-                            ?.name as string
-                        }{" "}
-                        {
-                          employees.find((e: any) => e.id === m.verifyTechnic)
-                            ?.surname as string
-                        }
-                      </Text>
-                    </View>
-                  ))}
-              </View>
-              <View style={styles.tableRow}>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-              </View>
-
-              {/* Table Body */}
-              <View style={styles.tableRow}>
-                {missionListe
-                  .filter((mission) => mission.id == id)
-                  .map((m) => (
-                    <View
-                      style={[styles.tableCol, styles.colMergedTBValidated]}
-                      key={m.id}
-                    >
-                      <Text style={styles.tableCellTBValidated}>
-                        Payé par :{" "}
-                        {
-                          employees.find(
-                            (e: any) => e.id === m.validateFinancial
-                          )?.name as string
-                        }{" "}
-                        {
-                          employees.find(
-                            (e: any) => e.id === m.validateFinancial
-                          )?.surname as string
-                        }
-                      </Text>
-                    </View>
-                  ))}
-              </View>
-              <View style={styles.tableRow}>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-                <View
-                  style={[styles.tableCol, styles.colSingleTBValidatedBody]}
-                >
-                  <Text style={styles.tableCell}></Text>
-                </View>
-              </View>
-              {/* Add more rows as needed */}
-            </View>
-          </View>
+            ))}
         </View>
       </Page>
     </Document>
@@ -1747,7 +1455,10 @@ export default PrintPdf;
 const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
-    padding: 20,
+    paddingTop: 30,
+    paddingBottom: 30,
+    paddingLeft: 30,
+    paddingRight: 30,
   },
   table: {
     display: "flex",
@@ -1762,15 +1473,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   tableCol: {
-    width: "20%", // Ajustement pour correspondre à la longueur souhaitée
-    borderStyle: "solid",
-    borderWidth: 1,
+    // Ajustement pour correspondre à la longueur souhaitée
+    // borderStyle: "solid",
+    borderWidth: "1px solid grey",
     borderLeftWidth: 0,
     borderTopWidth: 0,
   },
   tableCellHeader: {
     margin: 5,
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "bold",
   },
   tableCell: {
@@ -1789,9 +1500,7 @@ const styles = StyleSheet.create({
   colMerged: {
     width: "40%", // 16.6% * 2
   },
-  colSingle: {
-    width: "20%",
-  },
+  colSingle: {},
   colMergedTBValidated: {
     width: "100%", // 20% * 2
   },
@@ -1814,5 +1523,15 @@ const styles = StyleSheet.create({
   logo: {
     width: 75,
     height: 80,
+  },
+  header: {
+    position: "absolute",
+    top: 10,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+  },
+  content: {
+    marginTop: 60,
   },
 });
