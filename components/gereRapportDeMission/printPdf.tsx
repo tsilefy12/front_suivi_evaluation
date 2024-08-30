@@ -62,13 +62,12 @@ const PrintPdf = () => {
         <View style={{ width: "95%" }}>
           <View
             style={{
-              paddingTop: 40,
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-around",
               alignItems: "center",
               paddingLeft: 10,
-              paddingRight: 20,
+              paddingRight: 50,
             }}
           >
             <Image
@@ -1380,67 +1379,72 @@ const PrintPdf = () => {
                     RÉSUMÉ DES DEPENSES PREVUES
                   </Text>
                 </View>
-                <View style={{ width: "100%" }}>
-                  <View style={styles.tableRow}>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>Grant</Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <View style={styles.flexColumn}>
-                        <Text style={[styles.tableCellHeader]}>Ligne</Text>
-                        <Text style={[styles.tableCellHeader, styles.flexEnd]}>
-                          budgétaire
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>
-                        Dépenses prévues
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    width: "100%",
+                    borderTop: 1,
+                    borderTopColor: "grey",
+                    borderLeft: 1,
+                    borderLeftColor: "grey",
+                  }}
+                >
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={styles.tableCellHeader}>Grant</Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <View style={styles.flexColumn}>
+                      <Text style={[styles.tableCellHeader]}>Ligne</Text>
+                      <Text style={[styles.tableCellHeader, styles.flexEnd]}>
+                        budgétaire
                       </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>
-                        Dépenses réalisées
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>Différence</Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>Remarques</Text>
                     </View>
                   </View>
-                  <View style={styles.tableRow}>
-                    <View style={styles.tableCol}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        1
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        2
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        3
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        4
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        5
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        6
-                      </Text>
-                    </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={styles.tableCellHeader}>Dépenses prévues</Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={styles.tableCellHeader}>
+                      Dépenses réalisées
+                    </Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={styles.tableCellHeader}>Différence</Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={styles.tableCellHeader}>Remarques</Text>
+                  </View>
+                </View>
+                <View style={{ ...styles.tableRow, width: "100%" }}>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      1
+                    </Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      2
+                    </Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      3
+                    </Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      4
+                    </Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      5
+                    </Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      6
+                    </Text>
                   </View>
                 </View>
                 <View
@@ -1459,42 +1463,56 @@ const PrintPdf = () => {
                     CALCUL DES RELIQUATS
                   </Text>
                 </View>
-                <View style={{ width: "100%" }}>
-                  <View style={styles.tableRow}>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>
-                        Total des dépenses en espèces
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>
-                        Total des reliquats en espèces
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>Balance</Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>Remarques</Text>
-                    </View>
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    width: "100%",
+                    borderTop: 1,
+                    borderTopColor: "grey",
+                    borderLeft: 1,
+                    borderLeftColor: "grey",
+                  }}
+                >
+                  <View style={{ ...styles.tableCol, width: "33,33%" }}>
+                    <Text style={styles.tableCellHeader}>
+                      Total des dépenses en espèces
+                    </Text>
                   </View>
-                  <View style={styles.tableRow}>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>
-                        Total des dépenses en espèces
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>
-                        Total des reliquats en espèces
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>Balance</Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCellHeader}>Remarques</Text>
-                    </View>
+                  <View style={{ ...styles.tableCol, width: "33,33%" }}>
+                    <Text style={styles.tableCellHeader}>
+                      Total des reliquats en espèces
+                    </Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "33.33%" }}>
+                    <Text style={styles.tableCellHeader}>Balance</Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "33.33%" }}>
+                    <Text style={styles.tableCellHeader}>Remarques</Text>
+                  </View>
+                </View>
+                <View style={{ ...styles.tableRow, width: "100%" }}>
+                  <View style={{ ...styles.tableCol, width: "33.33%" }}>
+                    <Text style={styles.tableCellHeader}>
+                      {(() => {
+                        const total = mission.rapportDepense
+                          ?.filter(
+                            (f) =>
+                              f.missionId == mission.id &&
+                              f.modePaiement == "Especes"
+                          )
+                          .reduce((acc, curr) => acc + curr.montant!, 0);
+                        return formatMontant(Number(total || 0));
+                      })()}
+                    </Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "33.33%" }}>
+                    <Text style={styles.tableCellHeader}>-</Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "33.33%" }}>
+                    <Text style={styles.tableCellHeader}>-</Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "33.33%" }}>
+                    <Text style={styles.tableCellHeader}>-</Text>
                   </View>
                 </View>
                 {/*besoin en vehicule*/}
@@ -2136,7 +2154,7 @@ const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
     paddingTop: 30,
-    paddingBottom: 30,
+    paddingBottom: 35,
     paddingLeft: 30,
     paddingRight: 30,
   },
