@@ -8,6 +8,10 @@ export interface UnCompleteTbbItem {
   type?: string;
   devise?: number;
   coursDevise?: number;
+  retenuAdmin?: number;
+  moyenRemise?: string;
+  depenseAdmin?: number;
+  depensesResp?: number;
   [x: string]: any;
 }
 

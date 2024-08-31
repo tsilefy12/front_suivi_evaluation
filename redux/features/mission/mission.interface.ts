@@ -42,10 +42,6 @@ export interface MissionItem {
   dateRF?: Date;
   status?: string;
   validateLogistic?: string;
-  retenuAdmin?: number;
-  moyenRemise?: string;
-  depenseAdmin?: number;
-  depensesResp?: number;
   activites?: ActiviteRapportItem[];
   livrables?: LivrableRapportItem[];
   previsionDepense?: PrevisionDepenseItem[];

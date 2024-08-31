@@ -23,6 +23,8 @@ import formatMontant from "../../hooks/format";
 import { ResumeDepenseItem } from "../../redux/features/resumeDepense/reumeDepense.interface";
 import { MissionItem } from "../../redux/features/mission/mission.interface";
 import useFetchVoiture from "../previsionMissions/organism/Logistique/tableBesoinVéhicules/hooks/useFetchVoiture";
+import { ResumeDepensePrevueItem } from "../../redux/features/resumeDepensePrevue/reumeDepensePrevue.interface";
+import { PrevisionDepenseItem } from "../../redux/features/PrevisionDepense/previsionDepense.interface";
 
 const PrintPdf = () => {
   const router = useRouter();
@@ -1535,7 +1537,35 @@ const PrintPdf = () => {
                     </Text>
                   </View>
                   <View style={{ ...styles.tableCol, width: "33.33%" }}>
-                    <Text style={styles.tableCellHeader}>-</Text>
+                    <Text style={styles.tableCellHeader}>
+                      {(mission.resumeDepensePrevue
+                        ?.filter(
+                          (f: ResumeDepensePrevueItem) =>
+                            f.missionId == mission.id
+                        )
+                        .reduce(
+                          (acc, cur) => acc + (Number(cur.budgetDepense) || 0),
+                          0
+                        ) || 0) +
+                        (mission.previsionDepense
+                          ?.filter(
+                            (f: PrevisionDepenseItem) =>
+                              f.missionId == mission.id
+                          )
+                          .reduce(
+                            (acc, cur) => acc + (Number(cur.imprevue) || 0),
+                            0
+                          ) || 0) -
+                        Number(
+                          mission.uncompleteTbbs?.map(
+                            (retenu) => retenu.retenuAdmin
+                          ) || 0
+                        ) -
+                        Number(
+                          mission.uncompleteTbbs?.map((m) => m.depensesResp) ||
+                            0
+                        )}
+                    </Text>
                   </View>
                   <View style={{ ...styles.tableCol, width: "33.33%" }}>
                     <Text style={styles.tableCellHeader}>-</Text>

@@ -31,6 +31,7 @@ import useFetchGrants from "../../../../../GrantsEnCours/hooks/getGrants";
 import useFetchBudgetLine from "../../tablePrevision/hooks/useFetchbudgetLine";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { cancelEdit } from "../../../../../../redux/features/resumeDepense/resumeDepenseSlice";
+import useFetchPrevisionDepenseList from "../../tablePrevision/hooks/useFetchPrevisionDepense";
 
 const AddResumeDepense = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
@@ -45,8 +46,16 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const fetchBudgetLine = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const [grantValue, setGrantValue]: any = React.useState(0);
+  const fetchPrevisionDepense = useFetchPrevisionDepenseList();
+  const { previsionDepenselist } = useAppSelector(
+    (state) => state.previsonDepense
+  );
+  const [depense, setDepenese] = useState<number>(0);
+  const [ligneBudget, setLigneBudget] = useState<any>("");
+  const [budget, setBudget] = useState<number>(0);
 
   React.useEffect(() => {
+    fetchPrevisionDepense();
     fetchResumeDepense();
     fetchBudgetLine();
     fetchGrant();
@@ -82,24 +91,20 @@ const AddResumeDepense = ({ handleClose }: any) => {
     if (!id) return null;
     return options.find((option: any) => option.id === id) || null;
   };
-  let BudgetLineGrantList: any = useState<{}>([]);
 
-  //select budget line depends grant
-  const uniqueValues = new Set();
   useEffect(() => {
-    grantEncoursList.filter((g) => {
-      if (grantValue == g.id && grantValue !== "vide") {
-        if (!uniqueValues.has(g.id)) {
-          uniqueValues.add(g.id);
-          return (BudgetLineGrantList = g.budgetLines!.filter(
-            (e) => e.grantId == grantValue
-          ));
-        }
-      }
-      uniqueValues.add(g.id);
-      return [];
-    });
-  }, [grantEncoursList, grantValue]);
+    if (grantValue != "") {
+      previsionDepenselist
+        .filter((f) => f.grant == grantValue)
+        .map(
+          (m) => (
+            setLigneBudget(m.ligneBudgetaire),
+            setDepenese(Number(m.montant)),
+            setBudget(Number(m.montant))
+          )
+        );
+    }
+  }, [previsionDepenselist, grantValue]);
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -114,7 +119,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                   ? resumeDepense?.ligneBudgetaire
                   : "",
                 remarque: isEditing ? resumeDepense?.remarque : "",
-                budgetDepense: isEditing ? resumeDepense?.budgetDepense : 0,
+                // budgetDepense: isEditing ? resumeDepense?.budgetDepense : 0,
                 missionId: isEditing ? resumeDepense?.missionId : id,
               }
         }
@@ -123,7 +128,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
           depensePrevue: Yup.string().required("Champ obligatoire"),
           // ligneBudgetaire: Yup.number().required("Champ obligatoire"),
           remarque: Yup.string().required("Champ obligatoire"),
-          budgetDepense: Yup.string().required("Champ obligatoire"),
+          // budgetDepense: Yup.string().required("Champ obligatoire"),
         })}
         onSubmit={(value: any, action: any) => {
           handleSubmit(value);
@@ -141,18 +146,28 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       <Autocomplete
                         fullWidth
                         id="outlined-basic"
-                        options={grantEncoursList}
-                        getOptionLabel={(option: any) => option.code}
+                        options={previsionDepenselist}
+                        getOptionLabel={(option: any) => {
+                          const foundItem = grantEncoursList.find(
+                            (f) =>
+                              f.id ===
+                              previsionDepenselist.find(
+                                (m) => m.grant === option
+                              )?.grant
+                          );
+                          // Ensure that a string is always returned, even if the item is not found
+                          return foundItem ? foundItem.code : ""; // Return an empty string if undefined
+                        }}
                         value={getGrantOption(
                           formikProps.values.grant,
-                          grantEncoursList
+                          previsionDepenselist
                         )}
-                        onChange={(event, value) =>
+                        onChange={(event, value) => {
                           formikProps.setFieldValue(
                             "grant",
                             value ? value.id : ""
-                          )
-                        }
+                          );
+                        }}
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -176,17 +191,23 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       />
                     </FormControl>
                     <FormControl fullWidth>
-                      <OSSelectField
+                      <OSTextField
                         fullWidth
-                        select
                         id="outlined-basic"
-                        label="Budget line"
+                        label="Ligne budgetaire"
                         variant="outlined"
+                        value={
+                          budgetLineList.find((f: any) => f.id == ligneBudget)
+                            ?.code
+                        }
+                        onChange={(e: any, ligneBudget: any) =>
+                          formikProps.setFieldValue(
+                            "ligneBudgetaire",
+                            ligneBudget
+                          )
+                        }
                         name="ligneBudgetaire"
-                        options={BudgetLineGrantList}
-                        dataKey={["code"]}
-                        valueKey="id"
-                      ></OSSelectField>
+                      />
                     </FormControl>
                     <OSTextField
                       fullWidth
@@ -194,18 +215,20 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       label="Dépense prévue"
                       variant="outlined"
                       name="depensePrevue"
+                      value={depense}
                       inputProps={{ autoComplete: "off", min: 0 }}
-                      type="text"
+                      type="number"
                     />
-                    <OSTextField
+                    {/* <OSTextField
                       fullWidth
                       id="outlined-basic"
                       label="Budget de dépense"
                       variant="outlined"
                       name="budgetDepense"
+                      value={budget}
                       inputProps={{ autoComplete: "off", min: 0 }}
-                      type="text"
-                    />
+                      type="number"
+                    /> */}
                     <OSTextField
                       fullWidth
                       id="outlined-basic"

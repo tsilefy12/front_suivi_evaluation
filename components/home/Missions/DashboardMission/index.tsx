@@ -63,8 +63,9 @@ const DashboardMission = () => {
     if (search != "") {
       const donne = missionListe.filter(
         (m: MissionItem) =>
-          new Date(m.dateFin as Date).getFullYear() == new Date().getFullYear() &&
-          m.RefBudget!.toLowerCase().includes(search.toLowerCase()) ||
+          (new Date(m.dateFin as Date).getFullYear() ==
+            new Date().getFullYear() &&
+            m.RefBudget!.toLowerCase().includes(search.toLowerCase())) ||
           employees
             .find((e: EmployeItem) => e.id === m.missionManagerId)
             ?.name!.toLowerCase()
@@ -80,7 +81,13 @@ const DashboardMission = () => {
       return setData(donne.reverse());
     }
     if (filterYear !== "Tous") {
-      const donne = [...missionListe.filter((m) => new Date(m.dateFin as Date).getFullYear() == new Date().getFullYear())]
+      const donne = [
+        ...missionListe.filter(
+          (m) =>
+            new Date(m.dateFin as Date).getFullYear() ==
+            new Date().getFullYear()
+        ),
+      ]
         .filter(
           (m: MissionItem) =>
             new Date(m.dateFin as Date).getFullYear() == filterYear
@@ -88,7 +95,15 @@ const DashboardMission = () => {
         .reverse();
       return setData(donne);
     }
-    return setData([...missionListe.filter((m) => new Date(m.dateFin as Date).getFullYear() == new Date().getFullYear())].reverse());
+    return setData(
+      [
+        ...missionListe.filter(
+          (m) =>
+            new Date(m.dateFin as Date).getFullYear() ==
+            new Date().getFullYear()
+        ),
+      ].reverse()
+    );
   }, [search, missionListe, filterYear]);
 
   const exportToExcel = (data: MissionItem[]) => {
@@ -146,7 +161,9 @@ const DashboardMission = () => {
               ?.filter((f: PrevisionDepenseItem) => f.grant)
               .reduce((acc, cur) => acc + (Number(cur.imprevue) || 0), 0) || 0)
         ),
-        "Retenu admin": formatMontant(Number(row.retenuAdmin)),
+        "Retenu admin": formatMontant(
+          Number(row.uncompleteTbbs?.map((retenu) => retenu.retenuAdmin) || 0)
+        ),
         "Remis responsable total": formatMontant(
           (row.resumeDepensePrevue
             ?.filter((f: ResumeDepensePrevueItem) => f.grant)
@@ -156,17 +173,23 @@ const DashboardMission = () => {
               ?.filter((f: PrevisionDepenseItem) => f.grant)
               .reduce((acc, cur) => acc + (Number(cur.imprevue) || 0), 0) ||
               0) -
-            Number(row.retenuAdmin)
+            Number(row.uncompleteTbbs?.map((retenu) => retenu.retenuAdmin) || 0)
         ),
-        "Moyen remise": row.moyenRemise,
+        "Moyen remise":
+          row.uncompleteTbbs?.map((retenu) => retenu.moyenRemise) || "",
         "Remise Grants": grantEncoursList.find(
           (g: any) =>
             g.id == row.rapportDepense?.map((m: RapportDepenseItem) => m.grant)
         )?.code,
-        "Dépenses admin": formatMontant(Number(row.depenseAdmin)),
-        "Dépenses responsable": formatMontant(Number(row.depensesResp)),
+        "Dépenses admin": formatMontant(
+          Number(row.uncompleteTbbs?.map((m) => m.depenseAdmin) || 0)
+        ),
+        "Dépenses responsable": formatMontant(
+          Number(row.uncompleteTbbs?.map((m) => m.depensesResp) || 0)
+        ),
         "Reliquat admin": formatMontant(
-          Number(row.retenuAdmin) - Number(row.depenseAdmin)
+          Number(row.uncompleteTbbs?.map((retenu) => retenu.retenuAdmin) || 0) -
+            Number(row.uncompleteTbbs?.map((m) => m.depenseAdmin) || 0)
         ),
         "Reliquat responsable": formatMontant(
           (row.resumeDepensePrevue
@@ -501,7 +524,13 @@ const DashboardMission = () => {
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
-                    {formatMontant(Number(row.retenuAdmin))}
+                    {formatMontant(
+                      Number(
+                        row.uncompleteTbbs?.map(
+                          (retenu) => retenu.retenuAdmin
+                        ) || 0
+                      )
+                    )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
                     {formatMontant(
@@ -517,11 +546,16 @@ const DashboardMission = () => {
                             const imprevu = Number(cur.imprevue);
                             return acc + (isNaN(imprevu) ? 0 : imprevu);
                           }, 0) || 0) -
-                        Number(row.retenuAdmin)
+                        Number(
+                          row.uncompleteTbbs?.map(
+                            (retenu) => retenu.retenuAdmin
+                          ) || 0
+                        )
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
-                    {row.moyenRemise}
+                    {row.uncompleteTbbs?.map((retenu) => retenu.moyenRemise) ||
+                      ""}
                   </TableCell>
                   <TableCell>
                     {
@@ -535,14 +569,29 @@ const DashboardMission = () => {
                     }
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
-                    {formatMontant(Number(row.depenseAdmin))}
-                  </TableCell>
-                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
-                    {formatMontant(Number(row.depensesResp))}
+                    {formatMontant(
+                      Number(
+                        row.uncompleteTbbs?.map((m) => m.depenseAdmin) || 0
+                      )
+                    )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {formatMontant(
-                      Number(row.retenuAdmin) - Number(row.depenseAdmin)
+                      Number(
+                        row.uncompleteTbbs?.map((m) => m.depensesResp) || 0
+                      )
+                    )}
+                  </TableCell>
+                  <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
+                    {formatMontant(
+                      Number(
+                        row.uncompleteTbbs?.map(
+                          (retenu) => retenu.retenuAdmin
+                        ) || 0
+                      ) -
+                        Number(
+                          row.uncompleteTbbs?.map((m) => m.depenseAdmin) || 0
+                        )
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>

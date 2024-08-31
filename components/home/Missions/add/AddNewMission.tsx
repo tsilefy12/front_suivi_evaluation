@@ -145,10 +145,6 @@ const AddNewMission = () => {
                 status: isEditing ? mission?.status : "",
                 dateRF: isEditing ? mission?.dateRF : new Date(),
                 validateLogistic: isEditing ? mission?.validateLogistic : "",
-                retenuAdmin: isEditing ? mission?.retenuAdmin : 0,
-                moyenRemise: isEditing ? mission?.moyenRemise : "",
-                depenseAdmin: isEditing ? mission?.depenseAdmin : 0,
-                depensesResp: isEditing ? mission?.depensesResp : 0,
               }
         }
         validationSchema={Yup.object().shape({
@@ -504,35 +500,6 @@ const AddNewMission = () => {
                     isOptionEqualToValue={(option: any, value: any) =>
                       option.id === value.id
                     }
-                  />
-                </Stack>
-                <Stack direction={"row"} gap={2} paddingBottom={2}>
-                  <OSTextField
-                    id="outlined-basic"
-                    label="Retenu admin"
-                    name="retenuAdmin"
-                    type="number"
-                    inputProps={{ autoComplete: "off", min: 0 }}
-                  />
-                  <OSTextField
-                    id="outlined-basic"
-                    label="Moyen remise"
-                    name="moyenRemise"
-                    inputProps={{ autoComplete: "off" }}
-                  />
-                  <OSTextField
-                    id="outlined-basic"
-                    label="Dépense admin"
-                    name="depenseAdmin"
-                    type="number"
-                    inputProps={{ autoComplete: "off", min: 0 }}
-                  />
-                  <OSTextField
-                    id="outlined-basic"
-                    label="Dépense responsable"
-                    name="depensesResp"
-                    type="number"
-                    inputProps={{ autoComplete: "off", min: 0 }}
                   />
                 </Stack>
               </FormContainer>

@@ -34,7 +34,7 @@ const Finances = () => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Résumé de dépenses prévues</Typography>
+          <Typography>Resume de depense réalisé</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <ListResumeDepense />
