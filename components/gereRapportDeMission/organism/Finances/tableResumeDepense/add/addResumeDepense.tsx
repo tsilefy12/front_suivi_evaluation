@@ -1,28 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
-  Autocomplete,
   Container,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
-  FormLabel,
-  InputLabel,
   MenuItem,
-  Select,
   styled,
-  Table,
-  TableCell,
-  TableHead,
   TablePagination,
-  TableRow,
-  TextField,
-  Typography,
 } from "@mui/material";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import InfoIcon from "@mui/icons-material/Info";
 import * as Yup from "yup";
 import {
   defaultLabelDisplayedRows,
@@ -42,17 +30,14 @@ import {
   updateResumeDepensePrevue,
 } from "../../../../../../redux/features/resumeDepensePrevue";
 import OSTextField from "../../../../../shared/input/OSTextField";
-import OSSelectField from "../../../../../shared/select/OSSelectField";
 import useFetchResumeDepenseList from "../../../../../previsionMissions/organism/Finances/tableResumeDepense/hooks/useFetchResumeDepense";
-import { ResumeDepenseItem } from "../../../../../../redux/features/resumeDepense/reumeDepense.interface";
 import { cancelEdit } from "../../../../../../redux/features/resumeDepensePrevue/resumeDepensePrevueSlice";
-import { RapportDepenseItem } from "../../../../../../redux/features/rapportDepense/rapportDepense.interface";
 import useFetchRapportDepense from "../../tableRapportDesDepenses/hooks/useFetchRapportDepense";
 
 const AddResumeDepense = ({ handleClose }: any) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [dense, setDense] = React.useState(false);
+
   const { isEditing, resumeDepensePrevue } = useAppSelector(
     (state: any) => state.resumeDepensePrevue
   );
@@ -65,7 +50,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
   const { id }: any = router.query;
   const fetchResumeDepense = useFetchResumeDepenseList();
-  const { resumeDepenseList } = useAppSelector((state) => state.resumeDepense);
   const fetchRapportDepense = useFetchRapportDepense();
   const { rapportDepenseList } = useAppSelector(
     (state: any) => state.rapportDepense
@@ -98,10 +82,9 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const [dpns, setDpns]: any = React.useState("");
   const [bdgt, setBdgt]: any = React.useState("");
   const [rmq, setRmq]: any = React.useState("");
-  const [depense, setDepenese] = useState<number>(0);
-  const [ligneBudget, setLigneBudget] = useState<any>("");
-  const [budget, setBudget] = useState<number>(0);
+  const [depense, setDepense] = useState<number>(0);
   const [grantValue, setGrantValue] = useState<any>("");
+  const [selectedBudgetLine, setSelectedBudgetLine] = React.useState({});
 
   const clickUtiliser = (
     grants: any,
@@ -116,10 +99,44 @@ const AddResumeDepense = ({ handleClose }: any) => {
       setBdgt(budget),
       setRmq(rem);
   };
-  // console.log("Budget line value :", grts)
+  const handleGrantChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setGrantValue(event.target.value as number);
+  };
+  const listLigne = useMemo(() => {
+    const lignes: any[] = [];
+    rapportDepenseList
+      .filter((f) => f.missionId == id)
+      .forEach((b) => {
+        if (grantValue !== "") {
+          const budgetLineNames = budgetLineList
+            .filter((f) => f.grantId == grantValue && f.id == b.ligneBudgetaire)
+            .map((e) => e.code);
+
+          lignes.push({ id: b.ligneBudgetaire, name: budgetLineNames });
+        } else {
+          lignes.push({ id: "", name: "" });
+        }
+      });
+    return lignes;
+  }, [rapportDepenseList, budgetLineList, grantValue]);
+
+  useEffect(() => {
+    if (selectedBudgetLine != "") {
+      rapportDepenseList
+        .filter(
+          (f) =>
+            f.missionId == id &&
+            f.ligneBudgetaire == Number(selectedBudgetLine.id)
+        )
+        .map((m) => setDepense(m.montant!));
+    }
+  }, [listLigne, selectedBudgetLine]);
   //ajout
   const handleSubmit = async (values: any) => {
     values.missionId = id!;
+    values.grant = grantValue;
+    values.depensePrevue = depense;
+    values.ligneBudgetaire = selectedBudgetLine.id!;
     try {
       if (isEditing) {
         await dispatch(
@@ -154,27 +171,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
       console.log("error", error);
     }
   };
-  const getGrantOption = (id: any, options: any) => {
-    setGrantValue(id);
-    if (!id) return null;
-    return options.find((option: any) => option.id === id) || null;
-  };
-  let BudgetLineGrantList: any = useState<{}>([]);
-  const uniqueValues = new Set();
 
-  useEffect(() => {
-    if (grantValue != "") {
-      rapportDepenseList
-        .filter((f) => f.grant == grantValue)
-        .map(
-          (m) => (
-            setLigneBudget(m.ligneBudgetaire),
-            setDepenese(Number(m.montant)),
-            setBudget(Number(m.montant))
-          )
-        );
-    }
-  }, [rapportDepenseList, grantValue]);
   return (
     <Container
       maxWidth="xl"
@@ -188,9 +185,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
             : {
                 depensePrevue: isEditing
                   ? resumeDepensePrevue?.depensePrevue
-                  : 0,
-                budgetDepense: isEditing
-                  ? resumeDepensePrevue?.budgetDepense
                   : 0,
                 remarque: isEditing ? resumeDepensePrevue?.remarque : "",
                 grant: isEditing ? resumeDepensePrevue?.grant : grantValue,
@@ -224,26 +218,21 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         label="Grant"
                         variant="outlined"
                         name="grant"
-                        value={
-                          grantValue != ""
-                            ? grantValue
-                            : formikProps.values.grant
-                        }
-                        onChange={(e: any) => setGrantValue(e.target.value)}
+                        value={grantValue !== "" ? grantValue : ""}
+                        onChange={handleGrantChange}
                       >
-                        <MenuItem value={""}></MenuItem>
                         {Array.from(
                           new Map(
-                            rapportDepenseList.map((p: RapportDepenseItem) => {
+                            rapportDepenseList.map((p) => {
                               const foundItem = grantEncoursList.find(
                                 (f) => f.id === p.grant
                               );
-                              return [foundItem?.code, foundItem]; // Use code as the key
+                              return [foundItem?.code, foundItem];
                             })
-                          ).values() // Get only the values from the Map
+                          ).values()
                         ).map((item) => (
-                          <MenuItem key={item?.id!} value={item?.id!}>
-                            {item?.code!}
+                          <MenuItem key={item?.id} value={item?.id}>
+                            {item?.code}
                           </MenuItem>
                         ))}
                       </OSTextField>
@@ -251,21 +240,31 @@ const AddResumeDepense = ({ handleClose }: any) => {
                     <FormControl fullWidth>
                       <OSTextField
                         fullWidth
+                        select
                         id="outlined-basic"
                         label="Ligne budgetaire"
                         variant="outlined"
-                        value={
-                          budgetLineList.find((f: any) => f.id == ligneBudget)
-                            ?.code
-                        }
-                        onChange={(e: any, ligneBudget: any) =>
+                        size="small"
+                        name="ligneBudgetaire"
+                        value={formikProps.values.ligneBudgetaire?.id || ""}
+                        onChange={(e: any) => {
+                          const selectedValue =
+                            listLigne.find(
+                              (item) => item.id === e.target.value
+                            ) || {};
+                          setSelectedBudgetLine(selectedValue);
                           formikProps.setFieldValue(
                             "ligneBudgetaire",
-                            ligneBudget
-                          )
-                        }
-                        name="ligneBudgetaire"
-                      />
+                            selectedValue.id
+                          );
+                        }}
+                      >
+                        {listLigne.map((item) => (
+                          <MenuItem key={item.id} value={item.id}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                      </OSTextField>
                     </FormControl>
                     <OSTextField
                       fullWidth
@@ -273,15 +272,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       label="Dépense prévue"
                       variant="outlined"
                       name="depensePrevue"
-                      inputProps={{ autoComplete: "off" }}
-                      disabled={!!grts}
-                    />
-                    <OSTextField
-                      fullWidth
-                      id="outlined-basic"
-                      label="Budget de dépense"
-                      variant="outlined"
-                      name="budgetDepense"
+                      value={depense}
                       inputProps={{ autoComplete: "off" }}
                       disabled={!!grts}
                     />

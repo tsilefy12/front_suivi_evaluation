@@ -242,9 +242,6 @@ const ListResumeDepense = () => {
                           <TableCell align="left">
                             {formatMontant(Number(row.depensePrevue))}
                           </TableCell>
-                          <TableCell align="left">
-                            {formatMontant(Number(row.budgetDepense))}
-                          </TableCell>
                           <TableCell align="left">{row.remarque}</TableCell>
                           <TableCell align="left" width="20px">
                             <BtnActionContainer

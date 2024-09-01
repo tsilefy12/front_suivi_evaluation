@@ -21,12 +21,6 @@ export const headCells: readonly HeadCell[] = [
     label: "Dépenses prévues",
   },
   {
-    id: "budget",
-    numeric: true,
-    disablePadding: false,
-    label: "Budget de dépenses",
-  },
-  {
     id: "remarques",
     numeric: true,
     disablePadding: false,
@@ -35,6 +29,6 @@ export const headCells: readonly HeadCell[] = [
 ];
 
 export const rows = [
-  createData("ADM-MOT-001", "LB1", "100000", "100000", "100000"),
-  createData("Gasik'Ar", "LB2", "200000", "200000", "200000"),
+  createData("ADM-MOT-001", "LB1", "100000", "100000"),
+  createData("Gasik'Ar", "LB2", "200000", "200000"),
 ];

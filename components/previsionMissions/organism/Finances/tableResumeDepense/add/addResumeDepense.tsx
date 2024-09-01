@@ -28,6 +28,7 @@ import useFetchBudgetLine from "../../tablePrevision/hooks/useFetchbudgetLine";
 import OSTextField from "../../../../../shared/input/OSTextField";
 import { cancelEdit } from "../../../../../../redux/features/resumeDepense/resumeDepenseSlice";
 import useFetchPrevisionDepenseList from "../../tablePrevision/hooks/useFetchPrevisionDepense";
+import { createResumeDepensePrevue } from "../../../../../../redux/features/resumeDepensePrevue";
 
 const AddResumeDepense = ({ handleClose }: any) => {
   const dispatch = useAppDispatch();
@@ -47,7 +48,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
     (state) => state.previsonDepense
   );
   const [depense, setDepense] = useState<number>(0);
-  const [selectedBudgetLine, setSelectedBudgetLine] = React.useState(0);
+  const [selectedBudgetLine, setSelectedBudgetLine] = React.useState({});
 
   useEffect(() => {
     fetchPrevisionDepense();

@@ -724,7 +724,7 @@ const PrintPdfPrevision = () => {
                 <View
                   style={{
                     ...styles.tableCol,
-                    width: "83.1%",
+                    width: "100%",
                     height: 15,
                     border: "none",
                   }}
@@ -740,7 +740,7 @@ const PrintPdfPrevision = () => {
                 <View
                   style={{
                     ...styles.tableCol,
-                    width: "83.1%",
+                    width: "100%",
                     height: "auto",
                     backgroundColor: "darkgrey",
                     border: "none",
@@ -1265,7 +1265,7 @@ const PrintPdfPrevision = () => {
                 <View
                   style={{
                     ...styles.tableCol,
-                    width: "83.1%",
+                    width: "100%",
                     height: "auto",
                     backgroundColor: "transparent",
                     border: "none",
@@ -1449,7 +1449,7 @@ const PrintPdfPrevision = () => {
                     borderColor: "grey",
                     fontSize: 14,
                     borderTop: 1,
-                    width: "83.1%",
+                    width: "100%",
                     borderTopColor: "grey",
                   }}
                 >
@@ -1543,7 +1543,7 @@ const PrintPdfPrevision = () => {
                     borderColor: "grey",
                     fontSize: 14,
                     // borderTop: 1,
-                    width: "83.1%",
+                    width: "100%",
                     // borderTopColor: "grey",
                   }}
                 >
@@ -1700,7 +1700,7 @@ const PrintPdfPrevision = () => {
                     borderColor: "grey",
                     fontSize: 14,
                     borderTop: 1,
-                    width: "83.1%",
+                    width: "100%",
                     borderTopColor: "grey",
                   }}
                 >
@@ -1820,7 +1820,7 @@ const PrintPdfPrevision = () => {
                       borderColor: "grey",
                       fontSize: 14,
                       borderTop: 1,
-                      width: "83.1%",
+                      width: "100%",
                       borderTopColor: "grey",
                     }}
                   >
@@ -1987,7 +1987,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableRow,
-                      width: "83.1%",
+                      width: "100%",
                       borderLeft: 1,
                       borderTop: 1,
                       borderColor: "grey",
@@ -2022,7 +2022,7 @@ const PrintPdfPrevision = () => {
                     </View>
                     <View style={{ ...styles.tableCol, width: "20%" }}>
                       <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        Budget de dépense
+                        Dépenses réalisées
                       </Text>
                     </View>
                     <View style={{ ...styles.tableCol, width: "20%" }}>
@@ -2086,7 +2086,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableRow,
-                      width: "83.1%",
+                      width: "100%",
                       borderLeft: 1,
                       borderColor: "grey",
                       fontSize: 14,
@@ -2100,10 +2100,10 @@ const PrintPdfPrevision = () => {
                     <View style={{ ...styles.tableCol, width: "20%" }}>
                       <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                         {(() => {
-                          const totalDepense = mission.resumeDepensePrevue
+                          const totalDepense = mission.previsionDepense
                             ?.filter((f) => f.missionId == mission.id)
                             ?.reduce(
-                              (a, b) => Number(a) + Number(b.depensePrevue),
+                              (a, b) => Number(a) + Number(b.montant),
                               0
                             );
                           return formatMontant(Number(totalDepense || 0));
@@ -2113,10 +2113,10 @@ const PrintPdfPrevision = () => {
                     <View style={{ ...styles.tableCol, width: "20%" }}>
                       <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                         {(() => {
-                          const totalBudget = mission.resumeDepensePrevue
+                          const totalBudget = mission.resumeDepense
                             ?.filter((f) => f.missionId == mission.id)
                             ?.reduce(
-                              (a, b) => Number(a) + Number(b.budgetDepense),
+                              (a, b) => Number(a) + Number(b.depensePrevue),
                               0
                             );
                           return formatMontant(Number(totalBudget || 0));
@@ -2126,17 +2126,17 @@ const PrintPdfPrevision = () => {
                     <View style={{ ...styles.tableCol, width: "20%" }}>
                       <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                         {(() => {
-                          const totalDepense = mission.resumeDepensePrevue
+                          const totalDepense = mission.previsionDepense
                             ?.filter((f) => f.missionId == mission.id)
                             ?.reduce(
-                              (a, b) => Number(a) + Number(b.depensePrevue),
+                              (a, b) => Number(a) + Number(b.montant),
                               0
                             );
 
-                          const totalBudget = mission.resumeDepensePrevue
+                          const totalBudget = mission.resumeDepense
                             ?.filter((f) => f.missionId == mission.id)
                             ?.reduce(
-                              (a, b) => Number(a) + Number(b.budgetDepense),
+                              (a, b) => Number(a) + Number(b.depensePrevue),
                               0
                             );
                           const calculTotal =
