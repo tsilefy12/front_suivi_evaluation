@@ -2051,7 +2051,14 @@ const PrintPdfPrevision = () => {
                   </View>
                   {/* Table Body */}
                   {mission.resumeDepense?.map((prevue: any) => (
-                    <View style={{ ...styles.tableRow }} key={prevue.id}>
+                    <View
+                      style={{
+                        ...styles.tableRow,
+                        borderLeft: 1,
+                        borderLeftColor: "grey",
+                      }}
+                      key={prevue.id}
+                    >
                       <View style={{ ...styles.tableCol, width: "20%" }}>
                         <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                           {
