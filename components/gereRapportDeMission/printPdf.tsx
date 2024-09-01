@@ -1128,13 +1128,14 @@ const PrintPdf = () => {
                     fontSize: 14,
                     borderTop: 1,
                     borderTopColor: "grey",
+                    width: "100%",
                   }}
                 >
                   {mission.rapportDepense?.map((rd) => (
                     <View
                       style={{
                         ...styles.tableCol,
-
+                        width: "12.5%",
                         textAlign: "left",
                         borderColor: "grey",
                       }}
@@ -1153,7 +1154,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-
+                        width: "12.5%",
                         textAlign: "left",
                         borderColor: "grey",
                       }}
@@ -1172,7 +1173,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-
+                        width: "12.5%",
                         borderColor: "grey",
                         textAlign: "left",
                       }}
@@ -1195,6 +1196,7 @@ const PrintPdf = () => {
                         display: "flex",
                         flexWrap: "wrap",
                         textAlign: "left",
+                        width: "12.5%",
                       }}
                     >
                       <Text
@@ -1216,6 +1218,7 @@ const PrintPdf = () => {
                         display: "flex",
                         flexWrap: "wrap",
                         textAlign: "left",
+                        width: "12.5%",
                       }}
                     >
                       <Text
@@ -1237,6 +1240,7 @@ const PrintPdf = () => {
                         display: "flex",
                         flexWrap: "wrap",
                         textAlign: "left",
+                        width: "12.5%",
                       }}
                     >
                       <Text
@@ -1256,6 +1260,7 @@ const PrintPdf = () => {
                         ...styles.tableCol,
                         borderColor: "grey",
                         textAlign: "left",
+                        width: "12.5%",
                       }}
                     >
                       <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
@@ -1272,7 +1277,7 @@ const PrintPdf = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-
+                        width: "12.5%",
                         borderColor: "grey",
                         textAlign: "left",
                       }}
@@ -1607,7 +1612,48 @@ const PrintPdf = () => {
                     </Text>
                   </View>
                   <View style={{ ...styles.tableCol, width: "33.33%" }}>
-                    <Text style={styles.tableCellHeader}>-</Text>
+                    <Text style={styles.tableCellHeader}>
+                      {(() => {
+                        const total = mission.rapportDepense
+                          ?.filter(
+                            (f) =>
+                              f.missionId == mission.id &&
+                              f.modePaiement == "Especes"
+                          )
+                          .reduce((acc, curr) => acc + curr.montant!, 0);
+                        const valeur =
+                          (mission.resumeDepensePrevue
+                            ?.filter(
+                              (f: ResumeDepensePrevueItem) =>
+                                f.missionId == mission.id
+                            )
+                            .reduce(
+                              (acc, cur) =>
+                                acc + (Number(cur.depensePrevue) || 0),
+                              0
+                            ) || 0) +
+                          (mission.previsionDepense
+                            ?.filter(
+                              (f: PrevisionDepenseItem) =>
+                                f.missionId == mission.id
+                            )
+                            .reduce(
+                              (acc, cur) => acc + (Number(cur.imprevue) || 0),
+                              0
+                            ) || 0) -
+                          Number(
+                            mission.uncompleteTbbs?.map(
+                              (retenu) => retenu.retenuAdmin
+                            ) || 0
+                          ) -
+                          Number(
+                            mission.uncompleteTbbs?.map(
+                              (m) => m.depensesResp
+                            ) || 0
+                          );
+                        return formatMontant(Number(total - valeur) || 0);
+                      })()}
+                    </Text>
                   </View>
                   <View style={{ ...styles.tableCol, width: "33.33%" }}>
                     <Text style={styles.tableCellHeader}>-</Text>
