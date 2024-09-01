@@ -69,10 +69,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
     // values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) => bl.id)];
 
     try {
-      values.grant = grantValue;
-      values.ligneBudgetaire = ligneBudget;
-      values.depensePrevue = Number(depense);
-      values.missiondId = id!;
       if (isEditing) {
         values.grant = resumeDepense?.grant;
         await dispatch(
@@ -82,10 +78,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
           })
         );
       } else {
-        values.grant = grantValue;
-        values.ligneBudgetaire = ligneBudget;
-        values.depensePrevue = Number(depense);
-        values.missiondId = id!;
         await dispatch(createResumeDepense(values)), fetchResumeDepense();
       }
       handleClose();
@@ -122,19 +114,18 @@ const AddResumeDepense = ({ handleClose }: any) => {
             ? resumeDepense
             : {
                 grant: isEditing ? resumeDepense?.grant : 0,
-                depensePrevue: isEditing ? resumeDepense?.depensePrevue : 0,
+                depensePrevue: isEditing
+                  ? resumeDepense?.depensePrevue
+                  : Number(depense),
                 ligneBudgetaire: isEditing
                   ? resumeDepense?.ligneBudgetaire
-                  : "",
+                  : ligneBudget,
                 remarque: isEditing ? resumeDepense?.remarque : "",
                 // budgetDepense: isEditing ? resumeDepense?.budgetDepense : 0,
                 missionId: isEditing ? resumeDepense?.missionId : id,
               }
         }
         validationSchema={Yup.object({
-          // grant: Yup.number().required("Champ obligatoire"),
-          depensePrevue: Yup.string().required("Champ obligatoire"),
-          // ligneBudgetaire: Yup.number().required("Champ obligatoire"),
           remarque: Yup.string().required("Champ obligatoire"),
           // budgetDepense: Yup.string().required("Champ obligatoire"),
         })}
