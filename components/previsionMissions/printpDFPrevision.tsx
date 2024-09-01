@@ -58,7 +58,7 @@ const PrintPdfPrevision = () => {
               flexDirection: "row",
               justifyContent: "space-around",
               alignItems: "center",
-              paddingLeft: 20,
+              paddingLeft: 30,
               paddingRight: 50,
             }}
           >
