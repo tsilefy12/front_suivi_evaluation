@@ -143,41 +143,25 @@ const AddResumeDepense = ({ handleClose }: any) => {
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
                     <FormControl fullWidth>
-                      <Autocomplete
+                      <OSTextField
                         fullWidth
+                        select
                         id="outlined-basic"
-                        options={previsionDepenselist}
-                        value={getGrantOption(
-                          formikProps.values.grant,
-                          previsionDepenselist
-                        )}
-                        onChange={(event, value) => {
-                          formikProps.setFieldValue(
-                            "grant",
-                            value ? value.id : ""
-                          );
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Grant"
-                            variant="outlined"
-                            error={
-                              formikProps.touched.grant &&
-                              Boolean(formikProps.errors.grant)
+                        label="Ligne budgetaire"
+                        variant="outlined"
+                        value={formikProps.values.grant}
+                        onChange={(e: any) => setGrantValue(e.target.value)}
+                      >
+                        <MenuItem value={""}></MenuItem>
+                        {previsionDepenselist.map((p) => (
+                          <MenuItem key={p.id} value={p.id}>
+                            {
+                              grantEncoursList.find((f) => f.id == p.grant)
+                                ?.code
                             }
-                            helperText={
-                              formikProps.touched.grant &&
-                              typeof formikProps.errors.grant === "string"
-                                ? formikProps.errors.grant
-                                : ""
-                            }
-                          />
-                        )}
-                        isOptionEqualToValue={(option: any, value: any) =>
-                          option.id === value.id
-                        }
-                      />
+                          </MenuItem>
+                        ))}
+                      </OSTextField>
                     </FormControl>
                     <FormControl fullWidth>
                       <OSTextField
