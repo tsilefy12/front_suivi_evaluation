@@ -196,7 +196,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       name="depensePrevue"
                       value={depense}
                       inputProps={{ autoComplete: "off", min: 0 }}
-                      type="number"
+                      type="text"
                     />
                     {/* <OSTextField
                       fullWidth

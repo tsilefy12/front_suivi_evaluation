@@ -46,6 +46,8 @@ import OSSelectField from "../../../../../shared/select/OSSelectField";
 import useFetchResumeDepenseList from "../../../../../previsionMissions/organism/Finances/tableResumeDepense/hooks/useFetchResumeDepense";
 import { ResumeDepenseItem } from "../../../../../../redux/features/resumeDepense/reumeDepense.interface";
 import { cancelEdit } from "../../../../../../redux/features/resumeDepensePrevue/resumeDepensePrevueSlice";
+import { RapportDepenseItem } from "../../../../../../redux/features/rapportDepense/rapportDepense.interface";
+import useFetchRapportDepense from "../../tableRapportDesDepenses/hooks/useFetchRapportDepense";
 
 const AddResumeDepense = ({ handleClose }: any) => {
   const [page, setPage] = React.useState(0);
@@ -61,12 +63,16 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchligneBudgetaire = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
-  const [grantValue, setGrantValue]: any = React.useState("vide");
   const { id }: any = router.query;
   const fetchResumeDepense = useFetchResumeDepenseList();
   const { resumeDepenseList } = useAppSelector((state) => state.resumeDepense);
+  const fetchRapportDepense = useFetchRapportDepense();
+  const { rapportDepenseList } = useAppSelector(
+    (state: any) => state.rapportDepense
+  );
 
   React.useEffect(() => {
+    fetchRapportDepense();
     fetchResumeDepensePrevue();
     fetchGrantList();
     fetchligneBudgetaire();
@@ -92,6 +98,10 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const [dpns, setDpns]: any = React.useState("");
   const [bdgt, setBdgt]: any = React.useState("");
   const [rmq, setRmq]: any = React.useState("");
+  const [depense, setDepenese] = useState<number>(0);
+  const [ligneBudget, setLigneBudget] = useState<any>("");
+  const [budget, setBudget] = useState<number>(0);
+  const [grantValue, setGrantValue] = useState<any>("");
 
   const clickUtiliser = (
     grants: any,
@@ -153,19 +163,18 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const uniqueValues = new Set();
 
   useEffect(() => {
-    grantEncoursList.filter((g) => {
-      if (grantValue == g.id && grantValue !== "vide") {
-        if (!uniqueValues.has(g.id)) {
-          uniqueValues.add(g.id);
-          return (BudgetLineGrantList = g.budgetLines!.filter(
-            (e) => e.grantId == grantValue
-          ));
-        }
-      }
-      uniqueValues.add(g.id);
-      return [];
-    });
-  }, [grantEncoursList, grantValue]);
+    if (grantValue != "") {
+      rapportDepenseList
+        .filter((f) => f.grant == grantValue)
+        .map(
+          (m) => (
+            setLigneBudget(m.ligneBudgetaire),
+            setDepenese(Number(m.montant)),
+            setBudget(Number(m.montant))
+          )
+        );
+    }
+  }, [rapportDepenseList, grantValue]);
   return (
     <Container
       maxWidth="xl"
@@ -208,61 +217,55 @@ const AddResumeDepense = ({ handleClose }: any) => {
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
                     <FormControl fullWidth>
-                      <Autocomplete
-                        fullWidth
-                        id="outlined-basic"
-                        options={grantEncoursList}
-                        getOptionLabel={(option: any) => option.code}
-                        value={getGrantOption(
-                          formikProps.values.grant,
-                          grantEncoursList
-                        )}
-                        onChange={(event, value) =>
-                          formikProps.setFieldValue(
-                            "grant",
-                            value ? value.id : ""
-                          )
-                        }
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Grant"
-                            variant="outlined"
-                            error={
-                              formikProps.touched.grant &&
-                              Boolean(formikProps.errors.grant)
-                            }
-                            helperText={
-                              formikProps.touched.grant &&
-                              typeof formikProps.errors.grant === "string"
-                                ? formikProps.errors.grant
-                                : ""
-                            }
-                          />
-                        )}
-                        isOptionEqualToValue={(option: any, value: any) =>
-                          option.id === value.id
-                        }
-                      />
-                    </FormControl>
-                    <FormControl fullWidth>
-                      <OSSelectField
+                      <OSTextField
                         fullWidth
                         select
                         id="outlined-basic"
-                        label="Budget line"
+                        label="Grant"
                         variant="outlined"
-                        name="ligneBudgetaire"
-                        options={BudgetLineGrantList}
-                        dataKey={["code"]}
-                        valueKey="id"
+                        name="grant"
                         value={
-                          bdgLine != 0
-                            ? bdgLine
-                            : formikProps.values.ligneBudgetaire
+                          grantValue != ""
+                            ? grantValue
+                            : formikProps.values.grant
                         }
-                        disabled={!!grts}
-                      ></OSSelectField>
+                        onChange={(e: any) => setGrantValue(e.target.value)}
+                      >
+                        <MenuItem value={""}></MenuItem>
+                        {Array.from(
+                          new Map(
+                            rapportDepenseList.map((p: RapportDepenseItem) => {
+                              const foundItem = grantEncoursList.find(
+                                (f) => f.id === p.grant
+                              );
+                              return [foundItem?.code, foundItem]; // Use code as the key
+                            })
+                          ).values() // Get only the values from the Map
+                        ).map((item) => (
+                          <MenuItem key={item?.id!} value={item?.id!}>
+                            {item?.code!}
+                          </MenuItem>
+                        ))}
+                      </OSTextField>
+                    </FormControl>
+                    <FormControl fullWidth>
+                      <OSTextField
+                        fullWidth
+                        id="outlined-basic"
+                        label="Ligne budgetaire"
+                        variant="outlined"
+                        value={
+                          budgetLineList.find((f: any) => f.id == ligneBudget)
+                            ?.code
+                        }
+                        onChange={(e: any, ligneBudget: any) =>
+                          formikProps.setFieldValue(
+                            "ligneBudgetaire",
+                            ligneBudget
+                          )
+                        }
+                        name="ligneBudgetaire"
+                      />
                     </FormControl>
                     <OSTextField
                       fullWidth

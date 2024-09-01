@@ -3,7 +3,6 @@ export interface ResumeDepensePrevueItem {
   grant?: number;
   ligneBudgetaire?: number;
   depensePrevue?: any;
-  budgetDepense?: any;
   remarque?: string;
   missionId?: string;
 }
