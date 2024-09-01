@@ -1989,7 +1989,7 @@ const PrintPdfPrevision = () => {
                     style={{
                       textAlign: "center",
                       width: "100%",
-                      color: "black",
+                      color: "#1976d2",
                       fontWeight: 700,
                       fontSize: 14,
                       paddingBottom: 5,
@@ -2073,19 +2073,19 @@ const PrintPdfPrevision = () => {
                       </View>
                       <View style={{ ...styles.tableCol, width: "20%" }}>
                         <Text style={{ ...styles.tableCell, fontSize: 14 }}>
-                          {formatMontant(Number(prevue.depensePrevue))}
+                          {formatMontant(Number(prevue.depensePrevue || 0))}
                         </Text>
                       </View>
                       <View style={{ ...styles.tableCol, width: "20%" }}>
                         <Text style={{ ...styles.tableCell, fontSize: 14 }}>
-                          {formatMontant(Number(prevue.budgetDepense))}
+                          {formatMontant(Number(prevue.budgetDepense || 0))}
                         </Text>
                       </View>
                       <View style={{ ...styles.tableCol, width: "20%" }}>
                         <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                           {formatMontant(
                             Number(prevue.depensePrevue - prevue.budgetDepense)
-                          )}
+                          ) || 0}
                         </Text>
                       </View>
                       <View style={{ ...styles.tableCol, width: "20%" }}>
