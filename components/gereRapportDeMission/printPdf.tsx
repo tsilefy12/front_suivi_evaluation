@@ -1497,9 +1497,15 @@ const PrintPdf = () => {
                     </Text>
                   </View>
                   <View style={{ ...styles.tableCol, width: "16.67%" }}>
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                      {rd.remarque}
-                    </Text>
+                    {mission.resumeDepensePrevue
+                      ?.filter((f) => f.missionId === mission.id)
+                      .map((m) => (
+                        <Text
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
+                        >
+                          {m.remarque}
+                        </Text>
+                      ))}
                   </View>
                 </View>
                 <View
