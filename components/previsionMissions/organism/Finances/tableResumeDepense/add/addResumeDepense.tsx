@@ -47,7 +47,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
     (state) => state.previsonDepense
   );
   const [depense, setDepense] = useState<number>(0);
-  const [selectedBudgetLine, setSelectedBudgetLine] = React.useState("");
+  const [selectedBudgetLine, setSelectedBudgetLine] = React.useState(0);
 
   useEffect(() => {
     fetchPrevisionDepense();
@@ -79,17 +79,21 @@ const AddResumeDepense = ({ handleClose }: any) => {
       previsionDepenselist
         .filter(
           (f) =>
-            f.missionId == id && f.ligneBudgetaire == Number(selectedBudgetLine)
+            f.missionId == id &&
+            f.ligneBudgetaire == Number(selectedBudgetLine.id)
         )
         .map((m) => setDepense(m.montant!));
     }
   }, [listLigne, selectedBudgetLine]);
+
   const handleGrantChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setGrantValue(event.target.value as number);
   };
 
   const handleSubmit = async (values: any) => {
     values.grant = grantValue;
+    values.depensePrevue = depense;
+    values.ligneBudgetaire = selectedBudgetLine.id!;
     try {
       if (isEditing) {
         await dispatch(
@@ -118,12 +122,8 @@ const AddResumeDepense = ({ handleClose }: any) => {
             ? resumeDepense
             : {
                 grant: isEditing ? resumeDepense.grant : 0,
-                depensePrevue: isEditing
-                  ? resumeDepense.depensePrevue
-                  : depense,
-                ligneBudgetaire: isEditing
-                  ? resumeDepense.ligneBudgetaire
-                  : selectedBudgetLine,
+                depensePrevue: isEditing ? resumeDepense.depensePrevue : "",
+                ligneBudgetaire: isEditing ? resumeDepense.ligneBudgetaire : "",
                 remarque: isEditing ? resumeDepense.remarque : "",
                 missionId: id,
               }
@@ -178,18 +178,21 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       variant="outlined"
                       size="small"
                       name="ligneBudgetaire"
-                      value={formikProps.values.ligneBudgetaire}
-                      key={formikProps.values.ligneBudgetaire}
-                      onChange={(e) => {
-                        setSelectedBudgetLine(e.target.value);
+                      value={formikProps.values.ligneBudgetaire?.id || ""}
+                      onChange={(e: any) => {
+                        const selectedValue =
+                          listLigne.find(
+                            (item) => item.id === e.target.value
+                          ) || {};
+                        setSelectedBudgetLine(selectedValue);
                         formikProps.setFieldValue(
                           "ligneBudgetaire",
-                          e.target.value
+                          selectedValue.id
                         );
                       }}
                     >
                       {listLigne.map((item) => (
-                        <MenuItem key={item} value={item}>
+                        <MenuItem key={item.id} value={item.id}>
                           {item.name}
                         </MenuItem>
                       ))}
@@ -200,11 +203,11 @@ const AddResumeDepense = ({ handleClose }: any) => {
                     id="outlined-basic"
                     label="Dépense prévue"
                     variant="outlined"
-                    name="depensePrevue"
                     value={depense}
                     inputProps={{ autoComplete: "off" }}
                     type="text"
                     onChange={(e: any) => setDepense(e.target.value)}
+                    name="depensePrevue"
                   />
                   <OSTextField
                     fullWidth

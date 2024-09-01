@@ -2,7 +2,7 @@ export interface ResumeDepensePrevueItem {
   id?: string;
   grant?: number;
   ligneBudgetaire?: number;
-  depensePrevue?: any;
+  depensePrevue?: number;
   remarque?: string;
   missionId?: string;
 }
