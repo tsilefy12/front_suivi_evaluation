@@ -1447,19 +1447,19 @@ const PrintPdf = () => {
                     </View>
                     <View style={{ ...styles.tableCol, width: "16.67%" }}>
                       <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        {formatMontant(Number(rd.depensePrevue))}
+                        {/* {formatMontant(Number(rd.depensePrevue))} */}
                       </Text>
                     </View>
                     <View style={{ ...styles.tableCol, width: "16.67%" }}>
                       <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        {formatMontant(Number(rd.budgetDepense))}
+                        {/* {formatMontant(Number(rd.budgetDepense))} */}
                       </Text>
                     </View>
                     <View style={{ ...styles.tableCol, width: "16.67%" }}>
                       <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        {formatMontant(
-                          Number(rd.depensePrevue - rd.budgetDepense)
-                        )}
+                        {/* {formatMontant(
+                          // Number(rd.depensePrevue - rd.budgetDepense)
+                        )} */}
                       </Text>
                     </View>
                     <View style={{ ...styles.tableCol, width: "16.67%" }}>

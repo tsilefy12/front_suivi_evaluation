@@ -71,13 +71,14 @@ const PrintPdfPrevision = () => {
                 border: 1.5,
                 paddingTop: 5,
                 paddingBottom: 6,
-                width: "100%",
+                width: "80%",
                 display: "flex",
                 alignItems: "center",
                 textAlign: "center",
                 color: "#D2691E",
                 fontWeight: "bold",
                 backgroundColor: "rgb(223, 227, 232)",
+                marginLeft: 90,
               }}
             >
               Prévision de mission,{" "}
@@ -122,8 +123,8 @@ const PrintPdfPrevision = () => {
                     style={{
                       border: 1.5,
                       padding: 4,
-                      minWidth: 520,
-                      maxWidth: 520,
+                      minWidth: 475,
+                      maxWidth: 475,
                     }}
                   >
                     {
@@ -151,8 +152,8 @@ const PrintPdfPrevision = () => {
                     style={{
                       border: 1.5,
                       padding: 4,
-                      minWidth: 520,
-                      maxWidth: 520,
+                      minWidth: 475,
+                      maxWidth: 475,
                     }}
                   >
                     {mission
@@ -179,7 +180,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "50%",
                       textAlign: "left",
                       borderTop: 1,
                       borderTopColor: "grey",
@@ -197,7 +198,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
+                      width: "50%",
                       borderTop: 1,
                       borderTopColor: "grey",
                       textAlign: "left",
@@ -221,7 +222,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "50%",
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -239,7 +240,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
+                      width: "50%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -263,7 +264,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "50%",
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -282,7 +283,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
+                      width: "50%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -304,7 +305,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.6%",
+                        width: "50%",
                         textAlign: "left",
                         // borderTop: 1,
                         // borderTopColor: "grey",
@@ -320,7 +321,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "62.5%",
+                        width: "50%",
                         // borderTop: 1,
                         // borderTopColor: "grey",
                         textAlign: "left",
@@ -343,7 +344,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "50%",
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -362,7 +363,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
+                      width: "50%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -383,7 +384,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.6%",
+                        width: "50%",
                         textAlign: "left",
                         // borderTop: 1,
                         // borderTopColor: "grey",
@@ -400,7 +401,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "62.5%",
+                        width: "50%",
                         // borderTop: 1,
                         // borderTopColor: "grey",
                         textAlign: "left",
@@ -417,12 +418,13 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
+                    width: "100%",
                   }}
                 >
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "25%",
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -441,7 +443,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -454,7 +456,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -467,7 +469,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -485,12 +487,13 @@ const PrintPdfPrevision = () => {
                       borderLeft: 1,
                       borderLeftColor: "grey",
                       fontSize: 14,
+                      width: "100%",
                     }}
                   >
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.6%",
+                        width: "25%",
                         textAlign: "left",
                         // borderTop: 1,
                         // borderTopColor: "grey",
@@ -507,7 +510,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         // borderTop: 1,
                         // borderTopColor: "grey",
                         textAlign: "left",
@@ -520,7 +523,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         // borderTop: 1,
                         // borderTopColor: "grey",
                         textAlign: "left",
@@ -533,7 +536,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         // borderTop: 1,
                         // borderTopColor: "grey",
                         textAlign: "left",
@@ -550,12 +553,13 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
+                    width: "100%",
                   }}
                 >
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "50%",
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -574,7 +578,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
+                      width: "50%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -589,12 +593,13 @@ const PrintPdfPrevision = () => {
                     borderLeft: 1,
                     borderLeftColor: "grey",
                     fontSize: 14,
+                    width: "100%",
                   }}
                 >
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "25%",
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -612,7 +617,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -625,7 +630,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -638,7 +643,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       // borderTop: 1,
                       // borderTopColor: "grey",
                       textAlign: "left",
@@ -656,12 +661,13 @@ const PrintPdfPrevision = () => {
                       borderLeft: 1,
                       borderLeftColor: "grey",
                       fontSize: 14,
+                      width: "100%",
                     }}
                   >
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.6%",
+                        width: "25%",
                         textAlign: "left",
                       }}
                     >
@@ -677,7 +683,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         textAlign: "left",
                       }}
                     >
@@ -688,7 +694,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         textAlign: "left",
                       }}
                     >
@@ -702,7 +708,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         textAlign: "left",
                       }}
                     >
@@ -769,7 +775,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "50%",
                       textAlign: "left",
                       backgroundColor: "darkgrey",
                     }}
@@ -787,7 +793,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
+                      width: "50%",
                       textAlign: "center",
                       borderTop: 1,
                       borderTopColor: "grey",
@@ -816,7 +822,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "50%",
                       textAlign: "left",
                       backgroundColor: "darkgrey",
                     }}
@@ -833,7 +839,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
+                      width: "50%",
                       textAlign: "center",
                       borderTop: 1,
                       borderTopColor: "grey",
@@ -853,12 +859,13 @@ const PrintPdfPrevision = () => {
                     borderLeft: 1,
                     borderLeftColor: "grey",
                     fontSize: 14,
+                    width: "100%",
                   }}
                 >
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.5%",
+                      width: "33.33%",
                       textAlign: "left",
                       borderColor: "grey",
                     }}
@@ -875,7 +882,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "31.25%",
+                      width: "33.33%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
@@ -887,7 +894,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "31.25%",
+                      width: "33.33%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
@@ -906,12 +913,13 @@ const PrintPdfPrevision = () => {
                         borderLeft: 1,
                         borderLeftColor: "grey",
                         fontSize: 14,
+                        width: "100%",
                       }}
                     >
                       <View
                         style={{
                           ...styles.tableCol,
-                          width: "20.5%",
+                          width: "33.33%",
                           textAlign: "left",
                           borderColor: "grey",
                         }}
@@ -928,7 +936,7 @@ const PrintPdfPrevision = () => {
                       <View
                         style={{
                           ...styles.tableCol,
-                          width: "31.25%",
+                          width: "33.33%",
                           borderColor: "grey",
                           textAlign: "left",
                         }}
@@ -942,7 +950,7 @@ const PrintPdfPrevision = () => {
                       <View
                         style={{
                           ...styles.tableCol,
-                          width: "31.25%",
+                          width: "33.33%",
                           borderColor: "grey",
                           textAlign: "left",
                         }}
@@ -967,7 +975,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.5%",
+                      width: "50%",
                       textAlign: "left",
                       backgroundColor: "darkgrey",
                     }}
@@ -984,7 +992,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
+                      width: "50%",
                       textAlign: "center",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -1004,12 +1012,13 @@ const PrintPdfPrevision = () => {
                     borderLeft: 1,
                     borderLeftColor: "grey",
                     fontSize: 14,
+                    width: "100%",
                   }}
                 >
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.5%",
+                      width: "33.33%",
                       textAlign: "left",
                       borderColor: "grey",
                     }}
@@ -1026,7 +1035,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "31.25%",
+                      width: "33.33%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
@@ -1038,7 +1047,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "31.25%",
+                      width: "33.33%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
@@ -1057,12 +1066,13 @@ const PrintPdfPrevision = () => {
                         borderLeft: 1,
                         borderLeftColor: "grey",
                         fontSize: 14,
+                        width: "100%",
                       }}
                     >
                       <View
                         style={{
                           ...styles.tableCol,
-                          width: "20.5%",
+                          width: "33.33%",
                           textAlign: "left",
                           borderColor: "grey",
                         }}
@@ -1079,7 +1089,7 @@ const PrintPdfPrevision = () => {
                       <View
                         style={{
                           ...styles.tableCol,
-                          width: "31.25%",
+                          width: "33.33%",
                           borderColor: "grey",
                           textAlign: "left",
                         }}
@@ -1093,7 +1103,7 @@ const PrintPdfPrevision = () => {
                       <View
                         style={{
                           ...styles.tableCol,
-                          width: "31.25%",
+                          width: "33.33%",
                           borderColor: "grey",
                           textAlign: "left",
                         }}
@@ -1118,7 +1128,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.6%",
+                      width: "50%",
                       textAlign: "left",
                       backgroundColor: "darkgrey",
                     }}
@@ -1135,7 +1145,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "62.5%",
+                      width: "50%",
                       textAlign: "center",
                       // borderTop: 1,
                       // borderTopColor: "grey",
@@ -1160,7 +1170,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.5%",
+                      width: "33.33%",
                       textAlign: "left",
                       borderColor: "grey",
                     }}
@@ -1177,7 +1187,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "31.25%",
+                      width: "33.33%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
@@ -1194,7 +1204,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "31.25%",
+                      width: "33.33%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
@@ -1213,12 +1223,13 @@ const PrintPdfPrevision = () => {
                         borderLeft: 1,
                         borderLeftColor: "grey",
                         fontSize: 14,
+                        width: "100%",
                       }}
                     >
                       <View
                         style={{
                           ...styles.tableCol,
-                          width: "20.5%",
+                          width: "33.33%",
                           textAlign: "left",
                           borderColor: "grey",
                         }}
@@ -1235,7 +1246,7 @@ const PrintPdfPrevision = () => {
                       <View
                         style={{
                           ...styles.tableCol,
-                          width: "31.25%",
+                          width: "33.33%",
                           borderColor: "grey",
                           textAlign: "left",
                         }}
@@ -1249,7 +1260,7 @@ const PrintPdfPrevision = () => {
                       <View
                         style={{
                           ...styles.tableCol,
-                          width: "31.25%",
+                          width: "33.33%",
                           borderColor: "grey",
                           textAlign: "left",
                         }}
@@ -1284,12 +1295,13 @@ const PrintPdfPrevision = () => {
                     borderLeft: 1,
                     borderLeftColor: "grey",
                     fontSize: 14,
+                    width: "100%",
                   }}
                 >
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.5%",
+                      width: "25%",
                       textAlign: "left",
                       borderColor: "grey",
                       borderTop: 1,
@@ -1308,7 +1320,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       borderColor: "grey",
                       textAlign: "left",
                       borderTop: 1,
@@ -1327,7 +1339,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       borderColor: "grey",
                       textAlign: "left",
                       borderTop: 1,
@@ -1341,7 +1353,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "20.83%",
+                      width: "25%",
                       borderColor: "grey",
                       textAlign: "left",
                       borderTop: 1,
@@ -1360,12 +1372,13 @@ const PrintPdfPrevision = () => {
                       borderLeft: 1,
                       borderColor: "grey",
                       fontSize: 14,
+                      width: "100%",
                     }}
                   >
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.5%",
+                        width: "25%",
                         textAlign: "left",
                         borderColor: "grey",
                       }}
@@ -1386,7 +1399,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         borderColor: "grey",
                         textAlign: "left",
                       }}
@@ -1403,7 +1416,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         borderColor: "grey",
                         textAlign: "left",
                       }}
@@ -1415,7 +1428,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "20.83%",
+                        width: "25%",
                         borderColor: "grey",
                         textAlign: "left",
                       }}
@@ -2497,7 +2510,7 @@ const PrintPdfPrevision = () => {
                     VALIDATION
                   </Text>
                 </View>
-                <View style={{ width: "83.1%" }}>
+                <View style={{ width: "100%" }}>
                   <View
                     style={{
                       ...styles.tableRow,
