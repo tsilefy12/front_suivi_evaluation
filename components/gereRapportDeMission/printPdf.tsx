@@ -1188,17 +1188,18 @@ const PrintPdf = () => {
                       </Text>
                     </View>
                   ))}
-                  {mission.previsionDepense?.map((pd) => (
-                    <View
-                      style={{
-                        ...styles.tableCol,
-                        borderColor: "grey",
-                        display: "flex",
-                        flexWrap: "wrap",
-                        textAlign: "left",
-                        width: "12.5%",
-                      }}
-                    >
+
+                  <View
+                    style={{
+                      ...styles.tableCol,
+                      borderColor: "grey",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      textAlign: "left",
+                      width: "12.5%",
+                    }}
+                  >
+                    {mission.previsionDepense?.map((pd) => (
                       <Text
                         style={{
                           ...styles.tableCellHeader,
@@ -1208,8 +1209,8 @@ const PrintPdf = () => {
                       >
                         {pd.montant}
                       </Text>
-                    </View>
-                  ))}
+                    ))}
+                  </View>
                   {mission.rapportDepense?.map((rd) => (
                     <View
                       style={{
