@@ -1720,7 +1720,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "10.3875%",
+                      width: "13.3875%",
                       textAlign: "left",
                       borderColor: "grey",
                     }}
@@ -1754,7 +1754,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "10.3875%",
+                      width: "7.3875%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
@@ -1840,7 +1840,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "10.3875%",
+                        width: "13.3875%",
                         textAlign: "left",
                         borderColor: "grey",
                       }}
@@ -1874,7 +1874,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "10.3875%",
+                        width: "7.3875%",
                         borderColor: "grey",
                         display: "flex",
                         flexWrap: "wrap",
