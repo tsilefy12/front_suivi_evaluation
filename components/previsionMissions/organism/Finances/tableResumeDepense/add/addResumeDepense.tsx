@@ -143,6 +143,8 @@ const AddResumeDepense = ({ handleClose }: any) => {
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
                     <FormControl fullWidth>
+                      import React from 'react'; import {MenuItem} from
+                      '@mui/material';
                       <OSTextField
                         fullWidth
                         select
@@ -150,16 +152,22 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         label="Grant"
                         variant="outlined"
                         name="grant"
-                        value={formikProps.values.grant}
+                        value={grantValue}
                         onChange={(e: any) => setGrantValue(e.target.value)}
                       >
                         <MenuItem value={""}></MenuItem>
-                        {previsionDepenselist.map((p) => (
-                          <MenuItem key={p.id} value={p.id}>
-                            {
-                              grantEncoursList.find((f) => f.id == p.grant)
-                                ?.code
-                            }
+                        {[
+                          ...new Map(
+                            previsionDepenselist.map((p) => {
+                              const foundItem = grantEncoursList.find(
+                                (f) => f.id === p.grant
+                              );
+                              return [foundItem?.code, foundItem]; // Use code as the key
+                            })
+                          ).values(),
+                        ].map((item) => (
+                          <MenuItem key={item?.id} value={item?.id}>
+                            {item?.code}
                           </MenuItem>
                         ))}
                       </OSTextField>
