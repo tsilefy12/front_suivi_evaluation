@@ -116,7 +116,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                 grant: isEditing ? resumeDepense?.grant : 0,
                 depensePrevue: isEditing
                   ? resumeDepense?.depensePrevue
-                  : Number(depense),
+                  : depense,
                 ligneBudgetaire: isEditing
                   ? resumeDepense?.ligneBudgetaire
                   : ligneBudget,
