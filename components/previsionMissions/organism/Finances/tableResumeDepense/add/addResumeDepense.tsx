@@ -143,8 +143,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
                 <DialogContent>
                   <FormContainer spacing={2} mt={2}>
                     <FormControl fullWidth>
-                      import React from 'react'; import {MenuItem} from
-                      '@mui/material';
                       <OSTextField
                         fullWidth
                         select
@@ -156,16 +154,16 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         onChange={(e: any) => setGrantValue(e.target.value)}
                       >
                         <MenuItem value={""}></MenuItem>
-                        {[
-                          ...new Map(
+                        {Array.from(
+                          new Map(
                             previsionDepenselist.map((p) => {
                               const foundItem = grantEncoursList.find(
                                 (f) => f.id === p.grant
                               );
                               return [foundItem?.code, foundItem]; // Use code as the key
                             })
-                          ).values(),
-                        ].map((item) => (
+                          ).values() // Get only the values from the Map
+                        ).map((item) => (
                           <MenuItem key={item?.id} value={item?.id}>
                             {item?.code}
                           </MenuItem>
