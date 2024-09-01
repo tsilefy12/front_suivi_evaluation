@@ -45,7 +45,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
-  const [grantValue, setGrantValue]: any = React.useState(0);
+  const [grantValue, setGrantValue] = React.useState<any>(0);
   const fetchPrevisionDepense = useFetchPrevisionDepenseList();
   const { previsionDepenselist } = useAppSelector(
     (state) => state.previsonDepense
@@ -149,7 +149,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         label="Grant"
                         variant="outlined"
                         name="grant"
-                        value={grantValue}
+                        value={grantValue != "" ? grantValue : ""}
                         onChange={(e: any) => setGrantValue(e.target.value)}
                       >
                         <MenuItem value={""}></MenuItem>
