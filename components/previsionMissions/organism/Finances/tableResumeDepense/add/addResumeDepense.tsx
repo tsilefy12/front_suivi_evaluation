@@ -51,8 +51,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
     (state) => state.previsonDepense
   );
   const [depense, setDepenese] = useState<number>(0);
-  const [ligneBudget, setLigneBudget] = useState<any>("");
-  const [budget, setBudget] = useState<number>(0);
+  const [ligneBudget, setLigneBudget] = useState<any>([]);
 
   React.useEffect(() => {
     fetchPrevisionDepense();
@@ -67,10 +66,9 @@ const AddResumeDepense = ({ handleClose }: any) => {
 
   const handleSubmit = async (values: any) => {
     // values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) => bl.id)];
-
+    values.grant = grantValue;
     try {
       if (isEditing) {
-        values.grant = resumeDepense?.grant;
         await dispatch(
           updateResumeDepense({
             id: resumeDepense.id!,
@@ -91,20 +89,21 @@ const AddResumeDepense = ({ handleClose }: any) => {
     if (!id) return null;
     return options.find((option: any) => option.id === id) || null;
   };
-
+  const uniqueValues = new Set();
   useEffect(() => {
     if (grantValue != "") {
-      previsionDepenselist
+      const ligneBudgetaires = previsionDepenselist
         .filter((f) => f.grant == grantValue)
-        .map(
-          (m) => (
-            setLigneBudget(m.ligneBudgetaire),
-            setDepenese(Number(m.montant)),
-            setBudget(Number(m.montant))
-          )
-        );
+        .map((m) => {
+          if (!uniqueValues.has(m.ligneBudgetaire)) {
+            uniqueValues.add(m.ligneBudgetaire);
+          }
+          uniqueValues.add(m.ligneBudgetaire);
+        });
+      return setLigneBudget(ligneBudgetaires);
     }
   }, [previsionDepenselist, grantValue]);
+
   return (
     <Container maxWidth="xl" sx={{ backgroundColor: "#fff", pb: 5 }}>
       <Formik
@@ -116,7 +115,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                 grant: isEditing ? resumeDepense?.grant : 0,
                 depensePrevue: isEditing
                   ? resumeDepense?.depensePrevue
-                  : depense,
+                  : Number(depense),
                 ligneBudgetaire: isEditing
                   ? resumeDepense?.ligneBudgetaire
                   : ligneBudget,
@@ -159,9 +158,9 @@ const AddResumeDepense = ({ handleClose }: any) => {
                               const foundItem = grantEncoursList.find(
                                 (f) => f.id === p.grant
                               );
-                              return [foundItem?.code, foundItem]; // Use code as the key
+                              return [foundItem?.code, foundItem];
                             })
-                          ).values() // Get only the values from the Map
+                          ).values()
                         ).map((item) => (
                           <MenuItem key={item?.id} value={item?.id}>
                             {item?.code}
@@ -176,17 +175,35 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         label="Ligne budgetaire"
                         variant="outlined"
                         value={
-                          budgetLineList.find((f: any) => f.id == ligneBudget)
-                            ?.code
+                          budgetLineList.find((f: any) =>
+                            ligneBudget.includes(f.id)
+                          )?.code || ""
                         }
-                        onChange={(e: any, ligneBudget: any) =>
+                        onChange={(e: any) => {
                           formikProps.setFieldValue(
                             "ligneBudgetaire",
-                            ligneBudget
-                          )
-                        }
+                            e.target.value
+                          );
+                        }}
                         name="ligneBudgetaire"
-                      />
+                        select
+                      >
+                        <MenuItem value={""}></MenuItem>
+                        {Array.from(
+                          new Map(
+                            ligneBudget.map((p) => {
+                              const foundItem = budgetLineList.find(
+                                (f) => f.id === p
+                              );
+                              return [foundItem?.code, foundItem];
+                            })
+                          ).values()
+                        ).map((item) => (
+                          <MenuItem key={item?.id} value={item?.id}>
+                            {item?.code}
+                          </MenuItem>
+                        ))}
+                      </OSTextField>
                     </FormControl>
                     <OSTextField
                       fullWidth
@@ -196,7 +213,7 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       name="depensePrevue"
                       value={depense}
                       inputProps={{ autoComplete: "off", min: 0 }}
-                      type="text"
+                      type="number"
                     />
                     {/* <OSTextField
                       fullWidth
