@@ -1544,7 +1544,7 @@ const PrintPdf = () => {
                             f.missionId == mission.id
                         )
                         .reduce(
-                          (acc, cur) => acc + (Number(cur.budgetDepense) || 0),
+                          (acc, cur) => acc + (Number(cur.depensePrevue) || 0),
                           0
                         ) || 0) +
                         (mission.previsionDepense
