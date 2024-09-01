@@ -1720,7 +1720,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "13.3875%",
+                      width: "16.3875%",
                       textAlign: "left",
                       borderColor: "grey",
                     }}
@@ -1754,7 +1754,7 @@ const PrintPdfPrevision = () => {
                   <View
                     style={{
                       ...styles.tableCol,
-                      width: "7.3875%",
+                      width: "4.3875%",
                       borderColor: "grey",
                       textAlign: "left",
                     }}
@@ -1840,7 +1840,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "13.3875%",
+                        width: "16.3875%",
                         textAlign: "left",
                         borderColor: "grey",
                       }}
@@ -1874,7 +1874,7 @@ const PrintPdfPrevision = () => {
                     <View
                       style={{
                         ...styles.tableCol,
-                        width: "7.3875%",
+                        width: "4.3875%",
                         borderColor: "grey",
                         display: "flex",
                         flexWrap: "wrap",
@@ -2091,8 +2091,10 @@ const PrintPdfPrevision = () => {
                       <View style={{ ...styles.tableCol, width: "20%" }}>
                         <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                           {formatMontant(
-                            Number(prevue.depensePrevue - prevue.budgetDepense)
-                          ) || 0}
+                            Number(
+                              prevue.depensePrevue - prevue.budgetDepense
+                            ) || 0
+                          )}
                         </Text>
                       </View>
                       <View style={{ ...styles.tableCol, width: "20%" }}>
