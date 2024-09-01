@@ -147,17 +147,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         fullWidth
                         id="outlined-basic"
                         options={previsionDepenselist}
-                        getOptionLabel={(option: any) => {
-                          const foundItem = grantEncoursList.find(
-                            (f) =>
-                              f.id ===
-                              previsionDepenselist.find(
-                                (m) => m.grant === option
-                              )?.grant
-                          );
-                          // Ensure that a string is always returned, even if the item is not found
-                          return foundItem ? foundItem.code : ""; // Return an empty string if undefined
-                        }}
                         value={getGrantOption(
                           formikProps.values.grant,
                           previsionDepenselist

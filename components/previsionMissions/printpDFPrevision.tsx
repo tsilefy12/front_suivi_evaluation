@@ -71,7 +71,7 @@ const PrintPdfPrevision = () => {
                 border: 1.5,
                 paddingTop: 5,
                 paddingBottom: 6,
-                width: "65%",
+                width: "100%",
                 display: "flex",
                 alignItems: "center",
                 textAlign: "center",
@@ -102,7 +102,7 @@ const PrintPdfPrevision = () => {
                   display: "flex",
                   flexDirection: "column",
                   paddingLeft: 35,
-                  fontSize: 12,
+                  fontSize: 14,
                   paddingTop: 5,
                 }}
                 key={mission.id}
@@ -114,7 +114,7 @@ const PrintPdfPrevision = () => {
                     gap: 5,
                     alignItems: "center",
                     paddingBottom: 5,
-                    fontSize: 8,
+                    fontSize: 14,
                   }}
                 >
                   <Text>RESPONSABLE DE MISSION</Text>
@@ -122,8 +122,8 @@ const PrintPdfPrevision = () => {
                     style={{
                       border: 1.5,
                       padding: 4,
-                      minWidth: 350,
-                      maxWidth: 350,
+                      minWidth: 520,
+                      maxWidth: 520,
                     }}
                   >
                     {
@@ -143,7 +143,7 @@ const PrintPdfPrevision = () => {
                     gap: 5,
                     alignItems: "center",
                     paddingBottom: 5,
-                    fontSize: 8,
+                    fontSize: 14,
                   }}
                 >
                   <Text>GESTIONNAIRE DU BUDGET</Text>
@@ -151,8 +151,8 @@ const PrintPdfPrevision = () => {
                     style={{
                       border: 1.5,
                       padding: 4,
-                      minWidth: 350,
-                      maxWidth: 350,
+                      minWidth: 520,
+                      maxWidth: 520,
                     }}
                   >
                     {mission
@@ -173,6 +173,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
+                    width: "100%",
                   }}
                 >
                   <View
@@ -187,7 +188,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Objectifs de la mission :{" "}
@@ -202,7 +203,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       {mission.missionGoals
                         ?.map((er) => er.description)
                         .join(",")}
@@ -214,6 +215,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
+                    width: "100%",
                   }}
                 >
                   <View
@@ -228,7 +230,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Resultats attendus :{" "}
@@ -243,7 +245,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       {mission.exceptedResults
                         ?.map((er) => er.description)
                         .join(",")}
@@ -255,6 +257,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
+                    width: "100%",
                   }}
                 >
                   <View
@@ -270,7 +273,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Activités prevues :{" "}
@@ -294,7 +297,8 @@ const PrintPdfPrevision = () => {
                       ...styles.tableRow,
                       borderLeft: 1,
                       borderLeftColor: "grey",
-                      fontSize: 8,
+                      fontSize: 14,
+                      width: "100%",
                     }}
                   >
                     <View
@@ -309,7 +313,7 @@ const PrintPdfPrevision = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                         }}
                       ></Text>
                     </View>
@@ -322,7 +326,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {er.description}
                       </Text>
                     </View>
@@ -333,6 +337,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
+                    width: "100%",
                   }}
                 >
                   <View
@@ -348,7 +353,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Livrable :{" "}
@@ -372,7 +377,7 @@ const PrintPdfPrevision = () => {
                       ...styles.tableRow,
                       borderLeft: 1,
                       borderLeftColor: "grey",
-                      fontSize: 8,
+                      fontSize: 14,
                     }}
                   >
                     <View
@@ -387,7 +392,7 @@ const PrintPdfPrevision = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                           backgroundColor: "grey",
                         }}
                       ></Text>
@@ -401,7 +406,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {er.description}
                       </Text>
                     </View>
@@ -427,7 +432,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Lieux de mission :{" "}
@@ -442,7 +447,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Fokontany
                     </Text>
                   </View>
@@ -455,7 +460,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Commune
                     </Text>
                   </View>
@@ -468,7 +473,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       District
                     </Text>
                   </View>
@@ -479,7 +484,7 @@ const PrintPdfPrevision = () => {
                       ...styles.tableRow,
                       borderLeft: 1,
                       borderLeftColor: "grey",
-                      fontSize: 8,
+                      fontSize: 14,
                     }}
                   >
                     <View
@@ -494,7 +499,7 @@ const PrintPdfPrevision = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                           backgroundColor: "grey",
                         }}
                       ></Text>
@@ -508,7 +513,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {er.village}
                       </Text>
                     </View>
@@ -521,7 +526,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {er.commune}
                       </Text>
                     </View>
@@ -534,7 +539,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {er.district}
                       </Text>
                     </View>
@@ -560,7 +565,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Les missionnaires(MV):{" "}
@@ -583,7 +588,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                   }}
                 >
                   <View
@@ -598,7 +603,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Nom et prénoms
@@ -613,7 +618,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Date de départ
                     </Text>
                   </View>
@@ -626,7 +631,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Date de retour
                     </Text>
                   </View>
@@ -639,7 +644,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Responsabilité pendant la mission
                     </Text>
                   </View>
@@ -650,7 +655,7 @@ const PrintPdfPrevision = () => {
                       ...styles.tableRow,
                       borderLeft: 1,
                       borderLeftColor: "grey",
-                      fontSize: 8,
+                      fontSize: 14,
                     }}
                   >
                     <View
@@ -663,7 +668,7 @@ const PrintPdfPrevision = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                         }}
                       >
                         {`${m.firstNameMissionary} ${m.lastNameMissionary}`}
@@ -676,7 +681,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {format(new Date(m.startDateMissionary!), "dd/MM/yyyy")}
                       </Text>
                     </View>
@@ -687,7 +692,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {format(
                           new Date(m.returnDateMissionary!),
                           "dd/MM/yyyy"
@@ -701,7 +706,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {(() => {
                           const nom = employees.find(
                             (f) => f.id == m.missionResponsabilityMissionary
@@ -727,7 +732,7 @@ const PrintPdfPrevision = () => {
                   <Text
                     style={{
                       ...styles.tableCellHeader,
-                      fontSize: 9,
+                      fontSize: 14,
                       border: "none",
                     }}
                   ></Text>
@@ -745,7 +750,7 @@ const PrintPdfPrevision = () => {
                   <Text
                     style={{
                       ...styles.tableCellHeader,
-                      fontSize: 9,
+                      fontSize: 14,
                       border: "none",
                     }}
                   >
@@ -757,7 +762,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                     width: "100%",
                   }}
                 >
@@ -772,7 +777,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                         fontStyle: "italic",
                       }}
                     >
@@ -792,7 +797,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Champs obligatoires
@@ -804,7 +809,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                     width: "100%",
                   }}
                 >
@@ -819,7 +824,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       1. Voiture interne (MV)
@@ -837,7 +842,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     ></Text>
                   </View>
@@ -847,7 +852,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                   }}
                 >
                   <View
@@ -861,7 +866,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Assurance
@@ -875,7 +880,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Visite technique
                     </Text>
                   </View>
@@ -887,7 +892,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Disposition de sécurité
                     </Text>
                   </View>
@@ -900,7 +905,7 @@ const PrintPdfPrevision = () => {
                         ...styles.tableRow,
                         borderLeft: 1,
                         borderLeftColor: "grey",
-                        fontSize: 8,
+                        fontSize: 14,
                       }}
                     >
                       <View
@@ -914,7 +919,7 @@ const PrintPdfPrevision = () => {
                         <Text
                           style={{
                             ...styles.tableCellHeader,
-                            fontSize: 9,
+                            fontSize: 14,
                           }}
                         >
                           {er.insuranceVehicle}
@@ -929,7 +934,7 @@ const PrintPdfPrevision = () => {
                         }}
                       >
                         <Text
-                          style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
                         >
                           {er.technicalVisitVehicle}
                         </Text>
@@ -943,7 +948,7 @@ const PrintPdfPrevision = () => {
                         }}
                       >
                         <Text
-                          style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
                         >
                           {er.safetyBeltVehicle === true ? "OUI" : "NON"}
                         </Text>
@@ -955,7 +960,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                     width: "100%",
                   }}
                 >
@@ -970,7 +975,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       2. Voiture externe (location ou partenaire)
@@ -988,7 +993,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     ></Text>
                   </View>
@@ -998,7 +1003,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                   }}
                 >
                   <View
@@ -1012,7 +1017,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Assurance
@@ -1026,7 +1031,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Visite technique
                     </Text>
                   </View>
@@ -1038,7 +1043,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Disposition de sécurité
                     </Text>
                   </View>
@@ -1051,7 +1056,7 @@ const PrintPdfPrevision = () => {
                         ...styles.tableRow,
                         borderLeft: 1,
                         borderLeftColor: "grey",
-                        fontSize: 8,
+                        fontSize: 14,
                       }}
                     >
                       <View
@@ -1065,7 +1070,7 @@ const PrintPdfPrevision = () => {
                         <Text
                           style={{
                             ...styles.tableCellHeader,
-                            fontSize: 9,
+                            fontSize: 14,
                           }}
                         >
                           {er.insuranceVehicle}
@@ -1080,7 +1085,7 @@ const PrintPdfPrevision = () => {
                         }}
                       >
                         <Text
-                          style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
                         >
                           {er.technicalVisitVehicle}
                         </Text>
@@ -1094,7 +1099,7 @@ const PrintPdfPrevision = () => {
                         }}
                       >
                         <Text
-                          style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
                         >
                           {er.safetyBeltVehicle === true ? "OUI" : "NON"}
                         </Text>
@@ -1106,7 +1111,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                     width: "100%",
                   }}
                 >
@@ -1121,7 +1126,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       3. Autres
@@ -1139,7 +1144,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     ></Text>
                   </View>
@@ -1149,7 +1154,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                   }}
                 >
                   <View
@@ -1163,7 +1168,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Assurance
@@ -1180,7 +1185,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Visite technique
@@ -1194,7 +1199,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Disposition de sécurité
                     </Text>
                   </View>
@@ -1207,7 +1212,7 @@ const PrintPdfPrevision = () => {
                         ...styles.tableRow,
                         borderLeft: 1,
                         borderLeftColor: "grey",
-                        fontSize: 8,
+                        fontSize: 14,
                       }}
                     >
                       <View
@@ -1221,7 +1226,7 @@ const PrintPdfPrevision = () => {
                         <Text
                           style={{
                             ...styles.tableCellHeader,
-                            fontSize: 9,
+                            fontSize: 14,
                           }}
                         >
                           {er.insuranceVehicle}
@@ -1236,7 +1241,7 @@ const PrintPdfPrevision = () => {
                         }}
                       >
                         <Text
-                          style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
                         >
                           {er.technicalVisitVehicle}
                         </Text>
@@ -1250,7 +1255,7 @@ const PrintPdfPrevision = () => {
                         }}
                       >
                         <Text
-                          style={{ ...styles.tableCellHeader, fontSize: 9 }}
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
                         >
                           {er.safetyBeltVehicle === true ? "OUI" : "NON"}
                         </Text>
@@ -1269,7 +1274,7 @@ const PrintPdfPrevision = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                  <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                     Contact pendant la mission :
                   </Text>
                 </View>
@@ -1278,7 +1283,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderLeftColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                   }}
                 >
                   <View
@@ -1294,7 +1299,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Nom et prénoms
@@ -1313,7 +1318,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Lieu/Institution
@@ -1329,7 +1334,7 @@ const PrintPdfPrevision = () => {
                       borderTopColor: "grey",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Numéro
                     </Text>
                   </View>
@@ -1343,7 +1348,7 @@ const PrintPdfPrevision = () => {
                       borderTopColor: "grey",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Remarques
                     </Text>
                   </View>
@@ -1354,7 +1359,7 @@ const PrintPdfPrevision = () => {
                       ...styles.tableRow,
                       borderLeft: 1,
                       borderColor: "grey",
-                      fontSize: 8,
+                      fontSize: 14,
                     }}
                   >
                     <View
@@ -1368,7 +1373,7 @@ const PrintPdfPrevision = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                         }}
                       >
                         {(() => {
@@ -1389,7 +1394,7 @@ const PrintPdfPrevision = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                         }}
                       >
                         {c.locationContact}
@@ -1403,7 +1408,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {c.numberContact}
                       </Text>
                     </View>
@@ -1415,7 +1420,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {c.noteContact}
                       </Text>
                     </View>
@@ -1431,7 +1436,7 @@ const PrintPdfPrevision = () => {
                   <Text
                     style={{
                       color: "#1976d2",
-                      fontSize: 9,
+                      fontSize: 14,
                     }}
                   >
                     PROGRAMME DE LA MISSION
@@ -1442,7 +1447,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                     borderTop: 1,
                     width: "83.1%",
                     borderTopColor: "grey",
@@ -1459,7 +1464,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Du
@@ -1476,7 +1481,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Au
@@ -1490,7 +1495,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Activtés prévues
                     </Text>
                   </View>
@@ -1502,7 +1507,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Lieu
                     </Text>
                   </View>
@@ -1514,7 +1519,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Livrables
                     </Text>
                   </View>
@@ -1526,7 +1531,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       1e Responsable
                     </Text>
                   </View>
@@ -1536,7 +1541,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                     // borderTop: 1,
                     width: "83.1%",
                     // borderTopColor: "grey",
@@ -1553,7 +1558,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       {format(
@@ -1573,7 +1578,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       {format(new Date(mission.dateFin as Date), "dd/MM/yyyy")}
@@ -1594,7 +1599,7 @@ const PrintPdfPrevision = () => {
                         key={index}
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                           marginBottom: 2,
                         }}
                       >
@@ -1618,7 +1623,7 @@ const PrintPdfPrevision = () => {
                         key={m.id}
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                           marginBottom: 2,
                         }}
                       >
@@ -1641,7 +1646,7 @@ const PrintPdfPrevision = () => {
                         key={m.id}
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                           marginBottom: 2,
                         }}
                       >
@@ -1657,7 +1662,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       {(() => {
                         const nom = employees.find(
                           (e) => e.id == mission.missionManagerId
@@ -1682,7 +1687,7 @@ const PrintPdfPrevision = () => {
                   <Text
                     style={{
                       color: "#1976d2",
-                      fontSize: 9,
+                      fontSize: 14,
                     }}
                   >
                     PRÉVISION DES DÉPENSES
@@ -1693,7 +1698,7 @@ const PrintPdfPrevision = () => {
                     ...styles.tableRow,
                     borderLeft: 1,
                     borderColor: "grey",
-                    fontSize: 8,
+                    fontSize: 14,
                     borderTop: 1,
                     width: "83.1%",
                     borderTopColor: "grey",
@@ -1710,7 +1715,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Date
@@ -1727,7 +1732,7 @@ const PrintPdfPrevision = () => {
                     <Text
                       style={{
                         ...styles.tableCellHeader,
-                        fontSize: 9,
+                        fontSize: 14,
                       }}
                     >
                       Libellés
@@ -1741,7 +1746,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Nb
                     </Text>
                   </View>
@@ -1753,7 +1758,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       PU
                     </Text>
                   </View>
@@ -1765,7 +1770,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Montant
                     </Text>
                   </View>
@@ -1777,7 +1782,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Grant
                     </Text>
                   </View>
@@ -1789,7 +1794,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Ligne budgétaire
                     </Text>
                   </View>
@@ -1801,7 +1806,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       Regleme
                     </Text>
                   </View>
@@ -1813,7 +1818,7 @@ const PrintPdfPrevision = () => {
                       ...styles.tableRow,
                       borderLeft: 1,
                       borderColor: "grey",
-                      fontSize: 8,
+                      fontSize: 14,
                       borderTop: 1,
                       width: "83.1%",
                       borderTopColor: "grey",
@@ -1830,7 +1835,7 @@ const PrintPdfPrevision = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                         }}
                       >
                         {format(new Date(p.date as Date), "dd/MM/yyyy")}
@@ -1847,7 +1852,7 @@ const PrintPdfPrevision = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                         }}
                       >
                         {p.libelle}
@@ -1866,7 +1871,7 @@ const PrintPdfPrevision = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                           marginBottom: 2,
                         }}
                       >
@@ -1887,7 +1892,7 @@ const PrintPdfPrevision = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                           marginBottom: 2,
                         }}
                       >
@@ -1907,7 +1912,7 @@ const PrintPdfPrevision = () => {
                       <Text
                         style={{
                           ...styles.tableCellHeader,
-                          fontSize: 9,
+                          fontSize: 14,
                           marginBottom: 2,
                         }}
                       >
@@ -1922,7 +1927,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {
                           grantEncoursList.find((grant) => grant.id == p.grant)
                             ?.code
@@ -1937,7 +1942,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {
                           budgetLineList.find(
                             (budgetLine) => budgetLine.id == p.ligneBudgetaire
@@ -1953,7 +1958,7 @@ const PrintPdfPrevision = () => {
                         textAlign: "left",
                       }}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {p.regleme}
                       </Text>
                     </View>
@@ -1973,7 +1978,7 @@ const PrintPdfPrevision = () => {
                       width: "100%",
                       color: "black",
                       fontWeight: 700,
-                      fontSize: 9,
+                      fontSize: 14,
                       paddingBottom: 5,
                     }}
                   >
@@ -1989,21 +1994,21 @@ const PrintPdfPrevision = () => {
                     }}
                   >
                     <View style={{ ...styles.tableCol, width: "20%" }}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Grant
                       </Text>
                     </View>
                     <View style={{ ...styles.tableCol, width: "20%" }}>
                       <View style={styles.flexColumn}>
                         <Text
-                          style={{ ...[styles.tableCellHeader], fontSize: 9 }}
+                          style={{ ...[styles.tableCellHeader], fontSize: 14 }}
                         >
                           Ligne
                         </Text>
                         <Text
                           style={{
                             ...[styles.tableCellHeader, styles.flexEnd],
-                            fontSize: 9,
+                            fontSize: 14,
                           }}
                         >
                           budgétaire
@@ -2011,22 +2016,22 @@ const PrintPdfPrevision = () => {
                       </View>
                     </View>
                     <View style={{ ...styles.tableCol, width: "20%" }}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Dépenses prévues
                       </Text>
                     </View>
                     <View style={{ ...styles.tableCol, width: "20%" }}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Budget de dépense
                       </Text>
                     </View>
                     <View style={{ ...styles.tableCol, width: "20%" }}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Ecart
                       </Text>
                     </View>
                     <View style={{ ...styles.tableCol, width: "20%" }}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Commentaires
                       </Text>
                     </View>
@@ -2035,7 +2040,7 @@ const PrintPdfPrevision = () => {
                   {mission.resumeDepense?.map((prevue: any) => (
                     <View style={{ ...styles.tableRow }} key={prevue.id}>
                       <View style={{ ...styles.tableCol, width: "20%" }}>
-                        <Text style={{ ...styles.tableCell, fontSize: 9 }}>
+                        <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                           {
                             grantEncoursList.find(
                               (grant) => grant.id == prevue.grant
@@ -2044,7 +2049,7 @@ const PrintPdfPrevision = () => {
                         </Text>
                       </View>
                       <View style={{ ...styles.tableCol, width: "20%" }}>
-                        <Text style={{ ...styles.tableCell, fontSize: 9 }}>
+                        <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                           {
                             budgetLineList.find(
                               (budgetLine) =>
@@ -2054,24 +2059,24 @@ const PrintPdfPrevision = () => {
                         </Text>
                       </View>
                       <View style={{ ...styles.tableCol, width: "20%" }}>
-                        <Text style={{ ...styles.tableCell, fontSize: 9 }}>
+                        <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                           {formatMontant(Number(prevue.depensePrevue))}
                         </Text>
                       </View>
                       <View style={{ ...styles.tableCol, width: "20%" }}>
-                        <Text style={{ ...styles.tableCell, fontSize: 9 }}>
+                        <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                           {formatMontant(Number(prevue.budgetDepense))}
                         </Text>
                       </View>
                       <View style={{ ...styles.tableCol, width: "20%" }}>
-                        <Text style={{ ...styles.tableCell, fontSize: 9 }}>
+                        <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                           {formatMontant(
                             Number(prevue.depensePrevue - prevue.budgetDepense)
                           )}
                         </Text>
                       </View>
                       <View style={{ ...styles.tableCol, width: "20%" }}>
-                        <Text style={{ ...styles.tableCell, fontSize: 9 }}>
+                        <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                           {prevue.remarque}
                         </Text>
                       </View>
@@ -2084,16 +2089,16 @@ const PrintPdfPrevision = () => {
                       width: "83.1%",
                       borderLeft: 1,
                       borderColor: "grey",
-                      fontSize: 8,
+                      fontSize: 14,
                     }}
                   >
                     <View style={{ ...styles.tableCol, width: "40%" }}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Total
                       </Text>
                     </View>
                     <View style={{ ...styles.tableCol, width: "20%" }}>
-                      <Text style={{ ...styles.tableCell, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                         {(() => {
                           const totalDepense = mission.resumeDepensePrevue
                             ?.filter((f) => f.missionId == mission.id)
@@ -2106,7 +2111,7 @@ const PrintPdfPrevision = () => {
                       </Text>
                     </View>
                     <View style={{ ...styles.tableCol, width: "20%" }}>
-                      <Text style={{ ...styles.tableCell, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                         {(() => {
                           const totalBudget = mission.resumeDepensePrevue
                             ?.filter((f) => f.missionId == mission.id)
@@ -2119,7 +2124,7 @@ const PrintPdfPrevision = () => {
                       </Text>
                     </View>
                     <View style={{ ...styles.tableCol, width: "20%" }}>
-                      <Text style={{ ...styles.tableCell, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCell, fontSize: 14 }}>
                         {(() => {
                           const totalDepense = mission.resumeDepensePrevue
                             ?.filter((f) => f.missionId == mission.id)
@@ -2141,7 +2146,9 @@ const PrintPdfPrevision = () => {
                       </Text>
                     </View>
                     <View style={{ ...styles.tableCol, width: "20%" }}>
-                      <Text style={{ ...styles.tableCell, fontSize: 9 }}></Text>
+                      <Text
+                        style={{ ...styles.tableCell, fontSize: 14 }}
+                      ></Text>
                     </View>
                   </View>
                 </View>
@@ -2155,7 +2162,7 @@ const PrintPdfPrevision = () => {
                   <Text
                     style={{
                       color: "#1976d2",
-                      fontSize: 9,
+                      fontSize: 14,
                     }}
                   >
                     SUIVI LOGISTIQUE
@@ -2482,7 +2489,7 @@ const PrintPdfPrevision = () => {
                       textAlign: "center",
                       color: "#1976d2",
                       fontWeight: "bold",
-                      fontSize: 9,
+                      fontSize: 14,
                       paddingBottom: 10,
                       paddingTop: 15,
                     }}
@@ -2503,28 +2510,28 @@ const PrintPdfPrevision = () => {
                     <View
                       style={[styles.tableCol, styles.colSingleTBValidated]}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Poste
                       </Text>
                     </View>
                     <View
                       style={[styles.tableCol, styles.colSingleTBValidated]}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Signature
                       </Text>
                     </View>
                     <View
                       style={[styles.tableCol, styles.colSingleTBValidated]}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Date
                       </Text>
                     </View>
                     <View
                       style={[styles.tableCol, styles.colSingleTBValidated]}
                     >
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 9 }}>
+                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         Lieu
                       </Text>
                     </View>
@@ -2540,7 +2547,7 @@ const PrintPdfPrevision = () => {
                       style={[styles.tableCol, styles.colMergedTBValidated]}
                     >
                       <Text
-                        style={{ ...styles.tableCellTBValidated, fontSize: 9 }}
+                        style={{ ...styles.tableCellTBValidated, fontSize: 14 }}
                       >
                         Élaboré par :{" "}
                         {(() => {
@@ -2595,7 +2602,7 @@ const PrintPdfPrevision = () => {
                       style={[styles.tableCol, styles.colMergedTBValidated]}
                     >
                       <Text
-                        style={{ ...styles.tableCellTBValidated, fontSize: 9 }}
+                        style={{ ...styles.tableCellTBValidated, fontSize: 14 }}
                       >
                         Vérificateur financier :{" "}
                         {(() => {
@@ -2649,7 +2656,7 @@ const PrintPdfPrevision = () => {
                       style={[styles.tableCol, styles.colMergedTBValidated]}
                     >
                       <Text
-                        style={{ ...styles.tableCellTBValidated, fontSize: 9 }}
+                        style={{ ...styles.tableCellTBValidated, fontSize: 14 }}
                       >
                         Vérificateur technique :{" "}
                         {(() => {
@@ -2703,7 +2710,7 @@ const PrintPdfPrevision = () => {
                       style={[styles.tableCol, styles.colMergedTBValidated]}
                     >
                       <Text
-                        style={{ ...styles.tableCellTBValidated, fontSize: 9 }}
+                        style={{ ...styles.tableCellTBValidated, fontSize: 14 }}
                       >
                         Payé par :{" "}
                         {(() => {
@@ -2807,7 +2814,7 @@ const styles = StyleSheet.create({
   },
   tableCellHeader: {
     margin: 5,
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "bold",
   },
   tableCell: {
