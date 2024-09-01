@@ -180,7 +180,6 @@ const ListPrevision = () => {
   }, [getGrantId, selectId]);
 
   const handleSubmit = async (values: any) => {
-    console.log("values", selectedBudgetLine, getGrantId, regle, lib, prix);
     (values.imprevue = total / 10),
       (values.grant = getGrantId),
       (values.date = new Date()),

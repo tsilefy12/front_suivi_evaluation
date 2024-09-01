@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {
@@ -41,13 +41,13 @@ const AddResumeDepense = ({ handleClose }: any) => {
   const { grantEncoursList } = useAppSelector((state) => state.grantEncours);
   const fetchBudgetLine = useFetchBudgetLine();
   const { budgetLineList } = useAppSelector((state: any) => state.budgetLine);
-  const [grantValue, setGrantValue] = useState<any>(0);
+  const [grantValue, setGrantValue] = useState<any>("");
   const fetchPrevisionDepense = useFetchPrevisionDepenseList();
   const { previsionDepenselist } = useAppSelector(
     (state) => state.previsonDepense
   );
   const [depense, setDepense] = useState<number>(0);
-  const [ligneBudget, setLigneBudget] = useState<any>([]);
+  const [selectedBudgetLine, setSelectedBudgetLine] = React.useState("");
 
   useEffect(() => {
     fetchPrevisionDepense();
@@ -56,23 +56,34 @@ const AddResumeDepense = ({ handleClose }: any) => {
     fetchGrant();
   }, [router.query]);
 
-  useEffect(() => {
-    if (grantValue !== "") {
-      const uniqueValues = new Set();
-      const ligneBudgetaires = previsionDepenselist
-        .filter((f) => f.grant === grantValue)
-        .map((m) => {
-          if (!uniqueValues.has(m.ligneBudgetaire)) {
-            uniqueValues.add(m.ligneBudgetaire);
-            return m.ligneBudgetaire;
-          }
-          return null;
-        })
-        .filter(Boolean);
-      setLigneBudget(ligneBudgetaires);
-    }
-  }, [previsionDepenselist, grantValue]);
+  const listLigne = useMemo(() => {
+    const lignes: any[] = [];
+    previsionDepenselist
+      .filter((f) => f.missionId == id)
+      .forEach((b) => {
+        if (grantValue !== "") {
+          const budgetLineNames = budgetLineList
+            .filter((f) => f.grantId == grantValue && f.id == b.ligneBudgetaire)
+            .map((e) => e.code);
 
+          lignes.push({ id: b.ligneBudgetaire, name: budgetLineNames });
+        } else {
+          lignes.push({ id: "", name: "" });
+        }
+      });
+    return lignes;
+  }, [previsionDepenselist, budgetLineList, grantValue]);
+
+  useEffect(() => {
+    if (selectedBudgetLine != "") {
+      previsionDepenselist
+        .filter(
+          (f) =>
+            f.missionId == id && f.ligneBudgetaire == Number(selectedBudgetLine)
+        )
+        .map((m) => setDepense(m.montant!));
+    }
+  }, [listLigne, selectedBudgetLine]);
   const handleGrantChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setGrantValue(event.target.value as number);
   };
@@ -106,10 +117,14 @@ const AddResumeDepense = ({ handleClose }: any) => {
           isEditing
             ? resumeDepense
             : {
-                grant: 0,
-                depensePrevue: 0,
-                ligneBudgetaire: [],
-                remarque: "",
+                grant: isEditing ? resumeDepense.grant : 0,
+                depensePrevue: isEditing
+                  ? resumeDepense.depensePrevue
+                  : depense,
+                ligneBudgetaire: isEditing
+                  ? resumeDepense.ligneBudgetaire
+                  : selectedBudgetLine,
+                remarque: isEditing ? resumeDepense.remarque : "",
                 missionId: id,
               }
         }
@@ -138,7 +153,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       value={grantValue !== "" ? grantValue : ""}
                       onChange={handleGrantChange}
                     >
-                      <MenuItem value={""}></MenuItem>
                       {Array.from(
                         new Map(
                           previsionDepenselist.map((p) => {
@@ -162,32 +176,21 @@ const AddResumeDepense = ({ handleClose }: any) => {
                       id="outlined-basic"
                       label="Ligne budgetaire"
                       variant="outlined"
-                      value={
-                        budgetLineList.find((f: any) =>
-                          ligneBudget.includes(f.id)
-                        )?.code || ""
-                      }
-                      onChange={(e: any) => {
+                      size="small"
+                      name="ligneBudgetaire"
+                      value={formikProps.values.ligneBudgetaire}
+                      key={formikProps.values.ligneBudgetaire}
+                      onChange={(e) => {
+                        setSelectedBudgetLine(e.target.value);
                         formikProps.setFieldValue(
                           "ligneBudgetaire",
                           e.target.value
                         );
                       }}
-                      name="ligneBudgetaire"
                     >
-                      <MenuItem value={""}></MenuItem>
-                      {Array.from(
-                        new Map(
-                          ligneBudget.map((p) => {
-                            const foundItem = budgetLineList.find(
-                              (f) => f.id === p
-                            );
-                            return [foundItem?.code, foundItem];
-                          })
-                        ).values()
-                      ).map((item) => (
-                        <MenuItem key={item?.id} value={item?.id}>
-                          {item?.code}
+                      {listLigne.map((item) => (
+                        <MenuItem key={item} value={item}>
+                          {item.name}
                         </MenuItem>
                       ))}
                     </OSTextField>
@@ -199,8 +202,8 @@ const AddResumeDepense = ({ handleClose }: any) => {
                     variant="outlined"
                     name="depensePrevue"
                     value={depense}
-                    inputProps={{ autoComplete: "off", min: 0 }}
-                    type="number"
+                    inputProps={{ autoComplete: "off" }}
+                    type="text"
                     onChange={(e: any) => setDepense(e.target.value)}
                   />
                   <OSTextField
