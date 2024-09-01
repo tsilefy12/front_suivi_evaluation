@@ -67,8 +67,12 @@ const AddResumeDepense = ({ handleClose }: any) => {
 
   const handleSubmit = async (values: any) => {
     // values.ligneBudgetaire = [...selectedBudgetLine.map((bl: any) => bl.id)];
-    values.grant = grantValue;
+
     try {
+      values.grant = grantValue;
+      values.ligneBudgetaire = ligneBudget;
+      values.depensePrevue = Number(depense);
+      values.missiondId = id!;
       if (isEditing) {
         values.grant = resumeDepense?.grant;
         await dispatch(
@@ -78,6 +82,10 @@ const AddResumeDepense = ({ handleClose }: any) => {
           })
         );
       } else {
+        values.grant = grantValue;
+        values.ligneBudgetaire = ligneBudget;
+        values.depensePrevue = Number(depense);
+        values.missiondId = id!;
         await dispatch(createResumeDepense(values)), fetchResumeDepense();
       }
       handleClose();
