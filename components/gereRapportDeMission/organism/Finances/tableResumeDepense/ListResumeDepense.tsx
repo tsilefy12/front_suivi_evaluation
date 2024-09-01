@@ -82,13 +82,9 @@ const ListResumeDepense = () => {
   };
 
   let total: any = useMemo(() => {
-    let totalBudget: any = 0;
     resumeDepensePrevueList
-      .filter((f: any) => f.missionId === id)
-      .forEach((item: any) => {
-        totalBudget += parseInt(item.budgetDepense);
-      });
-    return totalBudget;
+      .filter((f) => f.missionId === id)
+      .reduce((acc, curr) => acc + curr.montant, 0);
   }, [resumeDepensePrevueList]);
 
   const handleRequestSort = (

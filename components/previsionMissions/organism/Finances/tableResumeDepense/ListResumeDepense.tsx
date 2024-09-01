@@ -76,7 +76,7 @@ const ListResumeDepense = () => {
     resumeDepenseList
       .filter((f: any) => f.missionId == id)
       .map((item) => {
-        totalBudget += parseInt(item.budgetDepense);
+        totalBudget += item.depensePrevue;
       });
     return totalBudget;
   }, [resumeDepenseList]);

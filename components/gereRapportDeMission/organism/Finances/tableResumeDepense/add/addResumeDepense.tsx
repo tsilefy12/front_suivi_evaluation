@@ -133,10 +133,6 @@ const AddResumeDepense = ({ handleClose }: any) => {
   }, [listLigne, selectedBudgetLine]);
   //ajout
   const handleSubmit = async (values: any) => {
-    values.missionId = id!;
-    values.grant = grantValue;
-    values.depensePrevue = depense;
-    values.ligneBudgetaire = selectedBudgetLine.id!;
     try {
       if (isEditing) {
         await dispatch(
@@ -162,6 +158,9 @@ const AddResumeDepense = ({ handleClose }: any) => {
         handleClose());
       } else {
         values.grant = grantValue;
+        values.missionId = id!;
+        values.depensePrevue = depense;
+        values.ligneBudgetaire = selectedBudgetLine.id!;
         return await (dispatch(createResumeDepensePrevue(values)),
         fetchResumeDepensePrevue(),
         handleClose());

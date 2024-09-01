@@ -1323,7 +1323,7 @@ const PrintPdf = () => {
                     <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       {(() => {
                         const totalPrevue = mission.previsionDepense
-                          ?.filter((f) => (f.missionId = mission.id))
+                          ?.filter((f) => f.missionId == mission.id)
                           .reduce(
                             (acc: any, curr: any) => acc + curr.montant,
                             0
@@ -1342,8 +1342,8 @@ const PrintPdf = () => {
                   >
                     <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                       {(() => {
-                        const totalRealise = mission.rappportDepense
-                          ?.filter((f: any) => (f.missionId = mission.id))
+                        const totalRealise = mission.rapportDepense
+                          ?.filter((f: any) => f.missionId == mission.id)
                           .reduce(
                             (acc: any, curr: any) => acc + curr.montant,
                             0
@@ -1417,26 +1417,29 @@ const PrintPdf = () => {
                     <Text style={styles.tableCellHeader}>Remarques</Text>
                   </View>
                 </View>
-                {mission.resumeDepensePrevue?.map((rd) => (
-                  <View
-                    style={{
-                      ...styles.tableRow,
-                      width: "100%",
-                      borderTop: 1,
-                      borderTopColor: "grey",
-                      borderLeft: 1,
-                      borderLeftColor: "grey",
-                    }}
-                  >
-                    <View style={{ ...styles.tableCol, width: "16.67%" }}>
+
+                <View
+                  style={{
+                    ...styles.tableRow,
+                    width: "100%",
+                    borderTop: 1,
+                    borderTopColor: "grey",
+                    borderLeft: 1,
+                    borderLeftColor: "grey",
+                  }}
+                >
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    {mission.resumeDepensePrevue?.map((rd) => (
                       <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {
                           grantEncoursList.find((grant) => grant.id == rd.grant)
                             ?.code
                         }
                       </Text>
-                    </View>
-                    <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    ))}
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    {mission.resumeDepensePrevue?.map((rd) => (
                       <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
                         {
                           budgetLineList.find(
@@ -1444,31 +1447,61 @@ const PrintPdf = () => {
                           )?.code
                         }
                       </Text>
-                    </View>
-                    <View style={{ ...styles.tableCol, width: "16.67%" }}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        {/* {formatMontant(Number(rd.depensePrevue))} */}
-                      </Text>
-                    </View>
-                    <View style={{ ...styles.tableCol, width: "16.67%" }}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        {/* {formatMontant(Number(rd.budgetDepense))} */}
-                      </Text>
-                    </View>
-                    <View style={{ ...styles.tableCol, width: "16.67%" }}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        {/* {formatMontant(
-                          // Number(rd.depensePrevue - rd.budgetDepense)
-                        )} */}
-                      </Text>
-                    </View>
-                    <View style={{ ...styles.tableCol, width: "16.67%" }}>
-                      <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        {rd.remarque}
-                      </Text>
-                    </View>
+                    ))}
                   </View>
-                ))}
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    {mission.resumeDepense
+                      ?.filter((f) => f.missionId === mission.id)
+                      .map((m, index) => (
+                        <Text
+                          key={index}
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
+                        >
+                          {formatMontant(Number(m.depensePrevue))}
+                        </Text>
+                      ))}
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    {mission.resumeDepensePrevue
+                      ?.filter((f) => f.missionId === mission.id)
+                      .map((m, index) => (
+                        <Text
+                          key={index}
+                          style={{ ...styles.tableCellHeader, fontSize: 14 }}
+                        >
+                          {formatMontant(Number(m.depensePrevue))}
+                        </Text>
+                      ))}
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      {(() => {
+                        const prevueSum =
+                          mission.resumeDepense
+                            ?.filter((f) => f.missionId === mission.id)
+                            .reduce(
+                              (sum, m) => sum + Number(m.depensePrevue),
+                              0
+                            ) || 0;
+
+                        const rapportSum =
+                          mission.resumeDepensePrevue
+                            ?.filter((f) => f.missionId === mission.id)
+                            .reduce(
+                              (sum, m) => sum + Number(m.depensePrevue),
+                              0
+                            ) || 0;
+
+                        return formatMontant(prevueSum - rapportSum);
+                      })()}
+                    </Text>
+                  </View>
+                  <View style={{ ...styles.tableCol, width: "16.67%" }}>
+                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                      {rd.remarque}
+                    </Text>
+                  </View>
+                </View>
                 <View
                   style={{
                     textAlign: "center",
