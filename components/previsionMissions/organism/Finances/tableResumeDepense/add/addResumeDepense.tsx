@@ -147,8 +147,9 @@ const AddResumeDepense = ({ handleClose }: any) => {
                         fullWidth
                         select
                         id="outlined-basic"
-                        label="Ligne budgetaire"
+                        label="Grant"
                         variant="outlined"
+                        name="grant"
                         value={formikProps.values.grant}
                         onChange={(e: any) => setGrantValue(e.target.value)}
                       >
