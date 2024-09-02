@@ -164,7 +164,6 @@ const PrintPdf = () => {
                     border: "none",
                     // borderTop: 1,
                     // borderTopColor: "grey",
-                    backgroundColor: "darkgrey",
                   }}
                 >
                   <Text
@@ -315,7 +314,6 @@ const PrintPdf = () => {
                     borderLeft: 1,
                     borderLeftColor: "grey",
                     width: "100%",
-                    backgroundColor: "darkgrey",
                   }}
                 >
                   <View
@@ -469,7 +467,6 @@ const PrintPdf = () => {
                         ...styles.tableCol,
                         textAlign: "center",
                         width: "100%",
-                        backgroundColor: "darkgrey",
                       }}
                     >
                       <Text
@@ -507,7 +504,7 @@ const PrintPdf = () => {
                         ...styles.tableCol,
                         textAlign: "left",
                         width: "100%",
-                        backgroundColor: "darkgrey",
+
                         borderRight: "none",
                       }}
                     >
@@ -562,7 +559,6 @@ const PrintPdf = () => {
                         ...styles.tableCol,
                         textAlign: "center",
                         width: "100%",
-                        backgroundColor: "darkgrey",
                       }}
                     >
                       <Text
@@ -604,7 +600,7 @@ const PrintPdf = () => {
                         ...styles.tableCol,
                         textAlign: "left",
                         width: "100%",
-                        backgroundColor: "darkgrey",
+
                         borderRight: "none",
                       }}
                     >
@@ -659,7 +655,6 @@ const PrintPdf = () => {
                         ...styles.tableCol,
                         textAlign: "center",
                         width: "100%",
-                        backgroundColor: "darkgrey",
                       }}
                     >
                       <Text
@@ -698,7 +693,7 @@ const PrintPdf = () => {
                         ...styles.tableCol,
                         textAlign: "left",
                         width: "100%",
-                        backgroundColor: "darkgrey",
+
                         borderRight: "none",
                       }}
                     >

@@ -36,6 +36,7 @@ import useFetchPrevisionDepenseList from "../../../previsionMissions/organism/Fi
 import useFetchMissionListe from "../hooks/useFetchMissionListe";
 import * as XLSX from "xlsx";
 import { TableLoading } from "../../../shared/loading";
+import { ImprevuePrevisionItem } from "../../../../redux/features/imprevuePrevision/imprevuePrevision.interface";
 
 const DashboardMission = () => {
   const router = useRouter();
@@ -138,76 +139,101 @@ const DashboardMission = () => {
           employees.find((e) => e.id === row.verifyFinancial)?.surname || ""
         }`,
         Budgets: formatMontant(
-          row.resumeDepensePrevue
-            ?.filter((f: ResumeDepensePrevueItem) => f.grant)
-            .reduce((acc, cur) => acc + (Number(cur.budgetDepense) || 0), 0) ||
+          row.resumeDepense
+            ?.filter((f) => f.grant)
+            .reduce((acc, cur) => acc + (Number(cur.depensePrevue) || 0), 0) ||
             0
         ),
         Grants: grantEncoursList.find(
           (g: GrantEncoursItem) =>
-            g.id === row.resumeDepensePrevue?.map((m) => m.grant)
+            g.id === row.previsionDepense?.map((m) => m.grant)
         )?.code,
         Imprevu: formatMontant(
-          row.previsionDepense
-            ?.filter((f: PrevisionDepenseItem) => f.grant)
+          row.imprevuePrevisions
+            ?.filter((f: ImprevuePrevisionItem) => f.grant)
             .reduce((acc, cur) => acc + (Number(cur.imprevue) || 0), 0) || 0
         ),
         "Total budget": formatMontant(
-          (row.resumeDepensePrevue
+          row.resumeDepense
             ?.filter((f: ResumeDepensePrevueItem) => f.grant)
-            .reduce((acc, cur) => acc + (Number(cur.budgetDepense) || 0), 0) ||
-            0) +
-            (row.previsionDepense
-              ?.filter((f: PrevisionDepenseItem) => f.grant)
-              .reduce((acc, cur) => acc + (Number(cur.imprevue) || 0), 0) || 0)
+            .reduce((acc, cur) => acc + (Number(cur.depensePrevue) || 0), 0) ||
+            0
         ),
         "Retenu admin": formatMontant(
-          Number(row.uncompleteTbbs?.map((retenu) => retenu.retenuAdmin) || 0)
+          Number(
+            row.previsionDepense
+              ?.filter((f: PrevisionDepenseItem) => f.regleme != "Especes")
+              .reduce((acc, cur) => acc + (Number(cur.montant) || 0), 0) || 0
+          )
         ),
         "Remis responsable total": formatMontant(
-          (row.resumeDepensePrevue
-            ?.filter((f: ResumeDepensePrevueItem) => f.grant)
-            .reduce((acc, cur) => acc + (Number(cur.budgetDepense) || 0), 0) ||
-            0) +
-            (row.previsionDepense
-              ?.filter((f: PrevisionDepenseItem) => f.grant)
-              .reduce((acc, cur) => acc + (Number(cur.imprevue) || 0), 0) ||
-              0) -
-            Number(row.uncompleteTbbs?.map((retenu) => retenu.retenuAdmin) || 0)
+          Number(
+            row.previsionDepense
+              ?.filter((f: PrevisionDepenseItem) => f.regleme == "Especes")
+              .reduce((acc, cur) => acc + (Number(cur.montant) || 0), 0) || 0
+          )
         ),
-        "Moyen remise":
-          row.uncompleteTbbs?.map((retenu) => retenu.moyenRemise) || "",
-        "Remise Grants": grantEncoursList.find(
-          (g: any) =>
-            g.id == row.rapportDepense?.map((m: RapportDepenseItem) => m.grant)
-        )?.code,
+        "Moyen remise": "Espèces",
+        "Remise responsable": formatMontant(
+          (row.previsionDepense
+            ?.filter((f: PrevisionDepenseItem) => f.grant)
+            .reduce((acc, cur) => acc + (Number(cur.montant) || 0), 0) || 0) -
+            row.rapportDepense
+              ?.filter((f: RapportDepenseItem) => f.grant)
+              .reduce(
+                (acc: any, cur: any) => acc + (Number(cur.montant) || 0),
+                0
+              ) || 0
+        ),
+        Devise: row.uncompleteTbbs?.map((m) => m.devise) || 0,
         "Dépenses admin": formatMontant(
-          Number(row.uncompleteTbbs?.map((m) => m.depenseAdmin) || 0)
+          Number(
+            row.rapportDepense
+              ?.filter((f) => f.modePaiement != "Especes")
+              .reduce((acc, cur) => acc + (Number(cur.montant) || 0), 0) || 0
+          )
         ),
         "Dépenses responsable": formatMontant(
-          Number(row.uncompleteTbbs?.map((m) => m.depensesResp) || 0)
+          Number(
+            row.rapportDepense
+              ?.filter((f) => f.modePaiement == "Especes")
+              .reduce((acc, cur) => acc + (Number(cur.montant) || 0), 0) || 0
+          )
         ),
         "Reliquat admin": formatMontant(
-          Number(row.uncompleteTbbs?.map((retenu) => retenu.retenuAdmin) || 0) -
-            Number(row.uncompleteTbbs?.map((m) => m.depenseAdmin) || 0)
+          row.previsionDepense
+            ?.filter((f: PrevisionDepenseItem) => f.regleme != "Especes")
+            .reduce((acc, cur) => acc + (Number(cur.montant) || 0), 0) ||
+            0 -
+              Number(
+                row.rapportDepense
+                  ?.filter((f) => f.modePaiement != "Especes")
+                  .reduce((acc, cur) => acc + (Number(cur.montant) || 0), 0) ||
+                  0
+              )
         ),
         "Reliquat responsable": formatMontant(
-          (row.resumeDepensePrevue
-            ?.filter((f: ResumeDepensePrevueItem) => f.grant)
-            .reduce((acc, cur) => acc + (Number(cur.budgetDepense) || 0), 0) ||
-            0) +
-            (row.previsionDepense
-              ?.filter((f: PrevisionDepenseItem) => f.grant)
-              .reduce((acc, cur) => acc + (Number(cur.imprevue) || 0), 0) ||
-              0) -
-            Number(
-              row.uncompleteTbbs?.map((retenu) => retenu.retenuAdmin) || 0
-            ) -
-            Number(row.uncompleteTbbs?.map((m) => m.depensesResp) || 0)
+          (row.previsionDepense
+            ?.filter((f: PrevisionDepenseItem) => f.grant)
+            .reduce((acc, cur) => acc + (Number(cur.montant) || 0), 0) || 0) -
+            row.rapportDepense
+              ?.filter((f: RapportDepenseItem) => f.grant)
+              .reduce(
+                (acc: any, cur: any) => acc + (Number(cur.montant) || 0),
+                0
+              ) || 0
         ),
         "Coût mission": formatMontant(
-          Number(row.uncompleteTbbs?.map((m) => m.depenseAdmin) || 0) +
-            Number(row.uncompleteTbbs?.map((m) => m.depensesResp) || 0)
+          Number(
+            row.rapportDepense
+              ?.filter((f) => f.modePaiement != "Especes")
+              .reduce((acc, cur) => acc + (Number(cur.montant) || 0), 0) || 0
+          ) +
+            Number(
+              row.rapportDepense
+                ?.filter((f) => f.modePaiement == "Especes")
+                .reduce((acc, cur) => acc + (Number(cur.montant) || 0), 0) || 0
+            )
         ),
         "Rapport technique": row.uncompleteTbbs
           ?.map((m) => m.ordreDeMission)
@@ -376,7 +402,13 @@ const DashboardMission = () => {
                   Moyen remise
                 </TableCell>
                 <TableCell sx={{ minWidth: 150, maxWidth: 150 }} align="left">
-                  Remise Grants
+                  Remise responsable
+                </TableCell>
+                <TableCell sx={{ minWidth: 150, maxWidth: 150 }} align="left">
+                  Moyen remise
+                </TableCell>
+                <TableCell sx={{ minWidth: 150, maxWidth: 150 }} align="left">
+                  Devise
                 </TableCell>
                 <TableCell sx={{ minWidth: 150, maxWidth: 150 }} align="left">
                   Dépenses admin
@@ -481,10 +513,10 @@ const DashboardMission = () => {
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
                     {formatMontant(
-                      row.resumeDepensePrevue
-                        ?.filter((f: ResumeDepensePrevueItem) => f.grant)
+                      row.previsionDepense
+                        ?.filter((f) => f.grant)
                         .reduce((acc, cur) => {
-                          const budget = Number(cur.budgetDepense);
+                          const budget = Number(cur.montant);
                           return acc + (isNaN(budget) ? 0 : budget);
                         }, 0) || 0
                     )}
@@ -493,14 +525,14 @@ const DashboardMission = () => {
                     {
                       grantEncoursList.find(
                         (g: GrantEncoursItem) =>
-                          g.id === row.resumeDepensePrevue?.map((m) => m.grant)
+                          g.id === row.previsionDepense?.map((m) => m.grant)
                       )?.code
                     }
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
                     {formatMontant(
-                      row.previsionDepense
-                        ?.filter((f: PrevisionDepenseItem) => f.grant)
+                      row.imprevuePrevisions
+                        ?.filter((f) => f.grant)
                         .reduce((acc, cur) => {
                           const imprevu = Number(cur.imprevue);
                           return acc + (isNaN(imprevu) ? 0 : imprevu);
@@ -509,117 +541,146 @@ const DashboardMission = () => {
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
                     {formatMontant(
-                      (row.resumeDepensePrevue
-                        ?.filter((f: ResumeDepensePrevueItem) => f.grant)
+                      row.previsionDepense
+                        ?.filter((f: PrevisionDepenseItem) => f.grant)
                         .reduce((acc, cur) => {
-                          const budget = Number(cur.budgetDepense);
-                          return acc + (isNaN(budget) ? 0 : budget);
-                        }, 0) || 0) +
-                        (row.previsionDepense
-                          ?.filter((f: PrevisionDepenseItem) => f.grant)
-                          .reduce((acc, cur) => {
-                            const imprevu = Number(cur.imprevue);
-                            return acc + (isNaN(imprevu) ? 0 : imprevu);
-                          }, 0) || 0)
+                          const totalBudget = Number(cur.montant);
+                          return acc + (isNaN(totalBudget) ? 0 : totalBudget);
+                        }, 0) || 0
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {formatMontant(
                       Number(
-                        row.uncompleteTbbs?.map(
-                          (retenu) => retenu.retenuAdmin
-                        ) || 0
+                        row.previsionDepense
+                          ?.filter((f) => f.regleme != "Especes")
+                          .reduce((acc, cur) => {
+                            const totalBudget = Number(cur.montant);
+                            return acc + (isNaN(totalBudget) ? 0 : totalBudget);
+                          }, 0) || 0
                       )
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
                     {formatMontant(
-                      (row.resumeDepensePrevue
-                        ?.filter((f: ResumeDepensePrevueItem) => f.grant)
-                        .reduce((acc, cur) => {
-                          const budget = Number(cur.budgetDepense);
-                          return acc + (isNaN(budget) ? 0 : budget);
-                        }, 0) || 0) +
-                        (row.previsionDepense
-                          ?.filter((f: PrevisionDepenseItem) => f.grant)
+                      Number(
+                        row.previsionDepense
+                          ?.filter((f) => f.regleme == "Especes")
                           .reduce((acc, cur) => {
-                            const imprevu = Number(cur.imprevue);
-                            return acc + (isNaN(imprevu) ? 0 : imprevu);
-                          }, 0) || 0) -
-                        Number(
-                          row.uncompleteTbbs?.map(
-                            (retenu) => retenu.retenuAdmin
+                            const totalBudget = Number(cur.montant);
+                            return acc + (isNaN(totalBudget) ? 0 : totalBudget);
+                          }, 0) || 0
+                      )
+                    )}
+                  </TableCell>
+                  <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
+                    {"Espèces"}
+                  </TableCell>
+                  <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
+                    {formatMontant(
+                      (row.previsionDepense
+                        ?.filter((f: PrevisionDepenseItem) => f.grant)
+                        .reduce(
+                          (acc, cur) => acc + (Number(cur.montant) || 0),
+                          0
+                        ) || 0) -
+                        row.rapportDepense
+                          ?.filter((f: RapportDepenseItem) => f.grant)
+                          .reduce(
+                            (acc: any, cur: any) =>
+                              acc + (Number(cur.montant) || 0),
+                            0
                           ) || 0
-                        )
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
-                    {row.uncompleteTbbs?.map((retenu) => retenu.moyenRemise) ||
-                      ""}
+                    {"Espèces"}
                   </TableCell>
-                  <TableCell>
-                    {
-                      grantEncoursList.find(
-                        (g: any) =>
-                          g.id ==
-                          row.rapportDepense!.map(
-                            (m: RapportDepenseItem) => m.grant
-                          )
-                      )?.code
-                    }
+                  <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
+                    {row.uncompleteTbbs?.map((retenu) => retenu.devise) || ""}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {formatMontant(
                       Number(
-                        row.uncompleteTbbs?.map((m) => m.depenseAdmin) || 0
+                        row.rapportDepense
+                          ?.filter((f) => f.modePaiement != "Especes")
+                          .reduce(
+                            (acc, cur) => acc + (Number(cur.montant) || 0),
+                            0
+                          ) || 0
                       )
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {formatMontant(
                       Number(
-                        row.uncompleteTbbs?.map((m) => m.depensesResp) || 0
+                        row.rapportDepense
+                          ?.filter((f) => f.modePaiement == "Especes")
+                          .reduce(
+                            (acc, cur) => acc + (Number(cur.montant) || 0),
+                            0
+                          ) || 0
                       )
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 200, maxWidth: 200 }}>
                     {formatMontant(
                       Number(
-                        row.uncompleteTbbs?.map(
-                          (retenu) => retenu.retenuAdmin
-                        ) || 0
+                        row.rapportDepense
+                          ?.filter((f) => f.grant)
+                          .reduce(
+                            (acc, cur) => acc + (Number(cur.montant) || 0),
+                            0
+                          ) || 0
                       ) -
                         Number(
-                          row.uncompleteTbbs?.map((m) => m.depenseAdmin) || 0
+                          row.previsionDepense
+                            ?.filter((f) => f.grant)
+                            .reduce(
+                              (acc, cur) => acc + (Number(cur.montant) || 0),
+                              0
+                            ) || 0
                         )
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
                     {formatMontant(
-                      (row.resumeDepensePrevue
-                        ?.filter((f: ResumeDepensePrevueItem) => f.grant)
-                        .reduce((acc, cur) => {
-                          const budget = Number(cur.budgetDepense);
-                          return acc + (isNaN(budget) ? 0 : budget);
-                        }, 0) || 0) +
-                        (row.previsionDepense
-                          ?.filter((f: PrevisionDepenseItem) => f.grant)
-                          .reduce((acc, cur) => {
-                            const imprevu = Number(cur.imprevue);
-                            return acc + (isNaN(imprevu) ? 0 : imprevu);
-                          }, 0) || 0) -
+                      Number(
+                        row.rapportDepense
+                          ?.filter((f) => f.grant)
+                          .reduce(
+                            (acc, cur) => acc + (Number(cur.montant) || 0),
+                            0
+                          ) || 0
+                      ) -
                         Number(
-                          row.uncompleteTbbs!.map(
-                            (retenu) => retenu.retenuAdmin
-                          )
-                        ) -
-                        Number(row.uncompleteTbbs!.map((m) => m.depensesResp))
+                          row.previsionDepense
+                            ?.filter((f) => f.grant)
+                            .reduce(
+                              (acc, cur) => acc + (Number(cur.montant) || 0),
+                              0
+                            ) || 0
+                        )
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
                     {formatMontant(
-                      Number(row.uncompleteTbbs!.map((m) => m.depenseAdmin)) +
-                        Number(row.uncompleteTbbs!.map((m) => m.depensesResp))
+                      Number(
+                        row.rapportDepense
+                          ?.filter((f) => f.modePaiement != "Especes")
+                          .reduce(
+                            (acc, cur) => acc + (Number(cur.montant) || 0),
+                            0
+                          ) || 0
+                      ) +
+                        Number(
+                          row.rapportDepense
+                            ?.filter((f) => f.modePaiement == "Especes")
+                            .reduce(
+                              (acc, cur) => acc + (Number(cur.montant) || 0),
+                              0
+                            ) || 0
+                        )
                     )}
                   </TableCell>
                   <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
@@ -673,29 +734,37 @@ const DashboardMission = () => {
                   <TableCell align="left" sx={{ minWidth: 150, maxWidth: 150 }}>
                     {(() => {
                       // Calcul du total des dépenses administratives et des dépenses responsables
-                      const totalDepenseAdmin = row.uncompleteTbbs!.reduce(
-                        (acc, m) => acc + Number(m.depenseAdmin),
-                        0
+                      const totalDepenseAdmin = Number(
+                        row.rapportDepense
+                          ?.filter((f) => f.modePaiement != "Especes")
+                          .reduce(
+                            (acc, cur) => acc + (Number(cur.montant) || 0),
+                            0
+                          ) || 0
                       );
-                      const totalDepenseResp = row.uncompleteTbbs!.reduce(
-                        (acc, m) => acc + Number(m.depensesResp),
-                        0
+                      const totalDepenseResp = Number(
+                        row.rapportDepense
+                          ?.filter((f) => f.modePaiement == "Especes")
+                          .reduce(
+                            (acc, cur) => acc + (Number(cur.montant) || 0),
+                            0
+                          ) || 0
                       );
                       const totalCouMission =
                         totalDepenseAdmin + totalDepenseResp;
 
                       // Calcul du total des budgets
                       const totalBudgets =
-                        row.resumeDepensePrevue
+                        row.rapportDepense
                           ?.filter((f) => f.grant)
                           .reduce((acc, cur) => {
-                            const budget = Number(cur.budgetDepense);
+                            const budget = Number(cur.montant);
                             return acc + (isNaN(budget) ? 0 : budget);
                           }, 0) || 0;
 
                       // Calcul du total des imprévus
                       const totalImprevue =
-                        row.previsionDepense
+                        row.imprevuePrevisions
                           ?.filter((f) => f.grant)
                           .reduce((acc, cur) => {
                             const imprevu = Number(cur.imprevue);

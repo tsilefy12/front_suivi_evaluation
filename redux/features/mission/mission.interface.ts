@@ -9,6 +9,7 @@ import { ContactItem } from "../contact/contactSlice.interface";
 import { DeliverableItem } from "../deliverable/deliverableSlice.interface";
 import { EmployeItem } from "../employe/employeSlice.interface";
 import { ExceptedResultItem } from "../exceptedResult/exceptedResultSlice.interface";
+import { ImprevuePrevisionItem } from "../imprevuePrevision/imprevuePrevision.interface";
 import { LieuxRapportItem } from "../lieuxRapport/lieuxRapport.interface";
 import { MissionGoalItem } from "../missionGoal/missionGoalSlice.interface";
 import { MissionLocationItem } from "../missionLocation/missionLocationSlice.interface";
@@ -86,6 +87,7 @@ export interface MissionItem {
   resultats?: ResultatRapportItem[];
   besoinVehiculeRapport?: BesoinvehiculeRapportItem[];
   calculCarburantRapport?: CalculCarburantRapportItem[];
+  imprevuePrevisions?: ImprevuePrevisionItem[];
 }
 
 export interface MissionInitialState {
