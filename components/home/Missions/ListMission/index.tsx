@@ -614,6 +614,22 @@ const ListMissions = () => {
                       </Link>
                     )}
                   </Stack>
+                  <Stack direction={"row"} gap={2}>
+                    <Link
+                      href={`/validationMission/${mission.id!}/validationPrevision`}
+                    >
+                      <Button variant="text" color="info">
+                        Validation prévision
+                      </Button>
+                    </Link>
+                    <Link
+                      href={`/validationMission/${mission.id!}/validationRapport`}
+                    >
+                      <Button variant="text" color="info">
+                        Validation rapport
+                      </Button>
+                    </Link>
+                  </Stack>
                 </CardFooter>
               </LinkContainer>
             </Grid>
