@@ -1,5 +1,5 @@
-import ValidationPrevision from "../../../components/validationMission/validationPrevision/ValidationPrevision";
-import BackOfficeLayout from "../../../layouts/backOffice";
+import ValidationPrevision from "../../../../components/validationMission/[id]/validationPrevision/ValidationPrevision";
+import BackOfficeLayout from "../../../../layouts/backOffice";
 
 const ValidationPrevisioPages = () => {
   return (

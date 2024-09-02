@@ -268,7 +268,6 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
-                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
@@ -758,6 +757,8 @@ const PrintPdfPrevision = () => {
                     borderLeftColor: "grey",
                     fontSize: 14,
                     width: "100%",
+                    borderTop: 1,
+                    borderTopColor: "grey",
                   }}
                 >
                   <View

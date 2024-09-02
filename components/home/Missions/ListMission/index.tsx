@@ -45,6 +45,7 @@ import {
   defaultLabelDisplayedRows,
   labelRowsPerPage,
 } from "../../../../config/table.config";
+import { fetchConnectedUser } from "../../../../redux/features/auth";
 
 const ListMissions = () => {
   const router = useRouter();
@@ -57,14 +58,17 @@ const ListMissions = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [getMissionId, setGetMissionId] = React.useState<string>("");
   const validate = usePermitted();
+  const { linkedEmployee } = useAppSelector((state) => state.auth);
+
   const data = async () => {
     await fetchEmployes();
     await fetchMissionListe();
   };
   useEffect(() => {
     data();
+    fetchConnectedUser();
   }, []);
-
+  console.log(linkedEmployee);
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer la Mission",
@@ -573,7 +577,13 @@ const ListMissions = () => {
                 </CardBody>
                 <CardFooter
                   key={mission.id!}
-                  sx={{ display: "flex", paddingBottom: 4 }}
+                  sx={{
+                    display: "flex",
+                    paddingBottom: 4,
+                    flexDirection: "row",
+                    width: "100%",
+                    flexWrap: "wrap",
+                  }}
                 >
                   <Stack
                     direction={{ xs: "column", sm: "row" }}

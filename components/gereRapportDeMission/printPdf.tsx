@@ -1643,7 +1643,8 @@ const PrintPdf = () => {
                               (m) => m.depensesResp
                             ) || 0
                           );
-                        return formatMontant(Number(total - valeur) || 0);
+
+                        return formatMontant(Number(total ?? 0 - valeur ?? 0));
                       })()}
                     </Text>
                   </View>

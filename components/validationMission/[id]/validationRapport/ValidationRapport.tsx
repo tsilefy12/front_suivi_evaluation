@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
-import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import useFetchGrants from "../../GrantsEnCours/hooks/getGrants";
-import useFetchEmploys from "../../GrantsEnCours/hooks/getResponsable";
-import useFetchMissionListe from "../../home/Missions/hooks/useFetchMissionListe";
-import { MissionItem } from "../../../redux/features/mission/mission.interface";
-import { axios } from "../../../axios";
-import { enqueueSnackbar } from "../../../redux/features/notification/notificationSlice";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
+import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
+import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
+import useFetchMissionListe from "../../../home/Missions/hooks/useFetchMissionListe";
+import { MissionItem } from "../../../../redux/features/mission/mission.interface";
+import { axios } from "../../../../axios";
+import { enqueueSnackbar } from "../../../../redux/features/notification/notificationSlice";
 import {
   Button,
   Divider,
@@ -16,8 +16,9 @@ import {
   Typography,
 } from "@mui/material";
 import { Check, Close } from "@mui/icons-material";
-import PrintPdf from "../../gereRapportDeMission/printPdf";
+import PrintPdf from "../../../gereRapportDeMission/printPdf";
 import DoneIcon from "@mui/icons-material/Done";
+import { useRouter } from "next/router";
 
 const ValidationRapport = () => {
   const fetchMission = useFetchMissionListe();
@@ -34,12 +35,14 @@ const ValidationRapport = () => {
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
   const [getVerificateurLogistic, setGetVerificateurLogistic] =
     React.useState<boolean>(false);
+  const router = useRouter();
+  const { id } = router.query;
   React.useEffect(() => {
     fetchEmployes();
     fetchGrants();
     fetchMission();
     const mission = missionListe.find((f: MissionItem) =>
-      f.notify!.map((n) => n.missionId).includes(f.id)
+      f.notify!.map((n) => n.missionId).includes(id as string)
     );
     if (mission) {
       const {
@@ -217,7 +220,7 @@ const ValidationRapport = () => {
               {missionListe
                 .filter(
                   (f: MissionItem) =>
-                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((n) => n.missionId).includes(id as string) &&
                     f.notify!.map((m) => m.type == "Rapport")
                 )
                 .map((row: MissionItem) => (
@@ -239,7 +242,7 @@ const ValidationRapport = () => {
               {missionListe
                 .filter(
                   (f: MissionItem) =>
-                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((n) => n.missionId).includes(id as string) &&
                     f.notify!.map((m) => m.type == "Rapport")
                 )
                 .map((row: MissionItem) => (
@@ -303,7 +306,7 @@ const ValidationRapport = () => {
               {missionListe
                 .filter(
                   (f: MissionItem) =>
-                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((n) => n.missionId).includes(id as string) &&
                     f.notify!.map((m) => m.type == "Rapport")
                 )
                 .map((row: MissionItem) => (
@@ -368,7 +371,7 @@ const ValidationRapport = () => {
               {missionListe
                 .filter(
                   (f: MissionItem) =>
-                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((n) => n.missionId).includes(id as string) &&
                     f.notify!.map((m) => m.type == "Rapport")
                 )
                 .map((row: MissionItem) => (
@@ -434,7 +437,7 @@ const ValidationRapport = () => {
               {missionListe
                 .filter(
                   (f: MissionItem) =>
-                    f.notify!.map((n) => n.missionId).includes(f.id) &&
+                    f.notify!.map((n) => n.missionId).includes(id as string) &&
                     f.notify!.map((m) => m.type == "Rapport")
                 )
                 .map((row: MissionItem) => (

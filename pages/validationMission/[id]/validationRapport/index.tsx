@@ -1,5 +1,5 @@
-import ValidationRapport from "../../../components/validationMission/validationRapport/ValidationRapport";
-import BackOfficeLayout from "../../../layouts/backOffice";
+import ValidationRapport from "../../../../components/validationMission/[id]/validationRapport/ValidationRapport";
+import BackOfficeLayout from "../../../../layouts/backOffice";
 
 const ValidationRapportPage = () => {
   return (

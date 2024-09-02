@@ -1,11 +1,11 @@
 import React, { Fragment, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import useFetchGrants from "../../GrantsEnCours/hooks/getGrants";
-import useFetchEmploys from "../../GrantsEnCours/hooks/getResponsable";
-import useFetchMissionListe from "../../home/Missions/hooks/useFetchMissionListe";
-import { MissionItem } from "../../../redux/features/mission/mission.interface";
-import { axios } from "../../../axios";
-import { enqueueSnackbar } from "../../../redux/features/notification/notificationSlice";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
+import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
+import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
+import useFetchMissionListe from "../../../home/Missions/hooks/useFetchMissionListe";
+import { MissionItem } from "../../../../redux/features/mission/mission.interface";
+import { axios } from "../../../../axios";
+import { enqueueSnackbar } from "../../../../redux/features/notification/notificationSlice";
 import {
   Button,
   Divider,
@@ -16,8 +16,9 @@ import {
   Typography,
 } from "@mui/material";
 import { Check, Close } from "@mui/icons-material";
-import PrintPdfPrevision from "../../previsionMissions/printpDFPrevision";
+import PrintPdfPrevision from "../../../previsionMissions/printpDFPrevision";
 import DoneIcon from "@mui/icons-material/Done";
+import { useRouter } from "next/router";
 
 const ValidationPrevision = () => {
   const fetchMission = useFetchMissionListe();
@@ -33,6 +34,8 @@ const ValidationPrevision = () => {
   const [getValidatePaye, setGetValidatePay] = React.useState<boolean>(false);
   const [getValidateLogistique, setGetValidateLogistique] =
     React.useState<boolean>(false);
+  const router = useRouter();
+  const { id } = router.query;
   // const fetchNotify = useFetchNotify();
   // const { notifyList, notify } = useAppSelector((state) => state.notify);
   useEffect(() => {
@@ -40,7 +43,7 @@ const ValidationPrevision = () => {
     fetchEmployes();
     fetchMission();
     const mission = missionListe.find((f: MissionItem) =>
-      f.notify!.map((n) => n.missionId).includes(f.id)
+      f.notify!.map((n) => n.missionId).includes(id as string)
     );
     if (mission) {
       const {
@@ -223,7 +226,7 @@ const ValidationPrevision = () => {
             {missionListe
               .filter(
                 (f: MissionItem) =>
-                  f.notify!.map((n) => n.missionId).includes(f.id) &&
+                  f.notify!.map((n) => n.missionId).includes(id as string) &&
                   f.notify!.map((m) => m.type == "Prevision")
               )
               .map((row: MissionItem) => (
@@ -245,7 +248,7 @@ const ValidationPrevision = () => {
             {missionListe
               .filter(
                 (f: MissionItem) =>
-                  f.notify!.map((n) => n.missionId).includes(f.id) &&
+                  f.notify!.map((n) => n.missionId).includes(id as string) &&
                   f.notify!.map((n: any) => n.type).includes("Prevision")
               )
               .map((row: MissionItem) => (
@@ -309,7 +312,7 @@ const ValidationPrevision = () => {
             {missionListe
               .filter(
                 (f: MissionItem) =>
-                  f.notify!.map((n) => n.missionId).includes(f.id) &&
+                  f.notify!.map((n) => n.missionId).includes(id as string) &&
                   f.notify!.map((n: any) => n.type).includes("Prevision")
               )
               .map((row: MissionItem) => (
@@ -374,7 +377,7 @@ const ValidationPrevision = () => {
             {missionListe
               .filter(
                 (f: MissionItem) =>
-                  f.notify!.map((n) => n.missionId).includes(f.id) &&
+                  f.notify!.map((n) => n.missionId).includes(id as string) &&
                   f.notify!.map((n: any) => n.type).includes("Prevision")
               )
               .map((row: MissionItem) => (
@@ -439,7 +442,7 @@ const ValidationPrevision = () => {
             {missionListe
               .filter(
                 (f: MissionItem) =>
-                  f.notify!.map((n) => n.missionId).includes(f.id) &&
+                  f.notify!.map((n) => n.missionId).includes(id as string) &&
                   f.notify!.map((n: any) => n.type).includes("Prevision")
               )
               .map((row: MissionItem) => (
