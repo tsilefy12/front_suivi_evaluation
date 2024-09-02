@@ -270,9 +270,13 @@ const PrevisionDeMission = () => {
           )
           .map((m: any) => m.reference);
         const endData = [...missions].reverse();
-        const end = endData[0].slice(3);
-
-        return setReference(parseInt(end) + 1);
+        if (endData.length > 0) {
+          const end = endData[0].slice(3);
+          return setReference(parseInt(end) + 1);
+        } else {
+          console.warn("endData array is empty");
+          return setReference(1);
+        }
       }
     } else {
       console.warn("Current mission not found");

@@ -35,12 +35,9 @@ import {
 } from "../../../../../../redux/features/missionary";
 import { MissionaryItem } from "../../../../../../redux/features/missionary/missionarySlice.interface";
 import Moment from "react-moment";
-import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 
 const ListMissionnaires = () => {
   const [open, setOpen] = React.useState(false);
-  const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state) => state.employe);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -56,7 +53,6 @@ const ListMissionnaires = () => {
 
   React.useEffect(() => {
     fetchMissionaryList();
-    fetchEmployes();
   }, []);
 
   const handleClickDelete = async (id: any) => {
@@ -95,7 +91,7 @@ const ListMissionnaires = () => {
                   <TableCell>Nom</TableCell>
                   <TableCell>Date de début</TableCell>
                   <TableCell>Date de retour</TableCell>
-                  <TableCell>Responsable de mission</TableCell>
+                  <TableCell>Responsabilité</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -124,16 +120,7 @@ const ListMissionnaires = () => {
                         }
                       </TableCell>
                       <TableCell component="th" scope="row" key={index}>
-                        {
-                          employees.find(
-                            (e) => e.id === row.missionResponsabilityMissionary
-                          )?.name
-                        }{" "}
-                        {
-                          employees.find(
-                            (e) => e.id == row.missionResponsabilityMissionary
-                          )?.surname
-                        }
+                        {row.missionResponsabilityMissionary}
                       </TableCell>
                       <TableCell align="right" key={index}>
                         <BtnActionContainer

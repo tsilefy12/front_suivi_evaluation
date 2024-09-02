@@ -47,7 +47,7 @@ export default function Mission() {
           </TableHead>
           <TableBody>
             {missionListe
-              .filter((f) => f.status === "En cours")
+              .filter((f) => f.status === "Encours")
               .map((row: MissionItem, index: any) => (
                 <TableRow key={row.id}>
                   <TableCell padding="none" sx={{ paddingY: 1 }}>

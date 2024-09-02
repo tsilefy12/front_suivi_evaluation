@@ -30,14 +30,12 @@ import OSSelectField from "../../../../../shared/select/OSSelectField";
 
 const AddMissionnaire = ({ handleClose }: any) => {
   const router = useRouter();
-  const { id }= router.query;
+  const { id } = router.query;
   const dispatch = useAppDispatch();
   const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector(state =>state.employe)
+  const { employees } = useAppSelector((state) => state.employe);
 
-  const { missionary, isEditing } = useAppSelector(
-    (state) => state.missionary
-  );
+  const { missionary, isEditing } = useAppSelector((state) => state.missionary);
   const fetchMissionaryList = useFetchMissionaryList();
 
   useEffect(() => {
@@ -71,12 +69,22 @@ const AddMissionnaire = ({ handleClose }: any) => {
           isEditing
             ? missionary
             : {
-                lastNameMissionary: isEditing ? missionary?.lastNameMissionary : "",
-                firstNameMissionary: isEditing ? missionary?.firstNameMissionary : "",
-                startDateMissionary: isEditing ? missionary?.startDateMissionary : "",
-                returnDateMissionary: isEditing ? missionary?.returnDateMissionary : "",
-                missionResponsabilityMissionary: isEditing ? missionary?.missionResponsabilityMissionary : "",
-                missionId: isEditing ? missionary?.missionId: id,
+                lastNameMissionary: isEditing
+                  ? missionary?.lastNameMissionary
+                  : "",
+                firstNameMissionary: isEditing
+                  ? missionary?.firstNameMissionary
+                  : "",
+                startDateMissionary: isEditing
+                  ? missionary?.startDateMissionary
+                  : "",
+                returnDateMissionary: isEditing
+                  ? missionary?.returnDateMissionary
+                  : "",
+                missionResponsabilityMissionary: isEditing
+                  ? missionary?.missionResponsabilityMissionary
+                  : "",
+                missionId: isEditing ? missionary?.missionId : id,
               }
         }
         validationSchema={Yup.object({
@@ -114,7 +122,10 @@ const AddMissionnaire = ({ handleClose }: any) => {
                         label="Date de debut"
                         value={formikProps.values.startDateMissionary}
                         onChange={(value: any) =>
-                          formikProps.setFieldValue("startDateMissionary", value)
+                          formikProps.setFieldValue(
+                            "startDateMissionary",
+                            value
+                          )
                         }
                       />
                       <OSDatePicker
@@ -122,17 +133,18 @@ const AddMissionnaire = ({ handleClose }: any) => {
                         label="Date de retour"
                         value={formikProps.values.returnDateMissionary}
                         onChange={(value: any) =>
-                          formikProps.setFieldValue("returnDateMissionary", value)
+                          formikProps.setFieldValue(
+                            "returnDateMissionary",
+                            value
+                          )
                         }
                       />
-                      <OSSelectField
+                      <OSTextField
                         id="outlined-basic"
-                        label="Responsable"
+                        label="Responsabilité"
                         name="missionResponsabilityMissionary"
-                        options={employees}
-                        dataKey={"name"}
-                        valueKey="id"
                         inputProps={{ autoComplete: "off" }}
+                        type="text"
                       />
                     </FormContainer>
                   </DialogContent>

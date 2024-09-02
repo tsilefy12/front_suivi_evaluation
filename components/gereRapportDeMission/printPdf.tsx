@@ -304,16 +304,7 @@ const PrintPdf = () => {
                       }}
                     >
                       <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        {(() => {
-                          const nom = employees.find(
-                            (f) => f.id == m.missionResponsabilityMissionary
-                          )?.name;
-                          const prenom = employees.find(
-                            (f) => f.id == m.missionResponsabilityMissionary
-                          )?.surname;
-
-                          return nom + " " + prenom;
-                        })()}
+                        {mission.missionResponsabilityMissionary}
                       </Text>
                     </View>
                   </View>

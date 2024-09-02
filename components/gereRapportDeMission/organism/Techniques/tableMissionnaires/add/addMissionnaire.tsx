@@ -21,8 +21,6 @@ import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { cancelEdit } from "../../../../../../redux/features/missionary/missionarySlice";
 import useFetchMissionaryList from "../hooks/useFetchMissionaryList";
-import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
-import { EmployeItem } from "../../../../../../redux/features/employe/employeSlice.interface";
 import {
   createMissionaryRapport,
   updateMissionaryRapport,
@@ -38,25 +36,22 @@ const AddMissionnaireRapport = ({ handleClose }: any) => {
     (state: any) => state.missionaires
   );
   const fetchMissionaryList = useFetchMissionaryList();
-  const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) => state.employe);
 
   useEffect(() => {
     fetchMissionaryList();
-    fetchEmployes();
   }, [router.query]);
 
-  const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
-    isEditing
-      ? employees.filter((employee: any) =>
-          missionaires?.missionResponsabilityMissionary?.includes(employee.id!)
-        )
-      : []
-  );
+  // const [selectedEmployes, setSelectedEmployes] = useState<EmployeItem[]>(
+  //   isEditing
+  //     ? employees.filter((employee: any) =>
+  //         missionaires?.missionResponsabilityMissionary?.includes(employee.id!)
+  //       )
+  //     : []
+  // );
   const handleSubmit = async (values: any) => {
-    values.missionResponsabilityMissionary = [
-      ...selectedEmployes.map((e) => e.id),
-    ];
+    // values.missionResponsabilityMissionary = [
+    //   ...selectedEmployes.map((e) => e.id),
+    // ];
     try {
       if (isEditing) {
         await dispatch(
@@ -152,25 +147,12 @@ const AddMissionnaireRapport = ({ handleClose }: any) => {
                           )
                         }
                       />
-                      <Autocomplete
-                        multiple
-                        id="tags-standard"
-                        options={employees}
-                        getOptionLabel={(employee: any) =>
-                          `${employee.name} ${employee.surname}` as string
-                        }
-                        value={selectedEmployes}
-                        onChange={(event, newValue) => {
-                          setSelectedEmployes(newValue);
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            id="outlined-basic"
-                            label="Responsable de mission"
-                            variant="outlined"
-                          />
-                        )}
+                      <OSTextField
+                        id="outlined-basic"
+                        label="Responsabilité"
+                        name="missionResponsabilityMissionary"
+                        inputProps={{ autoComplete: "off" }}
+                        type="text"
                       />
                     </FormContainer>
                   </DialogContent>

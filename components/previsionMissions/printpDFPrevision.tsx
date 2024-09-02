@@ -348,7 +348,6 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
-                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
@@ -428,7 +427,6 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
-                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
@@ -563,7 +561,6 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                       // borderTop: 1,
                       // borderTopColor: "grey",
-                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
@@ -713,16 +710,7 @@ const PrintPdfPrevision = () => {
                       }}
                     >
                       <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
-                        {(() => {
-                          const nom = employees.find(
-                            (f) => f.id == m.missionResponsabilityMissionary
-                          )?.name;
-                          const prenom = employees.find(
-                            (f) => f.id == m.missionResponsabilityMissionary
-                          )?.surname;
-
-                          return nom + " " + prenom;
-                        })()}
+                        {mission.missionResponsabilityMissionary}
                       </Text>
                     </View>
                   </View>
@@ -748,7 +736,6 @@ const PrintPdfPrevision = () => {
                     ...styles.tableCol,
                     width: "100%",
                     height: "auto",
-                    backgroundColor: "darkgrey",
                     border: "none",
                     textAlign: "center",
                   }}
@@ -758,6 +745,7 @@ const PrintPdfPrevision = () => {
                       ...styles.tableCellHeader,
                       fontSize: 14,
                       border: "none",
+                      color: "#1976d2",
                     }}
                   >
                     Autre informations importantes
@@ -777,7 +765,6 @@ const PrintPdfPrevision = () => {
                       ...styles.tableCol,
                       width: "50%",
                       textAlign: "left",
-                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
@@ -797,7 +784,6 @@ const PrintPdfPrevision = () => {
                       textAlign: "center",
                       borderTop: 1,
                       borderTopColor: "grey",
-                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
@@ -824,7 +810,6 @@ const PrintPdfPrevision = () => {
                       ...styles.tableCol,
                       width: "50%",
                       textAlign: "left",
-                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
@@ -977,7 +962,6 @@ const PrintPdfPrevision = () => {
                       ...styles.tableCol,
                       width: "50%",
                       textAlign: "left",
-                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
@@ -1130,7 +1114,6 @@ const PrintPdfPrevision = () => {
                       ...styles.tableCol,
                       width: "50%",
                       textAlign: "left",
-                      backgroundColor: "darkgrey",
                     }}
                   >
                     <Text
@@ -1759,7 +1742,13 @@ const PrintPdfPrevision = () => {
                       textAlign: "left",
                     }}
                   >
-                    <Text style={{ ...styles.tableCellHeader, fontSize: 14 }}>
+                    <Text
+                      style={{
+                        ...styles.tableCellHeader,
+                        fontSize: 14,
+                        paddingRight: 4,
+                      }}
+                    >
                       Nb
                     </Text>
                   </View>
@@ -1879,6 +1868,7 @@ const PrintPdfPrevision = () => {
                         display: "flex",
                         flexWrap: "wrap",
                         textAlign: "left",
+                        paddingRight: 4,
                       }}
                     >
                       <Text

@@ -63,7 +63,7 @@ const NavbarBackOffice = ({ matches }: any) => {
               color="inherit"
             >
               <Badge
-                badgeContent={17}
+                badgeContent={1}
                 color="error"
                 sx={{
                   ".MuiBadge-badge": {

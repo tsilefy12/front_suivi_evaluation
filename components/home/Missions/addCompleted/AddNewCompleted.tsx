@@ -82,10 +82,10 @@ const AddNewCompleted = ({ fermerDialog, getMissionId }: any) => {
                 type: isEditing ? uncompleteTbb?.type : "",
                 devise: isEditing ? uncompleteTbb?.devise : "",
                 coursDevise: isEditing ? uncompleteTbb?.coursDevise : 0,
-                retenuAdmin: isEditing ? uncompleteTbb?.retenuAdmin : 0,
-                moyenRemise: isEditing ? uncompleteTbb?.moyenRemise : "",
-                depenseAdmin: isEditing ? uncompleteTbb?.depenseAdmin : 0,
-                depensesResp: isEditing ? uncompleteTbb?.depensesResp : 0,
+                // retenuAdmin: isEditing ? uncompleteTbb?.retenuAdmin : 0,
+                // moyenRemise: isEditing ? uncompleteTbb?.moyenRemise : "",
+                // depenseAdmin: isEditing ? uncompleteTbb?.depenseAdmin : 0,
+                // depensesResp: isEditing ? uncompleteTbb?.depensesResp : 0,
               }
         }
         validationSchema={Yup.object({
@@ -144,7 +144,7 @@ const AddNewCompleted = ({ fermerDialog, getMissionId }: any) => {
               <DialogContent sx={{ width: "100%" }}>
                 <Divider />
                 <div style={{ marginTop: 15 }}>
-                  <Stack direction={"row"} gap={2} paddingBottom={2}>
+                  {/* <Stack direction={"row"} gap={2} paddingBottom={2}>
                     <OSTextField
                       id="outlined-basic"
                       label="Retenu admin"
@@ -172,7 +172,7 @@ const AddNewCompleted = ({ fermerDialog, getMissionId }: any) => {
                       type="number"
                       inputProps={{ autoComplete: "off", min: 0 }}
                     />
-                  </Stack>
+                  </Stack> */}
                   <Stack direction={"row"} gap={2} paddingBottom={2}>
                     <OSSelectField
                       id="outlined-basic"

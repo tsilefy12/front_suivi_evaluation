@@ -28,8 +28,6 @@ import {
   deleteMissionaryRapport,
   editMissionaryRapport,
 } from "../../../../../../redux/features/missionaires";
-import { MissionairesItem } from "../../../../../../redux/features/missionaires/missionaires.interface";
-import useFetchEmploys from "../../../../../GrantsEnCours/hooks/getResponsable";
 import AddMissionnaireRapport from "../add/addMissionnaire";
 import useFetchMissionaryRapportList from "../hooks/useFetchMissionaryList";
 
@@ -49,12 +47,9 @@ const ListMissionnairesRapport = () => {
   const { missionaireslist } = useAppSelector(
     (state: any) => state.missionaires
   );
-  const fetchEmployes = useFetchEmploys();
-  const { employees } = useAppSelector((state: any) => state.employe);
 
   React.useEffect(() => {
     fetchMissionaryRapportList();
-    fetchEmployes();
   }, []);
 
   //suppression
@@ -124,40 +119,7 @@ const ListMissionnairesRapport = () => {
                         }
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        <FormControl
-                          sx={{
-                            height:
-                              Array.isArray(
-                                row.missionResponsabilityMissionary
-                              ) &&
-                              row.missionResponsabilityMissionary.length <= 2
-                                ? "auto"
-                                : 70,
-                            overflow: "auto",
-                          }}
-                        >
-                          {Array.isArray(row.missionResponsabilityMissionary) &&
-                            row.missionResponsabilityMissionary.map(
-                              (lp: any) => {
-                                return (
-                                  <Stack
-                                    direction="column"
-                                    spacing={2}
-                                    key={lp}
-                                  >
-                                    {
-                                      employees.find((e: any) => e.id === lp)
-                                        ?.name
-                                    }{" "}
-                                    {
-                                      employees.find((e: any) => e.id === lp)
-                                        ?.surname
-                                    }
-                                  </Stack>
-                                );
-                              }
-                            )}
-                        </FormControl>
+                        {row.missionResponsabilityMissionary}
                       </TableCell>
                       <TableCell align="right">
                         <BtnActionContainer
