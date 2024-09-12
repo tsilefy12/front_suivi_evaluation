@@ -15,7 +15,7 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import { Check, Close } from "@mui/icons-material";
+import { ArrowBack, Check, Close } from "@mui/icons-material";
 import PrintPdf from "../../../gereRapportDeMission/printPdf";
 import DoneIcon from "@mui/icons-material/Done";
 import { useRouter } from "next/router";
@@ -224,7 +224,12 @@ const ValidationRapport = () => {
   ];
   return (
     <>
-      <Button variant="contained" onClick={() => router.back()}>
+      <Button
+        color="info"
+        onClick={() => router.back()}
+        sx={{ paddingLeft: 4 }}
+        startIcon={<ArrowBack />}
+      >
         Retour
       </Button>
       <Stack width={{ xs: "100%", sm: "100%", md: "100%" }}>
