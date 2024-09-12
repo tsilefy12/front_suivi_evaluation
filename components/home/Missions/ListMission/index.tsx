@@ -77,7 +77,7 @@ const ListMissions = () => {
     data();
     fetchConnectedUser();
   }, []);
-  console.log("id auth", user);
+  // console.log("id auth", user);
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer la Mission",
@@ -660,14 +660,22 @@ const ListMissions = () => {
                     <Link
                       href={`/validationMission/${mission.id!}/validationPrevision`}
                     >
-                      <Button variant="text" color="info" disabled={!getId}>
+                      <Button
+                        variant="text"
+                        color="info"
+                        disabled={!getId && user?.name != "Admin"}
+                      >
                         Validation prévision
                       </Button>
                     </Link>
                     <Link
                       href={`/validationMission/${mission.id!}/validationRapport`}
                     >
-                      <Button variant="text" color="info" disabled={!getId}>
+                      <Button
+                        variant="text"
+                        color="info"
+                        disabled={!getId && user?.name != "Admin"}
+                      >
                         Validation rapport
                       </Button>
                     </Link>
