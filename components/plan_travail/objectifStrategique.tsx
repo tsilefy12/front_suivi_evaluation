@@ -280,10 +280,11 @@ const ListObjectifStrategique = ({
                             handleClickEdit(getSelectId);
                             handleMenuClose();
                           }}
-                          disabled={planTravaillist
-                            .flatMap((row) => row.clotures)
-                            .map((c: any) => c.planTravaileId)
-                            .includes(row.id)}
+                        disabled={planTravaillist
+  .flatMap((row) => row.clotures)
+  .map((c: any) => c?.planTravaileId) // Ajout de l'opérateur de sécurité "?"
+  .includes(row.id)}
+
                         >
                           <EditIcon color="primary" />
                           Modifier
