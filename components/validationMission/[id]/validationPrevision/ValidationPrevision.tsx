@@ -19,6 +19,9 @@ import { Check, Close } from "@mui/icons-material";
 import PrintPdfPrevision from "../../../previsionMissions/printpDFPrevision";
 import DoneIcon from "@mui/icons-material/Done";
 import { useRouter } from "next/router";
+import useFetchStagiaire from "../../../GrantsEnCours/hooks/getStagiaire";
+import useFetchPrestataire from "../../../GrantsEnCours/hooks/getPrestataire";
+import { fetchConnectedUser } from "../../../../redux/features/auth";
 
 const ValidationPrevision = () => {
   const fetchMission = useFetchMissionListe();
@@ -36,11 +39,24 @@ const ValidationPrevision = () => {
     React.useState<boolean>(false);
   const router = useRouter();
   const { id } = router.query;
+  const fetchStagiaire = useFetchStagiaire();
+  const { interns } = useAppSelector((state: any) => state.stagiaire);
+  const fetchPrestataire = useFetchPrestataire();
+  const { prestataireListe } = useAppSelector(
+    (state: any) => state.prestataire
+  );
+  const { user } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    fetchConnectedUser();
+  }, []);
   // const fetchNotify = useFetchNotify();
   // const { notifyList, notify } = useAppSelector((state) => state.notify);
   useEffect(() => {
     fetchGrants();
     fetchEmployes();
+    fetchStagiaire();
+    fetchPrestataire();
     fetchMission();
     const mission = missionListe.find((f: MissionItem) =>
       f.notify!.map((n) => n.missionId).includes(id as string)
@@ -204,301 +220,340 @@ const ValidationPrevision = () => {
       console.log(error);
     }
   };
+  const formatOptions = (options: any) => {
+    return options.map((option: any) => ({
+      id: option.id,
+      name: option.name,
+      surname: option.surname,
+      email: option.email,
+    }));
+  };
+
+  const allOptions = [
+    ...formatOptions(employees),
+    ...formatOptions(interns),
+    ...formatOptions(prestataireListe),
+  ];
+
   return (
-    <Stack width={{ xs: "100%", sm: "100%", md: "100%" }}>
-      {missionListe.length == 0 ? (
-        <LinearProgress color="success" sx={{ width: "100%" }} />
-      ) : null}
-      <CardPrevision
-        key={0}
-        sx={{
-          height: "calc(100vh - 250px)",
-          paddingTop: 1,
-          overflow: "auto",
-        }}
-      >
-        <Typography variant="h6" sx={{ textTransform: "uppercase" }}>
-          Etat des prévisions
-        </Typography>
-        <Stack spacing={2}>
-          <div>
-            <FormLabel>Elaboré par : </FormLabel>
-            {missionListe
-              .filter(
-                (f: MissionItem) =>
-                  f.notify!.map((n) => n.missionId).includes(id as string) &&
-                  f.notify!.map((m) => m.type == "Prevision")
-              )
-              .map((row: MissionItem) => (
-                <span key={row.id!}>
-                  {
-                    employees.find((e: any) => e.id === row.missionManagerId)
-                      ?.name as string
-                  }{" "}
-                  {
-                    employees.find((e: any) => e.id === row.missionManagerId)
-                      ?.surname as string
-                  }
-                </span>
-              ))}
-          </div>
-          <Divider />
-          <Typography>
-            <span> Vérifié financièrement par : </span>
-            {missionListe
-              .filter(
-                (f: MissionItem) =>
-                  f.notify!.map((n) => n.missionId).includes(id as string) &&
-                  f.notify!.map((n: any) => n.type).includes("Prevision")
-              )
-              .map((row: MissionItem) => (
-                <Stack
-                  direction={"column"}
-                  gap={2}
-                  justifyContent={"space-between"}
-                  alignItems={"start"}
-                  key={row.id!}
-                >
-                  <FormLabel>
-                    {" "}
+    <>
+      <Button variant="contained" onClick={() => router.back()}>
+        Retour
+      </Button>
+      <Stack width={{ xs: "100%", sm: "100%", md: "100%" }}>
+        {missionListe.length == 0 ? (
+          <LinearProgress color="success" sx={{ width: "100%" }} />
+        ) : null}
+        <CardPrevision
+          key={0}
+          sx={{
+            height: "calc(100vh - 250px)",
+            paddingTop: 1,
+            overflow: "auto",
+          }}
+        >
+          <Typography variant="h6" sx={{ textTransform: "uppercase" }}>
+            Etat des prévisions
+          </Typography>
+          <Stack spacing={2}>
+            <div>
+              <FormLabel>Elaboré par : </FormLabel>
+              {missionListe
+                .filter(
+                  (f: MissionItem) =>
+                    f.notify!.map((n) => n.missionId).includes(id as string) &&
+                    f.notify!.map((m) => m.type == "Prevision")
+                )
+                .map((row: MissionItem) => (
+                  <span key={row.id!}>
                     {
-                      employees.find((e: any) => e.id === row.verifyFinancial)
+                      employees.find((e: any) => e.id === row.missionManagerId)
                         ?.name as string
                     }{" "}
                     {
-                      employees.find((e: any) => e.id === row.verifyFinancial)
+                      employees.find((e: any) => e.id === row.missionManagerId)
                         ?.surname as string
                     }
-                  </FormLabel>
-                  <Stack direction={"row"} gap={4}>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      startIcon={<DoneIcon />}
-                      onClick={() =>
-                        handleValidationFinance(
-                          row.verifyFinancial!,
-                          row.id!,
-                          getVerificateurFinance == true ? false : true,
-                          "finance"
-                        )
+                  </span>
+                ))}
+            </div>
+            <Divider />
+            <Typography>
+              <span> Vérifié financièrement par : </span>
+              {missionListe
+                .filter(
+                  (f: MissionItem) =>
+                    f.notify!.map((n) => n.missionId).includes(id as string) &&
+                    f.notify!.map((n: any) => n.type).includes("Prevision")
+                )
+                .map((row: MissionItem) => (
+                  <Stack
+                    direction={"column"}
+                    gap={2}
+                    justifyContent={"space-between"}
+                    alignItems={"start"}
+                    key={row.id!}
+                  >
+                    <FormLabel>
+                      {" "}
+                      {
+                        employees.find((e: any) => e.id === row.verifyFinancial)
+                          ?.name as string
+                      }{" "}
+                      {
+                        employees.find((e: any) => e.id === row.verifyFinancial)
+                          ?.surname as string
                       }
-                    >
-                      Vérifier financièrement
-                    </Button>
-                    <FormLabel
-                      sx={{
-                        display:
-                          getVerificateurFinance == true ? "none" : "block",
-                      }}
-                    >
-                      <Close color="error" />
                     </FormLabel>
-                    <FormLabel
-                      sx={{
-                        display:
-                          getVerificateurFinance == true ? "block" : "none",
-                      }}
-                    >
-                      <Check color="primary" />
-                    </FormLabel>
+                    <Stack direction={"row"} gap={4}>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        startIcon={<DoneIcon />}
+                        onClick={() =>
+                          handleValidationFinance(
+                            row.verifyFinancial!,
+                            row.id!,
+                            getVerificateurFinance == true ? false : true,
+                            "finance"
+                          )
+                        }
+                        disabled={
+                          !allOptions.find(
+                            (option: any) => option.email === user?.email
+                          )?.id
+                        }
+                      >
+                        Vérifier financièrement
+                      </Button>
+                      <FormLabel
+                        sx={{
+                          display:
+                            getVerificateurFinance == true ? "none" : "block",
+                        }}
+                      >
+                        <Close color="error" />
+                      </FormLabel>
+                      <FormLabel
+                        sx={{
+                          display:
+                            getVerificateurFinance == true ? "block" : "none",
+                        }}
+                      >
+                        <Check color="primary" />
+                      </FormLabel>
+                    </Stack>
                   </Stack>
-                </Stack>
-              ))}
-          </Typography>
-          <Divider />
-          <Typography>
-            <span>Vérifié techniquement par : </span>
-            {missionListe
-              .filter(
-                (f: MissionItem) =>
-                  f.notify!.map((n) => n.missionId).includes(id as string) &&
-                  f.notify!.map((n: any) => n.type).includes("Prevision")
-              )
-              .map((row: MissionItem) => (
-                <Stack
-                  direction={"column"}
-                  gap={2}
-                  justifyContent={"space-between"}
-                  alignItems={"start"}
-                  key={row.id!}
-                >
-                  <FormLabel>
+                ))}
+            </Typography>
+            <Divider />
+            <Typography>
+              <span>Vérifié techniquement par : </span>
+              {missionListe
+                .filter(
+                  (f: MissionItem) =>
+                    f.notify!.map((n) => n.missionId).includes(id as string) &&
+                    f.notify!.map((n: any) => n.type).includes("Prevision")
+                )
+                .map((row: MissionItem) => (
+                  <Stack
+                    direction={"column"}
+                    gap={2}
+                    justifyContent={"space-between"}
+                    alignItems={"start"}
+                    key={row.id!}
+                  >
+                    <FormLabel>
+                      {
+                        employees.find((e: any) => e.id === row.verifyTechnic)
+                          ?.name as string
+                      }{" "}
+                      {
+                        employees.find((e: any) => e.id === row.verifyTechnic)
+                          ?.surname as string
+                      }
+                    </FormLabel>
+                    <Stack direction={"row"} gap={4}>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        startIcon={<DoneIcon />}
+                        onClick={() =>
+                          handleValidationTechnique(
+                            row.verifyTechnic!,
+                            row.id!,
+                            getVerificateurTechnic == true ? false : true,
+                            "technique"
+                          )
+                        }
+                        disabled={
+                          getVerificateurFinance == false ||
+                          !allOptions.find(
+                            (option: any) => option.email === user?.email
+                          )?.id
+                        }
+                      >
+                        Vérifier Techniquement
+                      </Button>
+                      <FormLabel
+                        sx={{
+                          display:
+                            getVerificateurTechnic == true ? "none" : "block",
+                        }}
+                        disabled={getVerificateurFinance == false}
+                      >
+                        <Close color="error" />
+                      </FormLabel>
+                      <FormLabel
+                        sx={{
+                          display:
+                            getVerificateurTechnic == true ? "block" : "none",
+                        }}
+                      >
+                        <Check color="primary" />
+                      </FormLabel>
+                    </Stack>
+                  </Stack>
+                ))}
+            </Typography>
+            <Divider />
+            <Typography>
+              <span>Vérifié logistiquement par : </span>
+              {missionListe
+                .filter(
+                  (f: MissionItem) =>
+                    f.notify!.map((n) => n.missionId).includes(id as string) &&
+                    f.notify!.map((n: any) => n.type).includes("Prevision")
+                )
+                .map((row: MissionItem) => (
+                  <Stack
+                    direction={"column"}
+                    gap={2}
+                    justifyContent={"space-between"}
+                    alignItems={"start"}
+                    key={row.id!}
+                  >
+                    <FormLabel>
+                      {
+                        employees.find(
+                          (e: any) => e.id === row.validateLogistique
+                        )?.name as string
+                      }{" "}
+                      {
+                        employees.find(
+                          (e: any) => e.id === row.validateLogistique
+                        )?.surname as string
+                      }
+                    </FormLabel>
+                    <Stack direction={"row"} gap={4}>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        startIcon={<DoneIcon />}
+                        onClick={() =>
+                          handleValidateLogistique(
+                            row.validateLogistic!,
+                            row.id!,
+                            getValidateLogistique == true ? false : true,
+                            "logistique"
+                          )
+                        }
+                        disabled={
+                          !allOptions.find(
+                            (option: any) => option.email === user?.email
+                          )?.id
+                        }
+                      >
+                        Valider Logistique
+                      </Button>
+                      <FormLabel
+                        sx={{
+                          display:
+                            getValidateLogistique == true ? "none" : "block",
+                        }}
+                      >
+                        <Close color="error" />
+                      </FormLabel>
+                      <FormLabel
+                        sx={{
+                          display:
+                            getValidateLogistique == true ? "block" : "none",
+                        }}
+                      >
+                        <Check color="primary" />
+                      </FormLabel>
+                    </Stack>
+                  </Stack>
+                ))}
+            </Typography>
+            <Divider />
+            <Typography>
+              {missionListe
+                .filter(
+                  (f: MissionItem) =>
+                    f.notify!.map((n) => n.missionId).includes(id as string) &&
+                    f.notify!.map((n: any) => n.type).includes("Prevision")
+                )
+                .map((row: MissionItem) => (
+                  <Fragment key={row.id}>
+                    <span>Payé par :</span>
+                    <br></br>
                     {
-                      employees.find((e: any) => e.id === row.verifyTechnic)
+                      employees.find((e: any) => e.id === row.validateFinancial)
                         ?.name as string
                     }{" "}
                     {
-                      employees.find((e: any) => e.id === row.verifyTechnic)
+                      employees.find((e: any) => e.id === row.validateFinancial)
                         ?.surname as string
                     }
-                  </FormLabel>
-                  <Stack direction={"row"} gap={4}>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      startIcon={<DoneIcon />}
-                      onClick={() =>
-                        handleValidationTechnique(
-                          row.verifyTechnic!,
-                          row.id!,
-                          getVerificateurTechnic == true ? false : true,
-                          "technique"
-                        )
-                      }
-                      disabled={getVerificateurFinance == false}
-                    >
-                      Vérifier Techniquement
-                    </Button>
-                    <FormLabel
-                      sx={{
-                        display:
-                          getVerificateurTechnic == true ? "none" : "block",
-                      }}
-                      disabled={getVerificateurFinance == false}
-                    >
-                      <Close color="error" />
-                    </FormLabel>
-                    <FormLabel
-                      sx={{
-                        display:
-                          getVerificateurTechnic == true ? "block" : "none",
-                      }}
-                    >
-                      <Check color="primary" />
-                    </FormLabel>
-                  </Stack>
-                </Stack>
-              ))}
-          </Typography>
-          <Divider />
-          <Typography>
-            <span>Vérifié logistiquement par : </span>
-            {missionListe
-              .filter(
-                (f: MissionItem) =>
-                  f.notify!.map((n) => n.missionId).includes(id as string) &&
-                  f.notify!.map((n: any) => n.type).includes("Prevision")
-              )
-              .map((row: MissionItem) => (
-                <Stack
-                  direction={"column"}
-                  gap={2}
-                  justifyContent={"space-between"}
-                  alignItems={"start"}
-                  key={row.id!}
-                >
-                  <FormLabel>
-                    {
-                      employees.find(
-                        (e: any) => e.id === row.validateLogistique
-                      )?.name as string
-                    }{" "}
-                    {
-                      employees.find(
-                        (e: any) => e.id === row.validateLogistique
-                      )?.surname as string
-                    }
-                  </FormLabel>
-                  <Stack direction={"row"} gap={4}>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      startIcon={<DoneIcon />}
-                      onClick={() =>
-                        handleValidateLogistique(
-                          row.validateLogistic!,
-                          row.id!,
-                          getValidateLogistique == true ? false : true,
-                          "logistique"
-                        )
-                      }
-                      // disabled={getVerificateurLogistic == false}
-                    >
-                      Valider Logistique
-                    </Button>
-                    <FormLabel
-                      sx={{
-                        display:
-                          getValidateLogistique == true ? "none" : "block",
-                      }}
-                    >
-                      <Close color="error" />
-                    </FormLabel>
-                    <FormLabel
-                      sx={{
-                        display:
-                          getValidateLogistique == true ? "block" : "none",
-                      }}
-                    >
-                      <Check color="primary" />
-                    </FormLabel>
-                  </Stack>
-                </Stack>
-              ))}
-          </Typography>
-          <Divider />
-          <Typography>
-            {missionListe
-              .filter(
-                (f: MissionItem) =>
-                  f.notify!.map((n) => n.missionId).includes(id as string) &&
-                  f.notify!.map((n: any) => n.type).includes("Prevision")
-              )
-              .map((row: MissionItem) => (
-                <Fragment key={row.id}>
-                  <span>Payé par :</span>
-                  <br></br>
-                  {
-                    employees.find((e: any) => e.id === row.validateFinancial)
-                      ?.name as string
-                  }{" "}
-                  {
-                    employees.find((e: any) => e.id === row.validateFinancial)
-                      ?.surname as string
-                  }
-                  <Stack direction={"row"} gap={4}>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      startIcon={<DoneIcon />}
-                      onClick={() =>
-                        handleValidationPaye(
-                          row.validateFinancial!,
-                          row.id!,
-                          getValidatePaye == true ? false : true,
-                          "paye"
-                        )
-                      }
-                      disabled={getVerificateurTechnic == false}
-                    >
-                      Vérsé
-                    </Button>
-                    <FormLabel
-                      sx={{
-                        display: getValidatePaye == true ? "none" : "block",
-                      }}
-                    >
-                      <Close color="error" />
-                    </FormLabel>
-                    <FormLabel
-                      sx={{
-                        display: getValidatePaye == true ? "block" : "none",
-                      }}
-                    >
-                      <Check color="primary" />
-                    </FormLabel>
-                  </Stack>
-                </Fragment>
-              ))}
-          </Typography>
-          <Divider />
-        </Stack>
-        <CardFooter>
-          <PrintPdfPrevision />
-        </CardFooter>
-      </CardPrevision>
-    </Stack>
+                    <Stack direction={"row"} gap={4}>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        startIcon={<DoneIcon />}
+                        onClick={() =>
+                          handleValidationPaye(
+                            row.validateFinancial!,
+                            row.id!,
+                            getValidatePaye == true ? false : true,
+                            "paye"
+                          )
+                        }
+                        disabled={
+                          getVerificateurTechnic == false ||
+                          allOptions.find(
+                            (option: any) => option.email === user?.email
+                          )?.id
+                        }
+                      >
+                        Vérsé
+                      </Button>
+                      <FormLabel
+                        sx={{
+                          display: getValidatePaye == true ? "none" : "block",
+                        }}
+                      >
+                        <Close color="error" />
+                      </FormLabel>
+                      <FormLabel
+                        sx={{
+                          display: getValidatePaye == true ? "block" : "none",
+                        }}
+                      >
+                        <Check color="primary" />
+                      </FormLabel>
+                    </Stack>
+                  </Fragment>
+                ))}
+            </Typography>
+            <Divider />
+          </Stack>
+          <CardFooter>
+            <PrintPdfPrevision />
+          </CardFooter>
+        </CardPrevision>
+      </Stack>
+    </>
   );
 };
 export default ValidationPrevision;

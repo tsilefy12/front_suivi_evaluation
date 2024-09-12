@@ -46,6 +46,8 @@ import {
   labelRowsPerPage,
 } from "../../../../config/table.config";
 import { fetchConnectedUser } from "../../../../redux/features/auth";
+import useFetchStagiaire from "../../../GrantsEnCours/hooks/getStagiaire";
+import useFetchPrestataire from "../../../GrantsEnCours/hooks/getPrestataire";
 
 const ListMissions = () => {
   const router = useRouter();
@@ -55,20 +57,27 @@ const ListMissions = () => {
   const fetchMissionListe = useFetchMissionListe();
   const fetchEmployes = useFetchEmployes();
   const { employees } = useAppSelector((state) => state.employe);
+  const fetchStagiaire = useFetchStagiaire();
+  const { interns } = useAppSelector((state: any) => state.stagiaire);
+  const fetchPrestataire = useFetchPrestataire();
+  const { prestataireListe } = useAppSelector(
+    (state: any) => state.prestataire
+  );
   const [open, setOpen] = React.useState<boolean>(false);
   const [getMissionId, setGetMissionId] = React.useState<string>("");
   const validate = usePermitted();
-  const { linkedEmployee } = useAppSelector((state) => state.auth);
-
+  const { user } = useAppSelector((state) => state.auth);
   const data = async () => {
     await fetchEmployes();
+    await fetchStagiaire();
+    await fetchPrestataire();
     await fetchMissionListe();
   };
   useEffect(() => {
     data();
     fetchConnectedUser();
   }, []);
-  console.log(linkedEmployee);
+  console.log("id auth", user);
   const handleClickDelete = async (id: any) => {
     confirm({
       title: "Supprimer la Mission",
@@ -301,6 +310,29 @@ const ListMissions = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataMission.length) : 0;
 
+  const formatOptions = (options: any) => {
+    return options.map((option: any) => ({
+      id: option.id,
+      name: option.name,
+      surname: option.surname,
+      email: option.email,
+    }));
+  };
+
+  const allOptions = [
+    ...formatOptions(employees),
+    ...formatOptions(interns),
+    ...formatOptions(prestataireListe),
+  ];
+  const [getId, setGetId] = React.useState<string>("");
+  useEffect(() => {
+    if (user) {
+      const idUser = allOptions.find(
+        (option: any) => option.email === user.email
+      )?.id;
+      setGetId(idUser);
+    }
+  }, [allOptions, user]);
   return (
     <Container maxWidth="xl">
       <SectionNavigation direction="row" justifyContent="space-between" mb={1}>
@@ -628,14 +660,14 @@ const ListMissions = () => {
                     <Link
                       href={`/validationMission/${mission.id!}/validationPrevision`}
                     >
-                      <Button variant="text" color="info">
+                      <Button variant="text" color="info" disabled={!getId}>
                         Validation prévision
                       </Button>
                     </Link>
                     <Link
                       href={`/validationMission/${mission.id!}/validationRapport`}
                     >
-                      <Button variant="text" color="info">
+                      <Button variant="text" color="info" disabled={!getId}>
                         Validation rapport
                       </Button>
                     </Link>

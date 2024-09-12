@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/reduxHooks";
 import useFetchGrants from "../../../GrantsEnCours/hooks/getGrants";
 import useFetchEmploys from "../../../GrantsEnCours/hooks/getResponsable";
@@ -19,6 +19,9 @@ import { Check, Close } from "@mui/icons-material";
 import PrintPdf from "../../../gereRapportDeMission/printPdf";
 import DoneIcon from "@mui/icons-material/Done";
 import { useRouter } from "next/router";
+import useFetchStagiaire from "../../../GrantsEnCours/hooks/getStagiaire";
+import useFetchPrestataire from "../../../GrantsEnCours/hooks/getPrestataire";
+import { fetchConnectedUser } from "../../../../redux/features/auth";
 
 const ValidationRapport = () => {
   const fetchMission = useFetchMissionListe();
@@ -27,6 +30,12 @@ const ValidationRapport = () => {
   const fetchGrants = useFetchGrants();
 
   const fetchEmployes = useFetchEmploys();
+  const fetchStagiaire = useFetchStagiaire();
+  const { interns } = useAppSelector((state: any) => state.stagiaire);
+  const fetchPrestataire = useFetchPrestataire();
+  const { prestataireListe } = useAppSelector(
+    (state: any) => state.prestataire
+  );
   const { employees } = useAppSelector((state) => state.employe);
   const [getVerificateurFinance, setGetVerificateurFinance] =
     React.useState<boolean>(false);
@@ -37,6 +46,10 @@ const ValidationRapport = () => {
     React.useState<boolean>(false);
   const router = useRouter();
   const { id } = router.query;
+  const { user } = useAppSelector((state) => state.auth);
+  useEffect(() => {
+    fetchConnectedUser();
+  }, []);
   React.useEffect(() => {
     fetchEmployes();
     fetchGrants();
@@ -196,9 +209,24 @@ const ValidationRapport = () => {
       console.log(error);
     }
   };
-
+  const formatOptions = (options: any) => {
+    return options.map((option: any) => ({
+      id: option.id,
+      name: option.name,
+      surname: option.surname,
+      email: option.email,
+    }));
+  };
+  const allOptions = [
+    ...formatOptions(employees),
+    ...formatOptions(interns),
+    ...formatOptions(prestataireListe),
+  ];
   return (
     <>
+      <Button variant="contained" onClick={() => router.back()}>
+        Retour
+      </Button>
       <Stack width={{ xs: "100%", sm: "100%", md: "100%" }}>
         {missionListe.length == 0 ? (
           <LinearProgress color="success" sx={{ width: "100%" }} />
@@ -277,6 +305,11 @@ const ValidationRapport = () => {
                             "finance"
                           )
                         }
+                        disabled={
+                          !allOptions.find(
+                            (option: any) => option.email === user?.email
+                          )?.id
+                        }
                       >
                         Vérifier financièrement
                       </Button>
@@ -340,7 +373,12 @@ const ValidationRapport = () => {
                             "technique"
                           )
                         }
-                        disabled={getVerificateurFinance == false}
+                        disabled={
+                          getVerificateurFinance == false ||
+                          allOptions.find(
+                            (option: any) => option.email === user?.email
+                          )?.id
+                        }
                       >
                         Vérifier Techniquement
                       </Button>
@@ -407,7 +445,11 @@ const ValidationRapport = () => {
                             "logistique"
                           )
                         }
-                        // disabled={getVerificateurLogistic == false}
+                        disabled={
+                          !allOptions.find(
+                            (option: any) => option.email === user?.email
+                          )?.id
+                        }
                       >
                         Valider Logistique
                       </Button>
@@ -465,7 +507,12 @@ const ValidationRapport = () => {
                             "paye"
                           )
                         }
-                        disabled={getVerificateurTechnic == false}
+                        disabled={
+                          getVerificateurTechnic == false ||
+                          allOptions.find(
+                            (option: any) => option.email === user?.email
+                          )?.id
+                        }
                       >
                         Vérsé
                       </Button>
