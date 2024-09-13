@@ -663,7 +663,13 @@ const ListMissions = () => {
                       <Button
                         variant="text"
                         color="info"
-                        disabled={!getId && user?.name != "Admin"}
+                        disabled={
+                          getId != mission.verifyFinancial ||
+                          getId != mission.validateFinancial ||
+                          getId != mission.verifyTechnic ||
+                          (getId != mission.validateLogistic &&
+                            user?.name != "Admin")
+                        }
                       >
                         Validation prévision
                       </Button>
@@ -674,7 +680,13 @@ const ListMissions = () => {
                       <Button
                         variant="text"
                         color="info"
-                        disabled={!getId && user?.name != "Admin"}
+                        disabled={
+                          getId != mission.verifyFinancial ||
+                          getId != mission.validateFinancial ||
+                          getId != mission.verifyTechnic ||
+                          (getId != mission.validateLogistic &&
+                            user?.name != "Admin")
+                        }
                       >
                         Validation rapport
                       </Button>

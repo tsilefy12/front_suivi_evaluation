@@ -311,9 +311,9 @@ const ValidationRapport = () => {
                           )
                         }
                         disabled={
-                          !allOptions.find(
+                          allOptions.find(
                             (option: any) => option.email === user?.email
-                          )?.id
+                          )?.id != row.verifyFinancial!
                         }
                       >
                         Vérifier financièrement
@@ -382,7 +382,7 @@ const ValidationRapport = () => {
                           getVerificateurFinance == false ||
                           allOptions.find(
                             (option: any) => option.email === user?.email
-                          )?.id
+                          )?.id != row.verifyTechnic!
                         }
                       >
                         Vérifier Techniquement
@@ -451,9 +451,9 @@ const ValidationRapport = () => {
                           )
                         }
                         disabled={
-                          !allOptions.find(
+                          allOptions.find(
                             (option: any) => option.email === user?.email
-                          )?.id
+                          )?.id != row.validateLogistic!
                         }
                       >
                         Valider Logistique
@@ -516,7 +516,7 @@ const ValidationRapport = () => {
                           getVerificateurTechnic == false ||
                           allOptions.find(
                             (option: any) => option.email === user?.email
-                          )?.id
+                          )?.id != row.validateFinancial!
                         }
                       >
                         Vérsé
