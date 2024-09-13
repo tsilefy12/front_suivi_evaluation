@@ -664,11 +664,11 @@ const ListMissions = () => {
                         variant="text"
                         color="info"
                         disabled={
-                          getId != mission.verifyFinancial ||
-                          getId != mission.validateFinancial ||
-                          getId != mission.verifyTechnic ||
-                          (getId != mission.validateLogistic &&
-                            user?.name != "Admin")
+                          getId !== mission.verifyFinancial &&
+                          getId !== mission.validateFinancial &&
+                          getId !== mission.verifyTechnic &&
+                          getId !== mission.validateLogistic &&
+                          user?.name !== "Admin"
                         }
                       >
                         Validation prévision
@@ -681,11 +681,11 @@ const ListMissions = () => {
                         variant="text"
                         color="info"
                         disabled={
-                          getId != mission.verifyFinancial ||
-                          getId != mission.validateFinancial ||
-                          getId != mission.verifyTechnic ||
-                          (getId != mission.validateLogistic &&
-                            user?.name != "Admin")
+                          getId !== mission.verifyFinancial &&
+                          getId !== mission.validateFinancial &&
+                          getId !== mission.verifyTechnic &&
+                          getId !== mission.validateLogistic &&
+                          user?.name !== "Admin"
                         }
                       >
                         Validation rapport
